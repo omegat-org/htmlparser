@@ -36,8 +36,8 @@ import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 
 public abstract class HTMLCompositeTag extends HTMLTag {
-	private HTMLTag startTag, endTag;
-	private Vector childTags; 
+	protected HTMLTag startTag, endTag;
+	protected Vector childTags; 
 
 	public HTMLCompositeTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
 		super(tagData);
