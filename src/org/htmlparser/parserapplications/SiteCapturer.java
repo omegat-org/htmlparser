@@ -40,19 +40,24 @@ import java.util.HashSet;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.filters.AndFilter;
+import org.htmlparser.filters.HasAttributeFilter;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.FrameTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.MetaTag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
  * Save a web site locally.
- * Illustrative prgram to save a web site contents locally.
+ * Illustrative program to save a web site contents locally.
  * It was created to demonstrate URL rewriting in it's simplest form.
  * It uses customized tags in the NodeFactory to alter the URLs.
  * This program has a number of limitations:
@@ -123,6 +128,11 @@ public class SiteCapturer
     protected boolean mCaptureResources;
 
     /**
+     * The filter to apply to the nodes retrieved.
+     */
+    protected NodeFilter mFilter;
+
+    /**
      * Copy buffer size.
      * Resources are moved to disk in chunks this size or less.
      */
@@ -135,6 +145,8 @@ public class SiteCapturer
     {
         PrototypicalNodeFactory factory;
 
+        mSource = null;
+        mTarget = null;
         mPages = new ArrayList ();
         mFinished = new HashSet ();
         mImages = new ArrayList ();
@@ -146,6 +158,8 @@ public class SiteCapturer
         factory.registerTag (new LocalBaseHrefTag ());
         factory.registerTag (new LocalImageTag ());
         mParser.setNodeFactory (factory);
+        mCaptureResources = true;
+        mFilter = null;
     }
 
     /**
@@ -210,6 +224,25 @@ public class SiteCapturer
     public void setCaptureResources (boolean capture)
     {
         mCaptureResources = capture;
+    }
+    
+    
+    /** Getter for property filter.
+     * @return Value of property filter.
+     *
+     */
+    public NodeFilter getFilter ()
+    {
+        return (mFilter);
+    }
+    
+    /** Setter for property filter.
+     * @param filter New value of property filter.
+     *
+     */
+    public void setFilter (NodeFilter filter)
+    {
+        mFilter = filter;
     }
     
     /**
@@ -280,7 +313,7 @@ public class SiteCapturer
         int j;
         String ret;
 
-        if (link.equals (getSource ()))
+        if (link.equals (getSource ()) || (!getSource ().endsWith ("/") && link.equals (getSource () + "/")))
             ret = "index.html"; // handle the root page specially
         else if (link.startsWith (getSource ())
                 && (link.length () > getSource ().length ()))
@@ -381,12 +414,16 @@ public class SiteCapturer
     /**
      * Process a single page.
      */
-    protected void process ()
+    protected void process (NodeFilter filter)
         throws
             ParserException
     {
         String url;
+        int bookmark;
         NodeList list;
+        NodeList robots;
+        MetaTag robot;
+        String content;
         File file;
         File dir;
         PrintWriter out;
@@ -397,17 +434,49 @@ public class SiteCapturer
         mFinished.add (url);
 
         try
-        {   // fetch the page and gather the list of nodes
+        {
+            bookmark = mPages.size ();
+            // fetch the page and gather the list of nodes
             mParser.setURL (url);
             list = new NodeList ();
             for (NodeIterator e = mParser.elements (); e.hasMoreNodes (); )
                 list.add (e.nextNode ()); // URL conversion occurs in the tags
+
+            // handle robots meta tag according to http://www.robotstxt.org/wc/meta-user.html
+            // <meta name="robots" content="index,follow" />
+            // <meta name="robots" content="noindex,nofollow" />
+            robots = list.extractAllNodesThatMatch (
+                new AndFilter (
+                    new NodeClassFilter (MetaTag.class),
+                    new HasAttributeFilter ("name", "robots")), true);
+            if (0 != robots.size ())
+            {
+                robot = (MetaTag)robots.elementAt (0);
+                content = robot.getAttribute ("content").toLowerCase ();
+                if ((-1 != content.indexOf ("none")) || (-1 != content.indexOf ("nofollow")))
+                    // reset mPages
+                    for (int i = bookmark; i < mPages.size (); i++)
+                        mPages.remove (i);
+                if ((-1 != content.indexOf ("none")) || (-1 != content.indexOf ("noindex")))
+                    return;
+            }
+    
+            if (null != filter)
+                list.keepAllNodesThatMatch (filter, true);
 
             // save the page locally
             file = new File (getTarget (), makeLocalLink (url, ""));
             dir = file.getParentFile ();
             if (!dir.exists ())
                 dir.mkdirs ();
+            else if (!dir.isDirectory ())
+            {
+                dir = new File (dir.getParentFile (), dir.getName () + ".content");
+                if (!dir.exists ())
+                    dir.mkdirs ();
+                file = new File (dir, file.getName ());
+            }
+                
             try
             {
                 out = new PrintWriter (new FileOutputStream (file));
@@ -580,7 +649,7 @@ public class SiteCapturer
         while (0 != mPages.size ())
             try
             {
-                process ();
+                process (getFilter ());
                 while (0 != mImages.size ())
                     copy ();
             }
