@@ -76,7 +76,7 @@ public class HTMLLinkProcessor {
 	 * @return String Absolute URL
 	 */
 	public String checkIfLinkIsRelative(String link, String url) {
-		if (link==null) return "";
+		if (link==null || link.length()==0) return "";
 		if (link.indexOf("://")==-1 && link.indexOf("mailto:")==-1 && url != null)
 		{
 			// Bug fix by Karem for relative links that
