@@ -184,6 +184,9 @@ public class NodeList implements Serializable {
     /**
      * Filter the list with the given filter non-recursively.
      * @param filter The filter to use.
+     * @return A new node array containing the nodes accepted by the filter.
+     * This is a linear list and preserves the nested structure of the returned
+     * nodes only.
      */
     public NodeList extractAllNodesThatMatch (NodeFilter filter)
     {
@@ -194,6 +197,9 @@ public class NodeList implements Serializable {
      * Filter the list with the given filter.
      * @param filter The filter to use.
      * @param recursive If <code>true<code> digs into the children recursively.
+     * @return A new node array containing the nodes accepted by the filter.
+     * This is a linear list and preserves the nested structure of the returned
+     * nodes only.
      */
     public NodeList extractAllNodesThatMatch (NodeFilter filter, boolean recursive)
     {
@@ -217,6 +223,45 @@ public class NodeList implements Serializable {
         }
 
         return (ret);
+    }
+
+    /**
+     * Remove nodes not matching the given filter non-recursively.
+     * @param filter The filter to use.
+     */
+    public void keepAllNodesThatMatch (NodeFilter filter)
+    {
+        keepAllNodesThatMatch (filter, false);
+    }
+
+    /**
+     * Remove nodes not matching the given filter.
+     * @param filter The filter to use.
+     * @param recursive If <code>true<code> digs into the children recursively.
+     */
+    public void keepAllNodesThatMatch (NodeFilter filter, boolean recursive)
+    {
+        String name;
+        Node node;
+        NodeList children;
+        NodeList ret;
+
+        for (int i = 0; i < size; )
+        {
+            node = nodeData[i];
+            if (!filter.accept (node))
+                remove (i);
+            else
+            {
+                if (recursive)
+                {
+                    children = node.getChildren ();
+                    if (null != children)
+                        children.keepAllNodesThatMatch (filter, recursive);
+                }
+                i++;
+            }
+        }
     }
 
     /**

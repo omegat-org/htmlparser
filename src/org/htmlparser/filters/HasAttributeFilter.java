@@ -28,10 +28,11 @@ package org.htmlparser.filters;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
+import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.TagNode;
 
 /**
- * This class accepts all tags that have a child acceptable to the filter.
+ * This class accepts all tags that have a certain attribute, and optionally, with a certain value.
  */
 public class HasAttributeFilter implements NodeFilter
 {
@@ -41,12 +42,28 @@ public class HasAttributeFilter implements NodeFilter
     protected String mAttribute;
 
     /**
+     * The value to check for.
+     */
+    protected String mValue;
+
+    /**
      * Creates a new instance of HasAttributeFilter that accepts tags with the given attribute.
      * @param attribute The attribute to search for.
      */
     public HasAttributeFilter (String attribute)
     {
+        this (attribute, null);
+    }
+
+    /**
+     * Creates a new instance of HasAttributeFilter that accepts tags with the given attribute.
+     * @param attribute The attribute to search for.
+     * @param value The value that must be matched, or null if any value will match.
+     */
+    public HasAttributeFilter (String attribute, String value)
+    {
         mAttribute = attribute.toUpperCase ();
+        mValue = value;
     }
 
     /**
@@ -56,13 +73,17 @@ public class HasAttributeFilter implements NodeFilter
     public boolean accept (Node node)
     {
         TagNode tag;
+        Attribute attribute;
         boolean ret;
 
         ret = false;
         if (node instanceof TagNode)
         {
             tag = (TagNode)node;
-            ret = null != tag.getAttributeEx (mAttribute);
+            attribute = tag.getAttributeEx (mAttribute);
+            ret = null != attribute;
+            if (ret && (null != mValue))
+                ret = mValue.equals (attribute.getValue ());
         }
 
         return (ret);
