@@ -50,7 +50,6 @@ import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserFeedback;
 import org.htmlparser.util.HTMLTagParser;
-import org.htmlparser.visitors.*;
 
 /**
  * This is the class that the user will use, either to get an iterator into 
@@ -1100,5 +1099,16 @@ public class HTMLParser
 			node = e.nextHTMLNode();
 			node.accept(visitor);
 		}
+	}
+	
+	/**
+	 * Creates the parser on an input string.
+	 * @param inputHTML
+	 * @return HTMLParser
+	 */
+	public static HTMLParser createParser(String inputHTML) {
+		HTMLReader reader =	
+			new HTMLReader(new StringReader(inputHTML),"");
+		return new HTMLParser(reader);
 	}
 }
