@@ -54,8 +54,22 @@ import org.htmlparser.visitors.NodeVisitor;
  *     sb.setURL ("http://www.netbeans.org"); // the HTTP is performed here
  *     String s = sb.getStrings ();
  * </pre>
- * @author Derrick Oswald
- * Created on December 23, 2002, 5:01 PM
+ * You can also use the StringBean as a NodeVisitor on your own parser,
+ * in which case you have to refetch your page if you change one of the
+ * properties because it resets the Strings property:</p>
+ * <pre>
+ *     StringBean sb = new StringBean ();
+ *     Parser parser = new Parser ("http://cbc.ca");
+ *     parser.visitAllNodesWith (sb);
+ *     String s = sb.getStrings ();
+ *     sb.setLinks (true);
+ *     parser.reset ();
+ *     parser.visitAllNodesWith (sb);
+ *     String sl = sb.getStrings ();
+ * </pre>
+ * According to Nick Burch, who contributed the patch, this is handy if you
+ * don't want StringBean to wander off and get the content itself, either
+ * because you already have it, it's not on a website etc.
  */
 public class StringBean extends NodeVisitor implements Serializable
 {
@@ -167,6 +181,9 @@ public class StringBean extends NodeVisitor implements Serializable
         mLinks = false;
         mReplaceSpace = true;
         mCollapse = true;
+		mBuffer = new StringBuffer (4096);
+		mIsScript = false;
+		mIsPre = false;
     }
 
     //
@@ -258,12 +275,9 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         String ret;
 
-        mIsPre = false;
-        mIsScript = false;
-        mBuffer = new StringBuffer (4096);
         mParser.visitAllNodesWith (this);
         ret = mBuffer.toString ();
-        mBuffer = null;
+        mBuffer = new StringBuffer(4096);
 
         return (ret);
     }
@@ -293,17 +307,14 @@ public class StringBean extends NodeVisitor implements Serializable
         if (null != getURL ())
             try
             {
-                mIsPre = false;
-                mIsScript = false;
                 try
                 {
-                    mBuffer = new StringBuffer (4096);
                     mParser.visitAllNodesWith (this);
                     updateStrings (mBuffer.toString ());
                 }
                 finally
                 {
-                    mBuffer = null;
+                    mBuffer = new StringBuffer (4096);
                 }
             }
             catch (EncodingChangeException ece)
@@ -330,6 +341,13 @@ public class StringBean extends NodeVisitor implements Serializable
             {
                 updateStrings (pe.toString ());
             }
+        else
+        {
+            // reset in case this StringBean is used as a visitor
+            // on another parser, not it's own
+            mStrings = null;
+            mBuffer = new StringBuffer (4096);
+        }
     }
 
     /**
@@ -387,7 +405,10 @@ public class StringBean extends NodeVisitor implements Serializable
     public String getStrings ()
     {
         if (null == mStrings)
-            setStrings ();
+			if (0 == mBuffer.length ())
+				setStrings ();
+			else
+				updateStrings (mBuffer.toString ());
 
         return (mStrings);
     }
