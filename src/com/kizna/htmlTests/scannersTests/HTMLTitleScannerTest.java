@@ -75,7 +75,8 @@ public class HTMLTitleScannerTest extends TestCase {
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		parser.addScanner(new HTMLTitleScanner("-t"));
+		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
+		parser.addScanner(titleScanner);
 		parser.addScanner(new HTMLStyleScanner("-s"));
 		parser.addScanner(new HTMLMetaTagScanner("-m"));
 	 	for (Enumeration e = parser.elements();e.hasMoreElements();) {
@@ -86,6 +87,6 @@ public class HTMLTitleScannerTest extends TestCase {
 		// check the title node
 		HTMLTitleTag titleTag = (HTMLTitleTag) node[2];
 		assertEquals("Title","Yahoo!",titleTag.getTitle());
-		
+		assertEquals("Title Scanner",titleScanner,titleTag.getThisScanner());
 	}
 }

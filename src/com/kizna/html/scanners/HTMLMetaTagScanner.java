@@ -42,7 +42,9 @@ public class HTMLMetaTagScanner extends HTMLTagScanner {
 		String metaTagName = (String)table.get("NAME");					
 		String metaTagContents = (String)table.get("CONTENT");
 		String httpEquiv = (String)table.get("HTTP-EQUIV");
-		return new HTMLMetaTag(tag.elementBegin(),tag.elementEnd(),tag.getText(),httpEquiv, metaTagName,metaTagContents,currLine);
+		HTMLMetaTag metaTag = new HTMLMetaTag(tag.elementBegin(),tag.elementEnd(),tag.getText(),httpEquiv, metaTagName,metaTagContents,currLine);
+		metaTag.setThisScanner(this);
+		return metaTag;
 	}
 
 }

@@ -63,7 +63,9 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 			} 
 		}
 		while (endFlag==false);
-		return new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,tag.getText(),tag.getTagLine());		
+		HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,tag.getText(),tag.getTagLine());
+		titleTag.setThisScanner(this);
+		return titleTag;		
 	}
 
 }

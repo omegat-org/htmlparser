@@ -74,8 +74,8 @@ public class HTMLMetaTagScannerTest extends TestCase {
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
-
-		parser.addScanner(new HTMLMetaTagScanner("-t"));
+		HTMLMetaTagScanner scanner = new HTMLMetaTagScanner("-t");
+		parser.addScanner(scanner);
 		
 		int i = 0;
 		for (Enumeration e = parser.elements();e.hasMoreElements();)
@@ -114,7 +114,7 @@ public class HTMLMetaTagScannerTest extends TestCase {
 		assertEquals("Meta Tag 10 Contents","text/html; charset=ISO-8859-1",metaTag.getMetaTagContents());
 		assertEquals("Meta Tag 10 Http-Equiv","content-type",metaTag.getHttpEquiv());
 
-		
+		assertEquals("This Scanner",scanner,metaTag.getThisScanner());
 	}
 
 	public static void main(String[] args) {
