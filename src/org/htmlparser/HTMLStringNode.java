@@ -154,4 +154,8 @@ public class HTMLStringNode extends HTMLNode
 		if (filter==STRING_FILTER) collectionVector.add(this);
 	}
 
+	public void accept(HTMLVisitor visitor) {
+		visitor.visitStringNode(this);
+	}
+
 }

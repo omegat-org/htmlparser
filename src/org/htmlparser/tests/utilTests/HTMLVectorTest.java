@@ -4,6 +4,7 @@ package org.htmlparser.tests.utilTests;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLVisitor;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLSimpleEnumeration;
 import org.htmlparser.util.HTMLVector;
@@ -88,6 +89,9 @@ public class HTMLVectorTest extends HTMLParserTestCase {
 	
 	private HTMLNode createHTMLNodeObject() {
 		HTMLNode node = new HTMLNode(10,20) {
+			public void accept(HTMLVisitor visitor) {
+			}
+
 			public void collectInto(Vector collectionVector, String filter) {
 			}
 	

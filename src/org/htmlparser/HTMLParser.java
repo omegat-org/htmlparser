@@ -1092,4 +1092,12 @@ public class HTMLParser
 			e.printStackTrace();
 		}
 	}
+	
+	public void visitAllNodesWith(HTMLVisitor visitor) throws HTMLParserException {
+		HTMLNode node;
+		for (HTMLEnumeration e = elements();e.hasMoreNodes();) {
+			node = e.nextHTMLNode();
+			node.accept(visitor);
+		}
+	}
 }

@@ -219,4 +219,7 @@ public class HTMLRemarkNode extends HTMLNode
 		if (filter==REMARK_NODE_FILTER) collectionVector.add(this);
 	}
 
+	public void accept(HTMLVisitor visitor) {
+	}
+
 }

@@ -33,6 +33,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Vector;
 
+
 /**
  * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)
  */
@@ -216,5 +217,7 @@ public abstract class HTMLNode
 	{
 		return nodeEnd;
 	}
+
+	public abstract void accept(HTMLVisitor visitor);
 	
 }

@@ -37,6 +37,7 @@ import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLTagParser;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLVisitor;
 /**
  * HTMLTag represents a generic tag. This class allows users to register specific
  * tag scanners, which can identify links, or image references. This tag asks the
@@ -393,4 +394,8 @@ public class HTMLTag extends HTMLNode
 		return parseAttributes();
 	}
 	
+	public void accept(HTMLVisitor visitor) {
+		visitor.visitTag(this);
+	}
+
 }

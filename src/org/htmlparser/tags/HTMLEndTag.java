@@ -118,4 +118,5 @@ public class HTMLEndTag extends HTMLTag
 	public String toString() {
 		return "EndTag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	
 }
