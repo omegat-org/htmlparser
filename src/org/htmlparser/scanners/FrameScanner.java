@@ -85,8 +85,7 @@ public class FrameScanner extends TagScanner
 	
 
 
-	public String extractFrameName(Tag tag,String url)
-	{
+	public String extractFrameName(Tag tag,String url) 	{
 		return tag.getAttribute("NAME");
 	}
 
