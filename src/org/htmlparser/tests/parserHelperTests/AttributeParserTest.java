@@ -182,7 +182,7 @@ public class AttributeParserTest extends ParserTestCase {
      */
     public void testScriptedTag ()
     {
-		getParameterTableFor("<body onLoad=defaultStatus=''>");
+		getParameterTableFor("body onLoad=defaultStatus=''");
 		assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
     }
 }
