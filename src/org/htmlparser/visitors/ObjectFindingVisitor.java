@@ -40,7 +40,11 @@ public class ObjectFindingVisitor extends HTMLVisitor {
 	private NodeList tags;
 	
 	public ObjectFindingVisitor(Class classTypeToFind) {
-		super(false);
+		this(classTypeToFind,false);
+	}
+	
+	public ObjectFindingVisitor(Class classTypeToFind,boolean recurse) {
+		super(recurse);
 		this.classTypeToFind = classTypeToFind;
 		this.tags = new NodeList();
 	}
