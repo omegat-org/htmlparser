@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020728 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020804 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -195,7 +195,7 @@ public void addScanner(HTMLTagScanner scanner) {
 	{
 		return new HTMLEnumeration()
 		{
-			public boolean hasMoreNodes()
+			public boolean hasMoreNodes() throws HTMLParserException
 			{
 				if (reader==null) return false;
 				try
@@ -209,9 +209,15 @@ public void addScanner(HTMLTagScanner scanner) {
 				}
 				catch (IOException e)
 				{
-					System.err.println("I/O Exception occured while reading "+resourceLocn);
-					return false;
+					throw new HTMLParserException("I/O Exception occured while reading "+resourceLocn,e);
 				}
+				catch (NullPointerException e) {
+					throw new HTMLParserException("Null Pointer exception occurred in HTMLParser.hasMoreNodes()",e);
+				}
+				catch (Exception e) {
+					throw new HTMLParserException("Unexpected Exception occurred in HTMLParser.hasMoreNodes()"+resourceLocn,e);
+				}
+
 			}
 			public HTMLNode nextHTMLNode() throws HTMLParserException
 			{
@@ -222,13 +228,13 @@ public void addScanner(HTMLTagScanner scanner) {
 				}
 				catch (IOException e)
 				{
-					throw new HTMLParserException("I/O Exception occured while reading "+resourceLocn,e);
+					throw new HTMLParserException("I/O Exception occured while reading "+resourceLocn+", in nextHTMLNode",e);
 				}
 				catch (NullPointerException e) {
-					throw new HTMLParserException("Null Pointer Exception occurred while reading "+resourceLocn,e);
+					throw new HTMLParserException("Null Pointer Exception occurred while reading "+resourceLocn+", in nextHTMLNode",e);
 				}
 				catch (Exception e) {
-					throw new HTMLParserException("Unexpected Exception occurred while reading "+resourceLocn,e);
+					throw new HTMLParserException("Unexpected Exception occurred while reading "+resourceLocn+", in nextHTMLNode",e);
 				}
 			}
 		};

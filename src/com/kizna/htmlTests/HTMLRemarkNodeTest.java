@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020728 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020804 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -233,4 +233,26 @@ public void testToPlainTextString() throws HTMLParserException {
 		assertEquals("Expected contents","\n",remarkNode.getText());
 		
 	}
+	/**
+	 * This is the simulation of a bug report submitted
+	 * by Claude Duguay.
+	 * If it is a comment with nothing in it, parser crashes
+	 */	
+	public void testRemarkNodeWithNothing() throws HTMLParserException {
+		String testHTML = new String("<!-->");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		{
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
+		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertEquals("Expected contents","\n",remarkNode.getText());
+		
+	}	
 }
