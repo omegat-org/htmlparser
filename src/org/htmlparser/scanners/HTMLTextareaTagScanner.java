@@ -29,6 +29,8 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Vector;
+
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLEndTag;
@@ -55,11 +57,12 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 	{
 		try
 		{
-			HTMLEndTag endTag=null;
+			HTMLTag startTag = tag;
+			HTMLTag endTag=null;
 			HTMLNode node = null;
 			boolean endTagFound=false;
 			StringBuffer value=new StringBuffer();
-			
+			Vector childVector = new Vector();			
 			// Remove all existing scanners, so as to parse only till the end tag
 			HTMLNode prevNode=tag;
 			do 
@@ -81,14 +84,14 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 							value.append(HTMLNode.getLineSeparator());
 					}
 					value.append(node.toHTML());
-		
+					childVector.add(node);
 					prevNode = node;
 				}
 			}
 			while (!endTagFound);
 			HTMLTextareaTag textareaTag = new HTMLTextareaTag(
 										0, node.elementEnd(), tag.getText(), 
-										value.toString(), currLine);
+										value.toString(), currLine,childVector,startTag,endTag);
 			return textareaTag;
 		}
 		catch (Exception e) 

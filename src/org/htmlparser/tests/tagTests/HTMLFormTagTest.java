@@ -68,7 +68,7 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
-		assertStringEquals("Form Tag string representation","&nbsp;User NamePassword&nbsp;&nbsp;",formTag.toPlainTextString());
+		assertStringEquals("Form Tag string representation","&nbsp;User NamePassword&nbsp;&nbsp;Contents of TextArea",formTag.toPlainTextString());
 	}
 	
 	public void testSearchFor() throws HTMLParserException {
