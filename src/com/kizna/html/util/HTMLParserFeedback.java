@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021016 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021031 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
