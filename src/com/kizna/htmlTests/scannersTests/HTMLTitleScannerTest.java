@@ -143,4 +143,29 @@ public class HTMLTitleScannerTest extends TestCase {
 	 	assertEquals("Title","Double tags can hang the code\r\n",titleTag.getTitle());
 	 	
 	}
+	/**
+	 * Testcase based on Claude Duguay's report. This proves
+	 * that the parser throws exceptions when faced with malformed html
+	 */
+	public void testNoEndTitleTag() throws HTMLParserException {
+		String testHTML = new String(
+		"<TITLE>KRP VALIDATION<PROCESS/TITLE>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		int i = 0;
+		try {
+			HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
+			parser.addScanner(titleScanner);
+		 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+				node[i++] = e.nextHTMLNode();
+			}
+			assertTrue("Should have thrown an HTMLParserException",false);
+		}
+		catch (HTMLParserException e) {
+
+		}
+	 	
+	}	
 }
