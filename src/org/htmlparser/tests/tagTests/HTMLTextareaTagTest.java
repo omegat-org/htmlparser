@@ -58,16 +58,6 @@ public class HTMLTextareaTagTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(5);
 	}
 	
-	
-	public void testGetSetValue()
-	{
-		assertTrue("Node 1 should be Textarea Tag",node[0] instanceof HTMLTextareaTag);
-		HTMLTextareaTag TextareaTag;
-		TextareaTag = (HTMLTextareaTag) node[0];
-		TextareaTag.setValue("The IPKF played a major role");
-		assertEquals("Set-Get test","The IPKF played a major role",TextareaTag.getValue());
-	}
-	
 	public void testToHTML() throws HTMLParserException 
 	{
 		assertTrue("Node 1 should be Textarea Tag",node[0] instanceof HTMLTextareaTag);
@@ -75,19 +65,19 @@ public class HTMLTextareaTagTest extends HTMLParserTestCase
 		assertTrue("Node 3 should be Textarea Tag",node[2] instanceof HTMLTextareaTag);
 		assertTrue("Node 4 should be Textarea Tag",node[3] instanceof HTMLTextareaTag);
 		assertTrue("Node 5 should be Textarea Tag",node[4] instanceof HTMLTextareaTag);
-		HTMLTextareaTag TextareaTag;
-		TextareaTag = (HTMLTextareaTag) node[0];
-		assertStringEquals("HTML String 1","<TEXTAREA NAME=\"Remarks\">The intervention by the UN proved beneficial</TEXTAREA>",TextareaTag.toHTML());
-		TextareaTag = (HTMLTextareaTag) node[1];
-		assertStringEquals("HTML String 2","<TEXTAREA>The capture of the Somali warloard was elusive</TEXTAREA>",TextareaTag.toHTML());
-		TextareaTag = (HTMLTextareaTag) node[2];
-		assertStringEquals("HTML String 3","<TEXTAREA></TEXTAREA>",TextareaTag.toHTML());
-		TextareaTag = (HTMLTextareaTag) node[3];
+		HTMLTextareaTag textareaTag;
+		textareaTag = (HTMLTextareaTag) node[0];
+		assertStringEquals("HTML String 1","<TEXTAREA NAME=\"Remarks\">The intervention by the UN proved beneficial</TEXTAREA>",textareaTag.toHTML());
+		textareaTag = (HTMLTextareaTag) node[1];
+		assertStringEquals("HTML String 2","<TEXTAREA>The capture of the Somali warloard was elusive</TEXTAREA>",textareaTag.toHTML());
+		textareaTag = (HTMLTextareaTag) node[2];
+		assertStringEquals("HTML String 3","<TEXTAREA></TEXTAREA>",textareaTag.toHTML());
+		textareaTag = (HTMLTextareaTag) node[3];
 		assertStringEquals("HTML String 4","<TEXTAREA NAME=\"Remarks\">The death threats of the organization\r\n"+
-									"refused to intimidate the soldiers</TEXTAREA>",TextareaTag.toHTML());
-		TextareaTag = (HTMLTextareaTag) node[4];
+									"refused to intimidate the soldiers</TEXTAREA>",textareaTag.toHTML());
+		textareaTag = (HTMLTextareaTag) node[4];
 		assertStringEquals("HTML String 5","<TEXTAREA NAME=\"Remarks\">The death threats of the LTTE\r\n" +
-									"refused to intimidate the Tamilians\r\n</TEXTAREA>",TextareaTag.toHTML());
+									"refused to intimidate the Tamilians\r\n</TEXTAREA>",textareaTag.toHTML());
 
 	}	
 	
@@ -99,19 +89,19 @@ public class HTMLTextareaTagTest extends HTMLParserTestCase
 		assertTrue("Node 3 should be Textarea Tag",node[2] instanceof HTMLTextareaTag);
 		assertTrue("Node 4 should be Textarea Tag",node[3] instanceof HTMLTextareaTag);
 		assertTrue("Node 5 should be Textarea Tag",node[4] instanceof HTMLTextareaTag);
-		HTMLTextareaTag TextareaTag;
-		TextareaTag = (HTMLTextareaTag) node[0];
-		assertStringEquals("HTML Raw String 1","TEXTAREA TAG\n--------\nNAME : Remarks\nVALUE : The intervention by the UN proved beneficial\n",TextareaTag.toString());
-		TextareaTag = (HTMLTextareaTag) node[1];
-		assertStringEquals("HTML Raw String 2","TEXTAREA TAG\n--------\nVALUE : The capture of the Somali warloard was elusive\n",TextareaTag.toString());
-		TextareaTag = (HTMLTextareaTag) node[2];
-		assertStringEquals("HTML Raw String 3","TEXTAREA TAG\n--------\nVALUE : \n",TextareaTag.toString());
-		TextareaTag = (HTMLTextareaTag) node[3];
+		HTMLTextareaTag textareaTag;
+		textareaTag = (HTMLTextareaTag) node[0];
+		assertStringEquals("HTML Raw String 1","TEXTAREA TAG\n--------\nNAME : Remarks\nVALUE : The intervention by the UN proved beneficial\n",textareaTag.toString());
+		textareaTag = (HTMLTextareaTag) node[1];
+		assertStringEquals("HTML Raw String 2","TEXTAREA TAG\n--------\nVALUE : The capture of the Somali warloard was elusive\n",textareaTag.toString());
+		textareaTag = (HTMLTextareaTag) node[2];
+		assertStringEquals("HTML Raw String 3","TEXTAREA TAG\n--------\nVALUE : \n",textareaTag.toString());
+		textareaTag = (HTMLTextareaTag) node[3];
 		assertStringEquals("HTML Raw String 4","TEXTAREA TAG\n--------\nNAME : Remarks\nVALUE : The death threats of the organization\r\n"+
-										"refused to intimidate the soldiers\n",TextareaTag.toString());
-		TextareaTag = (HTMLTextareaTag) node[4];
+										"refused to intimidate the soldiers\n",textareaTag.toString());
+		textareaTag = (HTMLTextareaTag) node[4];
 		assertStringEquals("HTML Raw String 5","TEXTAREA TAG\n--------\nNAME : Remarks\nVALUE : The death threats of the LTTE\r\n"+
-										"refused to intimidate the Tamilians\r\n\n",TextareaTag.toString());
+										"refused to intimidate the Tamilians\r\n\n",textareaTag.toString());
 	}
 	
 }

@@ -26,94 +26,35 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
-
 package org.htmlparser.scanners;
 
-import java.util.Vector;
-
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTextareaTag;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
-import org.htmlparser.util.HTMLParserException;
 
-
-
-public class HTMLTextareaTagScanner extends HTMLTagScanner
+public class HTMLTextareaTagScanner extends HTMLCompositeTagScanner
 {
 	public HTMLTextareaTagScanner()
 	{
-		super();
+		super("TEXTAREA");
 	}
 	
-	public HTMLTextareaTagScanner(String pFilter)
+	public HTMLTextareaTagScanner(String filter)
 	{
-		super(pFilter);
+		super(filter,"TEXTAREA");
 	}
-	
-	public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader, String currLine)
-			throws HTMLParserException
-	{
-		try
-		{
-			HTMLTag startTag = tag;
-			HTMLTag endTag=null;
-			HTMLNode node = null;
-			boolean endTagFound=false;
-			StringBuffer value=new StringBuffer();
-			Vector childVector = new Vector();			
-			// Remove all existing scanners, so as to parse only till the end tag
-			HTMLNode prevNode=tag;
-			do 
-			{
-				node = reader.readElement();
-				if (node instanceof HTMLEndTag)
-				{
-					endTag = (HTMLEndTag)node;
-					if (endTag.getText().toUpperCase().equals("TEXTAREA")) 
-					{
-						endTagFound = true;
-					}
-				}
-				else
-				{
-					if (prevNode!=null)
-					{
-						if (prevNode.elementEnd() > node.elementBegin()) 
-							value.append(HTMLNode.getLineSeparator());
-					}
-					value.append(node.toHTML());
-					childVector.addElement(node);
-					prevNode = node;
-				}
-			}
-			while (!endTagFound);
-			HTMLTextareaTag textareaTag = 
-			new HTMLTextareaTag(
-				new HTMLTagData(0, node.elementEnd(), tag.getText(), currLine),
-				new HTMLCompositeTagData(startTag,endTag,childVector),
-				value.toString()
-			);
-			return textareaTag;
-		}
-		catch (Exception e) 
-		{
-			throw new HTMLParserException("HTMLTextareaTagScanner.scan() : Error while scanning textarea tags, current line = "+currLine,e);
-		}
-	}
-	
-	
-	
-	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
-	 */
+
 	public String [] getID() {
 		String [] ids = new String[1];
 		ids[0] = "TEXTAREA";
 		return ids;
+	}
+
+	protected HTMLTag createTag(
+		HTMLTagData tagData,
+		HTMLCompositeTagData compositeTagData) {
+		return new HTMLTextareaTag(tagData,compositeTagData);
 	}
 
 }

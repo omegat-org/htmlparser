@@ -34,27 +34,20 @@ import org.htmlparser.util.HTMLParserUtils;
 
 public class HTMLTextareaTag extends HTMLCompositeTag
 {
-	private String value;
-	
-	public HTMLTextareaTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData, String value)
+	public HTMLTextareaTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData)
 	{
 		super(tagData,compositeTagData);
-		this.value = value;
 	}
 	
-	public java.lang.String getValue() {
-		return value;
-	}
-
-	public void setValue(java.lang.String newValue) {
-		value = newValue;
+	public String getValue() {
+		return toPlainTextString();
 	}
 
 	public String toString() 
 	{
-		StringBuffer lString = new StringBuffer(HTMLParserUtils.toString(this));
-		lString.append("VALUE : ").append(value).append("\n");
+		StringBuffer buff = new StringBuffer(HTMLParserUtils.toString(this));
+		buff.append("VALUE : ").append(getValue()).append("\n");
 		
-		return lString.toString();
+		return buff.toString();
 	}
 }
