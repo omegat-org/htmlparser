@@ -149,7 +149,7 @@ public class NodeReader extends BufferedReader
 	}
 	/**
 	 * Returns the parser object for which this reader exists
-	 * @return org.htmlparser.HTMLParser
+	 * @return org.htmlparser.Parser
 	 */
 	public Parser getParser() {
 		return parser;

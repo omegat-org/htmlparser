@@ -66,7 +66,7 @@ public class Robot {
 	}
 	/**
 	 * Crawl using a given parser object, and a given crawl depth.
-	 * @param parser HTMLParser object
+	 * @param parser Parser object
 	 * @param crawlDepth Depth of crawling
 	 */
 	public void crawl(Parser parser,int crawlDepth) throws ParserException {

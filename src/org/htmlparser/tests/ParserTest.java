@@ -102,7 +102,7 @@ public class ParserTest extends ParserTestCase {
 	}	
 	
 	/**
-     * Test the HTMLParser(URLConnection) constructor.
+     * Test the Parser(URLConnection) constructor.
 	 * This testcase needs you to be online.
      * Based on the form at Canada Post <code>http://www.canadapost.ca/tools/pcl/bin/default-e.asp</code>:
      * <pre>
@@ -304,7 +304,7 @@ public class ParserTest extends ParserTestCase {
 	}	
 
     /**
-     * Tests the 'from file' HTMLParser constructor.
+     * Tests the 'from file' Parser constructor.
      */
     public void testFile ()
     {

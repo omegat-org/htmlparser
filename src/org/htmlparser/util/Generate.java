@@ -71,7 +71,7 @@ public class Generate
 
     /**
      * Create a Generate object.
-     * Sets up the generation by creating a new <code>HTMLParser</code> pointed
+     * Sets up the generation by creating a new <code>Parser</code> pointed
      * at <a href="http://www.w3.org/TR/REC-html40/sgml/entities.html">http://www.w3.org/TR/REC-html40/sgml/entities.html</a>
      * with the standard scanners registered.
      */

@@ -87,7 +87,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * <BR>
  * Below is some sample code to parse Yahoo.com and print all the tags.
  * <pre>
- * HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
+ * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * // In this example, we are registering all the common scanners
  * parser.registerScanners(); 
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
@@ -98,7 +98,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * Below is some sample code to parse Yahoo.com and print only the text information. This scanning
  * will run faster, as there are no scanners registered here.
  * <pre>
- * HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
+ * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * // In this example, none of the scanners need to be registered
  * // as a string node is not a tag to be scanned for.
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
@@ -113,7 +113,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * Here's another snippet that will only print out the link urls in a document. 
  * This is an example of adding a link scanner.
  * <pre>
- * HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
+ * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * parser.addScanner(new HTMLLinkScanner("-l"));
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
  *    HTMLNode node = (HTMLNode)e.nextElement();
@@ -123,7 +123,7 @@ import org.htmlparser.visitors.NodeVisitor;
  *    }
  * }
  * </pre>
- *  @see HTMLParser#elements() 
+ *  @see Parser#elements() 
  */
 public class Parser
     implements
@@ -350,14 +350,14 @@ public class Parser
     }
 
 	/**
-	 * Creates a HTMLParser object with the location of the resource (URL or file)
+	 * Creates a Parser object with the location of the resource (URL or file)
 	 * You would typically create a DefaultHTMLParserFeedback object and pass it in.
 	 * @param resourceLocn Either the URL or the filename (autodetects).
      * A standard HTTP GET is performed to read the content of the URL.
 	 * @param feedback The HTMLParserFeedback object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
-     * @see #HTMLParser(URLConnection,HTMLParserFeedback)
+     * @see #Parser(URLConnection,HTMLParserFeedback)
 	 */
 	public Parser(String resourceLocn, ParserFeedback feedback) throws ParserException
 	{
@@ -365,7 +365,7 @@ public class Parser
     }
 
 	/**
-	 * Creates a HTMLParser object with the location of the resource (URL or file).
+	 * Creates a Parser object with the location of the resource (URL or file).
 	 * A DefaultHTMLParserFeedback object is used for feedback.
 	 * @param resourceLocn Either the URL or the filename (autodetects).
 	 */
@@ -399,7 +399,7 @@ public class Parser
      * A DefaultHTMLParserFeedback object is used for feedback.
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
-     * @see #HTMLParser(URLConnection,HTMLParserFeedback)
+     * @see #Parser(URLConnection,HTMLParserFeedback)
      */
     public Parser (URLConnection connection) throws ParserException
     {
@@ -870,7 +870,7 @@ public class Parser
 	 * This is perhaps the most important method of this class. In typical situations, you will need to use
 	 * the parser like this :
 	 * <pre>
-	 * HTMLParser parser = new HTMLParser("http://www.yahoo.com");
+	 * Parser parser = new Parser("http://www.yahoo.com");
 	 * parser.registerScanners();
 	 * for (HTMLEnumeration e = parser.elements();e.hasMoreElements();) {
 	 *    HTMLNode node = e.nextHTMLNode();
@@ -1026,9 +1026,9 @@ public class Parser
 	 * HTMLFrameSetScanner(filter key "-r") <br>
 	 * HTMLBaseHREFScanner(filter key "-b") <br>
 	 * <br>
-	 * Call this method after creating the HTMLParser object. e.g. <BR>
+	 * Call this method after creating the Parser object. e.g. <BR>
 	 * <pre>
-	 * HTMLParser parser = new HTMLParser("http://www.yahoo.com");
+	 * Parser parser = new Parser("http://www.yahoo.com");
 	 * parser.registerScanners();
 	 * </pre>
 	 */ 
@@ -1145,7 +1145,7 @@ public class Parser
 	/**
 	 * Creates the parser on an input string.
 	 * @param inputHTML
-	 * @return HTMLParser
+	 * @return Parser
 	 */
 	public static Parser createParser(String inputHTML) {
 		NodeReader reader =	

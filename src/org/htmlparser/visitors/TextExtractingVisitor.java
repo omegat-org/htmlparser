@@ -38,7 +38,7 @@ import org.htmlparser.util.Translate;
  * Extracts text from a web page.
  * Usage:
  * <code>
- * HTMLParser parser = new HTMLParser(...);
+ * Parser parser = new Parser(...);
  * TextExtractingVisitor visitor = new TextExtractingVisitor();
  * parser.visitAllNodesWith(visitor);
  * String textInPage = visitor.getExtractedText();

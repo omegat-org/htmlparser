@@ -50,7 +50,7 @@ import org.htmlparser.util.ParserFeedback;
  * 
  * <br>
  * Also, you have a feedback object provided to you, should you want to send log messages. This object is
- * instantiated by HTMLParser when a scanner is added to its collection.
+ * instantiated by Parser when a scanner is added to its collection.
  * 
  */
 public abstract class TagScanner

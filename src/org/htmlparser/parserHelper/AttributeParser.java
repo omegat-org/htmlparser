@@ -71,7 +71,7 @@ public class AttributeParser {
 	*    String tmp;
     *    try {
     *        HTMLReader in = new HTMLReader(new FileReader(path),2048);
-    *        HTMLParser p = new HTMLParser(in);
+    *        Parser p = new Parser(in);
     *        Enumeration en = p.elements();
     *        while (en.hasMoreElements()) {
     *            try {
