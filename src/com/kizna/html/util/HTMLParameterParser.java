@@ -14,6 +14,10 @@ import com.kizna.html.tags.HTMLTag;
  * Window>Preferences>Java>Code Generation.
  */
 public class HTMLParameterParser {
+	private final String delim = " \t\r\n\f=\"'>";
+	private final String doubleQuote = "\"";
+	private final String singleQuote = "\'";
+	private final String equalTo = "=";
 	/**
 	* Method to break the tag into pieces.
 	* @param returns a Hastable with elements containing the
@@ -58,8 +62,7 @@ public class HTMLParameterParser {
     
    public Hashtable parseParameters(HTMLTag tag){
         Hashtable h = new Hashtable();
-        String name,value,tokenAccumulator,currentToken;
-        final String delim = " \t\r\n\f=\"'>";
+        String name,value,tokenAccumulator,currentToken;     
         boolean isDoubleQuote=false;
         boolean isSingleQuote=false;
         boolean isValue=false;
@@ -77,19 +80,19 @@ public class HTMLParameterParser {
             // First let's combine tokens that are inside "" or ''
             //
             if (isDoubleQuote || isSingleQuote) {
-                if (isDoubleQuote && currentToken.equals("\"")){                
+                if (isDoubleQuote && currentToken.equals(doubleQuote)){                
                     isDoubleQuote= false;                                   
-                } else if (isSingleQuote && currentToken.equals("'")) {
+                } else if (isSingleQuote && currentToken.equals(singleQuote)) {
                     isSingleQuote=false;
                 }else {               
                     tokenAccumulator += currentToken;   
                     continue;
                 }
-            } else if (currentToken.equals("\"")){                
+            } else if (currentToken.equals(doubleQuote)){                
                 isDoubleQuote= true;
                 tokenAccumulator = "";
                 continue;
-            } else if (currentToken.equals("'")){
+            } else if (currentToken.equals(singleQuote)){
                 isSingleQuote=true;
                 tokenAccumulator="";
                 continue;                
@@ -102,7 +105,7 @@ public class HTMLParameterParser {
             if (delim.indexOf(tokenAccumulator)>=0) {
                 // tokenAccumulator was a delimiter
                 if (waitingForValue) {
-                  if (tokenAccumulator.equals("=")) {
+                  if (tokenAccumulator.equals(equalTo)) {
                         // here set to receive next value of parameter
                         waitingForValue=false;
                         isValue=true;
