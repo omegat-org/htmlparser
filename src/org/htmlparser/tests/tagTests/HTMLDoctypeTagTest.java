@@ -55,6 +55,6 @@ public class HTMLDoctypeTagTest extends HTMLParserTestCase {
 		// The node should be an HTMLLinkTag
 		assertTrue("Node should be a HTMLDoctypeTag",node[0] instanceof HTMLDoctypeTag);
 		HTMLDoctypeTag docTypeTag = (HTMLDoctypeTag)node[0];
-		assertEquals("Raw HTML","<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">",docTypeTag.toHTML());
+		assertStringEquals("toHTML()","<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">",docTypeTag.toHTML());
 	}
 }

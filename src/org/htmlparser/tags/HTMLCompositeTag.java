@@ -65,7 +65,6 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 	public String toHTML() {
 		StringBuffer sb = new StringBuffer();
 		putStartTagInto(sb);
-		//sb.append(tagContents.toString());
 		putChildrenInto(sb);
 		putEndTagInto(sb);
 		return sb.toString();

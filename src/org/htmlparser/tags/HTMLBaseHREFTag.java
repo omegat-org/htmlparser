@@ -55,7 +55,4 @@ public class HTMLBaseHREFTag extends HTMLTag {
 				"--------\n"+
 				"Name : "+baseUrl;
 	}
-	public String toHTML() {
-		return super.toHTML();
-	}
 }

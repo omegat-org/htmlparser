@@ -38,11 +38,6 @@ public class HTMLInputTag extends HTMLTag
 		super(pTagBegin,pTagEnd,pTagContents,pTagLine);
 	}
 		
-	public String toHTML()
-	{
-		return (HTMLParserUtils.toHTML(this));
-	}
-	
 	public String toString() 
 	{
 		return (HTMLParserUtils.toString(this));

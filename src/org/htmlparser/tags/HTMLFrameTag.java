@@ -58,7 +58,4 @@ public class HTMLFrameTag extends HTMLTag
 	public String toString() {
 		return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
-	public String toHTML() {
-		return super.toHTML();
-	}	
 }

@@ -55,4 +55,4 @@ public class HTMLDoctypeTag extends HTMLTag
 	public String toHTML() {
 		return "<!DOCTYPE "+tagContents+">";
 	}
-	}
+}
