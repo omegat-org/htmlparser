@@ -174,9 +174,6 @@ public class AttributeParserTest extends ParserTestCase {
      * Only perform this test if it's version 1.4 or higher.
      */
     public void testJspWithinAttributes() {
-        Parser parser;
-        
-        parser = new Parser ();
         if (1.4 <= Parser.getVersionNumber ())
         {
             getParameterTableFor(
@@ -196,9 +193,6 @@ public class AttributeParserTest extends ParserTestCase {
      * Only perform this test if it's version 1.4 or higher.
      */
     public void testScriptedTag () {
-        Parser parser;
-        
-        parser = new Parser ();
         if (1.4 <= Parser.getVersionNumber ())
         {
             getParameterTableFor("body onLoad=defaultStatus=''");

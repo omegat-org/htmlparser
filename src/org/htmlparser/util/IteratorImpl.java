@@ -80,7 +80,6 @@ public class IteratorImpl implements PeekingIterator
      * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
      */
     public boolean hasMoreNodes() throws ParserException {
-        Node node;
         boolean ret;
 
         if (null == reader)

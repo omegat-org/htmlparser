@@ -137,7 +137,7 @@ public abstract class TagScanner
    * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
    * scan has begun, and hence allows us to write scanners that can work with dirty html
    */
-  public boolean evaluate(String s,TagScanner previousOpenScanner) {
+  public boolean evaluate(String tagContents,TagScanner previousOpenScanner) {
   	return true;
   }
   public static String extractXMLData(Node node, String tagName, NodeReader reader) throws ParserException{
@@ -226,7 +226,6 @@ public abstract class TagScanner
 	
 	public String removeChars(String s,String occur)  {
 	    StringBuffer newString = new StringBuffer();
-	    char ch;
 	    int index;
 	    do {
 	    	index = s.indexOf(occur);
@@ -279,7 +278,9 @@ public abstract class TagScanner
 	 * @return Tag
 	 * @throws ParserException
 	 */
-	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException { return null; }
+	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException { 
+		return null; 
+	}
 
 
 	protected Tag getReplacedEndTag(Tag tag, NodeReader reader, String currentLine) {

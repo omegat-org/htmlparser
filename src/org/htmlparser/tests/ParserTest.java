@@ -612,7 +612,6 @@ public class ParserTest extends ParserTestCase {
 		"<p><font size=-2>&copy;2002 Google</font><font size=-2> - Searching 3,083,324,652 web pages</font></center></body></html>\n"
 		);		
 		parser.registerScanners();
-		int i = 0;
 		NodeList collectionList = new NodeList();
 
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
@@ -669,7 +668,6 @@ public class ParserTest extends ParserTestCase {
 		"</body>\n"+
 		"</html>");		
 		parser.registerScanners();
-		int i = 0;
 		NodeList collectionList = new NodeList();
 
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
@@ -711,9 +709,8 @@ public class ParserTest extends ParserTestCase {
             + "</tr>\n"
             + "</table>\n"
             + "</body></html>\n");
-		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
-        {
-			Node node = e.nextNode();
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
+			e.nextNode();
 		}
     }
     

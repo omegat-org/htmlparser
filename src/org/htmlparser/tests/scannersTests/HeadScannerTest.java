@@ -32,7 +32,6 @@
 package org.htmlparser.tests.scannersTests;
 
 import junit.framework.TestSuite;
-import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
@@ -45,7 +44,6 @@ public class HeadScannerTest extends ParserTestCase {
 
 	public void testSimpleHead() throws ParserException {
 		createParser("<HTML><HEAD></HEAD></HTML>");
-		HeadScanner headScanner = new HeadScanner();
 		parser.registerDomScanners();
 		parseAndAssertNodeCount(1);
 		assertTrue(node[0] instanceof Html);
@@ -55,7 +53,6 @@ public class HeadScannerTest extends ParserTestCase {
 	
 	public void testSimpleHeadWithoutEndTag() throws ParserException {
 		createParser("<HTML><HEAD></HTML>");
-		HeadScanner headScanner = new HeadScanner();
 		parser.registerDomScanners();
 		parseAndAssertNodeCount(1);
 		assertTrue(node[0] instanceof Html);
@@ -68,7 +65,6 @@ public class HeadScannerTest extends ParserTestCase {
 	
 	public void testSimpleHeadWithBody() throws ParserException {
 		createParser("<HTML><HEAD><BODY></HTML>");
-		HeadScanner headScanner = new HeadScanner();
 		parser.registerDomScanners();
 		parseAndAssertNodeCount(1);
 		assertTrue(node[0] instanceof Html);

@@ -335,7 +335,6 @@ public class TagNode extends AbstractNode
 		StringBuffer ret;
         Vector attributes;
         Attribute attribute;
-        String value;
 
         ret = new StringBuffer ();
         attributes = getAttributesEx ();

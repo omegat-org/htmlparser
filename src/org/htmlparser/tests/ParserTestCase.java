@@ -334,7 +334,6 @@ public class ParserTestCase extends TestCase {
 				continue;
 			}
 		
-			String expectedHTML = expectedTag.toHtml();
 			if (expectedValue==null)
 				fail(
 					"\nActual tag had extra key: "+key+displayMessage
@@ -361,7 +360,6 @@ public class ParserTestCase extends TestCase {
 				continue;
 			}
 				
-			String expectedHTML = expectedTag.toHtml();
 			assertStringEquals(
 				"\nvalue for key "+key+" in tag "+expectedTag.getTagName()+" expected="+expectedValue+" but was "+actualValue+
 				"\n\nComplete Tag expected:\n"+expectedTag.toHtml()+

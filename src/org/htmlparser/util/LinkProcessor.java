@@ -63,10 +63,6 @@ public class LinkProcessor
         throws
             ParserException
     {
-        String path; // path portion of constructed URL
-        boolean modified; // true if path is modified by us
-        boolean absolute; // true if link starts with "/"
-        int index;
         String ret;
         
         try
@@ -162,8 +158,7 @@ public class LinkProcessor
      * @param resourceLocn The resource to test.
      * @return <code>true</code> if the resource is a valid URL.
      */
-    public static boolean isURL (String resourceLocn)
-    {
+    public static boolean isURL (String resourceLocn) {
         URL url;
         boolean ret;
         

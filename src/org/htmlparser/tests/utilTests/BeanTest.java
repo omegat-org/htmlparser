@@ -47,10 +47,11 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.beans.LinkBean;
 import org.htmlparser.beans.StringBean;
+import org.htmlparser.tests.*;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
-public class BeanTest extends TestCase
+public class BeanTest extends ParserTestCase
 {
     public BeanTest (String name)
     {
@@ -122,7 +123,7 @@ public class BeanTest extends TestCase
         {
             file.delete ();
         }
-        assertEquals ("stringbean text differs", text, string);
+        assertStringEquals ("stringbean text differs", text, string);
     }
 
     public void testZeroArgConstructor ()

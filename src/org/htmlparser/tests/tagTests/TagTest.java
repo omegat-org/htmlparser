@@ -90,7 +90,6 @@ public class TagTest extends ParserTestCase
 	 * Nested JSP Tags were not working
 	 */
 	public void testNestedTags() throws ParserException {
-		EndTag etag;
 		String s = "input type=\"text\" value=\"<%=\"test\"%>\" name=\"text\"";
 		String line = "<"+s+">";
 	    createParser(line);
@@ -107,16 +106,12 @@ public class TagTest extends ParserTestCase
      */
     public void testParseParameter3() throws ParserException {
         Tag tag;
-        EndTag etag;
-        StringNode snode;
         Node node=null;
         String lin1 = "<DIV class=\"userData\" id=\"oLayout\" name=\"oLayout\"></DIV>";
        	createParser(lin1);
     	NodeIterator en = parser.elements();
         Hashtable h;
-        boolean testEnd=true;  // test end of first part
-        String a,href,myPara,myValue,nice;
-
+        
         try {
 
             if (en.hasMoreNodes()) {
@@ -148,8 +143,7 @@ public class TagTest extends ParserTestCase
        	createParser(lin1);
         NodeIterator en = parser.elements();
         Hashtable h;
-        boolean testEnd=true;  // test end of first part
-        String a,href,myPara,myValue,nice;
+        String a,href,myValue,nice;
 
         try {
 
@@ -219,8 +213,7 @@ public class TagTest extends ParserTestCase
        	createParser(lin1);
         NodeIterator en = parser.elements();
         Hashtable h;
-        boolean testEnd=true;  // test end of first part
-        String a,href,myPara,myValue,nice;
+        String a,href,myValue,nice;
 
         try {
 
@@ -288,8 +281,7 @@ public class TagTest extends ParserTestCase
        	createParser(lin1);
         NodeIterator en = parser.elements();
         Hashtable h;
-        boolean testEnd=true;  // test end of first part
-        String a,href,myPara,myValue,nice;
+        String a,nice;
 
         try {
 
@@ -391,9 +383,6 @@ public class TagTest extends ParserTestCase
      * This test just wants the text in the element
      */
     public void testWithoutParseParameter() throws ParserException{
-        Tag tag;
-        EndTag etag;
-        StringNode snode;
         Node node=null;
         String testHTML = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle\">Kaarle's homepage</A><p>Paragraph</p>";
        	createParser(testHTML);
@@ -417,9 +406,6 @@ public class TagTest extends ParserTestCase
     * This test just wants the text in the element
     */
    public void testEmptyTagParseParameter() throws ParserException{
-       Tag tag;
-       EndTag etag;
-       StringNode snode;
        Node node=null;
        String testHTML = "<INPUT name=\"foo\" value=\"foobar\" type=\"text\" />";
 
@@ -480,7 +466,6 @@ public class TagTest extends ParserTestCase
 		assertTrue("Node should be a tag",node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
 		assertStringEquals("Node contents","META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"",tag.getText());
-		Hashtable table = tag.getAttributes();
 		assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getAttribute("CONTENT"));
 
     }
@@ -609,7 +594,6 @@ public class TagTest extends ParserTestCase
 	}
     public void testExtractWord() {
     	String line = "Abc DEF GHHI";
-    	String word = Tag.extractWord(line);
     	assertEquals("Word expected","ABC",Tag.extractWord(line));
     	String line2= "%\n ";
     	assertEquals("Word expected for line 2","%",Tag.extractWord(line2));

@@ -56,7 +56,6 @@ public class HTMLLinkProcessorTest extends ParserTestCase {
 	public void testFixSpaces() {
 		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
 		String fixedURL = LinkProcessor.fixSpaces(url);
-		int index = fixedURL.indexOf(" ");
 		assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html",fixedURL);
 	}
 

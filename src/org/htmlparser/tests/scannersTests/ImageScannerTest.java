@@ -73,7 +73,6 @@ public class ImageScannerTest extends ParserTestCase
 	public void testExtractImageLocnInvertedCommasBug() throws ParserException
 	{
 		Tag tag = new Tag(new TagData(0,0,"img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo",""));
-		String link = "img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo";
 		String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
 		ImageScanner scanner = new ImageScanner("-i",new LinkProcessor());
 		assertEquals("Extracted Image Locn","http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif",scanner.extractImageLocn(tag,url));

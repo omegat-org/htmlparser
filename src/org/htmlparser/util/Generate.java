@@ -359,8 +359,6 @@ public class Generate
         int space;
         String token;
         String code;
-        int comment;
-        String description;
 
         if (string.startsWith ("<!--"))
             System.out.println (pretty (string.substring (4, string.length () - 3).trim ()));
@@ -413,9 +411,6 @@ public class Generate
         int index;
         int begin;
         int end;
-        StringBuffer ret;
-        
-        ret = new StringBuffer (4096);
         
         index = 0;
         while (-1 != (begin = string.indexOf ("<", index)))

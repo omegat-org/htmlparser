@@ -109,14 +109,6 @@ public class TagScannerTest extends ParserTestCase
 
 	public void testRemoveChars() {
 		String test = "hello\nworld\n\tqsdsds";
-		TagScanner scanner = new TagScanner() { 
-			public Tag scan(Tag tag,String url,NodeReader reader,String currLine) { return null;}
-			public boolean evaluate(String s,TagScanner previousOpenScanner) { return false; }
-			public String []getID() {
-				
-				return null;
-			}
-		};
 		String result = ParserUtils.removeChars(test,'\n');
 		assertEquals("Removing Chars","helloworld\tqsdsds",result);
 	}
