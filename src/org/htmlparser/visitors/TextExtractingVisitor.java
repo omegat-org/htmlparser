@@ -5,6 +5,17 @@ import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.Translate;
 
+
+/**
+ * Extracts text from a web page.
+ * Usage:
+ * <code>
+ * HTMLParser parser = new HTMLParser(...);
+ * TextExtractingVisitor visitor = new TextExtractingVisitor();
+ * parser.visitAllNodesWith(visitor);
+ * String textInPage = visitor.getExtractedText();
+ * </code>
+ */
 public class TextExtractingVisitor extends HTMLVisitor {
 	private StringBuffer textAccumulator;
 	private boolean preTagBeingProcessed;
