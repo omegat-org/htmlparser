@@ -30,6 +30,7 @@
 package org.htmlparser;
 
 import java.io.PrintWriter;
+
 /**
  * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)
  */
@@ -51,14 +52,33 @@ public abstract class HTMLNode
 	 * However it can also be changed using the mutator methods.
 	 * THis will be used in the toHTML() methods in all the sub-classes of HTMLNode.
 	 */
-	protected static String lineSeparator = 
-			(String)java.security.AccessController.doPrivileged(
-						new sun.security.action.GetPropertyAction("line.separator"));
+    protected static String lineSeparator = System.getProperty ("line.separator", "\n");
+
+    // It is unclear why security precautions were being taken just to access
+    // a simple accessible property. If the above is a problem, use this instead:
+//    protected static String lineSeparator = 
+//			(String)java.security.AccessController.doPrivileged (
+//                // inner anonymous class based on PrivilegedAction interface
+//                new java.security.PrivilegedAction ()
+//                {
+//                    /**
+//                     * Get the line separator.
+//                     * This method will be called by
+//                     * <code>AccessController.doPrivileged</code>
+//                     * after enabling privileges.
+//                     * @return The current value of system property <em>line.separator</em>.
+//                     */
+//                    public Object run ()
+//                    {
+//						return (System.getProperty ("line.separator", "\n"));
+//                    }
+//                });
 	
 	public HTMLNode(int nodeBegin, int nodeEnd) {
 		this.nodeBegin = nodeBegin;
 		this.nodeEnd = nodeEnd;
 	}
+
 	/**
 	 * @param lineSeparator New Line separator to be used
 	 */
