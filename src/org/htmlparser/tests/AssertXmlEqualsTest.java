@@ -46,6 +46,8 @@ public class AssertXmlEqualsTest extends ParserTestCase {
 	}
 	
 	public static TestSuite suite() {
-		return new TestSuite(AssertXmlEqualsTest.class);
+	    TestSuite suite = new TestSuite("XML Tests");
+        suite.addTestSuite(AssertXmlEqualsTest.class);
+        return (suite);
 	}
 }

@@ -37,13 +37,17 @@ public class AllTests extends junit.framework.TestCase
 	}
 	
 	public static TestSuite suite() {
-		TestSuite suite = new TestSuite("Utility Tests");
-		suite.addTestSuite(StringFindingVisitorTest.class);
-		suite.addTestSuite(TagFindingVisitorTest.class);
+		TestSuite suite = new TestSuite("Visitor Tests");
+        
+        suite.addTestSuite(CompositeTagFindingVisitorTest.class);
+		suite.addTestSuite(HtmlPageTest.class);
 		suite.addTestSuite(LinkFindingVisitorTest.class);
 		suite.addTestSuite(NodeVisitorTest.class);
+		suite.addTestSuite(StringFindingVisitorTest.class);
+		suite.addTestSuite(TagFindingVisitorTest.class);
+		suite.addTestSuite(TextExtractingVisitorTest.class);
 		suite.addTestSuite(UrlModifyingVisitorTest.class);
-		suite.addTestSuite(HtmlPageTest.class);
+
 		return suite;
 	} 
 }

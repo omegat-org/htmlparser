@@ -37,12 +37,14 @@ public class AllTests extends junit.framework.TestCase
 	}
 
   	public static TestSuite suite() {
-		TestSuite suite = new TestSuite();
+        TestSuite suite = new TestSuite("Parser Helper Tests");
+
 		suite.addTestSuite(AttributeParserTest.class);
+		suite.addTestSuite(CompositeTagScannerHelperTest.class);
 		suite.addTestSuite(RemarkNodeParserTest.class);
 		suite.addTestSuite(StringParserTest.class);
 		suite.addTestSuite(TagParserTest.class);
-		suite.addTestSuite(CompositeTagScannerHelperTest.class);
+
         return suite;
 	} 
 }

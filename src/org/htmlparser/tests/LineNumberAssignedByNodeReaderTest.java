@@ -116,6 +116,8 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
 	}
 
 	public static TestSuite suite() {
-		return new TestSuite(LineNumberAssignedByNodeReaderTest.class);
+	    TestSuite suite = new TestSuite("Line Number Tests");
+        suite.addTestSuite(LineNumberAssignedByNodeReaderTest.class);
+        return (suite);
 	}
 }

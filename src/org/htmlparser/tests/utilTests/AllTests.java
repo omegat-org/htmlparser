@@ -31,7 +31,6 @@ package org.htmlparser.tests.utilTests;
 
 import junit.framework.TestSuite;
 
-import org.htmlparser.tests.parserHelperTests.AttributeParserTest;
 /**
  * Insert the type's description here.
  * Creation date: (6/17/2001 6:07:04 PM)
@@ -58,11 +57,12 @@ public static TestSuite suite() {
 	TestSuite suite = new TestSuite("Utility Tests");
 	
 	suite.addTestSuite(BeanTest.class);
-	suite.addTestSuite(HTMLLinkProcessorTest.class);
-	suite.addTestSuite(AttributeParserTest.class);	
-	suite.addTestSuite(HTMLTagParserTest.class);
 	suite.addTestSuite(CharacterTranslationTest.class);
+	suite.addTestSuite(HTMLLinkProcessorTest.class);
+    suite.addTestSuite(HTMLParserUtilsTest.class);
+	suite.addTestSuite(HTMLTagParserTest.class);
 	suite.addTestSuite(NodeListTest.class);
+
 	return suite;
 } 
 }
