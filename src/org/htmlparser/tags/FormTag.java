@@ -84,7 +84,7 @@ public class FormTag extends CompositeTag
      * Get the list of text areas.
 	 * @return Textarea elements in the form
 	 */
-	public NodeList getFormtextAreas()
+	public NodeList getFormTextAreas()
     {
 		return textAreaList;
 	}
