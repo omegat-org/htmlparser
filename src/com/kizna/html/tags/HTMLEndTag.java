@@ -38,6 +38,11 @@ import com.kizna.html.HTMLNode;
  */
 public class HTMLEndTag extends HTMLTag
 {
+	public final static int ENDTAG_BEFORE_PARSING_STATE=0;
+    public final static int ENDTAG_WAIT_FOR_SLASH_STATE=1;
+    public final static int ENDTAG_BEGIN_PARSING_STATE=2;
+	public final static int ENDTAG_FINISHED_PARSING_STATE=3;
+	
 	/**
 	 * Constructor takes 3 arguments to construct an HTMLEndTag object.
 	 * @param tagBegin Beginning position of the end tag
@@ -55,48 +60,55 @@ public class HTMLEndTag extends HTMLTag
 	 */
 	public static HTMLNode find(String input,int position)
 	{
-		int state = 0;
-		//String tagContents = "";
+		int state = ENDTAG_BEFORE_PARSING_STATE;
 		StringBuffer tagContents = new StringBuffer();
 		int tagBegin=0;
 		int tagEnd=0;
 		int inputLen = input.length();
 		char ch;
-		for (int i=position;(i<inputLen&& state!=3);i++)
+		int i ;
+		for (i=position;(i<inputLen&& state!=ENDTAG_FINISHED_PARSING_STATE);i++)
 		{
 			ch = input.charAt(i);
-			if (ch=='>' && state==2)
+			if (ch=='>' && state==ENDTAG_BEGIN_PARSING_STATE)
 			{
-				state = 3;
+				state = ENDTAG_FINISHED_PARSING_STATE;
 				tagEnd = i;
 			}				
-			if (state==2)
+			if (state==ENDTAG_BEGIN_PARSING_STATE)
 			{
-				//tagContents+=input.charAt(i);		
 				tagContents.append(ch);
 			}
-			if (state==1)
+			if (state==ENDTAG_WAIT_FOR_SLASH_STATE)
 			{
 				if (ch=='/')			
 				{
-					state = 2;
+					state = ENDTAG_BEGIN_PARSING_STATE;
 				}
 				else return null;
 			}
-			if (state==4)
+
+			if (ch=='<')
 			{
-				//tagContents="";
-				tagContents.setLength(0);
+				if (state==ENDTAG_BEFORE_PARSING_STATE)
+				{
+					// Transition from State 0 to State 1 - Record data till > is encountered
+					tagBegin = i;
+					state = ENDTAG_WAIT_FOR_SLASH_STATE;
+				}
+				else if (state==ENDTAG_BEGIN_PARSING_STATE)
+				{
+					state=ENDTAG_FINISHED_PARSING_STATE;
+					tagEnd=i;			
+				}
 			}
-			if (ch=='<' && (state==0 || state==4))
-			{
-				// Transition from State 0 to State 1 - Record data till > is encountered
-				tagBegin = i;
-				state = 1;
-			}
-			
 		}
-		if (state==3)
+		// If parsing did not complete, it might be possible to accept
+		if (state==ENDTAG_BEGIN_PARSING_STATE) {
+			tagEnd=i;
+			state=ENDTAG_FINISHED_PARSING_STATE;
+		}		
+		if (state==ENDTAG_FINISHED_PARSING_STATE)
 		return new HTMLEndTag(tagBegin,tagEnd,tagContents.toString(),input);
 		else return null;	
 	}
