@@ -43,10 +43,11 @@ import org.htmlparser.tags.HTMLTag;
  * @version 7 AUG 2001
  */
 public class AttributeParser {
-    private final String delim = " \t\r\n\f=\"'>";
+    private final String delima = " \t\r\n\f=\"'>";
+    private final String delimb = " \t\r\n\f\"'>";
     private final char doubleQuote = '\"';
     private final char singleQuote = '\'';
-
+    private String delim;
 
 
 
@@ -97,11 +98,11 @@ public class AttributeParser {
         value=null;
         element=null;
         boolean waitingForEqual=false;
-
+        delim=delima;
         StringTokenizer tokenizer = new StringTokenizer(tag.getText(),delim,true);
         while (true) {
-            nextPart=getNextPart(tokenizer);
-
+            nextPart=getNextPart(tokenizer,delim);
+            delim=delima;
             if (element==null && nextPart != null && !nextPart.equals("=")){
                 element = nextPart;
                 putDataIntoTable(h,element,null,true);
@@ -118,6 +119,7 @@ public class AttributeParser {
                         if (waitingForEqual){
                             if (nextPart.equals("=")) {
                                 waitingForEqual=false;
+                                delim=delimb;
                             }
                             else {
                                  putDataIntoTable(h,name,"",false);
@@ -150,14 +152,14 @@ public class AttributeParser {
         return h;
     }
 
-    private String getNextPart(StringTokenizer tokenizer){
+    private String getNextPart(StringTokenizer tokenizer,String deli){
         String tokenAccumulator=null;
         boolean isDoubleQuote=false;
         boolean isSingleQuote=false;
         boolean isDataReady=false;
         String currentToken;
         while (isDataReady == false && tokenizer.hasMoreTokens()) {
-            currentToken = tokenizer.nextToken();
+            currentToken = tokenizer.nextToken(deli);
             //
             // First let's combine tokens that are inside "" or ''
             //
