@@ -61,20 +61,47 @@ public class HTMLParserTestCase extends TestCase {
 		node = new HTMLNode[numNodes];
 	}
 	
-	public void assertStringEquals(String message,String s1,String s2) {
-		for (int i=0;i<s1.length();i++) {
-			if (s1.charAt(i)!=s2.charAt(i)) {
-				assertTrue(message+
-					" \nMismatch of strings at char posn "+i+
-					" \nString 1 upto mismatch = "+s1.substring(0,i)+
-					" \nString 2 upto mismatch = "+s2.substring(0,i)+
-					" \nString 1 mismatch character = "+s1.charAt(i)+", code = "+(int)s1.charAt(i)+
-					" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i)+
-					" \nComplete String 1 = "+s1+
-					" \nComplete String 2 = "+s2,false);
-			}
-		}
-	}    
+    public void assertStringEquals(String message, String expected, 
+                                      String actual) {
+		String mismatchInfo = "";
+
+        if (expected.length() < actual.length()) {
+            mismatchInfo = "\n\nACTUAL result has "+(actual.length()-expected.length())+" extra characters at the end. They are :";
+
+            for (int i = expected.length(); i < actual.length(); i++) {
+                mismatchInfo += ("\nPosition : " + i + " , Code = " + (int) actual.charAt(i));
+            }
+        } else if(expected.length() > actual.length()) {
+            mismatchInfo = "\n\nEXPECTED result has "+(expected.length()-actual.length())+" extra characters at the end. They are :";
+
+            for (int i = actual.length(); i < expected.length(); i++) {
+                mismatchInfo += ("\nPosition : " + i + " , Code = " + (int) expected.charAt(i));
+            }
+        	
+        }
+        for (int i = 0; i < expected.length(); i++) {
+            if ((expected.length() != actual.length() && 
+                        (i == (expected.length() - 1) || 
+                            i == (actual.length() - 1))) || 
+                    (actual.charAt(i) != expected.charAt(i))) {
+                assertTrue(message +mismatchInfo + " \nMismatch of strings at char posn " + i + 
+                           " \n\nString Expected upto mismatch = " + 
+                           expected.substring(0, i) + 
+                           " \n\nString Actual upto mismatch = " + 
+                           actual.substring(0, i) + 
+                           " \n\nString Expected MISMATCH CHARACTER = " + 
+                           expected.charAt(i) + ", code = " + 
+                           (int) expected.charAt(i) + 
+                           " \n\nString Actual MISMATCH CHARACTER = " + 
+                           actual.charAt(i) + ", code = " + 
+                           (int) actual.charAt(i) + 
+                           " \n\n**** COMPLETE STRING EXPECTED ****\n" + 
+                           expected + 
+                           " \n\n**** COMPLETE STRING ACTUAL***\n" + actual, 
+                           false);
+            }
+        }
+    }   
 
 	public void parseNodes() throws HTMLParserException{
 		nodeCount = 0;

@@ -176,7 +176,7 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0]; 
-		assertStringEquals("Script toHTML()","<SCRIPT LANGUAGE=\"javascript\">\r\nvar lower = '<%=lowerValue%>';\r\n</SCRIPT>\r\n",scriptTag.toHTML());
+		assertStringEquals("Script toHTML()","<SCRIPT LANGUAGE=\"javascript\">\r\nvar lower = '<%=lowerValue%>';\r\n</SCRIPT>",scriptTag.toHTML());
 	}	
 
 	public void testSingleApostropheParsingBug() throws HTMLParserException {

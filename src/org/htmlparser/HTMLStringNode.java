@@ -120,13 +120,17 @@ public class HTMLStringNode extends HTMLNode
 					textBuffer.append(lineSeparator);
 					inputLen = input.length();
 					i=-1;
-					textBegin=-1;
+					// Bugfix by Somik Raha (pointed out by Dhaval Udani)
+					// Text begin pos should never be -1
+					//textBegin=-1;
 				}
 
 			}
 		}
-		if (textBegin<=textEnd) return new HTMLStringNode(textBuffer,textBegin,textEnd);
-		else return null;
+		// The condition below is not needed
+//		if (textBegin<=textEnd) return new HTMLStringNode(textBuffer,textBegin,textEnd);
+//		else return null;
+		return new HTMLStringNode(textBuffer,textBegin,textEnd);
 	}
 	/**
 	 * Returns the text of the string line
