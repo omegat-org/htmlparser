@@ -54,14 +54,23 @@ public class HTMLParameterParserTest extends TestCase {
         }
 
         public void testPlainParams(){
-		HTMLParameterParser parser = new HTMLParameterParser();
-		HTMLTag tag = new HTMLTag(0,0,"PARAM NAME=Param1 VALUE=Somik","");
-		Hashtable table = parser.parseParameters(tag);
-		assertEquals("Param1","Param1",table.get("NAME"));
-                assertEquals("Somik","Somik",table.get("VALUE"));                
+			HTMLParameterParser parser = new HTMLParameterParser();
+			HTMLTag tag = new HTMLTag(0,0,"PARAM NAME=Param1 VALUE=Somik","");
+			Hashtable table = parser.parseParameters(tag);
+			assertEquals("Param1","Param1",table.get("NAME"));
+            assertEquals("Somik","Somik",table.get("VALUE"));                
         }
         
-        
+        public void testValueMissing() {
+			HTMLParameterParser parser = new HTMLParameterParser();
+			HTMLTag tag = new HTMLTag(0,0,"INPUT type=\"checkbox\" name=\"Authorize\" value=\"Y\" checked","");
+			Hashtable table = parser.parseParameters(tag);
+			assertEquals("Name of Tag","INPUT",table.get(HTMLTag.TAGNAME));
+            assertEquals("Type","checkbox",table.get("type"));                
+            assertEquals("Name","Authorize",table.get("name"));
+            assertEquals("Value","Y",table.get("value"));
+			assertEquals("Checked","",table.get("checked"));
+        }
 	public static TestSuite suite() {
 		return new TestSuite(HTMLParameterParserTest.class);
 	}
