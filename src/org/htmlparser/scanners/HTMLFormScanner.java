@@ -133,12 +133,24 @@ public class HTMLFormScanner extends HTMLTagScanner
 			linkBegin = tag.elementBegin();
 		    boolean endFlag = false;
 			nodeVector.addElement(tag);
-
+			
+			// The following two lines added by Somik Raha, to fix a bug - so as to allow 
+			// links inside form tags to be scanned.
+			HTMLLinkScanner linkScanner = (HTMLLinkScanner)reader.getParser().getScanner(HTMLLinkScanner.LINK_SCANNER_ID);
+			HTMLImageScanner imageScanner = (HTMLImageScanner)reader.getParser().getScanner(HTMLImageScanner.IMAGE_SCANNER_ID);
+			// End of modification
+			
 			Hashtable oldScanners = adjustScanners(reader);
 			reader.getParser().addScanner(new HTMLInputTagScanner(""));
 			reader.getParser().addScanner(new HTMLSelectTagScanner(""));
 			reader.getParser().addScanner(new HTMLOptionTagScanner(""));
 			reader.getParser().addScanner(new HTMLTextareaTagScanner(""));
+			
+			// Following two lines added by Somik Raha, to fix the links in forms bug
+			reader.getParser().addScanner(linkScanner);
+			reader.getParser().addScanner(imageScanner);
+			// End of modification
+			
 		    do
 			{
 				node = reader.readElement();

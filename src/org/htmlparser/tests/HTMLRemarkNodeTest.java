@@ -109,7 +109,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
-		assertEquals("Plain Text of the remarkNode #1","",remarkNode.toPlainTextString());	
+		assertEquals("Plain Text of the remarkNode #1"," saved from url=(0022)http://internet.e-mail ",remarkNode.toPlainTextString());	
 		// The sixth node should be a HTMLRemarkNode 
 		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 		remarkNode = (HTMLRemarkNode)node[5];

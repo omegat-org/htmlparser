@@ -54,7 +54,7 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 	public void testSetFormLocation() throws HTMLParserException{
 		createParser(HTMLFormScannerTest.FORM_HTML);
 
-		parser.addScanner(new HTMLFormScanner(""));
+		parser.registerScanners();
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];

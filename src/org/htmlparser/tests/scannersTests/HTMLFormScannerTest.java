@@ -40,6 +40,7 @@ import org.htmlparser.scanners.HTMLFormScanner;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tags.HTMLInputTag;
+import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
@@ -105,7 +106,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 	}	
 	public void testScan() throws HTMLParserException {
 		createParser(FORM_HTML,"http://www.google.com/test/index.html");
-		parser.addScanner(new HTMLFormScanner(""));
+		parser.registerScanners();
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
@@ -154,5 +155,38 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		}
 		catch (HTMLParserException e) {
 		}
+	}
+	/** 
+	 * Bug reported by Pavan Podila - forms with links are not being parsed
+	 * Sample html is from google
+	 */
+	public void testScanFormWithLinks() throws HTMLParserException {
+		createParser(
+		"<form action=\"/search\" name=f><table cellspacing=0 cellpadding=0><tr><td width=75>&nbsp;"+
+		"</td><td align=center><input type=hidden name=hl value=en><input type=hidden name=ie "+
+		"value=\"UTF-8\"><input type=hidden name=oe value=\"UTF-8\"><input maxLength=256 size=55"+
+		" name=q value=\"\"><br><input type=submit value=\"Google Search\" name=btnG><input type="+
+		"submit value=\"I'm Feeling Lucky\" name=btnI></td><td valign=top nowrap><font size=-2>"+
+		"&nbsp;&#8226;&nbsp;<a href=/advanced_search?hl=en>Advanced&nbsp;Search</a><br>&nbsp;&#8226;"+
+		"&nbsp;<a href=/preferences?hl=en>Preferences</a><br>&nbsp;&#8226;&nbsp;<a href=/"+
+		"language_tools?hl=en>Language Tools</a></font></td></tr></table></form>"
+		);	
+		
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Should be a HTMLFormTag",node[0] instanceof HTMLFormTag);
+		HTMLFormTag formTag = (HTMLFormTag)node[0];
+		HTMLLinkTag [] linkTag = new HTMLLinkTag[10];
+		int i = 0;
+		for (Enumeration e=formTag.getAllNodesVector().elements();e.hasMoreElements();) {
+			HTMLNode formNode = (HTMLNode)e.nextElement();
+			if (formNode instanceof HTMLLinkTag) {
+				linkTag[i++] = (HTMLLinkTag)formNode;		
+			}
+		}
+		assertEquals("Link Tag Count",3,i);
+		assertEquals("First Link Tag Text","Advanced&nbsp;Search",linkTag[0].getLinkText());
+		assertEquals("Second Link Tag Text","Preferences",linkTag[1].getLinkText());
+		assertEquals("Third Link Tag Text","Language Tools",linkTag[2].getLinkText());
 	}
 }

@@ -55,6 +55,7 @@ import org.htmlparser.util.HTMLParserException;
  */
 public class HTMLLinkScanner extends HTMLTagScanner
 {
+	public static final String LINK_SCANNER_ID="A";
 	public static final String DIRTY_TAG_MESSAGE=" is a dirty link tag - the tag was not closed. \nWe encountered an open tag, before the previous end tag was found.\nCorrecting this..";
 	private HTMLTagScanner previousOpenLinkScanner=null;
 	private HTMLLinkProcessor processor;
@@ -338,7 +339,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	 */
 	public String [] getID() {
 		String [] ids = new String[1];
-		ids[0] = "A";
+		ids[0] = LINK_SCANNER_ID;
 		return ids;
 	}
 

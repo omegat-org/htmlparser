@@ -353,6 +353,15 @@ public class HTMLParser
 	}
 	
 	/**
+	 * Return the scanner registered in the parser having the
+	 * given id
+	 * @param id The id of the requested scanner
+	 * @return HTMLTagScanner The Tag Scanner
+	 */
+	public HTMLTagScanner getScanner(String id) {
+		return (HTMLTagScanner)scanners.get(id);
+	}
+	/**
 	 * The main program, which can be executed from the command line
 	 */
 	public static void main(String [] args)

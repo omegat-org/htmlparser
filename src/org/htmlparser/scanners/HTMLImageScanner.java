@@ -55,6 +55,7 @@ import org.htmlparser.util.HTMLParserException;
  */
 public class HTMLImageScanner extends HTMLTagScanner
 {
+	public static final String IMAGE_SCANNER_ID = "IMG";
 	private Hashtable table;
 	private HTMLLinkProcessor processor;
 	/**
@@ -146,7 +147,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 	 */
 	public String [] getID() {
 		String [] ids = new String[1];
-		ids[0] = "IMG";
+		ids[0] = IMAGE_SCANNER_ID;
 		return ids;
 	}
 
