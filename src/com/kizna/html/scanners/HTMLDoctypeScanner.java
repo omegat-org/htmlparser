@@ -85,7 +85,7 @@ public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
  */
 public void extractLanguage(HTMLTag tag) 
 {
-	language = extractField(tag,"LANGUAGE");
+	language = tag.getParameter("LANGUAGE");
 }
 	/** 
 	 * Scan the tag and extract the information related to this type. The url of the 

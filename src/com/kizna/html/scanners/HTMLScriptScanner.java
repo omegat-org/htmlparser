@@ -83,7 +83,8 @@ public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
  */
 public void extractLanguage(HTMLTag tag) 
 {
-	language = extractField(tag,"LANGUAGE");
+	language = tag.getParameter("LANGUAGE");
+	if (language==null) language="";
 }
 /**
  * Insert the method's description here.
@@ -91,7 +92,8 @@ public void extractLanguage(HTMLTag tag)
  */
 public void extractType(HTMLTag tag) 
 {
-	type = extractField(tag,"TYPE");
+	type = tag.getParameter("TYPE");
+	if (type==null) type="";
 }
 /**
  * Insert the method's description here.
