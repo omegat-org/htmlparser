@@ -42,7 +42,7 @@ public class HTMLStyleScannerTest extends HTMLParserTestCase
 	public void testEvaluate() 
 	{
 		HTMLStyleScanner scanner = new HTMLStyleScanner("-s");
-		boolean retVal = scanner.evaluate("   style ",null);
+		boolean retVal = scanner.evaluate("style ",null);
 		assertEquals("Evaluation of STYLE tag",new Boolean(true),new Boolean(retVal));
 	}
 

@@ -47,9 +47,9 @@ public class HTMLTitleTag extends HTMLCompositeTag {
 	 * @param tagContents
 	 * @param tagLine
 	 */
-	public HTMLTitleTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData, String title) {
+	public HTMLTitleTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
 		super(tagData,compositeTagData);
-		this.title = title;
+		this.title = toPlainTextString();
 		this.titleTagChildren = compositeTagData.getChildren();
 	}
 	
@@ -68,10 +68,7 @@ public class HTMLTitleTag extends HTMLCompositeTag {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
-	public String toPlainTextString() {
-		return title;
-	}
+
 	
 	public String toString() {
 		return "TITLE: "+title;

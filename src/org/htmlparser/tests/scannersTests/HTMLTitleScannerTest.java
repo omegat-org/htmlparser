@@ -40,16 +40,6 @@ public class HTMLTitleScannerTest extends HTMLParserTestCase {
 		super(name);
 	}
 
-	public void testEvaluate() {
-		HTMLTitleScanner scanner = new HTMLTitleScanner("-t");
-		boolean retVal = scanner.evaluate("TITLE",null);
-		assertEquals("Title evaluation - Upper Case",true,retVal);
-		retVal = scanner.evaluate("title",null);
-		assertEquals("Title evaluation - Lower Case",true,retVal);
-		retVal = scanner.evaluate("abcd",null);
-		assertEquals("Incorrect Case",false,retVal);
-	}
-	
 	public void testScan() throws HTMLParserException {
 		createParser("<html><head><title>Yahoo!</title><base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
 		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");

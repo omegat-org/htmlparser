@@ -13,7 +13,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 
 public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
-	private String nameOfTagToMatch;
+	protected String nameOfTagToMatch;
 
 	public HTMLCompositeTagScanner(String nameOfTagToMatch) {
 		super();
@@ -63,5 +63,7 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 	protected void childNodeEncountered(HTMLNode node) {
 	}
 
-	protected abstract HTMLTag createTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData); 
+	protected abstract HTMLTag createTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData);
+
+
 }
