@@ -14,10 +14,14 @@ import com.kizna.html.tags.HTMLTag;
  * Window>Preferences>Java>Code Generation.
  */
 public class HTMLParameterParser {
-	private final String delim = " \t\r\n\f=\"'>";
-	private final char doubleQuote = '\"';
-	private final char singleQuote = '\'';
-	private final char equalTo = '=';
+    private final String delim = " \t\r\n\f=\"'>";
+    private final char doubleQuote = '\"';
+    private final char singleQuote = '\'';
+
+
+    private StringTokenizer token;
+        
+        
 	/**
 	* Method to break the tag into pieces.
 	* @param returns a Hastable with elements containing the
@@ -62,29 +66,79 @@ public class HTMLParameterParser {
     
    public Hashtable parseParameters(HTMLTag tag){
         Hashtable h = new Hashtable();
-        String name,value,tokenAccumulator,currentToken;     
-        boolean isDoubleQuote=false;
-        boolean isSingleQuote=false;
-        boolean isValue=false;
-        boolean isValueInited=false;
-        boolean isName=true;
-        boolean waitingForValue = false;
+        String element,name,value,nextPart=null;     
+        
         name=null;
         value=null;
-        tokenAccumulator=null;
-        waitingForValue=false;          
-        StringTokenizer token = new StringTokenizer(tag.getText() + " ",delim,true);
-        while (token.hasMoreTokens()) {
-            currentToken = token.nextToken();
+        element=null;
+        boolean waitingForEqual=false;
+        
+//System.out.println("k0:|"+tag.getText()+"|");
+        token = new StringTokenizer(tag.getText(),delim,true);
+        while (true) {
+            nextPart=getNextPart();
             
+            if (element==null && nextPart != null && !nextPart.equals("=")){
+                element = nextPart;
+                putDataIntoTable(h,element,null,true);
+            }
+            else {
+                if (nextPart != null) {
+                    if (name == null) {
+                        name = nextPart;
+                        waitingForEqual=true;
+                    }
+                    else {
+                        if (waitingForEqual){
+                            if (nextPart.equals("=")) {                                                    
+                                waitingForEqual=false;                                            
+                            }
+                            else {                                                    
+                                 putDataIntoTable(h,name,"",false);         
+                                 name=nextPart;
+                                 value=null;
+                            }
+                        }
+                        if (!waitingForEqual && !nextPart.equals("=")) {
+                            value=nextPart;
+                            putDataIntoTable(h,name,value,false);                            
+                            name=null;
+                            value=null;                                                                                        
+                        }
+                    }
+                }
+                else {
+                    if (name != null) {
+                        putDataIntoTable(h,name,"",false);                                                   
+                        name=null;
+                        value=null;
+                    }
+                    break;
+                }                
+            }
+        }
+//System.out.println("h:"+h.toString());        
+        return h;
+    }
+    
+    private String getNextPart(){
+        String tokenAccumulator=null;
+        boolean isDoubleQuote=false;
+        boolean isSingleQuote=false;        
+        boolean isDataReady=false;
+        String currentToken;
+        while (isDataReady == false && token.hasMoreTokens()) {
+            currentToken = token.nextToken();
             //
             // First let's combine tokens that are inside "" or ''
             //
             if (isDoubleQuote || isSingleQuote) {
                 if (isDoubleQuote && currentToken.charAt(0)==doubleQuote){                
                     isDoubleQuote= false;                                   
+                    isDataReady=true;
                 } else if (isSingleQuote && currentToken.charAt(0)==singleQuote) {
                     isSingleQuote=false;
+                    isDataReady=true;
                 }else {               
                     tokenAccumulator += currentToken;   
                     continue;
@@ -92,84 +146,51 @@ public class HTMLParameterParser {
             } else if (currentToken.charAt(0)==doubleQuote){                
                 isDoubleQuote= true;
                 tokenAccumulator = "";
-                isValueInited=true;
                 continue;
             } else if (currentToken.charAt(0)==singleQuote){
                 isSingleQuote=true;
                 tokenAccumulator="";
-                isValueInited=true;
                 continue;                
             } else tokenAccumulator = currentToken;
             
-            // above leaves tokenAccumulator with
-            // - a delimter
-            // - a name of a parameter or the tag itself
-            // - a value of a parameter
-            if (!isValueInited && delim.indexOf(tokenAccumulator)>=0) {
-                // tokenAccumulator was a delimiter
-                //System.out.println("k:" + tokenAccumulator  + ":m");
-                if ( waitingForValue) {
-                  if (tokenAccumulator.charAt(0)==equalTo) {
-                        // here set to receive next value of parameter
-                        waitingForValue=false;
-                        isValue=true;
-                        value="";
-                    }                   
-                } 
-            }
-            else {                
-     
-                if (isValue) {
-                    value=tokenAccumulator;
-                    isValue=false;
+//System.out.println("k4|"+tokenAccumulator+"|"+currentToken+"|"+isDataReady);            
+            if (tokenAccumulator.equals(currentToken)) {            
+//System.out.println("k4a|"+tokenAccumulator+"|"+isDataReady);            
+                
+                
+                if (delim.indexOf(tokenAccumulator)>=0) {
+                    if (tokenAccumulator.equals("=")){
+//System.out.println("k4b|"+tokenAccumulator+"|"+isDataReady);            
+                        
+                        isDataReady=true;
+                    }
                 }
                 else {
-                    if (name==null) {
-                        name=tokenAccumulator;
-                        if (isName) {
-                            waitingForValue=false;
-                        }
-                        else {
-                            waitingForValue=true;
-                        }
-                    }
-                    else {
+                    
+//System.out.println("k4c|"+tokenAccumulator+"|"+currentToken+"|"+isDataReady);            
+                    
+                    isDataReady=true;
+                }                
+            }      
+            else isDataReady=true;
 
-                        h.put(name.toUpperCase(),"");  
-                        isName=false;
-                        value=null;
-                        name=tokenAccumulator;
-                        waitingForValue=true;
-                        isValueInited=false;
-
-                    }
-                }
-                
-                if (!waitingForValue) {
-                    if (name != null && isValue==false){
-                      	putDataIntoTable(h, name, value, isName);
-                        isName=false;
-                        name=null;
-                        name = null;
-                        value=null;
-                        isValueInited=false;
-                    }                
-                    waitingForValue=false;
-                }           
-            }
         }
-        return h;
+System.out.println("k5|"+tokenAccumulator+"|"+isDataReady);
+        return tokenAccumulator;                
     }
-	public void putDataIntoTable(Hashtable h,String name,String value,boolean isName) {
-		  if (isName && value == null) value=HTMLTag.TAGNAME;
-		    else if (value==null) value = ""; // Hashtable does not accept nulls
-		    if (isName) {
-		        // store tagname as tag.TAGNAME,tag                        
-		        h.put(value,name.toUpperCase());  
-		    } 
-		    else {                   
-		        // store tag parameters as NAME, value
-		        h.put(name.toUpperCase(),value);  
-		    }
-	}
+    
+    
+    private void putDataIntoTable(Hashtable h,String name,String value,boolean isName) {
+        if (isName && value == null) value=HTMLTag.TAGNAME;
+        else if (value==null) value = ""; // Hashtable does not accept nulls
+ //System.out.println("k1|"+name+"|"+value+"|");
+        if (isName) {
+            // store tagname as tag.TAGNAME,tag                        
+            h.put(value,name.toUpperCase());  
+        } 
+        else {                   
+            // store tag parameters as NAME, value
+            h.put(name.toUpperCase(),value);  
+        }
+    }
 }
