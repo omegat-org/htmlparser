@@ -121,17 +121,17 @@ public class HTMLParser
 	protected boolean readFlag = false;
 	private Vector scanners = new Vector();
 	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Aug 04, 2002)";
-/**
- * This constructor enables the construction of test cases, with readers
- * associated with test string buffers. 
- * @param reader com.kizna.html.HTMLReader
- */
-public HTMLParser(HTMLReader reader) 
-{
-	this.reader = reader;
-	reader.setParser(this);
-
-}
+	/**
+	 * This constructor enables the construction of test cases, with readers
+	 * associated with test string buffers. 
+	 * @param reader com.kizna.html.HTMLReader
+	 */
+	public HTMLParser(HTMLReader reader) 
+	{
+		this.reader = reader;
+		reader.setParser(this);
+	
+	}
 	/**
 	 * Creates a HTMLParser object with the location of the resource (URL or file)
 	 * @param resourceLocn Either the URL or the filename (autodetects)
@@ -146,34 +146,34 @@ public HTMLParser(HTMLReader reader)
 			throw new HTMLParserException("Error in constructing the parser object for resource "+resourceLocn,e);
 		}
 	}
-	
-/**
- * Add a new Tag Scanner.
- * In typical situations where you require a no-frills parser, use the registerScanners() method to add the most
- * common parsers. But when you wish to either compose a parser with only certain scanners registered, use this method.
- * It is advantageous to register only the scanners you want, in order to achieve faster parsing speed. This method 
- * would also be of use when you have developed custom scanners, and need to register them into the parser.
- * @param scanner HTMLTagScanner object (or derivative) to be added to the list of registered scanners
- */
-public void addScanner(HTMLTagScanner scanner) {
-	scanners.addElement(scanner);
-}
-	private String checkEnding(String link)
-	{
-		// Check if the link ends in html, htm, or /. If not, add a slash
-		int l1 = link.indexOf("html");
-		int l2 = link.indexOf("htm");
-		int l3 = link.indexOf("php");
-		int l4 = link.indexOf("jsp");
-		/*if (l1==-1 && l2==-1 && l3==-1 && l4==-1)
-		{
-			if (link.charAt(link.length()-1)!='/')
-			{ 
-				link+="/index.html";
-			} 
-			return link;
-		} else */return link;
+		
+	/**
+	 * Add a new Tag Scanner.
+	 * In typical situations where you require a no-frills parser, use the registerScanners() method to add the most
+	 * common parsers. But when you wish to either compose a parser with only certain scanners registered, use this method.
+	 * It is advantageous to register only the scanners you want, in order to achieve faster parsing speed. This method 
+	 * would also be of use when you have developed custom scanners, and need to register them into the parser.
+	 * @param scanner HTMLTagScanner object (or derivative) to be added to the list of registered scanners
+	 */
+	public void addScanner(HTMLTagScanner scanner) {
+		scanners.addElement(scanner);
 	}
+		private String checkEnding(String link)
+		{
+			// Check if the link ends in html, htm, or /. If not, add a slash
+			int l1 = link.indexOf("html");
+			int l2 = link.indexOf("htm");
+			int l3 = link.indexOf("php");
+			int l4 = link.indexOf("jsp");
+			/*if (l1==-1 && l2==-1 && l3==-1 && l4==-1)
+			{
+				if (link.charAt(link.length()-1)!='/')
+				{ 
+					link+="/index.html";
+				} 
+				return link;
+			} else */return link;
+		}
 	/**
 	 * Returns an iterator (enumeration) to the html nodes. Each node can be a tag/endtag/
 	 * string/link/image<br>
@@ -182,8 +182,8 @@ public void addScanner(HTMLTagScanner scanner) {
 	 * <pre>
 	 * HTMLParser parser = new HTMLParser("http://www.yahoo.com");
 	 * parser.registerScanners();
-	 * for (Enumeration e = parser.elements();e.hasMoreElements();) {
-	 *    HTMLNode node = (HTMLNode)e.nextElement();
+	 * for (HTMLEnumeration e = parser.elements();e.hasMoreElements();) {
+	 *    HTMLNode node = e.nextHTMLNode();
 	 *    if (node instanceof HTMLStringNode) {
 	 *      // Downcasting to HTMLStringNode
 	 *      HTMLStringNode stringNode = (HTMLStringNode)node;
@@ -231,26 +231,26 @@ public void addScanner(HTMLTagScanner scanner) {
 			}
 		};
 	}
-/**
- * Flush the current scanners registered. The registered scanners list becomes empty with this call.
- */
-public void flushScanners() {
-	scanners = new Vector();	
-}
-/**
- * Get the number of scanners registered currently in the scanner.
- * @return int number of scanners registered
- */
-public int getNumScanners() {
-	return scanners.size();	
-}
-/**
- * Get an enumeration of scanners registered currently in the parser
- * @return Enumeration of scanners currently registered in the parser
- */
-public Enumeration getScanners() {
-	return scanners.elements();
-}
+	/**
+	 * Flush the current scanners registered. The registered scanners list becomes empty with this call.
+	 */
+	public void flushScanners() {
+		scanners = new Vector();	
+	}
+	/**
+	 * Get the number of scanners registered currently in the scanner.
+	 * @return int number of scanners registered
+	 */
+	public int getNumScanners() {
+		return scanners.size();	
+	}
+	/**
+	 * Get an enumeration of scanners registered currently in the parser
+	 * @return Enumeration of scanners currently registered in the parser
+	 */
+	public Enumeration getScanners() {
+		return scanners.elements();
+	}
 	/*
 	 * The main program, which can be executed from the command line
 	 */
@@ -377,52 +377,52 @@ public Enumeration getScanners() {
 
 	}
 /**
- * This method should be invoked in order to register some common scanners. The scanners that get added are : <br>
- * HTMLLinkScanner    (filter key "-l")<br>
- * HTMLImageScanner   (filter key "-i")<br>
- * HTMLScriptScanner  (filter key "-s") <br>
- * HTMLStyleScanner   (filter key "-t") <br>
- * HTMLJspScanner     (filter key "-j") <br>
- * HTMLAppletScanner  (filter key "-a") <br>
- * HTMLMetaTagScanner (filter key "-m") <br>
- * HTMLTitleScanner   (filter key "-t") <br>
- * <br>
- * Call this method after creating the HTMLParser object. e.g. <BR>
- * <pre>
- * HTMLParser parser = new HTMLParser("http://www.yahoo.com");
- * parser.registerScanners();
- * </pre>
- */ 
-public void registerScanners() {
-	if (scanners.size()>0) {
-		System.err.println("registerScanners() should be called first, when no other scanner has been registered.");
-		System.err.println("Other scanners already exist, hence this method call wont have any effect");
-		return;
+	 * This method should be invoked in order to register some common scanners. The scanners that get added are : <br>
+	 * HTMLLinkScanner    (filter key "-l")<br>
+	 * HTMLImageScanner   (filter key "-i")<br>
+	 * HTMLScriptScanner  (filter key "-s") <br>
+	 * HTMLStyleScanner   (filter key "-t") <br>
+	 * HTMLJspScanner     (filter key "-j") <br>
+	 * HTMLAppletScanner  (filter key "-a") <br>
+	 * HTMLMetaTagScanner (filter key "-m") <br>
+	 * HTMLTitleScanner   (filter key "-t") <br>
+	 * <br>
+	 * Call this method after creating the HTMLParser object. e.g. <BR>
+	 * <pre>
+	 * HTMLParser parser = new HTMLParser("http://www.yahoo.com");
+	 * parser.registerScanners();
+	 * </pre>
+	 */ 
+	public void registerScanners() {
+		if (scanners.size()>0) {
+			System.err.println("registerScanners() should be called first, when no other scanner has been registered.");
+			System.err.println("Other scanners already exist, hence this method call wont have any effect");
+			return;
+		}
+		addScanner(new HTMLLinkScanner("-l"));
+		addScanner(new HTMLImageScanner("-i"));
+		addScanner(new HTMLScriptScanner("-s"));
+		addScanner(new HTMLStyleScanner("-t"));
+		addScanner(new HTMLJspScanner("-j"));
+		addScanner(new HTMLAppletScanner("-a"));
+		addScanner(new HTMLMetaTagScanner("-m"));
+		addScanner(new HTMLTitleScanner("-T"));
+		addScanner(new HTMLDoctypeScanner("-d"));
+		//addScanner(new HTMLFormScanner("-f"));
+		addScanner(new HTMLFrameSetScanner("-r"));	
 	}
-	addScanner(new HTMLLinkScanner("-l"));
-	addScanner(new HTMLImageScanner("-i"));
-	addScanner(new HTMLScriptScanner("-s"));
-	addScanner(new HTMLStyleScanner("-t"));
-	addScanner(new HTMLJspScanner("-j"));
-	addScanner(new HTMLAppletScanner("-a"));
-	addScanner(new HTMLMetaTagScanner("-m"));
-	addScanner(new HTMLTitleScanner("-T"));
-	addScanner(new HTMLDoctypeScanner("-d"));
-	//addScanner(new HTMLFormScanner("-f"));
-	addScanner(new HTMLFrameSetScanner("-r"));	
-}
-/**
- * Removes a specified scanner object.
- * @param scanner HTMLTagScanner object to be removed from the list of registered scanners
- */
-public boolean removeScanner(HTMLTagScanner scanner) {
-	return scanners.removeElement(scanner);
-}
-/**
- * This method is to be used to change the set of scanners in the current parser.
- * @param newScanners Vector holding scanner objects to be used during the parsing process.
- */
-public void setScanners(Vector newScanners) {
-	scanners = newScanners;
-}
+	/**
+	 * Removes a specified scanner object.
+	 * @param scanner HTMLTagScanner object to be removed from the list of registered scanners
+	 */
+	public boolean removeScanner(HTMLTagScanner scanner) {
+		return scanners.removeElement(scanner);
+	}
+	/**
+	 * This method is to be used to change the set of scanners in the current parser.
+	 * @param newScanners Vector holding scanner objects to be used during the parsing process.
+	 */
+	public void setScanners(Vector newScanners) {
+		scanners = newScanners;
+	}
 }
