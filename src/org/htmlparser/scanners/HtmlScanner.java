@@ -48,7 +48,7 @@ public class HtmlScanner extends CompositeTagScanner {
 		return MATCH_STRING;
 	}
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new Html(tagData,compositeTagData);

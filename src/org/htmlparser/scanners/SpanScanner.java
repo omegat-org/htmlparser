@@ -44,7 +44,7 @@ public class SpanScanner extends CompositeTagScanner {
 		super(filter, MATCH_ID);
 	}
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new Span(tagData,compositeTagData);

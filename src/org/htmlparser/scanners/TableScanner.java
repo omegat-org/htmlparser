@@ -52,7 +52,7 @@ public class TableScanner extends CompositeTagScanner {
 		parser.addScanner(new TableRowScanner(parser));
 	}
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new TableTag(tagData,compositeTagData,rows);

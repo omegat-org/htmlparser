@@ -73,7 +73,7 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) throws ParserException {
 

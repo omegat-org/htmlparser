@@ -53,7 +53,7 @@ public class StyleScanner extends CompositeTagScanner {
 		return MATCH_NAME;
 	}
 	
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new StyleTag(tagData,compositeTagData);

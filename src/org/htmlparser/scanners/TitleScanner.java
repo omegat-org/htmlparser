@@ -54,7 +54,7 @@ public class TitleScanner extends CompositeTagScanner {
 		return true; else return false;
 	} 
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new TitleTag(tagData,compositeTagData);

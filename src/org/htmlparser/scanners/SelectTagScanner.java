@@ -59,7 +59,7 @@ public class SelectTagScanner extends CompositeTagScanner
 	}
 
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new SelectTag(tagData,compositeTagData,optionTags);

@@ -44,7 +44,7 @@ public class DivScanner extends CompositeTagScanner {
 		super(filter, MATCH_STRING);
 	}
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new Div(tagData,compositeTagData);

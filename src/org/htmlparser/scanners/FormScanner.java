@@ -159,7 +159,7 @@ public class FormScanner extends CompositeTagScanner
 		return super.evaluate(s, previousOpenScanner);
 	}
 
-	protected Tag createTag(TagData tagData, CompositeTagData compositeTagData)
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
 		throws ParserException {
 		String formUrl = extractFormLocn(compositeTagData.getStartTag(),tagData.getUrlBeingParsed());
 		if (formUrl!=null && formUrl.length()>0) 

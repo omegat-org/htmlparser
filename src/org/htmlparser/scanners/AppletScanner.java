@@ -55,7 +55,7 @@ public class AppletScanner extends CompositeTagScanner {
 		return MATCH_STRING;
 	}
 
-	protected Tag createTag(TagData tagData, CompositeTagData compositeTagData)
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
 		throws ParserException {
 			
 		return new AppletTag(tagData,compositeTagData);

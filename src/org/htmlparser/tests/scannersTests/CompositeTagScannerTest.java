@@ -23,7 +23,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		};
 		scanner = 
 			new CompositeTagScanner(arr) {
-				protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException {
+				public Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException {
 					return null;
 				}
 				public String[] getID() {
@@ -130,7 +130,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		private static final String MATCH_NAME [] = { "CUSTOM" };
 		public CustomScanner() { super("", MATCH_NAME); }
 		public String[] getID() { return MATCH_NAME; }
-		protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
 			return new CustomTag(tagData, compositeTagData);
 		}
 		protected boolean isBrokenTag() {
@@ -142,7 +142,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		private static final String MATCH_NAME [] = { "ANOTHER" };
 		public AnotherScanner() { super("", MATCH_NAME); }
 		public String[] getID() { return MATCH_NAME; }
-		protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
 			return new AnotherTag(tagData, compositeTagData);
 		}
 		protected boolean isBrokenTag() {

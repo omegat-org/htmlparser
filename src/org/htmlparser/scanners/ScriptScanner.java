@@ -64,7 +64,7 @@ public class ScriptScanner extends CompositeTagScanner {
 		return MATCH_NAME;
 	}
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new ScriptTag(tagData,compositeTagData);

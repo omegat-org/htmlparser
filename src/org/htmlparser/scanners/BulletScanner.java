@@ -18,7 +18,7 @@ public class BulletScanner extends CompositeTagScanner {
 		super(filter, MATCH_STRING);
 	}
 
-	protected Tag createTag(TagData tagData, CompositeTagData compositeTagData)
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
 		throws ParserException {
 		return new Bullet(tagData,compositeTagData);
 	}

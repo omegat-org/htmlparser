@@ -60,7 +60,7 @@ public class TableRowScanner extends CompositeTagScanner {
 		super(filter, nameOfTagToMatch, removeScanners, stringNodeIgnoreMode);
 	}
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new TableRow(tagData,compositeTagData,columns);

@@ -30,11 +30,11 @@ package org.htmlparser.scanners;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
+import org.htmlparser.parserHelper.CompositeTagScannerHelper;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public abstract class CompositeTagScanner extends TagScanner {
@@ -58,35 +58,9 @@ public abstract class CompositeTagScanner extends TagScanner {
 	}
 	
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
-		Tag endTag = tag;
-		NodeList nodeList = new NodeList();
-		Node node = null;
-		do {
-			node = reader.readElement();
-			if (node==null) continue;
-			if (node instanceof Tag) {
-				Tag possibleEndTag = (Tag)node;
-				if (tag.isEmptyXmlTag()) {
-					endTag = possibleEndTag;
-					node = endTag;					
-				}
-			}
-			if (node instanceof EndTag)
-				endTag = (Tag)node;
-			else 
-				nodeList.add(node);						
-		}
-		while (node!=null);
-		
-		return createTag(
-			new TagData(
-				0,endTag.elementEnd(),0,0,"","","",tag.isEmptyXmlTag()
-			),
-			new CompositeTagData(
-				tag,endTag,nodeList
-			)
-		);
-		
+		CompositeTagScannerHelper helper = 
+			new CompositeTagScannerHelper();
+		return helper.scan(this,tag,url,reader,currLine);
 	}
 	
 //	public Tag scan(Tag tag, String url, NodeReader reader,String currLine)
@@ -226,7 +200,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 	protected void childNodeEncountered(Node node) {
 	}
 
-	protected abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
+	public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
 
 	protected EndTag createEndTagFor(Tag tag) {
 		return new EndTag(

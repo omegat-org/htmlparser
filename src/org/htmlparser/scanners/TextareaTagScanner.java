@@ -51,7 +51,7 @@ public class TextareaTagScanner extends CompositeTagScanner
 		return MATCH_NAME;
 	}
 
-	protected Tag createTag(
+	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new TextareaTag(tagData,compositeTagData);
