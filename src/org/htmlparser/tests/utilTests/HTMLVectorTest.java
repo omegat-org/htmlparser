@@ -125,4 +125,12 @@ public class HTMLVectorTest extends HTMLParserTestCase {
 		}
 	}
 	
+	public void testToNodeArray() {
+		createTestDataAndPutInVector(387);
+		HTMLNode nodes [] = vector.toNodeArray();
+		assertEquals("Length of array",387,nodes.length);
+		for (int i=0;i<nodes.length;i++)
+			assertNotNull("node "+i+" should not be null",nodes[i]);
+	}
+	
 }

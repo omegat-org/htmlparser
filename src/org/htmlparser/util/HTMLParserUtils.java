@@ -99,4 +99,21 @@ public class HTMLParserUtils
 		// Flush the scanners
 		pReader.getParser().setScanners(tempScanners);
 	}
+
+	public static String removeChars(String s,char occur)  {
+	    StringBuffer newString = new StringBuffer();
+	    char ch;
+	    for (int i=0;i<s.length();i++) {
+	      ch = s.charAt(i);
+	      if (ch!=occur) newString.append(ch);
+	    }
+	    return newString.toString();
+	}
+
+	public static String removeEscapeCharacters(String inputString) {
+		inputString = HTMLParserUtils.removeChars(inputString,'\r');
+		inputString = HTMLParserUtils.removeChars(inputString,'\n');
+		inputString = HTMLParserUtils.removeChars(inputString,'\t');
+		return inputString;
+	}	
 }

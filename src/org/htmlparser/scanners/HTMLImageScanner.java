@@ -38,6 +38,7 @@ import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.HTMLParserUtils;
 /**
  * Scans for the Image Tag. This is a subclass of HTMLTagScanner, and is called using a 
  * variant of the template method. If the evaluate() method returns true, that means the
@@ -78,8 +79,8 @@ public class HTMLImageScanner extends HTMLTagScanner
 			table = tag.getAttributes();
 			relativeLink =  (String)table.get("SRC");
 			if (relativeLink!=null) {
-				relativeLink = removeChars(relativeLink,'\n');
-				relativeLink = removeChars(relativeLink,'\r');
+				relativeLink = HTMLParserUtils.removeChars(relativeLink,'\n');
+				relativeLink = HTMLParserUtils.removeChars(relativeLink,'\r');
 			}
 			if (relativeLink==null || relativeLink.length()==0) {
 				// try fix

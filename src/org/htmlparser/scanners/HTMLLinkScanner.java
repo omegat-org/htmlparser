@@ -46,6 +46,7 @@ import org.htmlparser.tags.data.HTMLLinkTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.HTMLParserUtils;
 /**
  * Scans for the Link Tag. This is a subclass of HTMLTagScanner, and is called using a 
  * variant of the template method. If the evaluate() method returns true, that means the
@@ -159,8 +160,8 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			Hashtable table = tag.getAttributes();
 			String relativeLink =  (String)table.get("HREF");
 			if (relativeLink!=null) { 
-				relativeLink = removeChars(relativeLink,'\n');
-				relativeLink = removeChars(relativeLink,'\r');
+				relativeLink = HTMLParserUtils.removeChars(relativeLink,'\n');
+				relativeLink = HTMLParserUtils.removeChars(relativeLink,'\r');
 			}
 			return processor.extract(relativeLink,url);
 		}

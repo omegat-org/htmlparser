@@ -215,16 +215,6 @@ public abstract class HTMLTagScanner
 		), tag, url);
   	}
 	
-	public String removeChars(String s,char occur)  {
-	    StringBuffer newString = new StringBuffer();
-	    char ch;
-	    for (int i=0;i<s.length();i++) {
-	      ch = s.charAt(i);
-	      if (ch!=occur) newString.append(ch);
-	    }
-	    return newString.toString();
-	}
-	
 	public String removeChars(String s,String occur)  {
 	    StringBuffer newString = new StringBuffer();
 	    char ch;

@@ -93,4 +93,10 @@ public class HTMLVector {
 			}
 		};
 	}
+	
+	public HTMLNode [] toNodeArray() {
+		HTMLNode [] nodeArray = new HTMLNode[size];
+		System.arraycopy(nodeData, 0, nodeArray, 0, size);		
+		return nodeArray;
+	}
 }

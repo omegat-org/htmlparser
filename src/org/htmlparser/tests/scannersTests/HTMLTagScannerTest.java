@@ -36,6 +36,7 @@ import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.HTMLParserUtils;
 
 public class HTMLTagScannerTest extends HTMLParserTestCase
 {
@@ -116,7 +117,7 @@ public class HTMLTagScannerTest extends HTMLParserTestCase
 				return null;
 			}
 		};
-		String result = scanner.removeChars(test,'\n');
+		String result = HTMLParserUtils.removeChars(test,'\n');
 		assertEquals("Removing Chars","helloworld\tqsdsds",result);
 	}
 	
