@@ -38,7 +38,7 @@ public class CompositeTagScannerHelper {
 		this.url = url;
 		this.reader = reader;
 		this.currLine = currLine;	
-		this.endTag = tag;
+		this.endTag = null;
 		this.nodeList = new NodeList();
 		this.endTagFound = false;
 	}
@@ -54,6 +54,19 @@ public class CompositeTagScannerHelper {
 				doChildAndEndTagCheckOn(currentNode);					
 			}
 			while (currentNode!=null && !endTagFound);
+		}
+		if (endTag==null) {
+			String endTagName = tag.getTagName();
+			int endTagBegin = tag.elementEnd() + 1;
+			int endTagEnd = endTagBegin + endTagName.length() + 3; 
+			endTag = new EndTag(
+				new TagData(
+					endTagBegin,
+					endTagEnd,
+					endTagName,
+					currLine
+				)
+			);
 		}
 		return createTag();
 	}
