@@ -445,7 +445,8 @@ public class Page
      */
     public void close () throws IOException
     {
-        getSource ().destroy ();
+        if (null != getSource ())
+            getSource ().destroy ();
     }
 
     /**

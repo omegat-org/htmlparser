@@ -1053,6 +1053,90 @@ public class Lexer
         return (makeTag (start, mCursor.getPosition (), attributes));
     }
 
+    /**
+     * Return CDATA as a text node.
+     * According to appendix <a href="http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data">
+     * B.3.2 Specifying non-HTML data</a> of the
+     * <a href="http://www.w3.org/TR/html4/">HTML 4.01 Specification</a>:
+     * <quote>
+     * <b>Element content</b><br>
+     * When script or style data is the content of an element (SCRIPT and STYLE),
+     * the data begins immediately after the element start tag and ends at the
+     * first ETAGO ("&lt;/") delimiter followed by a name start character ([a-zA-Z]);
+     * note that this may not be the element's end tag.
+     * Authors should therefore escape "&lt;/" within the content. Escape mechanisms
+     * are specific to each scripting or style sheet language.
+     * </quote>
+     * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
+     */
+    public Node parseCDATA ()
+        throws
+            ParserException
+    {
+        int start;
+        int state;
+        boolean done;
+        char ch;
+        int end;
+
+        start = mCursor.getPosition ();
+        state = 0;
+        done = false;
+        while (!done)
+        {
+            ch = mPage.getCharacter (mCursor);
+            switch (state)
+            {
+                case 0: // prior to ETAGO
+                    switch (ch)
+                    {
+                        case 0: // end of input
+                            done = true;
+                            break;
+                        case '<':
+                            state = 1;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 1: // <
+                    switch (ch)
+                    {
+                        case 0: // end of input
+                            done = true;
+                            break;
+                        case '/':
+                            state = 2;
+                            break;
+                        default:
+                            state = 0;
+                            break;
+                    }
+                    break;
+                case 2: // </
+                    if (0 == ch)
+                        done = true;
+                    else if (Character.isLetter (ch))
+                    {
+                        done = true;
+                        // back up to the start of ETAGO
+                        mCursor.retreat ();
+                        mCursor.retreat ();
+                        mCursor.retreat ();
+                    }
+                    else
+                        state = 0;
+                    break;
+                default:
+                    throw new IllegalStateException ("how the fuck did we get in state " + state);
+            }
+        }
+        end = mCursor.getPosition ();
+
+        return (makeString (start, end));
+    }
+
     //
     // NodeFactory interface
     //

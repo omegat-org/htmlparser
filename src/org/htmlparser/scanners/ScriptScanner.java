@@ -28,21 +28,23 @@ package org.htmlparser.scanners;
 
 import java.util.Vector;
 
+import org.htmlparser.Attribute;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFactory;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Remark;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
+import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.scanners.ScriptDecoder;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
- * The ScriptScanner handles script code.
- * It gathers all interior nodes into one undifferentiated string node.
+ * The ScriptScanner handles script CDATA.
  */
 public class ScriptScanner
     extends
@@ -57,33 +59,22 @@ public class ScriptScanner
 
     /**
      * Scan for script.
-     * Accumulates nodes returned from the lexer, until &lt;/SCRIPT&gt;,
-     * &lt;BODY&gt; or &lt;HTML&gt; is encountered. Replaces the node factory
-     * in the lexer with a new (empty) one to avoid other scanners missing their 
-     * end tags and accumulating even the &lt;/SCRIPT&gt; tag.
+     * Accumulates text from the page, until &lt;/[a-zA-Z] is encountered.
      * @param tag The tag this scanner is responsible for.
-     * @param lexer The source of subsequent nodes.
+     * @param lexer The source of CDATA.
      * @param stack The parse stack, <em>not used</em>.
      */
     public Tag scan (Tag tag, Lexer lexer, NodeList stack)
         throws ParserException
     {
         String language;
-        Node node;
-        boolean done;
+        String code;
+        Node content;
         int position;
-        int startpos;
-        int endpos;
-        Tag end;
-        NodeFactory factory;
-        Text content;
-        Tag ret;
+        Node node;
+        Attribute attribute;
+        Vector vector;
 
-        done = false;
-        startpos = lexer.getPosition ();
-        endpos = startpos;
-        end = null;
-        factory = lexer.getNodeFactory ();
         if (tag instanceof ScriptTag)
         {
             language = ((ScriptTag)tag).getLanguage ();
@@ -91,60 +82,39 @@ public class ScriptScanner
                 (language.equalsIgnoreCase ("JScript.Encode") ||
                  language.equalsIgnoreCase ("VBScript.Encode")))
             {
-                String code = ScriptDecoder.Decode (lexer.getPage (), lexer.getCursor ());
+                code = ScriptDecoder.Decode (lexer.getPage (), lexer.getCursor ());
                 ((ScriptTag)tag).setScriptCode (code);
-                endpos = lexer.getPosition ();
             }
         }
-        lexer.setNodeFactory (new PrototypicalNodeFactory (true));
-        try
-        {
-            do
+        content = lexer.parseCDATA ();
+        position = lexer.getPosition ();
+        node = lexer.nextNode (false);
+        if (null != node)
+            if (!(node instanceof Tag) || !(   ((Tag)node).isEndTag ()
+                && ((Tag)node).getTagName ().equals (tag.getIds ()[0])))
             {
-                position = lexer.getPosition ();
-                node = lexer.nextNode (true);
-                if (null == node)
-                    done = true;
-                else
-                    if (node instanceof Tag)
-                        if (   ((Tag)node).isEndTag ()
-                            && ((Tag)node).getTagName ().equals (tag.getIds ()[0]))
-                        {
-                            end = (Tag)node;
-                            done = true;
-                        }
-                        else if (isTagToBeEndedFor (tag, (Tag)node))
-                        {
-                            lexer.setPosition (position);
-                            done = true;
-                        }
-                        else
-                            // must be a string, even though it looks like a tag
-                            endpos = node.getEndPosition ();
-                    else if (node instanceof Remark)
-                        endpos = node.getEndPosition ();
-                    else // Text
-                        endpos = node.getEndPosition ();
+                lexer.setPosition (position);
+                node = null;
             }
-            while (!done);
 
-            content = factory.createStringNode (lexer.getPage (), startpos, endpos);
-            // build new end tag if required
-            if (null == end)
-                end = lexer.getNodeFactory ().createTagNode (
-                    lexer.getPage (), endpos, endpos, new Vector ());
-            ret = tag;
-            ret.setEndTag (end);
-            ret.setChildren (new NodeList (content));
-            content.setParent (ret);
-            end.setParent (ret);
-            ret.doSemanticAction ();
-        }
-        finally
+        // build new end tag if required
+        if (null == node)
         {
-            lexer.setNodeFactory (factory);
+            attribute = new Attribute ("/script", null);
+            vector = new Vector ();
+            vector.addElement (attribute);
+            node = lexer.getNodeFactory ().createTagNode (
+                lexer.getPage (), position, position, vector);
         }
+        tag.setEndTag ((Tag)node);
+        if (null != content)
+        {
+            tag.setChildren (new NodeList (content));
+            content.setParent (tag);
+        }
+        node.setParent (tag);
+        tag.doSemanticAction ();
 
-        return (ret);
+        return (tag);
     }
 }

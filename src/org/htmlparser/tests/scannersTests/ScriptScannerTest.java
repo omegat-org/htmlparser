@@ -182,6 +182,15 @@ public class ScriptScannerTest extends ParserTestCase
      * interprets them as real tags. The problem was that the
      * string parser was not moving to the ignore state on encountering double
      * quotes (only single quotes were previously accepted).
+     * 
+     * <pre>
+     * Bug #1104627 Parser Crash reading javascript
+     * Bug #1024045 StringBean crashes on an URL
+     * Bug #1021925 StyleTag with missing linefeed prevents page from parsing
+     * </pre>
+     * Altered test to correctly escape the ETAGO.
+     * See http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data
+     *
      * @throws Exception
      */
     public void testScriptTagsGeneratedByScriptCode() throws Exception {
@@ -202,7 +211,7 @@ public class ScriptScannerTest extends ParserTestCase
             "document.write(\"{ // do something\"); " +
             "document.write(\"}\"); " +
             "// parser thinks this is the end tag.\n" +
-            "document.write(\"</script>\");" +
+            "document.write(\"<\\/script>\");" +
             "</script>" +
             "<body>" +
             "</body>" +
@@ -225,17 +234,28 @@ public class ScriptScannerTest extends ParserTestCase
             "document.write(\"{ // do something\"); " +
             "document.write(\"}\"); " +
             "// parser thinks this is the end tag.\n" +
-            "document.write(\"</script>\");",
+            "document.write(\"<\\/script>\");",
             scriptTag.getScriptCode()
         );
 
     }
 
+    /**
+     * 
+     * <pre>
+     * Bug #1104627 Parser Crash reading javascript
+     * Bug #1024045 StringBean crashes on an URL
+     * Bug #1021925 StyleTag with missing linefeed prevents page from parsing
+     * </pre>
+     * Altered test to correctly escape the ETAGO.
+     * See http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data
+     *
+     */
     public void testScriptCodeExtraction() throws ParserException {
         createParser(
             "<SCRIPT language=JavaScript>" +
             "document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
-            "width=\"80\" height=\"20\" border=\"0\"></a>\");" +
+            "width=\"80\" height=\"20\" border=\"0\"><\\/a>\");" +
             "</SCRIPT>"
         );
         parseAndAssertNodeCount(1);
@@ -244,16 +264,27 @@ public class ScriptScannerTest extends ParserTestCase
         assertStringEquals(
             "script code",
             "document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
-            "width=\"80\" height=\"20\" border=\"0\"></a>\");",
+            "width=\"80\" height=\"20\" border=\"0\"><\\/a>\");",
             scriptTag.getScriptCode()
         );
     }
 
+    /**
+     * 
+     * <pre>
+     * Bug #1104627 Parser Crash reading javascript
+     * Bug #1024045 StringBean crashes on an URL
+     * Bug #1021925 StyleTag with missing linefeed prevents page from parsing
+     * </pre>
+     * Altered test to correctly escape the ETAGO.
+     * See http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data
+     *
+     */
     public void testScriptCodeExtractionWithMultipleQuotes() throws ParserException {
         createParser(
             "<SCRIPT language=JavaScript>" +
             "document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
-            "width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");" +
+            "width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"><\\/a>\");" +
             "</SCRIPT>"
         );
         parseAndAssertNodeCount(1);
@@ -262,11 +293,22 @@ public class ScriptScannerTest extends ParserTestCase
         assertStringEquals(
             "script code",
             "document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
-            "width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");",
+            "width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"><\\/a>\");",
             scriptTag.getScriptCode()
         );
     }
 
+    /**
+     * 
+     * <pre>
+     * Bug #1104627 Parser Crash reading javascript
+     * Bug #1024045 StringBean crashes on an URL
+     * Bug #1021925 StyleTag with missing linefeed prevents page from parsing
+     * </pre>
+     * Altered test to correctly escape the ETAGO.
+     * See http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data
+     *
+     */
     public void testScriptWithinComments() throws Exception {
         createParser(
             "<script language=\"JavaScript1.2\">" +
@@ -307,7 +349,7 @@ public class ScriptScannerTest extends ParserTestCase
             "\n" +
             "else{" +
             "\n" +
-            "menuobj.document.write('<layer name=gui bgColor=#E6E6E6 width=165 onmouseover=\"clearhidemenu()\" onmouseout=\"hidemenu()\">'+which+'</layer>')" +
+            "menuobj.document.write('<layer name=gui bgColor=#E6E6E6 width=165 onmouseover=\"clearhidemenu()\" onmouseout=\"hidemenu()\">'+which+'<\\/layer>')" +
             "\n" +
             "menuobj.document.close()" +
             "\n" +
@@ -515,10 +557,19 @@ public class ScriptScannerTest extends ParserTestCase
 
     /**
      * See bug #741769 ScriptScanner doesn't handle quoted </script> tags
+     * 
+     * <pre>
+     * Bug #1104627 Parser Crash reading javascript
+     * Bug #1024045 StringBean crashes on an URL
+     * Bug #1021925 StyleTag with missing linefeed prevents page from parsing
+     * </pre>
+     * Altered test to correctly escape the ETAGO.
+     * See http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data
+     *
      */
     public void testScanQuotedEndTag() throws ParserException
     {
-        String html = "<SCRIPT language=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>";
+        String html = "<SCRIPT language=\"JavaScript\">document.write('<\\/SCRIPT>');</SCRIPT>";
         createParser(html);
         parseAndAssertNodeCount(1);
         assertStringEquals ("Parse error", html, node[0].toHtml ());
