@@ -699,13 +699,11 @@ public class ParserTest extends ParserTestCase {
     public void testOutOfMemory () throws Exception
     {
         createParser (
-            "<html><head>\n"
-            + "</head>\n"
+            "<html><head></head>\n"
             + "<body>\n"
-            + "<table>       \n"
+            + "<table>\n"
             + "<tr>\n"
-            + "      <td><img src=\"foo.jpg\" alt=\"f's\n"
-            + "b\"><font\n"
+            + "      <td><img src=\"foo.jpg\" alt=\"f's b\"><font\n"
             + " size=1>blah</font>\n"
             + "</td>\n"
             + "</tr>\n"
