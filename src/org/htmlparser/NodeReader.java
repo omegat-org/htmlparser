@@ -234,6 +234,10 @@ public class NodeReader extends BufferedReader
 		
 			return null;
 		}
+        catch (ParserException pe)
+        {
+            throw pe;
+        }
 		catch (Exception e) {
 			StringBuffer msgBuffer = new StringBuffer("NodeReader.readElement() : Error occurred while trying to read the next element,");
 			StringWriter sw = new StringWriter();
