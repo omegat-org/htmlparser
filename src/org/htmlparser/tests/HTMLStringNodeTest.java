@@ -49,7 +49,7 @@ import junit.framework.TestSuite;
  * Creation date: (6/17/2001 3:59:52 PM)
  * @author: Administrator
  */
-public class HTMLStringNodeTest extends TestCase {
+public class HTMLStringNodeTest extends HTMLParserTestCase {
 	/**
 	 * HTMLStringNodeTest constructor comment.
 	 * @param name java.lang.String
@@ -76,16 +76,8 @@ public class HTMLStringNodeTest extends TestCase {
 	 * Creation date: (6/17/2001 4:01:06 PM)
 	 */
 	public void testStringNodeBug1() throws HTMLParserException {
-		String testHTML = new String("<HTML><HEAD><TITLE>Google</TITLE>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
+		createParser("<HTML><HEAD><TITLE>Google</TITLE>");
+		parseAndAssertNodeCount(5);
 		// The fourth node should be a HTMLStringNode-  with the text - Google
 		assertTrue("Fourth node should be a HTMLStringNode",node[3] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)node[3];
@@ -102,19 +94,11 @@ public class HTMLStringNodeTest extends TestCase {
 	public void testStringNodeBug2() throws HTMLParserException {
 		// Register the link scanner
 		
-		String testHTML = new String("view these documents, you must have <A href='http://www.adobe.com'>Adobe \n"+
+		createParser("view these documents, you must have <A href='http://www.adobe.com'>Adobe \n"+
 			"Acrobat Reader</A> installed on your computer.");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.setLineSeparator("\r\n");
 		parser.addScanner(new HTMLLinkScanner("-l"));
-		HTMLNode [] node = new HTMLNode[10];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 3 nodes identified",new Integer(3),new Integer(i));
+		parseAndAssertNodeCount(3);
 		// The first node should be a HTMLStringNode-  with the text - view these documents, you must have 
 		assertTrue("First node should be a HTMLStringNode",node[0] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
@@ -128,25 +112,17 @@ public class HTMLStringNodeTest extends TestCase {
 		HTMLStringNode stringNode2 = (HTMLStringNode)node[2];
 		assertEquals("Contents of third node"," installed on your computer.",stringNode2.getText());
 	}
+	
 	/**
 	 * Bug reported by Roger Sollberger<br>
 	 * For the following HTML :
 	 * &lt;a href="http://asgard.ch"&gt;[&lt; ASGARD &gt;&lt;/a&gt;&lt;br&gt;
 	 * The string node is not correctly identified
 	 */
-	
 	public void testTagCharsInStringNode() throws HTMLParserException {
-		String testHTML = new String("<a href=\"http://asgard.ch\">[> ASGARD <]</a>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		createParser("<a href=\"http://asgard.ch\">[> ASGARD <]</a>");
 		parser.addScanner(new HTMLLinkScanner("-l"));
-		HTMLNode [] node = new HTMLNode[10];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified must be a link tag",node[0] instanceof HTMLLinkTag);
 		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
 		assertEquals("[> ASGARD <]",linkTag.getLinkText());
@@ -158,16 +134,8 @@ public class HTMLStringNodeTest extends TestCase {
 	 * Creation date: (5/6/2002 11:25:26 PM)
 	 */
 	public void testToPlainTextString() throws HTMLParserException {
-		String testHTML = new String("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 10 nodes identified",new Integer(10),new Integer(i));
+		createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
+		parseAndAssertNodeCount(10);
 		assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)node[3];
 		assertEquals("First String Node","This is the Title",stringNode.toPlainTextString());
@@ -181,16 +149,8 @@ public class HTMLStringNodeTest extends TestCase {
 	 * Creation date: (5/6/2002 11:25:26 PM)
 	 */
 	public void testToHTML() throws HTMLParserException {
-		String testHTML = new String("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 10 nodes identified",new Integer(10),new Integer(i));
+		createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
+		parseAndAssertNodeCount(10);
 		assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)node[3];
 		assertEquals("First String Node","This is the Title",stringNode.toHTML());
@@ -199,20 +159,12 @@ public class HTMLStringNodeTest extends TestCase {
 		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHTML());
 	}
 	public void testEmptyLines() throws HTMLParserException {
-		String testHTML = new String(
+		createParser(
 		"David Nirenberg (Center for Advanced Study in the Behavorial Sciences, Stanford).<br>\n"+
 		"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \n"+
 		"<br>"
 		);
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 4 nodes identified",new Integer(4),new Integer(i));
+		parseAndAssertNodeCount(4);
 		assertTrue("Third Node identified must be a string node",node[2] instanceof HTMLStringNode);
 	}
 	/**
@@ -220,18 +172,10 @@ public class HTMLStringNodeTest extends TestCase {
 	 * before a remark is being missed, if its on the same line.
 	 */
 	public void testStringBeingMissedBug() throws HTMLParserException {
-		String testHTML = new String(
+		createParser(
 		"Before Comment <!-- Comment --> After Comment"
 		);
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 3 nodes identified",new Integer(3),new Integer(i));
+		parseAndAssertNodeCount(3);
 		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
 		assertTrue("Second node should be HTMLRemarkNode",node[1] instanceof HTMLRemarkNode);
 		assertTrue("Third node should be HTMLStringNode",node[2] instanceof HTMLStringNode);
@@ -248,16 +192,8 @@ public class HTMLStringNodeTest extends TestCase {
 	 * HTMLStringNode does not return the string node correctly.
 	 */
 	public void testLastLineWithOneChar() throws HTMLParserException {
-		String testHTML = new String("a");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		createParser("a");
+		parseAndAssertNodeCount(1);
 		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
 		assertEquals("First String node contents","a",stringNode.getText());
