@@ -1,4 +1,4 @@
-Integration Build 1.2 - 20020813
+Integration Build 1.2 - 20020811
 --------------------------------
 [1] Fixed bug 590703 - Empty values dont get parsed 
 [2] Fixed bug 591435 - Missing values cause keys to be missed
