@@ -37,9 +37,19 @@ package com.kizna.html;
  */
 public class HTMLRemarkNode extends HTMLNode
 {
+	public final static int REMARK_NODE_BEFORE_PARSING_STATE=0;
+	public final static int REMARK_NODE_OPENING_ANGLE_BRACKET_STATE=1;
+	public final static int REMARK_NODE_EXCLAMATION_RECEIVED_STATE=2;
+	public final static int REMARK_NODE_FIRST_DASH_RECEIVED_STATE=3;
+	public final static int REMARK_NODE_ACCEPTING_STATE=4;		
+	public final static int REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE=5;	
+	public final static int REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE=6;		
+	public final static int REMARK_NODE_ACCEPTED_STATE=7;	
+    public final static int REMARK_NODE_ILLEGAL_STATE=8;
+    public final static int REMARK_NODE_FINISHED_PARSING_STATE=2;	
 	/**
 	 * Tag contents will have the contents of the comment tag.
-   */
+   	 */
 	String tagContents;
 	/** 
 	 * The beginning position of the tag in the line
@@ -85,7 +95,7 @@ public class HTMLRemarkNode extends HTMLNode
 	 */	
 	public static HTMLRemarkNode find(HTMLReader reader,String input,int position)
 	{
-		int state = 0;
+		int state = REMARK_NODE_BEFORE_PARSING_STATE;
 		//String tagContents = "";
 		StringBuffer tagContents = new StringBuffer();
 		int tagBegin=0;
@@ -93,76 +103,83 @@ public class HTMLRemarkNode extends HTMLNode
 		int i=position;
 		int inputLen = input.length();
 		char ch,prevChar=' ';
-		while (i < inputLen && state < 7)
+		while (i < inputLen && state < REMARK_NODE_ACCEPTED_STATE)
 		{
 			ch = input.charAt(i);
-			if (state == 6 && ch == '>')
+			if (state == REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE && ch == '>')
 			{
-				state=7;
+				state=REMARK_NODE_ACCEPTED_STATE;
 				tagEnd=i;
-			}
-			if (state==5)
+			} 
+			if (state==REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE)
 			{
 				if (ch == '-')
 				{
-					state=6;
+					state=REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE;
 				} else
 				{
 					// Rollback
-					state = 4;
+					state = REMARK_NODE_ACCEPTING_STATE;
 					tagContents.append(prevChar);
 				}
-			}
-			if (state==4 && ch == '-')
+			} 
+			if (state==REMARK_NODE_ACCEPTING_STATE && ch == '-')
 			{
-				state=5;
-			}		
-			if (state==4)
+				state=REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE;
+			} 
+			if (state==REMARK_NODE_ACCEPTING_STATE)
 			{
-				//tagContents+=input.charAt(i);		
+				// We can append contents now		
 				tagContents.append(ch);
-			}
-			if (state==8)
-			{
-				return null;
-			}
+			} 
+
 			
-			if (state==3)
+			if (state==REMARK_NODE_FIRST_DASH_RECEIVED_STATE)
 			{
 				if (ch == '-')
-				state=4;
-				else state=8;
-			}
-			if (state==2)
+				state=REMARK_NODE_ACCEPTING_STATE;
+				else state=REMARK_NODE_ILLEGAL_STATE;
+			} 
+			if (state==REMARK_NODE_EXCLAMATION_RECEIVED_STATE)
 			{
 				if (ch == '-')
-				state=3;
-				else state=8;
-			}
-			if (state==1)
+				state=REMARK_NODE_FIRST_DASH_RECEIVED_STATE;
+				else state=REMARK_NODE_ILLEGAL_STATE;
+			} 
+			if (state==REMARK_NODE_OPENING_ANGLE_BRACKET_STATE)
 			{
 				if (ch == '!')
-				state=2;
-				else state = 8; // This is not a remark tag
-			}
-			if (ch == '<' && state == 0)
+				state=REMARK_NODE_EXCLAMATION_RECEIVED_STATE;
+				else state = REMARK_NODE_ILLEGAL_STATE; // This is not a remark tag
+			} 
+			if (state == REMARK_NODE_BEFORE_PARSING_STATE)
 			{
-				// Transition from State 0 to State 1 - Record data till > is encountered
-				tagBegin = i;
-				state = 1;
-			}
-			if (state > 1 && state < 7 && i == input.length() - 1)
+				if (ch=='<') {
+					// Transition from State 0 to State 1 - Record data till > is encountered
+					tagBegin = i;
+					state = REMARK_NODE_OPENING_ANGLE_BRACKET_STATE;
+				}
+				else if (ch!=' ') {
+					// Its not a space, hence this is probably a string node, not a remark node
+					state = REMARK_NODE_ILLEGAL_STATE;
+				}
+			} 
+			if (state > REMARK_NODE_OPENING_ANGLE_BRACKET_STATE && state < REMARK_NODE_ACCEPTED_STATE && i == input.length() - 1)
 			{
 				// We need to continue parsing to the next line
 				input = reader.getNextLine();
 				tagContents.append("\n");
 				inputLen = input.length();
 				i=-1;
-			}		
+			}
+			if (state==REMARK_NODE_ILLEGAL_STATE)
+			{
+				return null;
+			}				
 			i++;
 			prevChar = ch;
 		}
-		if (state==7)
+		if (state==REMARK_NODE_ACCEPTED_STATE)
 		return new HTMLRemarkNode(tagBegin,tagEnd,tagContents.toString());
 		else
 		return null;	
