@@ -33,8 +33,8 @@ import org.htmlparser.tags.data.TagData;
 
 public class Span extends CompositeTag {
 
-	public Span(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData, compositeTagData);
-	}
+    public Span(TagData tagData, CompositeTagData compositeTagData) {
+        super(tagData, compositeTagData);
+    }
 
 }

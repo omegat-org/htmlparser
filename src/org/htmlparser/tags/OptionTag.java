@@ -33,30 +33,30 @@ import org.htmlparser.tags.data.TagData;
 
 public class OptionTag extends CompositeTag
 {
-	private String value;
-	
-	public OptionTag(TagData tagData, CompositeTagData compositeTagData)
-	{
-		super(tagData, compositeTagData);
-		this.value = (String)this.getAttribute("VALUE");
-	}
-	
-	public String getValue() {
-		return this.value;
-	}
-	
-	public void setValue(String value) {
-		this.value = value;
-		this.setAttribute("VALUE",value);
-	}
-	
-	public String getOptionText() {
-		return toPlainTextString();
-	}
-	
-	public String toString() {
-		String output = "OPTION VALUE: " + value + " TEXT: "+getOptionText()+"\n";
-		return output;
-	}
+    private String value;
+    
+    public OptionTag(TagData tagData, CompositeTagData compositeTagData)
+    {
+        super(tagData, compositeTagData);
+        this.value = (String)this.getAttribute("VALUE");
+    }
+    
+    public String getValue() {
+        return this.value;
+    }
+    
+    public void setValue(String value) {
+        this.value = value;
+        this.setAttribute("VALUE",value);
+    }
+    
+    public String getOptionText() {
+        return toPlainTextString();
+    }
+    
+    public String toString() {
+        String output = "OPTION VALUE: " + value + " TEXT: "+getOptionText()+"\n";
+        return output;
+    }
 
 }

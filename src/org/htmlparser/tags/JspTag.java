@@ -35,25 +35,25 @@ import org.htmlparser.tags.data.TagData;
  */
 public class JspTag extends Tag
 {
-	/**
-	 * The HTMLJspTag is constructed by providing the beginning posn, ending posn
-	 * and the tag contents.
-	 * @param tagData The data for this tag.
-	 */
-	public JspTag(TagData tagData)
-	{
-		super(tagData);
-	}
-	
-	public String toHtml() {
-		return "<%"+tagContents+"%>";
-	}
-	
-	/**
-	 * Print the contents of the remark tag.
-	 */
-	public String toString()
-	{
-		return "JSP/ASP Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-	}
+    /**
+     * The HTMLJspTag is constructed by providing the beginning posn, ending posn
+     * and the tag contents.
+     * @param tagData The data for this tag.
+     */
+    public JspTag(TagData tagData)
+    {
+        super(tagData);
+    }
+    
+    public String toHtml() {
+        return "<%"+tagContents+"%>";
+    }
+    
+    /**
+     * Print the contents of the remark tag.
+     */
+    public String toString()
+    {
+        return "JSP/ASP Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
 }

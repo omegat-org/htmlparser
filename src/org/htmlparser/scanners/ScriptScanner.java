@@ -40,55 +40,55 @@ import org.htmlparser.util.*;
  */
 
 public class ScriptScanner extends CompositeTagScanner {
-	private static final String SCRIPT_END_TAG = "</SCRIPT>";
-	private static final String MATCH_NAME [] = {"SCRIPT"};
-	private static final String ENDERS [] = {"BODY", "HTML"};
+    private static final String SCRIPT_END_TAG = "</SCRIPT>";
+    private static final String MATCH_NAME [] = {"SCRIPT"};
+    private static final String ENDERS [] = {"BODY", "HTML"};
 
-	public ScriptScanner() {
-		super("",MATCH_NAME,ENDERS);
-	}
+    public ScriptScanner() {
+        super("",MATCH_NAME,ENDERS);
+    }
 
-	public ScriptScanner(String filter) {
-		super(filter,MATCH_NAME,ENDERS);
-	}
+    public ScriptScanner(String filter) {
+        super(filter,MATCH_NAME,ENDERS);
+    }
 
-	public ScriptScanner(String filter, String[] nameOfTagToMatch) {
-		super(filter,nameOfTagToMatch,ENDERS);
-	}
-	
-	public String [] getID() {
-		return MATCH_NAME;
-	}
+    public ScriptScanner(String filter, String[] nameOfTagToMatch) {
+        super(filter,nameOfTagToMatch,ENDERS);
+    }
+    
+    public String [] getID() {
+        return MATCH_NAME;
+    }
 
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new ScriptTag(tagData,compositeTagData);
-	}
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
+        return new ScriptTag(tagData,compositeTagData);
+    }
 
-	public Tag scan(Tag tag, String url, NodeReader nodeReader, String currLine)
-		throws ParserException {
-		try {
-			ScriptScannerHelper helper = 
-				new ScriptScannerHelper(tag,url,nodeReader,currLine, this);
-			return helper.scan();
-			
-		}
-		catch (Exception e) {
-			throw new ParserException("Error in ScriptScanner: ",e);
-		}
-	}
+    public Tag scan(Tag tag, String url, NodeReader nodeReader, String currLine)
+        throws ParserException {
+        try {
+            ScriptScannerHelper helper = 
+                new ScriptScannerHelper(tag,url,nodeReader,currLine, this);
+            return helper.scan();
+            
+        }
+        catch (Exception e) {
+            throw new ParserException("Error in ScriptScanner: ",e);
+        }
+    }
 
 
-	/**
-	 * Gets the end tag that the scanner uses to stop scanning. Subclasses of
-	 * <code>ScriptScanner</code> you should override this method.
-	 * @return String containing the end tag to search for, i.e. &lt;/SCRIPT&gt;
-	 */ 
-	public String getEndTag() {
-		return SCRIPT_END_TAG;
-	}
-	
+    /**
+     * Gets the end tag that the scanner uses to stop scanning. Subclasses of
+     * <code>ScriptScanner</code> you should override this method.
+     * @return String containing the end tag to search for, i.e. &lt;/SCRIPT&gt;
+     */ 
+    public String getEndTag() {
+        return SCRIPT_END_TAG;
+    }
+    
 
 
 }

@@ -51,38 +51,38 @@ public class AttributeParser {
 
 
 
-	private Hashtable attributeTable;
-	private String element;
-	private String name;
-	private String value;
-	private String part;
-	private String empty;
-	private boolean equal;
-	private StringTokenizer tokenizer;
-	private boolean doubleQuote;
-	private boolean singleQuote;
-	private boolean ready;
-	private String currentToken;
-	private String tokenAccumulator;
-	/**
-	* Method to break the tag into pieces.
-	* @param text All the text within the tag inside &lt; and &gt;.
+    private Hashtable attributeTable;
+    private String element;
+    private String name;
+    private String value;
+    private String part;
+    private String empty;
+    private boolean equal;
+    private StringTokenizer tokenizer;
+    private boolean doubleQuote;
+    private boolean singleQuote;
+    private boolean ready;
+    private String currentToken;
+    private String tokenAccumulator;
+    /**
+    * Method to break the tag into pieces.
+    * @param text All the text within the tag inside &lt; and &gt;.
     * @return A Hastable with elements containing the
-	* pieces of the tag. The tag-name has the value field set to
-	* the constant Tag.TAGNAME. In addition the tag-name is
-	* stored into the Hashtable with the name Tag.TAGNAME
-	* where the value is the name of the tag.
-	* Tag parameters without value
-	* has the value "". Parameters with value are represented
-	* in the Hastable by a name/value pair.
-	* As html is case insensitive but Hastable is not are all
-	* names converted into UPPERCASE to the Hastable
-	* E.g extract the href values from A-tag's and print them
-	* <pre>
-	*
+    * pieces of the tag. The tag-name has the value field set to
+    * the constant Tag.TAGNAME. In addition the tag-name is
+    * stored into the Hashtable with the name Tag.TAGNAME
+    * where the value is the name of the tag.
+    * Tag parameters without value
+    * has the value "". Parameters with value are represented
+    * in the Hastable by a name/value pair.
+    * As html is case insensitive but Hastable is not are all
+    * names converted into UPPERCASE to the Hastable
+    * E.g extract the href values from A-tag's and print them
+    * <pre>
+    *
     *    Tag tag;
-	*    Hashtable h;
-	*    String tmp;
+    *    Hashtable h;
+    *    String tmp;
     *    try {
     *        NodeReader in = new NodeReader(new FileReader(path),2048);
     *        Parser p = new Parser(in);
@@ -101,19 +101,19 @@ public class AttributeParser {
     *    catch (IOException ie) {
     *        ie.printStackTrace();
     *    }
-	* </pre>
-	*
-	*/
+    * </pre>
+    *
+    */
    public Hashtable parseAttributes (String text) {
-		attributeTable = new SpecialHashtable();
-		part = null;
-		empty = null;
+        attributeTable = new SpecialHashtable();
+        part = null;
+        empty = null;
         name=null;
         value=null;
         element=null;
-		equal = false;
+        equal = false;
         delim=DELIMETERS;
-		tokenizer = new StringTokenizer(text,delim,true);
+        tokenizer = new StringTokenizer(text,delim,true);
         while (true) {
             part=getNextPartUsing(delim);
             delim=DELIMETERS;
@@ -126,7 +126,7 @@ public class AttributeParser {
                     process(part);
                 }
                 else {
-                   	processInvalidPart();
+                    processInvalidPart();
                     if (!tokenizer.hasMoreTokens ())
                         break;
                 }
@@ -159,44 +159,44 @@ public class AttributeParser {
         }
     }
 
-	private boolean isValid(String part) {
-		return part != null && (0 < part.length ());
-	}
+    private boolean isValid(String part) {
+        return part != null && (0 < part.length ());
+    }
 
-	private void process(String part) {
-		if (name == null) {
-		    if (!part.substring(0,1).equals(" ")) {
-		        name = part;
-		        equal=true;
-		    }
-		}
-		else {
-		    if (equal){
-		        if (part.equals("=")) {
-		            equal=false;
-		            delim=DELIMETERS_WITHOUT_EQUALS;
+    private void process(String part) {
+        if (name == null) {
+            if (!part.substring(0,1).equals(" ")) {
+                name = part;
+                equal=true;
+            }
+        }
+        else {
+            if (equal){
+                if (part.equals("=")) {
+                    equal=false;
+                    delim=DELIMETERS_WITHOUT_EQUALS;
                     value=Tag.NOTHING;
-		        }
-		        else {
-		             putDataIntoTable(attributeTable,name,Tag.NULLVALUE,false);
-		             name=part;
-		             value=null;
-		        }
-		    }
-		    if (!equal && !part.equals("=")) {
-		        value=part;
-		        putDataIntoTable(attributeTable,name,value,false);
-		        name=null;
-		        value=null;
-		    }
-		}
-	}
+                }
+                else {
+                     putDataIntoTable(attributeTable,name,Tag.NULLVALUE,false);
+                     name=part;
+                     value=null;
+                }
+            }
+            if (!equal && !part.equals("=")) {
+                value=part;
+                putDataIntoTable(attributeTable,name,value,false);
+                name=null;
+                value=null;
+            }
+        }
+    }
 
     private String getNextPartUsing(String delimiter) {
-		tokenAccumulator = null;
-		doubleQuote = false;
-		singleQuote = false;
-		ready = false;
+        tokenAccumulator = null;
+        doubleQuote = false;
+        singleQuote = false;
+        ready = false;
         while (ready == false && tokenizer.hasMoreTokens()) {
             currentToken = tokenizer.nextToken(delimiter);
 
@@ -209,49 +209,49 @@ public class AttributeParser {
                 singleQuote=true;
                 tokenAccumulator="";
             } else {
-            	tokenAccumulator = currentToken;
+                tokenAccumulator = currentToken;
                 ready = isReadyWithNextPart(currentToken);
             }
         }
         return tokenAccumulator;
     }
 
-	private boolean isReadyWithNextPart(String currentToken) {
-		boolean ready = false;
-		if (isDelimeter(currentToken)) {
-		    if (currentToken.equals("=")){
-		        ready=true;
-		    }
-		}
-		else {
-		    ready=true;
-		}
-		return ready;
-	}
+    private boolean isReadyWithNextPart(String currentToken) {
+        boolean ready = false;
+        if (isDelimeter(currentToken)) {
+            if (currentToken.equals("=")){
+                ready=true;
+            }
+        }
+        else {
+            ready=true;
+        }
+        return ready;
+    }
 
-	private boolean isDelimeter(String token) {
-		return delim.indexOf(tokenAccumulator)>=0;
-	}
-	
-	private boolean isCurrentTokenSingleQuote() {
-		return currentToken.charAt(0)==SINGLE_QUOTE;
-	}
+    private boolean isDelimeter(String token) {
+        return delim.indexOf(tokenAccumulator)>=0;
+    }
+    
+    private boolean isCurrentTokenSingleQuote() {
+        return currentToken.charAt(0)==SINGLE_QUOTE;
+    }
 
-	private boolean isCurrentTokenDoubleQuote() {
-		return currentToken.charAt(0)==DOUBLE_QUOTE;
-	}
+    private boolean isCurrentTokenDoubleQuote() {
+        return currentToken.charAt(0)==DOUBLE_QUOTE;
+    }
 
-	private void combineTokensInsideSingleOrDoubleQuotes() {
-		if (doubleQuote && currentToken.charAt(0)==DOUBLE_QUOTE){
-		    doubleQuote= false;
-		    ready=true;
-		} else if (singleQuote && currentToken.charAt(0)==SINGLE_QUOTE) {
-		    singleQuote=false;
-		    ready=true;
-		}else {
-		    tokenAccumulator += currentToken;
-		}
-	}
+    private void combineTokensInsideSingleOrDoubleQuotes() {
+        if (doubleQuote && currentToken.charAt(0)==DOUBLE_QUOTE){
+            doubleQuote= false;
+            ready=true;
+        } else if (singleQuote && currentToken.charAt(0)==SINGLE_QUOTE) {
+            singleQuote=false;
+            ready=true;
+        }else {
+            tokenAccumulator += currentToken;
+        }
+    }
 
 
     private void putDataIntoTable(Hashtable h,String name,String value,boolean isName) {

@@ -45,59 +45,59 @@ import org.htmlparser.util.ParserException;
  */
 public class BulletListScannerTest extends ParserTestCase {
 
-	public BulletListScannerTest(String name) {
-		super(name);
-	}
+    public BulletListScannerTest(String name) {
+        super(name);
+    }
 
-	public void testScan() throws ParserException {
-		createParser(
-			"<ul TYPE=DISC>" +
-				"<ul TYPE=\"DISC\"><li>Energy supply\n"+
-					" (Campbell)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"+
-					" (MacPhail)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"+
-				"</ul><A NAME=\"calpinecorp\"></A><B>Calpine Corp.</B>\n"+
-				"<ul TYPE=\"DISC\"><li>Power plant projects\n"+
-					" (Neufeld)  <A HREF=\"/hansard/37th3rd/h20314p.htm#1985\">1985</A>\n"+
-				"</ul>" +
-			"</ul>"
-		);
-		parser.registerScanners();
-		parseAndAssertNodeCount(1);
-		
-		NodeList nestedBulletLists = 
-			((CompositeTag)node[0]).searchFor(
-				BulletList.class
-			); 
-		assertEquals(
-			"bullets in first list",
-			2,
-			nestedBulletLists.size()
-		);
-		BulletList firstList =
-			(BulletList)nestedBulletLists.elementAt(0);
-		Bullet firstBullet = 
-			(Bullet)firstList.childAt(0);
-		Node firstNodeInFirstBullet =
-			firstBullet.childAt(0);
-		assertType(
-			"first child in bullet",
-			StringNode.class,
-			firstNodeInFirstBullet
-		);
-		assertStringEquals(
-			"expected text",
-			"Energy supply\r\n" +
-			" (Campbell)  ",
-			firstNodeInFirstBullet.toPlainTextString()
-		);
-	}
+    public void testScan() throws ParserException {
+        createParser(
+            "<ul TYPE=DISC>" +
+                "<ul TYPE=\"DISC\"><li>Energy supply\n"+
+                    " (Campbell)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"+
+                    " (MacPhail)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"+
+                "</ul><A NAME=\"calpinecorp\"></A><B>Calpine Corp.</B>\n"+
+                "<ul TYPE=\"DISC\"><li>Power plant projects\n"+
+                    " (Neufeld)  <A HREF=\"/hansard/37th3rd/h20314p.htm#1985\">1985</A>\n"+
+                "</ul>" +
+            "</ul>"
+        );
+        parser.registerScanners();
+        parseAndAssertNodeCount(1);
+        
+        NodeList nestedBulletLists = 
+            ((CompositeTag)node[0]).searchFor(
+                BulletList.class
+            ); 
+        assertEquals(
+            "bullets in first list",
+            2,
+            nestedBulletLists.size()
+        );
+        BulletList firstList =
+            (BulletList)nestedBulletLists.elementAt(0);
+        Bullet firstBullet = 
+            (Bullet)firstList.childAt(0);
+        Node firstNodeInFirstBullet =
+            firstBullet.childAt(0);
+        assertType(
+            "first child in bullet",
+            StringNode.class,
+            firstNodeInFirstBullet
+        );
+        assertStringEquals(
+            "expected text",
+            "Energy supply\r\n" +
+            " (Campbell)  ",
+            firstNodeInFirstBullet.toPlainTextString()
+        );
+    }
 
-	public void testMissingendtag ()
+    public void testMissingendtag ()
         throws ParserException
     {
-		createParser ("<li>item 1<li>item 2");
-		parser.registerScanners ();
-		parseAndAssertNodeCount (2);
+        createParser ("<li>item 1<li>item 2");
+        parser.registerScanners ();
+        parseAndAssertNodeCount (2);
         assertStringEquals ("item 1 not correct", "item 1", ((Bullet)node[0]).childAt (0).toHtml ());
         assertStringEquals ("item 2 not correct", "item 2", ((Bullet)node[1]).childAt (0).toHtml ());
     }

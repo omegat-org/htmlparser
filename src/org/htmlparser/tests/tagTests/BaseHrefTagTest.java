@@ -35,22 +35,22 @@ import org.htmlparser.util.ParserException;
 
 public class BaseHrefTagTest extends ParserTestCase {
 
-	public BaseHrefTagTest(String name) {
-		super(name);
-	}
-	
-	public void testConstruction() {
-		BaseHrefTag baseRefTag = new BaseHrefTag(new TagData(0,0,"",""),"http://www.abc.com");
-		assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
-	}
-	
-	public void testNotHREFBaseTag() throws ParserException {
-		createParser("<base target=\"_top\">");
-		parser.registerScanners();
-		parseAndAssertNodeCount(1);
-		assertTrue("Should be a base tag but was "+node[0].getClass().getName(),node[0] instanceof BaseHrefTag);
-		BaseHrefTag baseTag = (BaseHrefTag)node[0];
-		assertStringEquals("Base Tag HTML","<BASE TARGET=\"_top\">",baseTag.toHtml());
-	}
+    public BaseHrefTagTest(String name) {
+        super(name);
+    }
+    
+    public void testConstruction() {
+        BaseHrefTag baseRefTag = new BaseHrefTag(new TagData(0,0,"",""),"http://www.abc.com");
+        assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
+    }
+    
+    public void testNotHREFBaseTag() throws ParserException {
+        createParser("<base target=\"_top\">");
+        parser.registerScanners();
+        parseAndAssertNodeCount(1);
+        assertTrue("Should be a base tag but was "+node[0].getClass().getName(),node[0] instanceof BaseHrefTag);
+        BaseHrefTag baseTag = (BaseHrefTag)node[0];
+        assertStringEquals("Base Tag HTML","<BASE TARGET=\"_top\">",baseTag.toHtml());
+    }
 
 }

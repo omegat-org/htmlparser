@@ -36,29 +36,29 @@ import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
 public class MetaTagScanner extends TagScanner {
-	public MetaTagScanner(String filter) {
-		super(filter);
-	}
+    public MetaTagScanner(String filter) {
+        super(filter);
+    }
 
-	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "META";
-		return ids;
-	}
+    public String [] getID() {
+        String [] ids = new String[1];
+        ids[0] = "META";
+        return ids;
+    }
 
-	protected Tag createTag(TagData tagData, Tag tag, String url)
-		throws ParserException {
-		Hashtable table = tag.getAttributes();
-		String metaTagName = (String)table.get("NAME");					
-		String metaTagContents = (String)table.get("CONTENT");
-		String httpEquiv = (String)table.get("HTTP-EQUIV");
+    protected Tag createTag(TagData tagData, Tag tag, String url)
+        throws ParserException {
+        Hashtable table = tag.getAttributes();
+        String metaTagName = (String)table.get("NAME");                 
+        String metaTagContents = (String)table.get("CONTENT");
+        String httpEquiv = (String)table.get("HTTP-EQUIV");
 
-		return new MetaTag(
-			tagData,
-			httpEquiv,
-			metaTagName,
-			metaTagContents 
-		);
-	}
+        return new MetaTag(
+            tagData,
+            httpEquiv,
+            metaTagName,
+            metaTagContents 
+        );
+    }
 
 }

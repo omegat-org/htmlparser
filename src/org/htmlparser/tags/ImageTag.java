@@ -36,42 +36,42 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class ImageTag extends Tag
 {
-	public static final String IMAGE_TAG_FILTER="-i";
-	/**
-	 * The URL where the image is stored.
-	 */
-	protected String imageURL;
+    public static final String IMAGE_TAG_FILTER="-i";
+    /**
+     * The URL where the image is stored.
+     */
+    protected String imageURL;
 
     /**
-	 * Constructor creates an HTMLImageNode object, which stores the location
-	 * where the image is to be found.
+     * Constructor creates an HTMLImageNode object, which stores the location
+     * where the image is to be found.
      * @param tagData Specifies character position and content of the tag.
-	 * @param imageURL Location of the image.
-	 */
-	public ImageTag(TagData tagData,String imageURL)
-	{
-		super(tagData);
-		this.imageURL = imageURL;
-	}
-	/**
-	 * Returns the location of the image
-	 */
-	public String getImageURL()
-	{
-		return imageURL;
-	}
-	public String toString()
-	{
-		return "IMAGE TAG : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-	}
+     * @param imageURL Location of the image.
+     */
+    public ImageTag(TagData tagData,String imageURL)
+    {
+        super(tagData);
+        this.imageURL = imageURL;
+    }
+    /**
+     * Returns the location of the image
+     */
+    public String getImageURL()
+    {
+        return imageURL;
+    }
+    public String toString()
+    {
+        return "IMAGE TAG : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
 
-	public void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
         setAttribute ("SRC", imageURL);
-	}
+    }
 
-	public void accept(NodeVisitor visitor) {
-		visitor.visitImageTag(this);
-	}
+    public void accept(NodeVisitor visitor) {
+        visitor.visitImageTag(this);
+    }
 
 }

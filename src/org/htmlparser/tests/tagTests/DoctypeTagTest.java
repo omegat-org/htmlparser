@@ -34,27 +34,27 @@ import org.htmlparser.util.ParserException;
 
 public class DoctypeTagTest extends ParserTestCase {
 
-	public DoctypeTagTest(String name) {
-		super(name);
-	}
+    public DoctypeTagTest(String name) {
+        super(name);
+    }
 
-	public void testToHTML() throws ParserException {
-		String testHTML = new String(
-		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
-		"<HTML>\n"+
-		"<HEAD>\n"+
-		"<TITLE>Cogs of Chicago</TITLE>\n"+
-		"</HEAD>\n"+
-		"<BODY>\n"+
-		"...\n"+
-		"</BODY>\n"+
-		"</HTML>\n");
-		createParser(testHTML);
-		parser.registerScanners();
-		parseAndAssertNodeCount(9);
-		// The node should be an HTMLLinkTag
-		assertTrue("Node should be a HTMLDoctypeTag",node[0] instanceof DoctypeTag);
-		DoctypeTag docTypeTag = (DoctypeTag)node[0];
-		assertStringEquals("toHTML()","<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">",docTypeTag.toHtml());
-	}
+    public void testToHTML() throws ParserException {
+        String testHTML = new String(
+        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
+        "<HTML>\n"+
+        "<HEAD>\n"+
+        "<TITLE>Cogs of Chicago</TITLE>\n"+
+        "</HEAD>\n"+
+        "<BODY>\n"+
+        "...\n"+
+        "</BODY>\n"+
+        "</HTML>\n");
+        createParser(testHTML);
+        parser.registerScanners();
+        parseAndAssertNodeCount(9);
+        // The node should be an HTMLLinkTag
+        assertTrue("Node should be a HTMLDoctypeTag",node[0] instanceof DoctypeTag);
+        DoctypeTag docTypeTag = (DoctypeTag)node[0];
+        assertStringEquals("toHTML()","<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">",docTypeTag.toHtml());
+    }
 }

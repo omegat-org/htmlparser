@@ -33,11 +33,11 @@ import org.htmlparser.util.ParserUtils;
 
 public class InputTag extends Tag
 {
-	public InputTag(TagData tagData) {
-		super(tagData);
-	}
-		
-	public String toString() {
-		return (ParserUtils.toString(this));
-	}
+    public InputTag(TagData tagData) {
+        super(tagData);
+    }
+        
+    public String toString() {
+        return (ParserUtils.toString(this));
+    }
 }

@@ -34,39 +34,39 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
 public class TableColumnScanner extends CompositeTagScanner {
-	private final static String MATCH_STRING [] = { "TD" };
-	
-	public TableColumnScanner() {
-		this("");
-	}
-
-	public TableColumnScanner(String filter) {
-		this(filter, MATCH_STRING, new String[] {}, new String[] {}, false);
-	}
-
-	public TableColumnScanner(
-		String filter,
-		String[] nameOfTagToMatch,
-		String [] tagEnders, 
-		String [] endTagEnders,
-		boolean allowSelfChildren) {
-		super(
-			filter, 
-			nameOfTagToMatch, 
-			tagEnders,
-            endTagEnders,
-            allowSelfChildren
-		);
+    private final static String MATCH_STRING [] = { "TD" };
+    
+    public TableColumnScanner() {
+        this("");
     }
 
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new TableColumn(tagData,compositeTagData);
-	}
+    public TableColumnScanner(String filter) {
+        this(filter, MATCH_STRING, new String[] {}, new String[] {}, false);
+    }
 
-	public String[] getID() {
-		return MATCH_STRING;
-	}
+    public TableColumnScanner(
+        String filter,
+        String[] nameOfTagToMatch,
+        String [] tagEnders, 
+        String [] endTagEnders,
+        boolean allowSelfChildren) {
+        super(
+            filter, 
+            nameOfTagToMatch, 
+            tagEnders,
+            endTagEnders,
+            allowSelfChildren
+        );
+    }
+
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
+        return new TableColumn(tagData,compositeTagData);
+    }
+
+    public String[] getID() {
+        return MATCH_STRING;
+    }
 
 }

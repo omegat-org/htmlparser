@@ -33,45 +33,45 @@ import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
 public class HTMLLinkProcessorTest extends ParserTestCase {
-	private LinkProcessor lp;
+    private LinkProcessor lp;
 
-	public HTMLLinkProcessorTest(String name) {
-		super(name);
-	}
+    public HTMLLinkProcessorTest(String name) {
+        super(name);
+    }
 
-	protected void setUp() {
-		lp = new LinkProcessor();
-	}
+    protected void setUp() {
+        lp = new LinkProcessor();
+    }
 
-	public void testIsURL() {
-		String resourceLoc1 = "http://someurl.com";
-		String resourceLoc2 = "myfilehttp.dat";		
-		assertTrue(resourceLoc1+" should be a url",LinkProcessor.isURL(resourceLoc1));
-		assertTrue(resourceLoc2+" should not be a url",!LinkProcessor.isURL(resourceLoc2));	
-		String resourceLoc3 = "file://localhost/D:/java/jdk1.3/docs/api/overview-summary.html";
-		assertTrue(resourceLoc3+" should be a url",LinkProcessor.isURL(resourceLoc3));
-		
-	}
+    public void testIsURL() {
+        String resourceLoc1 = "http://someurl.com";
+        String resourceLoc2 = "myfilehttp.dat";     
+        assertTrue(resourceLoc1+" should be a url",LinkProcessor.isURL(resourceLoc1));
+        assertTrue(resourceLoc2+" should not be a url",!LinkProcessor.isURL(resourceLoc2)); 
+        String resourceLoc3 = "file://localhost/D:/java/jdk1.3/docs/api/overview-summary.html";
+        assertTrue(resourceLoc3+" should be a url",LinkProcessor.isURL(resourceLoc3));
+        
+    }
 
-	public void testFixSpaces() {
-		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
-		String fixedURL = LinkProcessor.fixSpaces(url);
-		assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html",fixedURL);
-	}
+    public void testFixSpaces() {
+        String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
+        String fixedURL = LinkProcessor.fixSpaces(url);
+        assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html",fixedURL);
+    }
 
-	/**
-	 * Reproduction of bug 673379 reported by Joe Robbins. Parser goes into
-	 * infinte loop if the link has no slashes.
-	 */
-	public void testLinkWithNoSlashes() throws Exception {
-		createParser("<A HREF=\".foo.txt\">Foo</A>","http://www.oygevalt.com");
-		parser.registerScanners();
-		parseAndAssertNodeCount(1);
-		assertTrue(node[0] instanceof LinkTag);
-		LinkTag linkTag = (LinkTag)node[0];
-		assertStringEquals("link","http://www.oygevalt.com/foo.txt",linkTag.getLink());
-		assertEquals("link","Foo",linkTag.getLinkText());
-	}
+    /**
+     * Reproduction of bug 673379 reported by Joe Robbins. Parser goes into
+     * infinte loop if the link has no slashes.
+     */
+    public void testLinkWithNoSlashes() throws Exception {
+        createParser("<A HREF=\".foo.txt\">Foo</A>","http://www.oygevalt.com");
+        parser.registerScanners();
+        parseAndAssertNodeCount(1);
+        assertTrue(node[0] instanceof LinkTag);
+        LinkTag linkTag = (LinkTag)node[0];
+        assertStringEquals("link","http://www.oygevalt.com/foo.txt",linkTag.getLink());
+        assertEquals("link","Foo",linkTag.getLinkText());
+    }
     //
     // Tests from Appendix C Examples of Resolving Relative URI References
     // RFC 2396 Uniform Resource Identifiers (URI): Generic Syntax

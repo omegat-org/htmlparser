@@ -37,22 +37,22 @@ import org.htmlparser.tags.data.TagData;
 public class DoctypeTag extends Tag
 {
     /**
-	 * The HTMLDoctypeTag is constructed by providing the beginning posn, ending posn
-	 * and the tag contents.
-	 * @param tagData The data for this tag.
-	 */
-	public DoctypeTag(TagData tagData)
-	{
-		super(tagData);
-	}
-	/**
-	 * Print the contents of the remark tag.
-	 */
-	public String toString()
-	{
-		return "Doctype Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-	}
-	public String toHtml() {
-		return "<!DOCTYPE "+tagContents+">";
-	}
+     * The HTMLDoctypeTag is constructed by providing the beginning posn, ending posn
+     * and the tag contents.
+     * @param tagData The data for this tag.
+     */
+    public DoctypeTag(TagData tagData)
+    {
+        super(tagData);
+    }
+    /**
+     * Print the contents of the remark tag.
+     */
+    public String toString()
+    {
+        return "Doctype Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
+    public String toHtml() {
+        return "<!DOCTYPE "+tagContents+">";
+    }
 }

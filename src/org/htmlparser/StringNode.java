@@ -37,57 +37,57 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class StringNode extends AbstractNode
 {
-	public static final String STRING_FILTER="-string";
-	
-	/**
-	 * The text of the string.
-	 */	
-	protected StringBuffer textBuffer;
+    public static final String STRING_FILTER="-string";
+    
+    /**
+     * The text of the string.
+     */ 
+    protected StringBuffer textBuffer;
 
-	/** 
-	 * Constructor takes in the text string, beginning and ending posns.
-	 * @param text The contents of the string line
-	 * @param textBegin The beginning position of the string
-	 * @param textEnd The ending positiong of the string
-	 */
-	public StringNode (StringBuffer text, int textBegin,int textEnd)
-	{
-		super(textBegin,textEnd);
-		this.textBuffer = text;
-	}
+    /** 
+     * Constructor takes in the text string, beginning and ending posns.
+     * @param text The contents of the string line
+     * @param textBegin The beginning position of the string
+     * @param textEnd The ending positiong of the string
+     */
+    public StringNode (StringBuffer text, int textBegin,int textEnd)
+    {
+        super(textBegin,textEnd);
+        this.textBuffer = text;
+    }
 
-	/**
-	 * Returns the text of the string line
-	 */
-	public String getText() {
-		return textBuffer.toString();
-	}
+    /**
+     * Returns the text of the string line
+     */
+    public String getText() {
+        return textBuffer.toString();
+    }
     /**
      * Sets the string contents of the node.
      * @param text The new text for the node.
      */
-	public void setText(String text)
-	{
-		textBuffer = new StringBuffer (text);
-	}
-	
-	public String toPlainTextString() {
-		return textBuffer.toString();
-	}
-	
-	public String toHtml() {
-		return textBuffer.toString();
-	}
-	
-	public String toString() {
-		return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-	}
-	
-	public void collectInto(NodeList collectionList, String filter) {
-		if (filter==STRING_FILTER) collectionList.add(this);
-	}
+    public void setText(String text)
+    {
+        textBuffer = new StringBuffer (text);
+    }
+    
+    public String toPlainTextString() {
+        return textBuffer.toString();
+    }
+    
+    public String toHtml() {
+        return textBuffer.toString();
+    }
+    
+    public String toString() {
+        return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
+    
+    public void collectInto(NodeList collectionList, String filter) {
+        if (filter==STRING_FILTER) collectionList.add(this);
+    }
 
-	public void accept(Object visitor) {
-		((NodeVisitor)visitor).visitStringNode(this);
-	}
+    public void accept(Object visitor) {
+        ((NodeVisitor)visitor).visitStringNode(this);
+    }
 }

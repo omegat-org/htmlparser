@@ -43,7 +43,7 @@ public class AllTests extends junit.framework.TestCase
  * @param name java.lang.String
  */
 public AllTests(String name) {
-	super(name);
+    super(name);
 }
 
     /**
@@ -57,7 +57,7 @@ public AllTests(String name) {
      * </pre>
      * All other options are passed on to the junit framework.
      */
-	public static void main(String[] args)
+    public static void main(String[] args)
     {
         String runner;
         int i;
@@ -107,7 +107,7 @@ public AllTests(String name) {
                 + t.getMessage ()
                 + ")");
         }
-	}
+    }
 
     /**
      * Insert the method's description here.

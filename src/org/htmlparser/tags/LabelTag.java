@@ -36,15 +36,15 @@ import org.htmlparser.tags.data.TagData;
 
 public class LabelTag extends CompositeTag {
 
-	public LabelTag(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData, compositeTagData);
-	}
-	
-	public String getLabel() {
-		return toPlainTextString();
-	}
-	
-	public String toString() {
-		return "LABEL: "+getLabel();
-	}
+    public LabelTag(TagData tagData, CompositeTagData compositeTagData) {
+        super(tagData, compositeTagData);
+    }
+    
+    public String getLabel() {
+        return toPlainTextString();
+    }
+    
+    public String toString() {
+        return "LABEL: "+getLabel();
+    }
 }

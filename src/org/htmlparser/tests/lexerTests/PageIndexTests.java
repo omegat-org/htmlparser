@@ -38,10 +38,10 @@ public class PageIndexTests extends TestCase
     /**
      * Test the end-of-line index class.
      */
-	public PageIndexTests (String name)
+    public PageIndexTests (String name)
     {
-		super (name);
-	}
+        super (name);
+    }
 
     public void testAppend1 ()
     {

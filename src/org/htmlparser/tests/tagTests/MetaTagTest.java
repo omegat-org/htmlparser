@@ -34,30 +34,30 @@ import org.htmlparser.util.ParserException;
 
 public class MetaTagTest extends ParserTestCase {
 
-	public MetaTagTest(String name) {
-		super(name);
-	}
+    public MetaTagTest(String name) {
+        super(name);
+    }
 
-	public void testToHTML() throws ParserException {
-		createParser(
-		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
-		"<html>\n"+
-		"<head><title>SpamCop - Welcome to SpamCop\n"+
-		"</title>\n"+
-		"<META name=\"description\" content=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\">\n"+
-		"<META name=\"keywords\" content=\"SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns\">\n"+
-		"<META name=\"language\" content=\"en\">\n"+
-		"<META name=\"owner\" content=\"service@admin.spamcop.net\">\n"+
-		"<META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
+    public void testToHTML() throws ParserException {
+        createParser(
+        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
+        "<html>\n"+
+        "<head><title>SpamCop - Welcome to SpamCop\n"+
+        "</title>\n"+
+        "<META name=\"description\" content=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\">\n"+
+        "<META name=\"keywords\" content=\"SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns\">\n"+
+        "<META name=\"language\" content=\"en\">\n"+
+        "<META name=\"owner\" content=\"service@admin.spamcop.net\">\n"+
+        "<META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
 
-		parser.registerScanners();
-		
-		parseAndAssertNodeCount(9);
-		assertTrue("Node 5 should be META Tag",node[4] instanceof MetaTag);
-		MetaTag metaTag;
-		metaTag = (MetaTag) node[4];
-		assertStringEquals("Meta Tag 4 Name","description",metaTag.getMetaTagName());
-		assertStringEquals("Meta Tag 4 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaContent());
-		assertStringEquals("toHTML()","<META CONTENT=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\" NAME=\"description\">",metaTag.toHtml());
-	}
+        parser.registerScanners();
+        
+        parseAndAssertNodeCount(9);
+        assertTrue("Node 5 should be META Tag",node[4] instanceof MetaTag);
+        MetaTag metaTag;
+        metaTag = (MetaTag) node[4];
+        assertStringEquals("Meta Tag 4 Name","description",metaTag.getMetaTagName());
+        assertStringEquals("Meta Tag 4 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaContent());
+        assertStringEquals("toHTML()","<META CONTENT=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\" NAME=\"description\">",metaTag.toHtml());
+    }
 }

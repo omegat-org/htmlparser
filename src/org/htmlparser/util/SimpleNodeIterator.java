@@ -39,17 +39,17 @@ import org.htmlparser.Node;
  */
 public interface SimpleNodeIterator extends NodeIterator
 {
-	/**
-	 * Check if more nodes are available.
-	 * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will
-	 * succeed.
-	 */
-   	public boolean hasMoreNodes();
+    /**
+     * Check if more nodes are available.
+     * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will
+     * succeed.
+     */
+    public boolean hasMoreNodes();
 
-	/**
-	 * Get the next node.
-	 * @return The next node in the HTML stream, or null if there are no more
-	 * nodes. 
-	 */
-	public Node nextNode();
+    /**
+     * Get the next node.
+     * @return The next node in the HTML stream, or null if there are no more
+     * nodes. 
+     */
+    public Node nextNode();
 }

@@ -35,29 +35,29 @@ import org.htmlparser.tags.data.TagData;
  */
 public class FrameTag extends Tag
 {
-	/**
-	 * The URL where the image is stored.
-	 */
-	protected String frameURL;
+    /**
+     * The URL where the image is stored.
+     */
+    protected String frameURL;
     protected String frameName;
-	public FrameTag(TagData tagData, String frameURL,String frameName) {
-		super(tagData);
-		this.frameURL = frameURL;
+    public FrameTag(TagData tagData, String frameURL,String frameName) {
+        super(tagData);
+        this.frameURL = frameURL;
       this.frameName = frameName;
-	}
-	/**
-	 * Returns the location of the image
-	 */
-	public String getFrameLocation() {
-		return frameURL;
-	}
-	public String getFrameName() {
-		return frameName;
-	}
-	/**
-	 * Print the contents of the HTMLFrameTag
-	 */
-	public String toString() {
-		return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-	}
+    }
+    /**
+     * Returns the location of the image
+     */
+    public String getFrameLocation() {
+        return frameURL;
+    }
+    public String getFrameName() {
+        return frameName;
+    }
+    /**
+     * Print the contents of the HTMLFrameTag
+     */
+    public String toString() {
+        return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
 }

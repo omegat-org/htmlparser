@@ -40,26 +40,26 @@ import org.htmlparser.util.ParserException;
  */
 
 public class DoctypeScanner extends TagScanner {
-	public DoctypeScanner() {
-		super();
-	}
+    public DoctypeScanner() {
+        super();
+    }
 
-	public DoctypeScanner(String filter) {
-		super(filter);
-	}
+    public DoctypeScanner(String filter) {
+        super(filter);
+    }
 
-	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "!DOCTYPE";
-		return ids;
-	}
+    public String [] getID() {
+        String [] ids = new String[1];
+        ids[0] = "!DOCTYPE";
+        return ids;
+    }
 
-	protected Tag createTag(TagData tagData, Tag tag, String url)
-		throws ParserException {
-		String tagContents = tag.getText();	
-		tagContents=tagContents.substring(9,tagContents.length());
-		tagData.setTagContents(tagContents);
-		return new DoctypeTag(tagData);
-	}
+    protected Tag createTag(TagData tagData, Tag tag, String url)
+        throws ParserException {
+        String tagContents = tag.getText(); 
+        tagContents=tagContents.substring(9,tagContents.length());
+        tagData.setTagContents(tagContents);
+        return new DoctypeTag(tagData);
+    }
 
 }

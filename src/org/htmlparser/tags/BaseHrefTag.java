@@ -40,21 +40,21 @@ import org.htmlparser.tags.data.TagData;
  * Window>Preferences>Java>Code Generation.
  */
 public class BaseHrefTag extends Tag {
-	private String baseUrl;
+    private String baseUrl;
 
-	public BaseHrefTag(TagData tagData, String baseUrl) {
-		super(tagData);
-		this.baseUrl = baseUrl;
-	}
-	public String getBaseUrl() {
-		return baseUrl;
-	}
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
-	}
-	public String toString() {
-		return "BASE TAG\n"+
-				"--------\n"+
-				"Name : "+baseUrl;
-	}
+    public BaseHrefTag(TagData tagData, String baseUrl) {
+        super(tagData);
+        this.baseUrl = baseUrl;
+    }
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+    public String toString() {
+        return "BASE TAG\n"+
+                "--------\n"+
+                "Name : "+baseUrl;
+    }
 }

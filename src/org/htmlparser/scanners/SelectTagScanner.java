@@ -41,57 +41,57 @@ import org.htmlparser.util.NodeList;
 
 public class SelectTagScanner extends CompositeTagScanner
 {
-	private static final String MATCH_NAME [] = {"SELECT"};
-	private static final String [] ENDERS = { "INPUT", "TEXTAREA", "SELECT" };
+    private static final String MATCH_NAME [] = {"SELECT"};
+    private static final String [] ENDERS = { "INPUT", "TEXTAREA", "SELECT" };
     private static final String [] END_TAG_ENDERS = {"FORM", "BODY", "HTML" };
-	private NodeList optionTags;
+    private NodeList optionTags;
     private Stack stack;
-		
-	public SelectTagScanner(Stack stack)
-	{
-		this("", stack);
-	}
-	
-	public SelectTagScanner(String filter, Stack stack)
-	{
+        
+    public SelectTagScanner(Stack stack)
+    {
+        this("", stack);
+    }
+    
+    public SelectTagScanner(String filter, Stack stack)
+    {
         super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
         this.stack = stack;
-	}
+    }
 
     public String [] getID() {
-		return MATCH_NAME;
-	}
+        return MATCH_NAME;
+    }
 
 
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
         if (!stack.empty () && (this == stack.peek ()))
             stack.pop ();
-		return new SelectTag(tagData,compositeTagData,optionTags);
-	}
-	
-	public void childNodeEncountered(Node node) {
-		if (node instanceof OptionTag)
-			optionTags.add(node);
-	}
+        return new SelectTag(tagData,compositeTagData,optionTags);
+    }
+    
+    public void childNodeEncountered(Node node) {
+        if (node instanceof OptionTag)
+            optionTags.add(node);
+    }
 
-	public void beforeScanningStarts ()
+    public void beforeScanningStarts ()
     {
         optionTags = new NodeList ();
         stack.push (this);
-	}
+    }
 
-	/**
-	 * This is the logic that decides when a option tag can be allowed
-	 */
-	public boolean shouldCreateEndTagAndExit ()
+    /**
+     * This is the logic that decides when a option tag can be allowed
+     */
+    public boolean shouldCreateEndTagAndExit ()
     {
         boolean ret;
         
         ret = false;
 
-		if (0 != stack.size ())
+        if (0 != stack.size ())
         {
             TagScanner parentScanner = (TagScanner)stack.peek ();
             if (parentScanner instanceof CompositeTagScanner)
@@ -106,5 +106,5 @@ public class SelectTagScanner extends CompositeTagScanner
         }
         
         return (ret);
-	}
+    }
 }

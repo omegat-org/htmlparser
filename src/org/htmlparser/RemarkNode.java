@@ -37,52 +37,52 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class RemarkNode extends AbstractNode
 {
-	public final static String REMARK_NODE_FILTER="-r";
-	
-	/**
-	 * Tag contents will have the contents of the comment tag.
-   	 */
-	String tagContents;
-	/**
-	 * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
-	 * and the tag contents.
-	 * @param nodeBegin beginning position of the tag
-	 * @param nodeEnd ending position of the tag
-	 * @param tagContents contents of the remark tag
-	 */
-	public RemarkNode(int nodeBegin, int nodeEnd, String tagContents)
-	{
-		super(nodeBegin,nodeEnd);
-		this.tagContents = tagContents;
-	}
+    public final static String REMARK_NODE_FILTER="-r";
+    
+    /**
+     * Tag contents will have the contents of the comment tag.
+     */
+    String tagContents;
+    /**
+     * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
+     * and the tag contents.
+     * @param nodeBegin beginning position of the tag
+     * @param nodeEnd ending position of the tag
+     * @param tagContents contents of the remark tag
+     */
+    public RemarkNode(int nodeBegin, int nodeEnd, String tagContents)
+    {
+        super(nodeBegin,nodeEnd);
+        this.tagContents = tagContents;
+    }
 
-	/** 
-	 * Returns the text contents of the comment tag.
-	 */
-	public String getText()
-	{
-		return tagContents;
-	}
-	public String toPlainTextString() {
-		return tagContents;
-	}
-	public String toHtml() {
-		return "<!--"+tagContents+"-->";
-	}
-	/**
-	 * Print the contents of the remark tag.
-	 */
-	public String toString()
-	{
-		return "Comment Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+"\n";
-	}
+    /** 
+     * Returns the text contents of the comment tag.
+     */
+    public String getText()
+    {
+        return tagContents;
+    }
+    public String toPlainTextString() {
+        return tagContents;
+    }
+    public String toHtml() {
+        return "<!--"+tagContents+"-->";
+    }
+    /**
+     * Print the contents of the remark tag.
+     */
+    public String toString()
+    {
+        return "Comment Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+"\n";
+    }
 
-	public void collectInto(NodeList collectionList, String filter) {
-		if (filter==REMARK_NODE_FILTER) collectionList.add(this);
-	}
+    public void collectInto(NodeList collectionList, String filter) {
+        if (filter==REMARK_NODE_FILTER) collectionList.add(this);
+    }
 
-	public void accept(Object visitor) {
-		((NodeVisitor)visitor).visitRemarkNode(this);
-	}
+    public void accept(Object visitor) {
+        ((NodeVisitor)visitor).visitRemarkNode(this);
+    }
 
 }

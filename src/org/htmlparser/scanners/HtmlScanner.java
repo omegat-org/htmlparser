@@ -34,24 +34,24 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
 public class HtmlScanner extends CompositeTagScanner {
-	private static String MATCH_STRING [] = {"HTML"};
-	
-	public HtmlScanner() {
-		this("");
-	}
+    private static String MATCH_STRING [] = {"HTML"};
+    
+    public HtmlScanner() {
+        this("");
+    }
 
-	public HtmlScanner(String filter) {
-		super(filter, MATCH_STRING);
-	}
+    public HtmlScanner(String filter) {
+        super(filter, MATCH_STRING);
+    }
 
-	public String[] getID() {
-		return MATCH_STRING;
-	}
+    public String[] getID() {
+        return MATCH_STRING;
+    }
 
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new Html(tagData,compositeTagData);
-	}
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
+        return new Html(tagData,compositeTagData);
+    }
 
 }

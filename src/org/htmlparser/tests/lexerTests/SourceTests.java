@@ -57,15 +57,15 @@ public class SourceTests extends TestCase
     /**
      * Test the first level stream class.
      */
-	public SourceTests (String name)
+    public SourceTests (String name)
     {
-		super (name);
-	}
+        super (name);
+    }
 
     /**
      * Test initialization with a null value.
      */
-	public void testNull () throws IOException
+    public void testNull () throws IOException
     {
         Source source;
         
@@ -76,7 +76,7 @@ public class SourceTests extends TestCase
     /**
      * Test initialization with a null charset name.
      */
-	public void testEmpty () throws IOException
+    public void testEmpty () throws IOException
     {
         Source source;
         
@@ -87,7 +87,7 @@ public class SourceTests extends TestCase
     /**
      * Test initialization with an input stream having only one byte.
      */
-	public void testOneByte () throws IOException
+    public void testOneByte () throws IOException
     {
         Source source;
         
@@ -99,7 +99,7 @@ public class SourceTests extends TestCase
     /**
      * Test close.
      */
-	public void testClose () throws IOException
+    public void testClose () throws IOException
     {
         Source source;
 
@@ -120,7 +120,7 @@ public class SourceTests extends TestCase
     /**
      * Test reset.
      */
-	public void testReset () throws IOException
+    public void testReset () throws IOException
     {
         String reference;
         Source source;
@@ -144,7 +144,7 @@ public class SourceTests extends TestCase
     /**
      * Test reset in the middle of reading.
      */
-	public void testMidReset () throws IOException
+    public void testMidReset () throws IOException
     {
         String reference;
         Source source;
@@ -168,7 +168,7 @@ public class SourceTests extends TestCase
     /**
      * Test mark/reset in the middle of reading.
      */
-	public void testMarkReset () throws IOException
+    public void testMarkReset () throws IOException
     {
         String reference;
         Source source;
@@ -194,7 +194,7 @@ public class SourceTests extends TestCase
     /**
      * Test skip.
      */
-	public void testSkip () throws IOException
+    public void testSkip () throws IOException
     {
         String part1;
         String part2;
@@ -222,7 +222,7 @@ public class SourceTests extends TestCase
     /**
      * Test multi-byte read.
      */
-	public void testMultByte () throws IOException
+    public void testMultByte () throws IOException
     {
         String reference;
         Source source;
@@ -240,7 +240,7 @@ public class SourceTests extends TestCase
     /**
      * Test positioned multi-byte read.
      */
-	public void testPositionedMultByte () throws IOException
+    public void testPositionedMultByte () throws IOException
     {
         String part1;
         String part2;
@@ -272,7 +272,7 @@ public class SourceTests extends TestCase
     /**
      * Test ready.
      */
-	public void testReady () throws IOException
+    public void testReady () throws IOException
     {
         Source source;
         
@@ -304,9 +304,9 @@ public class SourceTests extends TestCase
         link = "http://sourceforge.net/projects/htmlparser/HTMLParser_Coverage.html";
         chars1 = new ArrayList ();
         chars2 = new ArrayList ();
-	    try
-	    {
-	        url = new URL (link);
+        try
+        {
+            url = new URL (link);
             connection = url.openConnection ();
             connection.connect ();
             in = new InputStreamReader (new BufferedInputStream (connection.getInputStream ()), DEFAULT_CHARSET);
@@ -328,8 +328,8 @@ public class SourceTests extends TestCase
                 index++;
             }
             assertTrue ("extra characters", index == chars2.size ());
-	    }
-	    catch (MalformedURLException murle)
+        }
+        catch (MalformedURLException murle)
         {
             fail ("bad url " + link);
         }

@@ -48,61 +48,61 @@ import org.htmlparser.util.ParserException;
  */
 public class FrameScanner extends TagScanner
 {
-	/**
-	 * Overriding the default constructor
-	 */
-	public FrameScanner()
-	{
-		super();
-	}
-	/**
-	 * Overriding the constructor to accept the filter
-	 */
-	public FrameScanner(String filter)
-	{
-		super(filter);
-	}
+    /**
+     * Overriding the default constructor
+     */
+    public FrameScanner()
+    {
+        super();
+    }
+    /**
+     * Overriding the constructor to accept the filter
+     */
+    public FrameScanner(String filter)
+    {
+        super(filter);
+    }
   /**
    * Extract the location of the image, given the string to be parsed, and the url
    * of the html page in which this tag exists.
    * @param tag The tag with the 'SRC' attribute.
    * @param url URL of web page being parsed.
    */
-	public String extractFrameLocn(Tag tag,String url) throws ParserException
-	{
-		try {
-			Hashtable table = tag.getAttributes();
-			String relativeFrame =  (String)table.get("SRC");
-			if (relativeFrame==null) return ""; else
-			return (new LinkProcessor()).extract(relativeFrame,url);
-		}
-		catch (Exception e) {
-			String msg;
-			if (tag!=null) msg = tag.getText(); else msg = "null";
-			throw new ParserException("HTMLFrameScanner.extractFrameLocn() : Error in extracting frame location from tag "+msg,e); 
-		}
-	}
-	
+    public String extractFrameLocn(Tag tag,String url) throws ParserException
+    {
+        try {
+            Hashtable table = tag.getAttributes();
+            String relativeFrame =  (String)table.get("SRC");
+            if (relativeFrame==null) return ""; else
+            return (new LinkProcessor()).extract(relativeFrame,url);
+        }
+        catch (Exception e) {
+            String msg;
+            if (tag!=null) msg = tag.getText(); else msg = "null";
+            throw new ParserException("HTMLFrameScanner.extractFrameLocn() : Error in extracting frame location from tag "+msg,e); 
+        }
+    }
+    
 
 
-	public String extractFrameName(Tag tag,String url) 	{
-		return tag.getAttribute("NAME");
-	}
+    public String extractFrameName(Tag tag,String url)  {
+        return tag.getAttribute("NAME");
+    }
 
-	/**
-	 * @see org.htmlparser.scanners.TagScanner#getID()
-	 */
-	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "FRAME";
-		return ids;
-	}
+    /**
+     * @see org.htmlparser.scanners.TagScanner#getID()
+     */
+    public String [] getID() {
+        String [] ids = new String[1];
+        ids[0] = "FRAME";
+        return ids;
+    }
 
-	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
-		String frameUrl = extractFrameLocn(tag,url);
-		String frameName = extractFrameName(tag,url);
-		
-		return new FrameTag(tagData,frameUrl,frameName);
-	}
+    protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
+        String frameUrl = extractFrameLocn(tag,url);
+        String frameName = extractFrameName(tag,url);
+        
+        return new FrameTag(tagData,frameUrl,frameName);
+    }
 
 }

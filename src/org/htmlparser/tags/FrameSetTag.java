@@ -38,58 +38,58 @@ import org.htmlparser.util.SimpleNodeIterator;
  */
 public class FrameSetTag extends CompositeTag
 {
-	/**
-	 * The URL where the image is stored.
-	 */
-	protected String frameURL;
-   	protected String frameName;
-   	protected NodeList frames;
-	public FrameSetTag(TagData tagData,CompositeTagData compositeTagData) {
-		super(tagData,compositeTagData);
-      	this.frames = compositeTagData.getChildren();
-	}
-	
-	/**
-	 * Returns the location of the frame
-	 */
-	public String getFrameLocation() {
-		return frameURL;
-	}
-	
-	public String getFrameName() {
-		return frameName;
-	}
-	
-	/**
-	 * Print the contents of the HTMLImageNode
-	 */
-	public String toString() {
-		return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-	}
-	
-	/**
-	 * Returns the frames.
-	 * @return Vector
-	 */
-	public NodeList getFrames() {
-		return frames;
-	}
+    /**
+     * The URL where the image is stored.
+     */
+    protected String frameURL;
+    protected String frameName;
+    protected NodeList frames;
+    public FrameSetTag(TagData tagData,CompositeTagData compositeTagData) {
+        super(tagData,compositeTagData);
+        this.frames = compositeTagData.getChildren();
+    }
+    
+    /**
+     * Returns the location of the frame
+     */
+    public String getFrameLocation() {
+        return frameURL;
+    }
+    
+    public String getFrameName() {
+        return frameName;
+    }
+    
+    /**
+     * Print the contents of the HTMLImageNode
+     */
+    public String toString() {
+        return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
+    
+    /**
+     * Returns the frames.
+     * @return Vector
+     */
+    public NodeList getFrames() {
+        return frames;
+    }
 
-	public FrameTag getFrame(String frameName) {
-		boolean found = false;
-		FrameTag frameTag=null;
-		for (SimpleNodeIterator e=frames.elements();e.hasMoreNodes() && !found;) {
-			frameTag = (FrameTag)e.nextNode();
-			if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase())) found = true;
-		}
-		if (found)
-		return frameTag; else return null;
-	}
-	/**
-	 * Sets the frames.
-	 * @param frames The frames to set
-	 */
-	public void setFrames(NodeList frames) {
-		this.frames = frames;
-	}
+    public FrameTag getFrame(String frameName) {
+        boolean found = false;
+        FrameTag frameTag=null;
+        for (SimpleNodeIterator e=frames.elements();e.hasMoreNodes() && !found;) {
+            frameTag = (FrameTag)e.nextNode();
+            if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase())) found = true;
+        }
+        if (found)
+        return frameTag; else return null;
+    }
+    /**
+     * Sets the frames.
+     * @param frames The frames to set
+     */
+    public void setFrames(NodeList frames) {
+        this.frames = frames;
+    }
 }

@@ -34,53 +34,53 @@ import org.htmlparser.Node;
 import org.htmlparser.util.NodeList;
 
 public abstract class AbstractNodeDecorator implements Node {
-	protected Node delegate;
-	
-	protected AbstractNodeDecorator(Node delegate) {
-		this.delegate = delegate;
-	}
+    protected Node delegate;
+    
+    protected AbstractNodeDecorator(Node delegate) {
+        this.delegate = delegate;
+    }
 
-	public void accept(Object visitor) {
-		delegate.accept(visitor);
-	}
+    public void accept(Object visitor) {
+        delegate.accept(visitor);
+    }
 
-	public void collectInto(NodeList collectionList, Class nodeType) {
-		delegate.collectInto(collectionList, nodeType);
-	}
+    public void collectInto(NodeList collectionList, Class nodeType) {
+        delegate.collectInto(collectionList, nodeType);
+    }
 
-	public void collectInto(NodeList collectionList, String filter) {
-		delegate.collectInto(collectionList, filter);
-	}
+    public void collectInto(NodeList collectionList, String filter) {
+        delegate.collectInto(collectionList, filter);
+    }
 
-	public int elementBegin() {
-		return delegate.elementBegin();
-	}
+    public int elementBegin() {
+        return delegate.elementBegin();
+    }
 
-	public int elementEnd() {
-		return delegate.elementEnd();
-	}
+    public int elementEnd() {
+        return delegate.elementEnd();
+    }
 
-	public boolean equals(Object arg0) {
-		return delegate.equals(arg0);
-	}
+    public boolean equals(Object arg0) {
+        return delegate.equals(arg0);
+    }
 
-	public Node getParent() {
-		return delegate.getParent();
-	}
+    public Node getParent() {
+        return delegate.getParent();
+    }
 
-	public String getText() {
-		return delegate.getText();
-	}
+    public String getText() {
+        return delegate.getText();
+    }
 
-	public void setParent(Node node) {
-		delegate.setParent(node);
-	}
+    public void setParent(Node node) {
+        delegate.setParent(node);
+    }
 
     /**
      * Get the children of this node.
      * @return The list of children contained by this node, if it's been set, <code>null</code> otherwise.
      */
-	public NodeList getChildren ()
+    public NodeList getChildren ()
     {
         return (delegate.getChildren ());
     }
@@ -89,25 +89,25 @@ public abstract class AbstractNodeDecorator implements Node {
      * Set the children of this node.
      * @param children The new list of children this node contains.
      */
-	public void setChildren (NodeList children)
+    public void setChildren (NodeList children)
     {
         delegate.setChildren (children);
     }
 
-	public void setText(String text) {
-		delegate.setText(text);
-	}
+    public void setText(String text) {
+        delegate.setText(text);
+    }
 
-	public String toHtml() {
-		return delegate.toHtml();
-	}
+    public String toHtml() {
+        return delegate.toHtml();
+    }
 
-	public String toPlainTextString() {
-		return delegate.toPlainTextString();
-	}
+    public String toPlainTextString() {
+        return delegate.toPlainTextString();
+    }
 
-	public String toString() {
-		return delegate.toString();
-	}
+    public String toString() {
+        return delegate.toString();
+    }
 
 }

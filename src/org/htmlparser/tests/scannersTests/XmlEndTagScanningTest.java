@@ -34,21 +34,21 @@ import org.htmlparser.util.ParserException;
 
 public class XmlEndTagScanningTest extends ParserTestCase{
 
-	public XmlEndTagScanningTest(String name) {
-		super(name);
-	}
+    public XmlEndTagScanningTest(String name) {
+        super(name);
+    }
 
-	public void testSingleTagParsing() throws ParserException {
-		createParser("<div style=\"page-break-before: always; \" />");
-		parser.registerScanners();
-		parseAndAssertNodeCount(1);
-		assertType("div tag",Div.class,node[0]);
-		Div div = (Div)node[0];
-		assertStringEquals(
-			"style",
-			"page-break-before: always; ",
-			div.getAttribute("style")
-		);
-	}
+    public void testSingleTagParsing() throws ParserException {
+        createParser("<div style=\"page-break-before: always; \" />");
+        parser.registerScanners();
+        parseAndAssertNodeCount(1);
+        assertType("div tag",Div.class,node[0]);
+        Div div = (Div)node[0];
+        assertStringEquals(
+            "style",
+            "page-break-before: always; ",
+            div.getAttribute("style")
+        );
+    }
 
 }

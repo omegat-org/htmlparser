@@ -35,33 +35,33 @@ import org.htmlparser.tags.data.TagData;
  * A HTMLStyleTag represents a &lt;style&gt; tag
  */
 public class StyleTag extends CompositeTag {
-	/**
-	 * The HTMLStyleTag is constructed by providing the beginning posn, ending posn
-	 * and the tag contents.
-	 * @param tagData The data for this tag.
-	 * @param compositeTagData The data for this composite tag.
-	 */
-	public StyleTag(TagData tagData,CompositeTagData compositeTagData) {
-		super(tagData,compositeTagData);
-	}
-	/**
-	 * Get the javascript code in this tag
-	 * @return java.lang.String
-	 */
-	public java.lang.String getStyleCode() {
-		return getChildrenHTML();
-	}
-	/**
-	 * Print the contents of the javascript node
-	 */
-	public String toString() 
-	{
-		StringBuffer sb = new StringBuffer();	
-		sb.append("Style Node : \n");
-		sb.append("\n");
-		sb.append("Code\n");
-		sb.append("****\n");
-		sb.append(tagContents+"\n");
-		return sb.toString();
-	}
+    /**
+     * The HTMLStyleTag is constructed by providing the beginning posn, ending posn
+     * and the tag contents.
+     * @param tagData The data for this tag.
+     * @param compositeTagData The data for this composite tag.
+     */
+    public StyleTag(TagData tagData,CompositeTagData compositeTagData) {
+        super(tagData,compositeTagData);
+    }
+    /**
+     * Get the javascript code in this tag
+     * @return java.lang.String
+     */
+    public java.lang.String getStyleCode() {
+        return getChildrenHTML();
+    }
+    /**
+     * Print the contents of the javascript node
+     */
+    public String toString() 
+    {
+        StringBuffer sb = new StringBuffer();   
+        sb.append("Style Node : \n");
+        sb.append("\n");
+        sb.append("Code\n");
+        sb.append("****\n");
+        sb.append(tagContents+"\n");
+        return sb.toString();
+    }
 }

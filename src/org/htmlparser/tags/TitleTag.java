@@ -36,21 +36,21 @@ import org.htmlparser.visitors.NodeVisitor;
  * A Title Tag
  */
 public class TitleTag extends CompositeTag {
-	
-	public TitleTag(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData,compositeTagData);
-	}
-	
-	public String getTitle() {
-		return toPlainTextString();
-	}
-	
-	public String toString() {
-		return "TITLE: "+getTitle();
-	}
-	
-	public void accept(NodeVisitor visitor) {
-		visitor.visitTitleTag(this);
-	}
+    
+    public TitleTag(TagData tagData, CompositeTagData compositeTagData) {
+        super(tagData,compositeTagData);
+    }
+    
+    public String getTitle() {
+        return toPlainTextString();
+    }
+    
+    public String toString() {
+        return "TITLE: "+getTitle();
+    }
+    
+    public void accept(NodeVisitor visitor) {
+        visitor.visitTitleTag(this);
+    }
 
 }

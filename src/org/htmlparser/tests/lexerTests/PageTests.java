@@ -51,15 +51,15 @@ public class PageTests extends TestCase
     /**
      * Test the third level page class.
      */
-	public PageTests (String name)
+    public PageTests (String name)
     {
-		super (name);
-	}
+        super (name);
+    }
 
     /**
      * Test initialization with a null value.
      */
-	public void testNull () throws ParserException
+    public void testNull () throws ParserException
     {
         Page page;
 
@@ -87,7 +87,7 @@ public class PageTests extends TestCase
     /**
      * Test initialization with a real value.
      */
-	public void testURLConnection () throws ParserException, IOException
+    public void testURLConnection () throws ParserException, IOException
     {
         String link;
         URL url;
@@ -101,7 +101,7 @@ public class PageTests extends TestCase
     /**
      * Test initialization with non-existant URL.
      */
-	public void testBadURLConnection () throws IOException
+    public void testBadURLConnection () throws IOException
     {
         String link;
         URL url;

@@ -60,10 +60,10 @@ public class LexerTests extends TestCase
     /**
      * Test the Lexer class.
      */
-	public LexerTests (String name)
+    public LexerTests (String name)
     {
-		super (name);
-	}
+        super (name);
+    }
 
     /**
      * Test operation without tags.
@@ -313,7 +313,7 @@ public class LexerTests extends TestCase
         Source source;
         StringBuffer buffer;
         int i;
-		String html;
+        String html;
 
         long old_total;
         long new_total;
@@ -378,7 +378,7 @@ public class LexerTests extends TestCase
         Source source;
         StringBuffer buffer;
         int i;
-		String html;
+        String html;
 
         long old_total;
         long new_total;
@@ -448,7 +448,7 @@ public class LexerTests extends TestCase
         Source source;
         StringBuffer buffer;
         int i;
-		String html;
+        String html;
         InputStream stream;
 
         long old_total;
@@ -516,7 +516,7 @@ public class LexerTests extends TestCase
         Source source;
         StringBuffer buffer;
         int i;
-		String html;
+        String html;
         InputStream stream;
 
         long old_total;

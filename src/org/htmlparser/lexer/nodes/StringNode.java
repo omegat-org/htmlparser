@@ -39,18 +39,18 @@ import org.htmlparser.util.ParserException;
  */
 public class StringNode extends AbstractNode
 {
-	public static final String STRING_FILTER = "-string";
-	
-	/** 
-	 * Constructor takes in the text string, beginning and ending posns.
-	 * @param page The page this string is on.
-	 * @param start The beginning position of the string.
-	 * @param end The ending positiong of the string.
-	 */
-	public StringNode (Page page, int start, int end)
-	{
-		super (page, start, end);
-	}
+    public static final String STRING_FILTER = "-string";
+    
+    /** 
+     * Constructor takes in the text string, beginning and ending posns.
+     * @param page The page this string is on.
+     * @param start The beginning position of the string.
+     * @param end The ending positiong of the string.
+     */
+    public StringNode (Page page, int start, int end)
+    {
+        super (page, start, end);
+    }
 
     /**
      * Returns the text of the string line
@@ -88,14 +88,14 @@ public class StringNode extends AbstractNode
     }
     
     public String toString ()
-	{
+    {
         Cursor start;
         Cursor end;
         
         start = new Cursor (getPage (), elementBegin ());
         end = new Cursor (getPage (), elementEnd ());
-		return ("Txt (" + start.toString () + "," + end.toString () + "): " + getText ());
-	}
+        return ("Txt (" + start.toString () + "," + end.toString () + "): " + getText ());
+    }
 
     
     public void collectInto (NodeList collectionList, String filter)

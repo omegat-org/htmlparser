@@ -37,59 +37,59 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 
 public abstract class NodeVisitor {
-	private boolean recurseChildren;
-	private boolean recurseSelf;
-		
-	public NodeVisitor() {
-		this(true);	
-	}
-	
-	public NodeVisitor(boolean recurseChildren) {
-		this.recurseChildren = recurseChildren;
-		this.recurseSelf = true;	
-	}
-	
-	public NodeVisitor(boolean recurseChildren,boolean recurseSelf) {
-		this.recurseChildren = recurseChildren;
-		this.recurseSelf = recurseSelf;	
-	}
+    private boolean recurseChildren;
+    private boolean recurseSelf;
+        
+    public NodeVisitor() {
+        this(true); 
+    }
+    
+    public NodeVisitor(boolean recurseChildren) {
+        this.recurseChildren = recurseChildren;
+        this.recurseSelf = true;    
+    }
+    
+    public NodeVisitor(boolean recurseChildren,boolean recurseSelf) {
+        this.recurseChildren = recurseChildren;
+        this.recurseSelf = recurseSelf; 
+    }
 
-	public void visitTag(Tag tag) {
-		
-	}
+    public void visitTag(Tag tag) {
+        
+    }
 
-	public void visitStringNode(StringNode stringNode) {
-	}
-	
-	public void visitLinkTag(LinkTag linkTag) {
-	}
-	
-	public void visitImageTag(ImageTag imageTag) {
-	}
-	
-	public void visitEndTag(EndTag endTag) {
-		
-	}
-	
-	public void visitTitleTag(TitleTag titleTag) {
-		
-	}
-	public void visitRemarkNode(RemarkNode remarkNode) {
-		
-	}
-	
-	public boolean shouldRecurseChildren() {
-		return recurseChildren;
-	}
-	
-	public boolean shouldRecurseSelf() {
-		return recurseSelf;
-	}
+    public void visitStringNode(StringNode stringNode) {
+    }
+    
+    public void visitLinkTag(LinkTag linkTag) {
+    }
+    
+    public void visitImageTag(ImageTag imageTag) {
+    }
+    
+    public void visitEndTag(EndTag endTag) {
+        
+    }
+    
+    public void visitTitleTag(TitleTag titleTag) {
+        
+    }
+    public void visitRemarkNode(RemarkNode remarkNode) {
+        
+    }
+    
+    public boolean shouldRecurseChildren() {
+        return recurseChildren;
+    }
+    
+    public boolean shouldRecurseSelf() {
+        return recurseSelf;
+    }
 
-	/**
-	 * Override this method if you wish to do special
-	 * processing upon completion of parsing 
-	 */
-	public void finishedParsing() {
-	}
+    /**
+     * Override this method if you wish to do special
+     * processing upon completion of parsing 
+     */
+    public void finishedParsing() {
+    }
 }

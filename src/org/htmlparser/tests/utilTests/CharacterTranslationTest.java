@@ -34,10 +34,10 @@ import org.htmlparser.util.Translate;
 
 public class CharacterTranslationTest extends TestCase
 {
-	public CharacterTranslationTest (String name)
+    public CharacterTranslationTest (String name)
     {
-		super (name);
-	}
+        super (name);
+    }
     
     public void testInitialCharacterEntityReference ()
     {

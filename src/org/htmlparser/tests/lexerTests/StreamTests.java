@@ -47,15 +47,15 @@ public class StreamTests extends TestCase
     /**
      * Test the first level stream class.
      */
-	public StreamTests (String name)
+    public StreamTests (String name)
     {
-		super (name);
-	}
+        super (name);
+    }
 
     /**
      * Test initialization with a null value.
      */
-	public void testNull () throws IOException
+    public void testNull () throws IOException
     {
         Stream stream;
         
@@ -66,7 +66,7 @@ public class StreamTests extends TestCase
     /**
      * Test initialization with an empty input stream.
      */
-	public void testEmpty () throws IOException
+    public void testEmpty () throws IOException
     {
         Stream stream;
         
@@ -77,7 +77,7 @@ public class StreamTests extends TestCase
     /**
      * Test initialization with an input stream having only one byte.
      */
-	public void testOneByte () throws IOException
+    public void testOneByte () throws IOException
     {
         Stream stream;
         
@@ -105,9 +105,9 @@ public class StreamTests extends TestCase
         link = "http://sourceforge.net/projects/htmlparser/HTMLParser_Coverage.html";
         bytes1 = new ArrayList ();
         bytes2 = new ArrayList ();
-	    try
-	    {
-	        url = new URL (link);
+        try
+        {
+            url = new URL (link);
             connection = url.openConnection ();
             connection.connect ();
             in = new BufferedInputStream (connection.getInputStream ());
@@ -129,8 +129,8 @@ public class StreamTests extends TestCase
                 index++;
             }
             assertTrue ("extra bytes", index == bytes2.size ());
-	    }
-	    catch (MalformedURLException murle)
+        }
+        catch (MalformedURLException murle)
         {
             fail ("bad url " + link);
         }
@@ -176,9 +176,9 @@ public class StreamTests extends TestCase
 
         // pick a big file
         link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
-	    try
-	    {
-	        url = new URL (link);
+        try
+        {
+            url = new URL (link);
 
             // estimate the connection speed
             System.gc ();
@@ -262,8 +262,8 @@ public class StreamTests extends TestCase
 
             assertTrue ("slower (" + time2 + ") vs. (" + time1 + ")", time2 < time1);
             assertTrue ("average available bytes not greater (" + available2/samples + ") vs. (" + available1/samples + ")", available2 > available1);
-	    }
-	    catch (MalformedURLException murle)
+        }
+        catch (MalformedURLException murle)
         {
             fail ("bad url " + link);
         }
@@ -287,9 +287,9 @@ public class StreamTests extends TestCase
         link = "http://sourceforge.net/projects/htmlparser/overview-summary.html";
         bytes1 = new ArrayList ();
         bytes2 = new ArrayList ();
-	    try
-	    {
-	        url = new URL (link);
+        try
+        {
+            url = new URL (link);
             connection = url.openConnection ();
             connection.connect ();
             stream = new Stream (connection.getInputStream ());
@@ -337,8 +337,8 @@ public class StreamTests extends TestCase
                 assertEquals ("bytes differ at position " + (index + 1000), bytes1.get (index), bytes2.get (index));
                 index++;
             }
-	    }
-	    catch (MalformedURLException murle)
+        }
+        catch (MalformedURLException murle)
         {
             fail ("bad url " + link);
         }
@@ -362,9 +362,9 @@ public class StreamTests extends TestCase
         link = "http://sourceforge.net/projects/htmlparser/overview-summary.html";
         bytes1 = new ArrayList ();
         bytes2 = new ArrayList ();
-	    try
-	    {
-	        url = new URL (link);
+        try
+        {
+            url = new URL (link);
             connection = url.openConnection ();
             connection.connect ();
             stream = new Stream (connection.getInputStream ());
@@ -413,8 +413,8 @@ public class StreamTests extends TestCase
                 assertEquals ("bytes differ at position " + (index + 1000), bytes1.get (index), bytes2.get (index));
                 index++;
             }
-	    }
-	    catch (MalformedURLException murle)
+        }
+        catch (MalformedURLException murle)
         {
             fail ("bad url " + link);
         }
@@ -423,7 +423,7 @@ public class StreamTests extends TestCase
     /**
      * Test close.
      */
-	public void testClose () throws IOException
+    public void testClose () throws IOException
     {
         Stream stream;
         

@@ -36,11 +36,11 @@ import org.htmlparser.tags.data.TagData;
 
 public class HeadTag extends CompositeTag {
 
-	public HeadTag(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData, compositeTagData);
-	}
-	
-	public String toString() {
-		return "HEAD: " + super.toString();
-	}
+    public HeadTag(TagData tagData, CompositeTagData compositeTagData) {
+        super(tagData, compositeTagData);
+    }
+    
+    public String toString() {
+        return "HEAD: " + super.toString();
+    }
 }

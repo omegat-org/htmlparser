@@ -33,9 +33,9 @@ import junit.framework.TestSuite;
 public class AllTests extends junit.framework.TestCase 
 {
 
-	public AllTests(String name) {
-		super(name);
-	}
+    public AllTests(String name) {
+        super(name);
+    }
 
     /**
      * Mainline for all suites of tests.
@@ -48,7 +48,7 @@ public class AllTests extends junit.framework.TestCase
      * </pre>
      * All other options are passed on to the junit framework.
      */
-	public static void main(String[] args)
+    public static void main(String[] args)
     {
         String runner;
         int i;
@@ -98,22 +98,22 @@ public class AllTests extends junit.framework.TestCase
                 + t.getMessage ()
                 + ")");
         }
-	}
+    }
 
-	public static TestSuite suite() {
-		TestSuite suite = new TestSuite("HTMLParser Tests");
-		TestSuite basic = new TestSuite("Basic Tests");
-		basic.addTestSuite(ParserTest.class);
+    public static TestSuite suite() {
+        TestSuite suite = new TestSuite("HTMLParser Tests");
+        TestSuite basic = new TestSuite("Basic Tests");
+        basic.addTestSuite(ParserTest.class);
         suite.addTest(basic);
-		suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.utilTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.tagTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.visitorsTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.parserHelperTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.nodeDecoratorTests.AllTests.suite());
-		suite.addTest(AssertXmlEqualsTest.suite());
-		suite.addTest(LineNumberAssignedByNodeReaderTest.suite());
-		return suite;
-	} 
+        suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());
+        suite.addTest(org.htmlparser.tests.utilTests.AllTests.suite());
+        suite.addTest(org.htmlparser.tests.tagTests.AllTests.suite());
+        suite.addTest(org.htmlparser.tests.visitorsTests.AllTests.suite());
+        suite.addTest(org.htmlparser.tests.parserHelperTests.AllTests.suite());
+        suite.addTest(org.htmlparser.tests.nodeDecoratorTests.AllTests.suite());
+        suite.addTest(AssertXmlEqualsTest.suite());
+        suite.addTest(LineNumberAssignedByNodeReaderTest.suite());
+        return suite;
+    } 
 }
 

@@ -35,27 +35,27 @@ import org.htmlparser.util.ParserException;
 
 public class InputTagScannerTest extends ParserTestCase 
 {
-	
-	private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");
-	private InputTagScanner scanner;
-	
-	public InputTagScannerTest(String name) 
-	{
-		super(name);
-	}
-	
-	public void testScan() throws ParserException 
-	{
-		scanner = new InputTagScanner("-i");
-		createParser(testHTML,"http://www.google.com/test/index.html");
-		parser.addScanner(scanner);		
-		parseAndAssertNodeCount(1);
-	 	assertTrue(node[0] instanceof InputTag);
-	 	
-		// check the input node
-		InputTag inputTag = (InputTag) node[0];
-		assertEquals("Input Scanner",scanner,inputTag.getThisScanner());
-		assertEquals("Type","text",inputTag.getAttribute("TYPE"));
-		assertEquals("Name","Google",inputTag.getAttribute("NAME"));
-	}
+    
+    private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");
+    private InputTagScanner scanner;
+    
+    public InputTagScannerTest(String name) 
+    {
+        super(name);
+    }
+    
+    public void testScan() throws ParserException 
+    {
+        scanner = new InputTagScanner("-i");
+        createParser(testHTML,"http://www.google.com/test/index.html");
+        parser.addScanner(scanner);     
+        parseAndAssertNodeCount(1);
+        assertTrue(node[0] instanceof InputTag);
+        
+        // check the input node
+        InputTag inputTag = (InputTag) node[0];
+        assertEquals("Input Scanner",scanner,inputTag.getThisScanner());
+        assertEquals("Type","text",inputTag.getAttribute("TYPE"));
+        assertEquals("Name","Google",inputTag.getAttribute("NAME"));
+    }
 }

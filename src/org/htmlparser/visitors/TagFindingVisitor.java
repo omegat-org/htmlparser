@@ -36,60 +36,60 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 
 public class TagFindingVisitor extends NodeVisitor {
-	private String [] tagsToBeFound;
-	private int count [];
-	private int endTagCount [];
-	private NodeList [] tags;
-	private NodeList [] endTags;
-	private boolean endTagCheck;
-	
-	public TagFindingVisitor(String [] tagsToBeFound) {
-		this(tagsToBeFound,false);
-	}
+    private String [] tagsToBeFound;
+    private int count [];
+    private int endTagCount [];
+    private NodeList [] tags;
+    private NodeList [] endTags;
+    private boolean endTagCheck;
+    
+    public TagFindingVisitor(String [] tagsToBeFound) {
+        this(tagsToBeFound,false);
+    }
 
-	public TagFindingVisitor(String [] tagsToBeFound, boolean endTagCheck) {
-		this.tagsToBeFound = tagsToBeFound;
-		this.tags = new NodeList[tagsToBeFound.length];
-		if (endTagCheck) {
-			endTags = new NodeList[tagsToBeFound.length];
-			endTagCount = new int[tagsToBeFound.length];
-		}
-		for (int i=0;i<tagsToBeFound.length;i++) {
-			tags[i] = new NodeList();
-			if (endTagCheck)
-				endTags[i] = new NodeList();
-		}
-		this.count = new int[tagsToBeFound.length];
-		this.endTagCheck = endTagCheck;	
-	}	
-	
-	public int getTagCount(int index) {
-		return count[index];
-	}
+    public TagFindingVisitor(String [] tagsToBeFound, boolean endTagCheck) {
+        this.tagsToBeFound = tagsToBeFound;
+        this.tags = new NodeList[tagsToBeFound.length];
+        if (endTagCheck) {
+            endTags = new NodeList[tagsToBeFound.length];
+            endTagCount = new int[tagsToBeFound.length];
+        }
+        for (int i=0;i<tagsToBeFound.length;i++) {
+            tags[i] = new NodeList();
+            if (endTagCheck)
+                endTags[i] = new NodeList();
+        }
+        this.count = new int[tagsToBeFound.length];
+        this.endTagCheck = endTagCheck; 
+    }   
+    
+    public int getTagCount(int index) {
+        return count[index];
+    }
 
-	public void visitTag(Tag tag) {
-		for (int i=0;i<tagsToBeFound.length;i++)
-			if (tag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
-				count[i]++;
-				tags[i].add(tag);
-			}
-	}
+    public void visitTag(Tag tag) {
+        for (int i=0;i<tagsToBeFound.length;i++)
+            if (tag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
+                count[i]++;
+                tags[i].add(tag);
+            }
+    }
 
-	public Node [] getTags(int index) {
-		return tags[index].toNodeArray();
-	}
+    public Node [] getTags(int index) {
+        return tags[index].toNodeArray();
+    }
 
-	public void visitEndTag(EndTag endTag) {
-		if (!endTagCheck) return;
-		for (int i=0;i<tagsToBeFound.length;i++)
-			if (endTag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
-				endTagCount[i]++;
-				endTags[i].add(endTag);
-			}
-	}
-	
-	public int getEndTagCount(int index) {
-		return endTagCount[index];
-	}
-	
+    public void visitEndTag(EndTag endTag) {
+        if (!endTagCheck) return;
+        for (int i=0;i<tagsToBeFound.length;i++)
+            if (endTag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
+                endTagCount[i]++;
+                endTags[i].add(endTag);
+            }
+    }
+    
+    public int getEndTagCount(int index) {
+        return endTagCount[index];
+    }
+    
 }

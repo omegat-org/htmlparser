@@ -34,24 +34,24 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
 public class SpanScanner extends CompositeTagScanner {
-	private static final String [] MATCH_ID = {"SPAN"};
-	
-	public SpanScanner() {
-		this("");
-	}
+    private static final String [] MATCH_ID = {"SPAN"};
+    
+    public SpanScanner() {
+        this("");
+    }
 
-	public SpanScanner(String filter) {
-		super(filter, MATCH_ID);
-	}
+    public SpanScanner(String filter) {
+        super(filter, MATCH_ID);
+    }
 
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new Span(tagData,compositeTagData);
-	}
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
+        return new Span(tagData,compositeTagData);
+    }
 
-	public String[] getID() {
-		return MATCH_ID;
-	}
+    public String[] getID() {
+        return MATCH_ID;
+    }
 
 }

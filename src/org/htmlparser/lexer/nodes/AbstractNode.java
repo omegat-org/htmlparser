@@ -48,7 +48,7 @@ public abstract class AbstractNode extends org.htmlparser.AbstractNode
     /**
      * Create a lexeme.
      * Remember the page and start & end cursor positions.
-	 * @param page The page this tag was read from.
+     * @param page The page this tag was read from.
      * @param start The starting offset of this node within the page.
      * @param end The ending offset of this node within the page.
      */

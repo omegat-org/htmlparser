@@ -39,24 +39,24 @@ import org.htmlparser.tags.data.TagData;
  */
 
 public class StyleScanner extends CompositeTagScanner {
-	private static final String MATCH_NAME [] = {"STYLE"};
+    private static final String MATCH_NAME [] = {"STYLE"};
 
-	public StyleScanner() {
-		super(MATCH_NAME);
-	}
+    public StyleScanner() {
+        super(MATCH_NAME);
+    }
 
-	public StyleScanner(String filter) {
-		super(filter,MATCH_NAME);
-	}
+    public StyleScanner(String filter) {
+        super(filter,MATCH_NAME);
+    }
 
-	public String [] getID() {
-		return MATCH_NAME;
-	}
-	
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new StyleTag(tagData,compositeTagData);
-	}
+    public String [] getID() {
+        return MATCH_NAME;
+    }
+    
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
+        return new StyleTag(tagData,compositeTagData);
+    }
 
 }

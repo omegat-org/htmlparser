@@ -39,13 +39,13 @@ import org.htmlparser.tags.data.TagData;
  */
 public class BulletList extends CompositeTag {
 
-	public BulletList(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData, compositeTagData);
-	}
+    public BulletList(TagData tagData, CompositeTagData compositeTagData) {
+        super(tagData, compositeTagData);
+    }
 
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "BulletList";
-	}
+    public String toString() {
+        // TODO Auto-generated method stub
+        return "BulletList";
+    }
 
 }

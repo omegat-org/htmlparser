@@ -42,75 +42,75 @@ import org.htmlparser.util.ParserException;
 
 public class SelectTagTest extends ParserTestCase
 {
-	private String testHTML = new String(
-									"<SELECT name=\"Nominees\">\n"+
-									"<option value=\"Spouse\">Spouse"+
-									"<option value=\"Father\"></option>\n"+
-									"<option value=\"Mother\">Mother\n" +
-									"<option value=\"Son\">\nSon\n</option>"+
-									"<option value=\"Daughter\">\nDaughter\n"+
-									"<option value=\"Nephew\">\nNephew</option>\n"+
-									"<option value=\"Niece\">Niece\n" +
-									"</select>"
-									);
-	private SelectTag selectTag;
-	
-	public SelectTagTest(String name) 
-	{
-		super(name);
-	}
-	
-	protected void setUp() throws Exception{
-		super.setUp();
-		createParser(testHTML);
-		parser.addScanner(new SelectTagScanner("-s", new Stack ()));
-		parser.addScanner(new OptionTagScanner("-o", new Stack ()));
-		parseAndAssertNodeCount(1);
-		assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag);
-		selectTag = (SelectTag) node[0];
-	}
-	
-	public void testToHTML() throws ParserException 
-	{
-		assertStringEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
-									"<OPTION VALUE=\"Spouse\">Spouse</OPTION>\r\n"+
-									"<OPTION VALUE=\"Father\"></OPTION>\r\n"+
-									"<OPTION VALUE=\"Mother\">Mother\r\n</OPTION>\r\n" +
-									"<OPTION VALUE=\"Son\">\r\nSon\r\n</OPTION>"+
-									"<OPTION VALUE=\"Daughter\">\r\nDaughter\r\n</OPTION>\r\n"+
-									"<OPTION VALUE=\"Nephew\">\r\nNephew</OPTION>\r\n"+
-									"<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>"+
-									"</SELECT>",
-									selectTag.toHtml());
-	}	
-	
-	
-	public void testToString() throws ParserException 
-	{
-		assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag);	
-		SelectTag selectTag;
-		selectTag = (SelectTag) node[0];
-		assertStringEquals("HTML Raw String","SELECT TAG\n--------\nNAME : Nominees\n" +
-								"OPTION VALUE: Spouse TEXT: Spouse\n\n" +
-								"OPTION VALUE: Father TEXT: \n\n" +
-								"OPTION VALUE: Mother TEXT: Mother\r\n\n\n" +
-								"OPTION VALUE: Son TEXT: Son\r\n\n\n" +
-								"OPTION VALUE: Daughter TEXT: Daughter\r\n\n\n" +
-								"OPTION VALUE: Nephew TEXT: Nephew\n\n" +
-								"OPTION VALUE: Niece TEXT: Niece\r\n\n\n",
-							selectTag.toString());
-	}
+    private String testHTML = new String(
+                                    "<SELECT name=\"Nominees\">\n"+
+                                    "<option value=\"Spouse\">Spouse"+
+                                    "<option value=\"Father\"></option>\n"+
+                                    "<option value=\"Mother\">Mother\n" +
+                                    "<option value=\"Son\">\nSon\n</option>"+
+                                    "<option value=\"Daughter\">\nDaughter\n"+
+                                    "<option value=\"Nephew\">\nNephew</option>\n"+
+                                    "<option value=\"Niece\">Niece\n" +
+                                    "</select>"
+                                    );
+    private SelectTag selectTag;
+    
+    public SelectTagTest(String name) 
+    {
+        super(name);
+    }
+    
+    protected void setUp() throws Exception{
+        super.setUp();
+        createParser(testHTML);
+        parser.addScanner(new SelectTagScanner("-s", new Stack ()));
+        parser.addScanner(new OptionTagScanner("-o", new Stack ()));
+        parseAndAssertNodeCount(1);
+        assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag);
+        selectTag = (SelectTag) node[0];
+    }
+    
+    public void testToHTML() throws ParserException 
+    {
+        assertStringEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
+                                    "<OPTION VALUE=\"Spouse\">Spouse</OPTION>\r\n"+
+                                    "<OPTION VALUE=\"Father\"></OPTION>\r\n"+
+                                    "<OPTION VALUE=\"Mother\">Mother\r\n</OPTION>\r\n" +
+                                    "<OPTION VALUE=\"Son\">\r\nSon\r\n</OPTION>"+
+                                    "<OPTION VALUE=\"Daughter\">\r\nDaughter\r\n</OPTION>\r\n"+
+                                    "<OPTION VALUE=\"Nephew\">\r\nNephew</OPTION>\r\n"+
+                                    "<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>"+
+                                    "</SELECT>",
+                                    selectTag.toHtml());
+    }   
+    
+    
+    public void testToString() throws ParserException 
+    {
+        assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag); 
+        SelectTag selectTag;
+        selectTag = (SelectTag) node[0];
+        assertStringEquals("HTML Raw String","SELECT TAG\n--------\nNAME : Nominees\n" +
+                                "OPTION VALUE: Spouse TEXT: Spouse\n\n" +
+                                "OPTION VALUE: Father TEXT: \n\n" +
+                                "OPTION VALUE: Mother TEXT: Mother\r\n\n\n" +
+                                "OPTION VALUE: Son TEXT: Son\r\n\n\n" +
+                                "OPTION VALUE: Daughter TEXT: Daughter\r\n\n\n" +
+                                "OPTION VALUE: Nephew TEXT: Nephew\n\n" +
+                                "OPTION VALUE: Niece TEXT: Niece\r\n\n\n",
+                            selectTag.toString());
+    }
 
-	public void testGetOptionTags() {
-		OptionTag [] optionTags = selectTag.getOptionTags();
-		assertEquals("option tag array length",7,optionTags.length);
-		assertEquals("option tag 1","Spouse",optionTags[0].getOptionText());
-		assertEquals("option tag 7","Niece\r\n",optionTags[6].getOptionText());
-	}
-		
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {SelectTagTest.class.getName()});
-	}
+    public void testGetOptionTags() {
+        OptionTag [] optionTags = selectTag.getOptionTags();
+        assertEquals("option tag array length",7,optionTags.length);
+        assertEquals("option tag 1","Spouse",optionTags[0].getOptionText());
+        assertEquals("option tag 7","Niece\r\n",optionTags[6].getOptionText());
+    }
+        
+    public static void main(String[] args) 
+    {
+        new junit.awtui.TestRunner().start(new String[] {SelectTagTest.class.getName()});
+    }
 
 }

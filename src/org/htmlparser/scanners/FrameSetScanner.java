@@ -46,26 +46,26 @@ import org.htmlparser.tags.data.TagData;
  */
 public class FrameSetScanner extends CompositeTagScanner
 {
-	private static final String MATCH_NAME [] = {"FRAMESET"};
-	
-	public FrameSetScanner()
-	{
-		super(MATCH_NAME);
-	}
+    private static final String MATCH_NAME [] = {"FRAMESET"};
+    
+    public FrameSetScanner()
+    {
+        super(MATCH_NAME);
+    }
 
-	public FrameSetScanner(String filter)
-	{
-		super(filter,MATCH_NAME);
-	}
+    public FrameSetScanner(String filter)
+    {
+        super(filter,MATCH_NAME);
+    }
 
-	public String [] getID() {
-		return MATCH_NAME;
-	}
+    public String [] getID() {
+        return MATCH_NAME;
+    }
 
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new FrameSetTag(tagData,compositeTagData);
-	}
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
+        return new FrameSetTag(tagData,compositeTagData);
+    }
 
 }

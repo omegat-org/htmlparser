@@ -35,30 +35,30 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.DefaultParserFeedback;
 
 public class HTMLTagParserTest extends ParserTestCase {
-	private TagParser tagParser;
+    private TagParser tagParser;
 
-	public HTMLTagParserTest(String name) {
-		super(name);
-	}
+    public HTMLTagParserTest(String name) {
+        super(name);
+    }
 
     public void testCorrectTag() {
-    	Tag tag = new Tag(new TagData(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">"));
-		tagParser.correctTag(tag);
-		assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
-    }	
+        Tag tag = new Tag(new TagData(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">"));
+        tagParser.correctTag(tag);
+        assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
+    }   
 
-	public void testInsertInvertedCommasCorrectly() {
-		StringBuffer test = new StringBuffer("a b=c d e = f"); 
-		StringBuffer result = tagParser.insertInvertedCommasCorrectly(test);
-		assertStringEquals("Expected Correction","a b=\"c d\" e=\"f\"",result.toString());
-	}
+    public void testInsertInvertedCommasCorrectly() {
+        StringBuffer test = new StringBuffer("a b=c d e = f"); 
+        StringBuffer result = tagParser.insertInvertedCommasCorrectly(test);
+        assertStringEquals("Expected Correction","a b=\"c d\" e=\"f\"",result.toString());
+    }
 
-	public void testPruneSpaces() {
-		String test = "  fdfdf dfdf   ";
-		assertEquals("Expected Pruned string","fdfdf dfdf",TagParser.pruneSpaces(test));
-	}   
+    public void testPruneSpaces() {
+        String test = "  fdfdf dfdf   ";
+        assertEquals("Expected Pruned string","fdfdf dfdf",TagParser.pruneSpaces(test));
+    }   
 
-	protected void setUp() {
-		tagParser = new TagParser(new DefaultParserFeedback());	
-	} 
+    protected void setUp() {
+        tagParser = new TagParser(new DefaultParserFeedback()); 
+    } 
 }

@@ -44,101 +44,101 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
 public class TagParserTest extends ParserTestCase {
-	private static final String TEST_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" +
-		"<!-- Server: sf-web2 -->" +
-		"<html lang=\"en\">" +
-		"  <head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://sourceforge.net/cssdef.php\">" +
-		"	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" +
-		"    <TITLE>SourceForge.net: Modify: 711073 - HTMLTagParser not threadsafe as a static variable in Tag</TITLE>" +
-		"	<SCRIPT language=\"JavaScript\" type=\"text/javascript\">" +
-		"	<!--" +
-		"	function help_window(helpurl) {" +
-		"		HelpWin = window.open( 'http://sourceforge.net' + helpurl,'HelpWindow','scrollbars=yes,resizable=yes,toolbar=no,height=400,width=400');" +
-		"	}" +
-		"	// -->" +
-		"	</SCRIPT>" +
-		"		<link rel=\"SHORTCUT ICON\" href=\"/images/favicon.ico\">" +
-		"<!-- This is temp javascript for the jump button. If we could actually have a jump script on the server side that would be ideal -->" +
-		"<script language=\"JavaScript\" type=\"text/javascript\">" +
-		"<!--" +
-		"	function jump(targ,selObj,restore){ //v3.0" +
-		"	if (selObj.options[selObj.selectedIndex].value) " +
-		"		eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");" +
-		"	if (restore) selObj.selectedIndex=0;" +
-		"	}" +
-		"	//-->" +
-		"</script>" +
-		"<a href=\"http://normallink.com/sometext.html\">" +
-		"<style type=\"text/css\">" +
-		"<!--" +
-		"A:link { text-decoration:none }" +
-		"A:visited { text-decoration:none }" +
-		"A:active { text-decoration:none }" +
-		"A:hover { text-decoration:underline; color:#0066FF; }" +
-		"-->" +
-		"</style>" +
-		"</head>" +
-		"<body bgcolor=\"#FFFFFF\" text=\"#000000\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" link=\"#003399\" vlink=\"#003399\" alink=\"#003399\">";
-	private Map results;
-	private int testProgress;
-	
-	public TagParserTest(String name) {
-		super(name);
-	}
-	
-	public void testTagWithQuotes() throws Exception {
-		String testHtml = 
-		"<img src=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" width=87 height=20 border=0 alt=\"Marshall Field's\">";
-		
-		createParser(testHtml);
-		parseAndAssertNodeCount(1);
-		assertType("should be Tag",Tag.class,node[0]);
-		Tag tag = (Tag)node[0];
-		assertStringEquals("alt","Marshall Field's",tag.getAttribute("ALT"));
-		assertStringEquals(
-			"html",
-			"<IMG BORDER=\"0\" ALT=\"Marshall Field's\" WIDTH=\"87\" SRC=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" HEIGHT=\"20\">",
-			tag.toHtml()
-		);
-	}
-	
-	public void testEmptyTag() throws Exception {
-		createParser("<custom/>");
-		parseAndAssertNodeCount(1);
-		assertType("should be Tag",Tag.class,node[0]);
-		Tag tag = (Tag)node[0];
-		assertStringEquals("tag name","CUSTOM",tag.getTagName());
-		assertTrue("empty tag",tag.isEmptyXmlTag());
-		assertStringEquals(
-			"html",
-			"<CUSTOM/>",
-			tag.toHtml()
-		);
-	}
-	
-	public void testTagWithCloseTagSymbolInAttribute() throws ParserException {
-		createParser("<tag att=\"a>b\">");
-		parseAndAssertNodeCount(1);
-		assertType("should be Tag",Tag.class,node[0]);
-		Tag tag = (Tag)node[0];
-		assertStringEquals("attribute","a>b",tag.getAttribute("att"));
-	}
-	
-	public void testTagWithOpenTagSymbolInAttribute() throws ParserException {
-		createParser("<tag att=\"a<b\">");
-		parseAndAssertNodeCount(1);
-		assertType("should be Tag",Tag.class,node[0]);
-		Tag tag = (Tag)node[0];
-		assertStringEquals("attribute","a<b",tag.getAttribute("att"));
-	}
+    private static final String TEST_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" +
+        "<!-- Server: sf-web2 -->" +
+        "<html lang=\"en\">" +
+        "  <head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://sourceforge.net/cssdef.php\">" +
+        "   <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" +
+        "    <TITLE>SourceForge.net: Modify: 711073 - HTMLTagParser not threadsafe as a static variable in Tag</TITLE>" +
+        "   <SCRIPT language=\"JavaScript\" type=\"text/javascript\">" +
+        "   <!--" +
+        "   function help_window(helpurl) {" +
+        "       HelpWin = window.open( 'http://sourceforge.net' + helpurl,'HelpWindow','scrollbars=yes,resizable=yes,toolbar=no,height=400,width=400');" +
+        "   }" +
+        "   // -->" +
+        "   </SCRIPT>" +
+        "       <link rel=\"SHORTCUT ICON\" href=\"/images/favicon.ico\">" +
+        "<!-- This is temp javascript for the jump button. If we could actually have a jump script on the server side that would be ideal -->" +
+        "<script language=\"JavaScript\" type=\"text/javascript\">" +
+        "<!--" +
+        "   function jump(targ,selObj,restore){ //v3.0" +
+        "   if (selObj.options[selObj.selectedIndex].value) " +
+        "       eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");" +
+        "   if (restore) selObj.selectedIndex=0;" +
+        "   }" +
+        "   //-->" +
+        "</script>" +
+        "<a href=\"http://normallink.com/sometext.html\">" +
+        "<style type=\"text/css\">" +
+        "<!--" +
+        "A:link { text-decoration:none }" +
+        "A:visited { text-decoration:none }" +
+        "A:active { text-decoration:none }" +
+        "A:hover { text-decoration:underline; color:#0066FF; }" +
+        "-->" +
+        "</style>" +
+        "</head>" +
+        "<body bgcolor=\"#FFFFFF\" text=\"#000000\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" link=\"#003399\" vlink=\"#003399\" alink=\"#003399\">";
+    private Map results;
+    private int testProgress;
+    
+    public TagParserTest(String name) {
+        super(name);
+    }
+    
+    public void testTagWithQuotes() throws Exception {
+        String testHtml = 
+        "<img src=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" width=87 height=20 border=0 alt=\"Marshall Field's\">";
+        
+        createParser(testHtml);
+        parseAndAssertNodeCount(1);
+        assertType("should be Tag",Tag.class,node[0]);
+        Tag tag = (Tag)node[0];
+        assertStringEquals("alt","Marshall Field's",tag.getAttribute("ALT"));
+        assertStringEquals(
+            "html",
+            "<IMG BORDER=\"0\" ALT=\"Marshall Field's\" WIDTH=\"87\" SRC=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" HEIGHT=\"20\">",
+            tag.toHtml()
+        );
+    }
+    
+    public void testEmptyTag() throws Exception {
+        createParser("<custom/>");
+        parseAndAssertNodeCount(1);
+        assertType("should be Tag",Tag.class,node[0]);
+        Tag tag = (Tag)node[0];
+        assertStringEquals("tag name","CUSTOM",tag.getTagName());
+        assertTrue("empty tag",tag.isEmptyXmlTag());
+        assertStringEquals(
+            "html",
+            "<CUSTOM/>",
+            tag.toHtml()
+        );
+    }
+    
+    public void testTagWithCloseTagSymbolInAttribute() throws ParserException {
+        createParser("<tag att=\"a>b\">");
+        parseAndAssertNodeCount(1);
+        assertType("should be Tag",Tag.class,node[0]);
+        Tag tag = (Tag)node[0];
+        assertStringEquals("attribute","a>b",tag.getAttribute("att"));
+    }
+    
+    public void testTagWithOpenTagSymbolInAttribute() throws ParserException {
+        createParser("<tag att=\"a<b\">");
+        parseAndAssertNodeCount(1);
+        assertType("should be Tag",Tag.class,node[0]);
+        Tag tag = (Tag)node[0];
+        assertStringEquals("attribute","a<b",tag.getAttribute("att"));
+    }
 
-	public void testTagWithSingleQuote() throws ParserException {
-		createParser("<tag att=\'a<b\'>");
-		parseAndAssertNodeCount(1);
-		assertType("should be Tag",Tag.class,node[0]);
-		Tag tag = (Tag)node[0];
-		assertStringEquals("html","<TAG ATT=\"a<b\">",tag.toHtml());
-		assertStringEquals("attribute","a<b",tag.getAttribute("att"));
+    public void testTagWithSingleQuote() throws ParserException {
+        createParser("<tag att=\'a<b\'>");
+        parseAndAssertNodeCount(1);
+        assertType("should be Tag",Tag.class,node[0]);
+        Tag tag = (Tag)node[0];
+        assertStringEquals("html","<TAG ATT=\"a<b\">",tag.toHtml());
+        assertStringEquals("attribute","a<b",tag.getAttribute("att"));
     }
 
     /**
@@ -250,7 +250,7 @@ public class TagParserTest extends ParserTestCase {
             assertStringEquals ("attribute 2","foo>\r\nbar", attribute2);
         }
     }
-	
+    
     /**
      * Test multiline split tag like attribute.
      * See feature request #725749 Handle < and > in multi-line attributes.
@@ -284,7 +284,7 @@ public class TagParserTest extends ParserTestCase {
      * See feature request #736144 Handle multi-threaded operation.
      * Only perform this test if it's version 1.4 or higher.
      */
-	public void testThreadSafety() throws Exception
+    public void testThreadSafety() throws Exception
     {
         createParser("<html></html>");
         if (1.4 <= Parser.getVersionNumber ())
@@ -306,7 +306,7 @@ public class TagParserTest extends ParserTestCase {
                         parsingThread[i] = 
                             new ParsingThread(i,testHtml2,parsingThread.length);
 
-                Thread thread = new Thread(parsingThread[i]);					
+                Thread thread = new Thread(parsingThread[i]);                   
                 thread.start();
             }
 
@@ -318,7 +318,7 @@ public class TagParserTest extends ParserTestCase {
                 }
                 catch (InterruptedException e) {
                 }
-            }	
+            }   
             while (testProgress!=completionValue);
             for (int i=0;i<parsingThread.length;i++) {
                 if (!parsingThread[i].passed()) {
@@ -347,68 +347,68 @@ public class TagParserTest extends ParserTestCase {
                             "/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
                             parsingThread[i].getLink2().getLink()
                         );
-                    }				
+                    }               
                 }
             }
-		}
+        }
 
-	}
+    }
 
-	private int computeCompletionValue(int numThreads) {
-		return numThreads * (numThreads - 1) / 2;
-	}
-	
-	class ParsingThread implements Runnable {
-		Parser parser;
-		int id;
-		LinkTag link1, link2;
-		boolean result;
-		int max;
-		
-		ParsingThread(int id, String testHtml, int max) {
-			this.id = id;
-			this.max = max;
-			this.parser = 
-				Parser.createParser(testHtml);
-			parser.registerScanners();
-		}
-		
-		public void run() {
-			try {
-				result = false;
-				Node linkTag [] = parser.extractAllNodesThatAre(LinkTag.class);
-				link1 = (LinkTag)linkTag[0];
-				link2 = (LinkTag)linkTag[1];
-				if (id<max/2) {
-					if (link1.getLink().equals("/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html") &&
-						link2.getLink().equals("http://normallink.com/sometext.html"))
-						result = true;
-				} else {
-					if (link1.getLink().equals("http://normallink.com/sometext.html") &&
-						link2.getLink().equals("http://normallink.com/sometext.html"))
-						result = true;
-				}
-			}
-			catch (ParserException e) {
-				System.err.println("Parser Exception");
-				e.printStackTrace();
-			}
-			finally {
-				testProgress += id;
-			}
-		}
-		
-		public LinkTag getLink1() {
-			return link1;
-		}
-		
-		public LinkTag getLink2() {
-			return link2;
-		}
-		
-		public boolean passed() {
-			return result;
-		}
+    private int computeCompletionValue(int numThreads) {
+        return numThreads * (numThreads - 1) / 2;
+    }
+    
+    class ParsingThread implements Runnable {
+        Parser parser;
+        int id;
+        LinkTag link1, link2;
+        boolean result;
+        int max;
+        
+        ParsingThread(int id, String testHtml, int max) {
+            this.id = id;
+            this.max = max;
+            this.parser = 
+                Parser.createParser(testHtml);
+            parser.registerScanners();
+        }
+        
+        public void run() {
+            try {
+                result = false;
+                Node linkTag [] = parser.extractAllNodesThatAre(LinkTag.class);
+                link1 = (LinkTag)linkTag[0];
+                link2 = (LinkTag)linkTag[1];
+                if (id<max/2) {
+                    if (link1.getLink().equals("/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html") &&
+                        link2.getLink().equals("http://normallink.com/sometext.html"))
+                        result = true;
+                } else {
+                    if (link1.getLink().equals("http://normallink.com/sometext.html") &&
+                        link2.getLink().equals("http://normallink.com/sometext.html"))
+                        result = true;
+                }
+            }
+            catch (ParserException e) {
+                System.err.println("Parser Exception");
+                e.printStackTrace();
+            }
+            finally {
+                testProgress += id;
+            }
+        }
+        
+        public LinkTag getLink1() {
+            return link1;
+        }
+        
+        public LinkTag getLink2() {
+            return link2;
+        }
+        
+        public boolean passed() {
+            return result;
+        }
     }
     
     /**

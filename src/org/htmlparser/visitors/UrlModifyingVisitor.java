@@ -38,46 +38,46 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 
 public class UrlModifyingVisitor extends NodeVisitor {
-	private String linkPrefix;
-	private StringBuffer modifiedResult;
-	private Parser parser;
-	
-	public UrlModifyingVisitor(Parser parser, String linkPrefix) {
-		super(true,false);
-		this.parser = parser;
-		LinkScanner linkScanner = new LinkScanner();  
-		parser.addScanner(linkScanner);
-		parser.addScanner(
-			linkScanner.createImageScanner(
-				ImageTag.IMAGE_TAG_FILTER
-			)
-		);
-		this.linkPrefix =linkPrefix; 
-		modifiedResult = new StringBuffer();
-	}
-	
-	public void visitLinkTag(LinkTag linkTag) {
-		linkTag.setLink(linkPrefix + linkTag.getLink());
-	}
+    private String linkPrefix;
+    private StringBuffer modifiedResult;
+    private Parser parser;
+    
+    public UrlModifyingVisitor(Parser parser, String linkPrefix) {
+        super(true,false);
+        this.parser = parser;
+        LinkScanner linkScanner = new LinkScanner();  
+        parser.addScanner(linkScanner);
+        parser.addScanner(
+            linkScanner.createImageScanner(
+                ImageTag.IMAGE_TAG_FILTER
+            )
+        );
+        this.linkPrefix =linkPrefix; 
+        modifiedResult = new StringBuffer();
+    }
+    
+    public void visitLinkTag(LinkTag linkTag) {
+        linkTag.setLink(linkPrefix + linkTag.getLink());
+    }
 
-	public void visitImageTag(ImageTag imageTag) {
-		imageTag.setImageURL(linkPrefix + imageTag.getImageURL());
-		modifiedResult.append(imageTag.toHtml());
-	}
-	
-	public void visitEndTag(EndTag endTag) {
-		modifiedResult.append(endTag.toHtml());
-	}
+    public void visitImageTag(ImageTag imageTag) {
+        imageTag.setImageURL(linkPrefix + imageTag.getImageURL());
+        modifiedResult.append(imageTag.toHtml());
+    }
+    
+    public void visitEndTag(EndTag endTag) {
+        modifiedResult.append(endTag.toHtml());
+    }
 
-	public void visitStringNode(StringNode stringNode) {
-		modifiedResult.append(stringNode.toHtml());
-	}
+    public void visitStringNode(StringNode stringNode) {
+        modifiedResult.append(stringNode.toHtml());
+    }
 
-	public void visitTag(Tag tag) {
-		modifiedResult.append(tag.toHtml());
-	}
-	
-	public String getModifiedResult() {
-		return modifiedResult.toString();		
-	}
+    public void visitTag(Tag tag) {
+        modifiedResult.append(tag.toHtml());
+    }
+    
+    public String getModifiedResult() {
+        return modifiedResult.toString();       
+    }
 }

@@ -68,7 +68,7 @@ public class DefaultParserFeedback
      *   QUIET = 0;
      * </pre>
      */
-    protected int mode;
+    protected int mMode;
 
     /**
      * Construct a feedback object of the given type.
@@ -78,12 +78,17 @@ public class DefaultParserFeedback
      *   NORMAL - normal messages
      *   QUIET - no messages
      * </pre>
+     * @exception IllegalArgumentException if mode is not
+     * QUIET, NORMAL or DEBUG.
      */
     public DefaultParserFeedback (int mode)
     {
-		if (mode<QUIET||mode>DEBUG) 
-            throw new IllegalArgumentException ("illegal mode (" + mode + "), must be one of: QUIET, NORMAL, DEBUG");
-        this.mode = mode;
+        if (mode<QUIET||mode>DEBUG) 
+            throw new IllegalArgumentException (
+                "illegal mode ("
+                + mode
+                + "), must be one of: QUIET, NORMAL, DEBUG");
+        mMode = mode;
     }
 
     /**
@@ -100,7 +105,7 @@ public class DefaultParserFeedback
      */
     public void info (String message)
     {
-        if (mode!=QUIET)
+        if (QUIET != mMode)
             System.out.println ("INFO: " + message);
     }
     
@@ -110,7 +115,7 @@ public class DefaultParserFeedback
      */
     public void warning (String message)
     {
-        if (mode!=QUIET)
+        if (QUIET != mMode)
             System.out.println ("WARNING: " + message);
     }
     
@@ -121,10 +126,10 @@ public class DefaultParserFeedback
      */
     public void error (String message, ParserException exception)
     {
-        if (mode!=QUIET)
+        if (QUIET != mMode)
         {
             System.out.println ("ERROR: " + message);
-            if (mode == DEBUG && (exception!=null))
+            if (DEBUG == mMode && (null != exception))
                 exception.printStackTrace ();
         }
     }

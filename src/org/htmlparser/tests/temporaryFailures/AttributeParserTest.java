@@ -43,49 +43,49 @@ import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 
 public class AttributeParserTest extends ParserTestCase {
-	private AttributeParser parser;
-	private Tag tag;
-	private Hashtable table;
-	
-	public AttributeParserTest(String name) {
-		super(name);
-	}
+    private AttributeParser parser;
+    private Tag tag;
+    private Hashtable table;
+    
+    public AttributeParserTest(String name) {
+        super(name);
+    }
 
-	protected void setUp() {
-		parser = new AttributeParser();
-	}
-	
-	public void getParameterTableFor(String tagContents) {
-		tag = new Tag(new TagData(0,0,tagContents,""));
-		table = parser.parseAttributes(tag.getText ());
-		
-	}
-	
-	public void testParseParameters() {
-		getParameterTableFor("a b = \"c\"");
-		assertEquals("Value","c",table.get("B"));
-	}
-
-	public void testParseTokenValues() {
-		getParameterTableFor("a b = \"'\"");
-		assertEquals("Value","'",table.get("B"));
-	}
+    protected void setUp() {
+        parser = new AttributeParser();
+    }
+    
+    public void getParameterTableFor(String tagContents) {
+        tag = new Tag(new TagData(0,0,tagContents,""));
+        table = parser.parseAttributes(tag.getText ());
         
-	public void testParseEmptyValues() {
-		getParameterTableFor("a b = \"\"");
-		assertEquals("Value","",table.get("B"));		
-	}
+    }
+    
+    public void testParseParameters() {
+        getParameterTableFor("a b = \"c\"");
+        assertEquals("Value","c",table.get("B"));
+    }
 
-	public void testParseMissingEqual() {
-		getParameterTableFor("a b\"c\"");
-		assertEquals("ValueB",null,table.get("B"));
+    public void testParseTokenValues() {
+        getParameterTableFor("a b = \"'\"");
+        assertEquals("Value","'",table.get("B"));
+    }
+        
+    public void testParseEmptyValues() {
+        getParameterTableFor("a b = \"\"");
+        assertEquals("Value","",table.get("B"));        
+    }
+
+    public void testParseMissingEqual() {
+        getParameterTableFor("a b\"c\"");
+        assertEquals("ValueB",null,table.get("B"));
                 
-	}
+    }
         
     public void testTwoParams(){
-		getParameterTableFor("PARAM NAME=\"Param1\" VALUE=\"Somik\">\n");
-		assertEquals("Param1","Param1",table.get("NAME"));
-		assertEquals("Somik","Somik",table.get("VALUE"));                
+        getParameterTableFor("PARAM NAME=\"Param1\" VALUE=\"Somik\">\n");
+        assertEquals("Param1","Param1",table.get("NAME"));
+        assertEquals("Somik","Somik",table.get("VALUE"));                
     }
 
     public void testPlainParams(){
@@ -110,14 +110,14 @@ public class AttributeParserTest extends ParserTestCase {
      */
     public void testIncorrectSpaceKeyBug() {
         getParameterTableFor("TEXTAREA name=\"Remarks\" ");
-		// There should only be two keys..
-		assertEquals("There should only be two keys",2,table.size());
-		// The first key is name
-		String key1 = "NAME";
-		String value1 = (String)table.get(key1);
-		assertEquals("Expected value 1", "Remarks",value1);
-		String key2 = Tag.TAGNAME;
-		assertEquals("Expected Value 2","TEXTAREA",table.get(key2));
+        // There should only be two keys..
+        assertEquals("There should only be two keys",2,table.size());
+        // The first key is name
+        String key1 = "NAME";
+        String value1 = (String)table.get(key1);
+        assertEquals("Expected value 1", "Remarks",value1);
+        String key2 = Tag.TAGNAME;
+        assertEquals("Expected Value 2","TEXTAREA",table.get(key2));
     }
 
     public void testNullTag(){
@@ -127,30 +127,30 @@ public class AttributeParserTest extends ParserTestCase {
     }
     
     public void testAttributeWithSpuriousEqualTo() {
-    	getParameterTableFor(
-			"a class=rlbA href=/news/866201.asp?0sl=-32"
-		);
-		assertStringEquals(
-			"href",
-			"/news/866201.asp?0sl=-32",
-			(String)table.get("HREF")
-		);
+        getParameterTableFor(
+            "a class=rlbA href=/news/866201.asp?0sl=-32"
+        );
+        assertStringEquals(
+            "href",
+            "/news/866201.asp?0sl=-32",
+            (String)table.get("HREF")
+        );
     }
     
     public void testQuestionMarksInAttributes() {
-		getParameterTableFor(
-			"a href=\"mailto:sam@neurogrid.com?subject=Site Comments\""
-    	);
-		assertStringEquals(
-			"href",
-			"mailto:sam@neurogrid.com?subject=Site Comments",
-			(String)table.get("HREF")
-		);
-		assertStringEquals(
-			"tag name",
-			"A",
-			(String)table.get(Tag.TAGNAME)
-		);
+        getParameterTableFor(
+            "a href=\"mailto:sam@neurogrid.com?subject=Site Comments\""
+        );
+        assertStringEquals(
+            "href",
+            "mailto:sam@neurogrid.com?subject=Site Comments",
+            (String)table.get("HREF")
+        );
+        assertStringEquals(
+            "tag name",
+            "A",
+            (String)table.get(Tag.TAGNAME)
+        );
     }
 
     /**
@@ -163,8 +163,8 @@ public class AttributeParserTest extends ParserTestCase {
      * Bug #725420 NPE in StringBean.visitTag
      **/
     public void testEmptyTag () {
-		getParameterTableFor("");
-		assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
+        getParameterTableFor("");
+        assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
     }
 
     /**

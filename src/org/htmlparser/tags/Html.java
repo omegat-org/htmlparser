@@ -33,8 +33,8 @@ import org.htmlparser.tags.data.TagData;
 
 public class Html extends CompositeTag {
 
-	public Html(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData, compositeTagData);
-	}
-	
+    public Html(TagData tagData, CompositeTagData compositeTagData) {
+        super(tagData, compositeTagData);
+    }
+    
 }

@@ -37,41 +37,41 @@ import org.htmlparser.util.ParserException;
 
 public class TextareaTagScannerTest extends ParserTestCase
 {
-	
-	private String testHTML = new String(
-									"<TEXTAREA name=\"Remarks\">The intervention by the UN proved beneficial</TEXTAREA>" +
-									"<TEXTAREA>The capture of the Somali warloard was elusive</TEXTAREA>" +
-									"<TEXTAREA></TEXTAREA>" +
-									"<TEXTAREA name=\"Remarks\">The death threats of the organization\n" +
-									"refused to intimidate the soldiers</TEXTAREA>" +
-									"<TEXTAREA name=\"Remarks\">The death threats of the LTTE\n" +
-									"refused to intimidate the Tamilians\n</TEXTAREA>"
-									);
-	private TextareaTagScanner scanner;
-	
-	public TextareaTagScannerTest(String name) 
-	{
-		super(name);
-	}
-	
-	public void testScan() throws ParserException 
-	{
-		scanner = new TextareaTagScanner("-i", new Stack ());
-		createParser(testHTML);
-		scanner = new TextareaTagScanner("-ta", new Stack ());
-		parser.addScanner(scanner);
-		parseAndAssertNodeCount(5);
-	 	assertTrue(node[0] instanceof TextareaTag);
-	 	assertTrue(node[1] instanceof TextareaTag);
-	 	assertTrue(node[2] instanceof TextareaTag);
-	 	assertTrue(node[3] instanceof TextareaTag);
-	 	assertTrue(node[4] instanceof TextareaTag);
-	 	
-		// check the Textarea node
-		for(int j=0;j<nodeCount;j++)
-		{
-			TextareaTag TextareaTag = (TextareaTag) node[j];
-			assertEquals("Textarea Scanner",scanner,TextareaTag.getThisScanner());
-		}
-	}
+    
+    private String testHTML = new String(
+                                    "<TEXTAREA name=\"Remarks\">The intervention by the UN proved beneficial</TEXTAREA>" +
+                                    "<TEXTAREA>The capture of the Somali warloard was elusive</TEXTAREA>" +
+                                    "<TEXTAREA></TEXTAREA>" +
+                                    "<TEXTAREA name=\"Remarks\">The death threats of the organization\n" +
+                                    "refused to intimidate the soldiers</TEXTAREA>" +
+                                    "<TEXTAREA name=\"Remarks\">The death threats of the LTTE\n" +
+                                    "refused to intimidate the Tamilians\n</TEXTAREA>"
+                                    );
+    private TextareaTagScanner scanner;
+    
+    public TextareaTagScannerTest(String name) 
+    {
+        super(name);
+    }
+    
+    public void testScan() throws ParserException 
+    {
+        scanner = new TextareaTagScanner("-i", new Stack ());
+        createParser(testHTML);
+        scanner = new TextareaTagScanner("-ta", new Stack ());
+        parser.addScanner(scanner);
+        parseAndAssertNodeCount(5);
+        assertTrue(node[0] instanceof TextareaTag);
+        assertTrue(node[1] instanceof TextareaTag);
+        assertTrue(node[2] instanceof TextareaTag);
+        assertTrue(node[3] instanceof TextareaTag);
+        assertTrue(node[4] instanceof TextareaTag);
+        
+        // check the Textarea node
+        for(int j=0;j<nodeCount;j++)
+        {
+            TextareaTag TextareaTag = (TextareaTag) node[j];
+            assertEquals("Textarea Scanner",scanner,TextareaTag.getThisScanner());
+        }
+    }
 }

@@ -37,47 +37,47 @@ import org.htmlparser.tags.data.TagData;
 
 public class OptionTagScanner extends CompositeTagScanner
 {
-	private static final String MATCH_NAME [] = {"OPTION"};
-	private static final String [] ENDERS = { "INPUT", "TEXTAREA", "SELECT", "OPTION" };
+    private static final String MATCH_NAME [] = {"OPTION"};
+    private static final String [] ENDERS = { "INPUT", "TEXTAREA", "SELECT", "OPTION" };
     private static final String [] END_TAG_ENDERS = { "SELECT", "FORM", "BODY", "HTML" };
     private Stack stack;
 
-	public OptionTagScanner(Stack stack) {
-		this("", stack);
-	}
-	
-	public OptionTagScanner(String filter, Stack stack) {
-		super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
+    public OptionTagScanner(Stack stack) {
+        this("", stack);
+    }
+    
+    public OptionTagScanner(String filter, Stack stack) {
+        super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
         this.stack = stack;
-	}
+    }
 
     public String [] getID() {
-		return MATCH_NAME;
-	}
-	
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
+        return MATCH_NAME;
+    }
+    
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
         if (!stack.empty () && (this == stack.peek ()))
             stack.pop ();
-		return new OptionTag(tagData,compositeTagData);
-	}
+        return new OptionTag(tagData,compositeTagData);
+    }
 
-	public void beforeScanningStarts ()
+    public void beforeScanningStarts ()
     {
         stack.push (this);
-	}
+    }
 
-	/**
-	 * This is the logic that decides when a option tag can be allowed
-	 */
-	public boolean shouldCreateEndTagAndExit ()
+    /**
+     * This is the logic that decides when a option tag can be allowed
+     */
+    public boolean shouldCreateEndTagAndExit ()
     {
         boolean ret;
         
         ret = false;
 
-		if (0 != stack.size ())
+        if (0 != stack.size ())
         {
             TagScanner parentScanner = (TagScanner)stack.peek ();
             if (parentScanner instanceof CompositeTagScanner)
@@ -92,5 +92,5 @@ public class OptionTagScanner extends CompositeTagScanner
         }
         
         return (ret);
-	}
+    }
 }

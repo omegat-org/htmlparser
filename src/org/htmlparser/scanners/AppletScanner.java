@@ -38,24 +38,24 @@ import org.htmlparser.util.ParserException;
  * Scanner for Applet tags
  */
 public class AppletScanner extends CompositeTagScanner {
-	private static String [] MATCH_STRING = {"APPLET"};
-	
-	public AppletScanner() {
-		super(MATCH_STRING);
-	}
-	
-	public AppletScanner(String filter) {
-		super(filter,MATCH_STRING);
-	}
+    private static String [] MATCH_STRING = {"APPLET"};
+    
+    public AppletScanner() {
+        super(MATCH_STRING);
+    }
+    
+    public AppletScanner(String filter) {
+        super(filter,MATCH_STRING);
+    }
 
-	public String [] getID() {
-		return MATCH_STRING;
-	}
+    public String [] getID() {
+        return MATCH_STRING;
+    }
 
-	public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-		throws ParserException {
-			
-		return new AppletTag(tagData,compositeTagData);
-	}
+    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
+        throws ParserException {
+            
+        return new AppletTag(tagData,compositeTagData);
+    }
 
 }

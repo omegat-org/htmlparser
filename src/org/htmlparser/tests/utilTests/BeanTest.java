@@ -376,38 +376,38 @@ public class BeanTest extends ParserTestCase
         check (sb, "<html><head></head><body>\t\t x</body></html>", "x");
     }
     
-	/**
-	 * Test text including a "pre" tag
-	 */
-	public void testOutputWithPreTags() {
-		StringBean sb;
-		sb = new StringBean ();
-		String sampleCode = "public class Product {}";
-		check (sb, "<body><pre>"+sampleCode+"</pre></body>", sampleCode);
-	}
+    /**
+     * Test text including a "pre" tag
+     */
+    public void testOutputWithPreTags() {
+        StringBean sb;
+        sb = new StringBean ();
+        String sampleCode = "public class Product {}";
+        check (sb, "<body><pre>"+sampleCode+"</pre></body>", sampleCode);
+    }
     
-	/**
-	 * Test text including a "script" tag
-	 */
-	public void testOutputWithScriptTags() {
-		StringBean sb;
-		sb = new StringBean ();
-		
-		String sampleScript =
-		  "<script language=\"javascript\">\r\n"
-		+ "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n" 
-		+ " document.write ('xxx');\r\n" 
-		+ "else\r\n"
-		+ " document.write ('yyy');\r\n"
-		+ "</script>\r\n";
-		
-		check (sb, "<body>"+sampleScript+"</body>", "");
-	}
+    /**
+     * Test text including a "script" tag
+     */
+    public void testOutputWithScriptTags() {
+        StringBean sb;
+        sb = new StringBean ();
+        
+        String sampleScript =
+          "<script language=\"javascript\">\r\n"
+        + "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n" 
+        + " document.write ('xxx');\r\n" 
+        + "else\r\n"
+        + " document.write ('yyy');\r\n"
+        + "</script>\r\n";
+        
+        check (sb, "<body>"+sampleScript+"</body>", "");
+    }
 
     /*
-	 * Test output with pre and any tag.
-	 */
-	public void testOutputWithPreAndAnyTag()
+     * Test output with pre and any tag.
+     */
+    public void testOutputWithPreAndAnyTag()
     {
         StringBean sb;
 
@@ -419,9 +419,9 @@ public class BeanTest extends ParserTestCase
     }
 
     /*
-	 * Test output with pre and any tag and text.
-	 */
-	public void testOutputWithPreAndAnyTagPlusText()
+     * Test output with pre and any tag and text.
+     */
+    public void testOutputWithPreAndAnyTagPlusText()
     {
         StringBean sb;
 
@@ -433,9 +433,9 @@ public class BeanTest extends ParserTestCase
     }
 
     /*
-	 * Test output with pre and any tag and text.
-	 */
-	public void testOutputWithPreAndAnyTagPlusTextWithWhitespace()
+     * Test output with pre and any tag and text.
+     */
+    public void testOutputWithPreAndAnyTagPlusTextWithWhitespace()
     {
         StringBean sb;
 
@@ -447,9 +447,9 @@ public class BeanTest extends ParserTestCase
     }
 
     /*
-	 * Test output without pre and any tag and text.
-	 */
-	public void testOutputWithoutPreAndAnyTagPlusTextWithWhitespace()
+     * Test output without pre and any tag and text.
+     */
+    public void testOutputWithoutPreAndAnyTagPlusTextWithWhitespace()
     {
         StringBean sb;
 
@@ -460,23 +460,23 @@ public class BeanTest extends ParserTestCase
         check (sb, "<html><head></head><body><hello>dog  food</hello></body></html>", "dog food");
     }
 
-	/**
-	 * Test output with pre and script tags
-	 */
-	public void xtestOutputWithPreAndScriptTags() {
-		StringBean sb;
-		sb = new StringBean ();
-		
-		String sampleScript =
-		  "<script language=\"javascript\">\r\n"
-		+ "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n" 
-		+ " document.write ('xxx');\r\n" 
-		+ "else\r\n"
-		+ " document.write ('yyy');\r\n"
-		+ "</script>\r\n";
-		
-		check (sb, "<body><pre>"+sampleScript+"</pre></body>", sampleScript);
-	}
+    /**
+     * Test output with pre and script tags
+     */
+    public void xtestOutputWithPreAndScriptTags() {
+        StringBean sb;
+        sb = new StringBean ();
+        
+        String sampleScript =
+          "<script language=\"javascript\">\r\n"
+        + "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n" 
+        + " document.write ('xxx');\r\n" 
+        + "else\r\n"
+        + " document.write ('yyy');\r\n"
+        + "</script>\r\n";
+        
+        check (sb, "<body><pre>"+sampleScript+"</pre></body>", sampleScript);
+    }
     
 }
 

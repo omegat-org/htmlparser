@@ -34,143 +34,143 @@ import java.util.NoSuchElementException;
 import org.htmlparser.Node;
 
 public class NodeList implements Serializable {
-	private static final int INITIAL_CAPACITY=10;
-	//private static final int CAPACITY_INCREMENT=20;
-	private Node nodeData[];
-	private int size;
-	private int capacity;
-	private int capacityIncrement;
-	private int numberOfAdjustments;
-	
-	public NodeList() {
-		size = 0;
-		capacity = INITIAL_CAPACITY;
-		nodeData = newNodeArrayFor(capacity);
-		capacityIncrement = capacity*2;
-		numberOfAdjustments = 0;
-	}
-	
-	public void add(Node node) {
-		if (size==capacity) 
-			adjustVectorCapacity();
-		nodeData[size++]=node;
-	}
+    private static final int INITIAL_CAPACITY=10;
+    //private static final int CAPACITY_INCREMENT=20;
+    private Node nodeData[];
+    private int size;
+    private int capacity;
+    private int capacityIncrement;
+    private int numberOfAdjustments;
+    
+    public NodeList() {
+        size = 0;
+        capacity = INITIAL_CAPACITY;
+        nodeData = newNodeArrayFor(capacity);
+        capacityIncrement = capacity*2;
+        numberOfAdjustments = 0;
+    }
+    
+    public void add(Node node) {
+        if (size==capacity) 
+            adjustVectorCapacity();
+        nodeData[size++]=node;
+    }
 
     /**
      * Add another node list to this one.
      * @param list The list to add.
      */
-	public void add (NodeList list)
+    public void add (NodeList list)
     {
         for (int i = 0; i < list.size; i++)
             add (list.nodeData[i]);
-	}
+    }
 
     /**
      * Insert the given node at the head of the list.
      * @param node The new first element.
      */
-	public void prepend(Node node)
+    public void prepend(Node node)
     {
-		if (size==capacity) 
-			adjustVectorCapacity();
+        if (size==capacity) 
+            adjustVectorCapacity();
         System.arraycopy (nodeData, 0, nodeData, 1, size);
         size++;
-		nodeData[0]=node;
-	}
+        nodeData[0]=node;
+    }
 
-	private void adjustVectorCapacity() {
-		capacity += capacityIncrement;
-		capacityIncrement *= 2;
-		Node oldData [] = nodeData;
-		nodeData = newNodeArrayFor(capacity);
-		System.arraycopy(oldData, 0, nodeData, 0, size);
-		numberOfAdjustments++;
-	}
+    private void adjustVectorCapacity() {
+        capacity += capacityIncrement;
+        capacityIncrement *= 2;
+        Node oldData [] = nodeData;
+        nodeData = newNodeArrayFor(capacity);
+        System.arraycopy(oldData, 0, nodeData, 0, size);
+        numberOfAdjustments++;
+    }
 
-	private Node[] newNodeArrayFor(int capacity) {
-		return new Node[capacity];
-	}
-	
-	public int size() {
-		return size;
-	}
-	
-	public Node elementAt(int i) {
-		return nodeData[i];
-	}
+    private Node[] newNodeArrayFor(int capacity) {
+        return new Node[capacity];
+    }
+    
+    public int size() {
+        return size;
+    }
+    
+    public Node elementAt(int i) {
+        return nodeData[i];
+    }
 
-	public int getNumberOfAdjustments() {
-		return numberOfAdjustments;
-	}
-	
-	public SimpleNodeIterator elements() {
-		return new SimpleNodeIterator() {
-			int count = 0;
-	
-			public boolean hasMoreNodes() {
-				return count < size;
-			}
-	
-			public Node nextNode() {
-			synchronized (NodeList.this) {
-				if (count < size) {
-				return nodeData[count++];
-				}
-			}
-			throw new NoSuchElementException("Vector Enumeration");
-			}
-		};
-	}
-	
-	public Node [] toNodeArray() {
-		Node [] nodeArray = newNodeArrayFor(size);
-		System.arraycopy(nodeData, 0, nodeArray, 0, size);		
-		return nodeArray;
-	}
-	
-	public String asString() {
-		StringBuffer buff = new StringBuffer();
-		for (int i=0;i<size;i++) 
-			buff.append(nodeData[i].toPlainTextString());	
-		return buff.toString();
-	}
-	
-	public String asHtml() {
-		StringBuffer buff = new StringBuffer();
-		for (int i=0;i<size;i++) 
-			buff.append(nodeData[i].toHtml());	
-		return buff.toString();
-	}
-	
-	public void remove(int index) {
-        System.arraycopy(nodeData, index+1, nodeData, index, size-index-1);		
-		size--;		
-	}
-	
-	public void removeAll() {
-		size = 0;
-		capacity = INITIAL_CAPACITY;
-		nodeData = newNodeArrayFor(capacity);
-		capacityIncrement = capacity*2;
-		numberOfAdjustments = 0;
-	}
-	
-	public String toString() {
-		StringBuffer text = new StringBuffer();
-		for (int i=0;i<size;i++)
-			text.append(nodeData[i].toPlainTextString());
-		return text.toString();
-	}
+    public int getNumberOfAdjustments() {
+        return numberOfAdjustments;
+    }
+    
+    public SimpleNodeIterator elements() {
+        return new SimpleNodeIterator() {
+            int count = 0;
+    
+            public boolean hasMoreNodes() {
+                return count < size;
+            }
+    
+            public Node nextNode() {
+            synchronized (NodeList.this) {
+                if (count < size) {
+                return nodeData[count++];
+                }
+            }
+            throw new NoSuchElementException("Vector Enumeration");
+            }
+        };
+    }
+    
+    public Node [] toNodeArray() {
+        Node [] nodeArray = newNodeArrayFor(size);
+        System.arraycopy(nodeData, 0, nodeArray, 0, size);      
+        return nodeArray;
+    }
+    
+    public String asString() {
+        StringBuffer buff = new StringBuffer();
+        for (int i=0;i<size;i++) 
+            buff.append(nodeData[i].toPlainTextString());   
+        return buff.toString();
+    }
+    
+    public String asHtml() {
+        StringBuffer buff = new StringBuffer();
+        for (int i=0;i<size;i++) 
+            buff.append(nodeData[i].toHtml());  
+        return buff.toString();
+    }
+    
+    public void remove(int index) {
+        System.arraycopy(nodeData, index+1, nodeData, index, size-index-1);     
+        size--;     
+    }
+    
+    public void removeAll() {
+        size = 0;
+        capacity = INITIAL_CAPACITY;
+        nodeData = newNodeArrayFor(capacity);
+        capacityIncrement = capacity*2;
+        numberOfAdjustments = 0;
+    }
+    
+    public String toString() {
+        StringBuffer text = new StringBuffer();
+        for (int i=0;i<size;i++)
+            text.append(nodeData[i].toPlainTextString());
+        return text.toString();
+    }
 
     /**
      * Search for nodes of the given type non-recursively.
      * @param classType The class to search for.
      */
-	public NodeList searchFor (Class classType)
+    public NodeList searchFor (Class classType)
     {
         return (searchFor (classType, false));
-	}
+    }
     
     /**
      * Search for nodes of the given type recursively.

@@ -33,21 +33,21 @@ import junit.framework.TestSuite;
 
 public class AllTests extends TestCase 
 {
-	public AllTests (String name)
+    public AllTests (String name)
     {
-		super (name);
-	}
+        super (name);
+    }
 
-	public static TestSuite suite ()
+    public static TestSuite suite ()
     {
-		TestSuite suite = new TestSuite ("Lexer Tests");
+        TestSuite suite = new TestSuite ("Lexer Tests");
         suite.addTestSuite (StreamTests.class);
         suite.addTestSuite (SourceTests.class);
         suite.addTestSuite (PageTests.class);
         suite.addTestSuite (PageIndexTests.class);
         suite.addTestSuite (LexerTests.class);
         return suite; 
-	}
+    }
 
     /**
      * Mainline for all suites of tests.

@@ -32,28 +32,29 @@ import org.htmlparser.tags.data.*;
 import org.htmlparser.util.*;
 
 public class TableTag extends CompositeTag {
-	private NodeList rows;
-	
-	public TableTag(
-		TagData tagData,
-		CompositeTagData compositeTagData,
-		NodeList rows) {
-		super(tagData, compositeTagData);
-		this.rows = rows;
-	}
-	
-	public int getRowCount() {
-		return rows.size();
-	}
-	
-	public TableRow getRow(int i) {
-		return (TableRow)rows.elementAt(i);
-	}
+    private NodeList rows;
+    
+    public TableTag(
+        TagData tagData,
+        CompositeTagData compositeTagData,
+        NodeList rows) {
+        super(tagData, compositeTagData);
+        this.rows = rows;
+    }
+    
+    public int getRowCount() {
+        return rows.size();
+    }
+    
+    public TableRow getRow(int i) {
+        return (TableRow)rows.elementAt(i);
+    }
 
-	public String toString() {
-		return 
-			"TableTag\n" +			"********\n"+
-			toHtml();
-	}
+    public String toString() {
+        return 
+            "TableTag\n" +
+            "********\n"+
+            toHtml();
+    }
 
 }

@@ -471,7 +471,7 @@ public class Translate
     }
     
     public static String decode (StringBuffer stringBuffer) {
-    	return decode(stringBuffer.toString());
+        return decode(stringBuffer.toString());
     }
 
     /**

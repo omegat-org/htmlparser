@@ -43,61 +43,61 @@ import org.htmlparser.util.ParserException;
 
 public class TagTest extends ParserTestCase
 {
-	public TagTest(String name) {
-		super(name);
-	}
+    public TagTest(String name) {
+        super(name);
+    }
 
-	/**
-	 * The bug being reproduced is this : <BR>
-	 * &lt;BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000 <BR>
-	 * vLink=#551a8b&gt;
-	 * The above line is incorrectly parsed in that, the BODY tag is not identified.
-	 */
-	public void testBodyTagBug1() throws ParserException {
-		createParser("<BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\nvLink=#551a8b>");
-		parseAndAssertNodeCount(1);
-		// The node should be an Tag
-		assertTrue("Node should be a Tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertEquals("Contents of the tag","BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\r\nvLink=#551a8b",tag.getText());
-	}
+    /**
+     * The bug being reproduced is this : <BR>
+     * &lt;BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000 <BR>
+     * vLink=#551a8b&gt;
+     * The above line is incorrectly parsed in that, the BODY tag is not identified.
+     */
+    public void testBodyTagBug1() throws ParserException {
+        createParser("<BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\nvLink=#551a8b>");
+        parseAndAssertNodeCount(1);
+        // The node should be an Tag
+        assertTrue("Node should be a Tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertEquals("Contents of the tag","BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\r\nvLink=#551a8b",tag.getText());
+    }
 
-	/**
-	 * The following should be identified as a tag : <BR>
-	 * 	&lt;MYTAG abcd\n"+
-	 *		"efgh\n"+
-	 *		"ijkl\n"+
-	 *		"mnop&gt;
-	 * Creation date: (6/17/2001 5:27:42 PM)
-	 */
-	public void testLargeTagBug() throws ParserException {
-		createParser(
-			"<MYTAG abcd\n"+
-			"efgh\n"+
-			"ijkl\n"+
-			"mnop>"
-		);
-		parseAndAssertNodeCount(1);
-		// The node should be an Tag
-		assertTrue("Node should be a Tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertEquals("Contents of the tag","MYTAG abcd\r\nefgh\r\nijkl\r\nmnop",tag.getText());
+    /**
+     * The following should be identified as a tag : <BR>
+     *  &lt;MYTAG abcd\n"+
+     *      "efgh\n"+
+     *      "ijkl\n"+
+     *      "mnop&gt;
+     * Creation date: (6/17/2001 5:27:42 PM)
+     */
+    public void testLargeTagBug() throws ParserException {
+        createParser(
+            "<MYTAG abcd\n"+
+            "efgh\n"+
+            "ijkl\n"+
+            "mnop>"
+        );
+        parseAndAssertNodeCount(1);
+        // The node should be an Tag
+        assertTrue("Node should be a Tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertEquals("Contents of the tag","MYTAG abcd\r\nefgh\r\nijkl\r\nmnop",tag.getText());
 
 
-	}
-	/**
-	 * Bug reported by Gordon Deudney 2002-03-15
-	 * Nested JSP Tags were not working
-	 */
-	public void testNestedTags() throws ParserException {
-		String s = "input type=\"text\" value=\"<%=\"test\"%>\" name=\"text\"";
-		String line = "<"+s+">";
-	    createParser(line);
-		parseAndAssertNodeCount(1);
-		assertTrue("The node found should have been an Tag",node[0] instanceof Tag);
-		Tag tag = (Tag) node[0];
-		assertEquals("Tag Contents",s,tag.getText());
-	}
+    }
+    /**
+     * Bug reported by Gordon Deudney 2002-03-15
+     * Nested JSP Tags were not working
+     */
+    public void testNestedTags() throws ParserException {
+        String s = "input type=\"text\" value=\"<%=\"test\"%>\" name=\"text\"";
+        String line = "<"+s+">";
+        createParser(line);
+        parseAndAssertNodeCount(1);
+        assertTrue("The node found should have been an Tag",node[0] instanceof Tag);
+        Tag tag = (Tag) node[0];
+        assertEquals("Tag Contents",s,tag.getText());
+    }
 
     /**
      * Test parseParameter method
@@ -108,8 +108,8 @@ public class TagTest extends ParserTestCase
         Tag tag;
         Node node=null;
         String lin1 = "<DIV class=\"userData\" id=\"oLayout\" name=\"oLayout\"></DIV>";
-       	createParser(lin1);
-    	NodeIterator en = parser.elements();
+        createParser(lin1);
+        NodeIterator en = parser.elements();
         Hashtable h;
         
         try {
@@ -119,7 +119,7 @@ public class TagTest extends ParserTestCase
 
                 tag = (Tag)node;
                 h = tag.getAttributes();
-				String classValue= (String)h.get("CLASS");
+                String classValue= (String)h.get("CLASS");
                 assertEquals ("The class value should be ","userData",classValue);
             }
 
@@ -138,9 +138,9 @@ public class TagTest extends ParserTestCase
         Tag tag;
         EndTag etag;
         StringNode snode;
-		Node node=null;
+        Node node=null;
         String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
-       	createParser(lin1);
+        createParser(lin1);
         NodeIterator en = parser.elements();
         Hashtable h;
         String a,href,myValue,nice;
@@ -210,7 +210,7 @@ public class TagTest extends ParserTestCase
         StringNode snode;
         Node node=null;
         String lin1 = "<G href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaila\">Kaarle's homepage</G><p>Paragraph</p>";
-       	createParser(lin1);
+        createParser(lin1);
         NodeIterator en = parser.elements();
         Hashtable h;
         String a,href,myValue,nice;
@@ -278,7 +278,7 @@ public class TagTest extends ParserTestCase
         StringNode snode;
         Node node=null;
         String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
-       	createParser(lin1);
+        createParser(lin1);
         NodeIterator en = parser.elements();
         Hashtable h;
         String a,nice;
@@ -324,57 +324,57 @@ public class TagTest extends ParserTestCase
      * up our parsing almost completely.
      */
     public void testStrictParsing() throws ParserException {
-		String testHTML = 
-		"<div align=\"center\">" +
-			"<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">" +
-				"<a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+
-		        "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
-		        "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
-		        "<a href=\"/cia/notices.html#sec\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Security</font></a>\n"+
-		        "<a href=\"/cia/contact.htm\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Contact Us</font></a>\n"+
-		        "<a href=\"/cia/sitemap.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Site Map</font></a>\n"+
-		        "<a href=\"/cia/siteindex.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Index</font></a>\n"+
-		        "<a href=\"/search\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Search</font></a>\n"+
-	        "</font>" +
+        String testHTML = 
+        "<div align=\"center\">" +
+            "<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">" +
+                "<a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+
+                "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
+                "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
+                "<a href=\"/cia/notices.html#sec\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Security</font></a>\n"+
+                "<a href=\"/cia/contact.htm\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Contact Us</font></a>\n"+
+                "<a href=\"/cia/sitemap.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Site Map</font></a>\n"+
+                "<a href=\"/cia/siteindex.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Index</font></a>\n"+
+                "<a href=\"/search\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Search</font></a>\n"+
+            "</font>" +
         "</div>";
 
-		createParser(testHTML,"http://www.cia.gov");
-		parser.registerScanners();
-		parseAndAssertNodeCount(1);
-		// Check the tags
-		assertType("node",Div.class,node[0]);
-		Div div = (Div)node[0];
-		Tag fontTag = (Tag)div.children().nextNode();
-		assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",fontTag.getText());
-		// Try to parse the parameters from this tag.
-		Hashtable table = fontTag.getAttributes();
-		assertNotNull("Parameters table",table);
-		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
-		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
+        createParser(testHTML,"http://www.cia.gov");
+        parser.registerScanners();
+        parseAndAssertNodeCount(1);
+        // Check the tags
+        assertType("node",Div.class,node[0]);
+        Div div = (Div)node[0];
+        Tag fontTag = (Tag)div.children().nextNode();
+        assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",fontTag.getText());
+        // Try to parse the parameters from this tag.
+        Hashtable table = fontTag.getAttributes();
+        assertNotNull("Parameters table",table);
+        assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
+        assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
     }
 
-	public void testToHTML() throws ParserException {
-		String testHTML = new String(
-			"<MYTAG abcd\n"+
-			"efgh\n"+
-			"ijkl\n"+
-			"mnop>\n"+
-			"<TITLE>Hello</TITLE>\n"+
-			"<A HREF=\"Hello.html\">Hey</A>"
-		);
-		createParser(testHTML);
-		parseAndAssertNodeCount(7);
-		// The node should be an Tag
-		assertTrue("1st Node should be a Tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertStringEquals("toHTML()","<MYTAG EFGH ABCD MNOP IJKL>",tag.toHtml());
-		assertTrue("2nd Node should be a Tag",node[1] instanceof Tag);
-		assertTrue("5th Node should be a Tag",node[4] instanceof Tag);
-		tag = (Tag)node[1];
-		assertEquals("Raw String of the tag","<TITLE>",tag.toHtml());
-		tag = (Tag)node[4];
-		assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toHtml());
-	}
+    public void testToHTML() throws ParserException {
+        String testHTML = new String(
+            "<MYTAG abcd\n"+
+            "efgh\n"+
+            "ijkl\n"+
+            "mnop>\n"+
+            "<TITLE>Hello</TITLE>\n"+
+            "<A HREF=\"Hello.html\">Hey</A>"
+        );
+        createParser(testHTML);
+        parseAndAssertNodeCount(7);
+        // The node should be an Tag
+        assertTrue("1st Node should be a Tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertStringEquals("toHTML()","<MYTAG EFGH ABCD MNOP IJKL>",tag.toHtml());
+        assertTrue("2nd Node should be a Tag",node[1] instanceof Tag);
+        assertTrue("5th Node should be a Tag",node[4] instanceof Tag);
+        tag = (Tag)node[1];
+        assertEquals("Raw String of the tag","<TITLE>",tag.toHtml());
+        tag = (Tag)node[4];
+        assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toHtml());
+    }
 
 
     /**
@@ -385,7 +385,7 @@ public class TagTest extends ParserTestCase
     public void testWithoutParseParameter() throws ParserException{
         Node node=null;
         String testHTML = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle\">Kaarle's homepage</A><p>Paragraph</p>";
-       	createParser(testHTML);
+        createParser(testHTML);
         NodeIterator en = parser.elements();
         String result="";
         try {
@@ -427,12 +427,12 @@ public class TagTest extends ParserTestCase
 
 
     public void testStyleSheetTag() throws ParserException{
-     	String testHTML1 = new String("<link rel src=\"af.css\"/>");
-		createParser(testHTML1,"http://www.google.com/test/index.html");
-		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertEquals("StyleSheet Source","af.css",tag.getAttribute("src"));
+        String testHTML1 = new String("<link rel src=\"af.css\"/>");
+        createParser(testHTML1,"http://www.google.com/test/index.html");
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertEquals("StyleSheet Source","af.css",tag.getAttribute("src"));
     }
 
     /**
@@ -440,169 +440,169 @@ public class TagTest extends ParserTestCase
      * and if this has no further lines to parse
      */
     public void testBrokenTag() throws ParserException{
-     	String testHTML1 = new String("<br");
-		createParser(testHTML1);
-		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertEquals("Node contents","br",tag.getText());
+        String testHTML1 = new String("<br");
+        createParser(testHTML1);
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertEquals("Node contents","br",tag.getText());
     }
 
     public void testTagInsideTag() throws ParserException {
-    	String testHTML = new String("<META name=\"Hello\" value=\"World </I>\">");
-		createParser(testHTML);
-		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertEquals("Node contents","META name=\"Hello\" value=\"World </I>\"",tag.getText());
-		assertEquals("Meta Content","World </I>",tag.getAttribute("value"));
+        String testHTML = new String("<META name=\"Hello\" value=\"World </I>\">");
+        createParser(testHTML);
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertEquals("Node contents","META name=\"Hello\" value=\"World </I>\"",tag.getText());
+        assertEquals("Meta Content","World </I>",tag.getAttribute("value"));
 
     }
 
     public void testIncorrectInvertedCommas() throws ParserException {
-    	String testHTML = new String("<META NAME=\"Author\" CONTENT = \"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"\">");
-		createParser(testHTML);
-		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertStringEquals("Node contents","META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"",tag.getText());
-		assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getAttribute("CONTENT"));
+        String testHTML = new String("<META NAME=\"Author\" CONTENT = \"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"\">");
+        createParser(testHTML);
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertStringEquals("Node contents","META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"",tag.getText());
+        assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getAttribute("CONTENT"));
 
     }
 
     public void testIncorrectInvertedCommas2() throws ParserException {
-    	String testHTML = new String("<META NAME=\"Keywords\" CONTENT=Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\">");
-		createParser(testHTML);
-		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertStringEquals("Node contents","META NAME=\"Keywords\" CONTENT=\"Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\"",tag.getText());
+        String testHTML = new String("<META NAME=\"Keywords\" CONTENT=Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\">");
+        createParser(testHTML);
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertStringEquals("Node contents","META NAME=\"Keywords\" CONTENT=\"Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\"",tag.getText());
     }
 
- 	public void testIncorrectInvertedCommas3() throws ParserException {
-    	String testHTML = new String("<meta name=\"description\" content=\"Une base de données sur les thèses de g\"ographie soutenues en France \">");
-		createParser(testHTML);
-		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a tag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertEquals("Node contents","meta name=\"description\" content=\"Une base de données sur les thèses de gographie soutenues en France\"",tag.getText());
+    public void testIncorrectInvertedCommas3() throws ParserException {
+        String testHTML = new String("<meta name=\"description\" content=\"Une base de données sur les thèses de g\"ographie soutenues en France \">");
+        createParser(testHTML);
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertEquals("Node contents","meta name=\"description\" content=\"Une base de données sur les thèses de gographie soutenues en France\"",tag.getText());
     }
 
-	/**
-	 * Ignore empty tags.
-	 */
-	public void testEmptyTag() throws ParserException {
-		String testHTML = "<html><body><>text</body></html>";
-		createParser(testHTML);
-		parser.registerScanners();
-		parseAndAssertNodeCount(5);
-		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-		StringNode stringNode = (StringNode)node[2];
-		assertEquals("Third node has incorrect text","<>text",stringNode.getText());
-	}
+    /**
+     * Ignore empty tags.
+     */
+    public void testEmptyTag() throws ParserException {
+        String testHTML = "<html><body><>text</body></html>";
+        createParser(testHTML);
+        parser.registerScanners();
+        parseAndAssertNodeCount(5);
+        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+        StringNode stringNode = (StringNode)node[2];
+        assertEquals("Third node has incorrect text","<>text",stringNode.getText());
+    }
 
-	/**
-	 * Ignore empty tags.
-	 */
-	public void testEmptyTag2() throws ParserException {
-		String testHTML = "<html><body>text<></body></html>";
-		createParser(testHTML);
-		parser.registerScanners();
-		parseAndAssertNodeCount(5);
-		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-		StringNode stringNode = (StringNode)node[2];
-		assertEquals("Third node has incorrect text","text<>",stringNode.getText());
-	}
+    /**
+     * Ignore empty tags.
+     */
+    public void testEmptyTag2() throws ParserException {
+        String testHTML = "<html><body>text<></body></html>";
+        createParser(testHTML);
+        parser.registerScanners();
+        parseAndAssertNodeCount(5);
+        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+        StringNode stringNode = (StringNode)node[2];
+        assertEquals("Third node has incorrect text","text<>",stringNode.getText());
+    }
 
-	/**
-	 * Ignore empty tags.
-	 */
-	public void testEmptyTag3() throws ParserException {
-		String testHTML = "<html><body>text<>text</body></html>";
-		createParser(testHTML);
-		parser.registerScanners();
-		parseAndAssertNodeCount(5);
-		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-		StringNode stringNode = (StringNode)node[2];
-		assertEquals("Third node has incorrect text","text<>text",stringNode.getText());
-	}
+    /**
+     * Ignore empty tags.
+     */
+    public void testEmptyTag3() throws ParserException {
+        String testHTML = "<html><body>text<>text</body></html>";
+        createParser(testHTML);
+        parser.registerScanners();
+        parseAndAssertNodeCount(5);
+        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+        StringNode stringNode = (StringNode)node[2];
+        assertEquals("Third node has incorrect text","text<>text",stringNode.getText());
+    }
 
-	/**
-	 * Ignore empty tags.
-	 */
-	public void testEmptyTag4() throws ParserException {
-		String testHTML = "<html><body>text\n<>text</body></html>";
-		createParser(testHTML);
-		parser.registerScanners();
+    /**
+     * Ignore empty tags.
+     */
+    public void testEmptyTag4() throws ParserException {
+        String testHTML = "<html><body>text\n<>text</body></html>";
+        createParser(testHTML);
+        parser.registerScanners();
         Parser.setLineSeparator ("\r\n"); // actually a static method
-		parseAndAssertNodeCount(5);
-		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-		StringNode stringNode = (StringNode)node[2];
+        parseAndAssertNodeCount(5);
+        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+        StringNode stringNode = (StringNode)node[2];
         String actual = stringNode.getText();
-		assertEquals("Third node has incorrect text","text\r\n<>text",actual);
-	}
+        assertEquals("Third node has incorrect text","text\r\n<>text",actual);
+    }
 
-	/**
-	 * Ignore empty tags.
-	 */
-	public void testEmptyTag5() throws ParserException {
-		String testHTML = "<html><body>text<\n>text</body></html>";
-		createParser(testHTML);
-		parser.registerScanners();
+    /**
+     * Ignore empty tags.
+     */
+    public void testEmptyTag5() throws ParserException {
+        String testHTML = "<html><body>text<\n>text</body></html>";
+        createParser(testHTML);
+        parser.registerScanners();
         Parser.setLineSeparator ("\r\n"); // actually a static method
-		parseAndAssertNodeCount(5);
-		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-		StringNode stringNode = (StringNode)node[2];
+        parseAndAssertNodeCount(5);
+        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+        StringNode stringNode = (StringNode)node[2];
         String actual = stringNode.getText();
-		assertEquals("Third node has incorrect text","text<\r\n>text",actual);
-	}
+        assertEquals("Third node has incorrect text","text<\r\n>text",actual);
+    }
 
-	/**
-	 * Ignore empty tags.
-	 */
-	public void testEmptyTag6() throws ParserException {
-		String testHTML = "<html><body>text<>\ntext</body></html>";
-		createParser(testHTML);
-		parser.registerScanners();
+    /**
+     * Ignore empty tags.
+     */
+    public void testEmptyTag6() throws ParserException {
+        String testHTML = "<html><body>text<>\ntext</body></html>";
+        createParser(testHTML);
+        parser.registerScanners();
         Parser.setLineSeparator ("\r\n"); // actually a static method
-		parseAndAssertNodeCount(5);
-		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-		StringNode stringNode = (StringNode)node[2];
+        parseAndAssertNodeCount(5);
+        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+        StringNode stringNode = (StringNode)node[2];
         String actual = stringNode.getText();
-		assertEquals("Third node has incorrect text","text<>\r\ntext",actual);
-	}
+        assertEquals("Third node has incorrect text","text<>\r\ntext",actual);
+    }
 
-	public void testAttributesReconstruction() throws ParserException {
-		String testHTML = "<TEXTAREA name=\"JohnDoe\" ></TEXTAREA>";
-		createParser(testHTML);
-		parseAndAssertNodeCount(2);
-		assertTrue("First node should be an HTMLtag",node[0] instanceof Tag);
-		Tag htmlTag = (Tag)node[0];
-		String expectedHTML = "<TEXTAREA NAME=\"JohnDoe\">";
-		assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
-	}
-	public void testIgnoreState() throws ParserException {
-		String testHTML = "<A \n"+
-		"HREF=\"/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
-		createParser(testHTML);
-		Node node = Tag.find(parser.getReader(),testHTML,0);
-		assertTrue("Node should be a tag",node instanceof Tag);
-		Tag tag = (Tag)node;
-		String href = tag.getAttribute("HREF");
-		assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
+    public void testAttributesReconstruction() throws ParserException {
+        String testHTML = "<TEXTAREA name=\"JohnDoe\" ></TEXTAREA>";
+        createParser(testHTML);
+        parseAndAssertNodeCount(2);
+        assertTrue("First node should be an HTMLtag",node[0] instanceof Tag);
+        Tag htmlTag = (Tag)node[0];
+        String expectedHTML = "<TEXTAREA NAME=\"JohnDoe\">";
+        assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
+    }
+    public void testIgnoreState() throws ParserException {
+        String testHTML = "<A \n"+
+        "HREF=\"/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
+        createParser(testHTML);
+        Node node = Tag.find(parser.getReader(),testHTML,0);
+        assertTrue("Node should be a tag",node instanceof Tag);
+        Tag tag = (Tag)node;
+        String href = tag.getAttribute("HREF");
+        assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
 
-	}
+    }
     public void testExtractWord() {
-    	String line = "Abc DEF GHHI";
-    	assertEquals("Word expected","ABC",Tag.extractWord(line));
-    	String line2= "%\n ";
-    	assertEquals("Word expected for line 2","%",Tag.extractWord(line2));
-    	String line3 = "%\n%>";
-		assertEquals("Word expected for line 3","%",Tag.extractWord(line3));
-    	String line4 = "%=abc%>";
-		assertEquals("Word expected for line 4","%",Tag.extractWord(line4));
-		String line5 = "OPTION";
-		assertEquals("Word expected for line 5","OPTION",Tag.extractWord(line5));
+        String line = "Abc DEF GHHI";
+        assertEquals("Word expected","ABC",Tag.extractWord(line));
+        String line2= "%\n ";
+        assertEquals("Word expected for line 2","%",Tag.extractWord(line2));
+        String line3 = "%\n%>";
+        assertEquals("Word expected for line 3","%",Tag.extractWord(line3));
+        String line4 = "%=abc%>";
+        assertEquals("Word expected for line 4","%",Tag.extractWord(line4));
+        String line5 = "OPTION";
+        assertEquals("Word expected for line 5","OPTION",Tag.extractWord(line5));
     }
 
     /**
@@ -634,10 +634,10 @@ public class TagTest extends ParserTestCase
         createParser (testHTML);
         parser.registerScanners ();
         parseAndAssertNodeCount (1);
-		assertTrue("Node should be a LinkTag", node[0] instanceof LinkTag);
-		LinkTag tag = (LinkTag)node[0];
-		String href = tag.getAttribute ("HREF");
-		assertStringEquals("Resolved Link","http://cbc.ca", href);
+        assertTrue("Node should be a LinkTag", node[0] instanceof LinkTag);
+        LinkTag tag = (LinkTag)node[0];
+        String href = tag.getAttribute ("HREF");
+        assertStringEquals("Resolved Link","http://cbc.ca", href);
     }
 
     /**
@@ -666,18 +666,18 @@ public class TagTest extends ParserTestCase
      */
     public void testParameterChange() throws ParserException
     {
-		createParser("<TABLE BORDER=0>");
-		parseAndAssertNodeCount(1);
-		// the node should be an HTMLTag
-		assertTrue("Node should be a HTMLTag",node[0] instanceof Tag);
-		Tag tag = (Tag)node[0];
-		assertEquals("Initial text should be","TABLE BORDER=0",tag.getText ());
+        createParser("<TABLE BORDER=0>");
+        parseAndAssertNodeCount(1);
+        // the node should be an HTMLTag
+        assertTrue("Node should be a HTMLTag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        assertEquals("Initial text should be","TABLE BORDER=0",tag.getText ());
 
-		Hashtable tempHash = tag.getAttributes ();
-		tempHash.put ("BORDER","1");
-		tag.setAttributes (tempHash);
+        Hashtable tempHash = tag.getAttributes ();
+        tempHash.put ("BORDER","1");
+        tag.setAttributes (tempHash);
 
         String s = tag.toHtml ();
-		assertEquals("HTML should be","<TABLE BORDER=\"1\">", s);
-    }	
+        assertEquals("HTML should be","<TABLE BORDER=\"1\">", s);
+    }   
 }

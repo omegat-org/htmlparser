@@ -37,25 +37,25 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
 public class HeadScanner extends CompositeTagScanner {
-	private static final String MATCH_NAME [] = {"HEAD"};
-	private static final String ENDERS [] = {"BODY"};
-	private static final String END_TAG_ENDERS [] = {"HTML"};
+    private static final String MATCH_NAME [] = {"HEAD"};
+    private static final String ENDERS [] = {"BODY"};
+    private static final String END_TAG_ENDERS [] = {"HTML"};
 
-	public HeadScanner() {
-		this("");
-	}
-	
-	public HeadScanner(String filter) {
-		super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS,false);
-	}
+    public HeadScanner() {
+        this("");
+    }
+    
+    public HeadScanner(String filter) {
+        super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS,false);
+    }
 
-	public String [] getID() {
-		return MATCH_NAME;
-	}
-	
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new HeadTag(tagData,compositeTagData);
-	}
+    public String [] getID() {
+        return MATCH_NAME;
+    }
+    
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
+        return new HeadTag(tagData,compositeTagData);
+    }
 }

@@ -35,25 +35,25 @@ import org.htmlparser.util.ParserException;
 
 public class InputTagScanner extends TagScanner
 {
-	public InputTagScanner()
-	{
-		super();
-	}
-	
-	public InputTagScanner(String filter)
-	{
-		super(filter);
-	}
+    public InputTagScanner()
+    {
+        super();
+    }
+    
+    public InputTagScanner(String filter)
+    {
+        super(filter);
+    }
 
-	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "INPUT";
-		return ids;
-	}
-	
-	protected Tag createTag(TagData tagData, Tag tag, String url)
-		throws ParserException {
-		return new InputTag(tagData);
-	}
+    public String [] getID() {
+        String [] ids = new String[1];
+        ids[0] = "INPUT";
+        return ids;
+    }
+    
+    protected Tag createTag(TagData tagData, Tag tag, String url)
+        throws ParserException {
+        return new InputTag(tagData);
+    }
 
 }

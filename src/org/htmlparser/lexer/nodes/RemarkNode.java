@@ -38,52 +38,52 @@ import org.htmlparser.util.NodeList;
  */
 public class RemarkNode extends AbstractNode
 {
-	public final static String REMARK_NODE_FILTER="-r";
-	
-	/** 
-	 * Constructor takes in the text string, beginning and ending posns.
-	 * @param page The page this string is on.
-	 * @param start The beginning position of the string.
-	 * @param end The ending positiong of the string.
-	 */
-	public RemarkNode (Page page, int start, int end)
-	{
-		super (page, start, end);
-	}
+    public final static String REMARK_NODE_FILTER="-r";
+    
+    /** 
+     * Constructor takes in the text string, beginning and ending posns.
+     * @param page The page this string is on.
+     * @param start The beginning position of the string.
+     * @param end The ending positiong of the string.
+     */
+    public RemarkNode (Page page, int start, int end)
+    {
+        super (page, start, end);
+    }
 
     /** 
-	 * Returns the text contents of the comment tag.
+     * Returns the text contents of the comment tag.
      * todo: this only works for the usual case.
-	 */
-	public String getText()
-	{
-		return (mPage.getText (elementBegin () + 4, elementEnd () - 3));
-	}
+     */
+    public String getText()
+    {
+        return (mPage.getText (elementBegin () + 4, elementEnd () - 3));
+    }
 
     public String toPlainTextString()
     {
-		return (getText());
-	}
-	public String toHtml() {
-		return (mPage.getText (elementBegin (), elementEnd ()));
-	}
-	/**
-	 * Print the contents of the remark tag.
-	 */
-	public String toString()
-	{
+        return (getText());
+    }
+    public String toHtml() {
+        return (mPage.getText (elementBegin (), elementEnd ()));
+    }
+    /**
+     * Print the contents of the remark tag.
+     */
+    public String toString()
+    {
         Cursor start;
         Cursor end;
         
         start = new Cursor (getPage (), elementBegin ());
         end = new Cursor (getPage (), elementEnd ());
-		return ("Rem (" + start.toString () + "," + end.toString () + "): " + getText ());
-	}
+        return ("Rem (" + start.toString () + "," + end.toString () + "): " + getText ());
+    }
 
-	public void collectInto(NodeList collectionList, String filter) {
-		if (filter==REMARK_NODE_FILTER) collectionList.add(this);
-	}
+    public void collectInto(NodeList collectionList, String filter) {
+        if (filter==REMARK_NODE_FILTER) collectionList.add(this);
+    }
 
-	public void accept(Object visitor) {
-	}
+    public void accept(Object visitor) {
+    }
 }

@@ -36,77 +36,77 @@ import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
-	public EscapeCharacterRemovingNodeTest(String name) {
-		super(name);
-	}
+    public EscapeCharacterRemovingNodeTest(String name) {
+        super(name);
+    }
 
-	private String parseToObtainDecodedResult(String STRING_TO_DECODE)
-		throws ParserException {
-		StringBuffer decodedContent = new StringBuffer();
+    private String parseToObtainDecodedResult(String STRING_TO_DECODE)
+        throws ParserException {
+        StringBuffer decodedContent = new StringBuffer();
 
-		StringNodeFactory stringNodeFactory = new StringNodeFactory();
-		stringNodeFactory.setEscapeCharacterRemoval(true);
-		createParser(STRING_TO_DECODE);
-		parser.setStringNodeFactory(stringNodeFactory); 
+        StringNodeFactory stringNodeFactory = new StringNodeFactory();
+        stringNodeFactory.setEscapeCharacterRemoval(true);
+        createParser(STRING_TO_DECODE);
+        parser.setStringNodeFactory(stringNodeFactory); 
 
-		NodeIterator nodes = parser.elements();
-		
-		while (nodes.hasMoreNodes()) 
-			decodedContent.append(nodes.nextNode().toPlainTextString());			
+        NodeIterator nodes = parser.elements();
+        
+        while (nodes.hasMoreNodes()) 
+            decodedContent.append(nodes.nextNode().toPlainTextString());            
 
-		return decodedContent.toString();
-	}
+        return decodedContent.toString();
+    }
 
-	public void testTab() throws Exception {
-		String ENCODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring Workshop\tCreated by Industrial Logic, Inc.";
-			
-		String DECODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
+    public void testTab() throws Exception {
+        String ENCODED_WORKSHOP_TITLE =
+            "The Testing & Refactoring Workshop\tCreated by Industrial Logic, Inc.";
+            
+        String DECODED_WORKSHOP_TITLE =
+            "The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
 
-		assertEquals(
-			"tab in string",
-			DECODED_WORKSHOP_TITLE,
-			parseToObtainDecodedResult(ENCODED_WORKSHOP_TITLE));
-	}
-	
-	public void testCarriageReturn() throws Exception {
-		String ENCODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring Workshop\nCreated by Industrial Logic, Inc.\n";
-			
-		String DECODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
+        assertEquals(
+            "tab in string",
+            DECODED_WORKSHOP_TITLE,
+            parseToObtainDecodedResult(ENCODED_WORKSHOP_TITLE));
+    }
+    
+    public void testCarriageReturn() throws Exception {
+        String ENCODED_WORKSHOP_TITLE =
+            "The Testing & Refactoring Workshop\nCreated by Industrial Logic, Inc.\n";
+            
+        String DECODED_WORKSHOP_TITLE =
+            "The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
 
-		assertEquals(
-			"tab in string",
-			DECODED_WORKSHOP_TITLE,
-			parseToObtainDecodedResult(ENCODED_WORKSHOP_TITLE));
-	}	
-	
-	public void testWithDecodingNodeDecorator() throws Exception {
-		String ENCODED_WORKSHOP_TITLE =
-			"The Testing &amp; Refactoring Workshop\nCreated by Industrial Logic, Inc.\n";
-			
-		String DECODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
+        assertEquals(
+            "tab in string",
+            DECODED_WORKSHOP_TITLE,
+            parseToObtainDecodedResult(ENCODED_WORKSHOP_TITLE));
+    }   
+    
+    public void testWithDecodingNodeDecorator() throws Exception {
+        String ENCODED_WORKSHOP_TITLE =
+            "The Testing &amp; Refactoring Workshop\nCreated by Industrial Logic, Inc.\n";
+            
+        String DECODED_WORKSHOP_TITLE =
+            "The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
 
-		StringBuffer decodedContent = new StringBuffer();
-		
-		StringNodeFactory stringNodeFactory = new StringNodeFactory();
-		stringNodeFactory.setNodeDecoding(true);
-		stringNodeFactory.setEscapeCharacterRemoval(true);
-		
-		createParser(ENCODED_WORKSHOP_TITLE);
-		parser.setStringNodeFactory(stringNodeFactory);
-		NodeIterator nodes = parser.elements();
-		
-		while (nodes.hasMoreNodes()) 
-			decodedContent.append(nodes.nextNode().toPlainTextString());			
+        StringBuffer decodedContent = new StringBuffer();
+        
+        StringNodeFactory stringNodeFactory = new StringNodeFactory();
+        stringNodeFactory.setNodeDecoding(true);
+        stringNodeFactory.setEscapeCharacterRemoval(true);
+        
+        createParser(ENCODED_WORKSHOP_TITLE);
+        parser.setStringNodeFactory(stringNodeFactory);
+        NodeIterator nodes = parser.elements();
+        
+        while (nodes.hasMoreNodes()) 
+            decodedContent.append(nodes.nextNode().toPlainTextString());            
 
-		assertEquals(
-			"tab in string",
-			DECODED_WORKSHOP_TITLE,
-			decodedContent.toString());
-		
-	}
+        assertEquals(
+            "tab in string",
+            DECODED_WORKSHOP_TITLE,
+            decodedContent.toString());
+        
+    }
 }

@@ -39,27 +39,27 @@ import org.htmlparser.util.ParserException;
 
 public class JspScanner extends TagScanner {
 
-	public JspScanner() {
-		super();
-	}
+    public JspScanner() {
+        super();
+    }
 
-	public JspScanner(String filter) {
-		super(filter);
-	}
+    public JspScanner(String filter) {
+        super(filter);
+    }
 
-	public String [] getID() {
-		String [] ids = new String[3];
-		ids[0] = "%";
-		ids[1] = "%=";
-		ids[2] = "%@";
-		return ids;
-	}
+    public String [] getID() {
+        String [] ids = new String[3];
+        ids[0] = "%";
+        ids[1] = "%=";
+        ids[2] = "%@";
+        return ids;
+    }
 
-	protected Tag createTag(TagData tagData, Tag tag, String url)
-		throws ParserException {
-		String tagContents = tagData.getTagContents();
-		tagData.setTagContents(tagContents.substring(1,tagContents.length()-1));
-		return new JspTag(tagData);
-	}
+    protected Tag createTag(TagData tagData, Tag tag, String url)
+        throws ParserException {
+        String tagContents = tagData.getTagContents();
+        tagData.setTagContents(tagContents.substring(1,tagContents.length()-1));
+        return new JspTag(tagData);
+    }
 
 }

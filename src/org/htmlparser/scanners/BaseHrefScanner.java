@@ -35,31 +35,31 @@ import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
 public class BaseHrefScanner extends TagScanner {
-	private LinkProcessor processor;
+    private LinkProcessor processor;
 
-	public BaseHrefScanner() {
-		super();
-	}
+    public BaseHrefScanner() {
+        super();
+    }
 
-	public BaseHrefScanner(String filter,LinkProcessor processor) {
-		super(filter);
-		this.processor = processor;
-	}
+    public BaseHrefScanner(String filter,LinkProcessor processor) {
+        super(filter);
+        this.processor = processor;
+    }
 
-	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "BASE";
-		return ids;
-	}
+    public String [] getID() {
+        String [] ids = new String[1];
+        ids[0] = "BASE";
+        return ids;
+    }
 
-	protected Tag createTag(TagData tagData, Tag tag, String url)
-		throws ParserException {
-		String baseUrl = (String)tag.getAttribute("HREF");
-		String absoluteBaseUrl="";
-		if (baseUrl != null && baseUrl.length()>0) {
-			absoluteBaseUrl = LinkProcessor.removeLastSlash(baseUrl.trim());
-			processor.setBaseUrl(absoluteBaseUrl);
-		}	
-		return new BaseHrefTag(tagData,absoluteBaseUrl);
-	}
+    protected Tag createTag(TagData tagData, Tag tag, String url)
+        throws ParserException {
+        String baseUrl = (String)tag.getAttribute("HREF");
+        String absoluteBaseUrl="";
+        if (baseUrl != null && baseUrl.length()>0) {
+            absoluteBaseUrl = LinkProcessor.removeLastSlash(baseUrl.trim());
+            processor.setBaseUrl(absoluteBaseUrl);
+        }   
+        return new BaseHrefTag(tagData,absoluteBaseUrl);
+    }
 }

@@ -37,15 +37,15 @@ import org.htmlparser.tags.data.TagData;
  */
 public class BodyTag extends CompositeTag
 {
-	public BodyTag(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData,compositeTagData);
-	}
-	
-	public String getBody() {
-		return toPlainTextString();
-	}
-	
-	public String toString() {
-		return "BODY: "+getBody();
-	}
+    public BodyTag(TagData tagData, CompositeTagData compositeTagData) {
+        super(tagData,compositeTagData);
+    }
+    
+    public String getBody() {
+        return toPlainTextString();
+    }
+    
+    public String toString() {
+        return "BODY: "+getBody();
+    }
 }

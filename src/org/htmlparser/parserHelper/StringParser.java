@@ -33,10 +33,10 @@ import org.htmlparser.NodeReader;
 import org.htmlparser.Parser;
 
 public class StringParser {
-	private final static int BEFORE_PARSE_BEGINS_STATE=0;	
-	private final static int PARSE_HAS_BEGUN_STATE=1;
-	private final static int PARSE_COMPLETED_STATE=2;	
-	private final static int PARSE_IGNORE_STATE=3;
+    private final static int BEFORE_PARSE_BEGINS_STATE=0;   
+    private final static int PARSE_HAS_BEGUN_STATE=1;
+    private final static int PARSE_COMPLETED_STATE=2;   
+    private final static int PARSE_IGNORE_STATE=3;
 
     /**
      * Returns true if the text at <code>pos</code> in <code>line</code> should be scanned as a tag.
@@ -64,79 +64,79 @@ public class StringParser {
         return (ret);
     }
 
-	/**
-	 * Locate the StringNode within the input string, by parsing from the given position
-	 * @param reader HTML reader to be provided so as to allow reading of next line
-	 * @param input Input String
-	 * @param position Position to start parsing from
-	 * @param balance_quotes If <code>true</code> enter ignoring state on
+    /**
+     * Locate the StringNode within the input string, by parsing from the given position
+     * @param reader HTML reader to be provided so as to allow reading of next line
+     * @param input Input String
+     * @param position Position to start parsing from
+     * @param balance_quotes If <code>true</code> enter ignoring state on
      * encountering quotes.
-	 */		
-	public Node find(NodeReader reader,String input,int position, boolean balance_quotes)
-	{
-		StringBuffer textBuffer = new StringBuffer();
-		int state = BEFORE_PARSE_BEGINS_STATE;
-		int textBegin=position;
-		int textEnd=position;
-		int inputLen = input.length();
-		char ch;
+     */     
+    public Node find(NodeReader reader,String input,int position, boolean balance_quotes)
+    {
+        StringBuffer textBuffer = new StringBuffer();
+        int state = BEFORE_PARSE_BEGINS_STATE;
+        int textBegin=position;
+        int textEnd=position;
+        int inputLen = input.length();
+        char ch;
         char ignore_ender = '\"';
-		for (int i=position;(i<inputLen && state!=PARSE_COMPLETED_STATE);i++)
-		{
-			ch  = input.charAt(i);
-			if (ch=='<' && state!=PARSE_IGNORE_STATE)
+        for (int i=position;(i<inputLen && state!=PARSE_COMPLETED_STATE);i++)
+        {
+            ch  = input.charAt(i);
+            if (ch=='<' && state!=PARSE_IGNORE_STATE)
             {
                 if (beginTag (input, i))
                 {
                     state = PARSE_COMPLETED_STATE;
                     textEnd=i-1;
                 }
-			}
-			if (balance_quotes && (ch=='\'' || ch=='"'))
+            }
+            if (balance_quotes && (ch=='\'' || ch=='"'))
             {
-				if (state==PARSE_IGNORE_STATE)
+                if (state==PARSE_IGNORE_STATE)
                 {
                     if (ch == ignore_ender)
                         state=PARSE_HAS_BEGUN_STATE;
                 }
-				else
+                else
                 {
                     ignore_ender = ch;
                     state = PARSE_IGNORE_STATE;
-				}
-			}					
-			if (state==BEFORE_PARSE_BEGINS_STATE)
-			{
-				state=PARSE_HAS_BEGUN_STATE;
-			}
-			if (state==PARSE_HAS_BEGUN_STATE || state==PARSE_IGNORE_STATE)
-			{
-				textBuffer.append(input.charAt(i));
-			}				
-			// Patch by Cedric Rosa
-			if (state==BEFORE_PARSE_BEGINS_STATE && i==inputLen-1)
-			   state=PARSE_HAS_BEGUN_STATE;
-			if (state==PARSE_HAS_BEGUN_STATE && i==inputLen-1)
-			{
-				do {
-					input = reader.getNextLine();
-					if (input!=null && input.length()==0)
-						textBuffer.append(Parser.getLineSeparator());
-				}
-				while (input!=null && input.length()==0);
-				
-				if (input==null) {
-					textEnd=i;
-					state =PARSE_COMPLETED_STATE;
-					
-				} else {
-					textBuffer.append(Parser.getLineSeparator());
-					inputLen = input.length();
-					i=-1;
-				}
+                }
+            }                   
+            if (state==BEFORE_PARSE_BEGINS_STATE)
+            {
+                state=PARSE_HAS_BEGUN_STATE;
+            }
+            if (state==PARSE_HAS_BEGUN_STATE || state==PARSE_IGNORE_STATE)
+            {
+                textBuffer.append(input.charAt(i));
+            }               
+            // Patch by Cedric Rosa
+            if (state==BEFORE_PARSE_BEGINS_STATE && i==inputLen-1)
+               state=PARSE_HAS_BEGUN_STATE;
+            if (state==PARSE_HAS_BEGUN_STATE && i==inputLen-1)
+            {
+                do {
+                    input = reader.getNextLine();
+                    if (input!=null && input.length()==0)
+                        textBuffer.append(Parser.getLineSeparator());
+                }
+                while (input!=null && input.length()==0);
+                
+                if (input==null) {
+                    textEnd=i;
+                    state =PARSE_COMPLETED_STATE;
+                    
+                } else {
+                    textBuffer.append(Parser.getLineSeparator());
+                    inputLen = input.length();
+                    i=-1;
+                }
 
-			}
-		}
-		return reader.getParser().getStringNodeFactory().createStringNode(textBuffer, textBegin, textEnd);
-	}
+            }
+        }
+        return reader.getParser().getStringNodeFactory().createStringNode(textBuffer, textBegin, textEnd);
+    }
 }

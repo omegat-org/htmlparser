@@ -46,47 +46,47 @@ import org.htmlparser.util.Translate;
  * </code>
  */
 public class TextExtractingVisitor extends NodeVisitor {
-	private StringBuffer textAccumulator;
-	private boolean preTagBeingProcessed;
-	
-	public TextExtractingVisitor() {
-		textAccumulator = new StringBuffer();
-		preTagBeingProcessed = false;
-	}
+    private StringBuffer textAccumulator;
+    private boolean preTagBeingProcessed;
+    
+    public TextExtractingVisitor() {
+        textAccumulator = new StringBuffer();
+        preTagBeingProcessed = false;
+    }
 
-	public String getExtractedText() {
-		return textAccumulator.toString();
-	}
+    public String getExtractedText() {
+        return textAccumulator.toString();
+    }
 
-	public void visitStringNode(StringNode stringNode) {
-		String text = stringNode.getText();
-		if (!preTagBeingProcessed) {
-			text = Translate.decode(text); 
-			text = replaceNonBreakingSpaceWithOrdinarySpace(text);
-		}
-		textAccumulator.append(text);
-	}
+    public void visitStringNode(StringNode stringNode) {
+        String text = stringNode.getText();
+        if (!preTagBeingProcessed) {
+            text = Translate.decode(text); 
+            text = replaceNonBreakingSpaceWithOrdinarySpace(text);
+        }
+        textAccumulator.append(text);
+    }
 
-	public void visitTitleTag(TitleTag titleTag) {
-		textAccumulator.append(titleTag.getTitle ());
-	}
+    public void visitTitleTag(TitleTag titleTag) {
+        textAccumulator.append(titleTag.getTitle ());
+    }
 
-	private String replaceNonBreakingSpaceWithOrdinarySpace(String text) {
-		return text.replace('\u00a0',' ');
-	}
+    private String replaceNonBreakingSpaceWithOrdinarySpace(String text) {
+        return text.replace('\u00a0',' ');
+    }
 
-	public void visitEndTag(EndTag endTag) {
-		if (isPreTag(endTag)) 
-			preTagBeingProcessed = false;
-	}
+    public void visitEndTag(EndTag endTag) {
+        if (isPreTag(endTag)) 
+            preTagBeingProcessed = false;
+    }
 
-	public void visitTag(Tag tag) {
-		if (isPreTag(tag)) 
-			preTagBeingProcessed = true;
-	}
+    public void visitTag(Tag tag) {
+        if (isPreTag(tag)) 
+            preTagBeingProcessed = true;
+    }
 
-	private boolean isPreTag(Tag tag) {
-		return tag.getTagName().equals("PRE");
-	}
+    private boolean isPreTag(Tag tag) {
+        return tag.getTagName().equals("PRE");
+    }
 
 }

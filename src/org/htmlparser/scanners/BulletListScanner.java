@@ -39,30 +39,30 @@ import org.htmlparser.util.ParserException;
 
 
 public class BulletListScanner extends CompositeTagScanner {
-	private static final String [] MATCH_STRING = { "UL", "OL" };
-	private final static String ENDERS [] = { "BODY", "HTML" };
-	private Stack ulli = new Stack();
-	
-	public BulletListScanner(Parser parser) {
-		this("",parser);
-	}
+    private static final String [] MATCH_STRING = { "UL", "OL" };
+    private final static String ENDERS [] = { "BODY", "HTML" };
+    private Stack ulli = new Stack();
+    
+    public BulletListScanner(Parser parser) {
+        this("",parser);
+    }
 
-	public BulletListScanner(String filter, Parser parser) {
-		super(filter, MATCH_STRING, ENDERS);
-		parser.addScanner(new BulletScanner("-bullet",ulli));
-	}
+    public BulletListScanner(String filter, Parser parser) {
+        super(filter, MATCH_STRING, ENDERS);
+        parser.addScanner(new BulletScanner("-bullet",ulli));
+    }
 
-	public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-		throws ParserException {
-		return new BulletList(tagData,compositeTagData);
-	}
+    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
+        throws ParserException {
+        return new BulletList(tagData,compositeTagData);
+    }
 
-	public String[] getID() {
-		return MATCH_STRING;
-	}
-	
-	public void beforeScanningStarts() {
-		ulli.push(this);
-	}
+    public String[] getID() {
+        return MATCH_STRING;
+    }
+    
+    public void beforeScanningStarts() {
+        ulli.push(this);
+    }
 
 }

@@ -35,67 +35,67 @@ import org.htmlparser.tags.data.TagData;
  * A HTMLScriptTag represents a JavaScript node
  */
 public class ScriptTag extends CompositeTag {
-	private java.lang.String language;
-	private java.lang.String type;
-	private String scriptCode;
-	/**
-	 * The HTMLScriptTag is constructed by providing the beginning posn, ending posn
-	 * and the tag contents.
-	 * @param tagData The data for this tag.
-	 * @param compositeTagData The data for this composite tag.
-	 */
-	public ScriptTag(TagData tagData,CompositeTagData compositeTagData) 
-	{
-		super(tagData,compositeTagData);
-		this.scriptCode = getChildrenHTML();
-		this.language = getAttribute("LANGUAGE"); 
-		this.type = getAttribute("TYPE");
-	}
+    private java.lang.String language;
+    private java.lang.String type;
+    private String scriptCode;
+    /**
+     * The HTMLScriptTag is constructed by providing the beginning posn, ending posn
+     * and the tag contents.
+     * @param tagData The data for this tag.
+     * @param compositeTagData The data for this composite tag.
+     */
+    public ScriptTag(TagData tagData,CompositeTagData compositeTagData) 
+    {
+        super(tagData,compositeTagData);
+        this.scriptCode = getChildrenHTML();
+        this.language = getAttribute("LANGUAGE"); 
+        this.type = getAttribute("TYPE");
+    }
 
-	public java.lang.String getLanguage() {
-		return language;
-	}
+    public java.lang.String getLanguage() {
+        return language;
+    }
 
-	public java.lang.String getScriptCode() {
-		return scriptCode;
-	}
+    public java.lang.String getScriptCode() {
+        return scriptCode;
+    }
 
-	public java.lang.String getType() {
-		return type;
-	}
-	/**
-	 * Set the language of the javascript tag
-	 * @param newLanguage java.lang.String
-	 */
-	public void setLanguage(java.lang.String newLanguage) {
-		language = newLanguage;
-	}
-	/**
-	 * Set the type of the javascript node
-	 * @param newType java.lang.String
-	 */
-	public void setType(java.lang.String newType) {
-		type = newType;
-	}
+    public java.lang.String getType() {
+        return type;
+    }
+    /**
+     * Set the language of the javascript tag
+     * @param newLanguage java.lang.String
+     */
+    public void setLanguage(java.lang.String newLanguage) {
+        language = newLanguage;
+    }
+    /**
+     * Set the type of the javascript node
+     * @param newType java.lang.String
+     */
+    public void setType(java.lang.String newType) {
+        type = newType;
+    }
 
-	/**
-	 * Print the contents of the javascript node
-	 */
-	public String toString() 
-	{
-		StringBuffer sb = new StringBuffer();
-		sb.append("Script Node : \n");
-		if (language!=null && type!=null)
-		if (language.length()!=0 || type.length()!=0)
-		{
-			sb.append("Properties -->\n");
-			if (language.length()!=0) sb.append("[Language : "+language+"]\n");
-			if (type!=null && type.length()!=0) sb.append("[Type : "+type+"]\n");
-		}
-		sb.append("\n");
-		sb.append("Code\n");
-		sb.append("****\n");
-		sb.append(getScriptCode()+"\n");
-		return sb.toString();
-	}
+    /**
+     * Print the contents of the javascript node
+     */
+    public String toString() 
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Script Node : \n");
+        if (language!=null && type!=null)
+        if (language.length()!=0 || type.length()!=0)
+        {
+            sb.append("Properties -->\n");
+            if (language.length()!=0) sb.append("[Language : "+language+"]\n");
+            if (type!=null && type.length()!=0) sb.append("[Type : "+type+"]\n");
+        }
+        sb.append("\n");
+        sb.append("Code\n");
+        sb.append("****\n");
+        sb.append(getScriptCode()+"\n");
+        return sb.toString();
+    }
 }

@@ -310,7 +310,7 @@ public class Page
         ret = DEFAULT_CHARSET;
         if (null != content)
         {
-			index = content.indexOf (CHARSET_STRING);
+            index = content.indexOf (CHARSET_STRING);
             
             if (index != -1)
             {
@@ -322,7 +322,7 @@ public class Page
                     if (index != -1)
                         content = content.substring (0, index);
 
-					//remove any double quotes from around charset string
+                    //remove any double quotes from around charset string
                     if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
                         content = content.substring (1, content.length () - 1);
 
@@ -335,14 +335,14 @@ public class Page
                     // Charset names are not case-sensitive;
                     // that is, case is always ignored when comparing charset names.
                     if (!ret.equalsIgnoreCase (content))
-					{
+                    {
                         System.out.println (
                             "detected charset \""
                             + content
                             + "\", using \""
                             + ret
                             + "\"");
-					}
+                    }
                 }
             }
         }
@@ -350,61 +350,61 @@ public class Page
         return (ret);
     }
 
-	/**
-	 * Lookup a character set name.
-	 * <em>Vacuous for JVM's without <code>java.nio.charset</code>.</em>
-	 * This uses reflection so the code will still run under prior JDK's but
-	 * in that case the default is always returned.
-	 * @param name The name to look up. One of the aliases for a character set.
-	 * @param _default The name to return if the lookup fails.
-	 */
-	public String findCharset (String name, String _default)
-	{
-		String ret;
+    /**
+     * Lookup a character set name.
+     * <em>Vacuous for JVM's without <code>java.nio.charset</code>.</em>
+     * This uses reflection so the code will still run under prior JDK's but
+     * in that case the default is always returned.
+     * @param name The name to look up. One of the aliases for a character set.
+     * @param _default The name to return if the lookup fails.
+     */
+    public String findCharset (String name, String _default)
+    {
+        String ret;
         
-		try
-		{
-			Class cls;
-			Method method;
-			Object object;
+        try
+        {
+            Class cls;
+            Method method;
+            Object object;
 
             cls = Class.forName ("java.nio.charset.Charset");
-			method = cls.getMethod ("forName", new Class[] { String.class });
-			object = method.invoke (null, new Object[] { name });
-			method = cls.getMethod ("name", new Class[] { });
-			object = method.invoke (object, new Object[] { });
-			ret = (String)object;
-		}
-		catch (ClassNotFoundException cnfe)
-		{
-			// for reflection exceptions, assume the name is correct
-			ret = name;
-		}
-		catch (NoSuchMethodException nsme)
-		{
-			// for reflection exceptions, assume the name is correct
-			ret = name;
-		}
-		catch (IllegalAccessException ia)
-		{
-			// for reflection exceptions, assume the name is correct
-			ret = name;
-		}
-		catch (InvocationTargetException ita)
-		{
-			// java.nio.charset.IllegalCharsetNameException
-			// and java.nio.charset.UnsupportedCharsetException
-			// return the default
-			ret = _default;
+            method = cls.getMethod ("forName", new Class[] { String.class });
+            object = method.invoke (null, new Object[] { name });
+            method = cls.getMethod ("name", new Class[] { });
+            object = method.invoke (object, new Object[] { });
+            ret = (String)object;
+        }
+        catch (ClassNotFoundException cnfe)
+        {
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (NoSuchMethodException nsme)
+        {
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (IllegalAccessException ia)
+        {
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (InvocationTargetException ita)
+        {
+            // java.nio.charset.IllegalCharsetNameException
+            // and java.nio.charset.UnsupportedCharsetException
+            // return the default
+            ret = _default;
             System.out.println (
                 "unable to determine cannonical charset name for "
                 + name
                 + " - using "
                 + _default);
-		}
+        }
         
-		return (ret);
-	}
+        return (ret);
+    }
 
     /**
      * Get the line number for a cursor.

@@ -32,36 +32,36 @@ import junit.framework.TestSuite;
 
 public class AllTests extends junit.framework.TestCase 
 {
-	public AllTests(String name) {
-		super(name);
-	}
+    public AllTests(String name) {
+        super(name);
+    }
 
-	public static TestSuite suite() {
-		TestSuite suite = new TestSuite("Tag Tests");
-		suite.addTestSuite(JspTagTest.class);
-		suite.addTestSuite(ScriptTagTest.class);
-		suite.addTestSuite(ImageTagTest.class);
-		suite.addTestSuite(LinkTagTest.class);		
-		suite.addTestSuite(TagTest.class);
-		suite.addTestSuite(TitleTagTest.class);
-		suite.addTestSuite(DoctypeTagTest.class);
-		suite.addTestSuite(EndTagTest.class);
-		suite.addTestSuite(MetaTagTest.class);
-		suite.addTestSuite(StyleTagTest.class);
-		suite.addTestSuite(AppletTagTest.class);
-		suite.addTestSuite(FrameTagTest.class);
-		suite.addTestSuite(FrameSetTagTest.class);	
-		suite.addTestSuite(InputTagTest.class);
-		suite.addTestSuite(OptionTagTest.class);
-		suite.addTestSuite(SelectTagTest.class);
-		suite.addTestSuite(TextareaTagTest.class);
-		suite.addTestSuite(FormTagTest.class);
-		suite.addTestSuite(BaseHrefTagTest.class);
-		suite.addTestSuite(ObjectCollectionTest.class);
-		suite.addTestSuite(BodyTagTest.class);
-		suite.addTestSuite(CompositeTagTest.class);
-		return suite; 
-	}
+    public static TestSuite suite() {
+        TestSuite suite = new TestSuite("Tag Tests");
+        suite.addTestSuite(JspTagTest.class);
+        suite.addTestSuite(ScriptTagTest.class);
+        suite.addTestSuite(ImageTagTest.class);
+        suite.addTestSuite(LinkTagTest.class);      
+        suite.addTestSuite(TagTest.class);
+        suite.addTestSuite(TitleTagTest.class);
+        suite.addTestSuite(DoctypeTagTest.class);
+        suite.addTestSuite(EndTagTest.class);
+        suite.addTestSuite(MetaTagTest.class);
+        suite.addTestSuite(StyleTagTest.class);
+        suite.addTestSuite(AppletTagTest.class);
+        suite.addTestSuite(FrameTagTest.class);
+        suite.addTestSuite(FrameSetTagTest.class);  
+        suite.addTestSuite(InputTagTest.class);
+        suite.addTestSuite(OptionTagTest.class);
+        suite.addTestSuite(SelectTagTest.class);
+        suite.addTestSuite(TextareaTagTest.class);
+        suite.addTestSuite(FormTagTest.class);
+        suite.addTestSuite(BaseHrefTagTest.class);
+        suite.addTestSuite(ObjectCollectionTest.class);
+        suite.addTestSuite(BodyTagTest.class);
+        suite.addTestSuite(CompositeTagTest.class);
+        return suite; 
+    }
 
     /**
      * Mainline for all suites of tests.

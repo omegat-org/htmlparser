@@ -47,24 +47,24 @@ import org.htmlparser.util.ParserException;
  */
 public class TagNode extends AbstractNode
 {
-	public static final String TYPE = "TAG";
-	/**
-	 * Constant used as value for the value of the tag name
-	 * in parseParameters  (Kaarle Kaila 3.8.2001)
-	 */
-	public final static String TAGNAME = "$<TAGNAME>$";
-	public final static String EMPTYTAG = "$<EMPTYTAG>$";
+    public static final String TYPE = "TAG";
+    /**
+     * Constant used as value for the value of the tag name
+     * in parseParameters  (Kaarle Kaila 3.8.2001)
+     */
+    public final static String TAGNAME = "$<TAGNAME>$";
+    public final static String EMPTYTAG = "$<EMPTYTAG>$";
     public final static String NULLVALUE = "$<NULL>$";
     public final static String NOTHING = "$<NOTHING>$";
-	private final static String EMPTY_STRING="";
-	
-	private boolean emptyXmlTag = false;
+    private final static String EMPTY_STRING="";
+    
+    private boolean emptyXmlTag = false;
 
     /**
-	 * The tag attributes.
+     * The tag attributes.
      * Objects of type Attribute.
-	 */
-	protected Vector mAttributes;
+     */
+    protected Vector mAttributes;
 
     /**
      * Set of tags that breaks the flow.
@@ -105,68 +105,68 @@ public class TagNode extends AbstractNode
         breakTags.put ("UL", Boolean.TRUE);
     }
 
-	/**
-	 * Create a tag with the location and attributes provided
-	 * @param page The page this tag was read from.
+    /**
+     * Create a tag with the location and attributes provided
+     * @param page The page this tag was read from.
      * @param start The starting offset of this node within the page.
      * @param end The ending offset of this node within the page.
      * @param attributes The list of attributes that were parsed in this tag.
      * @see Attribute
-	 */
-	public TagNode (Page page, int start, int end, Vector attributes)
-	{
-		super (page, start, end);
+     */
+    public TagNode (Page page, int start, int end, Vector attributes)
+    {
+        super (page, start, end);
         mAttributes = attributes;
-	}
+    }
 
-	/**
-	 * In case the tag is parsed at the scan method this will return value of a
-	 * parameter not implemented yet
-	 * @param name of parameter
-	 */
-	public String getAttribute (String name)
+    /**
+     * In case the tag is parsed at the scan method this will return value of a
+     * parameter not implemented yet
+     * @param name of parameter
+     */
+    public String getAttribute (String name)
     {
-	    return ((String)getAttributes().get(name.toUpperCase()));
-	}
+        return ((String)getAttributes().get(name.toUpperCase()));
+    }
 
-	/**
-	 * Set attribute with given key, value pair.
-	 * @param key
-	 * @param value
-	 */
-	public void setAttribute(String key, String value)
+    /**
+     * Set attribute with given key, value pair.
+     * @param key
+     * @param value
+     */
+    public void setAttribute(String key, String value)
     {
-		getAttributes ().put(key,value);
-	}
+        getAttributes ().put(key,value);
+    }
 
-	/**
-	 * In case the tag is parsed at the scan method this will return value of a
-	 * parameter not implemented yet
-	 * @param name of parameter
-	 * @deprecated use getAttribute instead
-	 */
-	public String getParameter(String name)
+    /**
+     * In case the tag is parsed at the scan method this will return value of a
+     * parameter not implemented yet
+     * @param name of parameter
+     * @deprecated use getAttribute instead
+     */
+    public String getParameter(String name)
     {
-		return (String)getAttributes().get (name.toUpperCase());
-	}
-	
-	/**
-	 * Gets the attributes in the tag.
+        return (String)getAttributes().get (name.toUpperCase());
+    }
+    
+    /**
+     * Gets the attributes in the tag.
      * NOTE: Values of the extended hashtable are two element arrays of String,
      * with the first element being the original name (not uppercased), 
      * and the second element being the value.
-	 * @return Returns a special hashtable of attributes in two element String arrays.
-	 */
-	public Vector getAttributesEx()
+     * @return Returns a special hashtable of attributes in two element String arrays.
+     */
+    public Vector getAttributesEx()
     {
-		return mAttributes;
-	}
+        return mAttributes;
+    }
 
-	/**
-	 * Gets the attributes in the tag.
-	 * @return Returns a Hashtable of attributes
-	 */
-	public Hashtable getAttributes()
+    /**
+     * Gets the attributes in the tag.
+     * @return Returns a Hashtable of attributes
+     */
+    public Hashtable getAttributes()
     {
         Vector attributes;
         Attribute attribute;
@@ -216,25 +216,25 @@ public class TagNode extends AbstractNode
             ret.put (TAGNAME, "");
 
         return (ret);
-	}
+    }
 
     public String getTagName(){
-	    return getParameter(TAGNAME);
-	}
+        return getParameter(TAGNAME);
+    }
 
     /**
-	 * Return the text contained in this tag
-	 */
-	public String getText()
+     * Return the text contained in this tag
+     */
+    public String getText()
     {
-		return (mPage.getText (elementBegin () + 1, elementEnd () - 1));
-	}
+        return (mPage.getText (elementBegin () + 1, elementEnd () - 1));
+    }
 
-	/**
-	 * Sets the attributes.
-	 * @param attributes The attribute collection to set.
-	 */
-	public void setAttributes (Hashtable attributes)
+    /**
+     * Sets the attributes.
+     * @param attributes The attribute collection to set.
+     */
+    public void setAttributes (Hashtable attributes)
     {
         Vector att;
         String key;
@@ -260,54 +260,54 @@ public class TagNode extends AbstractNode
             else
                 quote = (char)0;
             attribute = new Attribute (key, value, quote);
-			att.addElement (attribute);
+            att.addElement (attribute);
         }
-		this.mAttributes = att;
-	}
+        this.mAttributes = att;
+    }
 
-	/**
-	 * Sets the attributes.
+    /**
+     * Sets the attributes.
      * NOTE: Values of the extended hashtable are two element arrays of String,
      * with the first element being the original name (not uppercased), 
      * and the second element being the value.
-	 * @param attribs The attribute collection to set.
-	 */
+     * @param attribs The attribute collection to set.
+     */
     public void setAttributesEx (Vector attribs)
     {
         mAttributes = attribs;
     }
 
-	/**
-	 * Sets the nodeBegin.
-	 * @param tagBegin The nodeBegin to set
-	 */
-	public void setTagBegin(int tagBegin) {
-		this.nodeBegin = tagBegin;
-	}
+    /**
+     * Sets the nodeBegin.
+     * @param tagBegin The nodeBegin to set
+     */
+    public void setTagBegin(int tagBegin) {
+        this.nodeBegin = tagBegin;
+    }
 
-	/**
-	 * Gets the nodeBegin.
-	 * @return The nodeBegin value.
-	 */
-	public int getTagBegin() {
-		return (nodeBegin);
-	}
-	
-	/**
-	 * Sets the nodeEnd.
-	 * @param tagEnd The nodeEnd to set
-	 */
-	public void setTagEnd(int tagEnd) {
-		this.nodeEnd = tagEnd;
-	}
-	
-	/**
-	 * Gets the nodeEnd.
-	 * @return The nodeEnd value.
-	 */
-	public int getTagEnd() {
-		return (nodeEnd);
-	}
+    /**
+     * Gets the nodeBegin.
+     * @return The nodeBegin value.
+     */
+    public int getTagBegin() {
+        return (nodeBegin);
+    }
+    
+    /**
+     * Sets the nodeEnd.
+     * @param tagEnd The nodeEnd to set
+     */
+    public void setTagEnd(int tagEnd) {
+        this.nodeEnd = tagEnd;
+    }
+    
+    /**
+     * Gets the nodeEnd.
+     * @return The nodeEnd value.
+     */
+    public int getTagEnd() {
+        return (nodeEnd);
+    }
 
     public void setText (String text)
     {
@@ -323,22 +323,22 @@ public class TagNode extends AbstractNode
     }
 
     public String toPlainTextString() {
-		return EMPTY_STRING;
-	}
+        return EMPTY_STRING;
+    }
 
-	/**
-	 * A call to a tag's toHTML() method will render it in HTML.
-	 * @see org.htmlparser.Node#toHtml()
-	 */
-	public String toHtml()
+    /**
+     * A call to a tag's toHTML() method will render it in HTML.
+     * @see org.htmlparser.Node#toHtml()
+     */
+    public String toHtml()
     {
-		StringBuffer ret;
+        StringBuffer ret;
         Vector attributes;
         Attribute attribute;
 
         ret = new StringBuffer ();
         attributes = getAttributesEx ();
-		ret.append ("<");
+        ret.append ("<");
         if (0 < attributes.size ())
         {
             // special handling for the node name
@@ -351,18 +351,18 @@ public class TagNode extends AbstractNode
                 attribute.toString (ret);
             }
         }
-		if (isEmptyXmlTag ())
+        if (isEmptyXmlTag ())
             ret.append ("/");
-		ret.append (">");
+        ret.append (">");
 
-		return (ret.toString ());
+        return (ret.toString ());
     }
 
-	/**
-	 * Print the contents of the tag
-	 */
-	public String toString()
-	{
+    /**
+     * Print the contents of the tag
+     */
+    public String toString()
+    {
         String tag;
         Cursor start;
         Cursor end;
@@ -374,8 +374,8 @@ public class TagNode extends AbstractNode
             tag = "Tag";
         start = new Cursor (getPage (), elementBegin ());
         end = new Cursor (getPage (), elementEnd ());
-		return (tag + " (" + start.toString () + "," + end.toString () + "): " + getText ());
-	}
+        return (tag + " (" + start.toString () + "," + end.toString () + "): " + getText ());
+    }
 
     /**
      * Determines if the given tag breaks the flow of text.
@@ -394,53 +394,53 @@ public class TagNode extends AbstractNode
      * in the tag classes.
      * @see org.htmlparser.Node#collectInto(NodeList, String)
      */
-	public void collectInto(NodeList collectionList, String filter)
+    public void collectInto(NodeList collectionList, String filter)
     {
-	}
+    }
 
-	/**
-	 * Returns table of attributes in the tag
-	 * @return Hashtable
-	 * @deprecated This method is deprecated. Use getAttributes() instead.
-	 */
-	public Hashtable getParsed() {
-		return getAttributes ();
-	}
+    /**
+     * Returns table of attributes in the tag
+     * @return Hashtable
+     * @deprecated This method is deprecated. Use getAttributes() instead.
+     */
+    public Hashtable getParsed() {
+        return getAttributes ();
+    }
 
-	/**
-	 * Sometimes, a scanner may need to request a re-evaluation of the
-	 * attributes in a tag. This may happen when there is some correction
-	 * activity. An example of its usage can be found in ImageTag.
-	 * <br>
-	 * <B>Note:<B> This is an intensive task, hence call only when
-	 * really necessary
-	 * @return Hashtable
-	 */
-	public Hashtable redoParseAttributes()
+    /**
+     * Sometimes, a scanner may need to request a re-evaluation of the
+     * attributes in a tag. This may happen when there is some correction
+     * activity. An example of its usage can be found in ImageTag.
+     * <br>
+     * <B>Note:<B> This is an intensive task, hence call only when
+     * really necessary
+     * @return Hashtable
+     */
+    public Hashtable redoParseAttributes()
     {
         mAttributes = null;
         getAttributesEx ();
-		return (getAttributes ());
-	}
+        return (getAttributes ());
+    }
 
-	public void accept(Object visitor) {
-	}
+    public void accept(Object visitor) {
+    }
 
-	public String getType() {
-		return TYPE;
-	}
+    public String getType() {
+        return TYPE;
+    }
 
-	/**
-	 * Is this an empty xml tag of the form<br>
-	 * &lt;tag/&gt; 
-	 * @return boolean
-	 */
-	public boolean isEmptyXmlTag() {
-		return emptyXmlTag;
-	}
+    /**
+     * Is this an empty xml tag of the form<br>
+     * &lt;tag/&gt; 
+     * @return boolean
+     */
+    public boolean isEmptyXmlTag() {
+        return emptyXmlTag;
+    }
 
-	public void setEmptyXmlTag(boolean emptyXmlTag) {
-		this.emptyXmlTag = emptyXmlTag;
-	}
+    public void setEmptyXmlTag(boolean emptyXmlTag) {
+        this.emptyXmlTag = emptyXmlTag;
+    }
 
 }

@@ -36,51 +36,51 @@ import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class NonBreakingSpaceConvertingNodeTest extends ParserTestCase {
-	public NonBreakingSpaceConvertingNodeTest(String name) {
-		super(name);
-	}
+    public NonBreakingSpaceConvertingNodeTest(String name) {
+        super(name);
+    }
 
-	private String parseToObtainDecodedResult(String STRING_TO_DECODE)
-		throws ParserException {
-		StringBuffer decodedContent = new StringBuffer();
-		
-		StringNodeFactory stringNodeFactory = new StringNodeFactory();
-		stringNodeFactory.setNonBreakSpaceConversion(true);
-		createParser(STRING_TO_DECODE);
-		parser.setStringNodeFactory(stringNodeFactory); 
+    private String parseToObtainDecodedResult(String STRING_TO_DECODE)
+        throws ParserException {
+        StringBuffer decodedContent = new StringBuffer();
+        
+        StringNodeFactory stringNodeFactory = new StringNodeFactory();
+        stringNodeFactory.setNonBreakSpaceConversion(true);
+        createParser(STRING_TO_DECODE);
+        parser.setStringNodeFactory(stringNodeFactory); 
 
-		NodeIterator nodes = parser.elements();
-		
-		while (nodes.hasMoreNodes()) 
-			decodedContent.append(nodes.nextNode().toPlainTextString());			
+        NodeIterator nodes = parser.elements();
+        
+        while (nodes.hasMoreNodes()) 
+            decodedContent.append(nodes.nextNode().toPlainTextString());            
 
-		return decodedContent.toString();
-	}
+        return decodedContent.toString();
+    }
 
-	public void testOneNonBreakingSpace() throws Exception {
-		String ENCODED_WITH_NON_BREAKING_SPACE = 
-			"Here is string with \u00a0 inside of it.";
-			
-		String DECODED_WITH_NON_BREAKING_SPACE =
-			"Here is string with   inside of it.";
-		
-		assertEquals (
-			"\u00a0 was converted to a space correctly",
-			DECODED_WITH_NON_BREAKING_SPACE,
-			parseToObtainDecodedResult(ENCODED_WITH_NON_BREAKING_SPACE));
-	}
-	
-	public void testMultipleNonBreakingSpace() throws Exception {
-		String ENCODED_WITH_NON_BREAKING_SPACE = 
-			"\u00a0Here is string with \u00a0 inside of it\u00a0.";
-			
-		String DECODED_WITH_NON_BREAKING_SPACE =
-			" Here is string with   inside of it .";
-		
-		assertEquals (
-			"\u00a0 was converted to a space correctly",
-			DECODED_WITH_NON_BREAKING_SPACE,
-			parseToObtainDecodedResult(ENCODED_WITH_NON_BREAKING_SPACE));
-	}
-	
+    public void testOneNonBreakingSpace() throws Exception {
+        String ENCODED_WITH_NON_BREAKING_SPACE = 
+            "Here is string with \u00a0 inside of it.";
+            
+        String DECODED_WITH_NON_BREAKING_SPACE =
+            "Here is string with   inside of it.";
+        
+        assertEquals (
+            "\u00a0 was converted to a space correctly",
+            DECODED_WITH_NON_BREAKING_SPACE,
+            parseToObtainDecodedResult(ENCODED_WITH_NON_BREAKING_SPACE));
+    }
+    
+    public void testMultipleNonBreakingSpace() throws Exception {
+        String ENCODED_WITH_NON_BREAKING_SPACE = 
+            "\u00a0Here is string with \u00a0 inside of it\u00a0.";
+            
+        String DECODED_WITH_NON_BREAKING_SPACE =
+            " Here is string with   inside of it .";
+        
+        assertEquals (
+            "\u00a0 was converted to a space correctly",
+            DECODED_WITH_NON_BREAKING_SPACE,
+            parseToObtainDecodedResult(ENCODED_WITH_NON_BREAKING_SPACE));
+    }
+    
 }

@@ -36,42 +36,42 @@ import org.htmlparser.util.ParserUtils;
 
 public class SelectTag extends CompositeTag
 {
-	private OptionTag[] optionTags=null;
-	private NodeList optionTagList;
-	
-	public SelectTag(
-		TagData tagData, 
-		CompositeTagData compositeTagData,
-		NodeList optionTagList)
-	{
-		super(tagData,compositeTagData);
-		this.optionTagList = optionTagList;
-	}
-	
-	public OptionTag [] getOptionTags()
-	{
-		if (optionTags==null) {
-			optionTags = new OptionTag[optionTagList.size()];
-			for (int i=0;i<optionTagList.size();i++) {
-				optionTags[i] = (OptionTag)optionTagList.elementAt(i);	
-			}
-		}
-		return optionTags;
-	}
-	
-	public String toString() 
-	{
-		StringBuffer lString;
+    private OptionTag[] optionTags=null;
+    private NodeList optionTagList;
+    
+    public SelectTag(
+        TagData tagData, 
+        CompositeTagData compositeTagData,
+        NodeList optionTagList)
+    {
+        super(tagData,compositeTagData);
+        this.optionTagList = optionTagList;
+    }
+    
+    public OptionTag [] getOptionTags()
+    {
+        if (optionTags==null) {
+            optionTags = new OptionTag[optionTagList.size()];
+            for (int i=0;i<optionTagList.size();i++) {
+                optionTags[i] = (OptionTag)optionTagList.elementAt(i);  
+            }
+        }
+        return optionTags;
+    }
+    
+    public String toString() 
+    {
+        StringBuffer lString;
         NodeList children;
         
         lString = new StringBuffer(ParserUtils.toString(this));
         children = getChildren ();
-		for(int i=0;i<children.size(); i++)
-		{
-			OptionTag optionTag = (OptionTag)children.elementAt(i);
-			lString.append(optionTag.toString()).append("\n");
-		}
-		
-		return lString.toString();
-	}
+        for(int i=0;i<children.size(); i++)
+        {
+            OptionTag optionTag = (OptionTag)children.elementAt(i);
+            lString.append(optionTag.toString()).append("\n");
+        }
+        
+        return lString.toString();
+    }
 }

@@ -34,24 +34,24 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
 public class DivScanner extends CompositeTagScanner {
-	private static String MATCH_STRING [] = {"DIV"};
-	
-	public DivScanner() {
-		this("");
-	}
+    private static String MATCH_STRING [] = {"DIV"};
+    
+    public DivScanner() {
+        this("");
+    }
 
-	public DivScanner(String filter) {
-		super(filter, MATCH_STRING);
-	}
+    public DivScanner(String filter) {
+        super(filter, MATCH_STRING);
+    }
 
-	public Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new Div(tagData,compositeTagData);
-	}
+    public Tag createTag(
+        TagData tagData,
+        CompositeTagData compositeTagData) {
+        return new Div(tagData,compositeTagData);
+    }
 
-	public String[] getID() {
-		return MATCH_STRING;
-	}
+    public String[] getID() {
+        return MATCH_STRING;
+    }
 
 }

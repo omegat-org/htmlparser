@@ -34,11 +34,11 @@ import org.htmlparser.Node;
 import org.htmlparser.util.Translate;
 
 public class DecodingNode extends AbstractNodeDecorator {
-	public DecodingNode(Node node) {
-		super(node);
-	}
+    public DecodingNode(Node node) {
+        super(node);
+    }
 
-	public String toPlainTextString() {
-		return Translate.decode(delegate.toPlainTextString());
-	}
+    public String toPlainTextString() {
+        return Translate.decode(delegate.toPlainTextString());
+    }
 }

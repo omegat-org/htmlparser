@@ -38,12 +38,12 @@ public class AllTests extends junit.framework.TestCase
 
       public static TestSuite suite() {
         TestSuite suite = new TestSuite("Parser Helper Tests");
-		// To-do: Test below should be enabled after it passes
+        // To-do: Test below should be enabled after it passes
 //      suite.addTestSuite(AttributeParserTest.class);
         suite.addTestSuite(CompositeTagScannerHelperTest.class);
         suite.addTestSuite(RemarkNodeParserTest.class);
         suite.addTestSuite(StringParserTest.class);
-		// To-do: Test below should be enabled after it passes
+        // To-do: Test below should be enabled after it passes
 //      suite.addTestSuite(TagParserTest.class);
 
         return suite;

@@ -39,34 +39,34 @@ import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class BodyTagTest extends ParserTestCase {
-	private BodyTag bodyTag;
+    private BodyTag bodyTag;
 
-	public BodyTagTest(String name) {
-		super(name);
-	}
-	
-	protected void setUp() throws Exception {
-		super.setUp();
-		createParser("<html><head><title>body tag test</title></head><body>Yahoo!</body></html>");
-		parser.registerScanners();
-		parser.addScanner(new BodyScanner("-b"));
-	 	parseAndAssertNodeCount(6);
-	 	assertTrue(node[4] instanceof BodyTag);
-		bodyTag = (BodyTag) node[4];
-	}
-	
-	public void testToPlainTextString() throws ParserException {
-		// check the label node
-		assertEquals("Body","Yahoo!",bodyTag.toPlainTextString());				
-	}
+    public BodyTagTest(String name) {
+        super(name);
+    }
+    
+    protected void setUp() throws Exception {
+        super.setUp();
+        createParser("<html><head><title>body tag test</title></head><body>Yahoo!</body></html>");
+        parser.registerScanners();
+        parser.addScanner(new BodyScanner("-b"));
+        parseAndAssertNodeCount(6);
+        assertTrue(node[4] instanceof BodyTag);
+        bodyTag = (BodyTag) node[4];
+    }
+    
+    public void testToPlainTextString() throws ParserException {
+        // check the label node
+        assertEquals("Body","Yahoo!",bodyTag.toPlainTextString());              
+    }
 
-	public void testToHTML() throws ParserException {
-		assertStringEquals("Raw String","<BODY>Yahoo!</BODY>",bodyTag.toHtml());				
-	}
+    public void testToHTML() throws ParserException {
+        assertStringEquals("Raw String","<BODY>Yahoo!</BODY>",bodyTag.toHtml());                
+    }
 
-	public void testToString() throws ParserException  {
-		assertEquals("Body","BODY: Yahoo!",bodyTag.toString());		
-	}
+    public void testToString() throws ParserException  {
+        assertEquals("Body","BODY: Yahoo!",bodyTag.toString());     
+    }
     
     public void testAttributes ()
     {
@@ -100,14 +100,14 @@ public class BodyTagTest extends ParserTestCase {
             fail ("exception thrown " + pe.getMessage ());
         }
     }
-	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(BodyTagTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {BodyTagTest.class.getName()});
-	}
+    
+    public static TestSuite suite() 
+    {
+        return new TestSuite(BodyTagTest.class);
+    }
+    
+    public static void main(String[] args) 
+    {
+        new junit.awtui.TestRunner().start(new String[] {BodyTagTest.class.getName()});
+    }
 }

@@ -33,24 +33,24 @@ import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 
 public class TableRow extends CompositeTag {
-	private NodeList columnsList;
-	public TableRow(
-		TagData tagData,
-		CompositeTagData compositeTagData,
-		NodeList columnsList) {
-		super(tagData, compositeTagData);
-		this.columnsList = columnsList;
-	}
-	
-	public int getColumnCount() {
-		return columnsList.size();
-	}
+    private NodeList columnsList;
+    public TableRow(
+        TagData tagData,
+        CompositeTagData compositeTagData,
+        NodeList columnsList) {
+        super(tagData, compositeTagData);
+        this.columnsList = columnsList;
+    }
+    
+    public int getColumnCount() {
+        return columnsList.size();
+    }
 
-	public TableColumn [] getColumns() {
-		TableColumn [] columns = new TableColumn[columnsList.size()];
-		for (int i=0;i<columnsList.size();i++) {
-			columns[i] = (TableColumn)columnsList.elementAt(i);
-		}
-		return columns;
-	}
+    public TableColumn [] getColumns() {
+        TableColumn [] columns = new TableColumn[columnsList.size()];
+        for (int i=0;i<columnsList.size();i++) {
+            columns[i] = (TableColumn)columnsList.elementAt(i);
+        }
+        return columns;
+    }
 }
