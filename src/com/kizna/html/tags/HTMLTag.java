@@ -126,7 +126,7 @@ public class HTMLTag extends HTMLNode
 		}
 	}
 	private static int checkIllegalState(int state, int i, char ch, HTMLTag tag) {
-		if (ch=='/' && i>0 && tag.getTagLine().charAt(i-1)=='<')
+		if (ch=='/' && i>0 && tag.getTagLine().charAt(i-1)=='<' && state!=TAG_IGNORE_DATA_STATE)
 		{
 			state = TAG_ILLEGAL_STATE;
 		}

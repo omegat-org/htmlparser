@@ -116,7 +116,28 @@ public class HTMLMetaTagScannerTest extends TestCase {
 
 		assertEquals("This Scanner",scanner,metaTag.getThisScanner());
 	}
-
+	public void testScanTagsInMeta() {
+		String testHTML = new String(
+		"<META NAME=\"Description\" CONTENT=\"Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles\">"
+		);
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		HTMLMetaTagScanner scanner = new HTMLMetaTagScanner("-t");
+		parser.addScanner(scanner);
+		
+		int i = 0;
+		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		{
+			node[i++] = (HTMLNode)e.nextElement();
+		}
+		assertEquals("There should be 1 node identified",1,i);	
+		assertTrue("Node should be meta tag",node[0] instanceof HTMLMetaTag);
+		HTMLMetaTag metaTag = (HTMLMetaTag)node[0];
+		assertEquals("Meta Tag Name","Description",metaTag.getMetaTagName());
+		assertEquals("Content","Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles",metaTag.getMetaTagContents());
+	}
 	public static void main(String[] args) {
 		new junit.awtui.TestRunner().start(new String[] {"com.kizna.htmlTests.scannersTests.HTMLMetaTagScannerTest"});
 	}
