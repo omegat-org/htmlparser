@@ -72,10 +72,15 @@ public class CompositeTagScannerHelper {
 	private void doChildAndEndTagCheckOn(Node currentNode) {
 		if (currentNode instanceof EndTag) {
 			endTag = (Tag)currentNode;
-			endTagFound = true;
+			if (isExpectedEndTagFound())
+				endTagFound = true;
 		}
 		else 
 			nodeList.add(currentNode);	
+	}
+
+	private boolean isExpectedEndTagFound() {
+		return endTag.getTagName().equals(tag.getTagName());
 	}
 
 	private void doEmptyXmlTagCheckOn(Node currentNode) {

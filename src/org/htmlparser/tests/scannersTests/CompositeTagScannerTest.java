@@ -181,6 +181,57 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertType("second child",CustomTag.class,node);
 	}	
 	
+	public void testCompositeTagWithNestedTag() throws ParserException {
+		createParser(
+			"<Custom>" +
+				"<Another>" +					"Hello" +				"</Another>" +
+				"<Custom/>" +
+			"</Custom>" +
+			"<Custom/>"
+		);
+		parser.addScanner(new CustomScanner());
+		parser.addScanner(new AnotherScanner());
+		parseAndAssertNodeCount(2);
+		assertType("first node",CustomTag.class,node[0]);
+		assertType("second node",CustomTag.class,node[1]);
+		CustomTag customTag = (CustomTag)node[0];
+		Node node = customTag.childAt(0);
+		assertType("first child",AnotherTag.class,node);
+		AnotherTag anotherTag = (AnotherTag)node;
+		assertEquals("another tag children count",1,anotherTag.getChildCount());
+		node = anotherTag.childAt(0);
+		assertType("nested child",StringNode.class,node);
+		StringNode text = (StringNode)node;
+		assertEquals("text","Hello",text.toPlainTextString());
+	}
+
+	public void testCompositeTagWithTwoNestedTags() throws ParserException {
+		createParser(
+			"<Custom>" +
+				"<Another>" +
+					"Hello" +
+				"</Another>" +				"<unknown>" +					"World" +				"</unknown>" +
+				"<Custom/>" +
+			"</Custom>" +
+			"<Custom/>"
+		);
+		parser.addScanner(new CustomScanner());
+		parser.addScanner(new AnotherScanner());
+		parseAndAssertNodeCount(2);
+		assertType("first node",CustomTag.class,node[0]);
+		assertType("second node",CustomTag.class,node[1]);
+		CustomTag customTag = (CustomTag)node[0];
+		assertEquals("first custom tag children count",4,customTag.getChildCount());
+		Node node = customTag.childAt(0);
+		assertType("first child",AnotherTag.class,node);
+		AnotherTag anotherTag = (AnotherTag)node;
+		assertEquals("another tag children count",1,anotherTag.getChildCount());
+		node = anotherTag.childAt(0);
+		assertType("nested child",StringNode.class,node);
+		StringNode text = (StringNode)node;
+		assertEquals("text","Hello",text.toPlainTextString());
+	}
+	
 	public static class CustomScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "CUSTOM" };
 		public CustomScanner() { super("", MATCH_NAME); }
