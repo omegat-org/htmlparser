@@ -788,5 +788,28 @@ public class LexerTests extends ParserTestCase
             assertStringEquals ("bad html", html, node.toHtml());
         assertNull ("too many nodes", lexer.nextNode ());
     }
+    
+    /**
+     * See bug #899413 bug in javascript end detection.
+     */
+    public void testEscapedQuote () throws ParserException
+    {
+        String string;
+        String html;
+        Lexer lexer;
+        Node node;
+        
+        string = "\na='\\'';\n";
+        html = string + "</script>";
+        lexer = new Lexer (html);
+        node = lexer.nextNode (true);
+        if (node == null)
+            fail ("too few nodes");
+        else
+            assertStringEquals ("bad string", string, node.toHtml());
+        assertNotNull ("too few nodes", lexer.nextNode (true));
+        assertNull ("too many nodes", lexer.nextNode (true));
+    }
+
 }
 

@@ -400,6 +400,15 @@ public class Lexer
             }
             else if (quotesmart && (0 == quote) && (('\'' == ch) || ('"' == ch)))
                 quote = ch; // enter quoted state
+            // patch contributed by Gernot Fricke to handle escaped closing quote
+            else if (quotesmart && (0 != quote) && ('\\' == ch))
+            {
+                ch = mPage.getCharacter (cursor); //try to consume escaped character
+                if (  (ch != '\\') // escaped backslash
+                    && (ch != quote)) // escaped quote character 
+                       // ( reflects ["] or [']  whichever opened the quotation)
+                    cursor.retreat(); // unconsume char if character was not an escapable char.
+            }
             else if (quotesmart && (ch == quote))
                 quote = 0; // exit quoted state
             else if ((0 == quote) && ('<' == ch))
