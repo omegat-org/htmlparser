@@ -55,8 +55,9 @@ import org.htmlparser.util.ParserException;
  * given string contains an image tag. Extraction is done by the scan method thereafter
  * by the user of this class.
  */
-public class FormScanner extends TagScanner
+public class FormScanner extends CompositeTagScanner
 {
+	private static final String [] MATCH_ID = { "FORM" };
 	public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";	
 	private Vector textAreaVector;
 	private boolean linkScannerAlreadyOpen=false;
@@ -64,14 +65,14 @@ public class FormScanner extends TagScanner
 	 * HTMLFormScanner constructor comment.
 	 */
 	public FormScanner() {
-		super();
+		super(MATCH_ID);
 	}
 	/**
 	 * Overriding the constructor to accept the filter
 	 */
 	public FormScanner(String filter)
 	{
-		super(filter);
+		super(filter,MATCH_ID);
 	}
   /**
    * Extract the location of the image, given the string to be parsed, and the url
@@ -231,9 +232,7 @@ public class FormScanner extends TagScanner
 	 * @see org.htmlparser.scanners.TagScanner#getID()
 	 */
 	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "FORM";
-		return ids;
+		return MATCH_ID;
 	}
 
 	public boolean evaluate(String s, TagScanner previousOpenScanner) {
@@ -254,6 +253,11 @@ public class FormScanner extends TagScanner
 		else 	
 			linkScannerAlreadyOpen = false;
 		return super.evaluate(s, previousOpenScanner);
+	}
+
+	protected Tag createTag(TagData tagData, CompositeTagData compositeTagData)
+		throws ParserException {
+		return null;
 	}
 
 }
