@@ -1,3 +1,11 @@
+Integration Build 1.2 - 20020616
+--------------------------------
+[1] Fixed multiple line bug (reported by Gordon Deudney).
+HTMLStringNode now scans a complete string block, instead
+of producing string node objects per line.
+[2] Refactored HTMLScriptScanner, code size reduced, made
+consistent with design
+
 Integration Build 1.2 - 20020607
 --------------------------------
 Incorporated bug fixes by Wolfgang Germund
