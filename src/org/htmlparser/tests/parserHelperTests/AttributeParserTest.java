@@ -137,7 +137,8 @@ public class AttributeParserTest extends ParserTestCase {
      */
     public void testJspWithinAttributes() {
 		getParameterTableFor(
-			"a href=\"<%=Application(\"sURL\")%>/literature/index.htm"     	);
+			"a href=\"<%=Application(\"sURL\")%>/literature/index.htm"
+        );
 		assertStringEquals(
 			"href",
 			"<%=Application(\"sURL\")%>/literature/index.htm",
@@ -159,5 +160,20 @@ public class AttributeParserTest extends ParserTestCase {
 			"A",
 			(String)table.get(Tag.TAGNAME)
 		);
+    }
+
+    /**
+     * Believe it or not Moi (vincent_aumont) wants htmlparser to parse a text file
+     * containing something that looks nearly like a tag:
+     * <pre>
+     * "                        basic_string&lt;char, string_char_traits&lt;char&gt;, &lt;&gt;&gt;::basic_string()"
+     * </pre>
+     * This was throwing a null pointer exception when the empty &lt;&gt; was encountered.
+     * Bug #725420 NPE in StringBean.visitTag
+     **/
+    public void testEmptyTag ()
+    {
+		getParameterTableFor("");
+		assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
     }
 }

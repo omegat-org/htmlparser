@@ -149,6 +149,8 @@ public class AttributeParser {
                 }
             }
         }
+        if (null == element) // handle no tag contents
+            putDataIntoTable(h,"",null,true);
         return h;
     }
 
