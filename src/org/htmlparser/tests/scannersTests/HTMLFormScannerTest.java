@@ -55,7 +55,7 @@ import junit.framework.TestSuite;
 
 public class HTMLFormScannerTest extends HTMLParserTestCase {
 	public static final String FORM_HTML =
-	"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
+	"<FORM METHOD=\""+HTMLFormTag.POST+"\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\n"+
@@ -67,7 +67,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
 		"</FORM>";
 	
-	public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM METHOD=\"post\" ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\">\r\n";
+	public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM METHOD=\""+HTMLFormTag.POST+"\" ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\">\r\n";
 	public static final String EXPECTED_FORM_HTML_REST_OF_FORM=	
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
@@ -111,7 +111,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
-		assertEquals("Method","post",formTag.getFormMethod());
+		assertEquals("Method",HTMLFormTag.POST,formTag.getFormMethod());
 		assertEquals("Location","http://www.google.com/test/do_login.php",formTag.getFormLocation());
 		assertEquals("Name","login_form",formTag.getFormName());		
 		HTMLInputTag nameTag = formTag.getInputTag("name");

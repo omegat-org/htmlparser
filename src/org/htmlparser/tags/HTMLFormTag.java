@@ -40,6 +40,8 @@ import org.htmlparser.HTMLNode;
  */
 public class HTMLFormTag extends HTMLTag
 {
+	public static final String POST="POST";
+	public static final String GET="GET";
 	protected String formURL;
    	protected String formName;
    	protected String formMethod;

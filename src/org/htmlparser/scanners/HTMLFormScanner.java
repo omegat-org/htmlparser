@@ -103,8 +103,8 @@ public class HTMLFormScanner extends HTMLTagScanner
 	public String extractFormMethod(HTMLTag tag)
 	{
 		String method = tag.getParameter("METHOD");
-		if (method==null) method = "GET";
-		return method;
+		if (method==null) method = HTMLFormTag.GET;
+		return method.toUpperCase();
 
 	}
 
