@@ -81,7 +81,7 @@ public class HTMLLinkProcessor
             else
             {
                 url = new URL (new URL (base), link);
-                path = url.getPath ();
+                path = url.getFile ();
                 modified = false;
                 absolute = link.startsWith ("/");
                 if (!absolute)
