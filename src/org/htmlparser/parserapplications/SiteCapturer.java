@@ -284,7 +284,10 @@ public class SiteCapturer
             url = new URL (link);
             connection = url.openConnection ();
             type = connection.getContentType ();
-            ret = type.startsWith ("text/html");
+            if (type == null)
+                ret = false;
+            else
+                ret = type.startsWith ("text/html");
         }
         catch (Exception e)
         {
