@@ -636,13 +636,13 @@ public class StringBean extends NodeVisitor implements Serializable
             carriage_return ();
     }
     
-    /**
-     * Unit test.
-     */
-    public static void main (String[] args)
-    {
-        StringBean sb = new StringBean ();
-        sb.setURL ("http://cbc.ca");
-        System.out.println (sb.getStrings ());
-    }
+//    /**
+//     * Unit test.
+//     */
+//    public static void main (String[] args)
+//    {
+//        StringBean sb = new StringBean ();
+//        sb.setURL ("http://cbc.ca");
+//        System.out.println (sb.getStrings ());
+//    }
 }
