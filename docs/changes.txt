@@ -12,6 +12,88 @@
 *                                                                             *
 *******************************************************************************
 
+Release Build 1.3 - 20030525
+--------------------------------
+2003-05-25 15:30  derrickoswald
+
+	* docs/docs/: CustomTagExtraction.html,
+	FrequentlyAskedQuestions.html, PatternStories.html,
+	TagFindingVisitor.html, WritingYourOwnScanners.html:
+
+	Updated Wiki docs.
+	
+2003-05-25 14:58  derrickoswald
+
+	* src/org/htmlparser/tests/utilTests/NodeListTest.java:
+
+	Removed bogus assert in NodeListTest.
+	
+2003-05-25 09:12  derrickoswald
+
+	* src/org/htmlparser/util/NodeList.java:
+
+	Fixed off-by-one error in NodeList.remove().
+	
+2003-05-24 17:04  derrickoswald
+
+	* src/org/htmlparser/: NodeReader.java,
+	parserHelper/CompositeTagScannerHelper.java,
+	parserHelper/StringParser.java, scanners/CompositeTagScanner.java,
+	scanners/ScriptScanner.java,
+	tests/parserHelperTests/CompositeTagScannerHelperTest.java,
+	tests/scannersTests/ScriptScannerTest.java:
+
+	Fixed bug #741769 ScriptScanner doesn't handle quoted </script> tags
+	Major overhaul of ScriptScanner.
+	It now uses the scan() method of CompositeTagScanner (i.e. doesn't override).
+	CompositeTagScanner now has a balance_quotes member field that dictates
+	whether strings tags are scanned honouring single and double quotes.
+	This affected the call chain through NodeReader and StringScanner which
+	now have this parameter.
+	StringScanner now correctly handles quotes if asked. The ignoreState stuff is removed,
+	it didn't work anyway since a single StringScanner is used recursively by the NodeReader,
+	and the member field would have been tromped.
+	Sorry to all those who have broken code because of this, but it's for the better. Really.
+	
+2003-05-24 06:15  derrickoswald
+
+	* src/org/htmlparser/: tests/scannersTests/TableScannerTest.java,
+	scanners/TableColumnScanner.java, scanners/TableRowScanner.java:
+
+	Fixed bug #742254 Nested <TR> &<TD> tags should not be allowed.
+	
+2003-05-23 22:05  derrickoswald
+
+	* src/org/htmlparser/tests/ParserTestCase.java:
+
+	Correct a typo.
+	
+2003-05-21 20:36  polarys
+
+	* src/org/htmlparser/: parserHelper/TagParser.java, tags/Tag.java:
+
+	- Tag now remembers (in tagLines) *all* the lines spanned by the tag (not just the last one).
+	- Tag now remembers line number on which tag starts (from TagData).
+	- Tag now has new public methods:
+	      int getTagStartLine()
+	      int getTagEndLine()
+	      String[] getTagLines()
+	- TagParser now gives Tag (via constructor and setTagLine) sufficient info to support the above.
+	
+2003-05-21 08:00  derrickoswald
+
+	* src/org/htmlparser/tests/tagTests/TagTest.java:
+
+	See bug #740411 setParsed() has no effect on output.
+	Seems to work in the current 1.3 code base.
+	
+2003-05-21 07:13  derrickoswald
+
+	* src/org/htmlparser/tests/tagTests/TagTest.java:
+
+	See bug #741026 registerScanners() mangles output HTML badly.
+	Seems to work in the current 1.3 code base.
+	
 Integration Build 1.3 - 20030518
 --------------------------------
 
