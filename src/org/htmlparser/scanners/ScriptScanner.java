@@ -79,10 +79,10 @@ public class ScriptScanner extends CompositeTagScanner {
 			boolean sameLine = true;
 			int startingPos = startTag.elementEnd();
 			do {
-				int endTagLoc = line.toUpperCase().indexOf(SCRIPT_END_TAG,startingPos);
+				int endTagLoc = line.toUpperCase().indexOf(getEndTag(),startingPos);
 				while (endTagLoc>0 && isScriptEmbeddedInDocumentWrite(line, endTagLoc)) {
-					startingPos = endTagLoc+SCRIPT_END_TAG.length();
-					endTagLoc = line.toUpperCase().indexOf(SCRIPT_END_TAG, startingPos); 	
+					startingPos = endTagLoc+getEndTag().length();
+					endTagLoc = line.toUpperCase().indexOf(getEndTag(), startingPos); 	
 				}
 				 
 				if (endTagLoc!=-1) {
@@ -168,9 +168,18 @@ public class ScriptScanner extends CompositeTagScanner {
 		}
 	}
 
+	/**
+	 * Gets the end tag that the scanner uses to stop scanning. Subclasses of
+	 * <code>ScriptScanner</code> you should override this method.
+	 * @return String containing the end tag to search for, i.e. &lt;/SCRIPT&gt;
+	 */ 
+	public String getEndTag() {
+		return SCRIPT_END_TAG;
+	}
+	
 	private boolean isScriptEmbeddedInDocumentWrite(String line, int endTagLoc) {
-		if (endTagLoc+9 > line.length()-1) return false;
-		return line.charAt(endTagLoc+SCRIPT_END_TAG.length())=='"';
+		if (endTagLoc+getEndTag().length() > line.length()-1) return false;
+		return line.charAt(endTagLoc+getEndTag().length())=='"';
 	}
 
 }
