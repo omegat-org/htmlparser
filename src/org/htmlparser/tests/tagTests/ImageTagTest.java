@@ -40,120 +40,120 @@ import org.htmlparser.util.SimpleNodeIterator;
 
 public class ImageTagTest extends ParserTestCase 
 {
-	public ImageTagTest(String name) {
-		super(name);
-	}
+    public ImageTagTest(String name) {
+        super(name);
+    }
 
-	/**
-	 * The bug being reproduced is this : <BR>
-	 * &lt;BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000 <BR>
-	 * vLink=#551a8b&gt;
-	 * The above line is incorrectly parsed in that, the BODY tag is not identified.
-	 * Creation date: (6/17/2001 4:01:06 PM)
-	 */
-	public void testImageTag() throws ParserException
-	{
-		createParser("<IMG alt=Google height=115 src=\"goo/title_homepage4.gif\" width=305>","http://www.google.com/test/index.html");
-		// Register the image scanner
-		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-			
-		parseAndAssertNodeCount(1);
-		// The node should be an HTMLImageTag
-		assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
-		ImageTag imageTag = (ImageTag)node[0];
-		assertEquals("The image locn","http://www.google.com/test/goo/title_homepage4.gif",imageTag.getImageURL());
-	}
+    /**
+     * The bug being reproduced is this : <BR>
+     * &lt;BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000 <BR>
+     * vLink=#551a8b&gt;
+     * The above line is incorrectly parsed in that, the BODY tag is not identified.
+     * Creation date: (6/17/2001 4:01:06 PM)
+     */
+    public void testImageTag() throws ParserException
+    {
+        createParser("<IMG alt=Google height=115 src=\"goo/title_homepage4.gif\" width=305>","http://www.google.com/test/index.html");
+        // Register the image scanner
+        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+            
+        parseAndAssertNodeCount(1);
+        // The node should be an HTMLImageTag
+        assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
+        ImageTag imageTag = (ImageTag)node[0];
+        assertEquals("The image locn","http://www.google.com/test/goo/title_homepage4.gif",imageTag.getImageURL());
+    }
 
-	/**
-	 * The bug being reproduced is this : <BR>
-	 * &lt;BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000 <BR>
-	 * vLink=#551a8b&gt;
-	 * The above line is incorrectly parsed in that, the BODY tag is not identified.
-	 * Creation date: (6/17/2001 4:01:06 PM)
-	 */
-	public void testImageTagBug() throws ParserException
-	{
-		createParser("<IMG alt=Google height=115 src=\"../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/");
-		// Register the image scanner
-		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-			
-		parseAndAssertNodeCount(1);
-		// The node should be an HTMLImageTag
-		assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
-		ImageTag imageTag = (ImageTag)node[0];
-		assertEquals("The image locn","http://www.google.com/goo/title_homepage4.gif",imageTag.getImageURL());
-	}
+    /**
+     * The bug being reproduced is this : <BR>
+     * &lt;BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000 <BR>
+     * vLink=#551a8b&gt;
+     * The above line is incorrectly parsed in that, the BODY tag is not identified.
+     * Creation date: (6/17/2001 4:01:06 PM)
+     */
+    public void testImageTagBug() throws ParserException
+    {
+        createParser("<IMG alt=Google height=115 src=\"../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/");
+        // Register the image scanner
+        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+            
+        parseAndAssertNodeCount(1);
+        // The node should be an HTMLImageTag
+        assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
+        ImageTag imageTag = (ImageTag)node[0];
+        assertEquals("The image locn","http://www.google.com/goo/title_homepage4.gif",imageTag.getImageURL());
+    }
 
-	/**
-	 * The bug being reproduced is this : <BR>
-	 * &lt;BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000 <BR>
-	 * vLink=#551a8b&gt;
-	 * The above line is incorrectly parsed in that, the BODY tag is not identified.
-	 * Creation date: (6/17/2001 4:01:06 PM)
-	 */
-	public void testImageTageBug2() throws ParserException
-	{
-		createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
-		// Register the image scanner
-		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-			
-		parseAndAssertNodeCount(1);
-		// The node should be an HTMLImageTag
-		assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
-		ImageTag imageTag = (ImageTag)node[0];
-		assertEquals("The image locn","http://www.google.com/goo/title_homepage4.gif",imageTag.getImageURL());
-	}
+    /**
+     * The bug being reproduced is this : <BR>
+     * &lt;BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000 <BR>
+     * vLink=#551a8b&gt;
+     * The above line is incorrectly parsed in that, the BODY tag is not identified.
+     * Creation date: (6/17/2001 4:01:06 PM)
+     */
+    public void testImageTageBug2() throws ParserException
+    {
+        createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
+        // Register the image scanner
+        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+            
+        parseAndAssertNodeCount(1);
+        // The node should be an HTMLImageTag
+        assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
+        ImageTag imageTag = (ImageTag)node[0];
+        assertEquals("The image locn","http://www.google.com/goo/title_homepage4.gif",imageTag.getImageURL());
+    }
 
-	/**
-	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using LinkScanner.
-	 * Creation date: (7/1/2001 2:42:13 PM)
-	 */
-	public void testImageTagSingleQuoteBug() throws ParserException
-	{
-		createParser("<IMG SRC='abcd.jpg'>","http://www.cj.com/");
-		// Register the image scanner
-		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-			
-		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
-		ImageTag imageTag = (ImageTag)node[0];
-		assertEquals("Image incorrect","http://www.cj.com/abcd.jpg",imageTag.getImageURL());	
-	}
+    /**
+     * This bug occurs when there is a null pointer exception thrown while scanning a tag using LinkScanner.
+     * Creation date: (7/1/2001 2:42:13 PM)
+     */
+    public void testImageTagSingleQuoteBug() throws ParserException
+    {
+        createParser("<IMG SRC='abcd.jpg'>","http://www.cj.com/");
+        // Register the image scanner
+        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+            
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
+        ImageTag imageTag = (ImageTag)node[0];
+        assertEquals("Image incorrect","http://www.cj.com/abcd.jpg",imageTag.getImageURL());    
+    }
 
-	/**
-	 * The bug being reproduced is this : <BR>
-	 * &lt;A HREF=&gt;Something&lt;A&gt;<BR>
-	 * vLink=#551a8b&gt;
-	 * The above line is incorrectly parsed in that, the BODY tag is not identified.
-	 * Creation date: (6/17/2001 4:01:06 PM)
-	 */
-	public void testNullImageBug() throws ParserException
-	{
-		createParser("<IMG SRC=>","http://www.google.com/test/index.html");
-		// Register the image scanner
-		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-			
-		parseAndAssertNodeCount(1);
-		// The node should be an HTMLLinkTag
-		assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
-		ImageTag imageTag = (ImageTag)node[0];
-		assertStringEquals("The image location","",imageTag.getImageURL());
-	}
+    /**
+     * The bug being reproduced is this : <BR>
+     * &lt;A HREF=&gt;Something&lt;A&gt;<BR>
+     * vLink=#551a8b&gt;
+     * The above line is incorrectly parsed in that, the BODY tag is not identified.
+     * Creation date: (6/17/2001 4:01:06 PM)
+     */
+    public void testNullImageBug() throws ParserException
+    {
+        createParser("<IMG SRC=>","http://www.google.com/test/index.html");
+        // Register the image scanner
+        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+            
+        parseAndAssertNodeCount(1);
+        // The node should be an HTMLLinkTag
+        assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
+        ImageTag imageTag = (ImageTag)node[0];
+        assertStringEquals("The image location","",imageTag.getImageURL());
+    }
 
-	public void testToHTML() throws ParserException {
-		createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
-		// Register the image scanner
-		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-			
-		parseAndAssertNodeCount(1);
-		// The node should be an ImageTag
-		assertTrue("Node should be a ImageTag",node[0] instanceof ImageTag);
-		ImageTag imageTag = (ImageTag)node[0];
-		assertStringEquals("The image locn","<IMG WIDTH=\"305\" ALT=\"Google\" SRC=\"../../goo/title_homepage4.gif\" HEIGHT=\"115\">",imageTag.toHtml());
-		assertEquals("Alt","Google",imageTag.getAttribute("alt"));
-		assertEquals("Height","115",imageTag.getAttribute("height"));
-		assertEquals("Width","305",imageTag.getAttribute("width"));
-	}
+    public void testToHTML() throws ParserException {
+        createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
+        // Register the image scanner
+        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+            
+        parseAndAssertNodeCount(1);
+        // The node should be an ImageTag
+        assertTrue("Node should be a ImageTag",node[0] instanceof ImageTag);
+        ImageTag imageTag = (ImageTag)node[0];
+        assertStringEquals("The image locn","<IMG WIDTH=\"305\" ALT=\"Google\" SRC=\"../../goo/title_homepage4.gif\" HEIGHT=\"115\">",imageTag.toHtml());
+        assertEquals("Alt","Google",imageTag.getAttribute("alt"));
+        assertEquals("Height","115",imageTag.getAttribute("height"));
+        assertEquals("Width","305",imageTag.getAttribute("width"));
+    }
     
     /**
      * See bug #753003 <IMG> within <A> missed when followed by <MAP>
@@ -190,11 +190,11 @@ public class ImageTagTest extends ParserTestCase
             + "onClick=\"newWindow('Biography/Biography.html','HTML','menubar=yes,scrollbars=yes,resizable=yes,left=0,top=0'); return false\" target=\"HTML\">"
             + "</map>"
             + "</a>";
-		createParser (html);
-		parser.registerScanners ();
-			
-		parseAndAssertNodeCount (1);
-		assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        createParser (html);
+        parser.registerScanners ();
+            
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
         LinkTag link = (LinkTag)node[0];
         ImageTag img = extractLinkImage (link);
         assertNotNull ("no image tag", img);
@@ -210,11 +210,25 @@ public class ImageTagTest extends ParserTestCase
             + "src=\"http://i.cnn.net/cnn/images/1.gif\"/>";
 
         createParser (html);
-		parser.registerScanners ();
+        parser.registerScanners ();
 
         parseAndAssertNodeCount (1);
-		assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+        assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
         ImageTag img = (ImageTag)node[0];
         assertTrue ("bad source", "http://i.cnn.net/cnn/images/1.gif".equals (img.getImageURL ()));
-    }     
+    }
+    
+    // see bug #778781  SRC-attribute suppression in IMG-tags
+//    HTML before parse:
+//    <img src="images/first" alt="first">
+//    <img src="images/second" alt="">
+//    <img alt="third" src="images/third">
+//    <img alt="" src="images/fourth">
+//
+//    HTML after parse:
+//    <IMG ALT="first" SRC="images/first">
+//    <IMG ALT="" SRC="images/second">
+//    <IMG ALT="third" SRC="images/third">
+//    <IMG ALT="">
+
 }
