@@ -57,10 +57,14 @@ public class AttributeTests extends ParserTestCase
 
     public void getParameterTableFor(String tagContents)
     {
+        getParameterTableFor (tagContents, false);
+    }
+
+    public void getParameterTableFor(String tagContents, boolean dump)
+    {
         String html;
         NodeIterator iterator;
         Node node;
-        Tag tag;
         Vector attributes;
 
         html = "<" + tagContents + ">";
@@ -74,9 +78,24 @@ public class AttributeTests extends ParserTestCase
             {
                 tag = (Tag)node;
                 attributes = tag.getAttributesEx ();
-//                for (int i = 0; i < attributes.size (); i++)
-//                    System.out.print ("|" + attributes.elementAt (i));
-//                System.out.println ("|");
+                if (dump)
+                {
+                    for (int i = 0; i < attributes.size (); i++)
+                    {
+                        System.out.print ("Attribute #" + i);
+                        Attribute attribute = (Attribute)attributes.elementAt (i);
+                        if (null != attribute.getName ())
+                            System.out.print (" Name: '" + attribute.getName () + "'");
+                        if (null != attribute.getAssignment ())
+                            System.out.print (" Assignment: '" + attribute.getAssignment () + "'");
+                        if (0 != attribute.getQuote ())
+                            System.out.print (" Quote: " + attribute.getQuote ());
+                        if (null != attribute.getValue ())
+                            System.out.print (" Value: '" + attribute.getValue () + "'");
+                        System.out.println ();
+                    }
+                    System.out.println ();
+                }
                 table = tag.getAttributes ();
             }
             else
@@ -97,6 +116,7 @@ public class AttributeTests extends ParserTestCase
     public void testConstructors ()
     {
         Vector attributes;
+        Tag tag;
         String html;
 
         attributes = new Vector ();
@@ -125,6 +145,7 @@ public class AttributeTests extends ParserTestCase
         Attribute attribute;
         Attribute space;
         Vector attributes;
+        Tag tag;
         String html;
 
         attributes = new Vector ();
@@ -179,6 +200,7 @@ public class AttributeTests extends ParserTestCase
     public void testConstructors2 ()
     {
         Vector attributes;
+        Tag tag;
         String html;
 
         attributes = new Vector ();
@@ -207,6 +229,7 @@ public class AttributeTests extends ParserTestCase
         Attribute attribute;
         Attribute space;
         Vector attributes;
+        Tag tag;
         String html;
 
         attributes = new Vector ();
@@ -454,15 +477,14 @@ public class AttributeTests extends ParserTestCase
 
     /**
      * Test Rule 1.
+     * See discussion in Bug#891058 Bug in lexer. regarding alternate interpretations.
      */
     public void testRule1 ()
     {
         getParameterTableFor ("tag att = other=fred");
         assertTrue ("Attribute missing", table.containsKey ("ATT"));
-        assertEquals ("Attribute has wrong value", "", (String)table.get ("ATT"));
+        assertEquals ("Attribute has wrong value", "other=fred", (String)table.get ("ATT"));
         assertTrue ("No attribute should be called equal sign", !table.containsKey ("="));
-        assertTrue ("Attribute missing", table.containsKey ("OTHER"));
-        assertEquals ("Attribute has wrong value", "fred", (String)table.get ("OTHER"));
     }
 
     /**
@@ -493,26 +515,32 @@ public class AttributeTests extends ParserTestCase
 
     /**
      * Test Rule 4.
+     * See discussion in Bug#891058 Bug in lexer. regarding alternate interpretations.
      */
     public void testRule4 ()
     {
         getParameterTableFor ("tag att=\"va\"lue\" other=fred");
         assertTrue ("Attribute missing", table.containsKey ("ATT"));
-        assertEquals ("Attribute has wrong value", "va\"lue", (String)table.get ("ATT"));
+        assertEquals ("Attribute has wrong value", "va", (String)table.get ("ATT"));
         assertTrue ("No attribute should be called va\"lue", !table.containsKey ("VA\"LUE"));
+        assertTrue ("Attribute missing", table.containsKey ("LUE\""));
+        assertNull ("Attribute has wrong value", table.get ("LUE\""));
         assertTrue ("Attribute missing", table.containsKey ("OTHER"));
         assertEquals ("Attribute has wrong value", "fred", (String)table.get ("OTHER"));
     }
 
     /**
      * Test Rule 5.
+     * See discussion in Bug#891058 Bug in lexer. regarding alternate interpretations.
      */
     public void testRule5 ()
     {
         getParameterTableFor ("tag att='va'lue' other=fred");
         assertTrue ("Attribute missing", table.containsKey ("ATT"));
-        assertEquals ("Attribute has wrong value", "va'lue", (String)table.get ("ATT"));
+        assertEquals ("Attribute has wrong value", "va", (String)table.get ("ATT"));
         assertTrue ("No attribute should be called va'lue", !table.containsKey ("VA'LUE"));
+        assertTrue ("Attribute missing", table.containsKey ("LUE'"));
+        assertNull ("Attribute has wrong value", table.get ("LUE'"));
         assertTrue ("Attribute missing", table.containsKey ("OTHER"));
         assertEquals ("Attribute has wrong value", "fred", (String)table.get ("OTHER"));
     }

@@ -530,6 +530,7 @@ public class Lexer
      * <li>state 3 - within naked attribute value.</li>
      * <li>state 4 - within single quoted attribute value</li>
      * <li>state 5 - within double quoted attribute value</li>
+     * <li>state 6 - whitespaces after attribute name could lead to state 2 (=)or state 0</li>
      * </ol>
      * <p>
      * The starting point for the various components is stored in an array
@@ -540,6 +541,7 @@ public class Lexer
      * one slot for each whitespace or attribute/value pair.
      * The first slot is for attribute name (kind of like a standalone attribute).
      * @param cursor The position at which to start scanning.
+     * @return The parsed tag.
      */
     protected Node parseTag (Cursor cursor)
         throws
@@ -554,7 +556,7 @@ public class Lexer
         done = false;
         attributes = new Vector ();
         state = 0;
-        bookmarks = new int[7];
+        bookmarks = new int[8];
         bookmarks[0] = cursor.getPosition ();
         while (!done)
         {
@@ -594,9 +596,10 @@ public class Lexer
                     }
                     else if (Character.isWhitespace (ch))
                     {
-                        standalone (attributes, bookmarks);
-                        bookmarks[0] = bookmarks[2];
-                        state = 0;
+                        // whitespaces might be followed by next attribute or an equal sign
+                        // see Bug #891058 Bug in lexer.
+                        bookmarks[6] = bookmarks[2]; // setting the bookmark[0] is done in state 6 if applicable
+                        state = 6;
                     }
                     else if ('=' == ch)
                         state = 2;
@@ -618,10 +621,10 @@ public class Lexer
                         bookmarks[5] = bookmarks[3];
                     }
                     else if (Character.isWhitespace (ch))
-                    {
-                        empty (attributes, bookmarks);
-                        bookmarks[0] = bookmarks[3];
-                        state = 0;
+                    { 
+                        // collect white spaces after "=" into the assignment string;
+                        // do nothing
+                        // see Bug #891058 Bug in lexer.
                     }
                     else
                         state = 3;
@@ -665,145 +668,48 @@ public class Lexer
                         state = 0;
                     }
                     break;
+                // patch for lexer state correction by
+                // Gernot Fricke
+                // See Bug # 891058 Bug in lexer.
+                case 6: // undecided for state 0 or 2
+                        // we have read white spaces after an attributte name
+                    if (0 == ch)
+                    {
+                        // same as last else clause
+                        standalone (attributes, bookmarks);
+                  	    bookmarks[0]=bookmarks[6];
+                  	    cursor.retreat();
+                  	    state=0;
+                    }
+                    else if (Character.isWhitespace (ch))
+                    { 
+                        // proceed
+                    } 
+                    else if ('=' == ch) // yepp. the white spaces belonged to the equal.
+                    {
+                        bookmarks[2] = bookmarks[6];
+                        bookmarks[3] = bookmarks[7];
+                        state=2;
+                    }
+                    else
+                    {
+                        // white spaces were not ended by equal
+                        // meaning the attribute was a stand alone attribute
+                        // now: create the stand alone attribute and rewind 
+                        // the cursor to the end of the white spaces
+                        // and restart scanning as whitespace attribute.
+                  	    standalone (attributes, bookmarks);
+                  	    bookmarks[0]=bookmarks[6];
+                  	    cursor.retreat();
+                  	    state=0;
+                   	}
+                    break;
                 default:
                     throw new IllegalStateException ("how the fuck did we get in state " + state);
             }
         }
 
-        // OK, before constructing the node, fix up erroneous attributes
-        fixAttributes (attributes);
-
         return (makeTag (cursor, attributes));
-    }
-
-    /**
-     * Try to resolve bad attributes.
-     * Look for the following patterns and assume what they meant was the
-     * construct on the right:
-     * <p>Rule 1.
-     * <pre>
-     * att = -> att=
-     * </pre>
-     * An attribute named "=", converts a previous standalone attribute into
-     * an empty attribute.
-     * <p>Rule 2.
-     * <pre>
-     * att =value -> att=value
-     * </pre>
-     * An attribute name beginning with an equals sign, is the value of
-     * a previous standalone attribute.
-     * <p>Rule 3.
-     * <pre>
-     * att= "value" -> att="value"
-     * </pre>
-     * A quoted attribute name, is the value of a previous empty
-     * attribute.
-     * <p>Rule 4 and Rule 5.
-     * <pre>
-     * att="va"lue" -> att='va"lue'
-     * att='val'ue' -> att="val'ue"
-     * </pre>
-     * An attribute name ending in a quote is a second part of a
-     * similarly quoted value of a previous attribute. Note, this doesn't
-     * change the quote value but it should, or the contained quote should be
-     * removed.
-     * <p>Note:
-     * <pre>
-     * att = "value" -> att="value"
-     * </pre>
-     * A quoted attribute name, is the value of a previous standalone
-     * attribute separated by an attribute named "=" will be handled by
-     * sequential application of rule 1 and 3.
-     */
-    protected void fixAttributes (Vector attributes) throws ParserException
-    {
-        PageAttribute attribute;
-        Cursor cursor;
-        char ch1; // name starting character
-        char ch2; // name ending character
-        PageAttribute prev1; // attribute prior to the current
-        PageAttribute prev2; // attribute prior but one to the current
-        char quote;
-
-        cursor = new Cursor (getPage (), 0);
-        prev1 = null;
-        prev2 = null;
-        // leave the name alone & start with second attribute
-        for (int i = 2; i < attributes.size (); )
-        {
-            attribute = (PageAttribute)attributes.elementAt (i);
-            if (!attribute.isWhitespace ())
-            {
-                cursor.setPosition (attribute.getNameStartPosition ());
-                ch1 = attribute.getPage ().getCharacter (cursor);
-                cursor.setPosition (attribute.getNameEndPosition () - 1);
-                ch2 = attribute.getPage ().getCharacter (cursor);
-                if ('=' == ch1)
-                {   // possible rule 1 or 2
-                    // check for a previous standalone, both rules need it, also check prev1 as a sanity check
-                    if (null != prev2 && prev2.isStandAlone () && prev1.isWhitespace ())
-                    {
-                        if (1 == attribute.getNameEndPosition () - attribute.getNameStartPosition ())
-                        {   // rule 1, an isolated equals sign
-                            prev2.setValueStartPosition (attribute.getNameEndPosition ());
-                            attributes.removeElementAt (i); // current
-                            attributes.removeElementAt (i - 1); // whitespace
-                            prev1 = prev2;
-                            prev2 = null;
-                            i--;
-                            continue;
-                        }
-                        else
-                        {
-                            // rule 2, name starts with equals
-                            prev2.setValueStartPosition (attribute.getNameStartPosition () + 1); // past the equals sign
-                            prev2.setValueEndPosition (attribute.getNameEndPosition ());
-                            attributes.removeElementAt (i); // current
-                            attributes.removeElementAt (i - 1); // whitespace
-                            prev1 = prev2;
-                            prev2 = null;
-                            i--;
-                            continue;
-                        }
-                    }
-                }
-                else if ((('\'' == ch1) && ('\'' == ch2)) || (('"' == ch1) && ('"' == ch2)))
-                {   // possible rule 3
-                    // check for a previous empty, also check prev1 as a sanity check
-                    if (null != prev2 && prev2.isEmpty () && prev1.isWhitespace ())
-                    {   // TODO check that name has more than one character
-                        prev2.setValueStartPosition (attribute.getNameStartPosition () + 1);
-                        prev2.setValueEndPosition (attribute.getNameEndPosition () - 1);
-                        prev2.setQuote (ch1);
-                        attributes.removeElementAt (i); // current
-                        attributes.removeElementAt (i - 1); // whitespace
-                        prev1 = prev2;
-                        prev2 = null;
-                        i--;
-                        continue;
-                    }
-                }
-                else if (('\'' == ch2) || ('"' == ch2))
-                {   // possible rule 4 or 5
-                    // check for a previous valued attribute
-                    if (null != prev1 && prev1.isValued ())
-                    {   // check for a terminating quote of the same type
-                        cursor.setPosition (prev1.getValueEndPosition ());
-                        ch1 = prev1.getPage ().getCharacter (cursor); // crossing pages with cursor?
-                        if (ch1 == ch2)
-                        {
-                            prev1.setValueEndPosition (attribute.getNameEndPosition () - 1);
-                            attributes.removeElementAt (i); // current
-                            continue;
-                        }
-                    }
-                }
-            }
-            // shift and go on to next attribute
-            prev2 = prev1;
-            prev1 = attribute;
-            i++;
-        }
     }
 
     /**
