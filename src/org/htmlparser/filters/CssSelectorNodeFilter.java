@@ -26,7 +26,6 @@
 
 package org.htmlparser.filters;
 
-import junit.framework.TestCase;
 import org.htmlparser.*;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.tags.Tag;
