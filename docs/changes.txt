@@ -1,3 +1,7 @@
+Integration build 1.3 - 20030209
+--------------------------------
+[1] Reference test directory of project home page to maybe cure some sporadic errors in BeanTest.
+
 Integration build 1.3 - 20030202
 --------------------------------
 [1] Renamed HTMLCompositeTagScanner to CompositeTagScanner
