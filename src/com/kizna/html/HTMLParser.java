@@ -448,6 +448,10 @@ public class HTMLParser
 	 * HTMLAppletScanner  (filter key "-a") <br>
 	 * HTMLMetaTagScanner (filter key "-m") <br>
 	 * HTMLTitleScanner   (filter key "-t") <br>
+	 * HTMLDoctypeScanner (filter key "-d") <br>
+	 * HTMLFormScanner    (filter key "-f") <br>
+	 * HTMLFrameSetScanner(filter key "-r") <br>
+	 * HTMLBaseHREFScanner(filter key "-b") <br>
 	 * <br>
 	 * Call this method after creating the HTMLParser object. e.g. <BR>
 	 * <pre>
