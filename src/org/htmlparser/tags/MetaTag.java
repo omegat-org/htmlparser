@@ -46,7 +46,7 @@ public class MetaTag extends Tag {
 	public String getHttpEquiv() {
 		return httpEquiv;
 	}
-	public String getMetaTagContents() {
+	public String getMetaContent() {
 		return metaTagContents;
 	}
 	public String getMetaTagName() {

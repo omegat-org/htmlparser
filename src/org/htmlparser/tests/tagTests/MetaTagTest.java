@@ -57,7 +57,7 @@ public class MetaTagTest extends ParserTestCase {
 		MetaTag metaTag;
 		metaTag = (MetaTag) node[4];
 		assertStringEquals("Meta Tag 4 Name","description",metaTag.getMetaTagName());
-		assertStringEquals("Meta Tag 4 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaTagContents());
+		assertStringEquals("Meta Tag 4 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaContent());
 		assertStringEquals("toHTML()","<META CONTENT=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\" NAME=\"description\">",metaTag.toHtml());
 	}
 }

@@ -30,6 +30,7 @@
 package org.htmlparser.tests.parserHelperTests;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.ParserException;
 
 public class TagParserTest extends ParserTestCase {
 
@@ -65,4 +66,29 @@ public class TagParserTest extends ParserTestCase {
 			tag.toHtml()
 		);
 	}
+	
+	public void testTagWithCloseTagSymbolInAttribute() throws ParserException {
+		createParser("<tag att=\"a>b\">");
+		parseAndAssertNodeCount(1);
+		assertType("should be Tag",Tag.class,node[0]);
+		Tag tag = (Tag)node[0];
+		assertStringEquals("attribute","a>b",tag.getAttribute("att"));
+	}
+	
+	public void testTagWithOpenTagSymbolInAttribute() throws ParserException {
+		createParser("<tag att=\"a<b\">");
+		parseAndAssertNodeCount(1);
+		assertType("should be Tag",Tag.class,node[0]);
+		Tag tag = (Tag)node[0];
+		assertStringEquals("attribute","a<b",tag.getAttribute("att"));
+	}
+
+	public void testTagWithSingleQuote() throws ParserException {
+		createParser("<tag att=\'a<b\'>");
+		parseAndAssertNodeCount(1);
+		assertType("should be Tag",Tag.class,node[0]);
+		Tag tag = (Tag)node[0];
+		assertStringEquals("html","<TAG ATT=\"a<b\">",tag.toHtml());
+		assertStringEquals("attribute","a<b",tag.getAttribute("att"));
+	}	
 }
