@@ -62,7 +62,6 @@ public class AllTests extends ParserTestCase
 
         suite.addTestSuite(BeanTest.class);
         suite.addTestSuite(CharacterTranslationTest.class);
-        suite.addTestSuite(HTMLLinkProcessorTest.class);
         suite.addTestSuite(HTMLParserUtilsTest.class);
         suite.addTestSuite(NodeListTest.class);
         suite.addTestSuite(SortTest.class);

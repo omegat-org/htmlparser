@@ -317,16 +317,22 @@ public class LinkTag extends CompositeTag
     
     /**
      * Extract the link from the HREF attribute.
-     * The URL of the actual html page is also provided.
+     * @return The URL from the HREF attibute. This is absolute if the tag has
+     * a valid page.
      */
     public String extractLink ()
     {
-        String relativeLink =  getAttribute ("HREF");
-        if (relativeLink!=null)
+        String ret;
+
+        ret =  getAttribute ("HREF");
+        if (null != ret)
         {
-            relativeLink = ParserUtils.removeChars(relativeLink,'\n');
-            relativeLink = ParserUtils.removeChars(relativeLink,'\r');
+            ret = ParserUtils.removeChars (ret,'\n');
+            ret = ParserUtils.removeChars (ret,'\r');
         }
-        return (getPage ().getLinkProcessor ().extract (relativeLink, getPage ().getUrl ()));
+        if (null != getPage ())
+            ret = getPage ().getAbsoluteURL (ret);
+
+        return (ret);
     }
 }

@@ -955,4 +955,11 @@ public class ParserTest extends ParserTestCase
         assertStringEquals ("new remark contents wrong", newtext, rem.getText ());
         assertTrue ("toString wrong", rem.toString ().endsWith (newtext));
     }
+
+    public void testFixSpaces () throws ParserException
+    {
+        String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
+        parser = new Parser (url);
+        assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html", parser.getURL ());
+    }
 }

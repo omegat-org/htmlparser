@@ -35,12 +35,12 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 
 import org.htmlparser.util.EncodingChangeException;
-import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -74,6 +74,11 @@ public class Page
     protected String mUrl;
 
     /**
+     * The base URL for this page.
+     */
+    protected String mBaseUrl;
+
+    /**
      * The source of characters.
      */
     protected Source mSource;
@@ -87,12 +92,6 @@ public class Page
      * The connection this page is coming from or <code>null</code>.
      */
     protected transient URLConnection mConnection;
-
-    /**
-     * The processor of relative links on this page.
-     * Holds any overridden base HREF.
-     */
-    protected LinkProcessor mProcessor;
 
     /**
      * Messages for page not there (404).
@@ -135,7 +134,7 @@ public class Page
         if (null == connection)
             throw new IllegalArgumentException ("connection cannot be null");
         setConnection (connection);
-        mProcessor = null;
+        mBaseUrl = null;
     }
 
     /**
@@ -157,7 +156,7 @@ public class Page
         mIndex = new PageIndex (this);
         mConnection = null;
         mUrl = null;
-        mProcessor = null;
+        mBaseUrl = null;
     }
 
     public Page (String text)
@@ -179,7 +178,7 @@ public class Page
         }
         mConnection = null;
         mUrl = null;
-        mProcessor = null;
+        mBaseUrl = null;
     }
 
     //
@@ -395,6 +394,24 @@ public class Page
         mUrl = url;
     }
 
+    /**
+     * Gets the baseUrl.
+     * @return The base URL for this page, or <code>null</code> if not set.
+     */
+    public String getBaseUrl ()
+    {
+        return (mBaseUrl);
+    }
+
+    /**
+     * Sets the baseUrl.
+     * @param url The base url for this page.
+     */
+    public void setBaseUrl (String url)
+    {
+        mBaseUrl = url;
+    }
+    
     /**
      * Get the source this page is reading from.
      */
@@ -719,24 +736,90 @@ public class Page
     }
 
     /**
-     * Get the link processor associated with this page.
-     * @return The link processor that has the base HREF.
+     * Build a URL from the link and base provided.
+     * @param link The (relative) URI.
+     * @param base The base URL of the page, either from the &lt;BASE&gt; tag
+     * or, if none, the URL the page is being fetched from.
+     * @return An absolute URL.
      */
-    public LinkProcessor getLinkProcessor ()
+    public URL constructUrl (String link, String base)
+        throws MalformedURLException
     {
-        if (null == mProcessor)
-            mProcessor = new LinkProcessor ();
-        
-        return (mProcessor);
+        String path;
+        boolean modified;
+        boolean absolute;
+        int index;
+        URL url; // constructed URL combining relative link and base
+
+        url = new URL (new URL (base), link);
+        path = url.getFile ();
+        modified = false;
+        absolute = link.startsWith ("/");
+        if (!absolute)
+        {   // we prefer to fix incorrect relative links
+            // this doesn't fix them all, just the ones at the start
+            while (path.startsWith ("/."))
+            {
+                if (path.startsWith ("/../"))
+                {
+                    path = path.substring (3);
+                    modified = true;
+                }
+                else if (path.startsWith ("/./") || path.startsWith("/."))
+                {
+                    path = path.substring (2);
+                    modified = true;
+                }
+                else
+                    break;
+            }
+        }
+        // fix backslashes
+        while (-1 != (index = path.indexOf ("/\\")))
+        {
+            path = path.substring (0, index + 1) + path.substring (index + 2);
+            modified = true;
+        }
+        if (modified)
+            url = new URL (url, path);
+
+        return (url);
     }
 
     /**
-     * Set the link processor associated with this page.
-     * @param processor The new link processor for this page.
+     * Create an absolute URL from a relative link.
+     * @param link The reslative portion of a URL.
+     * @return The fully qualified URL or the original link if it was absolute
+     * already or a failure occured.
      */
-    public void setLinkProcessor (LinkProcessor processor)
+    public String getAbsoluteURL (String link)
     {
-        mProcessor = processor;
+        String base;
+        URL url;
+        String ret;
+
+        if ((null == link) || ("".equals (link)))
+            ret = "";
+        else
+            try
+            {
+                base =  getBaseUrl ();
+                if (null == base)
+                    base = getUrl ();
+                if (null == base)
+                    ret = link;
+                else
+                {
+                    url = constructUrl (link, base);
+                    ret = url.toExternalForm ();
+                }
+            }
+            catch (MalformedURLException murle)
+            {
+                ret = link;
+            }
+
+        return (ret);
     }
 
     /**
@@ -913,110 +996,3 @@ public class Page
         return (ret);
     }
 }
-
-//    /**
-//     * The default charset.
-//     * This should be <code>ISO-8859-1</code>,
-//     * see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
-//     * Another alias is "8859_1".
-//     */
-//    protected static final String DEFAULT_CHARSET = "ISO-8859-1";
-//
-//    /**
-//     *  Trigger for charset detection.
-//     */
-//    protected static final String CHARSET_STRING = "charset";
-//
-//
-//    /**
-//     * Try and extract the character set from the HTTP header.
-//     * @param connection The connection with the charset info.
-//     * @return The character set name to use for this HTML page.
-//     */
-//    protected String getCharacterSet (URLConnection connection)
-//    {
-//        final String field = "Content-Type";
-//
-//        String string;
-//        String ret;
-//
-//        ret = DEFAULT_CHARSET;
-//        string = connection.getHeaderField (field);
-//        if (null != string)
-//            ret = getCharset (string);
-//
-//        return (ret);
-//    }
-//
-//    /**
-//     * Get a CharacterSet name corresponding to a charset parameter.
-//     * @param content A text line of the form:
-//     * <pre>
-//     * text/html; charset=Shift_JIS
-//     * </pre>
-//     * which is applicable both to the HTTP header field Content-Type and
-//     * the meta tag http-equiv="Content-Type".
-//     * Note this method also handles non-compliant quoted charset directives such as:
-//     * <pre>
-//     * text/html; charset="UTF-8"
-//     * </pre>
-//     * and
-//     * <pre>
-//     * text/html; charset='UTF-8'
-//     * </pre>
-//     * @return The character set name to use when reading the input stream.
-//     * For JDKs that have the Charset class this is qualified by passing
-//     * the name to findCharset() to render it into canonical form.
-//     * If the charset parameter is not found in the given string, the default
-//     * character set is returned.
-//     * @see ParserHelper#findCharset
-//     * @see #DEFAULT_CHARSET
-//     */
-//    protected String getCharset(String content)
-//    {
-//        int index;
-//        String ret;
-//
-//        ret = DEFAULT_CHARSET;
-//        if (null != content)
-//        {
-//            index = content.indexOf(CHARSET_STRING);
-//
-//            if (index != -1)
-//            {
-//                content = content.substring(index + CHARSET_STRING.length()).trim();
-//                if (content.startsWith("="))
-//                {
-//                    content = content.substring(1).trim();
-//                    index = content.indexOf(";");
-//                    if (index != -1)
-//                        content = content.substring(0, index);
-//
-//                    //remove any double quotes from around charset string
-//                    if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
-//                        content = content.substring (1, content.length () - 1);
-//
-//                    //remove any single quote from around charset string
-//                    if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
-//                        content = content.substring (1, content.length () - 1);
-//
-//                    ret = ParserHelper.findCharset(content, ret);
-//                    // Charset names are not case-sensitive;
-//                    // that is, case is always ignored when comparing charset names.
-//                    if (!ret.equalsIgnoreCase(content))
-//                    {
-//                        feedback.info (
-//                            "detected charset \""
-//                            + content
-//                            + "\", using \""
-//                            + ret
-//                            + "\"");
-//                    }
-//                }
-//            }
-//        }
-//
-//        return (ret);
-//    }
-//
-

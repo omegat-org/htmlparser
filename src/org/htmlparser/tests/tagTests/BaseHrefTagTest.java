@@ -32,7 +32,6 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
-import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
 public class BaseHrefTagTest extends ParserTestCase {
@@ -50,15 +49,6 @@ public class BaseHrefTagTest extends ParserTestCase {
         BaseHrefTag baseRefTag = new BaseHrefTag ();
         baseRefTag.setBaseUrl ("http://www.abc.com");
         assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
-    }
-
-    public void testRemoveLastSlash() {
-        String url1 = "http://www.yahoo.com/";
-        String url2 = "http://www.google.com";
-        String modifiedUrl1 = LinkProcessor.removeLastSlash(url1);
-        String modifiedUrl2 = LinkProcessor.removeLastSlash(url2);
-        assertEquals("Url1","http://www.yahoo.com",modifiedUrl1);
-        assertEquals("Url2","http://www.google.com",modifiedUrl2);
     }
 
     public void testScan() throws ParserException{

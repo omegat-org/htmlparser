@@ -125,7 +125,14 @@ public class ImageTag extends Tag
                         else if (name.startsWith ("SRC"))
                         {
                             // missing equals sign
-                            ret = string.substring (3);
+                            string = string.substring (3);
+                            // remove any double quotes from around string
+                            if (string.startsWith ("\"") && string.endsWith ("\"") && (1 < string.length ()))
+                                string = string.substring (1, string.length () - 1);
+                            // remove any single quote from around string
+                            if (string.startsWith ("'") && string.endsWith ("'") && (1 < string.length ()))
+                                string = string.substring (1, string.length () - 1);
+                            ret = string;
                             state = 0; // go back to searching for SRC
                             // because, maybe we found SRCXXX
                             // where XXX isn't a URL
@@ -177,7 +184,8 @@ public class ImageTag extends Tag
     {
         if (null == imageURL)
             if (null != getPage ())
-                imageURL = getPage ().getLinkProcessor ().extract (extractImageLocn (), getPage().getUrl ());
+                imageURL = getPage ().getAbsoluteURL (extractImageLocn ());
+
         return (imageURL);
     }
 

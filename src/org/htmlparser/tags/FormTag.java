@@ -114,7 +114,7 @@ public class FormTag extends CompositeTag
     {
         if (null == mFormLocation)
             // ... is it true that without an ACTION the default is to send it back to the same page?
-            mFormLocation = extractFormLocn (getPage ().getUrl ());
+            mFormLocation = extractFormLocn ();
 
         return (mFormLocation);
     }
@@ -214,14 +214,16 @@ public class FormTag extends CompositeTag
      * of the html page in which this tag exists.
      * @param url URL of web page being parsed.
      */
-    public String extractFormLocn(String url)// throws ParserException
+    public String extractFormLocn ()
     {
-        String formURL;
+        String ret;
         
-        formURL = getAttribute("ACTION");
-        if (null == formURL)
-            return "";
-        else
-            return (getPage ().getLinkProcessor ().extract (formURL, url));
+        ret = getAttribute("ACTION");
+        if (null == ret)
+            ret = "";
+        else if (null != getPage ())
+            ret = getPage ().getAbsoluteURL (ret);
+        
+        return (ret);
     }
 }

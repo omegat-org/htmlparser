@@ -32,6 +32,7 @@ import java.net.URL;
 
 /**
  * Processor class for links, is present basically as a utility class.
+ * @deprecated Use a Page object instead.
  */
 public class LinkProcessor
     implements
@@ -56,6 +57,7 @@ public class LinkProcessor
      * @param link The reslative portion of a URL.
      * @param base The base URL unless overridden by the current baseURL property.
      * @return The fully qualified URL or the original link if a failure occured.
+     * @deprecated Use Page.getAbsoluteURL() instead.
      */
     public String extract (String link, String base)
     {
@@ -90,17 +92,20 @@ public class LinkProcessor
      */
     public String stripQuotes (String string)
     {
-        //remove any double quotes from around charset string
+        // remove any double quotes from around string
         if (string.startsWith ("\"") && string.endsWith ("\"") && (1 < string.length ()))
             string = string.substring (1, string.length () - 1);
 
-        //remove any single quote from around charset string
+        // remove any single quote from around string
         if (string.startsWith ("'") && string.endsWith ("'") && (1 < string.length ()))
             string = string.substring (1, string.length () - 1);
 
         return (string);
     }
-    
+
+    /**
+     * @deprecated Use Page.constructUrl() instead.
+     */
     public URL constructUrl(String link, String base)
         throws MalformedURLException {
         String path;
@@ -139,6 +144,7 @@ public class LinkProcessor
      * Turn spaces into %20.
      * @param url The url containing spaces.
      * @return The URL with spaces as %20 sequences.
+     * @deprecated Use Parser.fixSpaces() instead.
      */
     public static String fixSpaces (String url)
     {
@@ -207,6 +213,9 @@ public class LinkProcessor
         this.baseUrl = baseUrl;
     }
 
+    /**
+     * @deprecated Removing the last slash from a URL is a bad idea.
+     */
     public static String removeLastSlash(String baseUrl) {
       if(baseUrl.charAt(baseUrl.length()-1)=='/')
       {

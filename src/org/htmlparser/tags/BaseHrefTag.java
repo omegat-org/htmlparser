@@ -88,7 +88,7 @@ public class BaseHrefTag extends Tag
         page = getPage ();
         if (null != page)
         {
-            page.getLinkProcessor ().setBaseUrl (getBaseUrl ());
+            page.setBaseUrl (getBaseUrl ());
         }
     }
 }

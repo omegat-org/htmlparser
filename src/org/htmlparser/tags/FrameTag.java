@@ -58,13 +58,15 @@ public class FrameTag extends Tag
      */
     public String getFrameLocation ()
     {
-        String src;
+        String ret;
         
-        src = getAttribute ("SRC");
-        if (null == src)
-            return "";
-        else
-            return (getPage ().getLinkProcessor ().extract (src, getPage ().getUrl ()));
+        ret = getAttribute ("SRC");
+        if (null == ret)
+            ret = "";
+        else if (null != getPage ())
+            ret = getPage ().getAbsoluteURL (ret);
+        
+        return (ret);
     }
 
     /**
