@@ -27,7 +27,9 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.tagTests;
+
 import org.htmlparser.Parser;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.tags.JspTag;
 import org.htmlparser.tags.Tag;
@@ -85,8 +87,7 @@ public class JspTagTest extends ParserTestCase
                 "<" + contents2 + ">\n<jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
                 "%>");
             Parser.setLineSeparator("\r\n");
-            // Register the Jsp Scanner
-            parser.addScanner(new JspScanner("-j"));
+            parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
             parseAndAssertNodeCount(8);
             // The first node should be an JspTag
             assertTrue("Node 1 should be an JspTag",node[0] instanceof JspTag);
@@ -140,8 +141,7 @@ public class JspTagTest extends ParserTestCase
                 "            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
                 "%>\n");
             Parser.setLineSeparator("\r\n");
-            // Register the Jsp Scanner
-            parser.addScanner(new JspScanner("-j"));
+            parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
             parseAndAssertNodeCount(8);
             // The first node should be an JspTag
             assertTrue("Node 1 should be an JspTag",node[0] instanceof JspTag);
@@ -174,9 +174,7 @@ public class JspTagTest extends ParserTestCase
         StringBuffer sb1 = new StringBuffer();
         sb1.append("<% for (i=0;i<j;i++);%>");
         createParser(sb1.toString());
-
-        // Register the jsp scanner
-        parser.addScanner(new JspScanner("-j"));
+        parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
         parseAndAssertNodeCount(1);
         //assertTrue("Node should be a jsp tag",node[1] instanceof HTMLJspTag);
         JspTag jspTag = (JspTag)node[0];
@@ -206,7 +204,7 @@ public class JspTagTest extends ParserTestCase
         if (JSP_TESTS_ENABLED)
         {
             createParser(html);
-            parser.addScanner(new JspScanner());
+            parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
             parseAndAssertNodeCount(7);
 
             assertTrue("Should be a Jsp tag but was "+node[1].getClass().getName(),node[1] instanceof JspTag);

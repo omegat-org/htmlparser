@@ -433,4 +433,59 @@ public class CompositeTag extends Tag
         }
         return stringNode;
     }
+
+    public String toString ()
+    {
+        StringBuffer ret;
+        
+        ret = new StringBuffer (1024);
+        toString (0, ret);
+        
+        return (ret.toString ());
+    }
+
+    /**
+     * Return the text contained in this tag.
+     * @return The complete contents of the tag (within the angle brackets).
+     */
+    public String getText ()
+    {
+        String ret;
+        
+        ret = super.toHtml ();
+        ret = ret.substring (1, ret.length () - 1);
+        
+        return (ret);
+    }
+
+    public void toString (int level, StringBuffer buffer)
+    {
+        Node node;
+
+        for (int i = 0; i < level; i++)
+            buffer.append ("  ");
+        buffer.append (super.toString ());
+        buffer.append (System.getProperty ("line.separator"));
+        for (SimpleNodeIterator e = children (); e.hasMoreNodes ();)
+        {
+            node = e.nextNode ();
+            if (node instanceof CompositeTag)
+                ((CompositeTag)node).toString (level + 1, buffer);
+            else
+            {
+                for (int i = 0; i <= level; i++)
+                    buffer.append ("  ");
+                buffer.append (node);
+                buffer.append (System.getProperty ("line.separator"));
+            }
+        }
+        // eliminate virtual tags
+//        if (!(getEndTag ().getStartPosition () == getEndTag ().getEndPosition ()))
+        {
+            for (int i = 0; i <= level; i++)
+                buffer.append ("  ");
+            buffer.append (getEndTag ().toString ());
+            buffer.append (System.getProperty ("line.separator"));
+        }
+    }
 }

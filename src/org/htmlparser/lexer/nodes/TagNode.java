@@ -636,17 +636,36 @@ public class TagNode
      */
     public String toString ()
     {
+        String text;
         String type;
         Cursor start;
         Cursor end;
+        StringBuffer ret;
 
+        text = getText ();
+        ret = new StringBuffer (20 + text.length ());
         if (isEndTag ())
             type = "End";
         else
             type = "Tag";
         start = new Cursor (getPage (), getStartPosition ());
         end = new Cursor (getPage (), getEndPosition ());
-        return (type + " (" + start.toString () + "," + end.toString () + "): " + getText ());
+        ret.append (type);
+        ret.append (" (");
+        ret.append (start);
+        ret.append (",");
+        ret.append (end);
+        ret.append ("): ");
+        if (80 < ret.length () + text.length ())
+        {
+            text = text.substring (0, 77 - ret.length ());
+            ret.append (text);
+            ret.append ("...");
+        }
+        else
+            ret.append (text);
+        
+        return (ret.toString ());
     }
 
     /**

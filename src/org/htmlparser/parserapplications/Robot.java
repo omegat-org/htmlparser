@@ -45,7 +45,6 @@ public class Robot {
     public Robot(String resourceLocation) {
         try {
           parser = new Parser(resourceLocation,new DefaultParserFeedback());
-          parser.registerScanners();
         }
         catch (ParserException e) {
             System.err.println("Error, could not create parser object");
@@ -88,7 +87,6 @@ public class Robot {
                 if (crawlDepth>0)
                 {
                   Parser newParser = new Parser(linkTag.getLink(),new DefaultParserFeedback());
-                  newParser.registerScanners();
                   System.out.print("Crawling to "+linkTag.getLink());
                   crawl(newParser,crawlDepth-1);
                 }

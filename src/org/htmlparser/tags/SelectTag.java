@@ -98,25 +98,4 @@ public class SelectTag extends CompositeTag
 
         return (ret);
     }
-
-    public String toString()
-    {
-        StringBuffer lString;
-        NodeList children;
-        Node node;
-
-        lString = new StringBuffer(ParserUtils.toString(this));
-        children = getChildren ();
-        for(int i=0;i<children.size(); i++)
-        {
-            node = children.elementAt(i);
-            if (node instanceof OptionTag)
-            {
-                OptionTag optionTag = (OptionTag)node;
-                lString.append(optionTag.toString()).append("\n");
-            }
-        }
-
-        return lString.toString();
-    }
 }

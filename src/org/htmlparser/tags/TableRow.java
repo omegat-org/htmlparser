@@ -41,6 +41,11 @@ public class TableRow extends CompositeTag
     private static final String[] mIds = new String[] {"TR"};
 
     /**
+     * The set of end tag names that indicate the end of this tag.
+     */
+    private static final String[] mEndTagEnders = new String[] {"TABLE"};
+
+    /**
      * Create a new table row tag.
      */
     public TableRow ()
@@ -63,6 +68,15 @@ public class TableRow extends CompositeTag
     public String[] getEnders ()
     {
         return (mIds);
+    }
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (mEndTagEnders);
     }
 
     /**

@@ -55,7 +55,6 @@ public class TextExtractingVisitorTest extends ParserTestCase {
 
     public void testSimpleVisitWithRegisteredScanners() throws Exception {
         createParser("<HTML><HEAD><TITLE>Hello World</TITLE></HEAD></HTML>");
-        parser.registerScanners();
         TextExtractingVisitor visitor = new TextExtractingVisitor();
         parser.visitAllNodesWith(visitor);
         assertStringEquals(

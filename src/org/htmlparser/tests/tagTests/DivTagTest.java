@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Derrick Oswald
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,51 +16,38 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
 
-package org.htmlparser.tests.scannersTests;
+package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.scanners.DivScanner;
-import org.htmlparser.scanners.InputTagScanner;
-import org.htmlparser.scanners.TableScanner;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.TableTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class DivScannerTest extends ParserTestCase {
-
+public class DivTagTest extends ParserTestCase
+{
     static
     {
-        System.setProperty ("org.htmlparser.tests.scannersTests.DivScannerTest", "DivScannerTest");
+        System.setProperty ("org.htmlparser.tests.tagTests.DivTagTest", "DivTagTest");
     }
 
-    public DivScannerTest(String name) {
+    public DivTagTest (String name)
+    {
         super(name);
     }
-
+    
     public void testScan() throws ParserException {
         createParser("<table><div align=\"left\">some text</div></table>");
-        parser.registerScanners();
-        parser.addScanner(new TableScanner(parser));
-        parser.addScanner(new DivScanner());
         parseAndAssertNodeCount(1);
         assertType("node should be table",TableTag.class,node[0]);
         TableTag tableTag = (TableTag)node[0];
@@ -66,8 +61,13 @@ public class DivScannerTest extends ParserTestCase {
     public void testInputInDiv() throws ParserException
     {
         createParser("<div><INPUT type=\"text\" name=\"X\">Hello</INPUT></div>");
-        parser.addScanner(new DivScanner());
-        parser.addScanner(new InputTagScanner());
+        parser.setNodeFactory (
+            new PrototypicalNodeFactory (
+                new Tag[]
+                {
+                    new Div (),
+                    new InputTag (),
+                }));
         parseAndAssertNodeCount(1);
         assertType("node should be div",Div.class,node[0]);
         Div div = (Div)node[0];

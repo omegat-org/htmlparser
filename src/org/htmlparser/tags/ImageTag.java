@@ -187,11 +187,6 @@ public class ImageTag extends Tag
         return (imageURL);
     }
 
-    public String toString()
-    {
-        return "IMAGE TAG : Image at " + getImageURL () +"; begins at : "+getStartPosition ()+"; ends at : "+getEndPosition ();
-    }
-
     public void setImageURL (String url)
     {
         imageURL = url;

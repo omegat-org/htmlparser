@@ -32,6 +32,7 @@ import java.util.Map;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.Tag;
@@ -91,6 +92,7 @@ public class TagTests extends ParserTestCase {
         "<img src=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" width=87 height=20 border=0 alt=\"Marshall Field's\">";
 
         createParser(testHtml);
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
         assertType("should be Tag",Tag.class,node[0]);
         Tag tag = (Tag)node[0];
@@ -106,6 +108,7 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<custom/>";
         createParser(html);
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
         assertType("should be Tag",Tag.class,node[0]);
         Tag tag = (Tag)node[0];
@@ -120,6 +123,7 @@ public class TagTests extends ParserTestCase {
 
     public void testTagWithCloseTagSymbolInAttribute() throws ParserException {
         createParser("<tag att=\"a>b\">");
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
         assertType("should be Tag",Tag.class,node[0]);
         Tag tag = (Tag)node[0];
@@ -128,6 +132,7 @@ public class TagTests extends ParserTestCase {
 
     public void testTagWithOpenTagSymbolInAttribute() throws ParserException {
         createParser("<tag att=\"a<b\">");
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
         assertType("should be Tag",Tag.class,node[0]);
         Tag tag = (Tag)node[0];
@@ -137,6 +142,7 @@ public class TagTests extends ParserTestCase {
     public void testTagWithSingleQuote() throws ParserException {
         String html = "<tag att=\'a<b\'>";
         createParser(html);
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
         assertType("should be Tag",Tag.class,node[0]);
         Tag tag = (Tag)node[0];
@@ -153,7 +159,6 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<meta name=\"foo\" content=\"foo<bar>\">";
         createParser(html);
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -168,7 +173,6 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<meta name=\"foo\" content=\"foo<bar\">";
         createParser(html);
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -183,7 +187,6 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<meta name=\"foo\" content=\"foobar>\">";
         createParser(html);
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -198,7 +201,6 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<meta name=\"foo\" content=\"foo\nbar>\">";
         createParser(html);
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -219,7 +221,6 @@ public class TagTests extends ParserTestCase {
         // bar">
         String html = "<meta name=\"foo\" content=\"<foo>\nbar\">";
         createParser(html);
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -240,7 +241,6 @@ public class TagTests extends ParserTestCase {
         // bar">
         String html = "<meta name=\"foo\" content=\"foo>\nbar\">";
         createParser(html);
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -261,7 +261,6 @@ public class TagTests extends ParserTestCase {
         // bar">
         String html = "<meta name=\"foo\" content=\"<foo\nbar\"";
         createParser(html);
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -283,6 +282,7 @@ public class TagTests extends ParserTestCase {
     public void testThreadSafety() throws Exception
     {
         createParser("<html></html>");
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         String testHtml1 = "<a HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>" +
                             TEST_HTML;
 
@@ -360,9 +360,7 @@ public class TagTests extends ParserTestCase {
         ParsingThread(int id, String testHtml, int max) {
             this.id = id;
             this.max = max;
-            this.parser = 
-                Parser.createParser(testHtml);
-            parser.registerScanners();
+            this.parser = Parser.createParser(testHtml);
         }
 
         public void run() {
@@ -410,6 +408,7 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<input disabled>";
         createParser(html);
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount (1);
         assertType ("should be Tag", Tag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -423,6 +422,7 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<input disabled=>";
         createParser(html);
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount (1);
         assertType ("should be Tag", Tag.class, node[0]);
         Tag tag = (Tag)node[0];

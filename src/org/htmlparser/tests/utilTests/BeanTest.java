@@ -213,7 +213,6 @@ public class BeanTest extends ParserTestCase
         byte[] data;
 
         parser = new Parser ("http://htmlparser.sourceforge.net/test/example.html");
-        parser.registerScanners ();
         enumeration = parser.elements ();
         vector = new Vector (50);
         while (enumeration.hasMoreNodes ())

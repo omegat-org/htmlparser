@@ -76,7 +76,6 @@ public class Generate
         throws ParserException
     {
         parser = new Parser ("http://www.w3.org/TR/REC-html40/sgml/entities.html");
-        parser.registerScanners ();
     }
 
     /**
@@ -149,6 +148,49 @@ public class Generate
         return (ret.toString ());
     }
 
+    public void gather (Node node, StringBuffer buffer)
+    {
+        NodeList children;
+
+        if (node instanceof StringNode)
+        {
+            // Node is a plain string
+            // Cast it to an HTMLStringNode
+            StringNode stringNode = (StringNode)node;
+            // Retrieve the data from the object
+            buffer.append (stringNode.getText ());
+        }
+        else if (node instanceof LinkTag)
+        {
+            // Node is a link
+            // Cast it to an HTMLLinkTag
+            LinkTag linkNode = (LinkTag)node;
+            // Retrieve the data from the object and print it
+            buffer.append (linkNode.getLinkText ());
+        }
+        else if (node instanceof Tag)
+        {
+            String name = ((Tag)node).getTagName ();
+            if (name.equals ("BR") || name.equals ("P"))
+                buffer.append (nl);
+            else
+            {
+                children = ((Tag)node).getChildren ();
+                if (null != children)
+                    for (int i = 0; i < children.size (); i++)
+                        gather (children.elementAt (i), buffer);
+            }
+        }
+        else if (node instanceof RemarkNode)
+        {
+        }
+        else
+        {
+            System.out.println ();
+            System.out.println(node.toString());
+        }
+    }
+
     /**
      * Pull out text elements from the HTML.
      */
@@ -164,37 +206,7 @@ public class Generate
         for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
-
-            if (node instanceof StringNode)
-            {
-                // Node is a plain string
-                // Cast it to an HTMLStringNode
-                StringNode stringNode = (StringNode)node;
-                // Retrieve the data from the object
-                buffer.append (stringNode.getText ());
-            }
-            else if (node instanceof LinkTag)
-            {
-                // Node is a link
-                // Cast it to an HTMLLinkTag
-                LinkTag linkNode = (LinkTag)node;
-                // Retrieve the data from the object and print it
-                buffer.append (linkNode.getLinkText ());
-            }
-            else if (node instanceof Tag)
-            {
-                String contents = ((Tag)node).getText ();
-                if (contents.equals ("BR") || contents.equals ("P"))
-                    buffer.append (nl);
-            }
-            else if (node instanceof RemarkNode)
-            {
-            }
-            else
-            {
-                System.out.println ();
-                System.out.println(node.toString());
-            }
+            gather (node, buffer);
         }
 
         String text = translate (buffer.toString ());
@@ -430,8 +442,43 @@ public class Generate
             ParserException
     {
         Generate filter = new Generate ();
-        System.out.println ("import java.util.Hashtable;");
+        System.out.println ("// HTMLParser Library v1_4_20031109 - A java-based parser for HTML");
+        System.out.println ("// Copyright (C) Dec 31, 2000 Somik Raha");
+        System.out.println ("//");
+        System.out.println ("// This library is free software; you can redistribute it and/or");
+        System.out.println ("// modify it under the terms of the GNU Lesser General Public");
+        System.out.println ("// License as published by the Free Software Foundation; either");
+        System.out.println ("// version 2.1 of the License, or (at your option) any later version.");
+        System.out.println ("//");
+        System.out.println ("// This library is distributed in the hope that it will be useful,");
+        System.out.println ("// but WITHOUT ANY WARRANTY; without even the implied warranty of");
+        System.out.println ("// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU");
+        System.out.println ("// Lesser General Public License for more details.");
+        System.out.println ("//");
+        System.out.println ("// You should have received a copy of the GNU Lesser General Public");
+        System.out.println ("// License along with this library; if not, write to the Free Software");
+        System.out.println ("// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA");
+        System.out.println ("//");
+        System.out.println ("// For any questions or suggestions, you can write to me at :");
+        System.out.println ("// Email :somik@industriallogic.com");
+        System.out.println ("//");
+        System.out.println ("// Postal Address :");
+        System.out.println ("// Somik Raha");
+        System.out.println ("// Extreme Programmer & Coach");
+        System.out.println ("// Industrial Logic Corporation");
+        System.out.println ("// 2583 Cedar Street, Berkeley,");
+        System.out.println ("// CA 94708, USA");
+        System.out.println ("// Website : http://www.industriallogic.com");
+        System.out.println ("//");
+        System.out.println ("// This class was contributed by");
+        System.out.println ("// Derrick Oswald");
+        System.out.println ("//");
+        System.out.println ();
+        System.out.println ("package org.htmlparser.util;");
+        System.out.println ();
+        System.out.println ("import java.util.HashMap;");
         System.out.println ("import java.util.Iterator;");
+        System.out.println ("import java.util.Map;");
         System.out.println ();
         System.out.println ("/**");
         System.out.println (" * Translate numeric character references and character entity references to unicode characters.");
@@ -450,10 +497,10 @@ public class Generate
         System.out.println ("     * Table mapping entity reference kernel to character.");
         System.out.println ("     * <p><code>String</code>-><code>Character</code>");
         System.out.println ("     */");
-        System.out.println ("    protected static Hashtable mRefChar;");
+        System.out.println ("    protected static Map mRefChar;");
         System.out.println ("    static");
         System.out.println ("    {");
-        System.out.println ("        mRefChar = new Hashtable (1000);");
+        System.out.println ("        mRefChar = new HashMap (1000);");
         System.out.println ();
         filter.parse ();
         System.out.println ("    }");
@@ -462,11 +509,10 @@ public class Generate
         System.out.println ("     * Table mapping character to entity reference kernel.");
         System.out.println ("     * <p><code>Character</code>-><code>String</code>");
         System.out.println ("     */");
-        System.out.println ("    protected static Hashtable mCharRef;");
+        System.out.println ("    protected static Map mCharRef;");
         System.out.println ("    static");
         System.out.println ("    {");
-        System.out.println ("        mCharRef = new Hashtable (mRefChar.size ());");
-        System.out.println ();
+        System.out.println ("        mCharRef = new HashMap (mRefChar.size ());");
         System.out.println ("        Iterator iterator = mRefChar.keySet ().iterator ();");
         System.out.println ("        while (iterator.hasNext ())");
         System.out.println ("        {");
@@ -495,30 +541,29 @@ public class Generate
         System.out.println ("     */");
         System.out.println ("    public static char convertToChar (String string)");
         System.out.println ("    {");
-        System.out.println ("        int length;");
         System.out.println ("        Character item;");
+        System.out.println ("        int start;");
+        System.out.println ("        int end;");
         System.out.println ("        char ret;");
         System.out.println ();
         System.out.println ("        ret = 0;");
         System.out.println ();
-        System.out.println ("        length = string.length ();");
-        System.out.println ("        if (0 < length)");
+        System.out.println ("        start = 0;");
+        System.out.println ("        end = string.length ();");
+        System.out.println ("        if (0 < end)");
         System.out.println ("        {");
         System.out.println ("            if ('&' == string.charAt (0))");
+        System.out.println ("                start++;");
+        System.out.println ("            if (0 < end)");
         System.out.println ("            {");
-        System.out.println ("                string = string.substring (1);");
-        System.out.println ("                length--;");
-        System.out.println ("            }");
-        System.out.println ("            if (0 < length)");
-        System.out.println ("            {");
-        System.out.println ("                if (';' == string.charAt (length - 1))");
-        System.out.println ("                    string = string.substring (0, --length);");
-        System.out.println ("                if (0 < length)");
+        System.out.println ("                if (';' == string.charAt (end - 1))");
+        System.out.println ("                    --end;");
+        System.out.println ("                if (0 < end)");
         System.out.println ("                {");
-        System.out.println ("                    if ('#' == string.charAt (0))");
+        System.out.println ("                    if ('#' == string.charAt (start))");
         System.out.println ("                        try");
         System.out.println ("                        {");
-        System.out.println ("                            ret = (char)Integer.parseInt (string.substring (1));");
+        System.out.println ("                            ret = (char)Integer.parseInt (string.substring (start + 1, end));");
         System.out.println ("                        }");
         System.out.println ("                        catch (NumberFormatException nfe)");
         System.out.println ("                        {");
@@ -526,7 +571,7 @@ public class Generate
         System.out.println ("                        }");
         System.out.println ("                    else");
         System.out.println ("                    {");
-        System.out.println ("                        item = (Character)refChar.get (string);");
+        System.out.println ("                        item = (Character)mRefChar.get (string.substring (start,end));");
         System.out.println ("                        if (null != item)");
         System.out.println ("                            ret = item.charValue ();");
         System.out.println ("                    }");
@@ -535,6 +580,10 @@ public class Generate
         System.out.println ("        }");
         System.out.println ();
         System.out.println ("        return (ret);");
+        System.out.println ("    }");
+        System.out.println ();
+        System.out.println ("    public static String decode (StringBuffer stringBuffer) {");
+        System.out.println ("        return decode(stringBuffer.toString());");
         System.out.println ("    }");
         System.out.println ();
         System.out.println ("    /**");

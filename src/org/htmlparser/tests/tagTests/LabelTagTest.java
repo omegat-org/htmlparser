@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Derrick Oswald
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,52 +16,38 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
-//
-// This class was contributed by Dhaval Udani
-// dhaval.h.udani@orbitech.co.in
 
-package org.htmlparser.tests.scannersTests;
+package org.htmlparser.tests.tagTests;
 
-import java.util.*;
-import junit.framework.TestSuite;
-import org.htmlparser.scanners.LabelScanner;
+import java.util.Hashtable;
+
 import org.htmlparser.tags.LabelTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class LabelScannerTest extends ParserTestCase {
-
+public class LabelTagTest extends ParserTestCase
+{
     static
     {
-        System.setProperty ("org.htmlparser.tests.scannersTests.LabelScannerTest", "LabelScannerTest");
+        System.setProperty ("org.htmlparser.tests.tagTests.LabelTagTest", "LabelTagTest");
     }
 
-    public LabelScannerTest(String name) {
+    public LabelTagTest (String name)
+    {
         super(name);
     }
+    
     public void testSimpleLabels() throws ParserException
     {
         String html = "<label>This is a label tag</label>";
         createParser(html);
-        LabelScanner labelScanner = new LabelScanner("-l");
-        parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LabelTag);
         //  check the title node
@@ -66,9 +60,6 @@ public class LabelScannerTest extends ParserTestCase {
     public void testLabelWithJspTag() throws ParserException {
         String label = "<label><%=labelValue%></label>";
         createParser(label);
-        parser.registerScanners();
-        LabelScanner labelScanner = new LabelScanner("-l");
-        parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LabelTag);
         //  check the title node
@@ -80,9 +71,6 @@ public class LabelScannerTest extends ParserTestCase {
     {
         String html = "<label><span>Span within label</span></label>";
         createParser(html);
-        parser.registerScanners();
-        LabelScanner labelScanner = new LabelScanner("-l");
-        parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LabelTag);
         //  check the title node
@@ -95,9 +83,6 @@ public class LabelScannerTest extends ParserTestCase {
         String guts = "<span>Jane <b> Doe </b> Smith</span>";
         String html = "<label>" + guts + "</label>";
         createParser(html);
-        parser.registerScanners();
-        LabelScanner labelScanner = new LabelScanner("-l");
-        parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LabelTag);
         LabelTag labelTag = (LabelTag) node[0];
@@ -111,9 +96,6 @@ public class LabelScannerTest extends ParserTestCase {
     {
         String html = "<label>John Doe</label>";
         createParser(html);
-        parser.registerScanners();
-        LabelScanner labelScanner = new LabelScanner("-l");
-        parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LabelTag);
         LabelTag labelTag = (LabelTag) node[0];
@@ -127,9 +109,6 @@ public class LabelScannerTest extends ParserTestCase {
         String label1 = "<label id=\"attr1\">";
         String label2 = "<label>Jane Doe";
         createParser(label1 + label2);
-        parser.registerScanners();
-        LabelScanner labelScanner = new LabelScanner("-l");
-        parser.addScanner(labelScanner);
         parseAndAssertNodeCount(2);
         assertTrue(node[0] instanceof LabelTag);
         assertTrue(node[1] instanceof LabelTag);
@@ -159,9 +138,6 @@ public class LabelScannerTest extends ParserTestCase {
         String testHTML = label1 + label2 + label3 + label4 + label5 + label6 
             + label7 + label8 + label9 + label10 + label11 + label12 + label13;
         createParser(testHTML);
-        //parser.registerScanners();
-        LabelScanner labelScanner = new LabelScanner("-l");
-        parser.addScanner(labelScanner);
         parseAndAssertNodeCount(13);
         LabelTag LabelTag;
         LabelTag = (LabelTag) node[0];
@@ -190,9 +166,5 @@ public class LabelScannerTest extends ParserTestCase {
         assertStringEquals("HTML String", label12, LabelTag.toHtml());
         LabelTag = (LabelTag) node[12];
         assertStringEquals("HTML String", label13 + "</LABEL>",LabelTag.toHtml());
-    }
-
-    public static TestSuite suite() {
-        return new TestSuite(LabelScannerTest.class);
     }
 }

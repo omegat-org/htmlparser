@@ -33,6 +33,7 @@ import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 /**
  * The remark tag is identified and represented by this class.
@@ -80,17 +81,61 @@ public class RemarkNode extends AbstractNode
     {
         return (mPage.getText (getStartPosition (), getEndPosition ()));
     }
+
     /**
      * Print the contents of the remark tag.
      */
     public String toString()
     {
+        int startpos;
+        int endpos;
         Cursor start;
         Cursor end;
+        char c;
+        StringBuffer ret;
 
-        start = new Cursor (getPage (), getStartPosition ());
-        end = new Cursor (getPage (), getEndPosition ());
-        return ("Rem (" + start.toString () + "," + end.toString () + "): " + getText ());
+        startpos = getStartPosition ();
+        endpos = getEndPosition ();
+        ret = new StringBuffer (endpos - startpos + 20);
+        start = new Cursor (getPage (), startpos);
+        end = new Cursor (getPage (), endpos);
+        ret.append ("Rem (");
+        ret.append (start);
+        ret.append (",");
+        ret.append (end);
+        ret.append ("): ");
+        while (start.getPosition () < endpos)
+        {
+            try
+            {
+                c = mPage.getCharacter (start);
+                switch (c)
+                {
+                    case '\t':
+                        ret.append ("\\t");
+                        break;
+                    case '\n':
+                        ret.append ("\\n");
+                        break;
+                    case '\r':
+                        ret.append ("\\r");
+                        break;
+                    default:
+                        ret.append (c);
+                }
+            }
+            catch (ParserException pe)
+            {
+                // not really expected, but we'return only doing toString, so ignore
+            }
+            if (77 <= ret.length ())
+            {
+                ret.append ("...");
+                break;
+            }
+        }
+
+        return (ret.toString ());
     }
 
     public void accept(Object visitor) {

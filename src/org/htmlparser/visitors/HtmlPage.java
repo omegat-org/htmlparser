@@ -32,7 +32,7 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
-import org.htmlparser.scanners.TableScanner;
+import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
@@ -42,15 +42,12 @@ public class HtmlPage extends NodeVisitor {
     private String title;
     private NodeList nodesInBody;
     private NodeList tables;
-    private boolean bodyTagBegin;
 
     public HtmlPage(Parser parser) {
-        super(false);
-        parser.registerScanners();
-        parser.addScanner(new TableScanner(parser));
+        super(true);
+        title = "";
         nodesInBody = new NodeList();
         tables = new NodeList();
-        bodyTagBegin = false;
     }
 
     public String getTitle() {
@@ -63,60 +60,35 @@ public class HtmlPage extends NodeVisitor {
 
     public void visitTag(Tag tag)
     {
-        addTagToBodyIfApplicable(tag);
-
-        if (isTable(tag)) {
+        if (isTable(tag))
             tables.add(tag);
-        }
-        else {
-            if (isBodyTag(tag))
-                bodyTagBegin = true;
-        }
+        else if (isBodyTag(tag))
+            nodesInBody = tag.getChildren ();
     }
 
-    public void visitEndTag(Tag tag)
+    private boolean isTable(Tag tag)
     {
-        if (isBodyTag(tag))
-            bodyTagBegin = false;
-        addTagToBodyIfApplicable(tag);
+        return (tag instanceof TableTag);
     }
 
-    private boolean isTable(Tag tag) {
-        return tag instanceof TableTag;
-    }
-
-    private void addTagToBodyIfApplicable(Node node) {
-        if (bodyTagBegin)
-            nodesInBody.add(node);
-    }
-
-    public void visitRemarkNode(RemarkNode remarkNode) {
-        addTagToBodyIfApplicable(remarkNode);
-    }
-
-    public void visitStringNode(StringNode stringNode) {
-        addTagToBodyIfApplicable(stringNode);
-    }
-
-    private boolean isBodyTag(Tag tag) {
-        return tag.getTagName().equals("BODY");
+    private boolean isBodyTag(Tag tag)
+    {
+        return (tag instanceof BodyTag);
     }
 
     public NodeList getBody() {
         return nodesInBody;
     }
 
-    public TableTag [] getTables() {
+    public TableTag [] getTables()
+    {
         TableTag [] tableArr = new TableTag[tables.size()];
-        for (int i=0;i<tables.size();i++)
-            tableArr[i] = (TableTag)tables.elementAt(i);
+        tables.copyToNodeArray (tableArr);
         return tableArr;
     }
 
-
-
-    public void visitTitleTag(TitleTag titleTag) {
+    public void visitTitleTag(TitleTag titleTag)
+    {
         title = titleTag.getTitle();
     }
-
 }

@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Derrick Oswald
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,50 +16,39 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
 
-package org.htmlparser.tests.scannersTests;
+package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.tags.Bullet;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.tags.Bullet;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
-
-public class BulletScannerTest extends ParserTestCase {
-
+public class BulletTagTest extends ParserTestCase
+{
     static
     {
-        System.setProperty ("org.htmlparser.tests.scannersTests.BulletScannerTest", "BulletScannerTest");
+        System.setProperty ("org.htmlparser.tests.tagTests.BulletTagTest", "BulletTagTest");
     }
 
-    public BulletScannerTest(String name) {
+    public BulletTagTest (String name)
+    {
         super(name);
     }
-
+    
     public void testBulletFound() throws Exception {
         createParser(
             "<LI><A HREF=\"collapseHierarchy.html\">Collapse Hierarchy</A>\n"+
             "</LI>"
         );
-        parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertType("should be a bullet",Bullet.class,node[0]);
     }
@@ -77,11 +74,8 @@ public class BulletScannerTest extends ParserTestCase {
             "</body>" +
             "</html>"
         );
-        parser.registerScanners();
-        for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
-            Node node = i.nextNode();
-//            System.out.println(node.toHtml());
-        }
+        for (NodeIterator i = parser.elements();i.hasMoreNodes();)
+            i.nextNode();
     }
 
     public void testNonEndedBullets() throws ParserException {
@@ -96,7 +90,6 @@ public class BulletScannerTest extends ParserTestCase {
             " (MacPhail)  <A HREF=\"/hansard/37th3rd/h21022a.htm#3945\">3945-7</A>\n"+
             "<li>tuition fee freeze"
         );
-        parser.registerScanners();
         parseAndAssertNodeCount(5);
         for (int i=0;i<nodeCount;i++) {
             assertType("node "+i,Bullet.class,node[i]);

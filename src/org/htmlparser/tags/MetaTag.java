@@ -117,13 +117,4 @@ public class MetaTag extends Tag
             getPage ().setEncoding (charset);
         }
     }
-
-    public String toString()
-    {
-        return "META TAG\n"+
-                "--------\n"+
-                "Http-Equiv : "+getHttpEquiv()+"\n"+
-                "Name : "+ getMetaTagName() +"\n"+
-                "Contents : "+getMetaContent()+"\n";
-    }
 }

@@ -29,6 +29,7 @@
 
 package org.htmlparser.tests.tagTests;
 
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
@@ -46,10 +47,9 @@ public class EndTagTest extends ParserTestCase {
 
     public void testToHTML() throws ParserException {
         createParser("<HTML></HTML>");
-        // Register the image scanner
-        parser.registerScanners();
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(2);
-        // The node should be an HTMLLinkTag
+        // The node should be a tag
         assertTrue("Node should be a Tag",node[1] instanceof Tag);
         Tag endTag = (Tag)node[1];
         assertTrue("Node should be an end Tag",endTag.isEndTag ());
@@ -60,6 +60,7 @@ public class EndTagTest extends ParserTestCase {
         String testHtml =
             "<SCRIPT>document.write(d+\".com\")</SCRIPT><BR>";
         createParser(testHtml);
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         int pos = testHtml.indexOf("</SCRIPT>");
         parseAndAssertNodeCount(4);
         assertTrue("Node should be a Tag",node[2] instanceof Tag);

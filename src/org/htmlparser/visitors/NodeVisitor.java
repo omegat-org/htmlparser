@@ -66,7 +66,6 @@ import org.htmlparser.tags.TitleTag;
  *     public static void main (String[] args) throws ParserException
  *     {
  *         Parser parser = new Parser ("http://cbc.ca");
- *         parser.registerScanners ();
  *         Visitor visitor = new Visitor ();
  *         parser.visitAllNodesWith (visitor);
  *     }

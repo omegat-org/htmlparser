@@ -38,39 +38,8 @@ import org.htmlparser.Parser;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.Tag;
 
-public class ParserUtils {
-
-    public static String toString(Tag tag) {
-        String tagName = tag.getRawTagName ();
-        Hashtable attrs = tag.getAttributes();
-
-        StringBuffer lString = new StringBuffer(tagName);
-        lString.append(" TAG\n");
-        lString.append("--------\n");
-
-        for (Enumeration e = attrs.keys(); e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-            String value = (String) attrs.get(key);
-            if (!key.equalsIgnoreCase(SpecialHashtable.TAGNAME) && value.length() > 0)
-                lString.append(key).append(" : ").append(value).append("\n");
-        }
-
-        return lString.toString();
-    }
-
-    public static Map adjustScanners(Parser parser) {
-        Map tempScanners = new Hashtable();
-        tempScanners = parser.getScanners();
-        // Remove all existing scanners
-        parser.flushScanners();
-        return tempScanners;
-    }
-
-    public static void restoreScanners(Parser parser, Map tempScanners) {
-        // Flush the scanners
-        parser.setScanners(tempScanners);
-    }
-
+public class ParserUtils
+{
     public static String removeChars(String s, char occur) {
         StringBuffer newString = new StringBuffer();
         char ch;
@@ -87,12 +56,6 @@ public class ParserUtils {
         inputString = ParserUtils.removeChars(inputString, '\n');
         inputString = ParserUtils.removeChars(inputString, '\t');
         return inputString;
-    }
-
-    public static String removeLeadingBlanks(String plainText) {
-        while (plainText.indexOf(' ') == 0)
-            plainText = plainText.substring(1);
-        return plainText;
     }
 
     public static String removeTrailingBlanks(String text) {

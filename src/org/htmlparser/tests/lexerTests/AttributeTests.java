@@ -34,6 +34,7 @@ import junit.framework.TestSuite;
 import org.htmlparser.Node;
 
 import org.htmlparser.Parser;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.PageAttribute;
 import org.htmlparser.tags.Tag;
@@ -67,6 +68,7 @@ public class AttributeTests extends ParserTestCase
 
         html = "<" + tagContents + ">";
         createParser (html);
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         try
         {
             iterator = parser.elements ();

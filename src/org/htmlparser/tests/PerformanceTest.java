@@ -88,7 +88,6 @@ public class PerformanceTest {
         for (int i=0;i<=numTimes;i++) {
             // Create the parser object
             parser = new Parser(file,new DefaultParserFeedback());
-            parser.registerScanners();
             Node node;
             long start=System.currentTimeMillis();
             for (NodeIterator e = parser.elements();e.hasMoreNodes();) {

@@ -39,16 +39,17 @@ import java.util.Map;
 import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.StringNode;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
@@ -299,6 +300,7 @@ public class ParserTest extends ParserTestCase
             out.print (buffer);
             out.close ();
             parser = new Parser (connection);
+            parser.setNodeFactory (new PrototypicalNodeFactory (true));
         }
         catch (Exception e)
         {
@@ -351,6 +353,7 @@ public class ParserTest extends ParserTestCase
             out.println ("</html>");
             out.close ();
             parser = new Parser (file.getAbsolutePath (), new DefaultParserFeedback(DefaultParserFeedback.QUIET));
+            parser.setNodeFactory (new PrototypicalNodeFactory (true));
             nodes = new AbstractNode[30];
             i = 0;
             for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)
@@ -403,7 +406,6 @@ public class ParserTest extends ParserTestCase
         try
         {
             parser = new Parser("http://www.sony.co.jp", Parser.noFeedback);
-            parser.registerScanners ();
             assertEquals("Character set by default is ISO-8859-1", "ISO-8859-1", parser.getEncoding ());
             enumeration = parser.elements();
             // search for the <BODY> tag
@@ -431,6 +433,7 @@ public class ParserTest extends ParserTestCase
         Node[] nodes;
 
         parser = new Parser(url);
+        parser.setNodeFactory (new PrototypicalNodeFactory (new MetaTag ()));
         i = 0;
         nodes = new AbstractNode[30];
         for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
@@ -453,7 +456,6 @@ public class ParserTest extends ParserTestCase
         String url = "http://htmlparser.sourceforge.net/test/DoublequotedCharset.html";
 
         parser = new Parser(url);
-        parser.registerScanners ();
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
             e.nextNode();
         assertTrue ("Wrong encoding", parser.getEncoding ().equals ("UTF-8"));
@@ -474,7 +476,6 @@ public class ParserTest extends ParserTestCase
         String url = "http://htmlparser.sourceforge.net/test/SinglequotedCharset.html";
 
         parser = new Parser(url);
-        parser.registerScanners ();
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
             e.nextNode();
         assertTrue ("Wrong encoding", parser.getEncoding ().equals ("UTF-8"));
@@ -543,7 +544,6 @@ public class ParserTest extends ParserTestCase
             };
             page.setConnection (connection);
             parser = new Parser (new Lexer (page));
-            parser.registerScanners ();
             // must be the default
             assertTrue ("Wrong encoding", parser.getEncoding ().equals ("ISO-8859-1"));
             for (NodeIterator e = parser.elements();e.hasMoreNodes();)
@@ -574,6 +574,7 @@ public class ParserTest extends ParserTestCase
         String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
 
         parser = new Parser(url);
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         Node node [] = new AbstractNode[30];
         int i = 0;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
@@ -635,7 +636,6 @@ public class ParserTest extends ParserTestCase
         "</script></font>\n"+
         "<p><font size=-2>&copy;2002 Google</font><font size=-2> - Searching 3,083,324,652 web pages</font></center></body></html>\n"
         );
-        parser.registerScanners();
         NodeList collectionList = new NodeList();
         NodeClassFilter filter = new NodeClassFilter (LinkTag.class);
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
@@ -689,7 +689,6 @@ public class ParserTest extends ParserTestCase
         "</tr></table></div>\n"+
         "</body>\n"+
         "</html>");
-        parser.registerScanners();
         NodeList collectionList = new NodeList();
         TagNameFilter filter = new TagNameFilter ("IMG");
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
@@ -700,17 +699,6 @@ public class ParserTest extends ParserTestCase
             Node node = e.nextNode();
             assertTrue("Only images should have been parsed",node instanceof ImageTag);
         }
-    }
-
-    public void testRemoveScanner() throws Exception {
-        createParser(
-            ""
-        );
-        parser.registerScanners();
-        parser.removeScanner(new FormScanner("",parser));
-        Map scanners = parser.getScanners();
-        TagScanner scanner = (TagScanner)scanners.get("FORM");
-        assertNull("shouldnt have found scanner",scanner);
     }
 
     /**
@@ -747,6 +735,7 @@ public class ParserTest extends ParserTestCase
             + "size=1>blah</font></td></tr>\n"
             + "</table>\n"
             + "</body></html>");
+        parser.setNodeFactory (new PrototypicalNodeFactory (true));
         int i = 0;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
         {

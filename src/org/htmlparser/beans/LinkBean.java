@@ -94,7 +94,6 @@ public class LinkBean extends Object implements Serializable
         URL[] ret;
 
         parser = new Parser (url);
-        parser.registerScanners ();
         ObjectFindingVisitor visitor = new ObjectFindingVisitor(LinkTag.class);
         parser.visitAllNodesWith(visitor);
         Node [] nodes = visitor.getTags();

@@ -39,6 +39,16 @@ public class TableColumn extends CompositeTag
     private static final String[] mIds = new String[] {"TD"};
 
     /**
+     * The set of tag names that indicate the end of this tag.
+     */
+    private static final String[] mEnders = new String[] {"TD", "TR"};
+
+    /**
+     * The set of end tag names that indicate the end of this tag.
+     */
+    private static final String[] mEndTagEnders = new String[] {"TR", "TABLE"};
+
+    /**
      * Create a new table column tag.
      */
     public TableColumn ()
@@ -61,5 +71,14 @@ public class TableColumn extends CompositeTag
     public String[] getEnders ()
     {
         return (mIds);
+    }
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (mEndTagEnders);
     }
 }

@@ -31,7 +31,7 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.scanners.OptionTagScanner;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
@@ -59,6 +59,18 @@ public class OptionTagTest extends ParserTestCase
     private String testHTML = option1 + option2 + option3 + option4 + option5 + option6 
         + option7 + option8 + option9 + option10 + option11 + option12 + option13;
 
+    private String html = new String(
+                                    "<OPTION value=\"Google Search\">Google</OPTION>" +
+                                    "<OPTION value=\"AltaVista Search\">AltaVista" +
+                                    "<OPTION value=\"Lycos Search\"></OPTION>" +
+                                    "<OPTION>Yahoo!</OPTION>" +
+                                    "<OPTION>\nHotmail</OPTION>" +
+                                    "<OPTION>Mailcity\n</OPTION>"+
+                                    "<OPTION>\nIndiatimes\n</OPTION>"+
+                                    "<OPTION>\nRediff\n</OPTION>\n" +
+                                    "<OPTION>Cricinfo"
+                                    );
+
     public OptionTagTest(String name)
     {
         super(name);
@@ -67,7 +79,6 @@ public class OptionTagTest extends ParserTestCase
     protected void setUp() throws Exception {
         super.setUp();
         createParser(testHTML);
-        parser.addScanner(new OptionTagScanner("-option"));
         parseAndAssertNodeCount(13);
     }
 
@@ -141,5 +152,17 @@ public class OptionTagTest extends ParserTestCase
         assertEquals("HTML Raw String","OPTION VALUE: AOL TEXT: AOL\n",OptionTag.toString());
         OptionTag = (OptionTag) node[12];
         assertEquals("HTML Raw String","OPTION VALUE: Time Warner TEXT: Time Warner AOL Inc.\n",OptionTag.toString());
+    }
+
+    public void testScan() throws ParserException
+    {
+        createParser(html,"http://www.google.com/test/index.html");
+        parseAndAssertNodeCount(10);
+        for (int j = 0; j < 10; j++)
+        {
+            if (node[j] instanceof StringNode)
+                continue;
+            assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
+        }
     }
 }

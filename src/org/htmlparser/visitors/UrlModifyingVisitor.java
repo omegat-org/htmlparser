@@ -33,8 +33,6 @@ package org.htmlparser.visitors;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
-import org.htmlparser.scanners.ImageScanner;
-import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
@@ -48,8 +46,6 @@ public class UrlModifyingVisitor extends NodeVisitor {
     public UrlModifyingVisitor(Parser parser, String linkPrefix) {
         super(true,true);
         this.parser = parser;
-        parser.addScanner(new LinkScanner());
-        parser.addScanner(new ImageScanner(ImageTag.IMAGE_TAG_FILTER));
         this.linkPrefix =linkPrefix;
         modifiedResult = new StringBuffer();
     }
@@ -81,10 +77,14 @@ public class UrlModifyingVisitor extends NodeVisitor {
         Node parent;
         
         parent = tag.getParent ();
+        // process only those nodes not processed by a parent
         if (null == parent)
+            // an orphan end tag
             modifiedResult.append(tag.toHtml());
         else
-            modifiedResult.append(parent.toHtml());
+            if (null == parent.getParent ())
+                // a top level tag with no parents
+                modifiedResult.append(parent.toHtml());
     }
 
     public String getModifiedResult() {

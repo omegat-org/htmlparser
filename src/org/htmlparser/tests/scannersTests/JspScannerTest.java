@@ -29,6 +29,7 @@
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Parser;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.tags.JspTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -57,8 +58,7 @@ public class JspScannerTest extends ParserTestCase {
         "This is a <%=object%>\n"+
         "</h1>");
 
-        // Register the Jsp Scanner
-        parser.addScanner(new JspScanner("-j"));
+        parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
         parseAndAssertNodeCount(5);
         // The first node should be an JspTag
         assertTrue("Third should be an JspTag",node[2] instanceof JspTag);
@@ -88,8 +88,7 @@ public class JspScannerTest extends ParserTestCase {
                 "}\n" +
                 "%>");
             Parser.setLineSeparator("\r\n");
-            // Register the Jsp Scanner
-            parser.addScanner(new JspScanner("-j"));
+            parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
             parseAndAssertNodeCount(1);
         }
     }

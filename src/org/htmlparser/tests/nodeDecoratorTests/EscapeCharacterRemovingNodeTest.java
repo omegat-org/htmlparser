@@ -51,9 +51,9 @@ public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
         StringBuffer decodedContent = new StringBuffer();
 
         StringNodeFactory stringNodeFactory = new StringNodeFactory();
-        stringNodeFactory.setEscapeCharacterRemoval(true);
+        stringNodeFactory.setRemoveEscapes (true);
         createParser(STRING_TO_DECODE);
-        parser.setStringNodeFactory(stringNodeFactory);
+        parser.setNodeFactory(stringNodeFactory);
 
         NodeIterator nodes = parser.elements();
 
@@ -99,11 +99,11 @@ public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
         StringBuffer decodedContent = new StringBuffer();
 
         StringNodeFactory stringNodeFactory = new StringNodeFactory();
-        stringNodeFactory.setNodeDecoding(true);
-        stringNodeFactory.setEscapeCharacterRemoval(true);
+        stringNodeFactory.setDecode (true);
+        stringNodeFactory.setRemoveEscapes (true);
 
         createParser(ENCODED_WORKSHOP_TITLE);
-        parser.setStringNodeFactory(stringNodeFactory);
+        parser.setNodeFactory(stringNodeFactory);
         NodeIterator nodes = parser.elements();
 
         while (nodes.hasMoreNodes())

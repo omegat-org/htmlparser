@@ -55,8 +55,4 @@ public class InputTag extends Tag
     {
         return (mIds);
     }
-
-    public String toString() {
-        return (ParserUtils.toString(this));
-    }
 }

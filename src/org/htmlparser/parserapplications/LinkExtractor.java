@@ -44,7 +44,6 @@ public class LinkExtractor {
         this.location = location;
         try {
             this.parser   = new Parser(location); // Create the parser object
-            parser.registerScanners(); // Register standard scanners (Very Important)
         }
         catch (ParserException e) {
             e.printStackTrace();

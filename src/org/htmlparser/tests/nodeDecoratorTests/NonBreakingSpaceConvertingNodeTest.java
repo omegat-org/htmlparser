@@ -50,9 +50,9 @@ public class NonBreakingSpaceConvertingNodeTest extends ParserTestCase {
         StringBuffer decodedContent = new StringBuffer();
 
         StringNodeFactory stringNodeFactory = new StringNodeFactory();
-        stringNodeFactory.setNonBreakSpaceConversion(true);
+        stringNodeFactory.setConvertNonBreakingSpaces (true);
         createParser(STRING_TO_DECODE);
-        parser.setStringNodeFactory(stringNodeFactory);
+        parser.setNodeFactory(stringNodeFactory);
 
         NodeIterator nodes = parser.elements();
 

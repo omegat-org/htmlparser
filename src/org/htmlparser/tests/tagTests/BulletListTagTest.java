@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Derrick Oswald
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,52 +16,37 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
 
-package org.htmlparser.tests.scannersTests;
+package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.StringNode;
 import org.htmlparser.tags.Bullet;
 import org.htmlparser.tags.BulletList;
 import org.htmlparser.tags.CompositeTag;
-import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
-/**
- * @author Somik Raha
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
-public class BulletListScannerTest extends ParserTestCase {
-
+public class BulletListTagTest extends ParserTestCase
+{
     static
     {
-        System.setProperty ("org.htmlparser.tests.scannersTests.BulletListScannerTest", "BulletListScannerTest");
+        System.setProperty ("org.htmlparser.tests.tagTests.BulletListTagTest", "BulletListTagTest");
     }
 
-    public BulletListScannerTest(String name) {
+    public BulletListTagTest (String name)
+    {
         super(name);
     }
-
+    
     public void testScan() throws ParserException {
         createParser(
             "<ul TYPE=DISC>" +
@@ -66,7 +59,6 @@ public class BulletListScannerTest extends ParserTestCase {
                 "</ul>" +
             "</ul>"
         );
-        parser.registerScanners();
         parseAndAssertNodeCount(1);
 
         NodeList nestedBulletLists =
@@ -101,7 +93,6 @@ public class BulletListScannerTest extends ParserTestCase {
         throws ParserException
     {
         createParser ("<li>item 1<li>item 2");
-        parser.registerScanners ();
         parseAndAssertNodeCount (2);
         assertStringEquals ("item 1 not correct", "item 1", ((Bullet)node[0]).childAt (0).toHtml ());
         assertStringEquals ("item 2 not correct", "item 2", ((Bullet)node[1]).childAt (0).toHtml ());

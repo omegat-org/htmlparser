@@ -29,70 +29,120 @@
 package org.htmlparser;
 
 import java.io.Serializable;
+import org.htmlparser.lexer.Page;
 
 import org.htmlparser.nodeDecorators.DecodingNode;
 import org.htmlparser.nodeDecorators.EscapeCharacterRemovingNode;
 import org.htmlparser.nodeDecorators.NonBreakingSpaceConvertingNode;
 
-public class StringNodeFactory implements Serializable {
-
+public class StringNodeFactory
+    extends
+        PrototypicalNodeFactory
+    implements
+        Serializable
+{
     /**
      * Flag to tell the parser to decode strings returned by StringNode's toPlainTextString.
      * Decoding occurs via the method, org.htmlparser.util.Translate.decode()
      */
-    private boolean shouldDecodeNodes = false;
+    protected boolean mDecode;
 
 
     /**
      * Flag to tell the parser to remove escape characters, like \n and \t, returned by StringNode's toPlainTextString.
      * Escape character removal occurs via the method, org.htmlparser.util.ParserUtils.removeEscapeCharacters()
      */
-    private boolean shouldRemoveEscapeCharacters = false;
+    protected boolean mRemoveEscapes;
 
     /**
      * Flag to tell the parser to convert non breaking space
      * (i.e. \u00a0) to a space (" ").  If true, this will happen inside StringNode's toPlainTextString.
      */
-    private boolean shouldConvertNonBreakingSpace = false;
+    protected boolean mConvertNonBreakingSpaces;
+    
+    public StringNodeFactory ()
+    {
+        mDecode = false;
+        mRemoveEscapes = false;
+        mConvertNonBreakingSpaces = false;
+    }
 
-    public Node createStringNode(
-        StringBuffer textBuffer,
-        int textBegin,
-        int textEnd) {
-        Node newNode = new StringNode(textBuffer, textBegin, textEnd);
-        if (shouldDecodeNodes())
-            newNode = new DecodingNode(newNode);
-        if (shouldRemoveEscapeCharacters())
-            newNode = new EscapeCharacterRemovingNode(newNode);
-        if (shouldConvertNonBreakingSpace())
-            newNode = new NonBreakingSpaceConvertingNode(newNode);
-        return newNode;
+    //
+    // NodeFactory interface override
+    //
+
+    /**
+     * Create a new string node.
+     * @param page The page the node is on.
+     * @param start The beginning position of the string.
+     * @param end The ending positiong of the string.
+     */
+    public Node createStringNode (Page page, int start, int end)
+    {
+        Node ret;
+        
+        ret = super.createStringNode (page, start, end);
+        if (getDecode ())
+            ret = new DecodingNode (ret);
+        if (getRemoveEscapes ())
+            ret = new EscapeCharacterRemovingNode (ret);
+        if (getConvertNonBreakingSpaces ())
+            ret = new NonBreakingSpaceConvertingNode (ret);
+
+        return (ret);
     }
 
     /**
-     * Tells the parser to decode nodes using org.htmlparser.util.Translate.decode()
+     * Set the decoding state.
+     * @param decode If <code>true</code>, string nodes decode text using {@link org.htmlparser.util.Translate#decode}.
      */
-    public void setNodeDecoding(boolean shouldDecodeNodes) {
-            this.shouldDecodeNodes = shouldDecodeNodes;
-        }
-
-    public boolean shouldDecodeNodes() {
-        return shouldDecodeNodes;
+    public void setDecode (boolean decode)
+    {
+        mDecode = decode;
     }
 
-    public void setEscapeCharacterRemoval(boolean shouldRemoveEscapeCharacters) {
-        this.shouldRemoveEscapeCharacters = shouldRemoveEscapeCharacters;
+    /**
+     * Get the decoding state.
+     * @return <code>true</code> if string nodes decode text.
+     */
+    public boolean getDecode ()
+    {
+        return (mDecode);
     }
 
-    public boolean shouldRemoveEscapeCharacters() {
-        return shouldRemoveEscapeCharacters;
+    /**
+     * Set the escape removing state.
+     * @param decode If <code>true</code>, string nodes remove escape characters.
+     */
+    public void setRemoveEscapes (boolean remove)
+    {
+        mRemoveEscapes = remove;
     }
 
-    public void setNonBreakSpaceConversion(boolean shouldConvertNonBreakSpace) {
-        this.shouldConvertNonBreakingSpace = shouldConvertNonBreakSpace;
+    /**
+     * Get the escape removing state.
+     * @return The removing state.
+     */
+    public boolean getRemoveEscapes ()
+    {
+        return (mRemoveEscapes);
     }
 
-    public boolean shouldConvertNonBreakingSpace() {
-        return shouldConvertNonBreakingSpace;
+    /**
+     * Set the non-breaking space replacing state.
+     * @param convert If <code>true</code>, string nodes replace &semi;nbsp; characters with spaces.
+     */
+    public void setConvertNonBreakingSpaces (boolean convert)
+    {
+        mConvertNonBreakingSpaces = convert;
+    }
+
+    /**
+     * Get the non-breaking space replacing state.
+     * @return The replacing state.
+     */
+    public boolean getConvertNonBreakingSpaces ()
+    {
+        return (mConvertNonBreakingSpaces);
     }
 }

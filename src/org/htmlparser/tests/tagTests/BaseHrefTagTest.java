@@ -29,8 +29,14 @@
 package org.htmlparser.tests.tagTests;
 
 import java.util.Vector;
+
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.BaseHrefTag;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
 public class BaseHrefTagTest extends ParserTestCase {
@@ -50,11 +56,35 @@ public class BaseHrefTagTest extends ParserTestCase {
         assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
     }
 
+    public void testRemoveLastSlash() {
+        String url1 = "http://www.yahoo.com/";
+        String url2 = "http://www.google.com";
+        String modifiedUrl1 = LinkProcessor.removeLastSlash(url1);
+        String modifiedUrl2 = LinkProcessor.removeLastSlash(url2);
+        assertEquals("Url1","http://www.yahoo.com",modifiedUrl1);
+        assertEquals("Url2","http://www.google.com",modifiedUrl2);
+    }
+
+    public void testScan() throws ParserException{
+        createParser("<html><head><TITLE>test page</TITLE><BASE HREF=\"http://www.abc.com/\"><a href=\"home.cfm\">Home</a>...</html>","http://www.google.com/test/index.html");
+        parser.setNodeFactory (
+            new PrototypicalNodeFactory (
+                new Tag[]
+                {
+                    new TitleTag (),
+                    new LinkTag (),
+                    new BaseHrefTag (),
+                }));
+        parseAndAssertNodeCount(7);
+        assertTrue("Base href tag should be the 4th tag", node[3] instanceof BaseHrefTag);
+        BaseHrefTag baseRefTag = (BaseHrefTag)node[3];
+        assertEquals("Base HREF Url","http://www.abc.com",baseRefTag.getBaseUrl());
+    }
+
     public void testNotHREFBaseTag() throws ParserException
     {
         String html = "<base target=\"_top\">";
         createParser(html);
-        parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue("Should be a base tag but was "+node[0].getClass().getName(),node[0] instanceof BaseHrefTag);
         BaseHrefTag baseTag = (BaseHrefTag)node[0];

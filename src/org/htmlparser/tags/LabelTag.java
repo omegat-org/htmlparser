@@ -42,7 +42,7 @@ public class LabelTag extends CompositeTag
     private static final String[] mIds = new String[] {"LABEL"};
 
     /**
-     * Create a new lavel tag.
+     * Create a new label tag.
      */
     public LabelTag ()
     {

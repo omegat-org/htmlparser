@@ -54,7 +54,7 @@ public class StringNode extends AbstractNode
     }
 
     /**
-     * Returns the text of the string line
+     * Returns the text of the string line.
      */
     public String getText ()
     {
@@ -92,14 +92,64 @@ public class StringNode extends AbstractNode
         return (mPage.getText (getStartPosition (), getEndPosition ()));
     }
 
+    /**
+     * Express this string node as a printable string
+     * This is suitable for display in a debugger or output to a printout.
+     * Control characters are replaced by their equivalent escape
+     * sequence and contents is truncated to 80 characters.
+     * @return A string representation of the string node.
+     */
     public String toString ()
     {
+        int startpos;
+        int endpos;
         Cursor start;
         Cursor end;
+        char c;
+        StringBuffer ret;
 
-        start = new Cursor (getPage (), getStartPosition ());
-        end = new Cursor (getPage (), getEndPosition ());
-        return ("Txt (" + start.toString () + "," + end.toString () + "): " + getText ());
+        startpos = getStartPosition ();
+        endpos = getEndPosition ();
+        ret = new StringBuffer (endpos - startpos + 20);
+        start = new Cursor (getPage (), startpos);
+        end = new Cursor (getPage (), endpos);
+        ret.append ("Txt (");
+        ret.append (start);
+        ret.append (",");
+        ret.append (end);
+        ret.append ("): ");
+        while (start.getPosition () < endpos)
+        {
+            try
+            {
+                c = mPage.getCharacter (start);
+                switch (c)
+                {
+                    case '\t':
+                        ret.append ("\\t");
+                        break;
+                    case '\n':
+                        ret.append ("\\n");
+                        break;
+                    case '\r':
+                        ret.append ("\\r");
+                        break;
+                    default:
+                        ret.append (c);
+                }
+            }
+            catch (ParserException pe)
+            {
+                // not really expected, but we'return only doing toString, so ignore
+            }
+            if (77 <= ret.length ())
+            {
+                ret.append ("...");
+                break;
+            }
+        }
+
+        return (ret.toString ());
     }
 
     public void accept (Object visitor)

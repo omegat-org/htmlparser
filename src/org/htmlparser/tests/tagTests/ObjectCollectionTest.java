@@ -29,12 +29,11 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.scanners.DivScanner;
-import org.htmlparser.scanners.SpanScanner;
-import org.htmlparser.scanners.TableScanner;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -72,8 +71,7 @@ public class ObjectCollectionTest extends ParserTestCase {
             "<SPAN>The Refactoring Challenge</SPAN>" +
             "<SPAN>&#013;id: 6</SPAN>"
         );
-        parser.registerScanners();
-        parser.addScanner(new SpanScanner());
+        parser.setNodeFactory (new PrototypicalNodeFactory (new Span ()));
         assertSpanContent(parser.extractAllNodesThatAre(Span.class));
     }
 
@@ -84,9 +82,13 @@ public class ObjectCollectionTest extends ParserTestCase {
             "   <SPAN>&#013;id: 6</SPAN>" +
             "</DIV>"
         );
-        parser.registerScanners();
-        parser.addScanner(new DivScanner());
-        parser.addScanner(new SpanScanner());
+        parser.setNodeFactory (
+            new PrototypicalNodeFactory (
+                new Tag[]
+                {
+                    new Div (),
+                    new Span (),
+                }));
         parseAndAssertNodeCount(1);
         Div div = (Div)node[0];
         Node[] spans = ParserUtils.findTypeInNode (div, Span.class);
@@ -102,10 +104,14 @@ public class ObjectCollectionTest extends ParserTestCase {
             "   </DIV>" +
             "</table>"
         );
-        parser.registerScanners();
-        parser.addScanner(new DivScanner());
-        parser.addScanner(new SpanScanner());
-        parser.addScanner(new TableScanner(parser));
+        parser.setNodeFactory (
+            new PrototypicalNodeFactory (
+                new Tag[]
+                {
+                    new Div (),
+                    new Span (),
+                    new TableTag (),
+                }));
         parseAndAssertNodeCount(1);
         TableTag tableTag = (TableTag)node[0];
         NodeList nodeList = new NodeList();

@@ -55,7 +55,7 @@ public class FormTag extends CompositeTag
     /**
      * The set of end tag names that indicate the end of this tag.
      */
-    private static final String[] mEndTagEnders = new String[] {"HTML", "BODY"};
+    private static final String[] mEndTagEnders = new String[] {"HTML", "BODY", "TABLE"};
 
     /**
      * Create a new form tag.

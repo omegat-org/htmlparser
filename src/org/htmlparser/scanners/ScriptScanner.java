@@ -29,8 +29,10 @@
 package org.htmlparser.scanners;
 
 import java.util.Vector;
+
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Lexer;
@@ -46,7 +48,10 @@ import org.htmlparser.util.ParserException;
  * The ScriptScanner handles script code.
  * It gathers all interior nodes into one undifferentiated string node.
  */
-public class ScriptScanner extends CompositeTagScanner {
+public class ScriptScanner
+    extends
+        CompositeTagScanner
+{
     private static final String SCRIPT_END_TAG = "</SCRIPT>";
     private static final String MATCH_NAME [] = {"SCRIPT"};
     private static final String ENDERS [] = {"BODY", "HTML"};
@@ -100,7 +105,7 @@ public class ScriptScanner extends CompositeTagScanner {
         last = null;
         end = null;
         factory = lexer.getNodeFactory ();
-        lexer.setNodeFactory (new Parser ()); // no scanners on a new Parser right?
+        lexer.setNodeFactory (new PrototypicalNodeFactory (true));
         try
         {
             do

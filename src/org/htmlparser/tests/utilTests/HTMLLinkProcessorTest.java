@@ -71,7 +71,6 @@ public class HTMLLinkProcessorTest extends ParserTestCase {
      */
     public void testLinkWithNoSlashes() throws Exception {
         createParser("<A HREF=\".foo.txt\">Foo</A>","http://www.oygevalt.com");
-        parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[0];

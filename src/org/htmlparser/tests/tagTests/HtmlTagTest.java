@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Derrick Oswald
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,46 +16,37 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
 
-package org.htmlparser.tests.scannersTests;
+package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.filters.NodeClassFilter;
-import org.htmlparser.scanners.HtmlScanner;
-import org.htmlparser.scanners.TitleScanner;
 import org.htmlparser.tags.Html;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 
-public class HtmlTest extends ParserTestCase {
-
+public class HtmlTagTest extends ParserTestCase
+{
     static
     {
-        System.setProperty ("org.htmlparser.tests.scannersTests.HtmlTest", "HtmlTest");
+        System.setProperty ("org.htmlparser.tests.tagTests.HtmlTagTest", "HtmlTagTest");
     }
 
-    public HtmlTest(String name) {
+    public HtmlTagTest (String name)
+    {
         super(name);
     }
-
+    
     public void testScan() throws Exception {
         createParser(
             "<html>" +
@@ -58,8 +57,13 @@ public class HtmlTest extends ParserTestCase {
             "       Some data" +
             "   </body>" +
             "</html>");
-        parser.addScanner(new TitleScanner(""));
-        parser.addScanner(new HtmlScanner());
+        parser.setNodeFactory (
+            new PrototypicalNodeFactory (
+                new Tag[]
+                {
+                    new TitleTag (),
+                    new Html (),
+                }));
         parseAndAssertNodeCount(1);
         assertType("html tag",Html.class,node[0]);
         Html html = (Html)node[0];

@@ -34,9 +34,10 @@ import java.util.Arrays;
 
 import junit.framework.TestSuite;
 
-import org.htmlparser.tests.scannersTests.CompositeTagScannerTest.CustomScanner;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tests.scannersTests.CompositeTagScannerTest.CustomTag;
 import org.htmlparser.util.ParserException;
+
 /**
  * @author Somik Raha
  *
@@ -144,7 +145,7 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
      */
     private void testLineNumber(String xml, int numNodes, int useNode, int expectedStartLine, int expectedEndLine) throws ParserException {
         createParser(xml);
-        parser.addScanner(new CustomScanner());
+        parser.setNodeFactory (new PrototypicalNodeFactory (new CustomTag ()));
         parseAndAssertNodeCount(numNodes);
         assertType("custom node",CustomTag.class,node[useNode]);
         CustomTag tag = (CustomTag)node[useNode];

@@ -186,8 +186,8 @@ public class Lexer
     }
 
     /**
-     * Get the current node factory.
-     * @return The lexer's cursor position.
+     * Set the current node factory.
+     * @param factory The node factory to be used by the lexer.
      */
     public void setNodeFactory (NodeFactory factory)
     {

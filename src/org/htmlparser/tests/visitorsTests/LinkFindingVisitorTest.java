@@ -47,7 +47,6 @@ public class LinkFindingVisitorTest extends ParserTestCase {
 
     public void testLinkFoundCorrectly() throws Exception {
         createParser(html);
-        parser.registerScanners();
         LinkFindingVisitor visitor = new LinkFindingVisitor("Industrial Logic");
         parser.visitAllNodesWith(visitor);
         assertTrue("Found Industrial Logic Link",visitor.linkTextFound());

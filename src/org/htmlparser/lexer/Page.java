@@ -668,12 +668,14 @@ public class Page
         throws
             ParserException
     {
+        String encoding;
         InputStream stream;
         char[] buffer;
         int offset;
         char[] new_chars;
 
-        if (!getEncoding ().equals (character_set))
+        encoding = getEncoding ();
+        if (!encoding.equals (character_set))
         {
             stream = getSource ().getStream ();
             try
@@ -693,7 +695,11 @@ public class Page
                             + new_chars[i]
                             + " != old: "
                             + buffer[i]
-                            + ") for encoding at offset "
+                            + ") for encoding change from "
+                            + encoding
+                            + " to "
+                            + character_set
+                            + " at offset "
                             + offset);
                 }
             }

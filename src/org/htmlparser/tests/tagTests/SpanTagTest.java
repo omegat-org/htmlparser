@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Derrick Oswald
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,38 +16,28 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
 
-package org.htmlparser.tests.scannersTests;
+package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.scanners.SpanScanner;
-import org.htmlparser.scanners.TableScanner;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableColumn;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 
-public class SpanScannerTest extends ParserTestCase {
-
+public class SpanTagTest extends ParserTestCase
+{
     static
     {
-        System.setProperty ("org.htmlparser.tests.scannersTests.SpanScannerTest", "SpanScannerTest");
+        System.setProperty ("org.htmlparser.tests.tagTests.SpanTagTest", "SpanTagTest");
     }
 
     private static final String HTML_WITH_SPAN =
@@ -50,16 +48,21 @@ public class SpanScannerTest extends ParserTestCase {
         "   </DIV>" +
         "</TD>";
 
-    public SpanScannerTest(String name) {
+    public SpanTagTest (String name)
+    {
         super(name);
     }
-
+    
     public void testScan() throws Exception {
         createParser(
             HTML_WITH_SPAN
         );
-        parser.addScanner(new TableScanner(parser));
-        parser.addScanner(new SpanScanner());
+        parser.setNodeFactory (
+            new PrototypicalNodeFactory (
+                new Tag[] {
+                    new TableColumn (),
+                    new Span (),
+                }));
         parseAndAssertNodeCount(1);
         assertType("node",TableColumn.class,node[0]);
         TableColumn col = (TableColumn)node[0];

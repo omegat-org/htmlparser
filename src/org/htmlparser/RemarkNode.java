@@ -40,26 +40,6 @@ public class RemarkNode
     extends
         org.htmlparser.lexer.nodes.RemarkNode
 {
-    public final static String REMARK_NODE_FILTER="-r";
-
-//    /**
-//     * Tag contents will have the contents of the comment tag.
-//     */
-//    String tagContents;
-//
-//    /**
-//     * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
-//     * and the tag contents.
-//     * @param nodeBegin beginning position of the tag
-//     * @param nodeEnd ending position of the tag
-//     * @param tagContents contents of the remark tag
-//     */
-//    public RemarkNode(int nodeBegin, int nodeEnd, String tagContents)
-//    {
-//        super(nodeBegin,nodeEnd);
-//        this.tagContents = tagContents;
-//    }
-
     /**
      * Constructor takes in the text string, beginning and ending posns.
      * @param page The page this string is on.
@@ -72,25 +52,6 @@ public class RemarkNode
     }
 
     /**
-     * Print the contents of the remark tag.
-     */
-    public String toString()
-    {
-        StringBuffer ret;
-
-        ret = new StringBuffer (1024);
-        ret.append ("Comment Tag : ");
-        ret.append (getText ());
-        ret.append ("; begins at : ");
-        ret.append (getStartPosition ());
-        ret.append ("; ends at : ");
-        ret.append (getEndPosition ());
-        ret.append ("\n");
-
-        return (ret.toString ());
-    }
-
-    /**
      * Remark visiting code.
      * @param visitor The <code>NodeVisitor</code> object to invoke 
      * <code>visitRemarkNode()</code> on.
@@ -99,5 +60,4 @@ public class RemarkNode
     {
         ((NodeVisitor)visitor).visitRemarkNode (this);
     }
-
 }

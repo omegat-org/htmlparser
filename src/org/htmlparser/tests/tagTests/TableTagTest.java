@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Derrick Oswald
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,29 +16,19 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
 
-package org.htmlparser.tests.scannersTests;
+package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.scanners.TableScanner;
+import org.htmlparser.tags.Html;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
@@ -38,17 +36,19 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
-public class TableScannerTest extends ParserTestCase {
-
+public class TableTagTest extends ParserTestCase
+{
     static
     {
-        System.setProperty ("org.htmlparser.tests.scannersTests.TableScannerTest", "TableScannerTest");
+        System.setProperty ("org.htmlparser.tests.tagTests.TableTagTest", "TableTagTest");
     }
 
-    public TableScannerTest(String name) {
+
+    public TableTagTest (String name)
+    {
         super(name);
     }
-
+    
     private String createHtmlWithTable() {
         return
         "<table width=\"100.0%\" align=\"Center\" cellpadding=\"5.0\" cellspacing=\"0.0\" border=\"0.0\">"+
@@ -63,9 +63,9 @@ public class TableScannerTest extends ParserTestCase {
         "</table>";
     }
 
-    public void testScan() throws Exception {
+    public void testScan() throws ParserException 
+    {
         createParser(createHtmlWithTable());
-        parser.addScanner(new TableScanner(parser));
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof TableTag);
         TableTag tableTag = (TableTag)node[0];
@@ -100,10 +100,12 @@ public class TableScannerTest extends ParserTestCase {
             "</BODY>\n"+
             "</HTML>"
         );
-        parser.registerScanners();
-        parseAndAssertNodeCount(6);
-        assertType("third tag",TableTag.class,node[2]);
-        TableTag table = (TableTag)node[2];
+        parseAndAssertNodeCount(1);
+        assertType("only tag should be a HTML tag", Html.class,node[0]);
+        Html html = (Html)node[0];
+        assertEquals("html tag should have 4 children", 4, html.getChildCount ());
+        assertType("second tag",TableTag.class,html.getChild (1));
+        TableTag table = (TableTag)html.getChild (1);
         assertEquals("rows",3,table.getRowCount());
         TableRow tr = table.getRow(2);
         assertEquals("columns",1,tr.getColumnCount());
@@ -127,15 +129,11 @@ public class TableScannerTest extends ParserTestCase {
         String url = "http://htmlparser.sourceforge.net/test/badtable2.html";
 
         parser = new Parser (url);
-        if (1.4 <= Parser.getVersionNumber ())
-        {
-            parser.registerScanners ();
-            for (NodeIterator e = parser.elements();e.hasMoreNodes();)
-                e.nextNode();
-            // Note: The test will throw a StackOverFlowException,
-            // so we are successful if we get to here...
-            assertTrue ("Crash", true);
-        }
+        for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+            e.nextNode();
+        // Note: The test will throw a StackOverFlowException,
+        // so we are successful if we get to here...
+        assertTrue ("Crash", true);
     }
 
     /**
@@ -144,7 +142,6 @@ public class TableScannerTest extends ParserTestCase {
     public void testUnClosed1 () throws ParserException
     {
         createParser ("<TABLE><TR><TR></TR></TABLE>");
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         String s = node[0].toHtml ();
         assertEquals ("Unclosed","<TABLE><TR></TR><TR></TR></TABLE>",s);
@@ -156,7 +153,6 @@ public class TableScannerTest extends ParserTestCase {
     public void testUnClosed2 () throws ParserException
     {
         createParser ("<TABLE><TR><TD><TD></TD></TR></TABLE>");
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         String s = node[0].toHtml ();
         assertEquals ("Unclosed","<TABLE><TR><TD></TD><TD></TD></TR></TABLE>",s);
@@ -168,7 +164,6 @@ public class TableScannerTest extends ParserTestCase {
     public void testUnClosed3 () throws ParserException
     {
         createParser ("<TABLE><TR><TD>blah blah</TD><TR><TD>blah blah</TD></TR></TABLE>");
-        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         String s = node[0].toHtml ();
         assertEquals ("Unclosed","<TABLE><TR><TD>blah blah</TD></TR><TR><TD>blah blah</TD></TR></TABLE>",s);
@@ -180,14 +175,12 @@ public class TableScannerTest extends ParserTestCase {
      */
     public void testOverFlow () throws ParserException
     {
-        Parser parser =
+        parser =
             new Parser(
                 "http://www.sec.gov/Archives/edgar/data/30554/000089322002000287/w57038e10-k.htm"
             );
-        parser.addScanner(new TableScanner(parser));
         Node node;
         for (NodeIterator e = parser.elements(); e.hasMoreNodes(); )
             node = e.nextNode();
     }
-
 }

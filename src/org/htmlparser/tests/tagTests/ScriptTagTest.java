@@ -29,6 +29,7 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Parser;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.ScriptTag;
@@ -60,8 +61,6 @@ public class ScriptTagTest extends ParserTestCase{
     {
         String testHtml = "<SCRIPT>Script Code</SCRIPT>";
         createParser(testHtml,"http://localhost/index.html");
-        // Register the script scanner
-        parser.addScanner(new ScriptScanner("-s"));
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
@@ -72,9 +71,6 @@ public class ScriptTagTest extends ParserTestCase{
 
     public void testToHTML() throws ParserException {
         createParser("<SCRIPT>document.write(d+\".com\")</SCRIPT>");
-        // Register the image scanner
-        parser.addScanner(new ScriptScanner("-s"));
-
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         // Check the data in the applet tag
@@ -112,9 +108,7 @@ public class ScriptTagTest extends ParserTestCase{
 
         createParser(testHTML1);
         Parser.setLineSeparator("\r\n");
-        // Register the image scanner
-        parser.addScanner(new ScriptScanner("-s"));
-
+        parser.setNodeFactory (new PrototypicalNodeFactory (new ScriptTag ()));
         parseAndAssertNodeCount(3);
         assertTrue("Node should be a script tag",node[1]
         instanceof ScriptTag);
@@ -132,9 +126,6 @@ public class ScriptTagTest extends ParserTestCase{
         sb1.append(" document.write ('yyy');\r\n");
         sb1.append("</script>\r\n");
         createParser(sb1.toString());
-
-        // Register the image scanner
-        parser.addScanner(new ScriptScanner("-s"));
         parseAndAssertNodeCount(2);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
@@ -148,10 +139,6 @@ public class ScriptTagTest extends ParserTestCase{
         sb1.append("var lower = '<%=lowerValue%>';\n");
         sb1.append("</script>\n");
         createParser(sb1.toString());
-
-        // Register the image scanner
-        parser.addScanner(new ScriptScanner("-s"));
-        //parser.registerScanners();
         parseAndAssertNodeCount(2);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
@@ -161,9 +148,6 @@ public class ScriptTagTest extends ParserTestCase{
     public void testSingleApostropheParsingBug() throws ParserException {
         String script = "<script src='<%=sourceFileName%>'></script>";
         createParser(script);
-
-        // Register the image scanner
-        parser.addScanner(new ScriptScanner("-s"));
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];

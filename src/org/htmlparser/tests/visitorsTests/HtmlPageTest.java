@@ -54,19 +54,22 @@ public class HtmlPageTest extends ParserTestCase {
             "</body>" +
         "</html>";
 
+    private static final String guts = 
+        "Welcome to HTMLParser" +
+        "<table>" +
+            "<tr>" +
+                "<td>cell 1</td>" +
+                "<td>cell 2</td>" +
+            "</tr>" +
+        "</table>";
+
     private static final String PAGE_WITH_TABLE =
         "<html>" +
             "<head>" +
                 "<title>Welcome to the HTMLParser website</title>" +
             "</head>" +
             "<body>" +
-                "Welcome to HTMLParser" +
-                "<table>" +
-                    "<tr>" +
-                        "<td>cell 1</td>" +
-                        "<td>cell 2</td>" +
-                    "</tr>" +
-                "</table>" +
+                guts +
             "</body>" +
         "</html>";
 
@@ -106,17 +109,7 @@ public class HtmlPageTest extends ParserTestCase {
         parser.visitAllNodesWith(page);
         NodeList bodyNodes = page.getBody();
         assertEquals("number of nodes in body",2,bodyNodes.size());
-        assertXmlEquals(
-            "body html",
-            "Welcome to HTMLParser" +
-            "<table>" +
-                "<tr>" +
-                "   <td>cell 1</td>" +
-                "   <td>cell 2</td>" +
-                "</tr>" +
-            "</table>",
-            bodyNodes.asHtml()
-        );
+        assertXmlEquals("body html", guts, bodyNodes.asHtml());
         TableTag tables [] = page.getTables();
         assertEquals("number of tables",1,tables.length);
         assertEquals("number of rows",1,tables[0].getRowCount());

@@ -34,19 +34,34 @@ import java.util.Vector;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.tags.FormTag;
-import org.htmlparser.tests.scannersTests.FormScannerTest;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.SimpleNodeIterator;
 
 public class InstanceofPerformanceTest {
+
+    public static final String FORM_HTML =
+    "<FORM METHOD=\""+FormTag.POST+"\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
+        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+        "<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
+        "<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\n"+
+        "<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\n"+
+        "<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\n"+
+        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+        "<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
+        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+        "<TEXTAREA name=\"Description\" rows=\"15\" cols=\"55\" wrap=\"virtual\" class=\"composef\" tabindex=\"5\">Contents of TextArea</TEXTAREA>\n"+
+//      "<TEXTAREA name=\"AnotherDescription\" rows=\"15\" cols=\"55\" wrap=\"virtual\" class=\"composef\" tabindex=\"5\">\n"+
+        "<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
+        "<INPUT TYPE=\"submit\">\n"+
+        "</FORM>";
+
     FormTag formTag;
     Vector formChildren;
     public void setUp() throws Exception {
         Parser parser =
             Parser.createParser(
-                FormScannerTest.FORM_HTML
+                FORM_HTML
             );
-        parser.registerScanners();
         NodeIterator e = parser.elements();
         Node node = e.nextNode();
         formTag = (FormTag)node;

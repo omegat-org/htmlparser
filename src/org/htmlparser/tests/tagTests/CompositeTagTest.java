@@ -28,10 +28,14 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.tests.*;
-import org.htmlparser.util.*;
+import org.htmlparser.Node;
+import org.htmlparser.StringNode;
+import org.htmlparser.tags.CompositeTag;
+import org.htmlparser.tags.TableColumn;
+import org.htmlparser.tags.TableRow;
+import org.htmlparser.tags.TableTag;
+import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.ParserException;
 
 
 public class CompositeTagTest extends ParserTestCase {
@@ -57,7 +61,6 @@ public class CompositeTagTest extends ParserTestCase {
                 "</table>" +
             "</table>"
         );
-        parser.registerScanners();
         parseAndAssertNodeCount(1);
         TableTag tableTag = (TableTag)node[0];
         StringNode [] stringNode =
@@ -89,7 +92,6 @@ public class CompositeTagTest extends ParserTestCase {
                 "</table>" +
             "</table>"
         );
-        parser.registerScanners();
         parseAndAssertNodeCount(1);
         TableTag tableTag = (TableTag)node[0];
         StringNode [] stringNode =

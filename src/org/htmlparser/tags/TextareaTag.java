@@ -87,12 +87,4 @@ public class TextareaTag extends CompositeTag
     public String getValue() {
         return toPlainTextString();
     }
-
-    public String toString()
-    {
-        StringBuffer buff = new StringBuffer(ParserUtils.toString(this));
-        buff.append("VALUE : ").append(getValue()).append("\n");
-
-        return buff.toString();
-    }
 }

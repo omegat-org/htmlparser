@@ -259,8 +259,6 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         String ret;
 
-        mParser.flushScanners ();
-        mParser.registerScanners ();
         mIsPre = false;
         mIsScript = false;
         mBuffer = new StringBuffer (4096);
@@ -296,8 +294,6 @@ public class StringBean extends NodeVisitor implements Serializable
         if (null != getURL ())
             try
             {
-                mParser.flushScanners ();
-                mParser.registerScanners ();
                 mIsPre = false;
                 mIsScript = false;
                 try

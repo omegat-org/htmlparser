@@ -69,7 +69,6 @@ public class FilterTest extends ParserTestCase
         guts = "<body>Now is the time for all good men..</body>";
         html = "<html>" + guts + "</html>";
         createParser (html);
-        parser.registerDomScanners ();
         list = parser.extractAllNodesThatMatch (new NodeClassFilter (BodyTag.class));
         assertEquals ("only one element", 1, list.size ());
         assertType ("should be BodyTag", BodyTag.class, list.elementAt (0));
@@ -92,7 +91,6 @@ public class FilterTest extends ParserTestCase
         guts = "<booty>Now is the time for all good men..</booty>";
         html = "<html>" + guts + "</html>";
         createParser (html);
-        parser.registerDomScanners ();
         list = parser.extractAllNodesThatMatch (new TagNameFilter ("booty"));
         assertEquals ("only one element", 1, list.size ());
         assertSuperType ("should be Tag", TagNode.class, list.elementAt (0));
@@ -111,7 +109,6 @@ public class FilterTest extends ParserTestCase
         guts = "<body>Now is the <a id=target><b>time</b></a> for all good <time>men</time>..</body>";
         html = "<html>" + guts + "</html>";
         createParser (html);
-        parser.registerDomScanners ();
         list = parser.extractAllNodesThatMatch (new StringFilter ("Time"));
         assertEquals ("only one element", 1, list.size ());
         assertSuperType ("should be String", StringNode.class, list.elementAt (0));
@@ -133,7 +130,6 @@ public class FilterTest extends ParserTestCase
         guts = "<body>Now is the <a id=target><b>time</b></a> for all good <a href=http://bongo.com>men</a>..</body>";
         html = "<html>" + guts + "</html>";
         createParser (html);
-        parser.registerDomScanners ();
         list = parser.extractAllNodesThatMatch (new HasChildFilter (new TagNameFilter ("b")));
         assertEquals ("only one element", 1, list.size ());
         assertType ("should be LinkTag", LinkTag.class, list.elementAt (0));
@@ -156,7 +152,6 @@ public class FilterTest extends ParserTestCase
         guts = "<body>Now is the <a id=target><b>time</b></a> for all good <a href=http://bongo.com>men</a>..</body>";
         html = "<html>" + guts + "</html>";
         createParser (html);
-        parser.registerDomScanners ();
         list = parser.extractAllNodesThatMatch (new HasAttributeFilter ("id"));
         assertEquals ("only one element", 1, list.size ());
         assertType ("should be LinkTag", LinkTag.class, list.elementAt (0));
@@ -176,7 +171,6 @@ public class FilterTest extends ParserTestCase
         guts = "<body>Now is the <a id=one><b>time</b></a> for all good <a id=two><b>men</b></a>..</body>";
         html = "<html>" + guts + "</html>";
         createParser (html);
-        parser.registerDomScanners ();
         list = parser.extractAllNodesThatMatch (
             new AndFilter (
                 new HasChildFilter (
@@ -202,7 +196,6 @@ public class FilterTest extends ParserTestCase
         guts = "<body>Now is the <a id=one><b>time</b></a> for <a id=two><b>all</b></a> good <a id=three><b>men</b></a>..</body>";
         html = "<html>" + guts + "</html>";
         createParser (html);
-        parser.registerDomScanners ();
         list = parser.extractAllNodesThatMatch (
             new OrFilter (
                 new HasChildFilter (
@@ -231,7 +224,6 @@ public class FilterTest extends ParserTestCase
         guts = "<body>Now is the <a id=one><b>time</b></a> for <a id=two><b>all</b></a> good <a id=three><b>men</b></a>..</body>";
         html = "<html>" + guts + "</html>";
         createParser (html);
-        parser.registerDomScanners ();
         list = parser.extractAllNodesThatMatch (
             new AndFilter (
                 new HasChildFilter (

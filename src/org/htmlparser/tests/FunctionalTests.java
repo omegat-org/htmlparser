@@ -41,7 +41,7 @@ import junit.framework.TestSuite;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.scanners.ImageScanner;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.LinkProcessor;
@@ -88,7 +88,7 @@ public class FunctionalTests extends ParserTestCase {
 
     public int countImageTagsWithHTMLParser() throws ParserException {
         Parser parser = new Parser("http://education.yahoo.com/",new DefaultParserFeedback());
-        parser.addScanner(new ImageScanner("-i"));
+        parser.setNodeFactory (new PrototypicalNodeFactory (new ImageTag ()));
         setParser (parser);
         int parserImgTagCount = 0;
         Node node;

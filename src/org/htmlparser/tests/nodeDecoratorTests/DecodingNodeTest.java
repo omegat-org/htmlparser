@@ -50,9 +50,9 @@ public class DecodingNodeTest extends ParserTestCase {
         throws ParserException {
         StringBuffer decodedContent = new StringBuffer();
         StringNodeFactory stringNodeFactory = new StringNodeFactory();
-        stringNodeFactory.setNodeDecoding(true);
+        stringNodeFactory.setDecode (true);
         createParser(STRING_TO_DECODE);
-        parser.setStringNodeFactory(stringNodeFactory);
+        parser.setNodeFactory(stringNodeFactory);
         NodeIterator nodes = parser.elements();
 
         while (nodes.hasMoreNodes())

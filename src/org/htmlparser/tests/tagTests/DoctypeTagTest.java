@@ -55,10 +55,9 @@ public class DoctypeTagTest extends ParserTestCase {
         "</BODY>\n"+
         "</HTML>\n");
         createParser(testHTML);
-        parser.registerScanners();
-        parseAndAssertNodeCount(16);
-        // The node should be an DoctypeTag
-        assertTrue("Node should be a DoctypeTag",node[0] instanceof DoctypeTag);
+        parseAndAssertNodeCount(4);
+        // The first node should be an DoctypeTag
+        assertTrue("First node should be a DoctypeTag",node[0] instanceof DoctypeTag);
         DoctypeTag docTypeTag = (DoctypeTag)node[0];
         assertStringEquals("toHTML()","<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">",docTypeTag.toHtml());
     }

@@ -40,24 +40,6 @@ public class StringNode
     extends
         org.htmlparser.lexer.nodes.StringNode
 {
-    public static final String STRING_FILTER="-string";
-
-//    /**
-//     * The text of the string.
-//     */
-//    protected StringBuffer textBuffer;
-//
-    /**
-     * Constructor takes in the text string, beginning and ending posns.
-     * @param text The contents of the string line
-     * @param textBegin The beginning position of the string
-     * @param textEnd The ending positiong of the string
-     */
-    public StringNode (StringBuffer text, int textBegin,int textEnd)
-    {
-        super(new Page (text.toString ()), textBegin,textEnd);
-    }
-
     /**
      * Constructor takes in the text string, beginning and ending posns.
      * @param page The page this string is on.
@@ -67,21 +49,6 @@ public class StringNode
     public StringNode (Page page, int start, int end)
     {
         super (page, start, end);
-    }
-
-    public String toString()
-    {
-        StringBuffer ret;
-
-        ret = new StringBuffer (1024);
-        ret.append ("Text = ");
-        ret.append (getText ());
-        ret.append ("; begins at : ");
-        ret.append (getStartPosition ());
-        ret.append ("; ends at : ");
-        ret.append (getEndPosition ());
-
-        return (ret.toString ());
     }
 
     /**

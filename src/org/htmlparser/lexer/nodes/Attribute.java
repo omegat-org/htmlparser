@@ -32,6 +32,7 @@
 
 package org.htmlparser.lexer.nodes;
 
+import java.io.Serializable;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.Translate;
 
@@ -197,6 +198,8 @@ import org.htmlparser.util.Translate;
  * <p>
  */
 public class Attribute
+    implements
+        Serializable
 {
     /**
      * The name of this attribute.

@@ -66,7 +66,6 @@ public class ParserTestCase extends TestCase {
 
     protected void parse(String response) throws ParserException {
         createParser(response,10000);
-        parser.registerScanners();
         parseNodes();
     }
 
