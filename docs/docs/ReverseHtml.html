@@ -1,9 +1,21 @@
-<html><head><title>Reverse Html</title></head><body><DIV CLASS="wikitext"><P><B>Reverse Html Rendering</B></P><P>In order to get back the html representation of a web page, you may use toHTML() recursively. Here's one way to get it:</P><PRE>  Parser parser = new Parser(..);
+<html><head><title>Reverse Html</title></head><body><DIV CLASS="wikitext">
+<P><B>Reverse Html Rendering</B></P>
+<P>In order to get back the html representation of a web page, you may use toHTML() recursively. Here's one way to get it:</P>
+<PRE>  Parser parser = new Parser(..);
   parser.registerScanners();
   StringBuffer htmlBuffer = new StringBuffer();
   for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
      htmlBuffer.append(i.nextNode().toHTML());
   }
-  System.out.println("reverse html rendered after parse : "+htmlBuffer.toString());</PRE><P>This usually goes through child nodes of composite tags (like links, forms, etc..)</P><P>Often, it might be desired to modify the html being reconstructed. In such a case, you must change the tag's attributes prior to calling toHTML().</P><P>e.g. if the tag in question is a link tag, and you wish to modify the href, do this :</P><PRE>linkTag.setAttribute("SRC",newUrlString);
-doSomethingWith(linkTag.toHTML());</PRE><P><I>toHtml()</I> is basically a reconstruction of the tag using its attributes (at the atomic level) and its children (at the macro/composite level).</P><P>You can also change the name of the tag by setting its <I>TAGNAME</I> attribute, like so:</P><PRE>tag.setAttribute(Tag.TAGNAME,newTagName);</PRE><P>This should enable you to perform any transformations on the html.
-Take a look at another way of modifying tags in <A CLASS="wiki" HREF="WebRipper.html">WebRipper</A>.</P><P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:34:12 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
+  System.out.println("reverse html rendered after parse : "+htmlBuffer.toString());</PRE>
+<P>This usually goes through child nodes of composite tags (like links, forms, etc..)</P>
+<P>Often, it might be desired to modify the html being reconstructed. In such a case, you must change the tag's attributes prior to calling toHTML().</P>
+<P>e.g. if the tag in question is a link tag, and you wish to modify the href, do this :</P>
+<PRE>linkTag.setAttribute("SRC",newUrlString);
+doSomethingWith(linkTag.toHTML());</PRE>
+<P><I>toHtml()</I> is basically a reconstruction of the tag using its attributes (at the atomic level) and its children (at the macro/composite level).</P>
+<P>You can also change the name of the tag by setting its <I>TAGNAME</I> attribute, like so:</P>
+<PRE>tag.setAttribute(Tag.TAGNAME,newTagName);</PRE>
+<P>This should enable you to perform any transformations on the html.
+Take a look at another way of modifying tags in <A CLASS="wiki" HREF="WebRipper.html">WebRipper</A>.</P>
+<P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:34:12 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>

@@ -1,4 +1,7 @@
-<html><head><title>Custom Tag Extraction</title></head><body><DIV CLASS="wikitext"><P><B>Custom Tag Extraction</B></P><P>Custom tag extraction is easy. Simply create an array of tag names that you want to extract from a page, and pass it in to <SPAN CLASS="wikiunknown"><U>TagFindingVisitor</U></SPAN>, like so :</P><PRE>Parser parser = new Parser(..);
+<html><head><title>Custom Tag Extraction</title></head><body><DIV CLASS="wikitext">
+<P><B>Custom Tag Extraction</B></P>
+<P>Custom tag extraction is easy. Simply create an array of tag names that you want to extract from a page, and pass it in to <SPAN CLASS="wikiunknown"><U>TagFindingVisitor</U></SPAN>, like so :</P>
+<PRE>Parser parser = new Parser(..);
 String [] tagsToBeFound = {"P","BR","MYTAG"};
 TagFindingVisitor visitor = new TagFindingVisitor(tagsToBeFound);
 parser.visitAllNodesWith(visitor);
@@ -7,4 +10,5 @@ Node [] allPTags = visitor.getTags(0);
 // Second tag specified in search
 Node [] allBRTags = visitor.getTags(1);
 // Third tag specified in search
-Node [] allMyTags = visitor.getTags(2);</PRE><P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A>// Just a test of wiki</P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Wednesday, April  2, 2003  1:38:24 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
+Node [] allMyTags = visitor.getTags(2);</PRE>
+<P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A>// Just a test of wiki</P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Wednesday, April  2, 2003  1:38:24 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>

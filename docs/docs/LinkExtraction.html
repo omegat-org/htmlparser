@@ -1,4 +1,8 @@
-<html><head><title>Link Extraction</title></head><body><DIV CLASS="wikitext"><P><B>Link Extraction</B></P><P>There are many ways of extracting links.</P><P>1. Use the <SPAN CLASS="wikiunknown"><U>ObjectFindingVisitor</U></SPAN> to extract links, like so:</P><PRE>   Parser parser = new Parser("http://urlIWantToParse.com");
+<html><head><title>Link Extraction</title></head><body><DIV CLASS="wikitext">
+<P><B>Link Extraction</B></P>
+<P>There are many ways of extracting links.</P>
+<P>1. Use the <SPAN CLASS="wikiunknown"><U>ObjectFindingVisitor</U></SPAN> to extract links, like so:</P>
+<PRE>   Parser parser = new Parser("http://urlIWantToParse.com");
    // Create a visitor, specify that you want to recurse through its children
    // Recursion is needed only if you register all scanners, and a link tag could be embedded
    // within a form tag. But if you register only the link scanner, you don't need recursion.
@@ -15,7 +19,9 @@
       LinkTag linkTag = (LinkTag)links[i];
       System.out.println(linkTag.getLink());
       System.out.println(linkTag.getLinkText());
-   }</PRE><P>2. Use the parser utility method - extractAllNodesThatAre().</P><PRE>   Parser parser = new Parser("http://urlIWantToParse.com");
+   }</PRE>
+<P>2. Use the parser utility method - extractAllNodesThatAre().</P>
+<PRE>   Parser parser = new Parser("http://urlIWantToParse.com");
    parser.registerScanners();
    Node [] links = parser.extractAllNodesThatAre(LinkTag.class);
    // Instead of registering all scanners,
@@ -24,7 +30,9 @@
       LinkTag linkTag = (LinkTag)links[i];
       System.out.println(linkTag.getLink());
       System.out.println(linkTag.getLinkText());
-   }</PRE><P>3. It is possible that you are interested in extracting more than just links. In order to customize extraction, write your own visitor. Extend the Visitor class (in the package org.htmlparser.visitors - Parser v1.3 upwards) like so :</P><PRE>   public class MyCustomizedVisitor extends Visitor {
+   }</PRE>
+<P>3. It is possible that you are interested in extracting more than just links. In order to customize extraction, write your own visitor. Extend the Visitor class (in the package org.htmlparser.visitors - Parser v1.3 upwards) like so :</P>
+<PRE>   public class MyCustomizedVisitor extends Visitor {
       public MyCustomizedVisitor(Parser parser) {
          super(true);  /// Its usually a good idea to perform recursion
          // Add the scanners you want.
@@ -72,4 +80,5 @@ Parser parser = new Parser(...);
 MyCustomizedVisitor visitor = new MyCustomizedVisitor();
 parser.visitAllNodesWith(visitor);
 // You can now get the data from the visitor interface.
-</PRE><P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:22:44 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
+</PRE>
+<P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:22:44 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>

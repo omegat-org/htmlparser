@@ -1,0 +1,104 @@
+<html><head><title>Post Operation</title></head><body><DIV CLASS="wikitext">
+<H4>POST Operation</H4>
+<P>The standard HTTP request submitted by the parser is a GET. This note describes how to use POST, which is the usual request submitted by a form.</P>
+<P>As an example, we'll submit a form to the U.S. postal service web site.<BR/><I>Note: This is suboptimal, the postal service provides tools for this type of thing: <A CLASS="namedurl" HREF="http://www.uspswebtools.com"><SPAN STYLE="white-space: nowrap">http://www.uspswebtools.com</SPAN></A></I><BR/></P>
+<P>On the USPS web site, the page <A CLASS="namedurl" HREF="http://www.usps.com/zip4/citytown.htm"><SPAN STYLE="white-space: nowrap">http://www.usps.com/zip4/citytown.htm</SPAN></A> has the following FORM that asks for a zip code and returns the cities or towns covered by the zip code (only form elements are shown removing all the formatting markup):</P>
+<PRE>&lt;form NAME="frmzip" ACTION="zip_response.jsp" METHOD="post" OnSubmit="return validate(frmzip)"&gt;
+&lt;input type="text" id="zipcode" name="zipcode" size="5" maxlength="5" TABINDEX="10"&gt;
+&lt;input TYPE="image" NAME="Submit" SRC="/zip4/images/submit.jpg" BORDER="0" WIDTH="50" HEIGHT="17" ALT="Submit" TABINDEX="11"&gt;</PRE>
+<P>From this we determine that the <TT>METHOD</TT> is <TT>POST</TT> and the form should be submitted to <TT>zip_response.jsp</TT>. This relative URL is relative to the page it is found on, so the form should be submitted to <TT>http://www.usps.com/zip4/zip_response.jsp</TT> when the <TT>Submit</TT> input is clicked. The only <TT>input</TT> element other than the <TT>Submit</TT> is a single <TT>text</TT> field that takes 5 or fewer characters. Other types of input element are described in <A CLASS="namedurl" HREF="http://www.w3.org/TR/html4/interact/forms.html"><SPAN STYLE="white-space: nowrap">http://www.w3.org/TR/html4/interact/forms.html</SPAN></A>.</P>
+<P>The basic operation is to pass a fully prepared <TT>HttpURLConnection</TT> connected to the <TT>POST</TT> target URL into the <TT>Parser</TT>, either in the constructor or via the <TT>setConnection()</TT> method. To condition the connection, use the <TT>setRequestMethod()</TT> method to set the <TT>POST</TT> operation, and the <TT>setRequestProperty()</TT> and other explicit method calls. Then write the input fields as an ampersand concatenation (<TT>"input1=value1&amp;input2=value2&amp;..."</TT>) into the <TT>PrintWriter</TT> obtained by a call to <TT>getOutputStream()</TT>.</P>
+<P>The following sample program illustrates the principles using a <TT>StringBean</TT>, but the same code could be used with a <TT>Parser</TT> by replacing the last three lines in the <TT>try</TT> block with:</P>
+<PRE>        parser = new Parser ();
+        parser.setConnection (connection);
+        // ... do parser operations</PRE>
+<P><A CLASS="namedurl" HREF="images/Zip.java"><SPAN STYLE="white-space: nowrap"><IMG BORDER="0" ALT="http" SRC="/docs/themes/MacOSX/images/http.png" CLASS="linkicon">Source</SPAN> Code.</A><A CLASS="namedurl" HREF="images/Zip.java"><SPAN STYLE="white-space: nowrap">Source</SPAN> Code.</A> <A CLASS="namedurl" HREF="images/Zip.html"><SPAN STYLE="white-space: nowrap"><IMG BORDER="0" ALT="http" SRC="/docs/themes/MacOSX/images/http.png" CLASS="linkicon">Pretty</SPAN> Print Source Code</A><A CLASS="namedurl" HREF="images/Zip.html"><SPAN STYLE="white-space: nowrap">Pretty</SPAN> Print Source Code</A></P>
+<PRE>/*
+ * Zip.java
+ * POST zip code to look up cities.
+ *
+ * Created on April 20, 2003, 11:09 PM
+ */
+
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.htmlparser.beans.StringBean;
+
+/**
+ * POST zip code to look up cities.
+ * @author Derrick Oswald
+ */
+public class Zip
+{
+    String mText; // text extracted from the response to the POST request
+
+    /**
+     * Creates a new instance of Zip
+     */
+    public Zip (String code)
+    {
+        URL url;
+        HttpURLConnection connection;
+        StringBuffer buffer;
+        PrintWriter out;
+        StringBean bean;
+
+        try
+        {
+            // from the 'action' (relative to the refering page)
+            url = new URL ("http://www.usps.com/zip4/zip_response.jsp");
+            connection = (HttpURLConnection)url.openConnection ();
+            connection.setRequestMethod ("POST");
+
+            connection.setDoOutput (true);
+            connection.setDoInput (true);
+            connection.setUseCaches (false);
+
+            // more or less of these may be required
+            // see Request Header Definitions: http://www.ietf.org/rfc/rfc2616.txt
+            connection.setRequestProperty ("Accept-Charset", "*");
+            connection.setRequestProperty ("Referer", "http://www.usps.com/zip4/citytown.htm");
+            connection.setRequestProperty ("User-Agent", "Zip.java/1.0");
+
+            buffer = new StringBuffer (1024);
+            // 'input' fields separated by ampersands (&amp;)
+            buffer.append ("zipcode=");
+            buffer.append (code);
+            // buffer.append ("&amp;");
+            // etc.
+
+            out = new PrintWriter (connection.getOutputStream ());
+            out.print (buffer);
+            out.close ();
+
+            bean = new StringBean ();
+            bean.setConnection (connection);
+            mText = bean.getStrings ();
+        }
+        catch (Exception e)
+        {
+            mText = e.getMessage ();
+        }
+
+    }
+
+    public String getText ()
+    {
+        return (mText);
+    }
+
+    /**
+     * Program mainline.
+     * @param args The zip code to look up.
+     */
+    public static void main (String[] args)
+    {
+        if (0 &gt;= args.length)
+            System.out.println ("Usage:  java Zip &lt;zipcode&gt;");
+        else
+            System.out.println (new Zip (args[0]).getText ());
+    }
+}</PRE></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Thursday, April 24, 2003  4:36:36 am.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>

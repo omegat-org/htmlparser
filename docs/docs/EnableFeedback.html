@@ -1,4 +1,7 @@
-<html><head><title>Enable Feedback</title></head><body><DIV CLASS="wikitext"><P><B>Enable Feedback</B></P><P>If the parser needs to be switched to normal or debug mode, you can do this like so:</P><PRE>  Parser parser =
+<html><head><title>Enable Feedback</title></head><body><DIV CLASS="wikitext">
+<P><B>Enable Feedback</B></P>
+<P>If the parser needs to be switched to normal or debug mode, you can do this like so:</P>
+<PRE>  Parser parser =
     new Parser(
       "http://...",
       new DefaultParserFeedback(
@@ -13,4 +16,6 @@
        DefaultParserFeedback.DEBUG
       )
     );
-</PRE><P>You can also turn the feedback to QUIET mode (none of the events will be triggered), to get extra details. Check <A CLASS="wiki" HREF="BlockFeedback.html">BlockFeedback</A>. To handle the feedback yourself, without displaying it to standard output, subclass <SPAN CLASS="wikiunknown"><U>ParserFeedback</U></SPAN>, and override <I>info()</I>, <I>warning()</I> and <I>error()</I>.</P><P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:41:24 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
+</PRE>
+<P>You can also turn the feedback to QUIET mode (none of the events will be triggered), to get extra details. Check <A CLASS="wiki" HREF="BlockFeedback.html">BlockFeedback</A>. To handle the feedback yourself, without displaying it to standard output, subclass <SPAN CLASS="wikiunknown"><U>ParserFeedback</U></SPAN>, and override <I>info()</I>, <I>warning()</I> and <I>error()</I>.</P>
+<P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:41:24 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>

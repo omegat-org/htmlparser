@@ -1,4 +1,7 @@
-<html><head><title>Email Extraction</title></head><body><DIV CLASS="wikitext"><P><B>Email Extraction</B></P><P>This is very similar to link extraction. You have to extract links from a page and verify that they are email addresses. Link tags have a method - <I>isMailLink()</I></P><PRE>   Parser parser = new Parser(..);
+<html><head><title>Email Extraction</title></head><body><DIV CLASS="wikitext">
+<P><B>Email Extraction</B></P>
+<P>This is very similar to link extraction. You have to extract links from a page and verify that they are email addresses. Link tags have a method - <I>isMailLink()</I></P>
+<PRE>   Parser parser = new Parser(..);
    parser.registerScanners();
    Node links [] = parser.extractAllNodesThatAre(LinkTag.class);
    for (int i=0;i&lt;links.length;i++) {
@@ -7,4 +10,5 @@
         // Yes, its an email id
         System.out.println("Email address: "+linkTag.getLink());
      }
-   }</PRE><P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A>, February 16, 2003 11:41 am</P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:24:25 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
+   }</PRE>
+<P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A>, February 16, 2003 11:41 am</P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:24:25 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
