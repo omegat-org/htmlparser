@@ -26,32 +26,15 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
+package org.htmlparser.tags;
 
-package org.htmlparser.scanners;
-
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.HTMLTitleTag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
-/**
- * Scans title tags.
- */
-public class HTMLTitleScanner extends CompositeTagScanner {
-	private static final String MATCH_NAME [] = {"TITLE"};
+public class Html extends CompositeTag {
 
-	public HTMLTitleScanner(String filter) {
-		super(filter,MATCH_NAME);
-	}
-
-	public String [] getID() {
-		return MATCH_NAME;
+	public Html(TagData tagData, CompositeTagData compositeTagData) {
+		super(tagData, compositeTagData);
 	}
 	
-	protected HTMLTag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return new HTMLTitleTag(tagData,compositeTagData);
-	}
-
 }
