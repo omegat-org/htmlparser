@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030302 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030316 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -56,7 +56,7 @@ public class AppletTag extends CompositeTag
 	public AppletTag(TagData tagData,CompositeTagData compositeTagData) 
 	{
 		super(tagData,compositeTagData);
-		this.appletClass = compositeTagData.getStartTag().getAttribute("CLASS");
+		this.appletClass = compositeTagData.getStartTag().getAttribute("CODE");
 		this.codeBase = compositeTagData.getStartTag().getAttribute("CODEBASE");
 		this.archive = compositeTagData.getStartTag().getAttribute("ARCHIVE");
 		NodeList children = compositeTagData.getChildren();

@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030302 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030316 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ public class TagParserTest extends ParserTestCase {
 		
 		createParser(testHtml);
 		parseAndAssertNodeCount(1);
-		assertType("should be Tag",Tag.class,node[0]);
+		assertType("should be HTMLTag",Tag.class,node[0]);
 		Tag tag = (Tag)node[0];
 		assertStringEquals("alt","Marshall Field's",tag.getAttribute("ALT"));
 		assertStringEquals(
