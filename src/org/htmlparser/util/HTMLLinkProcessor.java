@@ -28,6 +28,7 @@
 
 package org.htmlparser.util;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -35,6 +36,8 @@ import java.net.URL;
  * Processor class for links, is present basically as a utility class.
  */
 public class HTMLLinkProcessor
+    implements
+        Serializable
 {
     /**
      * Overriding base URL.

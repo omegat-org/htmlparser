@@ -30,6 +30,7 @@ package org.htmlparser.scanners;
 //////////////////
 // Java Imports //
 //////////////////
+import java.io.Serializable;
 import java.util.Hashtable;
 
 import org.htmlparser.HTMLNode;
@@ -52,6 +53,8 @@ import org.htmlparser.util.HTMLParserFeedback;
  * 
  */
 public abstract class HTMLTagScanner
+    implements
+        Serializable
 {
 	  /**
 	   * A filter which is used to associate this tag. The filter contains a string

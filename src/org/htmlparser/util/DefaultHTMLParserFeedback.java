@@ -28,6 +28,8 @@
 
 package org.htmlparser.util;
 
+import java.io.Serializable;
+
 /**
  * Default implementation of the HTMLParserFeedback interface.
  * This implementation prints output to the console but users
@@ -39,7 +41,8 @@ package org.htmlparser.util;
 
 public class DefaultHTMLParserFeedback
     implements
-        HTMLParserFeedback
+        HTMLParserFeedback,
+        Serializable
 {
     /**
      * Constructor argument for a quiet feedback.

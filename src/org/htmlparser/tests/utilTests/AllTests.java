@@ -55,6 +55,7 @@ public static void main(String[] args) {
 public static TestSuite suite() {
 	TestSuite suite = new TestSuite("Utility Tests");
 	
+	suite.addTestSuite(BeanTest.class);
 	suite.addTestSuite(HTMLLinkProcessorTest.class);
 	suite.addTestSuite(HTMLParameterParserTest.class);	
 	suite.addTestSuite(HTMLTagParserTest.class);

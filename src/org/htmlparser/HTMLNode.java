@@ -30,12 +30,15 @@
 package org.htmlparser;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)
  */
 public abstract class HTMLNode
+    implements
+        Serializable
 {
 	/** 
 	 * The beginning position of the tag in the line

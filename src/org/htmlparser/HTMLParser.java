@@ -106,6 +106,8 @@ import org.htmlparser.util.HTMLTagParser;
  *  @see HTMLParser#elements() 
  */
 public class HTMLParser
+    implements
+        Serializable
 {
 	// Please don't change the formatting of the VERSION_STRING
 	// below. This is done so as to facilitate the ant script
@@ -125,7 +127,7 @@ public class HTMLParser
 	/**
 	 * Feedback object.
 	 */
-	private HTMLParserFeedback feedback;
+	protected HTMLParserFeedback feedback;
 	
 	/**
 	 * The URL or filename to be parsed.
@@ -135,7 +137,7 @@ public class HTMLParser
 	/** 
 	 * The html reader associated with this parser.
 	 */
-	protected HTMLReader reader;
+	protected transient HTMLReader reader;
 
     /**
      * The list of scanners to apply at the top level.
@@ -150,7 +152,7 @@ public class HTMLParser
     /**
      * The source for HTML.
      */
-    protected URLConnection url_conn;
+    protected transient URLConnection url_conn;
 
     /**
      * A quiet message sink.
@@ -271,13 +273,16 @@ public class HTMLParser
      * The parser is in a safe but useless state.
      * Set the reader or connection using setReader() or setConnection().
      * @see #setReader(HTMLReader)
-     * @see #setReader(URLConnection)
+     * @see #setConnection(URLConnection)
      */
     public HTMLParser ()
     {
         setFeedback (null);
         setScanners (null);
-        setReader (new HTMLReader (new StringReader (""), "http://localhost"));
+        resourceLocn = null;
+        reader = null;
+        character_set = DEFAULT_CHARSET;
+        url_conn = null;
 		HTMLTag.setTagParser (new HTMLTagParser (getFeedback ()));
     }
 
@@ -379,6 +384,37 @@ public class HTMLParser
     public HTMLParser (URLConnection connection) throws HTMLParserException
     {
         this (connection, stdout);
+    }
+
+    //
+    // Serialization support
+    //
+
+    private void writeObject (ObjectOutputStream out)
+        throws
+            IOException
+    {
+        if ((null == getConnection ()) || /*redundant*/(null == getURL ()))
+            if (null != getReader ())
+                throw new IOException ("can only serialize parsers with a URL");
+        out.defaultWriteObject ();
+    }
+
+    private void readObject (ObjectInputStream in)
+        throws
+            IOException,
+            ClassNotFoundException
+    {
+        in.defaultReadObject ();
+        try
+        {
+            // reopen the connection and create a reader which are transient fields
+            setURL (getURL ());
+        }
+        catch (HTMLParserException hpe)
+        {
+            throw new IOException (hpe.toString ());
+        }
     }
 
     //
@@ -772,7 +808,9 @@ public class HTMLParser
                     if (-1 != (index = content.indexOf (";")))
                         content = content.substring (0, index);
                     ret = findCharset (content, ret);
-                    if (!ret.equals (content))
+                    // Charset names are not case-sensitive;
+                    // that is, case is always ignored when comparing charset names.
+                    if (!ret.equalsIgnoreCase (content))
                         feedback.info (
                             "detected charset \""
                             + content
