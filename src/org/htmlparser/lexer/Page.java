@@ -354,11 +354,6 @@ public class Page
             throw new ParserException (ioe.getMessage (), ioe);
         }
         type = getContentType ();
-        if (type != null && !type.startsWith ("text"))
-            throw new ParserException (
-                "URL "
-                + connection.getURL ().toExternalForm ()
-                + " does not contain text");
         charset = getCharset (type);
         try
         {

@@ -439,6 +439,7 @@ public class Parser
     public void setLexer (Lexer lexer)
     {
         NodeFactory factory;
+        String type;
 
         if (null != lexer)
         {   // move a node factory that's been set to the new lexer
@@ -448,6 +449,13 @@ public class Parser
             if (null != factory)
                 lexer.setNodeFactory (factory);
             mLexer = lexer;
+            // warn about content that's not likely text
+            type = mLexer.getPage ().getContentType ();
+            if (type != null && !type.startsWith ("text"))
+                getFeedback ().warning (
+                    "URL "
+                    + mLexer.getPage ().getUrl ()
+                    + " does not contain text");
         }
     }
 
