@@ -216,7 +216,6 @@ public class FormTag extends CompositeTag
     /**
      * Extract the location of the image, given the tag, and the url
      * of the html page in which this tag exists.
-     * @param tag The form tag with the 'ACTION' attribute.
      * @param url URL of web page being parsed.
      */
     public String extractFormLocn(String url)// throws ParserException

@@ -73,7 +73,7 @@ public interface Node
      * e.g. when we try to get all the links on a page, it is not possible to
      * get it at the top-level, as many tags (like form tags), can contain
      * links embedded in them. We could get the links out by checking if the
-     * current node is a {@link CompositeTag}, and going through its children.
+     * current node is a {@link org.htmlparser.tags.CompositeTag}, and going through its children.
      * So this method provides a convenient way to do this.<P>
      *
      * Using collectInto(), programs get a lot shorter. Now, the code to

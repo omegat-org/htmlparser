@@ -148,7 +148,7 @@ public class PageAttribute extends Attribute
      * Create a whitespace attribute with the value given.
      * @param value The value of this attribute.
      * @exception IllegalArgumentException if the value contains other than
-     * whitespace. To set a real value use {@link #Attribute(String,String)}.
+     * whitespace. To set a real value use {@link Attribute#Attribute(String)}.
      */
     public PageAttribute (String value)
     {
@@ -446,7 +446,7 @@ public class PageAttribute extends Attribute
 
     /**
      * Set the ending position of the attribute name.
-     * @param start The new offset into the page at which the name ends.
+     * @param end The new offset into the page at which the name ends.
      */
     public void setNameEndPosition (int end)
     {
@@ -486,7 +486,7 @@ public class PageAttribute extends Attribute
 
     /**
      * Set the ending position of the attribute value.
-     * @param start The new offset into the page at which the value ends.
+     * @param end The new offset into the page at which the value ends.
      */
     public void setValueEndPosition (int end)
     {

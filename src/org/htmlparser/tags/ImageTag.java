@@ -82,8 +82,6 @@ public class ImageTag extends Tag
     * &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value
     * &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign
     * </pre>
-    * @param tag The tag with the 'SRC' attribute.
-    * @param url URL of web page being parsed.
     */
     public String extractImageLocn ()
     {

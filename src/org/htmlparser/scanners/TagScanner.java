@@ -140,30 +140,6 @@ public class TagScanner
         return (ret);
     }
 
-    /**
-     * Create a tag.
-     * Override this method to create your own tag type.
-     * @param tagData
-     * @param tag
-     * @param url
-     * @return Tag
-     * @throws ParserException
-     */
-    public Tag createTag(Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
-    {
-        Tag ret;
-
-        ret = null;
-
-        ret = new Tag ();
-        ret.setPage (page);
-        ret.setStartPosition (start);
-        ret.setEndPosition (end);
-        ret.setAttributesEx (attributes);
-        
-        return (ret);
-    }
-
     public String [] getID ()
     {
         return (new String[0]);

@@ -40,7 +40,7 @@ public class DoctypeTag extends Tag
     private static final String[] mIds = new String[] {"!DOCTYPE"};
 
     /**
-     * Create a new !doctype tag.
+     * Create a new &#33;doctype tag.
      */
     public DoctypeTag ()
     {

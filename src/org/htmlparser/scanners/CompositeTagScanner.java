@@ -139,8 +139,6 @@ public class CompositeTagScanner extends TagScanner
     * tag was found. For example, encountering &lt;/HTML&gt; while
     * scanning a &lt;BODY&gt; tag would mean that no &lt;/BODY&gt; was found
     * and needs to be corrected. These items are not prefixed by a '/'.
-    * @param allowSelfChildren If <code>true</code> a tag of the same name is
-    * allowed within this tag. Used to determine when an endtag is missing.
     * @param balance_quotes <code>true</code> if scanning string nodes needs to
     * honour quotes. For example, ScriptScanner defines this <code>true</code>
     * so that text within &lt;SCRIPT&gt;&lt;/SCRIPT&gt; ignores tag-like text
@@ -283,37 +281,6 @@ public class CompositeTagScanner extends TagScanner
     public Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
     {
         throw new ParserException ("composite tags shouldn't be using this");
-    }
-
-    /**
-     * You must override this method to create the tag of your choice upon successful parsing.
-     * This method is called after the scanner has completed the scan.
-     * The first four arguments are standard tag constructor arguments.
-     * The last three are for the composite tag construction.
-     * @param page The page the tag is found on.
-     * @param start The starting offset in the page of the tag.
-     * @param end The ending offset in the page of the tag.
-     * @param attributes The contents of the tag as a list of {@list Attribute} objects.
-     * @param startTag The tag that begins the composite tag.
-     * @param endTag The tag that ends the composite tag. Note this could be a
-     * virtual tag created to satisfy the scanner (check if it's starting and
-     * ending position are the same).
-     * @param children The list of nodes contained within the ebgin end tag pair.
-     */
-    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
-    {
-        CompositeTag ret;
-
-        ret = new CompositeTag ();
-        ret.setPage (page);
-        ret.setStartPosition (start);
-        ret.setEndPosition (end);
-        ret.setAttributesEx (attributes);
-        ret.setStartTag (startTag);
-        ret.setEndTag (endTag);
-        ret.setChildren (children);
-
-        return (ret);        
     }
 
     public final boolean isTagToBeEndedFor (Tag current, Tag tag)

@@ -55,8 +55,8 @@ public class StringNodeFactory
     protected boolean mRemoveEscapes;
 
     /**
-     * Flag to tell the parser to convert non breaking space
-     * (i.e. \u00a0) to a space (" ").  If true, this will happen inside StringNode's toPlainTextString.
+     * Flag to tell the parser to convert non breaking space (from \u00a0 to a space " ").
+     * If true, this will happen inside StringNode's toPlainTextString.
      */
     protected boolean mConvertNonBreakingSpaces;
     
@@ -112,7 +112,7 @@ public class StringNodeFactory
 
     /**
      * Set the escape removing state.
-     * @param decode If <code>true</code>, string nodes remove escape characters.
+     * @param remove If <code>true</code>, string nodes remove escape characters.
      */
     public void setRemoveEscapes (boolean remove)
     {

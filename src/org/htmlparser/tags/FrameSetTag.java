@@ -91,7 +91,7 @@ public class FrameSetTag extends CompositeTag
 
     /**
      * Gets a frame by name.
-     * @param 
+     * @param name The name of the frame to retrieve.
      * @return The specified frame or <code>null</code> if it wasn't found.
      */
     public FrameTag getFrame(String name)

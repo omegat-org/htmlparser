@@ -107,9 +107,9 @@ public class PrototypicalNodeFactory
     }
 
     /**
-     * Adds a tag to the registry.
-     * @param id The name under which to register the tag.
-     * @param tag The tag to be returned from a createTag(id) call.
+     * Gets a tag from the registry.
+     * @param id The name of the tag to return.
+     * @return The tag registered under the id name or <code>null</code> if none.
      */
     public Tag get (String id)
     {
@@ -118,7 +118,7 @@ public class PrototypicalNodeFactory
 
     /**
      * Remove a tag from the registry.
-     * @param id The name under which to register the tag.
+     * @param id The name of the tag to remove.
      * @return The tag that was registered with that id.
      */
     public Tag remove (String id)

@@ -201,7 +201,7 @@ public class Parser
      * </pre>
      * </li>
      * </ul>
-     * @param rd The reader to draw characters from.
+     * @param lexer The lexer to draw characters from.
      * @param fb The object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
@@ -266,7 +266,7 @@ public class Parser
      * parser.getReader().reset();
      * </pre>
      * </li>
-     * @param reader The source for HTML to be parsed.
+     * @param lexer The source for HTML to be parsed.
      */
     public Parser (Lexer lexer)
     {
@@ -345,7 +345,7 @@ public class Parser
 
     /**
      * Set the encoding for the page this parser is reading from.
-     * @param The new character set to use.
+     * @param encoding The new character set to use.
      */
     public void setEncoding (String encoding)
         throws
@@ -468,7 +468,6 @@ public class Parser
      *    }
      * }
      * </pre>
-     * @param filter The filter to apply to the nodes.
      */
     public NodeIterator elements () throws ParserException
     {
@@ -656,7 +655,7 @@ public class Parser
 
     /**
      * Extract all nodes matching the given filter.
-     * @see Node#collectInto()
+     * @see Node#collectInto(NodeList, NodeFilter)
      */
     public NodeList extractAllNodesThatMatch (NodeFilter filter) throws ParserException
     {
@@ -672,7 +671,7 @@ public class Parser
 
     /**
      * Convenience method to extract all nodes of a given class type.
-     * @see Node#collectInto()
+     * @see Node#collectInto(NodeList, NodeFilter)
      */
     public Node [] extractAllNodesThatAre (Class nodeType) throws ParserException
     {
