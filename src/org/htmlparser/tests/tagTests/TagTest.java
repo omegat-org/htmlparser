@@ -655,4 +655,25 @@ public class TagTest extends ParserTestCase
 		String href = tag.getAttribute ("HREF");
 		assertStringEquals("Resolved Link","http://cbc.ca", href);
     }
+
+    /**
+     * See bug #741026 registerScanners() mangles output HTML badly.
+     */
+    public void testHTMLOutputOfDifficultLinksWithRegisterScanners () throws ParserException
+    {
+        // straight out of a real world example        
+        createParser ("<a href=http://www.google.com/webhp?hl=en>");
+        // register standard scanners (Very Important)
+        parser.registerScanners ();
+        String temp = null;
+        for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
+        {
+            Node newNode = e.nextNode ();  // Get the next HTML Node
+            temp = newNode.toHTML ();
+        }
+        assertNotNull ("No nodes", temp);
+        assertEquals ("Incorrect HTML output: ",
+            "<A HREF=\"http://www.google.com/webhp?hl=en\"></A>",
+            temp);
+    }
 }
