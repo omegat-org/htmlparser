@@ -60,6 +60,7 @@ import org.htmlparser.tags.JspTag;
 import org.htmlparser.tags.LabelTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
+import org.htmlparser.tags.ObjectTag;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.SelectTag;
@@ -273,6 +274,7 @@ public class PrototypicalNodeFactory
         registerTag (new LabelTag ());
         registerTag (new LinkTag ());
         registerTag (new MetaTag ());
+        registerTag (new ObjectTag ());
         registerTag (new OptionTag ());
         registerTag (new ScriptTag ());
         registerTag (new SelectTag ());
