@@ -131,10 +131,8 @@ public class HTMLLinkProcessor {
 		try {
 			link = checkIfLinkIsRelative(link, url);
 			
-			
-			// Check if there are any escape characters to be filtered out (we are
-			// currently removing #38;
-			link=removeEscapeCharacters(link);
+			// remove numeric character references and character entity references
+            link = Translate.decode (link);
 			return link;
 		}
 		catch (Exception e) {
@@ -165,65 +163,6 @@ public class HTMLLinkProcessor {
 			return returnURL.toString();
 		}
 	}
-		public static String removeEscapeCharacters(String link)
-		{
-			int state = 0;
-			String temp = "",retVal="";
-			for (int i=0;i<link.length();i++)
-			{
-				char ch = link.charAt(i);
-				if (state==4) 
-				{
-					state=0;
-				}
-				if (ch=='#' && state==0) 
-				{
-					state=1;
-					continue;
-				}
-				if (state==1)
-				{
-					if (ch=='3')
-					{
-						state=2; 
-						continue;
-					}
-					else
-					{
-						state=0;
-						retVal+=temp;
-					}
-				}		
-				if (state==2)
-				{
-					if (ch=='8')
-					{
-					 	state=3;
-						continue;
-					}
-					else
-					{
-						state=0;
-						retVal+=temp;
-					}
-				}	
-				if (state==3)
-				{
-					if (ch==';')
-					{
-						state=4;
-						continue;
-					}
-					else
-					{
-						state=0;
-						retVal+=temp;
-					}
-				}				
-				if (state==0) retVal+=ch; else temp+=ch;
-			}
-			return retVal;
-		}
 	public String removeFirstSlashIfFound(String link) {
 		if (link==null || link.length()==0) return null;
 		if (link.charAt(0)=='/' || link.charAt(0)=='\\')

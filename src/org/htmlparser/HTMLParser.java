@@ -431,8 +431,11 @@ public class HTMLParser
 	
 	private HTMLReader openURLConnection()	throws HTMLParserException {
 		try {
-			// Its a web address
-			resourceLocn=HTMLLinkProcessor.removeEscapeCharacters(resourceLocn);
+            // for a while we'll warn people that translations are not happening any more
+            if (-1 != resourceLocn.indexOf ("#38;"))
+                feedback.warning ("URL contains escape - use org.htmlparser.util.Translate.decode()");
+
+            // Its a web address
 			resourceLocn=checkEnding(resourceLocn);
 			resourceLocn=HTMLLinkProcessor.fixSpaces(resourceLocn);
 			URL url = new URL(resourceLocn);
