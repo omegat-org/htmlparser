@@ -32,8 +32,9 @@
 
 package org.htmlparser.util;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Translate numeric character references and character entity references to unicode characters.
@@ -52,10 +53,10 @@ public class Translate
      * Table mapping entity reference kernel to character.
      * <p><code>String</code>-><code>Character</code>
      */
-    protected static Hashtable refChar;
+    protected static Map refChar;
     static
     {
-        refChar = new Hashtable (1000);
+        refChar = new HashMap(1000);
 
         // Portions © International Organization for Standardization 1986
         // Permission to copy in any form is granted for use with
@@ -395,16 +396,16 @@ public class Translate
      * Table mapping character to entity reference kernel.
      * <p><code>Character</code>-><code>String</code>
      */
-    protected static Hashtable mCharRef;
+    protected static Map charRefTable;
     static
     {
-        mCharRef = new Hashtable (refChar.size ());
+        charRefTable = new HashMap (refChar.size ());
         Iterator iterator = refChar.keySet ().iterator ();
         while (iterator.hasNext ())
         {
             String key = (String)iterator.next ();
             Character character = (Character)refChar.get (key);
-            mCharRef.put (character, key);
+            charRefTable.put (character, key);
         }
     }
 
@@ -512,7 +513,7 @@ public class Translate
     {
         StringBuffer buffer;
         String ret;
-        if (null != (ret = (String)mCharRef.get (character)))
+        if (null != (ret = (String)charRefTable.get (character)))
         {
             buffer = new StringBuffer (ret.length () + 2);
             buffer.append ('&');
