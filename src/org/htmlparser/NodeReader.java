@@ -191,7 +191,7 @@ public class NodeReader extends BufferedReader
             {
                 ch = line.charAt (pos + 1);
                 // the order of these tests might be optimized for speed
-                if ('/' == ch || '%' == ch || Character.isLetter (ch) || '!' == ch || '>' == ch)
+                if ('/' == ch || '%' == ch || Character.isLetter (ch) || '!' == ch)
                     ret = true;
             }
 

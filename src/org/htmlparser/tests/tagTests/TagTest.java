@@ -332,7 +332,9 @@ public class TagTest extends ParserTestCase
      */
     public void testStrictParsing() throws ParserException {
 		String testHTML = 
-		"<div align=\"center\">" +			"<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">" +				"<a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+
+		"<div align=\"center\">" +
+			"<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">" +
+				"<a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+
 		        "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
 		        "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
 		        "<a href=\"/cia/notices.html#sec\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Security</font></a>\n"+
@@ -340,7 +342,8 @@ public class TagTest extends ParserTestCase
 		        "<a href=\"/cia/sitemap.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Site Map</font></a>\n"+
 		        "<a href=\"/cia/siteindex.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Index</font></a>\n"+
 		        "<a href=\"/search\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Search</font></a>\n"+
-	        "</font>" +        "</div>";
+	        "</font>" +
+        "</div>";
 
 		createParser(testHTML,"http://www.cia.gov");
 		parser.registerScanners();
@@ -500,31 +503,87 @@ public class TagTest extends ParserTestCase
     }
 
 	/**
-	 * Bug reported by John Zook, if there is an empty tag,
-	 * then Tag shouldnt pass it down to the scanners.
+	 * Ignore empty tags.
 	 */
 	public void testEmptyTag() throws ParserException {
 		String testHTML = "<html><body><>text</body></html>";
 		createParser(testHTML);
 		parser.registerScanners();
-		parseAndAssertNodeCount(6);
-		assertTrue("Third node should be an HTMLtag",node[2] instanceof Tag);
-		Tag htmlTag = (Tag)node[2];
-		assertEquals("Third node should be empty","",htmlTag.getText());
+		parseAndAssertNodeCount(5);
+		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[2];
+		assertEquals("Third node has incorrect text","<>text",stringNode.getText());
 	}
 
 	/**
-	 * Bug reported by John Zook, if there is an empty tag,
-	 * then Tag shouldnt pass it down to the scanners.
+	 * Ignore empty tags.
 	 */
 	public void testEmptyTag2() throws ParserException {
 		String testHTML = "<html><body>text<></body></html>";
 		createParser(testHTML);
 		parser.registerScanners();
-		parseAndAssertNodeCount(6);
-		assertTrue("Fourth node should be an HTMLtag",node[3] instanceof Tag);
-		Tag htmlTag = (Tag)node[3];
-		assertEquals("Fourth node should be empty","",htmlTag.getText());
+		parseAndAssertNodeCount(5);
+		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[2];
+		assertEquals("Third node has incorrect text","text<>",stringNode.getText());
+	}
+
+	/**
+	 * Ignore empty tags.
+	 */
+	public void testEmptyTag3() throws ParserException {
+		String testHTML = "<html><body>text<>text</body></html>";
+		createParser(testHTML);
+		parser.registerScanners();
+		parseAndAssertNodeCount(5);
+		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[2];
+		assertEquals("Third node has incorrect text","text<>text",stringNode.getText());
+	}
+
+	/**
+	 * Ignore empty tags.
+	 */
+	public void testEmptyTag4() throws ParserException {
+		String testHTML = "<html><body>text\n<>text</body></html>";
+		createParser(testHTML);
+		parser.registerScanners();
+        parser.setLineSeparator ("\r\n"); // actually a static method
+		parseAndAssertNodeCount(5);
+		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[2];
+        String actual = stringNode.getText();
+		assertEquals("Third node has incorrect text","text\r\n<>text",actual);
+	}
+
+	/**
+	 * Ignore empty tags.
+	 */
+	public void testEmptyTag5() throws ParserException {
+		String testHTML = "<html><body>text<\n>text</body></html>";
+		createParser(testHTML);
+		parser.registerScanners();
+        parser.setLineSeparator ("\r\n"); // actually a static method
+		parseAndAssertNodeCount(5);
+		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[2];
+        String actual = stringNode.getText();
+		assertEquals("Third node has incorrect text","text<\r\n>text",actual);
+	}
+
+	/**
+	 * Ignore empty tags.
+	 */
+	public void testEmptyTag6() throws ParserException {
+		String testHTML = "<html><body>text<>\ntext</body></html>";
+		createParser(testHTML);
+		parser.registerScanners();
+        parser.setLineSeparator ("\r\n"); // actually a static method
+		parseAndAssertNodeCount(5);
+		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[2];
+        String actual = stringNode.getText();
+		assertEquals("Third node has incorrect text","text<>\r\ntext",actual);
 	}
 
 	public void testAttributesReconstruction() throws ParserException {

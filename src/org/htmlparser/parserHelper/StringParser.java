@@ -44,6 +44,32 @@ public class StringParser {
 		return find(reader, input, position, ignoreStateMode);	
 	}
 	
+    /**
+     * Returns true if the text at <code>pos</code> in <code>line</code> should be scanned as a tag.
+     * Basically an open angle followed by a known special character or a letter.
+     * @param line The current line being parsed.
+     * @param pos The position in the line to examine.
+     * @return <code>true</code> if we think this is the start of a tag.
+     */
+    private boolean beginTag (String line, int pos)
+    {
+        char ch;
+        boolean ret;
+        
+        ret = false;
+        
+        if (pos + 2 <= line.length ())
+            if ('<' == line.charAt (pos))
+            {
+                ch = line.charAt (pos + 1);
+                // the order of these tests might be optimized for speed
+                if ('/' == ch || '%' == ch || Character.isLetter (ch) || '!' == ch)
+                    ret = true;
+            }
+
+        return (ret);
+    }
+
 	/**
 	 * Locate the StringNode within the input string, by parsing from the given position
 	 * @param reader HTML reader to be provided so as to allow reading of next line
@@ -63,20 +89,13 @@ public class StringParser {
 		for (int i=position;(i<inputLen && state!=PARSE_COMPLETED_STATE);i++)
 		{
 			ch  = input.charAt(i);
-			// The following conditionals are a bug fix
-			// done by Roger Sollberger. They correspond to a
-			// testcase in HTMLStringNodeTest (testTagCharsInStringNode)
-			if (ch=='<' && state!=PARSE_IGNORE_STATE) {
-				if ((i+1)<input.length()) {
-					char nextChar = input.charAt(i+1);
-					if  (((nextChar>='A') && (nextChar<='Z')) || // next char must be A-Z 
-					 ((nextChar>='a') && (nextChar<='z')) || // next char must be a-z
-					 (nextChar=='/' || nextChar=='!' || nextChar=='>' || nextChar=='%'))   // or next char is a '/' 
-					{
-						state = PARSE_COMPLETED_STATE;
-						textEnd=i-1;
-					}
-				}
+			if (ch=='<' && state!=PARSE_IGNORE_STATE)
+            {
+                if (beginTag (input, i))
+                {
+                    state = PARSE_COMPLETED_STATE;
+                    textEnd=i-1;
+                }
 			}
 			if (ignoreStateMode && (ch=='\'' || ch=='"')) {
 				if (state==PARSE_IGNORE_STATE) state=PARSE_HAS_BEGUN_STATE;
