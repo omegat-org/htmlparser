@@ -56,30 +56,30 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
      * @throws ParserException if there is a problem parsing the test data
      */
     public void testLineNumbers() throws ParserException {
-        testLineNumber("<Custom/>", 1, 0, 1, 1);
-        testLineNumber("<Custom />", 1, 0, 1, 1);
-        testLineNumber("<Custom></Custom>", 1, 0, 1, 1);
-        testLineNumber("<Custom>Content</Custom>", 1, 0, 1, 1);
-        testLineNumber("<Custom>Content<Custom></Custom>", 1, 0, 1, 1);
+        testLineNumber("<Custom/>", 1, 0, 0, 0);
+        testLineNumber("<Custom />", 1, 0, 0, 0);
+        testLineNumber("<Custom></Custom>", 1, 0, 0, 0);
+        testLineNumber("<Custom>Content</Custom>", 1, 0, 0, 0);
+        testLineNumber("<Custom>Content<Custom></Custom>", 1, 0, 0, 0);
         testLineNumber(
             "<Custom>\n" +
             "   Content\n" +
             "</Custom>",
-            1, 0, 1, 3
+            1, 0, 0, 2
         );
         testLineNumber(
             "Foo\n" +
             "<Custom>\n" +
             "   Content\n" +
             "</Custom>",
-            2, 1, 2, 4
+            2, 1, 1, 3
         );
         testLineNumber(
             "Foo\n" +
             "<Custom>\n" +
             "   <Custom>SubContent</Custom>\n" +
             "</Custom>",
-            2, 1, 2, 4
+            2, 1, 1, 3
         );
         char[] oneHundredNewLines = new char[100];
         Arrays.fill(oneHundredNewLines, '\n');
@@ -89,7 +89,7 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
             "<Custom>\n" +
             "   <Custom>SubContent</Custom>\n" +
             "</Custom>",
-            2, 1, 102, 104
+            2, 1, 101, 103
         );
     }
 

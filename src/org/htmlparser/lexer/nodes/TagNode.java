@@ -364,7 +364,8 @@ public class TagNode
      * <p>
      * <em>
      * Note: This value is converted to uppercase and does not
-     * begin with "/" if it is an end tag.
+     * begin with "/" if it is an end tag. Nor does it end with
+     * a slash in the case of an XML type tag.
      * To get at the original text of the tag name use
      * {@link #getRawTagName getRawTagName()}.
      * </em>
@@ -386,6 +387,8 @@ public class TagNode
                 ret = ret.toUpperCase ();
                 if (ret.startsWith ("/"))
                     ret = ret.substring (1);
+                if (ret.endsWith ("/"))
+                    ret = ret.substring (0, ret.length () - 1);
             }
         }
 

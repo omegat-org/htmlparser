@@ -602,7 +602,7 @@ public class Parser
         remove_scanner = false;
         try
         {
-            if (null == scanners.get ("-m"))
+            if (null == scanners.get ("META"))
             {
                 addScanner (new MetaTagScanner ("-m"));
                 remove_scanner = true;
@@ -643,7 +643,7 @@ public class Parser
         finally
         {
             if (remove_scanner)
-                scanners.remove ("-m");
+                scanners.remove ("META");
         }
 
         return ret;
