@@ -30,6 +30,7 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
 import org.htmlparser.StringNode;
+import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
@@ -72,7 +73,7 @@ public class FormTagTest extends ParserTestCase {
 	public void testSearchFor() throws ParserException {
 		createParser(FormScannerTest.FORM_HTML);
 
-		parser.registerScanners();
+		parser.addScanner(new FormScanner(parser));
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof FormTag);
 		FormTag formTag = (FormTag)node[0];
@@ -81,8 +82,8 @@ public class FormTagTest extends ParserTestCase {
 		
 		Node [] nodes = nodeList.toNodeArray();
 		
-		assertEquals("Number of nodes founs",1,nodes.length);
-		assertTrue("Should have found a string node",nodes[0] instanceof StringNode);
+		assertEquals("Number of nodes found",1,nodes.length);
+		assertType("search result node",StringNode.class,nodes[0]);
 		StringNode stringNode = (StringNode)nodes[0];
 		assertEquals("Expected contents of string node","User Name",stringNode.getText());
 	}
@@ -105,7 +106,7 @@ public class FormTagTest extends ParserTestCase {
 	public void testSearchByName() throws ParserException {
 		createParser(FormScannerTest.FORM_HTML);
 
-		parser.registerScanners();
+		parser.addScanner(new FormScanner(parser));
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof FormTag);
 		FormTag formTag = (FormTag)node[0];
