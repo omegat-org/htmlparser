@@ -108,8 +108,4 @@ public class IteratorImpl implements PeekingIterator
         
         return (ret);
     }
-    
-    public Node nextHTMLNode() throws ParserException {
-    	return nextNode();
-    }
 }

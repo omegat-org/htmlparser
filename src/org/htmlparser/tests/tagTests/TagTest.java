@@ -31,6 +31,7 @@ package org.htmlparser.tests.tagTests;
 import java.util.Hashtable;
 
 import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.EndTag;
@@ -548,7 +549,7 @@ public class TagTest extends ParserTestCase
 		String testHTML = "<html><body>text\n<>text</body></html>";
 		createParser(testHTML);
 		parser.registerScanners();
-        parser.setLineSeparator ("\r\n"); // actually a static method
+        Parser.setLineSeparator ("\r\n"); // actually a static method
 		parseAndAssertNodeCount(5);
 		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
 		StringNode stringNode = (StringNode)node[2];
@@ -563,7 +564,7 @@ public class TagTest extends ParserTestCase
 		String testHTML = "<html><body>text<\n>text</body></html>";
 		createParser(testHTML);
 		parser.registerScanners();
-        parser.setLineSeparator ("\r\n"); // actually a static method
+        Parser.setLineSeparator ("\r\n"); // actually a static method
 		parseAndAssertNodeCount(5);
 		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
 		StringNode stringNode = (StringNode)node[2];
@@ -578,7 +579,7 @@ public class TagTest extends ParserTestCase
 		String testHTML = "<html><body>text<>\ntext</body></html>";
 		createParser(testHTML);
 		parser.registerScanners();
-        parser.setLineSeparator ("\r\n"); // actually a static method
+        Parser.setLineSeparator ("\r\n"); // actually a static method
 		parseAndAssertNodeCount(5);
 		assertTrue("Third node should be a string node",node[2] instanceof StringNode);
 		StringNode stringNode = (StringNode)node[2];

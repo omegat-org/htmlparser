@@ -43,10 +43,4 @@ public interface NodeIterator {
      */
 	public Node nextNode() throws ParserException;
 	
-	/**
-	 * Get the next node.
-	 * @return The next node in the HTML stream, or null if there are no more nodes.
-	 * @deprecated Use nextNode() instead.
-	 */
-	public Node nextHTMLNode() throws ParserException;	
 }
