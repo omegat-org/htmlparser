@@ -7,6 +7,7 @@ character on the last line was causing a parser crash
 [4] Fixed bug in HTMLParameterParser.parseParameters(), due to which
 params with spaces before = were not being picked up
 [5] Made massive API changes - throwing exceptions and using HTMLEnumeration
+[6] Fixed HTMLRemarkNode bug - we can recognize stuff like <!--> now.
 
 Integration Build 1.2 - 20020728
 --------------------------------
