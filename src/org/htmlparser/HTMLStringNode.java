@@ -38,14 +38,7 @@ public class HTMLStringNode extends HTMLNode
 	 * The text of the string.
    */	
 	protected StringBuffer textBuffer;
-  /** 
-	 * The beginning position of the tag in the line
-	 */	
-	protected int textBegin;
-	/**
-	 * The ending position of the tag in the line
-	 */	
-	protected int textEnd;
+
 	/** 
 	 * Constructor takes in the text string, beginning and ending posns.
 	 * @param text The contents of the string line
@@ -54,23 +47,9 @@ public class HTMLStringNode extends HTMLNode
 	 */
 	public HTMLStringNode(StringBuffer textBuffer,int textBegin,int textEnd)
 	{
+		super(textBegin,textEnd);
 		this.textBuffer = textBuffer;
-		this.textBegin = textBegin;
-		this.textEnd = textEnd;
-	}
-	/**
-	 * Returns the beginning position of the string.
-	 */	
-	public int elementBegin()
-	{
-		return textBegin;
-	}
-	/**
-	 * Returns the ending position fo the tag
-	 */	
-	public int elementEnd()
-	{
-		return textEnd;
+		
 	}
 	/**
 	 * Locate the StringNode within the input string, by parsing from the given position

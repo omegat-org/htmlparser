@@ -47,20 +47,6 @@ public class HTMLDoctypeTag extends HTMLTag
 		super(tagBegin,tagEnd,tagContents,tagLine);
 	}
 	/**
-	 * Returns the beginning position of the tag.
-	 */
-	public int elementBegin()
-	{
-		return tagBegin;
-	}
-	/**
-	 * Returns the ending position fo the tag
-	 */
-	public int elementEnd()
-	{
-		return tagEnd;
-	}
-	/**
 	 * Print the contents of the remark tag.
 	 */
 	public String toString()

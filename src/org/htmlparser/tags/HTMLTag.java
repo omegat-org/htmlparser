@@ -63,14 +63,6 @@ public class HTMLTag extends HTMLNode
 	 * Tag contents will have the contents of the comment tag.
    */
 	StringBuffer tagContents;
-	/** 
-	 * The beginning position of the tag in the line
-	 */		
-	int tagBegin;
-	/**
-	 * The ending position of the tag in the line
-	 */	
-	int tagEnd;
 	/**
 	* tag parameters parsed into this hashtable
 	* not implemented yet
@@ -94,8 +86,7 @@ public class HTMLTag extends HTMLNode
 	 */
 	public HTMLTag(int tagBegin, int tagEnd, String tagContents, String tagLine)
 	{
-		this.tagBegin = tagBegin;
-		this.tagEnd = tagEnd;
+		super(tagBegin,tagEnd);
 		this.tagContents = new StringBuffer();
 		this.tagContents.append(tagContents);
 		this.tagLine = tagLine;
@@ -107,21 +98,6 @@ public class HTMLTag extends HTMLNode
 	public void append(String ch) {
 		tagContents.append(ch);
 	}
-  	/**
-	 * Returns the beginning position of the string.
-	 */	
-	public int elementBegin()
-	{
-		return tagBegin;
-	}
-	/**
-	 * Returns the ending position fo the tag
-	 */		
-	public int elementEnd()
-	{
-		return tagEnd;
-	}
-
 	/**
 	 * Locate the tag withing the input string, by parsing from the given position
 	 * @param reader HTML reader to be provided so as to allow reading of next line

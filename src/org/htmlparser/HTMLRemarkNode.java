@@ -48,14 +48,6 @@ public class HTMLRemarkNode extends HTMLNode
 	 * Tag contents will have the contents of the comment tag.
    	 */
 	String tagContents;
-	/** 
-	 * The beginning position of the tag in the line
-	 */
-	int tagBegin;
-	/**
-	 * The ending position of the tag in the line
-	 */
-	int tagEnd;
 	/**
 	 * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.
@@ -66,23 +58,8 @@ public class HTMLRemarkNode extends HTMLNode
 	 */
 	public HTMLRemarkNode(int tagBegin, int tagEnd, String tagContents)
 	{
-		this.tagBegin = tagBegin;
-		this.tagEnd = tagEnd;
+		super(tagBegin,tagEnd);
 		this.tagContents = tagContents;
-	}
-	/**
-	 * Returns the beginning position of the tag.
-	 */
-	public int elementBegin()
-	{
-		return tagBegin;
-	}
-	/**
-	 * Returns the ending position fo the tag
-	 */
-	public int elementEnd()
-	{
-		return tagEnd;
 	}
 	/**
 	 * Locate the remark tag withing the input string, by parsing from the given position

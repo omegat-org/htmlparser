@@ -35,6 +35,16 @@ import java.io.PrintWriter;
  */
 public abstract class HTMLNode
 {
+	/** 
+	 * The beginning position of the tag in the line
+	 */
+	protected int tagBegin;
+
+	/**
+	 * The ending position of the tag in the line
+	 */
+	protected int tagEnd;
+
 	/**
 	 * Variable to store lineSeparator.<br>
 	 * This is setup to read line.separator from the System property.<br>
@@ -45,6 +55,10 @@ public abstract class HTMLNode
 			(String)java.security.AccessController.doPrivileged(
 						new sun.security.action.GetPropertyAction("line.separator"));
 	
+	public HTMLNode(int nodeBegin, int nodeEnd) {
+		this.tagBegin = nodeBegin;
+		this.tagEnd = nodeEnd;
+	}
 	/**
 	 * @param lineSeparator New Line separator to be used
 	 */
@@ -61,16 +75,7 @@ public abstract class HTMLNode
 		return HTMLNode.lineSeparator;
 	}
 
-	/**
-	 * Return the beginning position of the element
-	 */
-	public abstract int elementBegin();
-	
-	/**
-	 * Return the ending position of the element
-	 */
-	public abstract int elementEnd();
-	
+
 	/**
 	 * Print the contents of the html node. This method cannot be overridden. It makes a call to the node's
 	 * toString() method.
@@ -158,4 +163,23 @@ public abstract class HTMLNode
 	public final String toHTML(HTMLRenderer renderer) {
 		return renderer.render(this);
 	}
+
+	/**
+	 * Returns the beginning position of the tag.
+	 */
+	public int elementBegin()
+	{
+		return tagBegin;
+	}
+
+
+	/**
+	 * Returns the ending position fo the tag
+	 */
+	public int elementEnd()
+	{
+		return tagEnd;
+	}
+
+
 }
