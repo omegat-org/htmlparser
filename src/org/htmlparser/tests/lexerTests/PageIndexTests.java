@@ -28,12 +28,16 @@
 
 package org.htmlparser.tests.lexerTests;
 
-import junit.framework.TestCase;
-
 import org.htmlparser.lexer.PageIndex;
+import org.htmlparser.tests.ParserTestCase;
 
-public class PageIndexTests extends TestCase
+public class PageIndexTests extends ParserTestCase
 {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.lexerTests.PageIndexTests", "PageIndexTests");
+    }
 
     /**
      * Test the end-of-line index class.

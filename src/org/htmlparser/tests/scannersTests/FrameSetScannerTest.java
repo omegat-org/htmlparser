@@ -37,6 +37,11 @@ import org.htmlparser.util.ParserException;
 
 public class FrameSetScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.FrameSetScannerTest", "FrameSetScannerTest");
+    }
+
     public FrameSetScannerTest(String name) {
         super(name);
     }

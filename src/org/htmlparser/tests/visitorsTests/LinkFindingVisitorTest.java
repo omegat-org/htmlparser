@@ -32,6 +32,12 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.LinkFindingVisitor;
 
 public class LinkFindingVisitorTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.visitorsTests.LinkFindingVisitorTest", "LinkFindingVisitorTest");
+    }
+
     private String html =
         "<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, <A href=\"http://www.industriallogic.com\">Industrial Logic</a></BODY></HTML>";
 

@@ -34,6 +34,11 @@ import org.htmlparser.util.ParserException;
 
 public class XmlEndTagScanningTest extends ParserTestCase{
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.XmlEndTagScanningTest", "XmlEndTagScanningTest");
+    }
+
     public XmlEndTagScanningTest(String name) {
         super(name);
     }

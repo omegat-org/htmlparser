@@ -52,7 +52,12 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
-public class ParserTest extends ParserTestCase {
+public class ParserTest extends ParserTestCase
+{
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.ParserTest", "ParserTest");
+    }
 
     public ParserTest(String name) {
         super(name);

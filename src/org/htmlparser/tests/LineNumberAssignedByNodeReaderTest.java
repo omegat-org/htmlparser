@@ -45,6 +45,11 @@ import org.htmlparser.util.ParserException;
  */
 public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.LineNumberAssignedByNodeReaderTest", "LineNumberAssignedByNodeReaderTest");
+    }
+
     public LineNumberAssignedByNodeReaderTest(String name) {
         super(name);
     }

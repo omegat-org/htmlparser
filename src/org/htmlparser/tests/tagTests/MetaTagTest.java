@@ -34,6 +34,11 @@ import org.htmlparser.util.ParserException;
 
 public class MetaTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.MetaTagTest", "MetaTagTest");
+    }
+
     public MetaTagTest(String name) {
         super(name);
     }

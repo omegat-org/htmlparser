@@ -35,6 +35,11 @@ import org.htmlparser.util.ParserException;
 
 public class EndTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.EndTagTest", "EndTagTest");
+    }
+
     public EndTagTest(String name) {
         super(name);
     }

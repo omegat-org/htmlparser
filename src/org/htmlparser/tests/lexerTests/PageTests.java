@@ -33,13 +33,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import junit.framework.TestCase;
-
 import org.htmlparser.lexer.Page;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class PageTests extends TestCase
+public class PageTests extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.lexerTests.PageTests", "PageTests");
+    }
+
     /**
      * The default charset.
      * This should be <code>ISO-8859-1</code>,

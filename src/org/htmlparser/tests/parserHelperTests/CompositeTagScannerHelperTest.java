@@ -39,6 +39,12 @@ import org.htmlparser.tests.ParserTestCase;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class CompositeTagScannerHelperTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.parserHelperTests.CompositeTagScannerHelperTest", "CompositeTagScannerHelperTest");
+    }
+
     private CompositeTagScannerHelper helper;
     public CompositeTagScannerHelperTest(String name) {
         super(name);

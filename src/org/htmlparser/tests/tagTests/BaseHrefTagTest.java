@@ -35,6 +35,11 @@ import org.htmlparser.util.ParserException;
 
 public class BaseHrefTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.BaseHrefTagTest", "BaseHrefTagTest");
+    }
+
     public BaseHrefTagTest(String name) {
         super(name);
     }

@@ -39,6 +39,11 @@ import org.htmlparser.util.ParserException;
 
 public class DivScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.DivScannerTest", "DivScannerTest");
+    }
+
     public DivScannerTest(String name) {
         super(name);
     }

@@ -37,6 +37,10 @@ import org.htmlparser.util.ParserException;
 
 public class AppletScannerTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.AppletScannerTest", "AppletScannerTest");
+    }
 
     public AppletScannerTest(String name) {
         super(name);

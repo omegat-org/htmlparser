@@ -38,12 +38,16 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Random;
 
-import junit.framework.TestCase;
-
 import org.htmlparser.lexer.Stream;
+import org.htmlparser.tests.ParserTestCase;
 
-public class StreamTests extends TestCase
+public class StreamTests extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.lexerTests.StreamTests", "StreamTests");
+    }
+
     /**
      * Test the first level stream class.
      */

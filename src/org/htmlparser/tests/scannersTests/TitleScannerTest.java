@@ -36,6 +36,11 @@ import org.htmlparser.util.ParserException;
 
 public class TitleScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.TitleScannerTest", "TitleScannerTest");
+    }
+
     public TitleScannerTest(String name) {
         super(name);
     }

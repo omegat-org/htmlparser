@@ -38,6 +38,11 @@ import org.htmlparser.util.NodeList;
 
 public class HtmlTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.HtmlTest", "HtmlTest");
+    }
+
     public HtmlTest(String name) {
         super(name);
     }

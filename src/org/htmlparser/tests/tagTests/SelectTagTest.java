@@ -42,6 +42,11 @@ import org.htmlparser.util.ParserException;
 
 public class SelectTagTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.SelectTagTest", "SelectTagTest");
+    }
+
     private String testHTML = new String(
                                     "<SELECT name=\"Nominees\">\n"+
                                     "<option value=\"Spouse\">Spouse"+
@@ -98,10 +103,4 @@ public class SelectTagTest extends ParserTestCase
         assertEquals("option tag 1","Spouse",optionTags[0].getOptionText());
         assertEquals("option tag 7","Niece\r\n",optionTags[6].getOptionText());
     }
-
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(new String[] {SelectTagTest.class.getName()});
-    }
-
 }

@@ -36,6 +36,11 @@ import org.htmlparser.util.*;
 
 public class CompositeTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.CompositeTagTest", "CompositeTagTest");
+    }
+
     public CompositeTagTest(String name) {
         super(name);
     }

@@ -37,6 +37,12 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
 public class InputTagTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.InputTagTest", "InputTagTest");
+    }
+
     private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");
 
     public InputTagTest(String name)

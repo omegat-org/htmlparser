@@ -30,9 +30,12 @@ package org.htmlparser.tests.visitorsTests;
 
 import org.htmlparser.tests.ParserTestCase;
 
-
-
 public class CompositeTagFindingVisitorTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.visitorsTests.CompositeTagFindingVisitorTest", "CompositeTagFindingVisitorTest");
+    }
 
     public CompositeTagFindingVisitorTest(String name) {
         super(name);

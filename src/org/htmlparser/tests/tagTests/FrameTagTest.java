@@ -35,6 +35,11 @@ import org.htmlparser.util.ParserException;
 
 public class FrameTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.FrameTagTest", "FrameTagTest");
+    }
+
     public FrameTagTest(String name) {
         super(name);
     }

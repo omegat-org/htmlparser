@@ -39,13 +39,17 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Random;
 
-import junit.framework.TestCase;
-
 import org.htmlparser.lexer.Stream;
 import org.htmlparser.lexer.Source;
+import org.htmlparser.tests.ParserTestCase;
 
-public class SourceTests extends TestCase
+public class SourceTests extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.lexerTests.SourceTests", "SourceTests");
+    }
+
     /**
      * The default charset.
      * This should be <code>ISO-8859-1</code>,

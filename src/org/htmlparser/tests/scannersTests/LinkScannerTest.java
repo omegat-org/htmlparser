@@ -45,6 +45,11 @@ import org.htmlparser.util.SimpleNodeIterator;
 
 public class LinkScannerTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.LinkScannerTest", "LinkScannerTest");
+    }
+
     public LinkScannerTest(String name) {
         super(name);
     }

@@ -36,6 +36,11 @@ import org.htmlparser.util.ParserException;
 
 public class JspTagTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.JspTagTest", "JspTagTest");
+    }
+
     private static final boolean JSP_TESTS_ENABLED = false;
 
     public JspTagTest(String name) {

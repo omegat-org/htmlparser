@@ -41,6 +41,11 @@ import org.htmlparser.util.ParserException;
 
 public class FormTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.FormTagTest", "FormTagTest");
+    }
+
     public FormTagTest(String name) {
         super(name);
     }

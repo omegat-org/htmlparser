@@ -40,6 +40,11 @@ import org.htmlparser.util.SimpleNodeIterator;
 
 public class ImageTagTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.ImageTagTest", "ImageTagTest");
+    }
+
     public ImageTagTest(String name) {
         super(name);
     }

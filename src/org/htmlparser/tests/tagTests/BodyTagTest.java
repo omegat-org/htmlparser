@@ -39,6 +39,12 @@ import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class BodyTagTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.BodyTagTest", "BodyTagTest");
+    }
+
     private BodyTag bodyTag;
 
     public BodyTagTest(String name) {
@@ -104,10 +110,5 @@ public class BodyTagTest extends ParserTestCase {
     public static TestSuite suite()
     {
         return new TestSuite(BodyTagTest.class);
-    }
-
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(new String[] {BodyTagTest.class.getName()});
     }
 }

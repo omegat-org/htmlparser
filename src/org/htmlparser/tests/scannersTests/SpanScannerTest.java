@@ -37,6 +37,11 @@ import org.htmlparser.tests.ParserTestCase;
 
 public class SpanScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.SpanScannerTest", "SpanScannerTest");
+    }
+
     private static final String HTML_WITH_SPAN =
         "<TD BORDER=\"0.0\" VALIGN=\"Top\" COLSPAN=\"4\" WIDTH=\"33.33%\">" +
         "   <DIV>" +

@@ -40,6 +40,11 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class CompositeTagScannerTest extends ParserTestCase {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.CompositeTagScannerTest", "CompositeTagScannerTest");
+    }
+
     private CompositeTagScanner scanner;
     private String url;
 

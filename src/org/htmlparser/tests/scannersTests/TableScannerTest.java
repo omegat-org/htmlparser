@@ -40,6 +40,11 @@ import org.htmlparser.util.ParserException;
 
 public class TableScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.TableScannerTest", "TableScannerTest");
+    }
+
     public TableScannerTest(String name) {
         super(name);
     }

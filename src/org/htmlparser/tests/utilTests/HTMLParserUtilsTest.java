@@ -33,6 +33,11 @@ import org.htmlparser.util.ParserUtils;
 
 public class HTMLParserUtilsTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.utilTests.HTMLParserUtilsTest", "HTMLParserUtilsTest");
+    }
+
     public HTMLParserUtilsTest(String name) {
         super(name);
     }

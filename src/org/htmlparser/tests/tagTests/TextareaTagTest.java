@@ -37,6 +37,11 @@ import org.htmlparser.util.ParserException;
 
 public class TextareaTagTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.TextareaTagTest", "TextareaTagTest");
+    }
+
     private String area1 = "<TEXTAREA name=\"Remarks\" >The intervention by the UN proved beneficial</TEXTAREA>";
     private String area2 = "<TEXTAREA>The capture of the Somali warloard was elusive</TEXTAREA>";
     private String area3 = "<TEXTAREA></TEXTAREA>";

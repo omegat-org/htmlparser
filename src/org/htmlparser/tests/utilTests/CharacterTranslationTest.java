@@ -28,12 +28,16 @@
 
 package org.htmlparser.tests.utilTests;
 
-import junit.framework.TestCase;
-
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.Translate;
 
-public class CharacterTranslationTest extends TestCase
+public class CharacterTranslationTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.utilTests.CharacterTranslationTest", "CharacterTranslationTest");
+    }
+
     public CharacterTranslationTest (String name)
     {
         super (name);

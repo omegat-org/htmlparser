@@ -27,12 +27,18 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.utilTests;
+
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
 public class HTMLLinkProcessorTest extends ParserTestCase {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.utilTests.HTMLLinkProcessorTest", "HTMLLinkProcessorTest");
+    }
+
     private LinkProcessor lp;
 
     public HTMLLinkProcessorTest(String name) {

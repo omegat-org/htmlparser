@@ -41,6 +41,11 @@ import org.htmlparser.util.ParserException;
 
 public class ObjectCollectionTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.ObjectCollectionTest", "ObjectCollectionTest");
+    }
+
     public ObjectCollectionTest(String name) {
         super(name);
     }

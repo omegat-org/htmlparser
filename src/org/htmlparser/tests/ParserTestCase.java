@@ -30,7 +30,9 @@ package org.htmlparser.tests;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -302,17 +304,12 @@ public class ParserTestCase extends TestCase {
             if (tag.isEmptyXmlTag())
             {
                 tag.setEmptyXmlTag (false);
-//                data = new TagData
-//                    ("/" + tag.getTagName (), tag.elementEnd (), new Vector (), "", false);
                 node = new Tag (tag.getPage (), tag.getStartPosition (), tag.getEndPosition (), tag.getAttributesEx ());
-                //data.getTagBegin (), data.getTagEnd (), data.getAttributes ());
                 // cheat here and poink the new node into the iterator
                 ((IteratorImpl)iterator).push (node);
             }
         }
     }
-
-
 
     private void assertAttributesMatch(String displayMessage, Tag expectedTag, Tag actualTag) {
         assertAllExpectedTagAttributesFoundInActualTag(
@@ -421,6 +418,115 @@ public class ParserTestCase extends TestCase {
                 failMsg.append(nodes[i].toString()).append("\n\n");
             }
             fail(failMsg.toString());
+        }
+    }
+
+    /**
+     * Mainline for individual test cases.
+     * @param args Command line arguments. The following options
+     * are understood:
+     * <pre>
+     * -text  -- use junit.textui.TestRunner
+     * -awt   -- use junit.awtui.TestRunner
+     * -swing -- use junit.swingui.TestRunner (default)
+     * </pre>
+     * All other options are passed on to the junit framework.
+     * Decides the test class by examiing the system properties looking
+     * for a property that starts with "org.htmlparser.tests.", this is
+     * used as the name of the class (the value is ignored).
+     * Each class that subclasses ParserTestCase can inherit this mainline
+     * by adding a static block in their class similar to:
+     * <pre>
+     * static
+     * {
+     *     System.setProperty ("org.htmlparser.tests.ParserTest", "ParserTest");
+     * }
+     * </pre>
+     */
+    public static void main(String[] args)
+    {
+        String runner;
+        int i;
+        String arguments[];
+        Properties properties;
+        Enumeration enumeration;
+        String name;
+        Class cls;
+
+        runner = null;
+        for (i = 0; (i < args.length) && (null == runner); i++)
+        {
+            if (args[i].equalsIgnoreCase ("-text"))
+                runner = "junit.textui.TestRunner";
+            else if (args[i].equalsIgnoreCase ("-awt"))
+                runner = "junit.awtui.TestRunner";
+            else if (args[i].equalsIgnoreCase ("-swing"))
+                runner = "junit.swingui.TestRunner";
+        }
+        if (null != runner)
+        {
+            // remove it from the arguments
+            arguments = new String[args.length - 1];
+            System.arraycopy (args, 0, arguments, 0, i - 1);
+            System.arraycopy (args, i, arguments, i - 1, args.length - i);
+            args = arguments;
+        }
+        else
+            runner = "junit.swingui.TestRunner";
+
+        // find the test class that has registered in the system properties
+        arguments = args; // default of no class name, works in GUI mode
+        properties = System.getProperties ();
+        enumeration = properties.propertyNames ();
+        while (enumeration.hasMoreElements ())
+        {
+            name = (String)enumeration.nextElement ();
+            if (name.startsWith ("org.htmlparser.tests."))
+            {
+                // from http://www.mail-archive.com/commons-user%40jakarta.apache.org/msg02958.html
+                //
+                // The problem is within the UI test runners of JUnit. They bring
+                // with them a custom classloader, which causes the
+                // LogConfigurationException. Unfortunately Log4j doesn't work
+                // either.
+                //
+                // Solution: Disable "Reload classes every run" or start JUnit with
+                // command line option -noloading before the name of the Testsuite.
+                if (true)
+                {
+                    // append the test class
+                    arguments = new String[args.length + 2];
+                    System.arraycopy (args, 0, arguments, 0, args.length);
+                    arguments[arguments.length - 2] = "-noloading";
+                    arguments[arguments.length - 1] = name;
+                }
+                else
+                {
+                    // append the test class
+                    arguments = new String[args.length + 1];
+                    System.arraycopy (args, 0, arguments, 0, args.length);
+                    arguments[args.length] = name;
+                }
+                break; // JUnit only handles one class on the command line
+            }
+        }
+
+        // invoke main() of the test runner
+        try
+        {
+            cls = Class.forName (runner);
+            java.lang.reflect.Method method = cls.getDeclaredMethod (
+                "main", new Class[] { String[].class });
+            method.invoke (
+                null,
+                new Object[] { arguments });
+        }
+        catch (Throwable t)
+        {
+            System.err.println (
+                "cannot run unit test ("
+                + t.getMessage ()
+                + ")");
         }
     }
 }

@@ -53,6 +53,11 @@ import org.htmlparser.util.ParserException;
 
 public class BeanTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.utilTests.BeanTest", "BeanTest");
+    }
+
     public BeanTest (String name)
     {
         super (name);

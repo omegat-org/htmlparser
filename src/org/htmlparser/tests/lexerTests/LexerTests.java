@@ -38,8 +38,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import junit.framework.TestCase;
-
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.lexer.Lexer;
@@ -51,10 +49,16 @@ import org.htmlparser.lexer.nodes.RemarkNode;
 import org.htmlparser.lexer.nodes.StringNode;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.tags.Tag;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class LexerTests extends TestCase
+public class LexerTests extends ParserTestCase
 {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.lexerTests.LexerTests", "LexerTests");
+    }
 
     /**
      * Test the Lexer class.

@@ -37,6 +37,12 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class ScriptTagTest extends ParserTestCase{
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.ScriptTagTest", "ScriptTagTest");
+    }
+
     private ScriptScanner scriptScanner;
 
     public ScriptTagTest(String name)

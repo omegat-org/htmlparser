@@ -35,6 +35,12 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
 public class JspScannerTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.JspScannerTest", "JspScannerTest");
+    }
+
     private static final boolean JSP_TESTS_ENABLED = false;
 
     public JspScannerTest(String name) {

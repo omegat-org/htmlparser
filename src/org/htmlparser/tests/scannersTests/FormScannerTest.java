@@ -44,6 +44,12 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
 public class FormScannerTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.FormScannerTest", "FormScannerTest");
+    }
+
     public static final String FORM_HTML =
     "<FORM METHOD=\""+FormTag.POST+"\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
         "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+

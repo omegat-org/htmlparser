@@ -38,6 +38,11 @@ import org.htmlparser.util.ParserException;
 
 public class BodyScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.BodyScannerTest", "BodyScannerTest");
+    }
+
     public BodyScannerTest(String name) {
         super(name);
     }
@@ -102,11 +107,4 @@ public class BodyScannerTest extends ParserTestCase {
     {
         return new TestSuite(BodyScannerTest.class);
     }
-
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(new String[] {BodyScannerTest.class.getName()});
-    }
-
-
 }

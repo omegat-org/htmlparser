@@ -35,6 +35,12 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
 public class NodeListTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.utilTests.NodeListTest", "NodeListTest");
+    }
+
     private NodeList nodeList;
     private Node[] testNodes;
 
@@ -185,10 +191,4 @@ public class NodeListTest extends ParserTestCase {
         assertTrue("First Element",null==nodeList.elementAt(0));
         assertTrue("Second Element",null==nodeList.elementAt(1));
     }
-
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(new String[] {NodeListTest.class.getName()});
-    }
-
 }

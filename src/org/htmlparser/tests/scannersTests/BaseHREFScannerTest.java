@@ -38,6 +38,11 @@ import org.htmlparser.util.ParserException;
 
 public class BaseHREFScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.BaseHREFScannerTest", "BaseHREFScannerTest");
+    }
+
     private BaseHrefScanner scanner;
 
     public BaseHREFScannerTest(String arg0) {

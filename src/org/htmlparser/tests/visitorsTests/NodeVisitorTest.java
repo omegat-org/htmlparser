@@ -38,6 +38,11 @@ import org.htmlparser.visitors.NodeVisitor;
 
 public class NodeVisitorTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.visitorsTests.NodeVisitorTest", "NodeVisitorTest");
+    }
+
     public NodeVisitorTest(String name) {
         super(name);
     }

@@ -32,6 +32,12 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.StringFindingVisitor;
 
 public class StringFindingVisitorTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.visitorsTests.StringFindingVisitorTest", "StringFindingVisitorTest");
+    }
+
     private static final String HTML =
         "<HTML><HEAD><TITLE>This is the Title</TITLE>" +
         "</HEAD><BODY>Hello World, this is an excellent parser</BODY></HTML>";

@@ -34,8 +34,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import junit.framework.TestCase;
-
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.sort.Ordered;
 import org.htmlparser.util.sort.Sort;
 import org.htmlparser.util.sort.Sortable;
@@ -43,8 +42,12 @@ import org.htmlparser.util.sort.Sortable;
 /**
  * Sort testing.
  */
-public class SortTest extends TestCase
+public class SortTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.utilTests.SortTest", "SortTest");
+    }
 
     /**
      * Creates a new instance of SortTest

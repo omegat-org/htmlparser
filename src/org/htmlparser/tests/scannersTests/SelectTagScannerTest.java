@@ -40,6 +40,10 @@ import org.htmlparser.util.ParserException;
 
 public class SelectTagScannerTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.SelectTagScannerTest", "SelectTagScannerTest");
+    }
 
     private String testHTML = new String(
                                     "<Select name=\"Remarks\">" +

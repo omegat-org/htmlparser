@@ -36,6 +36,12 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
 public class TitleTagTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.TitleTagTest", "TitleTagTest");
+    }
+
     private TitleTag titleTag;
 
     public TitleTagTest(String name) {

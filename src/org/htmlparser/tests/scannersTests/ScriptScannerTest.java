@@ -39,6 +39,10 @@ import org.htmlparser.util.ParserException;
 
 public class ScriptScannerTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.ScriptScannerTest", "ScriptScannerTest");
+    }
 
     public ScriptScannerTest(String name) {
         super(name);

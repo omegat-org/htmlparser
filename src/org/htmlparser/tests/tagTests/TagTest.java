@@ -43,6 +43,11 @@ import org.htmlparser.util.SpecialHashtable;
 
 public class TagTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.TagTest", "TagTest");
+    }
+
     private static final boolean JSP_TESTS_ENABLED = false;
 
     public TagTest(String name) {

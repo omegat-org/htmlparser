@@ -33,6 +33,12 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.UrlModifyingVisitor;
 
 public class UrlModifyingVisitorTest extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.visitorsTests.UrlModifyingVisitorTest", "UrlModifyingVisitorTest");
+    }
+
     private static final String HTML_WITH_LINK =
     "<HTML><BODY>" +
         "<A HREF=\"mylink.html\"><IMG SRC=\"mypic.jpg\">" +

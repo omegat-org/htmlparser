@@ -45,6 +45,11 @@ import org.htmlparser.util.ParserException;
 public class ImageScannerTest extends ParserTestCase
 {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.ImageScannerTest", "ImageScannerTest");
+    }
+
     public ImageScannerTest(String name) {
         super(name);
     }

@@ -35,6 +35,11 @@ import org.htmlparser.util.ParserException;
 
 public class StyleTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.StyleTagTest", "StyleTagTest");
+    }
+
     public StyleTagTest(String name) {
         super(name);
     }

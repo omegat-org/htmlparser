@@ -34,6 +34,10 @@ import org.htmlparser.util.ParserException;
 
 public class StyleScannerTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.StyleScannerTest", "StyleScannerTest");
+    }
 
     public StyleScannerTest(String name) {
         super(name);

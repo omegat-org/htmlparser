@@ -37,6 +37,11 @@ import org.htmlparser.util.ParserException;
 
 public class LinkTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.LinkTagTest", "LinkTagTest");
+    }
+
     public LinkTagTest(String name) {
         super(name);
     }

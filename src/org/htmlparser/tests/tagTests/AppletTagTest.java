@@ -36,6 +36,11 @@ import org.htmlparser.util.ParserException;
 
 public class AppletTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.AppletTagTest", "AppletTagTest");
+    }
+
     public AppletTagTest(String name) {
         super(name);
     }

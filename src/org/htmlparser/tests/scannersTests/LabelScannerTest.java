@@ -40,6 +40,11 @@ import org.htmlparser.util.ParserException;
 
 public class LabelScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.LabelScannerTest", "LabelScannerTest");
+    }
+
     public LabelScannerTest(String name) {
         super(name);
     }
@@ -194,10 +199,4 @@ public class LabelScannerTest extends ParserTestCase {
     public static TestSuite suite() {
         return new TestSuite(LabelScannerTest.class);
     }
-
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(new String[] {LabelScannerTest.class.getName()});
-    }
-
 }

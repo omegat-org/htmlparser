@@ -39,6 +39,11 @@ import org.htmlparser.util.ParserException;
 
 public class StringParserTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.parserHelperTests.StringParserTest", "StringParserTest");
+    }
+
     public StringParserTest(String name) {
         super(name);
     }

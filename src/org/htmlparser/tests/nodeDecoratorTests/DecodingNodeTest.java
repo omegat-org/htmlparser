@@ -37,6 +37,11 @@ import org.htmlparser.util.ParserException;
 
 public class DecodingNodeTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.nodeDecoratorTests.DecodingNodeTest", "DecodingNodeTest");
+    }
+
     public DecodingNodeTest(String name) {
         super(name);
     }

@@ -45,6 +45,11 @@ import org.htmlparser.util.ParserException;
  */
 public class BulletListScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.BulletListScannerTest", "BulletListScannerTest");
+    }
+
     public BulletListScannerTest(String name) {
         super(name);
     }

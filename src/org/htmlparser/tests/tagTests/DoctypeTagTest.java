@@ -34,6 +34,11 @@ import org.htmlparser.util.ParserException;
 
 public class DoctypeTagTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.DoctypeTagTest", "DoctypeTagTest");
+    }
+
     public DoctypeTagTest(String name) {
         super(name);
     }

@@ -38,6 +38,11 @@ import org.htmlparser.util.ParserException;
 
 public class RemarkNodeParserTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.parserHelperTests.RemarkNodeParserTest", "RemarkNodeParserTest");
+    }
+
     public RemarkNodeParserTest(String name) {
         super(name);
     }

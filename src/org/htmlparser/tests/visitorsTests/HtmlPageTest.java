@@ -39,6 +39,11 @@ import org.htmlparser.visitors.HtmlPage;
 
 public class HtmlPageTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.visitorsTests.HtmlPageTest", "HtmlPageTest");
+    }
+
     private static final String SIMPLE_PAGE =
         "<html>" +
             "<head>" +

@@ -33,6 +33,11 @@ import junit.framework.TestSuite;
 
 public class AssertXmlEqualsTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.AssertXmlEqualsTest", "AssertXmlEqualsTest");
+    }
+
     public AssertXmlEqualsTest(String name) {
         super(name);
     }

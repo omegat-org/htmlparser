@@ -40,6 +40,11 @@ import org.htmlparser.util.ParserException;
 
 public class OptionTagTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.tagTests.OptionTagTest", "OptionTagTest");
+    }
+
     private String testHTML = new String(
                                     "<OPTION value=\"Google Search\">Google</OPTION>" +
                                     "<OPTION value=\"AltaVista Search\">AltaVista" +
@@ -139,10 +144,4 @@ public class OptionTagTest extends ParserTestCase
         OptionTag = (OptionTag) node[12];
         assertEquals("HTML Raw String","OPTION VALUE: Time Warner TEXT: Time Warner AOL Inc.\n",OptionTag.toString());
 */  }
-
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(new String[] {OptionTagTest.class.getName()});
-    }
-
 }

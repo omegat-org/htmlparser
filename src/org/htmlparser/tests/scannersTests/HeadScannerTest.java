@@ -38,6 +38,11 @@ import org.htmlparser.util.ParserException;
 
 public class HeadScannerTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.HeadScannerTest", "HeadScannerTest");
+    }
+
     public HeadScannerTest(String name) {
         super(name);
     }
@@ -76,14 +81,7 @@ public class HeadScannerTest extends ParserTestCase {
         assertEquals("toHtml()","<HTML><HEAD></HEAD><BODY></BODY></HTML>",htmlTag.toHtml());
     }
 
-
     public static TestSuite suite() {
         return new TestSuite(HeadScannerTest.class);
     }
-
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(new String[] {HeadScannerTest.class.getName()});
-    }
-
 }

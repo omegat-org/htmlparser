@@ -43,6 +43,10 @@ import org.htmlparser.util.ParserUtils;
 
 public class TagScannerTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.TagScannerTest", "TagScannerTest");
+    }
 
     public TagScannerTest(String name) {
         super(name);

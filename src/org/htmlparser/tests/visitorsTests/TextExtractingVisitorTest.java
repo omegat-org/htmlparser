@@ -33,6 +33,11 @@ import org.htmlparser.visitors.TextExtractingVisitor;
 
 public class TextExtractingVisitorTest extends ParserTestCase {
 
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.visitorsTests.TextExtractingVisitorTest", "TextExtractingVisitorTest");
+    }
+
     public TextExtractingVisitorTest(String name) {
         super(name);
     }

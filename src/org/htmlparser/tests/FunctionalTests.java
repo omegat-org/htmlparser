@@ -47,7 +47,12 @@ import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
-public class FunctionalTests extends TestCase {
+public class FunctionalTests extends ParserTestCase {
+
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.FunctionalTests", "FunctionalTests");
+    }
 
     public FunctionalTests(String arg0) {
         super(arg0);

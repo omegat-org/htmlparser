@@ -39,6 +39,10 @@ import org.htmlparser.util.ParserException;
 
 public class OptionTagScannerTest extends ParserTestCase
 {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.scannersTests.OptionTagScannerTest", "OptionTagScannerTest");
+    }
 
     private String testHTML = new String(
                                     "<OPTION value=\"Google Search\">Google</OPTION>" +
@@ -75,9 +79,4 @@ public class OptionTagScannerTest extends ParserTestCase
             assertEquals("Option Scanner",scanner,OptionTag.getThisScanner());
         }
     }
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(new String[] {OptionTagScannerTest.class.getName()});
-    }
-
 }

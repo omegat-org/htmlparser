@@ -36,6 +36,11 @@ import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class NonBreakingSpaceConvertingNodeTest extends ParserTestCase {
+    static
+    {
+        System.setProperty ("org.htmlparser.tests.nodeDecoratorTests.NonBreakingSpaceConvertingNodeTest", "NonBreakingSpaceConvertingNodeTest");
+    }
+
     public NonBreakingSpaceConvertingNodeTest(String name) {
         super(name);
     }
