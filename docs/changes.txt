@@ -12,6 +12,92 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20030727
+--------------------------------
+
+2003-07-22 20:12  derrickoswald
+
+	* build.xml:
+
+	Use junit.jar and commons-logging.jar now found in lib/.
+	
+2003-07-16 22:14  jkerievsky
+
+	* src/org/htmlparser/tests/utilTests/BeanTest.java:
+
+	updated last test in StringBean, and disabled the test, as is doesn't pass right now
+	
+2003-07-16 21:49  derrickoswald
+
+	* lib/: commons-logging.jar, junit.jar:
+
+	Add needed libraries.
+	
+2003-07-16 21:42  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java, lexer/Source.java,
+	lexer/Stream.java, tests/lexerTests/AllTests.java,
+	tests/lexerTests/PageTests.java, tests/lexerTests/SourceTests.java,
+	tests/lexerTests/StreamTests.java:
+
+	Initial drop of new io subsystem.
+	
+2003-07-16 20:56  derrickoswald
+
+	* src/org/htmlparser/tests/utilTests/BeanTest.java:
+
+	More tests.
+	testOutputWithPreAndScriptTags is now correct, I think.
+	The overarching goal of StringBean is to return the text, and only the text, that a user would see in a browser. When I open this html in Netscape I see nothing:
+	
+	<body><pre>
+	<script language=\"javascript\">
+	if(navigator.appName.indexOf(\"Netscape\") != -1)
+	 document.write ('xxx');
+	else
+	 document.write ('yyy');
+	</script>
+	</pre></body>
+	
+	That's what StringBean says too.
+	
+	Although this points out a flaw in the specification (such as it is, see the StringBean javadoc):
+	
+	 * Text within <SCRIPT></SCRIPT> tags is removed.
+	 * The text within <PRE></PRE> tags is not altered.
+	
+	So what happens when there's both?
+	The 'not altered' means, not collapsed, not that the HTML is returned literally.
+	To test this out, see how Netscape handles:
+	
+	<body><pre>
+	<b>Hello
+	World</b>
+	</pre></body>
+	
+	For me it shows:
+	
+	Hello
+	World
+	
+	which means it consumes (and honours) the bold tags even though it is within <pre></pre>
+	So the StringBean <pre> handling is correct, or so it seems.
+	
+	I guess that most questions can be answered by submitting it to a browser.
+	
+2003-07-16 16:05  jkerievsky
+
+	* src/org/htmlparser/tests/utilTests/BeanTest.java:
+
+	added some more BeanTests, including one that is Xed out, as I think it may uncover a bug
+	
+2003-07-15 20:17  derrickoswald
+
+	* src/org/htmlparser/tests/utilTests/: AllTests.java,
+	BeanTest.java:
+
+	Add some StringBean tests for Joshua.
+	
 Integration Build 1.4 - 20030713
 --------------------------------
 

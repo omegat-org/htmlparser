@@ -1,3 +1,31 @@
+// HTMLParser Library v1_3_20030727 - A java-based parser for HTML
+// Copyright (C) Dec 31, 2000 Somik Raha
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// For any questions or suggestions, you can write to me at :
+// Email :somik@industriallogic.com
+// 
+// Postal Address : 
+// Somik Raha
+// Extreme Programmer & Coach
+// Industrial Logic Corporation
+// 2583 Cedar Street, Berkeley, 
+// CA 94708, USA
+// Website : http://www.industriallogic.com
+
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Node;
@@ -75,7 +103,9 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
 	public void testCompositeTagWithOneTextChild() throws ParserException {
 		createParser(
-			"<Custom>" +				"Hello" +			"</Custom>"
+			"<Custom>" +
+				"Hello" +
+			"</Custom>"
 		);
 		CustomTag customTag = parseCustomTag(1);
 		int x = customTag.getChildCount();
@@ -141,7 +171,8 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		
 	public void testParseTwoCompositeTags() throws ParserException {
 		createParser(
-			"<Custom>" +			"</Custom>" +
+			"<Custom>" +
+			"</Custom>" +
 			"<Custom/>"
 		);
 		parser.addScanner(new CustomScanner());
@@ -173,7 +204,9 @@ public class CompositeTagScannerTest extends ParserTestCase {
 	public void testCompositeTagWithNestedTag() throws ParserException {
 		createParser(
 			"<Custom>" +
-				"<Another>" +					"Hello" +				"</Another>" +
+				"<Another>" +
+					"Hello" +
+				"</Another>" +
 				"<Custom/>" +
 			"</Custom>" +
 			"<Custom/>"
@@ -199,7 +232,10 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			"<Custom>" +
 				"<Another>" +
 					"Hello" +
-				"</Another>" +				"<unknown>" +					"World" +				"</unknown>" +
+				"</Another>" +
+				"<unknown>" +
+					"World" +
+				"</unknown>" +
 				"<Custom/>" +
 			"</Custom>" +
 			"<Custom/>"
@@ -236,7 +272,9 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
 	public void testErroneousCompositeTagWithChildren() throws ParserException {
 		createParser(
-			"<custom>" +				"<firstChild>" +				"<secondChild>"
+			"<custom>" +
+				"<firstChild>" +
+				"<secondChild>"
 		);
 		CustomTag customTag = parseCustomTag(1);
 		int x = customTag.getChildCount();
@@ -265,7 +303,9 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertEquals("ending line position",2,customTag.tagData.getEndLine());
 		assertStringEquals(
 			"html",
-			"<CUSTOM><FIRSTCHILD>\r\n" +			"<SECONDCHILD>" +			"</CUSTOM>",
+			"<CUSTOM><FIRSTCHILD>\r\n" +
+			"<SECONDCHILD>" +
+			"</CUSTOM>",
 			customTag.toHtml()
 		);		
 	}
@@ -325,7 +365,9 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
 	public void testCompositeTagWithErroneousAnotherTag() throws ParserException {
 		createParser(
-			"<custom>" +				"<another>" +			"</custom>"
+			"<custom>" +
+				"<another>" +
+			"</custom>"
 		);
 		parser.addScanner(new AnotherScanner(true));
 		CustomTag customTag = parseCustomTag(1);
@@ -346,7 +388,9 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			"<custom>" +
 				"<another>something" +
 			"</custom>"+
-			"<custom>" +				"<another>else</another>" +			"</custom>"
+			"<custom>" +
+				"<another>else</another>" +
+			"</custom>"
 		);
 		parser.addScanner(new AnotherScanner(true));
 		CustomTag customTag = parseCustomTag(2);
@@ -363,7 +407,8 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertStringEquals("anotherTag child text","something",stringNode.toPlainTextString());
 		assertStringEquals(
 			"first custom tag html",
-			"<CUSTOM><ANOTHER>something</ANOTHER></CUSTOM>",			customTag.toHtml()
+			"<CUSTOM><ANOTHER>something</ANOTHER></CUSTOM>",
+			customTag.toHtml()
 		);		
 		customTag = (CustomTag)node[1];
 		assertStringEquals(
@@ -499,7 +544,14 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
 	public void testComplexNesting() throws ParserException {
 		createParser(
-			"<custom>" +				"<custom>" +					"<another>" +				"</custom>" +				"<custom>" +					"<another>" +				"</custom>" +			"</custom>"
+			"<custom>" +
+				"<custom>" +
+					"<another>" +
+				"</custom>" +
+				"<custom>" +
+					"<another>" +
+				"</custom>" +
+			"</custom>"
 		);
 		parser.addScanner(new CustomScanner());
 		parser.addScanner(new AnotherScanner(false));
@@ -517,7 +569,13 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
 	public void testDisallowedChildren() throws ParserException {
 		createParser(
-			"<custom>\n" +			"Hello" +			"<custom>\n" +			"World" +			"<custom>\n" +			"Hey\n" +			"</custom>" 
+			"<custom>\n" +
+			"Hello" +
+			"<custom>\n" +
+			"World" +
+			"<custom>\n" +
+			"Hey\n" +
+			"</custom>" 
 		);
 		parser.addScanner(new CustomScanner(false));
 		parseAndAssertNodeCount(3);
