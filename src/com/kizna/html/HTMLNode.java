@@ -1,6 +1,6 @@
 package com.kizna.html;
 
-// HTMLParser Library v1.04 - A java-based parser for HTML
+// HTMLParser Library v1.1 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
