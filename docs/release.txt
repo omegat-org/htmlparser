@@ -1,4 +1,4 @@
-HTMLParser Integration Release 1.2 - 2002_08_26
+HTMLParser Integration Release 1.2 - 2002_10_02
 ***********************************************
 
 Q1. What are the contents of the distribution ? 
@@ -76,6 +76,8 @@ The following people have contributed important bug reports, feature ideas :
 [17] John Zook
 [18] Mazlan Mat
 [19] Rob Shields
+[20] Dhaval Udani
+[21] Joe Ryburn
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 
