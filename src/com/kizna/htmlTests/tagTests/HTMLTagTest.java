@@ -103,7 +103,7 @@ public void testBodyTagBug1()
     public void testCorrectTag() {
     	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
 		HTMLTag.correctTag(tag);
-		assertEquals("Corrected Tag","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
+		assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
     }
     public void testExtractWord() {
     	String line = "Abc DEF GHHI";
@@ -377,7 +377,7 @@ public void testNestedTags() {
 		HTMLTag tag = (HTMLTag)node[0];
 		assertEquals("DIV Tag expected","div align=\"center\"",tag.getText());		
 		tag = (HTMLTag)node[1];
-		assertEquals("Second tag should be corrected","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
+		assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
 		// Try to parse the parameters from this tag.
 		Hashtable table = tag.getParsed();
 		assertNotNull("Parameters table",table);
@@ -456,7 +456,9 @@ public void testToHTML() {
 					" \nString 1 upto mismatch = "+s1.substring(0,i)+
 					" \nString 2 upto mismatch = "+s2.substring(0,i)+
 					" \nString 1 mismatch character = "+s1.charAt(i)+", code = "+(int)s1.charAt(i)+
-					" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i),false);
+					" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i)+
+					" \nComplete String 1 = "+s1+
+					" \nComplete String 2 = "+s2,false);
 			}
 		}
 	}    
@@ -573,7 +575,7 @@ public void testToHTML() {
 		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
 		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
-		assertStringEquals("Node contents","META NAME=Author CONTENT=DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getText()); 
+		assertStringEquals("Node contents","META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"",tag.getText()); 
 		Hashtable table = tag.getParsed();
 		for (Enumeration e = table.keys();e.hasMoreElements();)
 		System.out.println((String)e.nextElement());
@@ -598,7 +600,7 @@ public void testToHTML() {
 		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
 		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
-		assertStringEquals("Node contents","META NAME=Keywords CONTENT=Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality",tag.getText()); 
+		assertStringEquals("Node contents","META NAME=\"Keywords\" CONTENT=\"Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\"",tag.getText()); 
     	
     }        
  	public void testIncorrectInvertedCommas3() {
@@ -619,8 +621,17 @@ public void testToHTML() {
 		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
 		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
-		assertEquals("Node contents","meta name=description content=Une base de données sur les thèses de gographie soutenues en France ",tag.getText()); 
+		assertEquals("Node contents","meta name=\"description\" content=\"Une base de données sur les thèses de gographie soutenues en France\"",tag.getText()); 
     	
     }
-    
+	public void testInsertInvertedCommasCorrectly() {
+		StringBuffer test = new StringBuffer("a b=c d e = f"); 
+		StringBuffer result = HTMLTag.insertInvertedCommasCorrectly(test);
+		assertStringEquals("Expected Correction","a b=\"c d\" e=\"f\"",result.toString());
+		
+	}
+	public void testPruneSpaces() {
+		String test = "  fdfdf dfdf   ";
+		assertEquals("Expected Pruned string","fdfdf dfdf",HTMLTag.pruneSpaces(test));
+	}
 }

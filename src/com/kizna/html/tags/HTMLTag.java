@@ -177,36 +177,39 @@ public class HTMLTag extends HTMLNode
 		tag.setText(result.toString());
 	}
 	public static StringBuffer insertInvertedCommasCorrectly(StringBuffer absorbedText) {
-		String delim=" ";
-		StringTokenizer tok = new StringTokenizer(absorbedText.toString(),delim,true);
-		String token;
 		StringBuffer result = new StringBuffer();
-		result.append(tok.nextToken()+' '); // Skip the first one
-		String nextToken=null,prevToken=null;
-		boolean startMapping=false;
-		boolean started=false;
+		StringTokenizer tok = new StringTokenizer(absorbedText.toString(),"=",false);
+		String token;
+		token=  (String)tok.nextToken();
+		result.append(token+"=");
 		for (;tok.hasMoreTokens();) {
-			token  = tok.nextToken();
-			if (startMapping) {
-				if (!started) {
-					result.append('"');
-					started=true;
-				} 
-			}
-			if (token.equals("=")) {
-				if (!startMapping) 
-				startMapping=true; else {
-					// Completed one value mapping
-					startMapping=false;
-					result.append(prevToken);
-					result.append('"');
-					result.append(token);
-				}
-			}
-			//result.append(token);
-			prevToken = token;
+			token=  (String)tok.nextToken();
+			token = pruneSpaces(token);
+			result.append('"');
+			int lastIndex = token.lastIndexOf(' ');
+			if (lastIndex!=-1 && tok.hasMoreTokens()) {
+				result.append(token.substring(0,lastIndex));
+				result.append('"');
+				result.append(token.substring(lastIndex,token.length()));
+			} else result.append(token+'"');
+			if (tok.hasMoreTokens()) result.append("=");
 		}
 		return result;
+	}
+	public static String pruneSpaces(String token) {
+		int firstSpace;
+		int lastSpace;
+		firstSpace = token.indexOf(' ');
+		while (firstSpace==0) {
+			token = token.substring(1,token.length());
+			firstSpace = token.indexOf(' ');
+		}
+		lastSpace  = token.lastIndexOf(' ');
+		while (lastSpace==token.length()-1) {
+			token = token.substring(0,token.length()-1);
+			lastSpace  = token.lastIndexOf(' ');
+		}			
+		return token;
 	}
   /**
 	 * Returns the beginning position of the string.
