@@ -12,6 +12,95 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20030629
+--------------------------------
+
+2003-06-28 11:47  derrickoswald
+
+	* src/org/htmlparser/tests/scannersTests/TableScannerTest.java:
+
+	Added testOverFlow().
+	See bug #750117 StackOverFlow while Node-Iteration
+	Not reproducible.
+	May be a Windows thing.
+	
+2003-06-28 11:08  derrickoswald
+
+	* src/org/htmlparser/: parserHelper/AttributeParser.java,
+	tests/tagTests/ImageTagTest.java:
+
+	Fix bug #755929 Empty string attr. value causes attr parsing to be stopped
+	and bug #753012 IMG SRC not parsed v1.3 & v1.4
+	There was a premature break in the attribute scanner on encountering an empty
+	string value. A guard testing for an exhausted tokenizer was added.
+	Added testEmptyStringElement() to ImageTagTest, although it could go anywhere really.
+	
+2003-06-28 10:31  derrickoswald
+
+	* src/org/htmlparser/tests/tagTests/ImageTagTest.java:
+
+	Add test for bug #753003 <IMG> within <A> missed when followed by <MAP>
+	Not reproducible.
+	
+2003-06-26 17:55  jkerievsky
+
+	* src/org/htmlparser/nodeDecorators/: AbstractNodeDecorator.java,
+	DecodingNode.java, EscapeCharacterRemovingNode.java,
+	NonBreakingSpaceConvertingNode.java:
+
+	made an abstract class for the StringNode decorators
+	
+2003-06-25 01:07  jkerievsky
+
+	* src/org/htmlparser/StringNode.java:
+
+	[no log message]
+	
+2003-06-25 01:03  jkerievsky
+
+	* src/org/htmlparser/: Parser.java, StringNode.java,
+	nodeDecorators/NonBreakingSpaceConvertingNode.java,
+	parserHelper/StringParser.java,
+	tests/nodeDecoratorTests/AllTests.java,
+	tests/nodeDecoratorTests/DecodingNodeTest.java,
+	tests/nodeDecoratorTests/EscapeCharacterRemovingNodeTest.java,
+	tests/nodeDecoratorTests/NonBreakingSpaceConvertingNodeTest.java:
+
+	added non breaking space converting decorator
+	
+2003-06-24 23:56  jkerievsky
+
+	* src/org/htmlparser/: DecodingNode.java,
+	EscapeCharacterRemovingNode.java, StringNode.java,
+	nodeDecorators/DecodingNode.java,
+	nodeDecorators/EscapeCharacterRemovingNode.java,
+	tests/AllTests.java, tests/DecodingNodeTest.java,
+	tests/EscapeCharacterRemovingNodeTest.java,
+	tests/nodeDecoratorTests/AllTests.java,
+	tests/nodeDecoratorTests/DecodingNodeTest.java,
+	tests/nodeDecoratorTests/EscapeCharacterRemovingNodeTest.java:
+
+	moved node decorator code and tests to their own packages.
+	
+2003-06-24 23:46  jkerievsky
+
+	* src/org/htmlparser/: DecodingNode.java,
+	EscapeCharacterRemovingNode.java, Node.java, Parser.java,
+	StringNode.java, parserHelper/CompositeTagScannerHelper.java,
+	parserHelper/StringParser.java, scanners/AppletScanner.java,
+	scanners/DoctypeScanner.java, scanners/JspScanner.java,
+	tags/Tag.java, tests/DecodingNodeTest.java,
+	tests/EscapeCharacterRemovingNodeTest.java,
+	tests/ParserTestCase.java, visitors/HtmlPage.java:
+
+	added EscapeRemovingNode decorator, remove lots of private methods and field that were never used in numerous classes
+	
+2003-06-24 19:59  jkerievsky
+
+	* src/org/htmlparser/: DecodingNode.java, Node.java:
+
+	[no log message]
+
 Integration Build 1.4 - 20030622
 --------------------------------
 
