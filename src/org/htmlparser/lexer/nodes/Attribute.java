@@ -36,7 +36,7 @@ import org.htmlparser.lexer.Page;
 
 /**
  * An attribute within a tag.
- * <p>If Name is null, it's whitepace and Value has the text.
+ * <p>If Name is null, it is whitepace and Value has the text.
  * <p>If Name is not null, and Value is null it's a standalone attribute.
  * <p>If Name is not null, and Value is "", and Quote is zero it's an empty attribute.
  * <p>If Name is not null, and Value is "", and Quote is ' it's an empty single quoted attribute.
@@ -155,6 +155,7 @@ public class Attribute
     /**
      * Get the value of the attribute.
      * The part after the equals sign, or the text if it's just a whitepace 'attribute'.
+     * <em>NOTE: This does not include any quotes that may have enclosed the value.</em>
      * @return The value, or <code>null</code> if it's a stand-alone attribute,
      * or the text if it's just a whitepace 'attribute'.
      */
@@ -164,6 +165,62 @@ public class Attribute
             if (0 <= mValueStart)
                 mValue = mPage.getText (mValueStart, mValueEnd);
         return (mValue);
+    }
+
+    /**
+     * Get the raw value of the attribute.
+     * The part after the equals sign, or the text if it's just a whitepace 'attribute'.
+     * @return The value, or <code>null</code> if it's a stand-alone attribute,
+     * or the text if it's just a whitepace 'attribute'.
+     */
+    public String getRawValue ()
+    {
+        char quote;
+        StringBuffer buffer;
+        String ret;
+        
+        ret = getValue ();
+        if (null != ret && (0 != (quote = getQuote ())))
+        {
+            buffer = new StringBuffer (ret.length() + 2);
+            buffer.append (quote);
+            buffer.append (ret);
+            buffer.append (quote);
+            ret = buffer.toString ();
+        }
+
+        return (ret);
+    }
+
+    /**
+     * Get the raw value of the attribute.
+     * The part after the equals sign, or the text if it's just a whitepace 'attribute'.
+     * @return The value, or <code>null</code> if it's a stand-alone attribute,
+     * or the text if it's just a whitepace 'attribute'.
+     */
+    public void getRawValue (StringBuffer buffer)
+    {
+        char quote;
+
+        if (null == mValue)
+        {
+            if (0 <= mValueStart)
+            {
+                if (0 != (quote = getQuote ()))
+                    buffer.append (quote);
+                mPage.getText (buffer, mValueStart, mValueEnd);
+                if (0 != quote)
+                    buffer.append (quote);
+            }
+        }
+        else
+        {
+            if (0 != (quote = getQuote ()))
+                buffer.append (quote);
+            buffer.append (mValue);
+            if (0 != quote)
+                buffer.append (quote);
+        }
     }
 
     /**
@@ -193,27 +250,18 @@ public class Attribute
      */
     public void toString (StringBuffer buffer)
     {
-        String value;
         String name;
         
-        value = getValue ();
         name = getName ();
         if (null == name)
-        {
-            if (value != null)
-                buffer.append (value);
-        }
+            getRawValue (buffer);
         else
         {
             buffer.append (name);
-            if (null != value)
+            if (0 <= mValueStart)
             {
                 buffer.append ("=");
-                if (0 != getQuote ())
-                    buffer.append (getQuote ());
-                buffer.append (value);
-                if (0 != getQuote ())
-                    buffer.append (getQuote ());
+                getRawValue (buffer);
             }
         }
     }

@@ -37,6 +37,7 @@ import org.htmlparser.lexer.Page;
 import org.htmlparser.parserHelper.SpecialHashtable;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.Translate;
 
 /**
  * TagNode represents a generic tag. This class allows users to register specific
@@ -120,34 +121,174 @@ public class TagNode extends AbstractNode
     }
 
     /**
-     * In case the tag is parsed at the scan method this will return value of a
-     * parameter not implemented yet
-     * @param name of parameter
+     * Create a tag with the location and attributes provided
+     * @param page The page this tag was read from.
+     * @param start The starting offset of this node within the page.
+     * @param end The ending offset of this node within the page.
+     * @param attributes The list of attributes that were parsed in this tag.
+     * @see Attribute
+     */
+    public TagNode ()
+    {
+        super (null, -1, -1);
+        mAttributes = new Vector ();
+    }
+
+    /**
+     * Returns the value of an attribute.
+     * @param name Name of attribute, case insensitive.
+     * @return The value associated with the attribute or null if it does
+     * not exist, or is a stand-alone or 
      */
     public String getAttribute (String name)
     {
-        return ((String)getAttributes().get(name.toUpperCase()));
+        Vector attributes;
+        int size;
+        Attribute attribute;
+        String string;
+        String ret;
+        
+        ret = null;
+
+        attributes = getAttributesEx ();
+        if (name.equalsIgnoreCase (TAGNAME))
+            ret = ((Attribute)attributes.elementAt (0)).getName ();
+        else
+        {
+            size = attributes.size ();
+            for (int i = 1; i < size; i++)
+            {
+                attribute = (Attribute)attributes.elementAt (i);
+                string = attribute.getName ();
+                if ((null != string) && name.equalsIgnoreCase (string))
+                {
+                    ret = attribute.getValue ();
+                    i = size; // exit fast
+                }
+            }
+        }
+        
+        return (ret);
     }
 
     /**
      * Set attribute with given key, value pair.
-     * @param key
-     * @param value
+     * Figures out a quote character to use if necessary.
+     * @param key The name of the attribute.
+     * @param value The value of the attribute.
      */
-    public void setAttribute(String key, String value)
+    public void setAttribute (String key, String value)
     {
-        getAttributes ().put(key,value);
+        char ch;
+        boolean needed;
+        boolean singleq;
+        boolean doubleq;
+        String ref;
+        StringBuffer buffer;
+        char quote;
+
+        // first determine if there's whitespace in the value
+        // and while we'return at it find a suitable quote character
+        needed = false;
+        singleq = true;
+        doubleq = true;
+        for (int i = 0; i < value.length (); i++)
+        {
+            ch = value.charAt (i);
+            if (Character.isWhitespace (ch))
+                needed = true;
+            else if ('\'' == ch)
+                singleq  = false;
+            else if ('"' == ch)
+                doubleq = false;
+        }
+        
+        // now apply quoting
+        if (needed)
+        {
+            if (doubleq)
+                quote = '"';
+            else if (singleq)
+                quote = '\'';
+            else
+            {
+                // uh-oh, we need to convert some quotes into character references
+                // convert all double quotes into &#34;
+                quote = '"';
+                ref = Translate.convertToString (quote);
+                // JDK 1.4: value = value.replaceAll ("\"", ref);
+                buffer = new StringBuffer (value.length() * 5);
+                for (int i = 0; i < value.length (); i++)
+                {
+                    ch = value.charAt (i);
+                    if ('"' == ch)
+                        buffer.append (ref);
+                    else
+                        buffer.append (ch);
+                }
+                value = buffer.toString ();
+            }
+        }
+        else
+            quote = 0;
+        setAttribute (key, value, quote);
     }
 
     /**
-     * In case the tag is parsed at the scan method this will return value of a
-     * parameter not implemented yet
-     * @param name of parameter
+     * Set attribute with given key, value pair where the value is quoted by quote.
+     * @param key The name of the attribute.
+     * @param value The value of the attribute.
+     * @param quote The quote character to be used around value.
+     * If zero, it is an unquoted value.
+     */
+    public void setAttribute (String key, String value, char quote)
+    {
+        setAttribute (new Attribute (key, value, quote));
+    }
+
+    /**
+     * Set an attribute.
+     * This replaces an attribute of the same name.
+     * To set the zeroth attribute (the tag name), use setTagName().
+     * @param attribute The attribute to set.
+     */
+    public void setAttribute (Attribute attribute)
+    {
+        boolean replaced;
+        Vector attributes;
+        String name;
+        Attribute test;
+        String test_name;
+
+        replaced = false;
+        attributes = getAttributesEx ();
+        if (0 < attributes.size ())
+        {
+            name = attribute.getName ();
+            for (int i = 1; i < attributes.size (); i++)
+            {
+                test = (Attribute)attributes.elementAt (i);
+                test_name = test.getName ();
+                if (null != test_name)
+                    if (test_name.equalsIgnoreCase (name))
+                    {
+                        attributes.setElementAt (attribute, i);
+                        replaced = true;
+                    }
+            }
+        }
+        if (!replaced)
+            attributes.addElement (attribute);
+    }
+
+    /**
+     * Eqivalent to <code>getAttribute (name)</code>.
+     * @param name Name of attribute.
      * @deprecated use getAttribute instead
      */
-    public String getParameter(String name)
+    public String getParameter (String name)
     {
-        return (String)getAttributes().get (name.toUpperCase());
+        return (getAttribute (name));
     }
     
     /**
@@ -157,16 +298,16 @@ public class TagNode extends AbstractNode
      * and the second element being the value.
      * @return Returns a special hashtable of attributes in two element String arrays.
      */
-    public Vector getAttributesEx()
+    public Vector getAttributesEx ()
     {
         return mAttributes;
     }
 
     /**
      * Gets the attributes in the tag.
-     * @return Returns a Hashtable of attributes
+     * @return Returns a Hashtable of attributes.
      */
-    public Hashtable getAttributes()
+    public Hashtable getAttributes ()
     {
         Vector attributes;
         Attribute attribute;
@@ -187,28 +328,17 @@ public class TagNode extends AbstractNode
                 attribute = (Attribute)attributes.elementAt (i);
                 if (null != attribute.getName ())
                 {
-                    value = attribute.getValue ();
-                    if ('\'' == attribute.getQuote ())
+                    if (0 != attribute.getQuote ())
+                        value = attribute.getRawValue ();
+                    else
                     {
-                        _value = new StringBuffer (value.length () + 2);
-                        _value.append ("'");
-                        _value.append (value);
-                        _value.append ("'");
-                        value =  _value.toString ();
+                        value = attribute.getValue ();
+                        if ((null != value) && value.equals (""))
+                            value = NOTHING;
                     }
-                    else if ('"' == attribute.getQuote ())
-                    {
-                        _value = new StringBuffer (value.length () + 2);
-                        _value.append ("\"");
-                        _value.append (value);
-                        _value.append ("\"");
-                        value =  _value.toString ();
-                    }
-                    else if ((null != value) && value.equals (""))
-                        value = NOTHING;
                     if (null == value)
                         value = NULLVALUE;
-                    ret.put (attribute.getName (), value);
+                    ret.put (attribute.getName ().toUpperCase (), value);
                 }
             }
         }
@@ -218,14 +348,56 @@ public class TagNode extends AbstractNode
         return (ret);
     }
 
-    public String getTagName(){
-        return getParameter(TAGNAME);
+    /**
+     * Return the name of this tag.
+     * <p>
+     * <em>
+     * Note: This value is converted to uppercase.
+     * To get at the original case version of the tag name use:
+     * <pre>
+     * getAttribute (TagNode.TAGNAME);
+     * </pre>
+     * </em>
+     * @return The tag name.
+     */
+    public String getTagName ()
+    {
+        return (getAttribute (TAGNAME).toUpperCase ());
     }
 
     /**
-     * Return the text contained in this tag
+     * Set the name of this tag.
+     * This creates or replaces the first attribute of the tag (the
+     * zeroth element of the attribute vector).
+     * @param name The tag name.
      */
-    public String getText()
+    public void setTagName (String name)
+    {
+        Attribute attribute;
+        Vector attributes;
+        Attribute zeroth;
+
+        attribute = new Attribute (name, null, (char)0);
+        attributes = getAttributesEx ();
+        if (0 == attributes.size ())
+            // nothing added yet
+            attributes.addElement (attribute);
+        else
+        {
+            zeroth = (Attribute)attributes.elementAt (0);
+            // check forn attribute that looks like a name
+            if ((null == zeroth.getValue ()) && (0 == zeroth.getQuote ()))
+                attributes.setElementAt (attribute, 0);
+            else
+                attributes.insertElementAt (attribute, 0);
+        }
+    }
+
+    /**
+     * Return the text contained in this tag.
+     * @return The complete contents of the tag (within the angle brackets).
+     */
+    public String getText ()
     {
         return (mPage.getText (elementBegin () + 1, elementEnd () - 1));
     }
@@ -281,15 +453,17 @@ public class TagNode extends AbstractNode
      * Sets the nodeBegin.
      * @param tagBegin The nodeBegin to set
      */
-    public void setTagBegin(int tagBegin) {
-        this.nodeBegin = tagBegin;
+    public void setTagBegin (int tagBegin)
+    {
+        nodeBegin = tagBegin;
     }
 
     /**
      * Gets the nodeBegin.
      * @return The nodeBegin value.
      */
-    public int getTagBegin() {
+    public int getTagBegin ()
+    {
         return (nodeBegin);
     }
     
@@ -297,15 +471,17 @@ public class TagNode extends AbstractNode
      * Sets the nodeEnd.
      * @param tagEnd The nodeEnd to set
      */
-    public void setTagEnd(int tagEnd) {
-        this.nodeEnd = tagEnd;
+    public void setTagEnd (int tagEnd)
+    {
+        nodeEnd = tagEnd;
     }
     
     /**
      * Gets the nodeEnd.
      * @return The nodeEnd value.
      */
-    public int getTagEnd() {
+    public int getTagEnd ()
+    {
         return (nodeEnd);
     }
 
@@ -322,15 +498,16 @@ public class TagNode extends AbstractNode
         }
     }
 
-    public String toPlainTextString() {
-        return EMPTY_STRING;
+    public String toPlainTextString ()
+    {
+        return (EMPTY_STRING);
     }
 
     /**
      * A call to a tag's toHTML() method will render it in HTML.
      * @see org.htmlparser.Node#toHtml()
      */
-    public String toHtml()
+    public String toHtml ()
     {
         StringBuffer ret;
         Vector attributes;
@@ -361,7 +538,7 @@ public class TagNode extends AbstractNode
     /**
      * Print the contents of the tag
      */
-    public String toString()
+    public String toString ()
     {
         String tag;
         Cursor start;
@@ -394,7 +571,7 @@ public class TagNode extends AbstractNode
      * in the tag classes.
      * @see org.htmlparser.Node#collectInto(NodeList, String)
      */
-    public void collectInto(NodeList collectionList, String filter)
+    public void collectInto (NodeList collectionList, String filter)
     {
     }
 
@@ -403,7 +580,8 @@ public class TagNode extends AbstractNode
      * @return Hashtable
      * @deprecated This method is deprecated. Use getAttributes() instead.
      */
-    public Hashtable getParsed() {
+    public Hashtable getParsed ()
+    {
         return getAttributes ();
     }
 
@@ -416,17 +594,19 @@ public class TagNode extends AbstractNode
      * really necessary
      * @return Hashtable
      */
-    public Hashtable redoParseAttributes()
+    public Hashtable redoParseAttributes ()
     {
         mAttributes = null;
         getAttributesEx ();
         return (getAttributes ());
     }
 
-    public void accept(Object visitor) {
+    public void accept (Object visitor)
+    {
     }
 
-    public String getType() {
+    public String getType ()
+    {
         return TYPE;
     }
 
@@ -435,11 +615,13 @@ public class TagNode extends AbstractNode
      * &lt;tag/&gt; 
      * @return boolean
      */
-    public boolean isEmptyXmlTag() {
+    public boolean isEmptyXmlTag ()
+    {
         return emptyXmlTag;
     }
 
-    public void setEmptyXmlTag(boolean emptyXmlTag) {
+    public void setEmptyXmlTag (boolean emptyXmlTag)
+    {
         this.emptyXmlTag = emptyXmlTag;
     }
 
