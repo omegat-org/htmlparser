@@ -1,4 +1,4 @@
-HTMLParser Version 1.4 (Integration Build Feb 29, 2004)
+HTMLParser Version 1.4 (Release Build Mar 14, 2004)
 *********************************************
 
 Contents of the distribution
@@ -68,9 +68,10 @@ Applications
 
 Bug Fixes
 ---------
-900125 Style Tag Children not grouped
-900128 RemarkNode.setText() does not set Text
+911565 isValued() and isEmpty() don't work
 902121 StringBean throws NullPointerException.
+900128 RemarkNode.setText() does not set Text
+900125 Style Tag Children not grouped
 899413 bug in javascript end detection.
 891058 Bug in lexer
 865279 Documentation
@@ -137,6 +138,7 @@ The following people have contributed important bug reports, feature ideas :
 [28] Pim Schrama
 [29] Nick Burch
 [30] Gernot Fricke
+[31] Anthony Labarre
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 

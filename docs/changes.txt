@@ -12,6 +12,24 @@
 *                                                                             *
 *******************************************************************************
 
+Release Build 1.4 - 20040314
+--------------------------------
+
+2004-03-14 10:53  derrickoswald
+
+	* src/org/htmlparser/beans/LinkBean.java:
+
+	Add retry on EncodingChangeException, just like StringBean.
+	
+2004-03-14 10:42  derrickoswald
+
+	* src/org/htmlparser/: tests/lexerTests/AttributeTests.java,
+	lexer/nodes/PageAttribute.java:
+
+	Fix bug #911565 isValued() and isNull() don't work.
+	Rework predicates. Add testPredicates() to attribute tests.
+	Don't rely on value of quote character when getting assignment string. Add testSetQuote().
+
 Integration Build 1.4 - 20040229
 --------------------------------
 

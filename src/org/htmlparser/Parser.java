@@ -80,14 +80,14 @@ public class Parser
      * The type of version.
      */
     public final static String
-    VERSION_TYPE = "Integration Build"
+    VERSION_TYPE = "Release Build"
     ;
 
     /**
      * The date of the version.
      */
     public final static String
-    VERSION_DATE = "Feb 29, 2004"
+    VERSION_DATE = "Mar 14, 2004"
     ;
 
     /**
