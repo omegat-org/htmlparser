@@ -86,4 +86,10 @@ public abstract class NodeVisitor {
 		return recurseSelf;
 	}
 
+	/**
+	 * Override this method if you wish to do special
+	 * processing upon completion of parsing 
+	 */
+	public void finishedParsing() {
+	}
 }

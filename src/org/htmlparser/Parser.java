@@ -987,6 +987,7 @@ public class Parser
 			node = e.nextNode();
 			node.accept(visitor);
 		}
+		visitor.finishedParsing();
 	}
 	
 	/** Initializes the parser with the given input HTML String.
