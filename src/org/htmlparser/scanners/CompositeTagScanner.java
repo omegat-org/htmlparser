@@ -36,7 +36,6 @@ import org.htmlparser.Node;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.Attribute;
-import org.htmlparser.parserHelper.CompositeTagScannerHelper;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;

@@ -28,7 +28,6 @@
 
 package org.htmlparser.tests.parserHelperTests;
 
-import org.htmlparser.parserHelper.CompositeTagScannerHelper;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
@@ -46,7 +45,6 @@ public class CompositeTagScannerHelperTest extends ParserTestCase {
         System.setProperty ("org.htmlparser.tests.parserHelperTests.CompositeTagScannerHelperTest", "CompositeTagScannerHelperTest");
     }
 
-    private CompositeTagScannerHelper helper;
     public CompositeTagScannerHelperTest(String name) {
         super(name);
     }
