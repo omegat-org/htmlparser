@@ -70,7 +70,7 @@ public class BaseHrefTag extends Tag
 
         base = getAttribute ("HREF");
         if (base != null && base.length() > 0)
-            base = LinkProcessor.removeLastSlash (base.trim());
+            base = base.trim ();
         base = (null == base) ? "" : base;
         
         return (base);
@@ -79,13 +79,6 @@ public class BaseHrefTag extends Tag
     public void setBaseUrl (String base)
     {
         setAttribute ("HREF", base);
-    }
-
-    public String toString()
-    {
-        return "BASE TAG\n"+
-                "--------\n"+
-                "Name : "+getBaseUrl();
     }
 
     /**

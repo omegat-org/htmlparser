@@ -59,6 +59,12 @@ public class Page
     public static final String DEFAULT_CHARSET = "ISO-8859-1";
 
     /**
+     * The default content type.
+     * In the absence of alternate information, assume html content.
+     */
+    public static final String DEFAULT_CONTENT_TYPE = "text/html";
+
+    /**
      * The URL this page is coming from.
      * Cached value of <code>getConnection().toExternalForm()</code> or
      * <code>setUrl()</code>.
@@ -309,8 +315,8 @@ public class Page
             ParserException
     {
         Stream stream;
+        String type;
         String charset;
-        
 
         mConnection = connection;
         try
@@ -326,7 +332,13 @@ public class Page
         {
             throw new ParserException (ioe.getMessage (), ioe);
         }
-        charset = getCharacterSet ();
+        type = getContentType ();
+        if (!type.startsWith ("text"))
+            throw new ParserException (
+                "URL "
+                + connection.getURL ().toExternalForm ()
+                + " does not contain text");
+        charset = getCharset (type);
         try
         {
             stream = new Stream (getConnection ().getInputStream ());
@@ -387,6 +399,23 @@ public class Page
     public Source getSource ()
     {
         return (mSource);
+    }
+
+    /**
+     * Try and extract the content type from the HTTP header.
+     * @return The content type.
+     */
+    public String getContentType ()
+    {
+        URLConnection connection;
+        String ret;
+
+        ret = DEFAULT_CONTENT_TYPE;
+        connection = getConnection ();
+        if (null != connection)
+            ret = connection.getContentType ();
+
+        return (ret);
     }
 
     /**
@@ -478,29 +507,6 @@ public class Page
         if ('\n' == ret)
             // update the EOL index in any case
             mIndex.add (cursor);
-
-        return (ret);
-    }
-
-    /**
-     * Try and extract the character set from the HTTP header.
-     * @return The character set name to use for this HTML page.
-     */
-    public String getCharacterSet ()
-    {
-        final String CONTENT_TYPE_STRING = "Content-Type";
-        URLConnection connection;
-        String string;
-        String ret;
-
-        ret = DEFAULT_CHARSET;
-        connection = getConnection ();
-        if (null != connection)
-        {
-            string = connection.getHeaderField (CONTENT_TYPE_STRING);
-            if (null != string)
-                ret = getCharset (string);
-        }
 
         return (ret);
     }

@@ -57,16 +57,27 @@ public class FrameTag extends Tag
     }
 
     /**
-     * Returns the location of the frames.
-     * TODO: handle base url?
+     * Returns the location of the frame.
+     * @return The contents of the SRC attribute converted to an absolute URL.
      */
-    public String getFrameLocation()
+    public String getFrameLocation ()
     {
-        String relativeFrame = getAttribute ("SRC");
-        if (relativeFrame==null)
+        String src;
+        
+        src = getAttribute ("SRC");
+        if (null == src)
             return "";
         else
-            return (new LinkProcessor()).extract(relativeFrame, getPage ().getUrl ());
+            return (getPage ().getLinkProcessor ().extract (src, getPage ().getUrl ()));
+    }
+
+    /**
+     * Sets the location of the frame.
+     * @param url The new frame location.
+     */
+    public void setFrameLocation (String url)
+    {
+        setAttribute ("SRC", url);
     }
 
     public String getFrameName()

@@ -78,7 +78,7 @@ public class BaseHrefTagTest extends ParserTestCase {
         parseAndAssertNodeCount(7);
         assertTrue("Base href tag should be the 4th tag", node[3] instanceof BaseHrefTag);
         BaseHrefTag baseRefTag = (BaseHrefTag)node[3];
-        assertEquals("Base HREF Url","http://www.abc.com",baseRefTag.getBaseUrl());
+        assertEquals("Base HREF Url","http://www.abc.com/",baseRefTag.getBaseUrl());
     }
 
     public void testNotHREFBaseTag() throws ParserException
