@@ -1,3 +1,18 @@
+Integration Build 1.2 - 20020512
+--------------------------------
+[1] Made Link Scanner more fault tolerant.
+Can handle bad links like
+<A HREF="..."><IMG></td><td ...><A href="..">...</a>
+
+In the above, the first link is correctly ended before</td>
+
+<A HREF="..."><IMG><A HREF="...">...</a>
+
+The first link is correctly ended before the second link begins
+
+[2] Bug in HTMLLinkProcessor fixed. Relative links were spuriously
+identified even if they used a non-http protocol (like ftp, gopher).
+
 Nightly Build 1.2 - 20020507
 ----------------------------
 [1] HTMLNode is no longer an interface, but an abstract class. There were two reasons for this change. Firstly, I couldnt think of a scenario where an object would be an html tag AND something else. Secondly, I wanted to enforce the implementation of toString(), which is usually done if you implement from the interface (as Object has a default toString()).
