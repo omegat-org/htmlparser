@@ -28,17 +28,15 @@
 
 package org.htmlparser.tags;
 
-import java.util.Enumeration;
 import java.util.Vector;
-
-import org.htmlparser.HTMLNode;
 
 /**
  * A Title Tag
  */
-public class HTMLTitleTag extends HTMLTag {
+public class HTMLTitleTag extends HTMLCompositeTag {
 	private String title;
 	private Vector titleTagChildren;
+	
 	/**
 	 * Constructor for HTMLTitleTag.
 	 * @param nodeBegin
@@ -46,11 +44,12 @@ public class HTMLTitleTag extends HTMLTag {
 	 * @param tagContents
 	 * @param tagLine
 	 */
-	public HTMLTitleTag(int tagBegin,int tagEnd,String title,Vector titleTagChildren, String tagContents,String tagLine) {
-		super(tagBegin, tagEnd, tagContents, tagLine);
+	public HTMLTitleTag(int tagBegin,int tagEnd,String title,Vector titleTagChildren, String tagContents,String tagLine,HTMLTag startTag, HTMLTag endTag) {
+		super(tagBegin, tagEnd, tagContents, tagLine,titleTagChildren,startTag, endTag);
 		this.title = title;
 		this.titleTagChildren = titleTagChildren;
 	}
+	
 	/**
 	 * Gets the title.
 	 * @return Returns a String
@@ -58,6 +57,7 @@ public class HTMLTitleTag extends HTMLTag {
 	public String getTitle() {
 		return title;
 	}
+	
 	/**
 	 * Sets the title.
 	 * @param title The title to set
@@ -65,18 +65,11 @@ public class HTMLTitleTag extends HTMLTag {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
 	public String toPlainTextString() {
 		return title;
 	}
-	public String toHTML() {
-		HTMLNode node;
-		StringBuffer sb = new StringBuffer();
-		for (Enumeration e = titleTagChildren.elements();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
-			sb.append(node.toHTML());
-		}
-		return "<TITLE>"+sb.toString()+"</TITLE>";
-	}
+	
 	public String toString() {
 		return "TITLE: "+title;
 	}

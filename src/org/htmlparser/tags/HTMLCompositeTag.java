@@ -39,7 +39,7 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 	public void putStartTagInto(StringBuffer sb) {
 		sb.append("<");
 		sb.append(getParameter(TAGNAME));
-		sb.append(" ");
+		if (containsMoreThanOneKey()) sb.append(" ");
 		String key,value;
 		int i = 0;
 		for (Enumeration e = parsed.keys();e.hasMoreElements();) {
@@ -52,6 +52,10 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 			}
 		}
 		sb.append(">");
+	}
+
+	public boolean containsMoreThanOneKey() {
+		return parsed.keySet().size()>1;
 	}
 
 	protected void putChildrenInto(StringBuffer sb) {

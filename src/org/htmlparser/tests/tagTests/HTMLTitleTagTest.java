@@ -57,7 +57,7 @@ public class HTMLTitleTagTest extends HTMLParserTestCase {
 	}
 
 	public void testToHTML() throws HTMLParserException {
-		assertEquals("Raw String","<TITLE>Yahoo!</TITLE>",titleTag.toHTML());				
+		assertStringEquals("Raw String","<TITLE>Yahoo!</TITLE>",titleTag.toHTML());				
 	}
 
 	public void testToString() throws HTMLParserException  {

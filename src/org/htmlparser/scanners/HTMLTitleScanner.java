@@ -72,8 +72,9 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 			String title = "";
 			String tmp;
 			HTMLNode node;
-			HTMLEndTag endTag=null;
 			Vector titleTagChildren = new Vector();
+			HTMLTag startTag = tag;
+			HTMLTag endTag = null;
 			do
 			{
 				node = reader.readElement();
@@ -95,7 +96,7 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 			if (node==null && !endFlag) {
 				throw new HTMLParserException("HTMLTitleScanner.scan(): Error while scanning title tag, went into a potential infinite loop, currentLine = "+currLine+", title so far = "+title);
 			}
-			HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,titleTagChildren,tag.getText(),tag.getTagLine());
+			HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,titleTagChildren,tag.getText(),tag.getTagLine(),startTag, endTag);
 			return titleTag;		
 		}
 		catch (Exception e) {
