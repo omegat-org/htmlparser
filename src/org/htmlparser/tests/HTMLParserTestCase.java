@@ -33,7 +33,7 @@ public class HTMLParserTestCase extends TestCase {
 		StringReader sr = new StringReader(testHTML);
 		reader =  new HTMLReader(new BufferedReader(sr),5000);
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
+		node = new HTMLNode[40];
 	}
 
 	protected void createParser(String inputHTML,int numNodes) {
@@ -49,7 +49,7 @@ public class HTMLParserTestCase extends TestCase {
 		StringReader sr = new StringReader(testHTML);
 		reader =  new HTMLReader(new BufferedReader(sr),url);
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
+		node = new HTMLNode[40];
 	}
 
 	protected void createParser(String inputHTML, String url,int numNodes) {
