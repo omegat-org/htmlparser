@@ -37,6 +37,7 @@ import java.util.Vector;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.ObjectFindingVisitor;
 
@@ -70,7 +71,7 @@ public class LinkBean extends Object implements Serializable
      */
     protected Parser mParser;
 
-    /** Creates new StringBean */
+    /** Creates new LinkBean */
     public LinkBean ()
     {
         mPropertySupport = new PropertyChangeSupport (this);
@@ -85,13 +86,23 @@ public class LinkBean extends Object implements Serializable
     protected URL[] extractLinks (String url) throws ParserException
     {
         Parser parser;
+        ObjectFindingVisitor visitor;
         Vector vector;
         LinkTag link;
         URL[] ret;
 
         parser = new Parser (url);
-        ObjectFindingVisitor visitor = new ObjectFindingVisitor(LinkTag.class);
-        parser.visitAllNodesWith(visitor);
+        visitor = new ObjectFindingVisitor (LinkTag.class);
+        try
+        {
+            parser.visitAllNodesWith (visitor);
+        }
+        catch (EncodingChangeException ece)
+        {
+            parser.reset ();
+            visitor = new ObjectFindingVisitor (LinkTag.class);
+            parser.visitAllNodesWith (visitor);
+        }
         Node [] nodes = visitor.getTags();
         vector = new Vector();
         for (int i = 0; i < nodes.length; i++)
@@ -272,17 +283,23 @@ public class LinkBean extends Object implements Serializable
         }
     }
 
-//    /**
-//     * Unit test.
-//     */
-//    public static void main (String[] args)
-//    {
-//        LinkBean lb = new LinkBean ();
-//        lb.setURL ("http://cbc.ca");
-//        URL[] urls = lb.getLinks ();
-//        for (int i = 0; i < urls.length; i++)
-//            System.out.println (urls[i]);
-//    }
+    /**
+     * Unit test.
+     * @param args Pass arg[0] as the URL to process.
+     */
+    public static void main (String[] args)
+    {
+        if (0 >= args.length)
+            System.out.println ("Usage: java -classpath htmlparser.jar org.htmlparser.beans.LinkBean <http://whatever_url>");
+        else
+        {
+            LinkBean lb = new LinkBean ();
+            lb.setURL (args[0]);
+            URL[] urls = lb.getLinks ();
+            for (int i = 0; i < urls.length; i++)
+                System.out.println (urls[i]);
+        }
+    }
 }
 
 
