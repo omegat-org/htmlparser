@@ -59,26 +59,45 @@ public class HTMLReader extends BufferedReader
 	private int lineCount;
 	private String previousLine;
 	/**
-	 * This constructor basically overrides the existing constructor in the
-	 * BufferedReader class.
+	 * The constructor takes in a reader object, it's length and the url to be read.
 	 */
-
-	public HTMLReader(Reader in, int len)
+	public HTMLReader(Reader in,int len,String url)
 	{
-		super(in,len);
-		this.parser = null;
-		this.lineCount = 1;
-	}
-	/**
-	 * The constructor takes in a reader object, and the url to be read.
-	 */
-	public HTMLReader(Reader in,String url)
-	{
-		super(in);
+		super(in, len);
 		this.url = url;
 		this.parser = null;		
 		this.lineCount = 1;
 	}
+	/**
+	 * This constructor basically overrides the existing constructor in the
+	 * BufferedReader class.
+     * The URL defaults to an empty string.
+     * @see #HTMLReader(Reader,int,String)
+	 */
+
+	public HTMLReader(Reader in, int len)
+	{
+		this(in,len,"");
+	}
+	/**
+	 * The constructor takes in a reader object, and the url to be read.
+     * The buffer size defaults to 8192.
+     * @see #HTMLReader(Reader,int,String)
+	 */
+	public HTMLReader(Reader in,String url)
+	{
+		this(in, 8192, url);
+	}
+    
+    /**
+     * Get the url for this reader.
+     * @return The url specified in the constructor;
+     */
+    public String getURL ()
+    {
+        return (url);
+    }
+
 	/**
 	 * This method is intended to be called only by scanners, when a situation of dirty html has arisen, 
 	 * and action has been taken to correct the parsed tags. For e.g. if we have html of the form :
