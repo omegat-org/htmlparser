@@ -2,7 +2,12 @@ Integration Build 1.2 - 20020728
 --------------------------------
 [1] Fixed bug in HTMLParser.openConnection(), mistaking 
 files for urls if they contain "http" or "www" anywhere.
-[2] 
+[2] Updated HTMLEndTag, this was accidentally left out in the 
+previous release.
+[3] Fixed Bug 586062 - relative links bug - if first char is a 
+slash, then the subdirectories of the url need to be ignored.
+[4] Fixed Bug 586222 - HTMLRemarkNode bug - if a line with a remark 
+ndoe contains a string before it, the string is ignored.
 
 Integration Build 1.2 - 20020721
 --------------------------------
