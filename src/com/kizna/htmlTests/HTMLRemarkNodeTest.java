@@ -35,8 +35,10 @@ package com.kizna.htmlTests;
 import com.kizna.html.scanners.HTMLLinkScanner;
 import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
-import java.util.Enumeration;
+
 import com.kizna.html.HTMLReader;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLNode;
@@ -89,7 +91,7 @@ public static TestSuite suite()
  * The above line is incorrectly parsed - the remark is not correctly identified.
  * This bug was reported by Serge Kruppa (2002-Feb-08). 
  */
-public void testRemarkNodeBug() 
+public void testRemarkNodeBug() throws HTMLParserException
 {
 	String testHTML = new String(
 		"<!-- saved from url=(0022)http://internet.e-mail -->\n"+
@@ -106,9 +108,9 @@ public void testRemarkNodeBug()
 	HTMLParser parser = new HTMLParser(reader);
 	HTMLNode [] node = new HTMLNode[20];
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 8 nodes identified",new Integer(8),new Integer(i));
 	// The first node should be a HTMLRemarkNode
@@ -124,7 +126,7 @@ public void testRemarkNodeBug()
  * Insert the method's description here.
  * Creation date: (5/6/2002 11:29:51 PM)
  */
-public void testToPlainTextString() {
+public void testToPlainTextString() throws HTMLParserException {
 	String testHTML = new String(
 		"<!-- saved from url=(0022)http://internet.e-mail -->\n"+
 		"<HTML>\n"+
@@ -140,9 +142,9 @@ public void testToPlainTextString() {
 	HTMLParser parser = new HTMLParser(reader);
 	HTMLNode [] node = new HTMLNode[20];
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 8 nodes identified",new Integer(8),new Integer(i));
 	// The first node should be a HTMLRemarkNode
@@ -155,7 +157,7 @@ public void testToPlainTextString() {
 	assertEquals("Plain Text of the remarkNode #6","\n   Whats gonna happen now ?\n",remarkNode.getText());	
 	
 }
-	public void testToRawString() {
+	public void testToRawString()  throws HTMLParserException {
 		String testHTML = new String(
 			"<!-- saved from url=(0022)http://internet.e-mail -->\n"+
 			"<HTML>\n"+
@@ -171,9 +173,9 @@ public void testToPlainTextString() {
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 8 nodes identified",new Integer(8),new Integer(i));
 		// The first node should be a HTMLRemarkNode
@@ -185,16 +187,16 @@ public void testToPlainTextString() {
 		remarkNode = (HTMLRemarkNode)node[5];
 		assertEquals("Raw String of the remarkNode #6","<!--\n\n   Whats gonna happen now ?\n\n-->",remarkNode.toHTML());			
 	}
-	public void testNonRemarkNode() {
+	public void testNonRemarkNode() throws HTMLParserException {
 		String testHTML = new String("&nbsp;<![endif]>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 2 nodes identified",new Integer(2),new Integer(i));
 		// The first node should be a HTMLRemarkNode
@@ -212,7 +214,7 @@ public void testToPlainTextString() {
 	 * If all the comment contains is a blank line, it breaks
 	 * the state
 	 */	
-	public void testRemarkNodeWithBlankLine() {
+	public void testRemarkNodeWithBlankLine() throws HTMLParserException {
 		String testHTML = new String("<!--\n"+
 		"\n"+
 		"-->");
@@ -221,9 +223,9 @@ public void testToPlainTextString() {
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);

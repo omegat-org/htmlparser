@@ -33,7 +33,9 @@
 package com.kizna.html.parserapplications;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
-import java.util.*;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
+
 import com.kizna.html.scanners.*;
 /**
  * The Robot Crawler application will crawl through urls recursively, based on a depth value.
@@ -51,20 +53,25 @@ public Robot(String resourceLocation) {
  * Crawl using a given crawl depth.
  * @param crawlDepth Depth of crawling
  */
-public void crawl(int crawlDepth) 
+public void crawl(int crawlDepth) throws HTMLParserException
 {
-  crawl(parser,crawlDepth);
+	try {
+	  crawl(parser,crawlDepth);
+	}
+	catch (HTMLParserException e) {
+		throw new HTMLParserException("HTMLParserException at crawl("+crawlDepth+")",e);
+	}
 }
 /**
  * Crawl using a given parser object, and a given crawl depth.
  * @param parser HTMLParser object
  * @param crawlDepth Depth of crawling
  */
-public void crawl(HTMLParser parser,int crawlDepth) {
+public void crawl(HTMLParser parser,int crawlDepth) throws HTMLParserException {
   System.out.println(" crawlDepth = "+crawlDepth);
-  for (Enumeration e = parser.elements();e.hasMoreElements();)
+  for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
   {
-    HTMLNode node = (HTMLNode)e.nextElement();
+    HTMLNode node = e.nextHTMLNode();
     if (node instanceof HTMLLinkTag)
     {
       HTMLLinkTag linkTag = (HTMLLinkTag)node;
@@ -122,7 +129,11 @@ public static void main(String[] args)
     
   Robot robot = new Robot(resourceLocation);	
   System.out.println("Crawling Site "+resourceLocation);
-  robot.crawl(crawlDepth);
-    
+  try {
+	  robot.crawl(crawlDepth);
+  }
+  catch (HTMLParserException e) {
+  	e.printStackTrace();
+  }
 }
 }

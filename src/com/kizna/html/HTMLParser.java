@@ -43,7 +43,10 @@ import java.util.*;
 /////////////////////////
 import com.kizna.html.scanners.*;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.ChainedException;
+import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLLinkProcessor;
+import com.kizna.html.util.HTMLParserException;
 /**
  * This is the class that the user will use, either to get an iterator into 
  * the html page or to directly parse the page and print the results
@@ -188,11 +191,11 @@ public void addScanner(HTMLTagScanner scanner) {
 	 * }
 	 * </pre>
 	 */
-	public Enumeration elements()
+	public HTMLEnumeration elements()
 	{
-		return new Enumeration()
+		return new HTMLEnumeration()
 		{
-			public boolean hasMoreElements()
+			public boolean hasMoreNodes()
 			{
 				if (reader==null) return false;
 				try
@@ -210,7 +213,7 @@ public void addScanner(HTMLTagScanner scanner) {
 					return false;
 				}
 			}
-			public Object nextElement()
+			public HTMLNode nextHTMLNode() throws HTMLParserException
 			{
 				try
 				{
@@ -219,8 +222,13 @@ public void addScanner(HTMLTagScanner scanner) {
 				}
 				catch (IOException e)
 				{
-					System.err.println("I/O Exception occured while reading "+resourceLocn);
-					return null;
+					throw new HTMLParserException("I/O Exception occured while reading "+resourceLocn,e);
+				}
+				catch (NullPointerException e) {
+					throw new HTMLParserException("Null Pointer Exception occurred while reading "+resourceLocn,e);
+				}
+				catch (Exception e) {
+					throw new HTMLParserException("Unexpected Exception occurred while reading "+resourceLocn,e);
 				}
 			}
 		};
@@ -281,12 +289,16 @@ public Enumeration getScanners() {
 		System.out.println("Parsing file "+args[0]+"...");
 		HTMLParser parser = new HTMLParser(args[0]);
 		parser.registerScanners();
-		if (args.length==2)
-		{
-			parser.parse(args[1]);
-		} else
-		parser.parse(null);
-
+		try {
+			if (args.length==2)
+			{
+				parser.parse(args[1]);
+			} else
+			parser.parse(null);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * Opens the connection with the resource to begin reading, by creating a HTML reader
@@ -325,12 +337,12 @@ public Enumeration getScanners() {
 	/**
 	 * Parse the given resource, using the filter provided
 	 */
-	public void parse(String filter)
+	public void parse(String filter) throws Exception
 	{
 		HTMLNode node;
-		for (Enumeration e=elements();e.hasMoreElements();)
+		for (HTMLEnumeration e=elements();e.hasMoreNodes();)
 		{
-			node = (HTMLNode)e.nextElement();
+			node = e.nextHTMLNode();
 	  	  	if (node!=null)
 			{
 			 	if (filter==null)

@@ -34,12 +34,13 @@ package com.kizna.htmlTests.tagTests;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.Enumeration;
 
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.tags.HTMLMetaTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -53,7 +54,7 @@ public class HTMLMetaTagTest extends TestCase {
 	public HTMLMetaTagTest(String name) {
 		super(name);
 	}
-	public void testToHTML() {
+	public void testToHTML() throws HTMLParserException {
 		String testHTML = new String(
 		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
 		"<html>\n"+
@@ -72,9 +73,9 @@ public class HTMLMetaTagTest extends TestCase {
 		parser.registerScanners();
 		
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 9 nodes identified",9,i);	
 		assertTrue("Node 5 should be META Tag",node[4] instanceof HTMLMetaTag);

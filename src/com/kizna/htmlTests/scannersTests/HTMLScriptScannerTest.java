@@ -35,6 +35,9 @@ import java.io.BufferedReader;
 import java.util.Hashtable;
 import com.kizna.html.tags.HTMLScriptTag;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
+
 import java.util.Enumeration;
 import com.kizna.html.*;
 import java.io.StringReader;
@@ -93,7 +96,7 @@ public void testEvaluate()
  * Insert the method's description here.
  * Creation date: (6/18/2001 2:26:41 AM)
  */
-public void testScan()
+public void testScan() throws HTMLParserException
 {
 	String testHTML = new String("<SCRIPT>document.write(d+\".com\")</SCRIPT>");
 	StringReader sr = new StringReader(testHTML);
@@ -104,9 +107,9 @@ public void testScan()
 	parser.addScanner(new HTMLScriptScanner("-s"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));	
 	assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
@@ -121,7 +124,7 @@ public void testScan()
  * SRC="../js/DetermineBrowser.js"&gt;&lt;/SCRIPT&gt;
  * the SRC data cannot be retrieved.
  */
-public void testScanBug()
+public void testScanBug() throws HTMLParserException
 {
 	String testHTML = new String("<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"../js/DetermineBrowser.js\"></SCRIPT>");
 	StringReader sr = new StringReader(testHTML);
@@ -132,9 +135,9 @@ public void testScanBug()
 	parser.addScanner(new HTMLScriptScanner("-s"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));	
 	assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
@@ -155,7 +158,7 @@ public void testScanBug()
 * &lt;/script&gt; 
 * check getScriptCode(). 
 */ 
-public void testScanBugWG() 
+public void testScanBugWG() throws HTMLParserException
 { 
 	StringBuffer sb1 = new StringBuffer(); 
 	sb1.append("<body><script language=\"javascript\">\r\n"); 
@@ -175,10 +178,9 @@ public void testScanBugWG()
 	parser.addScanner(new HTMLScriptScanner("-s")); 
 	
 	int i = 0; 
-	for (Enumeration e = parser.elements 
-	();e.hasMoreElements();) 
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) 
 	{ 
-	node[i++] = (HTMLNode)e.nextElement(); 
+		node[i++] = e.nextHTMLNode(); 
 	} 
 	
 	StringBuffer sb2 = new StringBuffer();
@@ -197,7 +199,7 @@ public void testScanBugWG()
 	HTMLScriptTag scriptTag = (HTMLScriptTag)node[1];
 	assertStringEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
 }
-public void testScanScriptWithLinks() 
+public void testScanScriptWithLinks() throws HTMLParserException
 { 
 	StringBuffer sb1 = new StringBuffer(); 
 	sb1.append("<script type=\"text/javascript\">\r\n"+
@@ -215,10 +217,9 @@ public void testScanScriptWithLinks()
 	//parser.addScanner(new HTMLScriptScanner("-s")); 
 	
 	int i = 0; 
-	for (Enumeration e = parser.elements 
-	();e.hasMoreElements();) 
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) 
 	{ 
-	node[i++] = (HTMLNode)e.nextElement(); 
+		node[i++] = e.nextHTMLNode(); 
 	} 
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
 	assertTrue("Node should be a script tag",node[0] 

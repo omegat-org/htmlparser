@@ -34,12 +34,13 @@ package com.kizna.htmlTests.tagTests;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.Enumeration;
 
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.tags.HTMLEndTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -53,7 +54,7 @@ public class HTMLEndTagTest extends TestCase {
 	public HTMLEndTagTest(String name) {
 		super(name);
 	}
-	public void testToHTML() {
+	public void testToHTML() throws HTMLParserException {
 		String testHTML = new String("<HTML></HTML>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
@@ -62,9 +63,9 @@ public class HTMLEndTagTest extends TestCase {
 		// Register the image scanner
 		parser.registerScanners();			
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-				node[i++] = (HTMLNode)e.nextElement();
+				node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 2 nodes identified",new Integer(2),new Integer(i));
 		// The node should be an HTMLLinkTag

@@ -1,9 +1,9 @@
 package com.kizna.htmlTests;
 
-import java.util.Enumeration;
-
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
 public class PerformanceTest {
 	private int numTimes;
@@ -18,7 +18,7 @@ public class PerformanceTest {
 		this.file = file;
 		this.numTimes = numTimes;		
 	}
-	public void beginTestWithoutScanners() {
+	public void beginTestWithoutScanners() throws HTMLParserException {
 		HTMLParser parser;
 		long sumTimes=0;
 		double avg=0;
@@ -30,8 +30,8 @@ public class PerformanceTest {
 			parser = new HTMLParser(file);
 			HTMLNode node;
 			long start=System.currentTimeMillis();
-			for (Enumeration e = parser.elements();e.hasMoreElements();) {
-				node = (HTMLNode)e.nextElement();
+			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+				node = e.nextHTMLNode();
 			}
 			long elapsedTime=System.currentTimeMillis()-start;
 			if (i!=0)
@@ -45,7 +45,7 @@ public class PerformanceTest {
 		System.out.println("Average Time : "+avg+" ms");
 		System.out.println("***************************************");
 	}
-	public void beginTestWithScanners() {
+	public void beginTestWithScanners() throws HTMLParserException {
 		HTMLParser parser;
 		long sumTimes=0;
 		double avg=0;
@@ -58,8 +58,8 @@ public class PerformanceTest {
 			parser.registerScanners();
 			HTMLNode node;
 			long start=System.currentTimeMillis();
-			for (Enumeration e = parser.elements();e.hasMoreElements();) {
-				node = (HTMLNode)e.nextElement();
+			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+				node = e.nextHTMLNode();
 			}
 			long elapsedTime=System.currentTimeMillis()-start;
 			if (i!=0)
@@ -84,8 +84,13 @@ public class PerformanceTest {
 		String numTimesString = args[1];
 		int numTimes = Integer.decode(numTimesString).intValue();
 		PerformanceTest pt = new PerformanceTest(file,numTimes);
-		pt.beginTestWithoutScanners();
-		pt.beginTestWithScanners();
+		try {
+			pt.beginTestWithoutScanners();
+			pt.beginTestWithScanners();
+		}
+		catch (HTMLParserException e) {
+			e.printStackTrace();
+		}
 	}
 }
 

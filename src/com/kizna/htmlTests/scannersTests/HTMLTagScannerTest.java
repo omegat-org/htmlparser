@@ -38,6 +38,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.HTMLParser;
@@ -75,7 +76,7 @@ public void testAbsorbLeadingBlanks()
 	String result = HTMLTagScanner.absorbLeadingBlanks(test);
 	assertEquals("Absorb test","This is a test",result);
 }
-public void testExtractXMLData() {
+public void testExtractXMLData() throws HTMLParserException {
 	String testHTML = new String(
 		"<MESSAGE>\n"+
 		"Abhi\n"+
@@ -84,9 +85,9 @@ public void testExtractXMLData() {
 	StringReader sr = new StringReader(testHTML); 
 	HTMLReader reader = new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
 	HTMLParser parser = new HTMLParser(reader);
-	Enumeration e = parser.elements(); 
+	HTMLEnumeration e = parser.elements(); 
 
-	HTMLNode node = (HTMLNode)e.nextElement();
+	HTMLNode node = e.nextHTMLNode();
 	try {
 		String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
 		assertEquals("Result","Abhi\r\nSri\r\n",result);
@@ -95,15 +96,15 @@ public void testExtractXMLData() {
 		assertTrue(e.toString(),false);
 	}		
 }
-public void testExtractXMLDataSingle() {
+public void testExtractXMLDataSingle() throws HTMLParserException {
 	String testHTML = new String(
 		"<MESSAGE>Test</MESSAGE>");
 	StringReader sr = new StringReader(testHTML); 
 	HTMLReader reader = new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
 	HTMLParser parser = new HTMLParser(reader);
-	Enumeration e = parser.elements(); 
+	HTMLEnumeration e = parser.elements(); 
 
-	HTMLNode node = (HTMLNode)e.nextElement();
+	HTMLNode node = (HTMLNode)e.nextHTMLNode();
 	try {
 		String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
 		assertEquals("Result","Test",result);
@@ -131,14 +132,14 @@ public void testTagExtraction()
  * Problem is in isXMLTag - when it uses equals() to 
  * find a match
  */
-public void testIsXMLTag() {
+public void testIsXMLTag() throws HTMLParserException {
 	String testHTML = "<OPTION value=\"#\">Select a destination</OPTION>";
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
 	HTMLParser parser = new HTMLParser(reader);
 	HTMLNode node;
-	Enumeration e = parser.elements();
-	node = (HTMLNode)e.nextElement();
+	HTMLEnumeration e = parser.elements();
+	node = (HTMLNode)e.nextHTMLNode();
 	assertTrue("OPTION tag could not be identified",HTMLTagScanner.isXMLTagFound(node,"OPTION"));
 }
 public void testRemoveChars() {

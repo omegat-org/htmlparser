@@ -1,6 +1,7 @@
 package com.kizna.html.parserapplications;
 
-import java.util.Enumeration;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
@@ -10,12 +11,12 @@ public class StringExtractor {
 	public StringExtractor(String resource) {
 		this.resource = resource;
 	}
-	public String extractStrings() {
+	public String extractStrings() throws HTMLParserException {
 		HTMLParser parser = new HTMLParser(resource);
 		HTMLNode node;
 		StringBuffer results= new StringBuffer();
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node = e.nextHTMLNode();
 			//System.out.print(node.toPlainTextString());
 			results.append(node.toPlainTextString());
 		}
@@ -24,6 +25,12 @@ public class StringExtractor {
 	public static void main(String[] args) {
 		System.out.println("Running..");
 		StringExtractor se = new StringExtractor(args[0]);	
-		System.out.println("Strings=  "+se.extractStrings());
+		try {
+			System.out.println("Strings=  "+se.extractStrings());
+		}
+		catch (HTMLParserException e) {
+			e.printStackTrace();
+		}
+			
 	}
 }

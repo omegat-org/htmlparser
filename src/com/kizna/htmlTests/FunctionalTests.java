@@ -36,12 +36,13 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Enumeration;
 
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.scanners.HTMLImageScanner;
 import com.kizna.html.tags.HTMLImageTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -60,12 +61,18 @@ public class FunctionalTests extends TestCase {
 	 * to check if the no of image tags are correctly 
 	 * identified by the parser
 	 */
-	public void testNumImageTagsInYahooWithoutRegisteringScanners() {
+	public void testNumImageTagsInYahooWithoutRegisteringScanners() throws HTMLParserException {
 		// First count the image tags as is
 		int imgTagCount;
 		imgTagCount = findImageTagCount();
-		int parserImgTagCount = countImageTagsWithHTMLParser();
-		assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);	
+		try {
+			int parserImgTagCount = countImageTagsWithHTMLParser();
+			assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);	
+		}
+		catch (HTMLParserException e) {
+			throw new HTMLParserException("Error thrown in call to countImageTagsWithHTMLParser()",e);
+		}
+			
 	}
 	public int findImageTagCount() {
 		int imgTagCount = 0;
@@ -85,13 +92,13 @@ public class FunctionalTests extends TestCase {
 		}
 		return imgTagCount;
 	}
-	public int countImageTagsWithHTMLParser() {
+	public int countImageTagsWithHTMLParser() throws HTMLParserException {
 		HTMLParser parser = new HTMLParser("http://www.yahoo.com");
 		parser.addScanner(new HTMLImageScanner("-i"));
 		int parserImgTagCount = 0;
 		HTMLNode node;
-		for (Enumeration e= parser.elements();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e= parser.elements();e.hasMoreNodes();) {
+			node = (HTMLNode)e.nextHTMLNode();
 			if (node instanceof HTMLImageTag) {
 				parserImgTagCount++;				
 			}		

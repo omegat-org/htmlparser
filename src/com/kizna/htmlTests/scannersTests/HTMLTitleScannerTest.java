@@ -40,6 +40,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import com.kizna.html.scanners.*;
 import com.kizna.html.tags.HTMLTitleTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.*;
 /**
  * @version 	1.0
@@ -68,7 +70,7 @@ public class HTMLTitleScannerTest extends TestCase {
 		retVal = scanner.evaluate("abcd",null);
 		assertEquals("Incorrect Case",false,retVal);
 	}
-	public void testScan() {
+	public void testScan() throws HTMLParserException {
 		String testHTML = new String("<html><head><title>Yahoo!</title><base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
@@ -79,8 +81,8 @@ public class HTMLTitleScannerTest extends TestCase {
 		parser.addScanner(titleScanner);
 		parser.addScanner(new HTMLStyleScanner("-s"));
 		parser.addScanner(new HTMLMetaTagScanner("-m"));
-	 	for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLNode)e.nextElement();
+	 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 	 	assertEquals("Number of nodes expected",7,i);		
 	 	assertTrue(node[2] instanceof HTMLTitleTag);
@@ -94,7 +96,7 @@ public class HTMLTitleScannerTest extends TestCase {
 	 * on not ending the title tag correctly, we would get 
 	 * null pointer exceptions..
 	 */
-	public void testIncompleteTitle() {
+	public void testIncompleteTitle() throws HTMLParserException {
 		String testHTML = new String(
 		"<TITLE>SISTEMA TERRA, VOL. VI , No. 1-3, December 1997</TITLE\n"+
 		"</HEAD>");
@@ -105,8 +107,8 @@ public class HTMLTitleScannerTest extends TestCase {
 		int i = 0;
 		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
 		parser.addScanner(titleScanner);
-	 	for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLNode)e.nextElement();
+	 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 	 	assertEquals("Number of nodes expected",2,i);		
 	 	assertTrue("First Node is a title tag",node[0] instanceof HTMLTitleTag);

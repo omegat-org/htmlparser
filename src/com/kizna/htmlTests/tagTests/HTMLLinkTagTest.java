@@ -36,6 +36,8 @@ import java.io.BufferedReader;
 import java.util.Enumeration;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
 
 import java.io.StringReader;
@@ -72,7 +74,7 @@ public static TestSuite suite()
  * The above line is incorrectly parsed in that, the BODY tag is not identified.
  * Creation date: (6/17/2001 4:01:06 PM)
  */
-public void testLinkNodeBug()  
+public void testLinkNodeBug()  throws HTMLParserException
 {
 	String testHTML = new String("<A HREF=\"../test.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -83,9 +85,9 @@ public void testLinkNodeBug()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	// The node should be an HTMLLinkTag
@@ -100,7 +102,7 @@ public void testLinkNodeBug()
  * The above line is incorrectly parsed in that, the BODY tag is not identified.
  * Creation date: (6/17/2001 4:01:06 PM)
  */
-public void testLinkNodeBug2() 
+public void testLinkNodeBug2() throws HTMLParserException
 {
 	String testHTML = new String("<A HREF=\"../../test.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -111,9 +113,9 @@ public void testLinkNodeBug2()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	// The node should be an HTMLLinkTag
@@ -127,7 +129,7 @@ public void testLinkNodeBug2()
  * This bug was submitted by Roget Kjensrud
  * Creation date: (6/17/2001 4:01:06 PM)
  */
-public void testLinkNodeBug3() 
+public void testLinkNodeBug3() throws HTMLParserException
 {
 	String testHTML = new String("<A HREF=\"/mylink.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -138,9 +140,9 @@ public void testLinkNodeBug3()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	// The node should be an HTMLLinkTag
@@ -154,7 +156,7 @@ public void testLinkNodeBug3()
  * This bug was submitted by Roget Kjensrud
  * Creation date: (6/17/2001 4:01:06 PM)
  */
-public void testLinkNodeBug4() 
+public void testLinkNodeBug4() throws HTMLParserException
 {
 	String testHTML = new String("<A HREF=\"/mylink.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -165,9 +167,9 @@ public void testLinkNodeBug4()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	// The node should be an HTMLLinkTag
@@ -179,7 +181,7 @@ public void testLinkNodeBug4()
  * Insert the method's description here.
  * Creation date: (8/2/2001 2:38:26 AM)
  */
-public void testLinkNodeBug5() 
+public void testLinkNodeBug5() throws HTMLParserException
 {
 	String testHTML = new String("<a href=http://note.kimo.com.tw/>µß∞O</a>&nbsp; <a \n"+
 	"href=http://photo.kimo.com.tw/>¨€√Ø</a>&nbsp; <a\n"+
@@ -192,9 +194,9 @@ public void testLinkNodeBug5()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 			
 	assertEquals("There should be 6 nodes identified",new Integer(6),new Integer(i));
@@ -214,7 +216,7 @@ public void testLinkNodeBug5()
  * This bug occurs when there is a null pointer exception thrown while scanning a tag using HTMLLinkScanner.
  * Creation date: (7/1/2001 2:42:13 PM)
  */
-public void testLinkNodeBugNullPointerException() 
+public void testLinkNodeBugNullPointerException() throws HTMLParserException
 {
 	String testHTML = new String("<FORM action=http://search.yahoo.com/bin/search name=f><MAP name=m><AREA\n"+ 
 		"coords=0,0,52,52 href=\"http://www.yahoo.com/r/c1\" shape=RECT><AREA"+
@@ -229,9 +231,9 @@ public void testLinkNodeBugNullPointerException()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 6 nodes identified",new Integer(6),new Integer(i));
 }
@@ -239,7 +241,7 @@ public void testLinkNodeBugNullPointerException()
  * This bug occurs when there is a null pointer exception thrown while scanning a tag using HTMLLinkScanner.
  * Creation date: (7/1/2001 2:42:13 PM)
  */
-public void testLinkNodeMailtoBug() 
+public void testLinkNodeMailtoBug() throws HTMLParserException
 {
 	String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -250,9 +252,9 @@ public void testLinkNodeMailtoBug()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	assertTrue("Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
@@ -264,7 +266,7 @@ public void testLinkNodeMailtoBug()
  * This bug occurs when there is a null pointer exception thrown while scanning a tag using HTMLLinkScanner.
  * Creation date: (7/1/2001 2:42:13 PM)
  */
-public void testLinkNodeSingleQuoteBug() 
+public void testLinkNodeSingleQuoteBug() throws HTMLParserException
 {
 	String testHTML = new String("<A HREF='abcd.html'>hello</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -275,9 +277,9 @@ public void testLinkNodeSingleQuoteBug()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	assertTrue("Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
@@ -291,7 +293,7 @@ public void testLinkNodeSingleQuoteBug()
  * The above line is incorrectly parsed in that, the BODY tag is not identified.
  * Creation date: (6/17/2001 4:01:06 PM)
  */
-public void testLinkTag() 
+public void testLinkTag() throws HTMLParserException
 {
 	String testHTML = new String("<A HREF=\"test.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -302,9 +304,9 @@ public void testLinkTag()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	// The node should be an HTMLLinkTag
@@ -319,7 +321,7 @@ public void testLinkTag()
  * The above line is incorrectly parsed in that, the BODY tag is not identified.
  * Creation date: (6/17/2001 4:01:06 PM)
  */
-public void testLinkTagBug() 
+public void testLinkTagBug() throws HTMLParserException
 {
 	String testHTML = new String("<A HREF=\"../test.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -330,9 +332,9 @@ public void testLinkTagBug()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	// The node should be an HTMLLinkTag
@@ -347,7 +349,7 @@ public void testLinkTagBug()
  * The above line is incorrectly parsed in that, the BODY tag is not identified.
  * Creation date: (6/17/2001 4:01:06 PM)
  */
-public void testNullTagBug() 
+public void testNullTagBug() throws HTMLParserException
 {
 	String testHTML = new String("<A HREF=>Something</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -358,9 +360,9 @@ public void testNullTagBug()
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	// The node should be an HTMLLinkTag
@@ -369,7 +371,7 @@ public void testNullTagBug()
 	assertEquals("The link location","",linkTag.getLink());
 	assertEquals("The link text","Something",linkTag.getLinkText());
 }
-public void testToPlainTextString() {
+public void testToPlainTextString() throws HTMLParserException {
 	String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
@@ -379,16 +381,16 @@ public void testToPlainTextString() {
 	parser.addScanner(new HTMLLinkScanner("-l"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 	assertTrue("Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
 	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
 	assertEquals("Link Plain Text","hello",linkTag.toPlainTextString());	
 }
-	public void testToHTML() {
+	public void testToHTML() throws HTMLParserException {
 		String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>\n"+
 			"<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font> <a \n"+
 			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
@@ -401,9 +403,9 @@ public void testToPlainTextString() {
 		parser.addScanner(new HTMLLinkScanner("-l"));
 			
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 1 node identified",new Integer(9),new Integer(i));
 		assertTrue("First Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);

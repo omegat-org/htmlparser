@@ -34,13 +34,14 @@ package com.kizna.htmlTests.scannersTests;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.Enumeration;
 
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.scanners.HTMLFrameScanner;
 import com.kizna.html.tags.HTMLFrameTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -69,7 +70,7 @@ public class HTMLFrameScannerTest extends TestCase {
 		assertTrue("Line 3",frameScanner.evaluate(line3,null));		
 		assertTrue("Line 4 should not be a frame",!frameScanner.evaluate(line4,null));				
 	}
-	public void testScan() {
+	public void testScan() throws HTMLParserException {
 		String testHTML = new String(
 		"<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+ 
   			"<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"+
@@ -83,9 +84,9 @@ public class HTMLFrameScannerTest extends TestCase {
 		parser.addScanner(new HTMLFrameScanner(""));
 		
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 4 nodes identified",4,i);	
 		assertTrue("Node 1 should be Frame Tag",node[1] instanceof HTMLFrameTag);

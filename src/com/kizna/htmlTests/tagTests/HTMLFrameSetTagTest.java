@@ -34,13 +34,15 @@ package com.kizna.htmlTests.tagTests;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.Enumeration;
+
 
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.scanners.HTMLFrameSetScanner;
 import com.kizna.html.tags.HTMLFrameSetTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -54,7 +56,7 @@ public class HTMLFrameSetTagTest extends TestCase {
 	public HTMLFrameSetTagTest(String arg0) {
 		super(arg0);
 	}
-	public void testToHTML() {
+	public void testToHTML() throws HTMLParserException{
 		String testHTML = new String(
 		"<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+ 
   			"<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"+
@@ -68,9 +70,9 @@ public class HTMLFrameSetTagTest extends TestCase {
 		parser.addScanner(new HTMLFrameSetScanner(""));
 		
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 1 nodes identified",1,i);	
 		assertTrue("Node 0 should be End Tag",node[0] instanceof HTMLFrameSetTag);

@@ -44,6 +44,8 @@ import com.kizna.html.scanners.HTMLFormScanner;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLFormTag;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -69,7 +71,7 @@ public class HTMLFormScannerTest extends TestCase {
 		assertTrue("Line 2",formScanner.evaluate(line2,null));
 		assertTrue("Line 3",formScanner.evaluate(line3,null));
 	}
-	public void testScan() {
+	public void testScan() throws HTMLParserException {
 		String testHTML = new String(
 		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
@@ -90,9 +92,9 @@ public class HTMLFormScannerTest extends TestCase {
 		parser.addScanner(new HTMLFormScanner(""));
 		
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 1 nodes identified",1,i);	
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
@@ -125,8 +127,8 @@ public class HTMLFormScannerTest extends TestCase {
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
 		"</FORM>",formTag.toHTML());
 	}
-	public void testScanFormWithNoEnding() {
-		/*String testHTML = new String(
+	/*public void testScanFormWithNoEnding() throws HTMLParserException{
+		String testHTML = new String(
 		"<TABLE>\n"+
 		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
@@ -147,15 +149,15 @@ public class HTMLFormScannerTest extends TestCase {
 		parser.addScanner(new HTMLFormScanner(""));
 		
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 1 nodes identified",3,i);	
 		assertTrue("Node 0 should be a Tag",node[0] instanceof HTMLTag);	
 		assertTrue("Node 1 should be a Form Tag",node[1] instanceof HTMLFormTag);	
-		assertTrue("Node 2 should be End Tag",node[2] instanceof HTMLEndTag);			*/
-	}
+		assertTrue("Node 2 should be End Tag",node[2] instanceof HTMLEndTag);			
+	}*/
 	public static TestSuite suite() {
 		return new TestSuite(HTMLFormScannerTest.class);
 	}

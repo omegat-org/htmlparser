@@ -32,9 +32,10 @@
 
 package com.kizna.htmlTests.tagTests;
 import java.io.BufferedReader;
-import java.util.Enumeration;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
 
 import java.io.StringReader;
@@ -47,161 +48,161 @@ import junit.framework.TestSuite;
  */
 public class HTMLJspTagTest extends TestCase 
 {
-/**
- * HTMLStringNodeTest constructor comment.
- * @param name java.lang.String
- */
-public HTMLJspTagTest(String name) {
-	super(name);
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:22:36 AM)
- * @return junit.framework.TestSuite
- */
-public static TestSuite suite() 
-{
-	TestSuite suite = new TestSuite(HTMLJspTagTest.class);
-	return suite;
-}
-/**
- * Check if the JSP Tag is being correctly recognized.
- * Our test html is : <BR>
- * &lt;%@ taglib uri="/WEB-INF/struts.tld" prefix="struts" %&gt;<BR>
- * &lt;jsp:useBean id="transfer" scope="session" class="com.bank.PageBean"/&gt;<BR>
- * &lt;%<BR>
- *   org.apache.struts.util.BeanUtils.populate(transfer, request);<BR>
- *    if(request.getParameter("marker") == null)<BR>
- *      // initialize a pseudo-property<BR>
- *        transfer.set("days", java.util.Arrays.asList(<BR>
- *            new String[] {"1", "2", "3", "4", "31"}));<BR>
- *    else <BR>
- *        if(transfer.validate(request))<BR>
- *            %&gt;&lt;jsp:forward page="transferConfirm.jsp"/&gt;&lt;%
- * %&gt;
- * Creation date: (6/17/2001 4:01:06 PM)
- */
-public void testJspTag() 
-{
-	String testHTML = new String(
-		"<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
-		"<jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/>\n"+
-		"<%\n"+
-		"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
-		"    if(request.getParameter(\"marker\") == null)\n"+
-		"        // initialize a pseudo-property\n"+
-		"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
-		"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
-		"    else \n"+
-		"        if(transfer.validate(request))\n"+
-		"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
-		"%>\n");
-	StringReader sr = new StringReader(testHTML);
-	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
-	HTMLNode [] node = new HTMLNode[20];
-	// Register the Jsp Scanner
-	parser.addScanner(new HTMLJspScanner("-j"));	
-	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
-	{
-		node[i++] = (HTMLNode)e.nextElement();
+	/**
+	 * HTMLStringNodeTest constructor comment.
+	 * @param name java.lang.String
+	 */
+	public HTMLJspTagTest(String name) {
+		super(name);
 	}
-	assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
-	// The first node should be an HTMLJspTag
-	assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof HTMLJspTag);
-	HTMLJspTag tag = (HTMLJspTag)node[0];
-	assertEquals("Contents of the tag","@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" ",tag.getText());
-
-	// The second node should be a normal tag
-	assertTrue("Node 2 should be an HTMLTag",node[1] instanceof HTMLTag);
-	HTMLTag htag = (HTMLTag)node[1];
-	assertEquals("Contents of the tag","jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/",htag.getText());
-
-	// The third node should be an HTMLJspTag
-	assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof HTMLJspTag);
-	HTMLJspTag tag2 = (HTMLJspTag)node[2];
-	String expected = "\n"+
-		"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
-		"    if(request.getParameter(\"marker\") == null)\n"+
-		"        // initialize a pseudo-property\n"+
-		"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
-		"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
-		"    else \n"+
-		"        if(transfer.validate(request))\n"+
-		"            ";
-	assertEquals("Contents of the tag",expected,tag2.getText());
-	
-}
-
-/**
- * Check if the JSP Tag is being correctly recognized.
- * Our test html is : <BR>
- * &lt;%@ taglib uri="/WEB-INF/struts.tld" prefix="struts" %&gt;<BR>
- * &lt;jsp:useBean id="transfer" scope="session" class="com.bank.PageBean"/&gt;<BR>
- * &lt;%<BR>
- *   org.apache.struts.util.BeanUtils.populate(transfer, request);<BR>
- *    if(request.getParameter("marker") == null)<BR>
- *      // initialize a pseudo-property<BR>
- *        transfer.set("days", java.util.Arrays.asList(<BR>
- *            new String[] {"1", "2", "3", "4", "31"}));<BR>
- *    else <BR>
- *        if(transfer.validate(request))<BR>
- *            %&gt;&lt;jsp:forward page="transferConfirm.jsp"/&gt;&lt;%
- * %&gt;
- * Creation date: (6/17/2001 4:01:06 PM)
- */
-public void testToHTML() 
-{
-	String testHTML = new String(
-		"<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
-		"<jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/>\n"+
-		"<%\n"+
-		"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
-		"    if(request.getParameter(\"marker\") == null)\n"+
-		"        // initialize a pseudo-property\n"+
-		"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
-		"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
-		"    else \n"+
-		"        if(transfer.validate(request))\n"+
-		"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
-		"%>\n");
-	StringReader sr = new StringReader(testHTML);
-	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
-	HTMLNode [] node = new HTMLNode[20];
-	// Register the Jsp Scanner
-	parser.addScanner(new HTMLJspScanner("-j"));	
-	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 11:22:36 AM)
+	 * @return junit.framework.TestSuite
+	 */
+	public static TestSuite suite() 
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		TestSuite suite = new TestSuite(HTMLJspTagTest.class);
+		return suite;
 	}
-	assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
-	// The first node should be an HTMLJspTag
-	assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof HTMLJspTag);
-	HTMLJspTag tag = (HTMLJspTag)node[0];
-	assertEquals("Raw String of the first JSP tag","<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>",tag.toHTML());
-
-
-	// The third node should be an HTMLJspTag
-	assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof HTMLJspTag);
-	HTMLJspTag tag2 = (HTMLJspTag)node[2];
-	String expected = "<%\n"+
-		"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
-		"    if(request.getParameter(\"marker\") == null)\n"+
-		"        // initialize a pseudo-property\n"+
-		"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
-		"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
-		"    else \n"+
-		"        if(transfer.validate(request))\n"+
-		"            %>";
-	assertEquals("Raw String of the second JSP tag",expected,tag2.toHTML());
-	assertTrue("Node 4 should be an HTMLJspTag",node[4] instanceof HTMLJspTag);
-	HTMLJspTag tag4 = (HTMLJspTag)node[4];
-	expected = "<%\n"+ 
-		"%>";
-	assertEquals("Raw String of the fourth JSP tag",expected,tag4.toHTML());
+	/**
+	 * Check if the JSP Tag is being correctly recognized.
+	 * Our test html is : <BR>
+	 * &lt;%@ taglib uri="/WEB-INF/struts.tld" prefix="struts" %&gt;<BR>
+	 * &lt;jsp:useBean id="transfer" scope="session" class="com.bank.PageBean"/&gt;<BR>
+	 * &lt;%<BR>
+	 *   org.apache.struts.util.BeanUtils.populate(transfer, request);<BR>
+	 *    if(request.getParameter("marker") == null)<BR>
+	 *      // initialize a pseudo-property<BR>
+	 *        transfer.set("days", java.util.Arrays.asList(<BR>
+	 *            new String[] {"1", "2", "3", "4", "31"}));<BR>
+	 *    else <BR>
+	 *        if(transfer.validate(request))<BR>
+	 *            %&gt;&lt;jsp:forward page="transferConfirm.jsp"/&gt;&lt;%
+	 * %&gt;
+	 * Creation date: (6/17/2001 4:01:06 PM)
+	 */
+	public void testJspTag() throws HTMLParserException
+	{
+		String testHTML = new String(
+			"<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
+			"<jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/>\n"+
+			"<%\n"+
+			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
+			"    if(request.getParameter(\"marker\") == null)\n"+
+			"        // initialize a pseudo-property\n"+
+			"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
+			"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
+			"    else \n"+
+			"        if(transfer.validate(request))\n"+
+			"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
+			"%>\n");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		// Register the Jsp Scanner
+		parser.addScanner(new HTMLJspScanner("-j"));	
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		{
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
+		// The first node should be an HTMLJspTag
+		assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof HTMLJspTag);
+		HTMLJspTag tag = (HTMLJspTag)node[0];
+		assertEquals("Contents of the tag","@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" ",tag.getText());
 	
-}
+		// The second node should be a normal tag
+		assertTrue("Node 2 should be an HTMLTag",node[1] instanceof HTMLTag);
+		HTMLTag htag = (HTMLTag)node[1];
+		assertEquals("Contents of the tag","jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/",htag.getText());
+	
+		// The third node should be an HTMLJspTag
+		assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof HTMLJspTag);
+		HTMLJspTag tag2 = (HTMLJspTag)node[2];
+		String expected = "\n"+
+			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
+			"    if(request.getParameter(\"marker\") == null)\n"+
+			"        // initialize a pseudo-property\n"+
+			"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
+			"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
+			"    else \n"+
+			"        if(transfer.validate(request))\n"+
+			"            ";
+		assertEquals("Contents of the tag",expected,tag2.getText());
+		
+	}
+	
+	/**
+	 * Check if the JSP Tag is being correctly recognized.
+	 * Our test html is : <BR>
+	 * &lt;%@ taglib uri="/WEB-INF/struts.tld" prefix="struts" %&gt;<BR>
+	 * &lt;jsp:useBean id="transfer" scope="session" class="com.bank.PageBean"/&gt;<BR>
+	 * &lt;%<BR>
+	 *   org.apache.struts.util.BeanUtils.populate(transfer, request);<BR>
+	 *    if(request.getParameter("marker") == null)<BR>
+	 *      // initialize a pseudo-property<BR>
+	 *        transfer.set("days", java.util.Arrays.asList(<BR>
+	 *            new String[] {"1", "2", "3", "4", "31"}));<BR>
+	 *    else <BR>
+	 *        if(transfer.validate(request))<BR>
+	 *            %&gt;&lt;jsp:forward page="transferConfirm.jsp"/&gt;&lt;%
+	 * %&gt;
+	 * Creation date: (6/17/2001 4:01:06 PM)
+	 */
+	public void testToHTML() throws HTMLParserException
+	{
+		String testHTML = new String(
+			"<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
+			"<jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/>\n"+
+			"<%\n"+
+			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
+			"    if(request.getParameter(\"marker\") == null)\n"+
+			"        // initialize a pseudo-property\n"+
+			"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
+			"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
+			"    else \n"+
+			"        if(transfer.validate(request))\n"+
+			"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
+			"%>\n");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		// Register the Jsp Scanner
+		parser.addScanner(new HTMLJspScanner("-j"));	
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		{
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
+		// The first node should be an HTMLJspTag
+		assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof HTMLJspTag);
+		HTMLJspTag tag = (HTMLJspTag)node[0];
+		assertEquals("Raw String of the first JSP tag","<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>",tag.toHTML());
+	
+	
+		// The third node should be an HTMLJspTag
+		assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof HTMLJspTag);
+		HTMLJspTag tag2 = (HTMLJspTag)node[2];
+		String expected = "<%\n"+
+			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
+			"    if(request.getParameter(\"marker\") == null)\n"+
+			"        // initialize a pseudo-property\n"+
+			"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
+			"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
+			"    else \n"+
+			"        if(transfer.validate(request))\n"+
+			"            %>";
+		assertEquals("Raw String of the second JSP tag",expected,tag2.toHTML());
+		assertTrue("Node 4 should be an HTMLJspTag",node[4] instanceof HTMLJspTag);
+		HTMLJspTag tag4 = (HTMLJspTag)node[4];
+		expected = "<%\n"+ 
+			"%>";
+		assertEquals("Raw String of the fourth JSP tag",expected,tag4.toHTML());
+		
+	}
 }

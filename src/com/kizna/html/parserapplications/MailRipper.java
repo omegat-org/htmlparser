@@ -33,8 +33,11 @@
 package com.kizna.html.parserapplications;
 import com.kizna.html.scanners.*;
 import com.kizna.html.tags.*;
-import java.util.Vector;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
+
 import java.util.Enumeration;
+import java.util.Vector;
 import com.kizna.html.*;
 
 
@@ -75,21 +78,26 @@ public static void main(String[] args) {
 
   MailRipper ripper = new MailRipper(resourceLocation);	
   System.out.println("Ripping Site "+resourceLocation);
-  for (Enumeration e=ripper.rip();e.hasMoreElements();) {
-    HTMLLinkTag tag = (HTMLLinkTag)e.nextElement();
-    System.out.println("Ripped mail address : "+tag.getLink());
+  try {
+	  for (Enumeration e=ripper.rip();e.hasMoreElements();) {
+	    HTMLLinkTag tag = (HTMLLinkTag)e.nextElement();
+	    System.out.println("Ripped mail address : "+tag.getLink());
+	  }
+  }
+  catch (HTMLParserException e) {
+  	e.printStackTrace();
   }
 }
 /**
  * Rip all mail addresses from the given url, and return an enumeration of such mail addresses.
  * @return Enumeration of mail addresses (a vector of HTMLLinkTag)
  */
-public Enumeration rip() {
+public Enumeration rip() throws HTMLParserException {
   HTMLNode node;
   Vector mailAddresses = new Vector();
-  for (Enumeration e = parser.elements();e.hasMoreElements();)
+  for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
   {
-    node = (HTMLNode)e.nextElement();
+    node = e.nextHTMLNode();
     if (node instanceof HTMLLinkTag)
     {
       HTMLLinkTag linkTag = (HTMLLinkTag)node;

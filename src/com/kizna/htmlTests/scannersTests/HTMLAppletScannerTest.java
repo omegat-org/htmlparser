@@ -32,11 +32,13 @@
 
 package com.kizna.htmlTests.scannersTests;
 import java.io.BufferedReader;
-import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.io.StringReader;
 
 import com.kizna.html.tags.HTMLAppletTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.*;
 import com.kizna.html.scanners.HTMLAppletScanner;
 
@@ -79,7 +81,7 @@ public void testEvaluate()
  * Insert the method's description here.
  * Creation date: (6/18/2001 2:26:41 AM)
  */
-public void testScan()
+public void testScan() throws HTMLParserException
 {
 	String [][]paramsData = {{"Param1","Value1"},{"Name","Somik"},{"Age","23"}};
 	Hashtable paramsMap = new Hashtable();
@@ -100,9 +102,9 @@ public void testScan()
 	parser.addScanner(new HTMLAppletScanner("-a"));
 		
 	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
-		node[i++] = (HTMLNode)e.nextElement();
+		node[i++] = e.nextHTMLNode();
 	}
 	assertEquals("There should be 2 node identified",new Integer(2),new Integer(i));	
 	assertTrue("Node should be an applet tag",node[0] instanceof HTMLAppletTag);

@@ -37,6 +37,8 @@ import java.io.*;
 import java.util.*;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.HTMLMetaTagScanner;
 /**
  * @version 	1.0
@@ -59,7 +61,7 @@ public class HTMLMetaTagScannerTest extends TestCase {
 		retVal = scanner.evaluate("   me ta ",null);
 		assertEquals("Evaluation of META tag - False case",false,retVal);		
 	}
-	public void testScan() {
+	public void testScan() throws HTMLParserException {
 		String testHTML = new String(
 		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
 		"<html>\n"+
@@ -78,9 +80,9 @@ public class HTMLMetaTagScannerTest extends TestCase {
 		parser.addScanner(scanner);
 		
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 11 nodes identified",11,i);	
 		assertTrue("Node 5 should be End Tag",node[5] instanceof HTMLEndTag);
@@ -116,7 +118,7 @@ public class HTMLMetaTagScannerTest extends TestCase {
 
 		assertEquals("This Scanner",scanner,metaTag.getThisScanner());
 	}
-	public void testScanTagsInMeta() {
+	public void testScanTagsInMeta() throws HTMLParserException {
 		String testHTML = new String(
 		"<META NAME=\"Description\" CONTENT=\"Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles\">"
 		);
@@ -128,9 +130,9 @@ public class HTMLMetaTagScannerTest extends TestCase {
 		parser.addScanner(scanner);
 		
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = (HTMLNode)e.nextElement();
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 1 node identified",1,i);	
 		assertTrue("Node should be meta tag",node[0] instanceof HTMLMetaTag);

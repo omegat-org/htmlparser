@@ -34,8 +34,10 @@ package com.kizna.htmlTests;
 import java.io.BufferedReader;
 import com.kizna.html.scanners.HTMLLinkScanner;
 import com.kizna.html.tags.HTMLLinkTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
-import java.util.Enumeration;
+
 import com.kizna.html.HTMLReader;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLNode;
@@ -49,8 +51,7 @@ import junit.framework.TestSuite;
  * Creation date: (6/17/2001 3:59:52 PM)
  * @author: Administrator
  */
-public class HTMLStringNodeTest extends TestCase 
-{
+public class HTMLStringNodeTest extends TestCase {
 	/**
 	 * HTMLStringNodeTest constructor comment.
 	 * @param name java.lang.String
@@ -76,17 +77,15 @@ public class HTMLStringNodeTest extends TestCase
 	 * with the end tag). The bug lies in HTMLReader.readElement().
 	 * Creation date: (6/17/2001 4:01:06 PM)
 	 */
-	public void testStringNodeBug1() 
-	{
+	public void testStringNodeBug1() throws HTMLParserException {
 		String testHTML = new String("<HTML><HEAD><TITLE>Google</TITLE>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
-		{
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
 		// The fourth node should be a HTMLStringNode-  with the text - Google
@@ -102,8 +101,7 @@ public class HTMLStringNodeTest extends TestCase
 	 * The first string before the link is not identified, and the space after the link is also not identified
 	 * Creation date: (8/2/2001 2:07:32 AM)
 	 */
-	public void testStringNodeBug2() 
-	{
+	public void testStringNodeBug2() throws HTMLParserException {
 		// Register the link scanner
 		
 		String testHTML = new String("view these documents, you must have <A href='http://www.adobe.com'>Adobe \n"+
@@ -114,9 +112,8 @@ public class HTMLStringNodeTest extends TestCase
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
-		{
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 3 nodes identified",new Integer(3),new Integer(i));
 		// The first node should be a HTMLStringNode-  with the text - view these documents, you must have 
@@ -139,7 +136,7 @@ public class HTMLStringNodeTest extends TestCase
 	 * The string node is not correctly identified
 	 */
 	
-	public void testTagCharsInStringNode() {
+	public void testTagCharsInStringNode() throws HTMLParserException {
 		String testHTML = new String("<a href=\"http://asgard.ch\">[> ASGARD <]</a>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
@@ -147,9 +144,8 @@ public class HTMLStringNodeTest extends TestCase
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
-		{
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
 		assertTrue("Node identified must be a link tag",node[0] instanceof HTMLLinkTag);
@@ -162,16 +158,15 @@ public class HTMLStringNodeTest extends TestCase
 	 * Insert the method's description here.
 	 * Creation date: (5/6/2002 11:25:26 PM)
 	 */
-	public void testToPlainTextString() {
+	public void testToPlainTextString() throws HTMLParserException {
 		String testHTML = new String("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
-		{
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 10 nodes identified",new Integer(10),new Integer(i));
 		assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
@@ -186,16 +181,15 @@ public class HTMLStringNodeTest extends TestCase
 	 * Insert the method's description here.
 	 * Creation date: (5/6/2002 11:25:26 PM)
 	 */
-	public void testToHTML() {
+	public void testToHTML() throws HTMLParserException {
 		String testHTML = new String("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
-		{
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 10 nodes identified",new Integer(10),new Integer(i));
 		assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
@@ -205,7 +199,7 @@ public class HTMLStringNodeTest extends TestCase
 		stringNode = (HTMLStringNode)node[7];
 		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHTML());
 	}
-	public void testEmptyLines() {
+	public void testEmptyLines() throws HTMLParserException {
 		String testHTML = new String(
 		"David Nirenberg (Center for Advanced Study in the Behavorial Sciences, Stanford).<br>\n"+
 		"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \n"+
@@ -216,9 +210,8 @@ public class HTMLStringNodeTest extends TestCase
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
-		{
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 4 nodes identified",new Integer(4),new Integer(i));
 		assertTrue("Third Node identified must be a string node",node[2] instanceof HTMLStringNode);
@@ -227,7 +220,7 @@ public class HTMLStringNodeTest extends TestCase
 	 * This is a bug reported by John Zook (586222), where the first few chars
 	 * before a remark is being missed, if its on the same line.
 	 */
-	public void testStringBeingMissedBug() {
+	public void testStringBeingMissedBug() throws HTMLParserException {
 		String testHTML = new String(
 		"Before Comment <!-- Comment --> After Comment"
 		);
@@ -236,9 +229,8 @@ public class HTMLStringNodeTest extends TestCase
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
-		{
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 3 nodes identified",new Integer(3),new Integer(i));
 		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
@@ -256,16 +248,15 @@ public class HTMLStringNodeTest extends TestCase
 	 * Based on a bug report submitted by Cedric Rosa, if the last line contains a single character,
 	 * HTMLStringNode does not return the string node correctly.
 	 */
-	public void testLastLineWithOneChar() {
+	public void testLastLineWithOneChar() throws HTMLParserException {
 		String testHTML = new String("a");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();)
-		{
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
 		}
 		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
 		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);

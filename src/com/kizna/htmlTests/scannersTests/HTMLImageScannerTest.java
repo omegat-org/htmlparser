@@ -40,6 +40,8 @@ import com.kizna.html.*;
 import com.kizna.html.tags.HTMLImageTag;
 import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.HTMLImageScanner;
 import junit.framework.TestSuite;
 /**
@@ -70,7 +72,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 * Insert the method's description here.
 	 * Creation date: (12/25/2001 12:02:50 PM)
 	 */
-	public void testDynamicRelativeImageScan() {
+	public void testDynamicRelativeImageScan() throws HTMLParserException {
 		String testHTML = "<IMG SRC=\"../abc/def/mypic.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi?abcdefg");
@@ -79,8 +81,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLTag)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLTag)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
@@ -114,7 +116,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 * in the image tag, based on requirement by Annette Doyle.
 	 * Thereby an important bug was detected.
 	 */
-	public void testPlaceHolderImageScan() {
+	public void testPlaceHolderImageScan() throws HTMLParserException {
 		String testHTML = "<IMG width=1 height=1 alt=\"a\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi?abcdefg");
@@ -123,8 +125,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i"));
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLTag)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLTag)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
@@ -138,7 +140,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 * Insert the method's description here.
 	 * Creation date: (12/25/2001 12:02:50 PM)
 	 */
-	public void testRelativeImageScan() {
+	public void testRelativeImageScan() throws HTMLParserException {
 		String testHTML = "<IMG SRC=\"mypic.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
@@ -147,8 +149,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLTag)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLTag)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
@@ -159,7 +161,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 * Insert the method's description here.
 	 * Creation date: (12/25/2001 12:02:50 PM)
 	 */
-	public void testRelativeImageScan2() {
+	public void testRelativeImageScan2() throws HTMLParserException {
 		String testHTML = "<IMG SRC=\"abc/def/mypic.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
@@ -168,8 +170,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLTag)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLTag)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
@@ -180,7 +182,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 * Insert the method's description here.
 	 * Creation date: (12/25/2001 12:02:50 PM)
 	 */
-	public void testRelativeImageScan3() {
+	public void testRelativeImageScan3() throws HTMLParserException {
 		String testHTML = "<IMG SRC=\"../abc/def/mypic.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
@@ -189,8 +191,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLTag)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLTag)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
@@ -201,7 +203,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 * Test image url which contains spaces in it.
 	 * This was actually a bug reported by Sam Joseph (sam@neurogrid.net)
 	 */
-	public void testImageWithSpaces() 
+	public void testImageWithSpaces() throws HTMLParserException
 	{
 		String testHTML = "<IMG SRC=\"../abc/def/Hello World.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
@@ -211,15 +213,15 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLTag)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLTag)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Expected Link","http://www.yahoo.com/abc/def/Hello World.jpg",imageTag.getImageLocation());		
 	}
-	public void testImageWithNewLineChars() 
+	public void testImageWithNewLineChars() throws HTMLParserException
 	{
 		String testHTML = "<IMG SRC=\"../abc/def/Hello \nWorld.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
@@ -229,8 +231,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
 		int i = 0;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLTag)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLTag)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
@@ -240,7 +242,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	/**
 	 * Test case to reproduce bug reported by Annette
 	 */
-	public void testImageTagsFromYahoo() 
+	public void testImageTagsFromYahoo() throws HTMLParserException
 	{
 		String testHTML = "<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n"+
 		"<input type=submit value=Search> <a href=r/so>advanced search</a></td></tr></table><table border=0 cellspacing=0 cellpadding=3 width=640><tr><td nowrap align=center><table border=0 cellspacing=0 cellpadding=0><tr><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif\" width=20 height=20 border=0></a></td><td> &nbsp; &nbsp; <a href=s/1048><b>Yahooligans!</b></a> - <a href=s/5282>Eet & Ern</a>, <a href=s/5283>Games</a>, <a href=s/5284>Science</a>, <a href=s/5285>Sports</a>, <a href=s/5286>Movies</a>, <a href=s/1048>more</a> &nbsp; &nbsp; </td><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif\" width=20 height=20 border=0></a></td></tr></table></td></tr><tr><td nowrap align=center><small><b>Shop</b>&nbsp;\n";
@@ -252,8 +254,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		parser.addScanner(new HTMLImageScanner("-i"));
 		int i = 0;
 		HTMLNode thisNode;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			thisNode = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			thisNode = (HTMLNode)e.nextHTMLNode();
 			if (thisNode instanceof HTMLImageTag)
 			node[i++] = thisNode;
 		}	
@@ -269,7 +271,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	/**
 	 * Test case to reproduce bug reported by Annette
 	 */
-	public void testImageTagsFromYahooWithAllScannersRegistered() 
+	public void testImageTagsFromYahooWithAllScannersRegistered() throws HTMLParserException
 	{
 		String testHTML = "<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n";
 	
@@ -281,8 +283,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		parser.registerScanners();
 		int i = 0;
 		HTMLNode thisNode;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLNode)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 22",22,i);
 		assertTrue("Node identified should be HTMLLinkTag",node[11] instanceof HTMLLinkTag);
@@ -301,7 +303,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 * This is the reproduction of a bug reported
 	 * by Annette Doyle
 	 */
-	public void testImageTagOnMultipleLines() {
+	public void testImageTagOnMultipleLines() throws HTMLParserException {
 		String testHTML = "  <td rowspan=3><img height=49 \n\n"+
 	      "alt=\"Central Intelligence Agency, Director of Central Intelligence\" \n\n"+
 	      "src=\"graphics/images_home2/cia_banners_template3_01.gif\" \n\n"+
@@ -315,8 +317,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		parser.registerScanners();
 		int i = 0;
 		HTMLNode thisNode;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLNode)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 3",3,i);
 		assertTrue("Node identified should be HTMLImageTag",node[1] instanceof HTMLImageTag);
@@ -327,7 +329,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		assertEquals("Width","241",imageTag.getParameter("WIDTH"));	
 		assertEquals("Height","49",imageTag.getParameter("HEIGHT"));
 	}
-	public void testDirectRelativeLinks() {
+	public void testDirectRelativeLinks() throws HTMLParserException {
 		String testHTML = "<IMG SRC  = \"/images/lines/li065.jpg\">"; 
 	
 		StringReader sr = new StringReader(testHTML); 
@@ -339,8 +341,8 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		parser.registerScanners();
 		int i = 0;
 		HTMLNode thisNode;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLNode)e.nextElement();
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLNode)e.nextHTMLNode();
 		}	
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);	
