@@ -183,10 +183,11 @@ public void setNodeVector(java.util.Vector newNodeVector) {
 			for (Enumeration e=linkData();e.hasMoreElements();)
 			{
 				node = (HTMLNode)e.nextElement();
-				sb.append("   "+(i++)+":\n");
-				sb.append(node.toString());
+				sb.append("   "+(i++)+ " ");
+				sb.append(node.toString()+"\n");
 			}
 		}
+		sb.append("  "+"*** END of LinkData ***\n");
 		return sb.toString();
 	}
 }
