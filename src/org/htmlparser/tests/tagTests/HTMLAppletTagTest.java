@@ -36,6 +36,7 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLAppletTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -43,15 +44,12 @@ import org.htmlparser.util.HTMLParserException;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class HTMLAppletTagTest extends TestCase {
+public class HTMLAppletTagTest extends HTMLParserTestCase {
 
-	/**
-	 * Constructor for HTMLAppletTagTest.
-	 * @param arg0
-	 */
 	public HTMLAppletTagTest(String name) {
 		super(name);
 	}
+
 	public void testToHTML() throws HTMLParserException {
 		String [][]paramsData = {{"Param1","Value1"},{"Name","Somik"},{"Age","23"}};
 		Hashtable paramsMap = new Hashtable();
@@ -64,19 +62,10 @@ public class HTMLAppletTagTest extends TestCase {
 		testHTML+=
 			"</APPLET>\n"+
 			"</HTML>";
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser(testHTML);
 		// Register the image scanner
 		parser.registerScanners();
-			
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 2 node identified",new Integer(2),new Integer(i));	
+		parseAndAssertNodeCount(2);
 		assertTrue("Node should be an applet tag",node[0] instanceof HTMLAppletTag);
 		// Check the data in the applet tag
 		HTMLAppletTag appletTag = (HTMLAppletTag)node[0];
@@ -87,8 +76,5 @@ public class HTMLAppletTagTest extends TestCase {
 		"<PARAM NAME=\"Age\" VALUE=\"23\">\r\n"+
 		"</APPLET>";
 		assertEquals("Raw String",expectedRawString,appletTag.toHTML());				
-	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLAppletTagTest.class);
 	}
 }

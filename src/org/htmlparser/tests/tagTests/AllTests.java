@@ -28,48 +28,35 @@
 
 package org.htmlparser.tests.tagTests;
 
-
 import junit.framework.TestSuite;
-/**
- * Insert the type's description here.
- * Creation date: (6/17/2001 6:07:04 PM)
- * @author: Administrator
- */
+
 public class AllTests extends junit.framework.TestCase 
 {
-/**
- * AllTests constructor comment.
- * @param name java.lang.String
- */
-public AllTests(String name) {
-	super(name);
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/17/2001 6:07:15 PM)
- * @return junit.framework.TestSuite
- */
-public static TestSuite suite() {
-	TestSuite suite = new TestSuite();
-	suite.addTest(HTMLJspTagTest.suite());
-	suite.addTest(HTMLScriptTagTest.suite());
-	suite.addTest(HTMLImageTagTest.suite());
-	suite.addTest(HTMLLinkTagTest.suite());		
-	suite.addTest(HTMLTagTest.suite());
-	suite.addTest(HTMLTitleTagTest.suite());
-	suite.addTest(HTMLDoctypeTagTest.suite());
-	suite.addTest(HTMLEndTagTest.suite());
-	suite.addTest(HTMLMetaTagTest.suite());
-	suite.addTest(HTMLStyleTagTest.suite());
-	suite.addTest(HTMLAppletTagTest.suite());
-	suite.addTest(HTMLFrameTagTest.suite());
-	suite.addTest(HTMLFrameSetTagTest.suite());	
-	suite.addTest(HTMLInputTagTest.suite());
-	suite.addTest(HTMLOptionTagTest.suite());
-	suite.addTest(HTMLSelectTagTest.suite());
-	suite.addTest(HTMLTextareaTagTest.suite());
-	suite.addTest(HTMLFormTagTest.suite());
-	suite.addTest(HTMLBaseHREFTagTest.suite());
-	return suite; 
-}
+	public AllTests(String name) {
+		super(name);
+	}
+
+	public static TestSuite suite() {
+		TestSuite suite = new TestSuite();
+		suite.addTestSuite(HTMLJspTagTest.class);
+		suite.addTestSuite(HTMLScriptTagTest.class);
+		suite.addTestSuite(HTMLImageTagTest.class);
+		suite.addTestSuite(HTMLLinkTagTest.class);		
+		suite.addTestSuite(HTMLTagTest.class);
+		suite.addTestSuite(HTMLTitleTagTest.class);
+		suite.addTestSuite(HTMLDoctypeTagTest.class);
+		suite.addTestSuite(HTMLEndTagTest.class);
+		suite.addTestSuite(HTMLMetaTagTest.class);
+		suite.addTestSuite(HTMLStyleTagTest.class);
+		suite.addTestSuite(HTMLAppletTagTest.class);
+		suite.addTestSuite(HTMLFrameTagTest.class);
+		suite.addTestSuite(HTMLFrameSetTagTest.class);	
+		suite.addTestSuite(HTMLInputTagTest.class);
+		suite.addTestSuite(HTMLOptionTagTest.class);
+		suite.addTestSuite(HTMLSelectTagTest.class);
+		suite.addTestSuite(HTMLTextareaTagTest.class);
+		suite.addTestSuite(HTMLFormTagTest.class);
+		suite.addTestSuite(HTMLBaseHREFTagTest.class);
+		return suite; 
+	}
 }

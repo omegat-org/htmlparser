@@ -36,6 +36,7 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -43,36 +44,20 @@ import org.htmlparser.util.HTMLParserException;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class HTMLEndTagTest extends TestCase {
+public class HTMLEndTagTest extends HTMLParserTestCase {
 
-	/**
-	 * Constructor for HTMLEndTagTest.
-	 * @param arg0
-	 */
 	public HTMLEndTagTest(String name) {
 		super(name);
 	}
+
 	public void testToHTML() throws HTMLParserException {
-		String testHTML = new String("<HTML></HTML>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser("<HTML></HTML>");
 		// Register the image scanner
 		parser.registerScanners();			
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-				node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 2 nodes identified",new Integer(2),new Integer(i));
+		parseAndAssertNodeCount(2);
 		// The node should be an HTMLLinkTag
 		assertTrue("Node should be a HTMLEndTag",node[1] instanceof HTMLEndTag);
 		HTMLEndTag endTag = (HTMLEndTag)node[1];
 		assertEquals("Raw String","</HTML>",endTag.toHTML());
 	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLEndTagTest.class);
-	}
-
 }

@@ -37,6 +37,7 @@ import org.htmlparser.HTMLReader;
 import org.htmlparser.scanners.HTMLLinkScanner;
 import org.htmlparser.tags.HTMLDoctypeTag;
 import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -44,15 +45,12 @@ import org.htmlparser.util.HTMLParserException;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class HTMLDoctypeTagTest extends TestCase {
+public class HTMLDoctypeTagTest extends HTMLParserTestCase {
 
-	/**
-	 * Constructor for HTMLDoctypeTagTest.
-	 * @param arg0
-	 */
 	public HTMLDoctypeTagTest(String name) {
 		super(name);
 	}
+
 	public void testToHTML() throws HTMLParserException {
 		String testHTML = new String(
 		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
@@ -64,24 +62,12 @@ public class HTMLDoctypeTagTest extends TestCase {
 		"...\n"+
 		"</BODY>\n"+
 		"</HTML>\n");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser(testHTML);
 		parser.registerScanners();
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 9 nodes identified",new Integer(9),new Integer(i));
+		parseAndAssertNodeCount(9);
 		// The node should be an HTMLLinkTag
 		assertTrue("Node should be a HTMLDoctypeTag",node[0] instanceof HTMLDoctypeTag);
 		HTMLDoctypeTag docTypeTag = (HTMLDoctypeTag)node[0];
 		assertEquals("Raw HTML","<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">",docTypeTag.toHTML());
 	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLDoctypeTagTest.class);
-	}
-
 }

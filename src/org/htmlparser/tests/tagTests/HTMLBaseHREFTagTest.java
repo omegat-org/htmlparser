@@ -31,36 +31,20 @@ package org.htmlparser.tests.tagTests;
 import java.io.StringReader;
 
 import org.htmlparser.tags.HTMLBaseHREFTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * @author Somik Raha
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
-public class HTMLBaseHREFTagTest extends TestCase {
+public class HTMLBaseHREFTagTest extends HTMLParserTestCase {
 
-	/**
-	 * Constructor for HTMLBaseHREFTagTest.
-	 * @param arg0
-	 */
-	public HTMLBaseHREFTagTest(String arg0) {
-		super(arg0);
+	public HTMLBaseHREFTagTest(String name) {
+		super(name);
 	}
 	public void testToHTML() {
 		HTMLBaseHREFTag baseRefTag = new HTMLBaseHREFTag(0,0,"","http://www.abc.com","");
 		String expected = "<BASE HREF=\"http://www.abc.com\">";
 		assertEquals("Expected HTML Reconstruction",expected,baseRefTag.toHTML());
 	}
-	public static TestSuite suite() 
-	{
-		TestSuite suite = new TestSuite(HTMLBaseHREFTagTest.class);
-		return suite;
-	}	
 }

@@ -35,6 +35,7 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLFormTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.scanners.HTMLFormScanner;
@@ -43,25 +44,14 @@ import org.htmlparser.util.HTMLEnumeration;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * @author Somik Raha
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
-public class HTMLFormTagTest extends TestCase {
+public class HTMLFormTagTest extends HTMLParserTestCase {
 
-	/**
-	 * Constructor for HTMLFormTagTest.
-	 * @param arg0
-	 */
 	public HTMLFormTagTest(String name) {
 		super(name);
 	}
+
 	public void testSetFormLocation() throws HTMLParserException{
-		String testHTML = new String(
+		createParser(
 		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
@@ -73,19 +63,9 @@ public class HTMLFormTagTest extends TestCase {
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
 		"</FORM>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLFormScanner(""));
-		
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 nodes identified",1,i);	
+		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 
@@ -102,12 +82,6 @@ public class HTMLFormTagTest extends TestCase {
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\r\n"+
 		"</FORM>";
-		//assertEquals("Length of string",tempString.length(),formTag.toHTML().length());
-
-		HTMLTagTest.assertStringEquals("Raw String",tempString,formTag.toHTML());
+		assertStringEquals("Raw String",tempString,formTag.toHTML());
 	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLFormTagTest.class);
-	}
-
 }
