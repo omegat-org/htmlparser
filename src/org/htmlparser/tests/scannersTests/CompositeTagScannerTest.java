@@ -29,6 +29,7 @@
 package org.htmlparser.tests.scannersTests;
 
 import java.util.Vector;
+import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Page;
@@ -134,7 +135,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertEquals("starting loc",0,customTag.getStartTag().getStartPosition ());
         assertEquals("ending loc",8,customTag.getStartTag().getEndPosition ());
         assertEquals("custom tag starting loc",0,customTag.getStartPosition ());
-        assertEquals("custom tag ending loc",24,customTag.getEndPosition ());
+        assertEquals("custom tag ending loc",24,customTag.getEndTag ().getEndPosition ());
 
         Node child = customTag.childAt(0);
         assertType("child",Tag.class,child);
@@ -155,7 +156,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertEquals("starting loc",0,customTag.getStartTag().getStartPosition ());
         assertEquals("ending loc",8,customTag.getStartTag().getEndPosition ());
         assertEquals("custom tag starting loc",0,customTag.getStartPosition ());
-        assertEquals("custom tag ending loc",27,customTag.getEndPosition ());
+        assertEquals("custom tag ending loc",27,customTag.getEndTag ().getEndPosition ());
 
         Node child = customTag.childAt(0);
         assertType("child",AnotherTag.class,child);
@@ -290,7 +291,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertEquals("starting loc",0,customTag.getStartTag().getStartPosition ());
         assertEquals("ending loc",8,customTag.getStartTag().getEndPosition ());
         assertEquals("starting line position",0,customTag.getStartingLineNumber());
-        assertEquals("ending line position",1,customTag.getEndingLineNumber());
+        assertEquals("ending line position",1,customTag.getEndTag ().getEndingLineNumber());
         assertStringEquals("html", html + "</custom>", customTag.toHtml()
         );
     }
@@ -306,9 +307,9 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertFalse("custom tag should not be xml end tag",customTag.isEmptyXmlTag());
         assertEquals("starting loc",0,customTag.getStartTag().getStartPosition ());
         assertEquals("ending loc",8,customTag.getStartTag().getEndPosition ());
-        assertEquals("ending loc of custom tag",17,customTag.getEndPosition ());
+        assertEquals("ending loc of custom tag",17,customTag.getEndTag ().getEndPosition ());
         assertEquals("starting line position",0,customTag.getStartingLineNumber());
-        assertEquals("ending line position",0,customTag.getEndingLineNumber());
+        assertEquals("ending line position",0,customTag.getEndTag ().getEndingLineNumber());
         assertStringEquals("1st custom tag", tag1 + "</custom>", customTag.toHtml());
         customTag = (CustomTag)node[1];
         assertStringEquals("2nd custom tag", tag2 + "</custom>", customTag.toHtml());
@@ -333,7 +334,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertEquals("starting loc",9,customTag.getStartTag().getStartPosition ());
         assertEquals("ending loc",17,customTag.getStartTag().getEndPosition ());
         assertEquals("starting line position",0,customTag.getStartingLineNumber());
-        assertEquals("ending line position",1,customTag.getEndingLineNumber());
+        assertEquals("ending line position",1,customTag.getEndTag ().getEndingLineNumber());
         assertStringEquals("another tag html",another + "</another>",anotherTag.toHtml());
         assertStringEquals("custom tag html",custom,customTag.toHtml());
     }
@@ -405,7 +406,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertEquals("ending loc",8,customTag.getStartTag().getEndPosition ());
         AnotherTag anotherTag = (AnotherTag)customTag.childAt(0);
         assertEquals("anotherTag child count",2,anotherTag.getChildCount());
-        assertEquals("anotherTag end loc",27,anotherTag.getEndPosition ());
+        assertEquals("anotherTag end loc",27,anotherTag.getEndTag ().getEndPosition ());
         assertEquals("custom end tag begin loc",27,customTag.getEndTag().getStartPosition ());
         assertEquals("custom end tag end loc",36,customTag.getEndTag().getEndPosition ());
     }
@@ -497,15 +498,20 @@ public class CompositeTagScannerTest extends ParserTestCase {
     public void testUrlBeingProvidedToCreateTag() throws ParserException {
         createParser("<Custom/>","http://www.yahoo.com");
 
-        parser.addScanner(new CustomScanner() {
-        public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
-        {
-            url = page.getUrl ();
-            return (super.createTag (page, start, end, attributes, startTag, endTag, children));
-        }
-        });
+        parser.addScanner(new CustomScanner()
+//            {
+//                public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+//                {
+//                    if (null != page)
+//                        url = page.getUrl ();
+//                    else
+//                        url = null;
+//                    return (super.createTag (page, start, end, attributes, startTag, endTag, children));
+//                }
+//            }
+        );
         parseAndAssertNodeCount(1);
-        assertStringEquals("url","http://www.yahoo.com",url);
+        assertStringEquals("url","http://www.yahoo.com",((AbstractNode)node[0]).getPage ().getUrl ());
     }
 
     public void testComplexNesting() throws ParserException {
@@ -564,7 +570,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
             return MATCH_NAME;
         }
 
-        public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+        public Tag createTag (Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
         {
             CustomTag ret;
 
@@ -595,7 +601,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
             return MATCH_NAME;
         }
 
-        public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+        public Tag createTag (Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
         {
             AnotherTag ret;
 

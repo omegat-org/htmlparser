@@ -191,8 +191,7 @@ public abstract class CompositeTagScanner extends TagScanner
         String match;
         String name;
         TagScanner scanner;
-        CompositeTag composite;
-        Tag ret;
+        CompositeTag ret;
         
         nodeList = new NodeList ();
         endTag = null;
@@ -244,13 +243,14 @@ public abstract class CompositeTagScanner extends TagScanner
         if (null == endTag)
             endTag = createVirtualEndTag (tag, lexer.getPage (), lexer.getCursor ().getPosition ());
 
-        composite = (CompositeTag)createTag (lexer.getPage (), tag.getStartPosition (), endTag.getEndPosition (), tag.getAttributesEx (), tag, endTag, nodeList);
-        composite.setThisScanner (this);
-        for (int i = 0; i < composite.getChildCount (); i++)
-            composite.childAt (i).setParent (composite);
-        ret = composite;
+        ret = (CompositeTag)tag;
+        ret.setEndTag (endTag);
+        ret.setChildren (nodeList);
+        for (int i = 0; i < ret.getChildCount (); i++)
+            ret.childAt (i).setParent (ret);
+        endTag.setParent (ret);
+        ret.doSemanticAction ();
 
-        
         return (ret);
     }
 
@@ -283,7 +283,7 @@ public abstract class CompositeTagScanner extends TagScanner
     /**
      * For composite tags this shouldn't be used and hence throws an exception.
      */
-    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    public Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
     {
         throw new ParserException ("composite tags shouldn't be using this");
     }

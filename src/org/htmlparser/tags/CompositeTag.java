@@ -44,8 +44,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * the {@link #toHtml toHtml} method.
  */
 public abstract class CompositeTag extends Tag {
-    protected TagNode startTag;
-    protected TagNode endTag;
+    protected TagNode mEndTag;
 
     public CompositeTag ()
     {
@@ -57,7 +56,14 @@ public abstract class CompositeTag extends Tag {
      */
     public SimpleNodeIterator children ()
     {
-        return (getChildren ().elements ());
+        SimpleNodeIterator ret;
+
+        if (null != getChildren ())
+            ret = getChildren ().elements ();
+        else
+            ret = (new NodeList ()).elements ();
+
+        return (ret);
     }
 
     /**
@@ -106,10 +112,6 @@ public abstract class CompositeTag extends Tag {
         return stringRepresentation.toString();
     }
 
-    public void putStartTagInto(StringBuffer sb) {
-        sb.append(startTag.toHtml());
-    }
-
     protected void putChildrenInto(StringBuffer sb)
     {
         Node node;
@@ -126,15 +128,17 @@ public abstract class CompositeTag extends Tag {
     {
         // eliminate virtual tags
 //        if (!(endTag.getStartPosition () == endTag.getEndPosition ()))
-            sb.append(endTag.toHtml());
+            sb.append(getEndTag ().toHtml());
     }
 
     public String toHtml() {
         StringBuffer sb = new StringBuffer();
-        putStartTagInto(sb);
-        if (!startTag.isEmptyXmlTag()) {
+        sb.append (super.toHtml ());
+        if (!isEmptyXmlTag())
+        {
             putChildrenInto(sb);
-            putEndTagInto(sb);
+            if (null != getEndTag ()) // this test if for link tags that refuse to scan because there's no HREF attribute
+                putEndTagInto(sb);
         }
         return sb.toString();
     }
@@ -323,14 +327,17 @@ public abstract class CompositeTag extends Tag {
 
         if (visitor.shouldRecurseChildren ())
         {
-            startTag.accept (visitor);
-            children = children ();
-            while (children.hasMoreNodes ())
+            if (null != getChildren ())
             {
-                child = (Node)children.nextNode ();
-                child.accept (visitor);
+                children = children ();
+                while (children.hasMoreNodes ())
+                {
+                    child = (Node)children.nextNode ();
+                    child.accept (visitor);
+                }
             }
-            endTag.accept (visitor);
+            if (null != getEndTag ())
+                getEndTag ().accept (visitor);
         }
         if (visitor.shouldRecurseSelf ())
             visitor.visitTag (this);
@@ -340,24 +347,31 @@ public abstract class CompositeTag extends Tag {
         return (getChildren ().size ());
     }
 
+    /**
+     * @deprecated The tag *is* ths start tag.
+     */
     public TagNode getStartTag()
     {
-        return startTag;
+        return (this);
     }
 
+    /**
+     * @deprecated The tag *is* ths start tag.
+     */
     public void setStartTag (TagNode start)
     {
-        startTag = start;
+        if (null != start)
+            throw new IllegalStateException ("the tag *is* ths start tag");
     }
 
     public TagNode getEndTag()
     {
-        return endTag;
+        return (mEndTag);
     }
 
     public void setEndTag(TagNode end)
     {
-        endTag = end;
+        mEndTag = end;
     }
 
     /**
@@ -389,7 +403,4 @@ public abstract class CompositeTag extends Tag {
         }
         return stringNode;
     }
-
-
-
 }

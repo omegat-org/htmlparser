@@ -57,7 +57,7 @@ public class DoctypeScanner extends TagScanner
         return ids;
     }
 
-    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    public Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
     {
         DoctypeTag ret;
 

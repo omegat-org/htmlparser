@@ -28,6 +28,7 @@
 
 package org.htmlparser.tags;
 
+import java.lang.CloneNotSupportedException;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -49,7 +50,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * This is also the base class for all tags created by the parser (not the
  * lexer which has nodes).
  */
-public class Tag extends TagNode
+public class Tag extends TagNode implements Cloneable
 {
     private TagScanner mScanner;
 
@@ -67,6 +68,11 @@ public class Tag extends TagNode
     {
         super (page, start, end, attributes);
         mScanner = null;
+    }
+
+    public Object clone() throws CloneNotSupportedException
+    {
+        return (super.clone ());
     }
 
     /**
@@ -120,15 +126,5 @@ public class Tag extends TagNode
             ((NodeVisitor)visitor).visitEndTag (this);
         else
             ((NodeVisitor)visitor).visitTag (this);
-    }
-    
-    public int getStartingLineNumber ()
-    {
-        return (getPage ().row (getStartPosition ()));
-    }
-
-    public int getEndingLineNumber ()
-    {
-        return (getPage ().row (getEndPosition ()));
     }
 }

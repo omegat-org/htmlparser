@@ -307,4 +307,11 @@ public abstract class AbstractNode implements Node, Serializable
 
     }
 
+    /**
+     * Perform the meaning of this tag.
+     * The default action is to do nothing.
+     */
+    public void doSemanticAction ()
+    {
+    }
 }

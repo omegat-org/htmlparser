@@ -98,6 +98,16 @@ public class ParserTestCase extends TestCase {
         node = new AbstractNode[numNodes];
     }
 
+    public Parser getParser ()
+    {
+        return (parser);
+    }
+
+    public void setParser (Parser parser)
+    {
+        this.parser = parser;
+    }
+
     public void assertStringEquals(String message, String expected,
                                       String actual) {
         String mismatchInfo = "";

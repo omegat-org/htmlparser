@@ -192,4 +192,15 @@ public interface Node {
      * @param text The new text for the node.
      */
     public void setText(String text);
+    
+    /**
+     * Perform the meaning of this tag.
+     * This is defined by the tag, for example the bold tag &lt;B&gt; may switch
+     * bold text on and off.
+     * Only a few tags have semantic meaning to the parser. These have to do
+     * with the character set to use (&lt;META&gt;), the base URL to use
+     * (&lt;BASE&gt;). Other than that, the semantic meaning is up to the
+     * application.
+     */
+    public void doSemanticAction ();
 }

@@ -146,4 +146,7 @@ public abstract class AbstractNodeDecorator implements Node {
         return delegate.toString();
     }
 
+    public void doSemanticAction () {
+        delegate.doSemanticAction ();
+    }
 }

@@ -256,15 +256,18 @@ public class TagNode
         ret = null;
 
         attributes = getAttributesEx ();
-        size = attributes.size ();
-        for (int i = 0; i < size; i++)
+        if (null != attributes)
         {
-            attribute = (Attribute)attributes.elementAt (i);
-            string = attribute.getName ();
-            if ((null != string) && name.equalsIgnoreCase (string))
+            size = attributes.size ();
+            for (int i = 0; i < size; i++)
             {
-                ret = attribute;
-                i = size; // exit fast
+                attribute = (Attribute)attributes.elementAt (i);
+                string = attribute.getName ();
+                if ((null != string) && name.equalsIgnoreCase (string))
+                {
+                    ret = attribute;
+                    i = size; // exit fast
+                }
             }
         }
 
@@ -808,5 +811,23 @@ public class TagNode
         raw = getRawTagName ();
 
         return ((null == raw) ? false : ('/' == raw.charAt (0)));
+    }
+
+    /**
+     * Get the line number where this tag starts.
+     * @return The (zero based) line number in the page where this tag starts.
+     */
+    public int getStartingLineNumber ()
+    {
+        return (getPage ().row (getStartPosition ()));
+    }
+
+    /**
+     * Get the line number where this tag ends.
+     * @return The (zero based) line number in the page where this tag ends.
+     */
+    public int getEndingLineNumber ()
+    {
+        return (getPage ().row (getEndPosition ()));
     }
 }

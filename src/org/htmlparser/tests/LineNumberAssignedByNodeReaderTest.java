@@ -60,18 +60,43 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
      * information in the <code>TagData</code> it is constructed with.
      * @throws ParserException if there is a problem parsing the test data
      */
-    public void testLineNumbers() throws ParserException {
+    public void testLineNumbers1() throws ParserException
+    {
         testLineNumber("<Custom/>", 1, 0, 0, 0);
+    }
+
+    public void testLineNumbers2() throws ParserException
+    {
         testLineNumber("<Custom />", 1, 0, 0, 0);
+    }
+
+    public void testLineNumbers3() throws ParserException
+    {
         testLineNumber("<Custom></Custom>", 1, 0, 0, 0);
+    }
+
+    public void testLineNumbers4() throws ParserException
+    {
         testLineNumber("<Custom>Content</Custom>", 1, 0, 0, 0);
+    }
+
+    public void testLineNumbers5() throws ParserException
+    {
         testLineNumber("<Custom>Content<Custom></Custom>", 1, 0, 0, 0);
+    }
+
+    public void testLineNumbers6() throws ParserException
+    {
         testLineNumber(
             "<Custom>\n" +
             "   Content\n" +
             "</Custom>",
             1, 0, 0, 2
         );
+    }
+
+    public void testLineNumbers7() throws ParserException
+    {
         testLineNumber(
             "Foo\n" +
             "<Custom>\n" +
@@ -79,6 +104,10 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
             "</Custom>",
             2, 1, 1, 3
         );
+    }
+
+    public void testLineNumbers8() throws ParserException
+    {
         testLineNumber(
             "Foo\n" +
             "<Custom>\n" +
@@ -86,6 +115,10 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
             "</Custom>",
             2, 1, 1, 3
         );
+    }
+
+    public void testLineNumbers9() throws ParserException
+    {
         char[] oneHundredNewLines = new char[100];
         Arrays.fill(oneHundredNewLines, '\n');
         testLineNumber(
@@ -116,7 +149,7 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
         assertType("custom node",CustomTag.class,node[useNode]);
         CustomTag tag = (CustomTag)node[useNode];
         assertEquals("start line", expectedStartLine, tag.getStartingLineNumber ());
-        assertEquals("end line", expectedEndLine, tag.getEndingLineNumber ());
+        assertEquals("end line", expectedEndLine, tag.getEndTag ().getEndingLineNumber ());
     }
 
     public static TestSuite suite() {

@@ -32,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -66,32 +67,21 @@ public class FunctionalTests extends ParserTestCase {
     public void testNumImageTagsInYahooWithoutRegisteringScanners() throws ParserException {
         // First count the image tags as is
         int imgTagCount;
-        imgTagCount = findImageTagCount();
-        try {
-            int parserImgTagCount = countImageTagsWithHTMLParser();
-            assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);
-        }
-        catch (ParserException e) {
-            throw new ParserException("Error thrown in call to countImageTagsWithHTMLParser()",e);
-        }
-
+        int parserImgTagCount = countImageTagsWithHTMLParser();
+        imgTagCount = findImageTagCount(getParser ());
+        assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);
     }
 
-    public int findImageTagCount() {
+    public int findImageTagCount(Parser parser) {
         int imgTagCount = 0;
-        try {
-            URL url = new URL("http://education.yahoo.com/");
-            InputStream is = url.openStream();
-            BufferedReader reader;
-            reader = new BufferedReader(new InputStreamReader(is));
-            imgTagCount = countImageTagsWithoutHTMLParser(reader);
-            is.close();
+        parser.reset ();
+        try
+        {
+            imgTagCount = countImageTagsWithoutHTMLParser(parser);
         }
-        catch (MalformedURLException e) {
-            System.err.println("URL was malformed!");
-        }
-        catch (IOException e) {
-            System.err.println("IO Exception occurred while trying to open stream");
+        catch (IOException e)
+        {
+            System.err.println ("IO Exception occurred while counting tags");
         }
         return imgTagCount;
     }
@@ -99,6 +89,7 @@ public class FunctionalTests extends ParserTestCase {
     public int countImageTagsWithHTMLParser() throws ParserException {
         Parser parser = new Parser("http://education.yahoo.com/",new DefaultParserFeedback());
         parser.addScanner(new ImageScanner("-i"));
+        setParser (parser);
         int parserImgTagCount = 0;
         Node node;
         for (NodeIterator e= parser.elements();e.hasMoreNodes();) {
@@ -110,11 +101,16 @@ public class FunctionalTests extends ParserTestCase {
         return parserImgTagCount;
     }
 
-    public int countImageTagsWithoutHTMLParser(BufferedReader reader) throws IOException {
+    public int countImageTagsWithoutHTMLParser (Parser parser) throws IOException
+    {
+        BufferedReader lines;
         String line;
-        int imgTagCount = 0;
+        int imgTagCount;
+        
+        imgTagCount = 0;
+        lines = new BufferedReader (parser.getLexer ().getPage ().getSource ());
         do {
-            line = reader.readLine();
+            line = lines.readLine();
             if (line!=null) {
                 // Check the line for image tags
                 String newline = line.toUpperCase();

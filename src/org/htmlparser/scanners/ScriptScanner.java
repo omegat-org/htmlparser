@@ -36,6 +36,7 @@ import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.NodeFactory;
+import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
@@ -71,7 +72,6 @@ public class ScriptScanner extends CompositeTagScanner {
         ret.setStartPosition (start);
         ret.setEndPosition (end);
         ret.setAttributesEx (attributes);
-        ret.setStartTag (startTag);
         ret.setEndTag (endTag);
         ret.setChildren (children);
 
@@ -94,7 +94,7 @@ public class ScriptScanner extends CompositeTagScanner {
         StringNode last;
         Tag end;
         NodeFactory factory;
-        Tag ret;
+        CompositeTag ret;
 
         done = false;
         last = null;
@@ -162,9 +162,12 @@ public class ScriptScanner extends CompositeTagScanner {
             // build new end tag if required
             if (null == end)
                 end = new Tag (lexer.getPage (), tag.getEndPosition (), tag.getEndPosition (), new Vector ());
-//TODO: use the factory:
-            ret = createTag (lexer.getPage (), tag.getStartPosition (), end.getEndPosition (), tag.getAttributesEx (), tag, end, new NodeList (last));
-            ret.setThisScanner (this);
+            ret = (CompositeTag)tag;
+            ret.setEndTag (end);
+            ret.setChildren (new NodeList (last));
+            last.setParent (ret);
+            end.setParent (ret);
+            ret.doSemanticAction ();
         }
         finally
         {

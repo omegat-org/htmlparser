@@ -52,7 +52,7 @@ public class InputTagScanner extends TagScanner
         return ids;
     }
 
-    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    public Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
     {
         InputTag ret;
 

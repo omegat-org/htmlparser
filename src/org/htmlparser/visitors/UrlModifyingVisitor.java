@@ -43,7 +43,7 @@ public class UrlModifyingVisitor extends NodeVisitor {
     private Parser parser;
 
     public UrlModifyingVisitor(Parser parser, String linkPrefix) {
-        super(true,false);
+        super(true,true);
         this.parser = parser;
         parser.addScanner(new LinkScanner());
         parser.addScanner(new ImageScanner(ImageTag.IMAGE_TAG_FILTER));
@@ -65,12 +65,14 @@ public class UrlModifyingVisitor extends NodeVisitor {
 
     public void visitTag(Tag tag)
     {
-        modifiedResult.append(tag.toHtml());
+        if (null == tag.getParent ())
+            modifiedResult.append(tag.toHtml());
     }
 
     public void visitEndTag(Tag tag)
     {
-        modifiedResult.append(tag.toHtml());
+        if (null == tag.getParent ())
+            modifiedResult.append(tag.toHtml());
     }
 
     public String getModifiedResult() {

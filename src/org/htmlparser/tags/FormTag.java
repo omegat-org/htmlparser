@@ -41,10 +41,16 @@ public class FormTag extends CompositeTag
 {
     public static final String POST="POST";
     public static final String GET="GET";
+    
+    /**
+     * This is the derived form location, based on action.
+     */
+    protected String mFormLocation;
 
     public FormTag ()
     {
         setTagName ("FORM");
+        mFormLocation = null;
     }
 
     /**
@@ -71,7 +77,11 @@ public class FormTag extends CompositeTag
      */
     public String getFormLocation()
     {
-        return (getAttribute("ACTION"));
+        if (null == mFormLocation)
+            // ... is it true that without an ACTION the default is to send it back to the same page?
+            mFormLocation = extractFormLocn (getPage ().getUrl ());
+
+        return (mFormLocation);
     }
 
     /**
@@ -81,6 +91,7 @@ public class FormTag extends CompositeTag
      */
     public void setFormLocation(String url)
     {
+        mFormLocation = url;
         setAttribute ("ACTION", url);
     }
 
@@ -178,23 +189,5 @@ public class FormTag extends CompositeTag
             return "";
         else
             return (getPage ().getLinkProcessor ().extract (formURL, url));
-    }
-
-    /**
-     * Override this because we need a trigger to set the ACTION attribute.
-     * NOTE: setting of the children is the last thing done on the tag
-     * after creation.
-     * @param children The new list of children this node contains.
-     */
-    public void setChildren (NodeList children)
-    {
-        String url;
-
-        super.setChildren (children);
-
-        // ... is it true that without an ACTION the default is to send it back to the same page?
-        url = extractFormLocn(getPage ().getUrl ());
-        if (null != url && 0 < url.length())
-            setAttribute ("ACTION",url);
     }
 }

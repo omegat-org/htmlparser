@@ -124,11 +124,7 @@ public class FormScannerTest extends ParserTestCase {
         assertEquals("Text Area Tag Contents","Contents of TextArea",textAreaTag.getValue());
         assertNull("Should have been null",formTag.getTextAreaTag("junk"));
 
-        String expected = 
-            FORM_HTML.substring (0, FORM_HTML.indexOf ("\"do_login.php\""))
-            + "\"http://www.google.com/test/do_login.php\""
-            + FORM_HTML.substring (FORM_HTML.indexOf ("\"do_login.php\"") + 14);
-        assertStringEquals("toHTML",expected,formTag.toHtml());
+        assertStringEquals("toHTML",FORM_HTML,formTag.toHtml());
     }
 
     public void testScanFormWithNoEnding() throws Exception {

@@ -138,16 +138,14 @@ public class LinkTag extends CompositeTag
      */
     public String getLinkText()
     {
-        return (getChildren().toString());
-    }
+        String ret;
 
-    /**
-     * Return the text contained in this linkinode
-     *  Kaarle Kaila 23.10.2001
-     */
-    public String getText()
-    {
-        return toHtml();
+        if (null != getChildren())
+            ret = getChildren().toString();
+        else
+            ret = "";
+
+        return (ret);
     }
 
     /**
@@ -247,7 +245,7 @@ public class LinkTag extends CompositeTag
             sb.append("null\n");
         else
             sb.append(getAccessKey ()+"\n");
-        if (children()!=null)
+        if (null != getChildren ())
         {
             sb.append("  "+"LinkData\n");
             sb.append("  "+"--------\n");

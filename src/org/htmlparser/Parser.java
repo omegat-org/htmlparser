@@ -36,12 +36,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
 import org.htmlparser.Node;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.nodeDecorators.DecodingNode;
@@ -51,6 +53,7 @@ import org.htmlparser.scanners.AppletScanner;
 import org.htmlparser.scanners.BaseHrefScanner;
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.scanners.BulletListScanner;
+import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.scanners.DoctypeScanner;
 import org.htmlparser.scanners.FormScanner;
@@ -191,8 +194,14 @@ public class Parser
     /**
      * The list of scanners to apply at the top level.
      */
-    protected Map scanners;
-    
+    protected Map mScanners;
+
+    /**
+     * The list of tags to return at the top level.
+     * The list is keyed by tag name.
+     */
+    protected Map mBlastocyst;
+
     /**
      * The current scanner when recursing into a tag.
      */
@@ -375,7 +384,7 @@ public class Parser
     /**
      * Set the connection for this parser.
      * This method creates a new <code>Lexer</code> reading from the connection.
-     * It does not adjust the <code>scanners</code> list
+     * It does not adjust the <code>mScanners</code> list
      * or <code>feedback</code> object. Trying to
      * set the connection to null is a noop.
      * @param connection A fully conditioned connection. The connect()
@@ -406,7 +415,7 @@ public class Parser
     /**
      * Set the URL for this parser.
      * This method creates a new Lexer reading from the given URL.
-     * It does not adjust the <code>scanners</code> list
+     * It does not adjust the <code>mScanners</code> list
      * or <code>feedback</code> object. Trying to set the url to null or an
      * empty string is a noop.
      * @see #setConnection(URLConnection)
@@ -452,7 +461,7 @@ public class Parser
 
     /**
      * Set the lexer for this parser.
-     * TIt does not adjust the <code>scanners</code> list
+     * TIt does not adjust the <code>mScanners</code> list
      * or <code>feedback</code> object.
      * Trying to set the lexer to <code>null</code> is a noop.
      * @param lexer The lexer object to use.
@@ -476,28 +485,39 @@ public class Parser
     }
 
     /**
-     * Get the number of scanners registered currently in the scanner.
-     * @return int number of scanners registered
+     * Get the number of scanners registered currently in the parser.
+     * @return int number of scanners registered.
      */
-    public int getNumScanners() {
-        return scanners.size();
+    public int getNumScanners()
+    {
+        return mScanners.size();
     }
 
     /**
      * This method is to be used to change the set of scanners in the current parser.
-     * @param newScanners Vector holding scanner objects to be used during the parsing process.
+     * @param newScanners List of scanner objects to be used during the parsing process.
      */
-    public void setScanners(Map newScanners)
+    public void setScanners (Map newScanners)
     {
-        scanners = (null == newScanners) ? new HashMap() : newScanners;
+        Iterator iterator;
+        TagScanner scanner;
+
+        flushScanners ();
+        if (null != newScanners)
+            for (iterator = newScanners.entrySet ().iterator (); iterator.hasNext (); )
+            {
+                scanner = (TagScanner)iterator.next ();
+                addScanner (scanner);
+            }
     }
 
     /**
-     * Get an enumeration of scanners registered currently in the parser
-     * @return Enumeration of scanners currently registered in the parser
+     * Get the list of scanners registered currently in the parser
+     * @return List of scanners currently registered in the parser
      */
-    public Map getScanners() {
-        return scanners;
+    public Map getScanners()
+    {
+        return mScanners;
     }
 
     /**
@@ -535,13 +555,37 @@ public class Parser
      * common parsers. But when you wish to either compose a parser with only certain scanners registered, use this method.
      * It is advantageous to register only the scanners you want, in order to achieve faster parsing speed. This method
      * would also be of use when you have developed custom scanners, and need to register them into the parser.
-     * @param scanner TagScanner object (or derivative) to be added to the list of registered scanners
+     * @param scanner TagScanner object (or derivative) to be added to the list of registered scanners.
      */
     public void addScanner(TagScanner scanner)
     {
-        String ids[] = scanner.getID();
-        for (int i=0;i<ids.length;i++) {
-            scanners.put(ids[i],scanner);
+        String ids[];
+        Tag tag;
+        
+        ids = scanner.getID();
+        for (int i = 0; i < ids.length; i++)
+        {
+            mScanners.put (ids[i], scanner);
+            // for now, the only way to create a tag is to ask the scanner...
+            try
+            {
+                if (scanner instanceof CompositeTagScanner)
+                {
+                    tag = ((CompositeTagScanner)scanner).createTag (null, 0, 0, null, null, null, null);
+                    tag.setThisScanner (scanner);
+                    mBlastocyst.put (ids[i], tag);
+                }
+                else
+                {
+                    tag = scanner.createTag (null, 0, 0, null, null, null);
+                    tag.setThisScanner (scanner);
+                    mBlastocyst.put (ids[i], tag);
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace ();
+            }
         }
     }
 
@@ -584,7 +628,7 @@ public class Parser
         remove_scanner = false;
         try
         {
-            if (null == scanners.get ("META"))
+            if (null == mScanners.get ("META"))
             {
                 addScanner (new MetaTagScanner ("-m"));
                 remove_scanner = true;
@@ -625,17 +669,20 @@ public class Parser
         finally
         {
             if (remove_scanner)
-                scanners.remove ("META");
+                mScanners.remove ("META");
         }
 
         return ret;
     }
 
     /**
-     * Flush the current scanners registered. The registered scanners list becomes empty with this call.
+     * Flush the current scanners registered.
+     * The registered scanners list becomes empty with this call.
      */
-    public void flushScanners() {
-        scanners = new Hashtable();
+    public void flushScanners()
+    {
+        mScanners = new Hashtable ();
+        mBlastocyst = new Hashtable ();
     }
 
     /**
@@ -644,8 +691,18 @@ public class Parser
      * @param id The id of the requested scanner
      * @return TagScanner The Tag Scanner
      */
-    public TagScanner getScanner(String id) {
-        return (TagScanner)scanners.get(id);
+    public TagScanner getScanner (String id)
+    {
+        Tag tag;
+        TagScanner ret;
+
+        ret = null;
+
+        tag = (Tag)mBlastocyst.get (id);
+        if (null != tag)
+            ret = (TagScanner)tag.getThisScanner ();
+        
+        return (ret);
     }
 
     /**
@@ -685,7 +742,8 @@ public class Parser
     }
 
     /**
-     * This method should be invoked in order to register some common scanners. The scanners that get added are : <br>
+     * This method should be invoked in order to register some common scanners.
+     * The scanners that get added are : <br>
      * LinkScanner    (filter key "-l")<br>
      * ImageScanner   (filter key "-i")<br>
      * ScriptScanner  (filter key "-s") <br>
@@ -708,9 +766,10 @@ public class Parser
      * </pre>
      */
     public void registerScanners() {
-        if (scanners.size()>0) {
+        if (mScanners.size()>0)
+        {
             System.err.println("registerScanners() should be called first, when no other scanner has been registered.");
-            System.err.println("Other scanners already exist, hence this method call wont have any effect");
+            System.err.println("Other scanners already exist, hence this method call won't have any effect");
             return;
         }
         addScanner(new LinkScanner(LinkTag.LINK_TAG_FILTER));
@@ -757,8 +816,16 @@ public class Parser
      * </pre>
      * @param scanner TagScanner object to be removed from the list of registered scanners
      */
-    public void removeScanner(TagScanner scanner) {
-        scanners.remove(scanner.getID()[0]);
+    public void removeScanner(TagScanner scanner)
+    {
+        String[] ids;
+
+        ids = scanner.getID ();
+        for (int i = 0; i < ids.length; i++)
+        {
+            mScanners.remove (ids[i]);
+            mBlastocyst.remove (ids[i]);
+        }
     }
 
     /**
@@ -1028,6 +1095,46 @@ public class Parser
         throws
             ParserException
     {
-        return (new Tag (page, start, end, attributes));
+        Attribute attribute;
+        String id;
+        Tag prototype;
+        Tag ret;
+
+        ret = null;
+
+        if (0 != attributes.size ())
+        {
+            attribute = (Attribute)attributes.elementAt (0);
+            id = attribute.getName ();
+            if (null != id)
+            {
+                try
+                {
+                    id = id.toUpperCase ();
+                    if (!id.startsWith ("/"))
+                    {
+                        if (id.endsWith ("/"))
+                            id = id.substring (0, id.length () - 1);
+                        prototype = (Tag)mBlastocyst.get (id);
+                        if (null != prototype)
+                        {
+                            ret = (Tag)prototype.clone ();
+                            ret.setPage (page);
+                            ret.setStartPosition (start);
+                            ret.setEndPosition (end);
+                            ret.setAttributesEx (attributes);
+                        }
+                    }
+                }
+                catch (CloneNotSupportedException cnse)
+                {
+                    // default to creating a new one
+                }
+            }
+        }
+        if (null == ret)
+            ret = new Tag (page, start, end, attributes);
+
+        return (ret);
     }
 }

@@ -133,8 +133,8 @@ public abstract class TagScanner
     {
         Tag ret;
         
-        ret = createTag(lexer.getPage (), tag.getStartPosition (), tag.getEndPosition (), tag.getAttributesEx (), tag, url);
-        ret.setThisScanner(this);
+        ret = tag;
+        ret.doSemanticAction ();
 
         return (ret);
     }
@@ -148,7 +148,7 @@ public abstract class TagScanner
      * @return Tag
      * @throws ParserException
      */
-    protected abstract Tag createTag(Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException;
+    public abstract Tag createTag(Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException;
 
     public abstract String [] getID();
 }
