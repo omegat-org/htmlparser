@@ -39,21 +39,21 @@ import org.htmlparser.tags.data.TagData;
  */
 public class BodyScanner extends CompositeTagScanner {
 	private static final String MATCH_NAME [] = {"BODY"};
+	private static final String ENDERS [] = {};
+	private static final String END_TAG_ENDERS [] = {"HTML"};
 
+	public BodyScanner() {
+		this("");
+	}
+	
 	public BodyScanner(String filter) {
-		super(filter,MATCH_NAME);
+		super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS,false);
 	}
 
 	public String [] getID() {
 		return MATCH_NAME;
 	}
 	
-	public boolean evaluate(String tagNameBeingChecked, TagScanner previousOpenScanner)
-    {
-		absorbLeadingBlanks(tagNameBeingChecked);
-        return (tagNameBeingChecked.toUpperCase ().startsWith (MATCH_NAME[0]) && null == previousOpenScanner);
-	} 
-
 	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {

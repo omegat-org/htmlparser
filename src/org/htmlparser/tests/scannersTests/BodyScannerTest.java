@@ -81,6 +81,19 @@ public class BodyScannerTest extends ParserTestCase {
 		assertEquals("Body","<BODY>before jsp<%=BodyValue%>after jsp</BODY>",bodyTag.toHtml());
 		assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
 	}
+	
+	public void testBodyEnding() throws ParserException {
+		createParser("<html><body>before jsp<%=BodyValue%>after jsp</html>");
+		parser.registerScanners();
+		BodyScanner bodyScanner = new BodyScanner("-b");
+		parser.addScanner(bodyScanner);
+	 	parseAndAssertNodeCount(3);
+	 	assertTrue(node[1] instanceof BodyTag);
+		// check the body node
+		BodyTag bodyTag = (BodyTag) node[1];
+		assertEquals("Body","<BODY>before jsp<%=BodyValue%>after jsp</BODY>",bodyTag.toHtml());
+		assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
+	}
 		
 	public static TestSuite suite() 
 	{

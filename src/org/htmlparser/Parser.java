@@ -53,6 +53,7 @@ import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.scanners.DoctypeScanner;
 import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.scanners.FrameSetScanner;
+import org.htmlparser.scanners.HeadScanner;
 import org.htmlparser.scanners.HtmlScanner;
 import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.scanners.LinkScanner;
@@ -1044,7 +1045,8 @@ public class Parser
 	public void registerDomScanners() {
 		registerScanners();
 		addScanner(new HtmlScanner());
-		addScanner(new BodyScanner("-body"));
+		addScanner(new BodyScanner());
+		addScanner(new HeadScanner());
 	}
 	
 	/**
