@@ -77,6 +77,11 @@
     <mkdir dir="${build}"/>
     <!-- Compile the java code from ${src} into ${build} -->
     <javac srcdir="${src}" destdir="${build}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" />
+    <!--  Copy images from ${src} into ${build} -->
+    <mkdir dir="${build}/org/htmlparser/beans/images"/>
+    <copy todir="${build}/org/htmlparser/beans/images">
+        <fileset dir="${src}/org/htmlparser/beans/images" includes="Chain16.gif Chain32.gif Knot16.gif Knot32.gif"/>
+    </copy>
   </target>
 
   <!-- Create the distribution of htmlparser.jar -->
@@ -89,7 +94,25 @@
     <mkdir dir="${dist}/lib"/>
 
     <!-- Put everything in ${build} into the htmlparser.jar file -->
-    <jar jarfile="${dist}/lib/htmlparser.jar" basedir="${build}" manifest="${resources}/Manifest.mf" />
+    <jar jarfile="${dist}/lib/htmlparser.jar" basedir="${build}" manifest="${resources}/Manifest.mf">
+      <manifest>
+        <section name="org/htmlparser/HTMLParser.class">
+          <attribute name="Java-Bean" value="True"/>
+        </section>
+        <section name="org/htmlparser/beans/StringBean.class">
+          <attribute name="Java-Bean" value="True"/>
+        </section>
+        <section name="org/htmlparser/beans/HTMLTextBean.class">
+          <attribute name="Java-Bean" value="True"/>
+        </section>
+        <section name="org/htmlparser/beans/LinkBean.class">
+          <attribute name="Java-Bean" value="True"/>
+        </section>
+        <section name="org/htmlparser/beans/HTMLLinkBean.class">
+          <attribute name="Java-Bean" value="True"/>
+        </section>
+      </manifest>
+    </jar>
   </target>
 
   <!-- Run the unit tests -->
@@ -108,6 +131,7 @@
         <pathelement location="${src}"/>
         <pathelement location="${junit.jar}"/>
       </classpath>
+      <!-- arg value="-text"/ don't use until JUnit bug 660115 is resolved -->
     </java>
   </target>
 
