@@ -1,4 +1,4 @@
-// HTMLParser Library v1_4_20031026 - A java-based parser for HTML
+// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -129,9 +129,9 @@ public class LinkTagTest extends ParserTestCase {
         String link1 = "http://note.kimo.com.tw/";
         String link2 = "http://photo.kimo.com.tw/";
         String link3 = "http://address.kimo.com.tw/";
-        createParser("<a href=" + link1 + ">µ§°O</a>&nbsp; <a \n"+
-        "href=" + link2 + ">¬ÛÃ¯</a>&nbsp; <a\n"+
-        "href=" + link3 + ">³q°T¿ý</a>&nbsp;&nbsp;","http://www.cj.com");
+        createParser("<a href=" + link1 + ">ï¿½ï¿½ï¿½O</a>&nbsp; <a \n"+
+        "href=" + link2 + ">ï¿½ï¿½Ã¯</a>&nbsp; <a\n"+
+        "href=" + link3 + ">ï¿½qï¿½Tï¿½ï¿½</a>&nbsp;&nbsp;","http://www.cj.com");
         Parser.setLineSeparator("\r\n");
         // Register the image scanner
         parser.addScanner(new LinkScanner("-l"));

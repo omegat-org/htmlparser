@@ -12,6 +12,284 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20031109
+--------------------------------
+
+2003-11-09 07:52  derrickoswald
+
+	* src/org/htmlparser/util/Translate.java:
+
+	Integrate optimization suggested by Christian Ullenboom C.Ullenboom@java-tutor.com.
+	
+2003-11-08 16:30  derrickoswald
+
+	* build.xml, src/org/htmlparser/AbstractNode.java,
+	src/org/htmlparser/Node.java, src/org/htmlparser/NodeFilter.java,
+	src/org/htmlparser/Parser.java, src/org/htmlparser/RemarkNode.java,
+	src/org/htmlparser/StringNode.java,
+	src/org/htmlparser/lexer/Page.java,
+	src/org/htmlparser/lexer/nodes/RemarkNode.java,
+	src/org/htmlparser/lexer/nodes/StringNode.java,
+	src/org/htmlparser/lexer/nodes/TagNode.java,
+	src/org/htmlparser/nodeDecorators/AbstractNodeDecorator.java,
+	src/org/htmlparser/scanners/LinkScanner.java,
+	src/org/htmlparser/tags/BaseHrefTag.java,
+	src/org/htmlparser/tags/CompositeTag.java,
+	src/org/htmlparser/tags/LinkTag.java,
+	src/org/htmlparser/tags/MetaTag.java,
+	src/org/htmlparser/tags/ScriptTag.java,
+	src/org/htmlparser/tags/Tag.java,
+	src/org/htmlparser/tests/AllTests.java,
+	src/org/htmlparser/tests/ParserTest.java,
+	src/org/htmlparser/tests/ParserTestCase.java,
+	src/org/htmlparser/tests/lexerTests/TagTests.java,
+	src/org/htmlparser/tests/scannersTests/BodyScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/FormScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/HtmlTest.java,
+	src/org/htmlparser/tests/scannersTests/InputTagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/LabelScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/LinkScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/MetaTagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/OptionTagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/SelectTagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/TextareaTagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/TitleScannerTest.java,
+	src/org/htmlparser/tests/tagTests/CompositeTagTest.java,
+	src/org/htmlparser/tests/tagTests/ImageTagTest.java,
+	src/org/htmlparser/tests/tagTests/ObjectCollectionTest.java,
+	src/org/htmlparser/tests/utilTests/NodeListTest.java,
+	src/org/htmlparser/util/IteratorImpl.java,
+	src/org/htmlparser/util/ParserUtils.java,
+	src/org/htmlparser/util/PeekingIterator.java,
+	src/org/htmlparser/util/PeekingIteratorImpl.java,
+	src/org/htmlparser/filters/AndFilter.java,
+	src/org/htmlparser/filters/HasAttributeFilter.java,
+	src/org/htmlparser/filters/HasChildFilter.java,
+	src/org/htmlparser/filters/NodeClassFilter.java,
+	src/org/htmlparser/filters/NotFilter.java,
+	src/org/htmlparser/filters/OrFilter.java,
+	src/org/htmlparser/filters/StringFilter.java,
+	src/org/htmlparser/filters/TagNameFilter.java,
+	src/org/htmlparser/filters/package.html,
+	src/org/htmlparser/tests/filterTests/FilterTest.java:
+
+	Implement generic node filtering.
+	Added the NodeFilter interface and the filter package.
+	Sideline tag specific scanners; tags now use only one scanner of each type,
+	TagScanner or CompositeTagScanner (except for ScriptScanner).
+	Obviated PeekingIterator by moving the META tag semantics to doSemanticAction,
+	much simpler, old IteratorImpl is now PeekingIteratorImpl but deprecated.
+	
+2003-11-05 22:00  derrickoswald
+
+	* src/org/htmlparser/: scanners/CompositeTagScanner.java,
+	scanners/ScriptScanner.java, scanners/TagScanner.java,
+	tags/AppletTag.java, tags/BaseHrefTag.java, tags/BodyTag.java,
+	tags/Bullet.java, tags/BulletList.java, tags/CompositeTag.java,
+	tags/Div.java, tags/DoctypeTag.java, tags/FormTag.java,
+	tags/FrameSetTag.java, tags/FrameTag.java, tags/HeadTag.java,
+	tags/Html.java, tags/ImageTag.java, tags/InputTag.java,
+	tags/JspTag.java, tags/LabelTag.java, tags/LinkTag.java,
+	tags/MetaTag.java, tags/OptionTag.java, tags/ScriptTag.java,
+	tags/SelectTag.java, tags/Span.java, tags/StyleTag.java,
+	tags/TableColumn.java, tags/TableRow.java, tags/TableTag.java,
+	tags/Tag.java, tags/TextareaTag.java, tags/TitleTag.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	util/IteratorImpl.java:
+
+	The tags now own their ids, enders and end tag enders.
+	The isTagToBeEndedFor logic is now uses information from the tags, not the scanners.
+	The kludge to get the scanner from the NodeFactory is now gone too,
+	this also comes from the tag.
+	
+2003-11-03 20:25  derrickoswald
+
+	* src/org/htmlparser/: beans/BeanyBaby.java, beans/StringBean.java,
+	lexer/Lexer.java, lexer/Page.java, lexer/PageIndex.java,
+	lexerapplications/thumbelina/Thumbelina.java,
+	tags/CompositeTag.java, visitors/ObjectFindingVisitor.java,
+	visitors/UrlModifyingVisitor.java:
+
+	Made visiting order the same order as on the page.
+	The 'shouldRecurseSelf' boolean of NodeVisitor could probably
+	be removed since it doesn't make much sense any more.
+	Fixed StringBean, which was still looking for end tags with names starting with
+	a slash, i.e. "/SCRIPT", silly beany.
+	Added some debugging support to the lexer, you can easily base a breakpoint on
+	line number.
+	
+2003-11-01 16:55  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, Node.java, Parser.java,
+	lexer/nodes/TagNode.java,
+	nodeDecorators/AbstractNodeDecorator.java,
+	scanners/BaseHrefScanner.java, scanners/CompositeTagScanner.java,
+	scanners/DoctypeScanner.java, scanners/FrameScanner.java,
+	scanners/ImageScanner.java, scanners/InputTagScanner.java,
+	scanners/JspScanner.java, scanners/MetaTagScanner.java,
+	scanners/ScriptScanner.java, scanners/TagScanner.java,
+	tags/BaseHrefTag.java, tags/CompositeTag.java, tags/FormTag.java,
+	tags/ImageTag.java, tags/LinkTag.java, tags/Tag.java,
+	tests/FunctionalTests.java,
+	tests/LineNumberAssignedByNodeReaderTest.java,
+	tests/ParserTestCase.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/scannersTests/FormScannerTest.java,
+	tests/tagTests/ScriptTagTest.java,
+	visitors/UrlModifyingVisitor.java:
+
+	Create nodes by cloning from a list of prototypes in the Parser (NodeFactory).
+	So now, the startTag() is the CompositeTag, and the CompositeTagScanner just adds children.
+	This is an intermediate code drop on the way to integrating the scanners with the tags;
+	the scanners no longer create the tags (but they still create the prototypical ones).
+	
+2003-10-31 23:03  derrickoswald
+
+	* src/org/htmlparser/tests/: ParserTestCase.java,
+	lexerTests/TagTests.java,
+	scannersTests/CompositeTagScannerTest.java,
+	scannersTests/LabelScannerTest.java,
+	scannersTests/ScriptScannerTest.java,
+	tagTests/BaseHrefTagTest.java, tagTests/BodyTagTest.java,
+	tagTests/OptionTagTest.java, tagTests/TitleTagTest.java:
+
+	Fixed all tests failing if case sensitivity was turned on.
+	Mostly this involved comparing the output from toHtml() with the string passed to the parser.
+	Now ParserTestCase does case sensitive comparisons.
+	
+2003-10-31 21:22  derrickoswald
+
+	* src/org/htmlparser/tests/:
+	nodeDecoratorTests/DecodingNodeTest.java, tagTests/TagTest.java,
+	utilTests/CharacterTranslationTest.java:
+
+	Convert native characters in tests to unicode.
+	Mostly this was the division sign (\u00f7) used in tests of character entity reference
+	translation, but other accented characters in TagTest were also problematic.
+	This only covers the files observed to cause failed testcases when compiled and run
+	under the en_US.UTF-8 native encoding, i.e. non ASCII.
+	Files were converted with the native2ascii tool supplied wth the JDK.
+	
+2003-10-31 20:36  derrickoswald
+
+	* src/org/htmlparser/: RemarkNode.java, StringNode.java,
+	lexer/nodes/RemarkNode.java, lexer/nodes/StringNode.java,
+	lexer/nodes/TagNode.java, scanners/CompositeTagScanner.java,
+	scanners/ScriptScanner.java, scanners/TagScanner.java,
+	tags/DoctypeTag.java, tags/FormTag.java, tags/FrameSetTag.java,
+	tags/FrameTag.java, tags/ImageTag.java, tags/JspTag.java,
+	tags/LinkTag.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/tagTests/EndTagTest.java, tests/tagTests/ScriptTagTest.java:
+
+	Remove deprecated method calls:
+	elementBegin()->getStartPosition()
+	elementEnd()->getEndPosition()
+	
+2003-10-31 07:56  derrickoswald
+
+	* src/org/htmlparser/: scanners/AppletScanner.java,
+	scanners/BodyScanner.java, scanners/BulletListScanner.java,
+	scanners/BulletScanner.java, scanners/CompositeTagScanner.java,
+	scanners/DivScanner.java, scanners/FormScanner.java,
+	scanners/FrameSetScanner.java, scanners/HeadScanner.java,
+	scanners/HtmlScanner.java, scanners/LabelScanner.java,
+	scanners/LinkScanner.java, scanners/OptionTagScanner.java,
+	scanners/ScriptScanner.java, scanners/SelectTagScanner.java,
+	scanners/SpanScanner.java, scanners/StyleScanner.java,
+	scanners/TableColumnScanner.java, scanners/TableRowScanner.java,
+	scanners/TableScanner.java, scanners/TextareaTagScanner.java,
+	scanners/TitleScanner.java,
+	tests/scannersTests/CompositeTagScannerTest.java:
+
+	Remove unused nameOfTagToMatch member in CompositeTag.
+	This is the job of getID() on superclass TagScanner.
+	
+2003-10-28 22:31  derrickoswald
+
+	* build.xml, src/org/htmlparser/Parser.java,
+	src/org/htmlparser/lexer/Page.java,
+	src/org/htmlparser/scanners/BaseHrefScanner.java,
+	src/org/htmlparser/scanners/FormScanner.java,
+	src/org/htmlparser/scanners/ImageScanner.java,
+	src/org/htmlparser/scanners/LinkScanner.java,
+	src/org/htmlparser/tags/BaseHrefTag.java,
+	src/org/htmlparser/tags/FormTag.java,
+	src/org/htmlparser/tags/ImageTag.java,
+	src/org/htmlparser/tags/LinkTag.java,
+	src/org/htmlparser/tests/FunctionalTests.java,
+	src/org/htmlparser/tests/scannersTests/BaseHREFScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/ImageScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/LinkScannerTest.java,
+	src/org/htmlparser/tests/tagTests/ImageTagTest.java,
+	src/org/htmlparser/visitors/UrlModifyingVisitor.java:
+
+	Move LinkProcess out of scanners and into Page, untangling A, IMG and BASE scanners.
+	Move form action determination to tag.
+	The scanners have no special actions on behalf of tags anymore.
+	
+2003-10-28 07:54  derrickoswald
+
+	* src/org/htmlparser/: Parser.java,
+	scanners/CompositeTagScanner.java, scanners/FormScanner.java,
+	scanners/ScriptScanner.java, scanners/TagScanner.java,
+	tests/scannersTests/TagScannerTest.java, util/IteratorImpl.java:
+
+	Remove TagScanner cruft.
+	
+2003-10-28 05:31  derrickoswald
+
+	* src/org/htmlparser/: scanners/BodyScanner.java,
+	scanners/BulletScanner.java, scanners/CompositeTagScanner.java,
+	scanners/FormScanner.java, scanners/HeadScanner.java,
+	scanners/LabelScanner.java, scanners/LinkScanner.java,
+	scanners/OptionTagScanner.java, scanners/SelectTagScanner.java,
+	scanners/TableColumnScanner.java, scanners/TableRowScanner.java,
+	scanners/TableScanner.java, scanners/TextareaTagScanner.java,
+	scanners/TitleScanner.java,
+	tests/scannersTests/CompositeTagScannerTest.java:
+
+	Replaced isAllowSelfChildren() using tagEnders set.
+	
+2003-10-27 22:04  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, lexer/Lexer.java,
+	lexer/nodes/NodeFactory.java, scanners/BulletListScanner.java,
+	scanners/BulletScanner.java, scanners/CompositeTagScanner.java,
+	scanners/FormScanner.java, scanners/OptionTagScanner.java,
+	scanners/ScriptScanner.java, scanners/SelectTagScanner.java,
+	scanners/TextareaTagScanner.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/scannersTests/OptionTagScannerTest.java,
+	tests/scannersTests/SelectTagScannerTest.java,
+	tests/scannersTests/TextareaTagScannerTest.java,
+	tests/tagTests/OptionTagTest.java,
+	tests/tagTests/SelectTagTest.java,
+	tests/tagTests/TextareaTagTest.java, util/IteratorImpl.java:
+
+	Moved the recursion from the NodeFactory to the CompositeTagScanner where it belongs.
+	Also needed to kick off the recursion in IteratorImpl.
+	The scnner is obtained in a kludgy way -- just 'til tags know their own scanners.
+	Also fixed the other NodeFactory signatures to have a Page rather than a Lexer.
+	
+2003-10-26 21:18  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, lexer/Page.java,
+	lexer/nodes/TagNode.java, scanners/FormScanner.java,
+	scanners/LinkScanner.java, scanners/TagScanner.java,
+	scanners/TitleScanner.java,
+	tests/scannersTests/AppletScannerTest.java,
+	tests/scannersTests/BaseHREFScannerTest.java,
+	tests/scannersTests/FormScannerTest.java,
+	tests/scannersTests/FrameSetScannerTest.java,
+	tests/scannersTests/ImageScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/scannersTests/ScriptScannerTest.java,
+	tests/scannersTests/StyleScannerTest.java,
+	tests/scannersTests/TagScannerTest.java:
+
+	Some speed improvements; passing tags to evaluate, creating strings without string buffers, etc.
+
 Integration Build 1.4 - 20031026
 --------------------------------
 2003-10-26 12:58  derrickoswald

@@ -19,7 +19,7 @@ writeToFile(visitor.getModifiedResult()); // you have to define writeToFile in y
 
 <p>If you're dealing with frames, you might want to enhance this visitor to be able to modify links on the frame tags. In such a case, override visitTag(), and check if the tag is a <span class="wikiunknown"><u>FrameTag (Note, <span class="wikiunknown"><u>UrlModifyingVisitor will register link and image scanners only, so you will need to register the frame scanner seperately). Then, you can proceed to modify the src attribute, use <i>Tag.setAttribute()
 
-<p>--<a HREF=SomikRaha.html class="wiki">SomikRaha</a>
+<p>--<a href="SomikRaha.html" class="wiki">SomikRaha</a>
 
 
 

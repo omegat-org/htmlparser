@@ -1,4 +1,4 @@
-// HTMLParser Library v1_4_20031026 - A java-based parser for HTML
+// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ public class Translate
     {
         refChar = new HashMap(1000);
 
-        // Portions © International Organization for Standardization 1986
+        // Portions ï¿½ International Organization for Standardization 1986
         // Permission to copy in any form is granted for use with
         // conforming SGML systems and applications as defined in
         // ISO 8879, provided this notice is included in all copies.
@@ -167,7 +167,7 @@ public class Translate
         // <!ENTITY % HTMLsymbol PUBLIC
         // "-//W3C//ENTITIES Symbols//EN//HTML">
         // %HTMLsymbol;
-        // Portions © International Organization for Standardization 1986:
+        // Portions ï¿½ International Organization for Standardization 1986:
         // Permission to copy in any form is granted for use with
         // conforming SGML systems and applications as defined in
         // ISO 8879, provided this notice is included in all copies.
@@ -341,7 +341,7 @@ public class Translate
         // <!ENTITY % HTMLspecial PUBLIC
         // "-//W3C//ENTITIES Special//EN//HTML">
         // %HTMLspecial;
-        // Portions © International Organization for Standardization 1986:
+        // Portions ï¿½ International Organization for Standardization 1986:
         // Permission to copy in any form is granted for use with
         // conforming SGML systems and applications as defined in
         // ISO 8879, provided this notice is included in all copies.
