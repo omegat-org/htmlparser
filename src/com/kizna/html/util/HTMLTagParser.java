@@ -21,6 +21,7 @@ public class HTMLTagParser {
 	public final static int TAG_ILLEGAL_STATE=4;
 	public final static int TAG_IGNORE_DATA_STATE=5;	    
 	public final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
+	public final static String ENCOUNTERED_QUERY_MESSAGE = "HTMLTagParser : Encountered > after a query. Accepting without correction and continuing parsing";
 	private HTMLParserFeedback feedback;
 	private boolean encounteredQuery;
 	public HTMLTagParser(HTMLParserFeedback feedback) {
@@ -80,7 +81,7 @@ public class HTMLTagParser {
 			if (state==TAG_IGNORE_DATA_STATE) {
 				if (encounteredQuery) {
 					encounteredQuery=false;
-					feedback.info("HTMLTagParser : Encountered > within quotes. Accepting without correction and continuing parsing");
+					feedback.info(ENCOUNTERED_QUERY_MESSAGE);
 					return state;
 				}
 				// Now, either this is a valid > input, and should be ignored,
@@ -91,10 +92,17 @@ public class HTMLTagParser {
 				// Correct the tag - assuming its grouped into name value pairs
 				// Remove all inverted commas.
 				correctTag(tag);
-				StringBuffer cursor = new StringBuffer();
-				for (int j=0;j<i;j++) cursor.append(' ');
-				cursor.append('^');
-				feedback.warning("HTMLTagParser : Encountered > inside inverted commas in line \n"+tag.getTagLine()+", location "+i+"\n"+cursor.toString()+"\nAutomatically corrected.");
+			
+				StringBuffer msg = new StringBuffer();
+				msg.append("HTMLTagParser : Encountered > inside inverted commas in line \n");
+				msg.append(tag.getTagLine());
+				msg.append(", location ");
+				msg.append(i);
+				msg.append("\n");
+				for (int j=0;j<i;j++) msg.append(' ');
+				msg.append('^');
+				msg.append("\nAutomatically corrected.");
+				feedback.warning(msg.toString());
 			}
 		}
 		return state;

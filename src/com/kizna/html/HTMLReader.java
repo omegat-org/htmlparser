@@ -183,7 +183,7 @@ public class HTMLReader extends BufferedReader
 			return null;
 		}
 		catch (Exception e) {
-			throw new HTMLParserException("HTMLReader.readElement() : Error occurred while trying to read the next element",e);
+			throw new HTMLParserException("HTMLReader.readElement() : Error occurred while trying to read the next element, at this line :"+line,e);
 		}
 	}
 	/**
