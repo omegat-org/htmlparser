@@ -1,11 +1,11 @@
-Integration build 1.3 - 20030111
+Integration build 1.3 - 20030119
 --------------------------------
 [1] HTMLCompositeTagScanner now takes an array of match strings
 [2] toHTML(HTMLRenderer ...) was replaced by UrlModifyingVisitor
 [3] Fixed NullPointerException in HTMLScriptTag.toString()
 [4] Fixed bug in HTMLStringNode (breaking up empty lines into seperate string nodes)
 
-Integration build 1.3 - 20030104
+Integration build 1.3 - 20030112
 --------------------------------
 [1] Assume charset is correct for JVM's without Charset class to check it
 [2] Beanize the parser
