@@ -194,6 +194,7 @@ public class HTMLParserTestCase extends TestCase {
 			HTMLTag actualTag   = (HTMLTag)actualNode;
 			if (isTagAnXmlEndTag(expectedTag)) {
 				if (!isTagAnXmlEndTag(actualTag)) {
+					assertTagEquals(displayMessage, expectedTag, actualTag);
 					HTMLNode tempNode =
 						actualEnumeration.nextNode();
 					assertTrue(
@@ -210,6 +211,7 @@ public class HTMLParserTestCase extends TestCase {
 						expectedTagName,
 						actualTag.getTagName()
 					);
+					
 				}
 			} else
 			assertTagEquals(displayMessage, expectedTag, actualTag);
@@ -225,10 +227,19 @@ public class HTMLParserTestCase extends TestCase {
 		Iterator i = expectedTag.getAttributes().keySet().iterator();
 		while (i.hasNext()) {
 			String key = (String)i.next();
+			if (key=="/") continue;
 			String expectedValue = 
 				expectedTag.getParameter(key);
 			String actualValue =
 				actualTag.getParameter(key);
+			if (key==HTMLTag.TAGNAME) {
+				expectedValue = HTMLParserUtils.removeChars(expectedValue,'/');
+				actualValue = HTMLParserUtils.removeChars(actualValue,'/');
+				assertEquals("tag name",expectedValue,actualValue);
+				continue;
+			}
+				
+			String expectedHTML = expectedTag.toHTML();
 			assertStringEquals(
 				"\nvalue for key "+key+" in tag "+expectedTag.getTagName()+" expected="+expectedValue+" but was "+actualValue+
 				"\n\nComplete Tag expected:\n"+expectedTag.toHTML()+
