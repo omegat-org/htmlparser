@@ -225,5 +225,123 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
 		assertEquals("Remark Node contents"," -- ",remarkNode.getText());
 	}
-	
+
+
+    // from http://www.w3.org/MarkUp/html-spec/html-spec_3.html
+//Comments
+//
+//To include comments in an HTML document, use a comment declaration.
+//A comment declaration consists of `<!' followed by zero or more comments
+//followed by `>'. Each comment starts with `--' and includes all text up to
+//and including the next occurrence of `--'. In a comment declaration, white
+//space is allowed after each comment, but not before the first comment. The
+//entire comment declaration is ignored. (10)
+//
+//For example:
+//
+//<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+//<HEAD>
+//<TITLE>HTML Comment Example</TITLE>
+//<!-- Id: html-sgml.sgm,v 1.5 1995/05/26 21:29:50 connolly Exp  -->
+//<!-- another -- -- comment -->
+//<!>
+//</HEAD>
+//<BODY>
+//<p> <!- not a comment, just regular old data characters ->
+
+    /**
+     * Test a comment declaration with a comment.
+     */
+    public void testSingleComment ()
+        throws
+            HTMLParserException
+    {
+		createParser(
+              "<HTML>\n"
+            + "<HEAD>\n"
+            + "<TITLE>HTML Comment Test</TITLE>\n"
+            + "</HEAD>\n"
+            + "<BODY>\n"
+            + "<!-- Id: html-sgml.sgm,v 1.5 1995/05/26 21:29:50 connolly Exp  -->\n"
+            + "</BODY>\n"
+            + "</HTML>\n"
+            );
+		parseAndAssertNodeCount(10);
+		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof HTMLRemarkNode);
+		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[7];
+		assertEquals("Remark Node contents"," Id: html-sgml.sgm,v 1.5 1995/05/26 21:29:50 connolly Exp  ",remarkNode.getText());
+    }
+    
+    /**
+     * Test a comment declaration with two comments.
+     */
+    public void testDoubleComment ()
+        throws
+            HTMLParserException
+    {
+		createParser(
+              "<HTML>\n"
+            + "<HEAD>\n"
+            + "<TITLE>HTML Comment Test</TITLE>\n"
+            + "</HEAD>\n"
+            + "<BODY>\n"
+            + "<!-- another -- -- comment -->\n"
+            + "</BODY>\n"
+            + "</HTML>\n"
+            );
+		parseAndAssertNodeCount(10);
+		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof HTMLRemarkNode);
+		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[7];
+		assertEquals("Remark Node contents"," another -- -- comment ",remarkNode.getText());
+    }
+
+    /**
+     * Test a comment declaration without any comments.
+     */
+    public void testEmptyComment ()
+        throws
+            HTMLParserException
+    {
+		createParser(
+              "<HTML>\n"
+            + "<HEAD>\n"
+            + "<TITLE>HTML Comment Test 'testEmptyComment'</TITLE>\n"
+            + "</HEAD>\n"
+            + "<BODY>\n"
+            + "<!>\n"
+            + "</BODY>\n"
+            + "</HTML>\n"
+            );
+		parseAndAssertNodeCount(10);
+		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof HTMLRemarkNode);
+		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[7];
+		assertEquals("Remark Node contents","",remarkNode.getText());
+    }
+
+//    /**
+//     * Test what the specification calls data characters.
+//     * Actually, no browser I've tried handles this correctly (as text).
+//     * Some handle it as a comment and others handle it as a tag.
+//     * So for now we leave this test case out.
+//     */
+//    public void testNotAComment ()
+//        throws
+//            HTMLParserException
+//    {
+//		createParser(
+//              "<HTML>\n"
+//            + "<HEAD>\n"
+//            + "<TITLE>HTML Comment Test 'testNotAComment'</TITLE>\n"
+//            + "</HEAD>\n"
+//            + "<BODY>\n"
+//            + "<!- not a comment, just regular old data characters ->\n"
+//            + "</BODY>\n"
+//            + "</HTML>\n"
+//            );
+//		parseAndAssertNodeCount(10);
+//		assertTrue("Node should not be a HTMLRemarkNode",!(node[7] instanceof HTMLRemarkNode));
+//		assertTrue("Node should be a HTMLStringNode but was "+node[7],node[7] instanceof HTMLStringNode);
+//		HTMLStringNode stringNode = (HTMLStringNode)node[7];
+//		assertEquals("String Node contents","<!- not a comment, just regular old data characters ->\n",stringNode.getText());
+//    }
 }
