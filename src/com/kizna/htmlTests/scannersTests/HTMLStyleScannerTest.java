@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -167,7 +167,7 @@ public class HTMLStyleScannerTest extends junit.framework.TestCase
 	 	assertEquals("Number of nodes expected",5,i);
 		assertTrue(node[4] instanceof HTMLStyleTag);
 		HTMLStyleTag styleTag = (HTMLStyleTag)node[4];
-		String expectedCode = "<!--\r\n\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\n"+
+		String expectedCode = "<!--\r\n\r\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\r\n"+
 		"//\r\n-->";
 		assertEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
 	}

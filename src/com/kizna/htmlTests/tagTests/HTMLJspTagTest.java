@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -122,14 +122,14 @@ public class HTMLJspTagTest extends TestCase
 		// The third node should be an HTMLJspTag
 		assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof HTMLJspTag);
 		HTMLJspTag tag2 = (HTMLJspTag)node[2];
-		String expected = "\n"+
-			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
-			"    if(request.getParameter(\"marker\") == null)\n"+
-			"        // initialize a pseudo-property\n"+
-			"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
-			"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
-			"    else \n"+
-			"        if(transfer.validate(request))\n"+
+		String expected = "\r\n"+
+			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\r\n"+
+			"    if(request.getParameter(\"marker\") == null)\r\n"+
+			"        // initialize a pseudo-property\r\n"+
+			"        transfer.set(\"days\", java.util.Arrays.asList(\r\n"+
+			"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\r\n"+
+			"    else \r\n"+
+			"        if(transfer.validate(request))\r\n"+
 			"            ";
 		assertEquals("Contents of the tag",expected,tag2.getText());
 		
@@ -188,19 +188,19 @@ public class HTMLJspTagTest extends TestCase
 		// The third node should be an HTMLJspTag
 		assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof HTMLJspTag);
 		HTMLJspTag tag2 = (HTMLJspTag)node[2];
-		String expected = "<%\n"+
-			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
-			"    if(request.getParameter(\"marker\") == null)\n"+
-			"        // initialize a pseudo-property\n"+
-			"        transfer.set(\"days\", java.util.Arrays.asList(\n"+
-			"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
-			"    else \n"+
-			"        if(transfer.validate(request))\n"+
+		String expected = "<%\r\n"+
+			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\r\n"+
+			"    if(request.getParameter(\"marker\") == null)\r\n"+
+			"        // initialize a pseudo-property\r\n"+
+			"        transfer.set(\"days\", java.util.Arrays.asList(\r\n"+
+			"            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\r\n"+
+			"    else \r\n"+
+			"        if(transfer.validate(request))\r\n"+
 			"            %>";
 		assertEquals("Raw String of the second JSP tag",expected,tag2.toHTML());
 		assertTrue("Node 4 should be an HTMLJspTag",node[4] instanceof HTMLJspTag);
 		HTMLJspTag tag4 = (HTMLJspTag)node[4];
-		expected = "<%\n"+ 
+		expected = "<%\r\n"+ 
 			"%>";
 		assertEquals("Raw String of the fourth JSP tag",expected,tag4.toHTML());
 		

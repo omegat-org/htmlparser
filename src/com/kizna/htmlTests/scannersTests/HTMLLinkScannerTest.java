@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -259,7 +259,9 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		assertEquals("There should be 8 nodes identified",8,i);
 		assertTrue("Seventh node should be a link tag",node[6] instanceof HTMLLinkTag);
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[6];
-		assertEquals("Link URL of link tag","http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/technical.html",linkTag.getLink());
+		String exp = new String("http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+"nical.html");
+		assertEquals("Length of link tag",exp.length(), linkTag.getLink().length());
+		assertEquals("Link URL of link tag",exp,linkTag.getLink());
 		assertEquals("Link Text of link tag"," Journalism 3.0",linkTag.getLinkText());
 		assertTrue("Eight node should be a string node",node[7] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)node[7];

@@ -73,6 +73,9 @@ public class HTMLTag extends HTMLNode
 	public void append(char ch) {
 		tagContents.append(ch);
 	}
+	public void append(String ch) {
+		tagContents.append(ch);
+	}
 	protected static int automataIllegalState(String input, int state, int i, char ch) {
 		if (ch=='/' && i>0 && input.charAt(i-1)=='<')
 		{
@@ -334,7 +337,7 @@ public java.lang.String getTagLine() {
 				nextLine = ">";
 			} else {
 				// This means this is just a new line, hence add the new line character
-				tag.append('\n');
+				tag.append(lineSeparator);
 			}
 
 			// We need to continue parsing to the next line

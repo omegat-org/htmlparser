@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -178,7 +178,7 @@ public class HTMLRemarkNode extends HTMLNode
 			{
 				// We need to continue parsing to the next line
 				//input = reader.getNextLine();
-				tagContents.append("\n");
+				tagContents.append(lineSeparator);
 				do {
 					input = reader.getNextLine();		
 				}

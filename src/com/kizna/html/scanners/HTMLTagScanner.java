@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -198,5 +198,21 @@ public static boolean isXMLTagFound(HTMLNode node, String tagName) {
     }
     return newString.toString();
   }
+  public String removeChars(String s,String occur)  {
+    StringBuffer newString = new StringBuffer();
+    char ch;
+    int index;
+    do {
+    	index = s.indexOf(occur);
+    	if (index!=-1) {
+    		newString.append(s.substring(0,index));
+    		s=s.substring(index+occur.length());
+    	}
+    }
+    while (index!=-1);
+    newString.append(s);
+    return newString.toString();
+  }
+
 
 }

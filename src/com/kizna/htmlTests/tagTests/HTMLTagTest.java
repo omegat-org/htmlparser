@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -93,7 +93,7 @@ public void testBodyTagBug1() throws HTMLParserException {
 	// The node should be an HTMLTag
 	assertTrue("Node should be a HTMLTag",node[0] instanceof HTMLTag);
 	HTMLTag tag = (HTMLTag)node[0];
-	assertEquals("Contents of the tag","BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\nvLink=#551a8b",tag.getText());
+	assertEquals("Contents of the tag","BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\r\nvLink=#551a8b",tag.getText());
 }
     public void testCheckValidity() {
     	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
@@ -139,7 +139,7 @@ public void testLargeTagBug() throws HTMLParserException {
 	// The node should be an HTMLTag
 	assertTrue("Node should be a HTMLTag",node[0] instanceof HTMLTag);
 	HTMLTag tag = (HTMLTag)node[0];
-	assertEquals("Contents of the tag","MYTAG abcd\nefgh\nijkl\nmnop",tag.getText());
+	assertEquals("Contents of the tag","MYTAG abcd\r\nefgh\r\nijkl\r\nmnop",tag.getText());
 	
 		
 }
@@ -466,7 +466,7 @@ public void testToHTML() throws HTMLParserException {
 	// The node should be an HTMLTag
 	assertTrue("1st Node should be a HTMLTag",node[0] instanceof HTMLTag);
 	HTMLTag tag = (HTMLTag)node[0];
-	assertEquals("Raw String of the tag","<MYTAG abcd\nefgh\nijkl\nmnop>",tag.toHTML());
+	assertEquals("Raw String of the tag","<MYTAG abcd\r\nefgh\r\nijkl\r\nmnop>",tag.toHTML());
 	assertTrue("2nd Node should be a HTMLTag",node[1] instanceof HTMLTag);
 	assertTrue("5th Node should be a HTMLTag",node[4] instanceof HTMLTag);
 	tag = (HTMLTag)node[1];

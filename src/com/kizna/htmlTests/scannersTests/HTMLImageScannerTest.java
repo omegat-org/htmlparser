@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -223,10 +223,11 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	}
 	public void testImageWithNewLineChars() throws HTMLParserException
 	{
-		String testHTML = "<IMG SRC=\"../abc/def/Hello \nWorld.jpg\">";
+		String testHTML = "<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
 		HTMLParser parser = new HTMLParser(reader);
+		parser.setLineSeparator("\r\n");
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
@@ -237,7 +238,9 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		assertEquals("Number of nodes identified should be 1",1,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Expected Image","http://www.yahoo.com/abc/def/Hello World.jpg",imageTag.getImageLocation());		
+		String exp = new String("http://www.yahoo.com/abc/def/Hello World.jpg");
+		//assertEquals("Length of image",exp.length(),imageTag.getImageLocation().length());
+		assertStringEquals("Expected Image",exp,imageTag.getImageLocation());		
 	}
 	/**
 	 * Test case to reproduce bug reported by Annette
@@ -377,4 +380,18 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		assertEquals("Alt","",imageTag.getParameter("ALT"));
 		
 	}
+	public void assertStringEquals(String message,String s1,String s2) {
+		for (int i=0;i<s1.length();i++) {
+			if (s1.charAt(i)!=s2.charAt(i)) {
+				assertTrue(message+
+					" \nMismatch of strings at char posn "+i+
+					" \nString 1 upto mismatch = "+s1.substring(0,i)+
+					" \nString 2 upto mismatch = "+s2.substring(0,i)+
+					" \nString 1 mismatch character = "+s1.charAt(i)+", code = "+(int)s1.charAt(i)+
+					" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i)+
+					" \nComplete String 1 = "+s1+
+					" \nComplete String 2 = "+s2,false);
+			}
+		}
+	}    	
 }

@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -149,6 +149,15 @@ public class HTMLTagScannerTest extends junit.framework.TestCase
 			public boolean evaluate(String s,HTMLTagScanner previousOpenScanner) { return false; }
 		};
 		String result = scanner.removeChars(test,'\n');
+		assertEquals("Removing Chars","helloworld\tqsdsds",result);
+	}
+	public void testRemoveChars2() {
+		String test = "hello\r\nworld\r\n\tqsdsds";
+		HTMLTagScanner scanner = new HTMLTagScanner() { 
+			public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) { return null;}
+			public boolean evaluate(String s,HTMLTagScanner previousOpenScanner) { return false; }
+		};
+		String result = scanner.removeChars(test,"\r\n");
 		assertEquals("Removing Chars","helloworld\tqsdsds",result);
 	}
 	/**

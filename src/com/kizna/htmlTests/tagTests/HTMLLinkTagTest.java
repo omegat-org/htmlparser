@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -197,6 +197,7 @@ public void testLinkNodeBug5() throws HTMLParserException
 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
 		node[i++] = e.nextHTMLNode();
+		System.out.println(i-1 + " : " + node[i-1].toHTML());
 	}
 			
 	assertEquals("There should be 6 nodes identified",new Integer(6),new Integer(i));
@@ -413,8 +414,8 @@ public void testToPlainTextString() throws HTMLParserException {
 		assertEquals("Link Raw Text","<A HREF='mailto:somik@yahoo.com'>hello</A>",linkTag.toHTML());
 		assertTrue("Eighth Node should be a HTMLLinkTag",node[7] instanceof HTMLLinkTag);
 		linkTag = (HTMLLinkTag)node[7];
-		assertEquals("Link Raw Text","<a \n"+
-			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
+		assertEquals("Link Raw Text","<a \r\n"+
+			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\r\n"+
 			"nical.html\"> Journalism 3.0</A>",linkTag.toHTML());
 	}
 }

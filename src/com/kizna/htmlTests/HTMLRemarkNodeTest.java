@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020826 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -120,7 +120,7 @@ public void testRemarkNodeBug() throws HTMLParserException
 	// The sixth node should be a HTMLRemarkNode 
 	assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 	remarkNode = (HTMLRemarkNode)node[5];
-	assertEquals("Text of the remarkNode #6","\n   Whats gonna happen now ?\n",remarkNode.getText());
+	assertEquals("Text of the remarkNode #6","\r\n   Whats gonna happen now ?\r\n",remarkNode.getText());
 }
 /**
  * Insert the method's description here.
@@ -154,7 +154,7 @@ public void testToPlainTextString() throws HTMLParserException {
 	// The sixth node should be a HTMLRemarkNode 
 	assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 	remarkNode = (HTMLRemarkNode)node[5];
-	assertEquals("Plain Text of the remarkNode #6","\n   Whats gonna happen now ?\n",remarkNode.getText());	
+	assertEquals("Plain Text of the remarkNode #6","\r\n   Whats gonna happen now ?\r\n",remarkNode.getText());	
 	
 }
 	public void testToRawString()  throws HTMLParserException {
@@ -185,7 +185,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		// The sixth node should be a HTMLRemarkNode 
 		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 		remarkNode = (HTMLRemarkNode)node[5];
-		assertEquals("Raw String of the remarkNode #6","<!--\r\n\n   Whats gonna happen now ?\n\r\n-->",remarkNode.toHTML());			
+		assertEquals("Raw String of the remarkNode #6","<!--\r\n\r\n   Whats gonna happen now ?\r\n\r\n-->",remarkNode.toHTML());			
 	}
 	public void testNonRemarkNode() throws HTMLParserException {
 		String testHTML = new String("&nbsp;<![endif]>");
@@ -230,7 +230,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
-		assertEquals("Expected contents","\n",remarkNode.getText());
+		assertEquals("Expected contents","\r\n",remarkNode.getText());
 		
 	}
 	/**
