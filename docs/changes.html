@@ -1,3 +1,14 @@
+Integration Build 1.3 - 20030420
+--------------------------------
+[1] Fixed bug #722046 StringExtractor.extractStrings misses most of the text,
+    change to use a StringBean to dig into tables.
+[2] add checking in Translate to eliminate bug #722835 StringIndexOutOfBoundsException exception
+[3] added line-break condition in assertXmlEquals
+[4] added fit testing framework
+[5] added parent association for each node
+[6] added digupStringNode() and findPositionOf(Node) to CompositeTag
+[7] Fixed bug 723835 in LinkExtractor
+
 Integration Build 1.3 - 20030413
 --------------------------------
 [1] reimplement StringBean as NodeVisitor, testStringBeanListener now succeeds
