@@ -31,6 +31,7 @@ package org.htmlparser.tests.parserHelperTests;
 import org.htmlparser.parserHelper.CompositeTagScannerHelper;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.ParserException;
 
 /**
  * @author Somik Raha
@@ -51,27 +52,23 @@ public class CompositeTagScannerHelperTest extends ParserTestCase {
     }
 
     protected void setUp() {
-//        helper =
-//            new CompositeTagScannerHelper(null,null,null,null,null,false);
     }
 
-    public void testIsXmlEndTagForRealXml() {
-        fail ("not implemented");
-//        Tag tag = new Tag(
-//            new TagData(
-//                0,0,"something/",""
-//            )
-//        );
-//        assertTrue("should be an xml end tag",helper.isXmlEndTag(tag));
+    public void testIsXmlEndTagForRealXml () throws ParserException
+    {
+        String html = "<something/>";
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue("should be a tag", node[0] instanceof Tag);
+        assertTrue("should be an xml end tag", ((Tag)node[0]).isEmptyXmlTag ());
     }
 
-    public void testIsXmlEndTagForFalseMatches() {
-        fail ("not implemented");
-//        Tag tag = new Tag(
-//            new TagData(
-//                0,0,"a href=http://someurl.com/",""
-//            )
-//        );
-//        assertFalse("should not be an xml end tag",helper.isXmlEndTag(tag));
+    public void testIsXmlEndTagForFalseMatches () throws ParserException
+    {
+        String html = "<a href=http://someurl.com/>";
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue("should be a tag", node[0] instanceof Tag);
+        assertTrue("should not be an xml end tag", !((Tag)node[0]).isEmptyXmlTag ());
     }
 }

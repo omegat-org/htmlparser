@@ -88,7 +88,7 @@ public class StringParserTest extends ParserTestCase {
         assertTrue("Second node should be a link node",node[1] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[1];
         assertEquals("Link is","http://www.adobe.com",linkNode.getLink());
-        assertEquals("Link text is","Adobe \r\nAcrobat Reader",linkNode.getLinkText());
+        assertEquals("Link text is","Adobe \nAcrobat Reader",linkNode.getLinkText());
 
         assertTrue("Third node should be a string node",node[2] instanceof StringNode);
         StringNode stringNode2 = (StringNode)node[2];

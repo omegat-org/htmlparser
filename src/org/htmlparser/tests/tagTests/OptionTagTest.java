@@ -56,9 +56,9 @@ public class OptionTagTest extends ParserTestCase
                                     "<OPTION>\nIndiatimes\n</OPTION>"+
                                     "<OPTION>\nRediff\n</OPTION>"+
                                     "<OPTION>Cricinfo" +
-                                    "<OPTION value=\"Microsoft Passport\">"
-//                                  "<OPTION value=\"AOL\"><SPAN>AOL</SPAN></OPTION>" +
-//                                  "<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL>"
+                                    "<OPTION value=\"Microsoft Passport\">"+
+                                    "<OPTION value=\"AOL\"><SPAN>AOL</SPAN></OPTION>" +
+                                    "<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL>"
                                     );
 
     public OptionTagTest(String name)
@@ -70,7 +70,7 @@ public class OptionTagTest extends ParserTestCase
         super.setUp();
         createParser(testHTML);
         parser.addScanner(new OptionTagScanner("-option", new Stack ()));
-        parseAndAssertNodeCount(11);
+        parseAndAssertNodeCount(13);
     }
 
     public void testToHTML() throws ParserException
@@ -104,11 +104,11 @@ public class OptionTagTest extends ParserTestCase
         assertStringEquals("HTML String","<OPTION>Cricinfo</OPTION>",OptionTag.toHtml());
         OptionTag = (OptionTag) node[10];
         assertStringEquals("HTML String","<OPTION VALUE=\"Microsoft Passport\"></OPTION>",OptionTag.toHtml());
-/*      OptionTag = (OptionTag) node[11];
+        OptionTag = (OptionTag) node[11];
         assertStringEquals("HTML String","<OPTION VALUE=\"AOL\"><SPAN>AOL</SPAN></OPTION>",OptionTag.toHtml());
         OptionTag = (OptionTag) node[12];
         assertStringEquals("HTML String","<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL></OPTION>",OptionTag.toHtml());
-*/  }
+    }
 
     public void testToString() throws ParserException
     {
@@ -126,22 +126,22 @@ public class OptionTagTest extends ParserTestCase
         OptionTag = (OptionTag) node[3];
         assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Yahoo!\n",OptionTag.toString());
         OptionTag = (OptionTag) node[4];
-        assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Hotmail\n",OptionTag.toString());
+        assertEquals("HTML Raw String","OPTION VALUE: null TEXT: \nHotmail\n",OptionTag.toString());
         OptionTag = (OptionTag) node[5];
         assertEquals("HTML Raw String","OPTION VALUE: ICQ Messenger TEXT: \n",OptionTag.toString());
         OptionTag = (OptionTag) node[6];
         assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Mailcity\n\n",OptionTag.toString());
         OptionTag = (OptionTag) node[7];
-        assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Indiatimes\n\n",OptionTag.toString());
+        assertEquals("HTML Raw String","OPTION VALUE: null TEXT: \nIndiatimes\n\n",OptionTag.toString());
         OptionTag = (OptionTag) node[8];
-        assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Rediff\n\n",OptionTag.toString());
+        assertEquals("HTML Raw String","OPTION VALUE: null TEXT: \nRediff\n\n",OptionTag.toString());
         OptionTag = (OptionTag) node[9];
         assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Cricinfo\n",OptionTag.toString());
         OptionTag = (OptionTag) node[10];
         assertEquals("HTML Raw String","OPTION VALUE: Microsoft Passport TEXT: \n",OptionTag.toString());
-/*      OptionTag = (OptionTag) node[11];
+        OptionTag = (OptionTag) node[11];
         assertEquals("HTML Raw String","OPTION VALUE: AOL TEXT: AOL\n",OptionTag.toString());
         OptionTag = (OptionTag) node[12];
         assertEquals("HTML Raw String","OPTION VALUE: Time Warner TEXT: Time Warner AOL Inc.\n",OptionTag.toString());
-*/  }
+    }
 }

@@ -116,12 +116,17 @@ public abstract class CompositeTag extends Tag {
         for (SimpleNodeIterator e = children (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
-            sb.append (node.toHtml ());
+            // eliminate virtual tags
+//            if (!(node.getStartPosition () == node.getEndPosition ()))
+                sb.append (node.toHtml ());
         }
     }
 
-    protected void putEndTagInto(StringBuffer sb) {
-        sb.append(endTag.toHtml());
+    protected void putEndTagInto(StringBuffer sb)
+    {
+        // eliminate virtual tags
+//        if (!(endTag.getStartPosition () == endTag.getEndPosition ()))
+            sb.append(endTag.toHtml());
     }
 
     public String toHtml() {

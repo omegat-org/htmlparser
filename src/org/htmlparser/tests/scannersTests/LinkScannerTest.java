@@ -83,8 +83,9 @@ public class LinkScannerTest extends ParserTestCase
         assertEquals("Text of the StringNode","Site Comments?",stringNode.getText());
         assertTrue("Third node should be a tag",node[2] instanceof Tag);
         assertTrue("Fourth node should be a link",node[3] instanceof LinkTag);
-        assertTrue("Fifth node should be a link",node[4] instanceof LinkTag);
-        assertTrue("Sixth node should be a Tag",node[5] instanceof Tag);
+        // LinkScanner.evaluate() says anythin less than 5 characters isn't a link:
+        assertTrue("Fifth node should be a tag",node[4] instanceof Tag); 
+        assertTrue("Sixth node should be a tag",node[5] instanceof Tag);
     }
 
     /**

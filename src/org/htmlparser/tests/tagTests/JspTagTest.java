@@ -66,41 +66,43 @@ public class JspTagTest extends ParserTestCase
      */
     public void testJspTag() throws ParserException
     {
-        String contents = "jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/";
-        String jsp = "<" + contents + ">";
-        String contents2 = "%\n"+
-            "    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
-            "    if(request.getParameter(\"marker\") == null)\n"+
-            "        // initialize a pseudo-property\n"+
-            "        transfer.set(\"days\", java.util.Arrays.asList(\n"+
-            "            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
-            "    else \n"+
-            "        if(transfer.validate(request))\n"+
-            "            %";
-        createParser(
-            "<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
-            jsp + "\n" +
-            "<" + contents2 + ">\n<jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
-            "%>");
-        Parser.setLineSeparator("\r\n");
-        // Register the Jsp Scanner
-        parser.addScanner(new JspScanner("-j"));
-        parseAndAssertNodeCount(8);
-        // The first node should be an JspTag
-        assertTrue("Node 1 should be an JspTag",node[0] instanceof JspTag);
-        JspTag tag = (JspTag)node[0];
-        assertStringEquals("Contents of the tag","%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %",tag.getText());
+        if (JSP_TESTS_ENABLED)
+        {
+            String contents = "jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/";
+            String jsp = "<" + contents + ">";
+            String contents2 = "%\n"+
+                "    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
+                "    if(request.getParameter(\"marker\") == null)\n"+
+                "        // initialize a pseudo-property\n"+
+                "        transfer.set(\"days\", java.util.Arrays.asList(\n"+
+                "            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
+                "    else \n"+
+                "        if(transfer.validate(request))\n"+
+                "            %";
+            createParser(
+                "<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
+                jsp + "\n" +
+                "<" + contents2 + ">\n<jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
+                "%>");
+            Parser.setLineSeparator("\r\n");
+            // Register the Jsp Scanner
+            parser.addScanner(new JspScanner("-j"));
+            parseAndAssertNodeCount(8);
+            // The first node should be an JspTag
+            assertTrue("Node 1 should be an JspTag",node[0] instanceof JspTag);
+            JspTag tag = (JspTag)node[0];
+            assertStringEquals("Contents of the tag","%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %",tag.getText());
 
-        // The second node should be a normal tag
-        assertTrue("Node 3 should be a normal Tag",node[2] instanceof Tag);
-        Tag htag = (Tag)node[2];
-        assertStringEquals("Contents of the tag",contents,htag.getText());
-        assertStringEquals("html",jsp,htag.toHtml());
-        // The third node should be an JspTag
-        assertTrue("Node 5 should be an JspTag",node[4] instanceof JspTag);
-        JspTag tag2 = (JspTag)node[4];
-        assertEquals("Contents of the tag",contents2,tag2.getText());
-
+            // The second node should be a normal tag
+            assertTrue("Node 3 should be a normal Tag",node[2] instanceof Tag);
+            Tag htag = (Tag)node[2];
+            assertStringEquals("Contents of the tag",contents,htag.getText());
+            assertStringEquals("html",jsp,htag.toHtml());
+            // The third node should be an JspTag
+            assertTrue("Node 5 should be an JspTag",node[4] instanceof JspTag);
+            JspTag tag2 = (JspTag)node[4];
+            assertStringEquals("Contents of the tag",contents2,tag2.getText());
+        }
     }
 
     /**

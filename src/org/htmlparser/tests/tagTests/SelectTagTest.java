@@ -58,6 +58,17 @@ public class SelectTagTest extends ParserTestCase
                                     "<option value=\"Niece\">Niece\n" +
                                     "</select>"
                                     );
+    private String correctedHTML = new String(
+                                    "<SELECT name=\"Nominees\">\n"+
+                                    "<option value=\"Spouse\">Spouse</option>"+
+                                    "<option value=\"Father\"></option>\n"+
+                                    "<option value=\"Mother\">Mother\n</option>" +
+                                    "<option value=\"Son\">\nSon\n</option>"+
+                                    "<option value=\"Daughter\">\nDaughter\n</option>"+
+                                    "<option value=\"Nephew\">\nNephew</option>\n"+
+                                    "<option value=\"Niece\">Niece\n</option>" +
+                                    "</select>"
+                                    );
     private SelectTag selectTag;
 
     public SelectTagTest(String name)
@@ -77,7 +88,7 @@ public class SelectTagTest extends ParserTestCase
 
     public void testToHTML() throws ParserException
     {
-        assertStringEquals("HTML String",testHTML, selectTag.toHtml());
+        assertStringEquals("HTML String", correctedHTML, selectTag.toHtml());
     }
 
 
@@ -101,6 +112,6 @@ public class SelectTagTest extends ParserTestCase
         OptionTag [] optionTags = selectTag.getOptionTags();
         assertEquals("option tag array length",7,optionTags.length);
         assertEquals("option tag 1","Spouse",optionTags[0].getOptionText());
-        assertEquals("option tag 7","Niece\r\n",optionTags[6].getOptionText());
+        assertEquals("option tag 7","Niece\n",optionTags[6].getOptionText());
     }
 }
