@@ -67,6 +67,7 @@ public static TestSuite suite() {
 	suite.addTest(HTMLStyleTagTest.suite());
 	suite.addTest(HTMLAppletTagTest.suite());
 	suite.addTest(HTMLFrameTagTest.suite());
+	suite.addTest(HTMLFrameSetTagTest.suite());	
 	return suite; 
 }
 }

@@ -35,6 +35,8 @@ package com.kizna.html.tags;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import com.kizna.html.HTMLNode;
+
 /**
  * Identifies an frame tag
  */
@@ -46,9 +48,9 @@ public class HTMLFrameSetTag extends HTMLTag
 	protected String frameURL;
    	protected String frameName;
    	protected Vector frames;
-	public HTMLFrameSetTag(int frameSetBegin, int frameSetEnd,String tagLine,Vector frames)
+	public HTMLFrameSetTag(int frameSetBegin, int frameSetEnd,String frameSetContents,String tagLine,Vector frames)
 	{
-		super(frameSetBegin,frameSetEnd,"",tagLine);
+		super(frameSetBegin,frameSetEnd,frameSetContents,tagLine);
 		this.frameURL = frameURL;
       	this.frameName = frameName;
       	this.frames = frames;
@@ -95,6 +97,24 @@ public class HTMLFrameSetTag extends HTMLTag
 	 */
 	public void setFrames(Vector frames) {
 		this.frames = frames;
+	}
+
+
+	/**
+	 * @see com.kizna.html.HTMLNode#toHTML()
+	 */
+	public String toHTML() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(super.toHTML());
+		HTMLNode node=null,prevNode=this;
+		for (Enumeration e = frames.elements();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			if (prevNode.elementEnd()>node.elementBegin()) sb.append("\r\n");
+			sb.append(node.toHTML());
+		} 
+		if (node.elementEnd()>elementEnd()) sb.append("\r\n");
+		sb.append("</FRAMESET>");
+		return sb.toString();
 	}
 
 

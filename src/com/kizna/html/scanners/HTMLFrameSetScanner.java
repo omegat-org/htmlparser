@@ -92,7 +92,7 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 			}
 		}
 		while(!endFrameSetFound);
-		HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,currentLine,frameVector);
+		HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector);
 		frameSetTag.setThisScanner(this);
 		frameSetTag.setParsed(tag.getParsed());
 		restoreScanners(reader, tempScannerVector);
