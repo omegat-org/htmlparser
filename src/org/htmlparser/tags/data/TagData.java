@@ -33,6 +33,7 @@ public class TagData {
 	private int tagEnd;
 	private String tagContents;
 	private String tagLine;
+	private String urlBeingParsed;
 	
 	public TagData(int tagBegin, int tagEnd, String tagContents,String tagLine) {
 		this.tagBegin = tagBegin;
@@ -40,6 +41,15 @@ public class TagData {
 		this.tagContents = tagContents;
 		this.tagLine = tagLine;	
 	}
+	
+	public TagData(int tagBegin, int tagEnd, String tagContents,String tagLine, String urlBeingParsed) {
+		this.tagBegin = tagBegin;
+		this.tagEnd   = tagEnd;
+		this.tagContents = tagContents;
+		this.tagLine = tagLine;	
+		this.urlBeingParsed = urlBeingParsed;
+	}
+	
 	public int getTagBegin() {
 		return tagBegin;
 	}
@@ -58,6 +68,14 @@ public class TagData {
 
 	public void setTagContents(String tagContents) {
 		this.tagContents = tagContents;
+	}
+
+	public String getUrlBeingParsed() {
+		return urlBeingParsed;
+	}
+
+	public void setUrlBeingParsed(String baseUrl) {
+		this.urlBeingParsed = baseUrl;
 	}
 
 }

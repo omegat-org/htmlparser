@@ -158,7 +158,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 	protected void childNodeEncountered(Node node) {
 	}
 
-	protected abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData);
+	protected abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
 
 	protected EndTag createEndTagFor(Tag tag) {
 		return new EndTag(

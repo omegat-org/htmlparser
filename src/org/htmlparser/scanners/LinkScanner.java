@@ -75,15 +75,11 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createLinkTag(TagData tagData, CompositeTagData compositeTagData, String url, Node node) throws ParserException {
-		int linkEnd;
-		// The link has been completed
-		// Create the link object and return it
-		// HTMLLinkNode Constructor got one extra parameter 
-		// Kaarle Kaila 23.10.2001
-		linkEnd = node.elementEnd();
-		
-		String link = extractLink(compositeTagData.getStartTag(),url);
+	protected Tag createTag(
+		TagData tagData,
+		CompositeTagData compositeTagData) throws ParserException {
+
+		String link = extractLink(compositeTagData.getStartTag(),tagData.getUrlBeingParsed());
 		int mailto = link.indexOf("mailto");
 		boolean mailLink=false;
 		if (mailto==0)
@@ -116,6 +112,7 @@ public class LinkScanner extends CompositeTagScanner
 		linkTag.setThisScanner(this);
 		return linkTag;
 	}
+	
 	/**
 	 * Template Method, used to decide if this scanner can handle the Link tag type. If 
 	 * the evaluation returns true, the calling side makes a call to scan().
@@ -267,16 +264,19 @@ public class LinkScanner extends CompositeTagScanner
 			{
 				
 				previousOpenScanner = null;
-				return createLinkTag(
+				return createTag(
 					new TagData(
-						linkBegin, node.elementEnd(),tagContents, currentLine
+						linkBegin, 
+						node.elementEnd(),
+						tagContents, 
+						currentLine,
+						url
 					),
 					new CompositeTagData(
 						startTag, 
 						endTag,
 						nodeVector
-					),
-					url,node 
+					) 
 				);
 			}
 			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
@@ -302,12 +302,6 @@ public class LinkScanner extends CompositeTagScanner
 	 */
 	public String [] getID() {
 		return MATCH_NAME;
-	}
-
-	protected Tag createTag(
-		TagData tagData,
-		CompositeTagData compositeTagData) {
-		return null;
 	}
 
 	protected boolean isTagToBeEndedFor(String tmp) {
