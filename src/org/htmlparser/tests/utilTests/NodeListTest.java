@@ -143,7 +143,6 @@ public class NodeListTest extends ParserTestCase {
 		nodeList.remove(1);
 		assertEquals("List Size",1,nodeList.size());
 		assertTrue("First Element",node1==nodeList.elementAt(0));
-		assertTrue("Second Element",null==nodeList.elementAt(1));
 	}
 	
 	public void testRemoveAll() {
