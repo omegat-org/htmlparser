@@ -1,5 +1,3 @@
-package com.kizna.htmlTests;
-
 // HTMLParser Library v1.1 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
@@ -32,7 +30,7 @@ package com.kizna.htmlTests;
 // Fax : +81-3-5449-4870
 // Website : www.kizna.com
 
-
+package com.kizna.htmlTests;
 import junit.framework.TestSuite;
 /**
  * Insert the type's description here.

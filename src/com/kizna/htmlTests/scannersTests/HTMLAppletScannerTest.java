@@ -1,6 +1,4 @@
-package com.kizna.htmlTests.scannersTests;
-
-// HTMLParser Library v1.04 - A java-based parser for HTML
+// HTMLParser Library v1.1 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -32,6 +30,7 @@ package com.kizna.htmlTests.scannersTests;
 // Fax : +81-3-5449-4870
 // Website : www.kizna.com
 
+package com.kizna.htmlTests.scannersTests;
 import java.io.BufferedReader;
 import java.util.Hashtable;
 import java.util.Enumeration;

@@ -1,6 +1,4 @@
-package com.kizna.html.tags;
-
-// HTMLParser Library v1.04 - A java-based parser for HTML
+// HTMLParser Library v1.1 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -40,7 +38,8 @@ package com.kizna.html.tags;
 // Email : afogleson@crunchytech.com
 // Voice : (703) 469-2032
 // Pager : (800) 826-3181
- 
+
+package com.kizna.html.tags; 
 import com.kizna.html.HTMLNode; 
 /**
  * The HTML Document Declaration Tag can identify &lt;!DOCTYPE&gt; tags

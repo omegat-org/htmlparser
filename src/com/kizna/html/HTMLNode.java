@@ -1,5 +1,3 @@
-package com.kizna.html;
-
 // HTMLParser Library v1.1 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
@@ -32,7 +30,7 @@ package com.kizna.html;
 // Fax : +81-3-5449-4870
 // Website : www.kizna.com
 
-
+package com.kizna.html;
 /**
  * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)
  */
