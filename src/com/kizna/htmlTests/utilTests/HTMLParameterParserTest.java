@@ -71,7 +71,19 @@ public class HTMLParameterParserTest extends TestCase {
             assertEquals("Value","Y",table.get("VALUE"));
             assertEquals("Checked","",table.get("CHECKED"));
         }
-        
+        public void testIncorrectSpaceKeyBug() {
+            HTMLParameterParser parser = new HTMLParameterParser();
+            HTMLTag tag = new HTMLTag(0,0,"TEXTAREA name=\"Remarks\" ","");
+            Hashtable table = parser.parseParameters(tag);
+			// There should only be two keys..
+			assertEquals("There should only be two keys",2,table.size());
+			// The first key is name
+			String key1 = "NAME";
+			String value1 = (String)table.get(key1);
+			assertEquals("Expected value 1", "Remarks",value1);
+			String key2 = HTMLTag.TAGNAME;
+			assertEquals("Expected Value 2","TEXTAREA",table.get(key2));
+        }
         public void testNullTag(){
             HTMLParameterParser parser = new HTMLParameterParser();
             HTMLTag tag = new HTMLTag(0,0,"INPUT type=","");
