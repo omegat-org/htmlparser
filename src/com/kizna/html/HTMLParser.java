@@ -389,6 +389,7 @@ public void registerScanners() {
 	addScanner(new HTMLMetaTagScanner("-m"));
 	addScanner(new HTMLTitleScanner("-t"));
 	addScanner(new HTMLDoctypeScanner("-d"));
+	addScanner(new HTMLFormScanner("-f"));
 }
 /**
  * Removes a specified scanner object.
