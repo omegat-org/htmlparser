@@ -147,6 +147,11 @@ public class Parser
      */
     protected static final String DEFAULT_CHARSET = "ISO-8859-1";
 
+    /**
+     *  Trigger for charset detection.
+     */
+    protected static final String CHARSET_STRING = "charset";
+
 	/**
 	 * Feedback object.
 	 */
@@ -658,6 +663,14 @@ public class Parser
      * </pre>
      * which is applicable both to the HTTP header field Content-Type and
      * the meta tag http-equiv="Content-Type".
+     * Note this method also handles non-compliant quoted charset directives such as:
+     * <pre>
+     * text/html; charset="UTF-8"
+     * </pre>
+     * and
+     * <pre>
+     * text/html; charset='UTF-8'
+     * </pre>
      * @return The character set name to use when reading the input stream.
      * For JDKs that have the Charset class this is qualified by passing
      * the name to findCharset() to render it into canonical form.
@@ -666,37 +679,50 @@ public class Parser
      * @see #findCharset(String,String)
      * @see #DEFAULT_CHARSET
      */
-    protected String getCharset (String content)
+    protected String getCharset(String content)
     {
-        final String parameter = "charset";
-
         int index;
-        String string;
         String ret;
-        
+
         ret = DEFAULT_CHARSET;
         if (null != content)
-            if (-1 != (index = content.indexOf (parameter)))
+        {
+			index = content.indexOf(CHARSET_STRING);
+            
+            if (index != -1)
             {
-                content = content.substring (index + parameter.length ()).trim ();
-                if (content.startsWith ("="))
+                content = content.substring(index + CHARSET_STRING.length()).trim();
+                if (content.startsWith("="))
                 {
-                    content = content.substring (1).trim ();
-                    if (-1 != (index = content.indexOf (";")))
-                        content = content.substring (0, index);
-                    ret = ParserHelper.findCharset (content, ret);
+                    content = content.substring(1).trim();
+                    index = content.indexOf(";");
+                    if (index != -1)
+                        content = content.substring(0, index);
+
+					//remove any double quotes from around charset string
+                    if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
+                        content = content.substring (1, content.length () - 1);
+
+                    //remove any single quote from around charset string
+                    if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
+                        content = content.substring (1, content.length () - 1);
+
+                    ret = ParserHelper.findCharset(content, ret);
                     // Charset names are not case-sensitive;
                     // that is, case is always ignored when comparing charset names.
-                    if (!ret.equalsIgnoreCase (content))
+                    if (!ret.equalsIgnoreCase(content))
+					{
                         feedback.info (
                             "detected charset \""
                             + content
                             + "\", using \""
                             + ret
                             + "\"");
+					}
                 }
             }
-        
+        }
+
         return (ret);
     }
 
