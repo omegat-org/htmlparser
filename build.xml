@@ -112,6 +112,7 @@ Update the Web Site
   <property name="versionNumber" value="${versionMajor}.${versionMinor}"/>
   <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
   <property name="src" value="src"/>
+  <property name="classes" value="${src}"/>
   <property name="docs" value="docs"/>
   <property name="wiki" value="${docs}/wiki"/>
   <property name="bin" value="bin"/>
@@ -119,7 +120,6 @@ Update the Web Site
   <property name="resources" value="resources"/>
   <property name="distribution" value="distribution"/>
   <property name="junit.jar" value="${lib}/junit.jar"/>
-  <property name="commons-logging.jar" value="${lib}/commons-logging.jar"/>
   <property name="sax2.jar" value="${lib}/sax2.jar"/>
 
   <taskdef resource="checkstyletask.properties"
@@ -222,11 +222,13 @@ Update the Web Site
   </target>
 
   <target name="compile" description="compile all java files">
-    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**" debug="on" classpath="src:${commons-logging.jar}" source="1.3"/>
+    <mkdir dir="${classes}"/>
+    <javac srcdir="${src}" destdir="${classes}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**" debug="on" classpath="${classes}" source="1.3"/>
   </target>
 
   <target name="compilelexer" description="compile lexer java files">
-    <javac srcdir="${src}" debug="on" classpath="src:${commons-logging.jar}" target="1.1" source="1.3">
+    <mkdir dir="${classes}"/>
+    <javac srcdir="${src}" destdir="${classes}" debug="on" classpath="{classes}" target="1.1" source="1.3">
       <include name="org/htmlparser/lexer/*.java"/>
       <include name="org/htmlparser/nodes/*.java"/>
       <include name="org/htmlparser/Attribute.java"/>
@@ -249,7 +251,8 @@ Update the Web Site
   </target>
 
   <target name="compileparser" depends="compilelexer" description="compile parser java files">
-    <javac srcdir="${src}" debug="on" classpath="src:${commons-logging.jar}:${sax2.jar}" source="1.3">
+    <mkdir dir="${classes}"/>
+    <javac srcdir="${src}" destdir="${classes}" debug="on" classpath="{classes}:${sax2.jar}" source="1.3">
       <include name="org/htmlparser/**/*.java"/>
       <exclude name="org/htmlparser/tests/**"/>
       <exclude name="org/htmlparser/lexerapplications/**/*.java"/>
@@ -263,7 +266,7 @@ Update the Web Site
   <target name="jarlexer" depends="compilelexer" description="create htmllexer.jar">
     <mkdir dir="${lib}"/>
     <jar jarfile="${lib}/htmllexer.jar"
-      basedir="${src}">
+      basedir="${classes}">
       <include name="org/htmlparser/lexer/*.class"/>
       <include name="org/htmlparser/nodes/*.class"/>
       <include name="org/htmlparser/Attribute.class"/>
@@ -296,10 +299,14 @@ Update the Web Site
   <!-- Create htmlparser.jar -->
   <target name="jarparser" depends="compileparser" description="create htmlparser.jar">
     <mkdir dir="${lib}"/>
-    <jar jarfile="${lib}/htmlparser.jar"
-      basedir="${src}"
-      includes="**/*.class **/*.gif"
-      excludes="org/htmlparser/tests/**/*.class">
+    <jar jarfile="${lib}/htmlparser.jar">
+      <fileset
+        dir="${classes}"
+        includes="**/*.class"
+        excludes="org/htmlparser/tests/**/*.class"/>
+      <fileset
+        dir="${src}"
+        includes="**/*.gif"/>
       <manifest>
         <attribute name="Main-Class" value="org.htmlparser.Parser"/>
         <section name="org/htmlparser/Parser.class">
@@ -325,11 +332,12 @@ Update the Web Site
   <target name="thumbelina" depends="JDK1.4,jarlexer" description="create thumbelina.jar" if="JDK1.4">
     <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
-    <javac compiler="javac1.4" srcdir="${src}" debug="on" classpath="src:${lib}/htmllexer.jar" source="1.3">
+    <mkdir dir="${classes}"/>
+    <javac compiler="javac1.4" srcdir="${src}" destdir="${classes}" debug="on" classpath="${classes}:${lib}/htmllexer.jar" source="1.3">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.java"/>
     </javac>
     <jar jarfile="${lib}/thumbelina.jar"
-      basedir="${src}"
+      basedir="${classes}"
       defaultexcludes="no"
       update="true">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.class"/>
@@ -343,15 +351,22 @@ Update the Web Site
   <target name="filterbuilder" depends="JDK1.4,jarparser" description="create filterbuilder.jar" if="JDK1.4">
     <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
-    <javac compiler="javac1.4" srcdir="${src}" debug="on" classpath="src:${lib}/htmlparser.jar" source="1.3">
+    <mkdir dir="${classes}"/>
+    <javac compiler="javac1.4" srcdir="${src}" destdir="${classes}" debug="on" classpath="${classes}:${lib}/htmlparser.jar" source="1.3">
       <include name="org/htmlparser/parserapplications/filterbuilder/**/*.java"/>
     </javac>
     <jar jarfile="${lib}/filterbuilder.jar"
-      basedir="${src}"
-      defaultexcludes="no"
-      update="true">
-      <include name="org/htmlparser/parserapplications/filterbuilder/**/*.class"/>
-      <include name="org/htmlparser/parserapplications/filterbuilder/**/*.gif"/>
+        update="true">
+      <fileset
+        dir="${classes}"
+        defaultexcludes="no">
+        <include name="org/htmlparser/parserapplications/filterbuilder/**/*.class"/>
+      </fileset>
+      <fileset
+        dir="${src}"
+        defaultexcludes="no">
+        <include name="org/htmlparser/parserapplications/filterbuilder/**/*.gif"/>
+      </fileset>
       <manifest>
         <attribute name="Main-Class" value="org.htmlparser.parserapplications.filterbuilder.FilterBuilder"/>
       </manifest>
@@ -360,11 +375,11 @@ Update the Web Site
   
   <!-- Run the unit tests -->
   <target name="test" depends="jar" description="run the JUnit tests">
-    <javac srcdir="${src}" includes="org/htmlparser/tests/**" debug="on" source="1.3">
+    <mkdir dir="${classes}"/>
+    <javac srcdir="${src}" destdir="${classes}" includes="org/htmlparser/tests/**" debug="on" source="1.3">
       <classpath>
-        <pathelement location="src"/>
+        <pathelement location="${classes}"/>
         <pathelement location="${junit.jar}"/>
-        <pathelement location="${commons-logging.jar}"/>
         <pathelement location="${sax2.jar}"/>
         <pathelement location="${java.home}/../lib/tools.jar"/>
       </classpath>
@@ -372,9 +387,8 @@ Update the Web Site
     <java classname="org.htmlparser.tests.AllTests" fork="yes" failonerror="yes">
       <classpath>
         <pathelement location="${lib}/htmlparser.jar"/>
-        <pathelement location="${src}"/>
+        <pathelement location="${classes}"/>
         <pathelement location="${junit.jar}"/>
-        <pathelement location="${commons-logging.jar}"/>
         <pathelement location="${sax2.jar}"/>
         <pathelement location="${java.home}/../lib/tools.jar"/>
       </classpath>
@@ -410,7 +424,8 @@ Update the Web Site
 
   <!-- Create the javadoc for the project -->
   <target name="javadoc" depends="JDK1.4,JDK_Warning,init" description="create JavaDoc (API) documentation">
-    <javac srcdir="${resources}" includes="HtmlTaglet.java" classpath="${src}"/>
+    <mkdir dir="${classes}"/>
+    <javac srcdir="${resources}" includes="HtmlTaglet.java" classpath="${classes}"/>
     <mkdir dir="${docs}/javadoc"/>
     <property name="javadoc.doctitle" value="HTML Parser ${versionNumber}"/>
     <property name="javadoc.header" value="&lt;A HREF=&quot;http://htmlparser.sourceforge.net&quot; target=&quot;_top&quot;>HTML Parser Home Page&lt;/A>"/>
@@ -421,7 +436,7 @@ Update the Web Site
     &lt;img src=&quot;http://sourceforge.net/sflogo.php?group_id=24399&amp;type=1&quot; width=&quot;88&quot; height=&quot;31&quot; border=&quot;0&quot; alt=&quot;SourceForge.net&quot;&gt;&lt;/A&gt;&lt;/div&gt;"/>
     <javadoc packagenames="org.htmlparser.*"
            sourcepath="${src}"
-           classpath="src:${commons-logging.jar}"
+           classpath="${classes}"
            defaultexcludes="yes"
            excludepackagenames="org.htmlparser.tests.*"
            destdir="${docs}/javadoc"
@@ -435,9 +450,9 @@ Update the Web Site
       <header>${javadoc.header}</header>
       <bottom>${javadoc.bottom}</bottom>
       <footer>${javadoc.footer}</footer>
-      <taglet name="HtmlTaglet" path="${resources}:${src}"/>
+      <taglet name="HtmlTaglet" path="${resources}:${classes}"/>
       <group title="Main Package" packages="org.htmlparser"/>
-      <group title="Example Applications" packages="org.htmlparser.parserapplications,org.htmlparser.lexerapplications.tabby,org.htmlparser.lexerapplications.thumbelina"/>
+      <group title="Example Applications" packages="org.htmlparser.parserapplications,org.htmlparser.lexerapplications.tabby,org.htmlparser.lexerapplications.thumbelina,org.htmlparser.parserapplications.filterbuilder"/>
       <group title="Tags" packages="org.htmlparser.tags,org.htmlparser.tags.data"/>
       <group title="Lexer" packages="org.htmlparser.lexer"/>
       <group title="Scanners" packages="org.htmlparser.scanners"/>
@@ -488,7 +503,7 @@ Update the Web Site
     <!-- delete the src.zip, classes and javadocs leave the jars -->
     <delete>
       <fileset dir="." includes="src.zip"/>
-      <fileset dir="${src}" includes="**/*.class"/>
+      <fileset dir="${classes}" includes="**/*.class"/>
     </delete>
     <delete dir="${docs}/javadoc/"/>
   </target>
