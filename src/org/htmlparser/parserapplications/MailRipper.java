@@ -64,7 +64,7 @@ public static void main(String[] args) {
   if (args.length<1 || args[0].equals("-help"))
   {
     System.out.println();
-    System.out.println("Syntax : java -classpath htmlparser.jar com.kizna.parserapplications.MailRipper <resourceLocn/website>");
+    System.out.println("Syntax : java -classpath htmlparser.jar org.htmlparser.parserapplications.MailRipper <resourceLocn/website>");
     System.out.println();
     System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path ");
     System.out.println("                  if not in current directory)");

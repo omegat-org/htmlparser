@@ -110,7 +110,7 @@ public static void main(String[] args)
   if (args.length<2 || args[0].equals("-help"))
   {
     System.out.println();
-    System.out.println("Syntax : java -classpath htmlparser.jar com.kizna.parserapplications.Robot <resourceLocn/website> <depth>");
+    System.out.println("Syntax : java -classpath htmlparser.jar org.htmlparser.parserapplications.Robot <resourceLocn/website> <depth>");
     System.out.println();
     System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path ");
     System.out.println("                  if not in current directory)");
