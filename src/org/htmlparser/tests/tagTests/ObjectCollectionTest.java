@@ -1,6 +1,8 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.HTMLNode;
+import org.htmlparser.scanners.DivScanner;
+import org.htmlparser.scanners.SpanScanner;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Span;
@@ -37,6 +39,7 @@ public class ObjectCollectionTest extends HTMLParserTestCase {
 			"<SPAN>&#013;id: 6</SPAN>" 
 		);
 		parser.registerScanners();
+		parser.addScanner(new SpanScanner());
 		assertSpanContent(parser.extractAllNodesThatAre(Span.class));
 	}
 	
@@ -48,6 +51,8 @@ public class ObjectCollectionTest extends HTMLParserTestCase {
 			"</DIV>"
 		);
 		parser.registerScanners();
+		parser.addScanner(new DivScanner());
+		parser.addScanner(new SpanScanner());
 		parseAndAssertNodeCount(1);
 		Div div = (Div)node[0];
 		NodeList nodeList = new NodeList();
@@ -64,6 +69,8 @@ public class ObjectCollectionTest extends HTMLParserTestCase {
 			"	</DIV>" +			"</table>"
 		);
 		parser.registerScanners();
+		parser.addScanner(new DivScanner());
+		parser.addScanner(new SpanScanner());
 		parser.addScanner(new TableScanner(parser));
 		parseAndAssertNodeCount(1);
 		TableTag tableTag = (TableTag)node[0];

@@ -30,6 +30,7 @@ package org.htmlparser.tests.scannersTests;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.scanners.HTMLImageScanner;
+import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
@@ -193,6 +194,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 	
 		// Register the image scanner
 		parser.registerScanners();
+		parser.addScanner(new TableScanner(parser));
 		parseAndAssertNodeCount(2);
 		assertType("first node type",TableRow.class,node[0]);
 		TableRow row = (TableRow)node[0];
@@ -225,6 +227,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 	
 		// Register the image scanner
 		parser.registerScanners();
+		parser.addScanner(new TableScanner(parser));
 		parseAndAssertNodeCount(1);
 		assertType("node should be", TableColumn.class, node[0]);
 		TableColumn col = (TableColumn)node[0];

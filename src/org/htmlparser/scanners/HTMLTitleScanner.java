@@ -48,6 +48,12 @@ public class HTMLTitleScanner extends CompositeTagScanner {
 		return MATCH_NAME;
 	}
 	
+	public boolean evaluate(String tagNameBeingChecked, HTMLTagScanner previousOpenScanner) {
+		absorbLeadingBlanks(tagNameBeingChecked);
+		if (tagNameBeingChecked.equalsIgnoreCase(MATCH_NAME[0]) && previousOpenScanner==null)
+		return true; else return false;
+	} 
+
 	protected HTMLTag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {

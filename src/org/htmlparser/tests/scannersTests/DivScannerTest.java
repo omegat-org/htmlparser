@@ -28,6 +28,7 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.TableTag;
@@ -44,6 +45,7 @@ public class DivScannerTest extends HTMLParserTestCase {
 		createParser("<table><div align=\"left\">some text</div></table>");
 		parser.registerScanners();
 		parser.addScanner(new TableScanner(parser));
+		parser.addScanner(new DivScanner());
 		parseAndAssertNodeCount(1);
 		assertType("node should be table",TableTag.class,node[0]);
 		TableTag tableTag = (TableTag)node[0];

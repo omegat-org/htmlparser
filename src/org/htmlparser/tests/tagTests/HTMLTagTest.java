@@ -32,6 +32,7 @@ import java.util.Hashtable;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLStringNode;
+import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLLinkTag;
@@ -344,6 +345,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		createParser(testHTML,"http://www.cia.gov");
 		// Register the image scanner
 		parser.registerScanners();
+		parser.addScanner(new DivScanner());
 		parseAndAssertNodeCount(1);
 		// Check the tags
 		HTMLTag tag = (HTMLTag)node[0];
