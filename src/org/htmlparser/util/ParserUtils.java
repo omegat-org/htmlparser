@@ -92,7 +92,7 @@ public class ParserUtils
 
     /**
      * Split the input string considering as string separator
-     * all the non numerical characters
+     * all the not numerical characters
      * with the only exception of the characters specified in charsDoNotBeRemoved param.
      * <BR>For example if you call splitButDigits(&quot;&lt;DIV&gt;  +12.5, +3.4 &lt;/DIV&gt;&quot;, &quot;+.&quot;),
      * <BR>you obtain an array of strings {&quot;+12.5&quot;, &quot;+3.4&quot;} as output (1,2,3,4 and 5 are digits and +,. are chars that do not be removed).
@@ -153,7 +153,7 @@ public class ParserUtils
     }
     
     /**
-     * Remove from the input string all the non numerical characters
+     * Remove from the input string all the not numerical characters
      * with the only exception of the characters specified in charsDoNotBeRemoved param.
      * <BR>For example if you call trimButDigits(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;+.&quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (1,2 and 5 are digits and +,. are chars that do not be removed).
@@ -184,13 +184,13 @@ public class ParserUtils
     }
     
     /**
-     * Remove from the input string all the non numerical characters
+     * Remove from the beginning and the end of the input string all the not numerical characters
      * with the only exception of the characters specified in charsDoNotBeRemoved param.
      * <BR>The removal process removes only chars at the beginning and at the end of the string.
      * <BR>For example if you call trimButDigitsBeginEnd(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;+.&quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (1,2 and 5 are digits and +,. are chars that do not be removed).
      * <BR>For example if you call trimButDigitsBeginEnd(&quot;&lt;DIV&gt;  +1 2 . 5 &lt;/DIV&gt;&quot;, &quot;+.&quot;),
-     * <BR>you obtain a string &quot;+1 2 . 5&quot; as output (the spaces inside the string are not removed).
+     * <BR>you obtain a string &quot;+1 2 . 5&quot; as output (the spacess inside the string are not removed).
      * @param input - The string in input.
      * @param charsDoNotBeRemoved - The chars that do not be removed.
      * @return The string as output.
@@ -237,7 +237,7 @@ public class ParserUtils
     
     /**
      * Split the input string considering as string separator
-     * all the space and tabs like chars and
+     * all the spaces and tabs like chars and
      * the chars specified in the input variable charsToBeRemoved.
      * <BR>For example if you call splitSpaces(&quot;&lt;DIV&gt;  +12.5, +3.4 &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/,&quot;),
      * &lt;BR>you obtain an array of strings {&quot;+12.5&quot;, &quot;+3.4&quot;} as output (space chars and &lt;,&gt;,D,I,V,/ and the comma are chars that must be removed).
@@ -298,12 +298,12 @@ public class ParserUtils
     }
 
     /**
-     * Remove from the input string all the space and tabs like chars.
-     * <BR>Remove also the chars specified in the input variable charsToBeRemoved.
+     * Remove from the input string all the spaces and tabs like chars.
+     * Remove also the chars specified in the input variable charsToBeRemoved.
      * <BR>For example if you call trimSpaces(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/&quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (space chars and &lt;,&gt;,D,I,V,/ are chars that must be removed).
      * <BR>For example if you call trimSpaces(&quot;&lt;DIV&gt;  Trim All Spaces Also The Ones Inside The String &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/&quot;),
-     * <BR>you obtain a string &quot;TrimAllSpacesAlsoTheOnesInsideTheString&quot; as output (all the space inside the string are removed).
+     * <BR>you obtain a string &quot;TrimAllSpacesAlsoTheOnesInsideTheString&quot; as output (all the spaces inside the string are removed).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
      * @return The string as output.
@@ -329,13 +329,13 @@ public class ParserUtils
     }
 
     /**
-     * Remove from the input string all the space and tabs like chars.
-     * <BR>Remove also the chars specified in the input variable charsToBeRemoved.
+     * Remove from the beginning and the end of the input string all the spaces and tabs like chars.
+     * Remove also the chars specified in the input variable charsToBeRemoved.
      * <BR>The removal process removes only chars at the beginning and at the end of the string.
      * <BR>For example if you call trimSpacesBeginEnd(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/&quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (space chars and &lt;,&gt;,D,I,V,/ are chars that must be removed).
      * <BR>For example if you call trimSpacesBeginEnd(&quot;&lt;DIV&gt;  Trim all spaces but not the ones inside the string &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/&quot;),
-     * <BR>you obtain a string &quot;Trim all spaces but not the ones inside the string&quot; as output (all the space inside the string are preserved).
+     * <BR>you obtain a string &quot;Trim all spaces but not the ones inside the string&quot; as output (all the spaces inside the string are preserved).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
      * @return The string as output.
@@ -368,7 +368,7 @@ public class ParserUtils
             for (int charsCount=0; charsCount<charsToBeRemoved.length(); charsCount++)
                 if (charsToBeRemoved.charAt(charsCount)==input.charAt(index))
                     charFound=true;
-            if (!( (Character.isWhitespace(input.charAt(index))) || (Character.isSpaceChar(input.charAt(index-1))) || (charFound) ))
+            if (!( (Character.isWhitespace(input.charAt(index))) || (Character.isSpaceChar(input.charAt(index))) || (charFound) ))
             {
                 end=index;
                 ok=false;
@@ -474,7 +474,7 @@ public class ParserUtils
     }
     
     /**
-     * Remove from the input string all the characters
+     * Remove from the beginning and the end of the input string all the characters
      * with the only exception of the characters specified in charsDoNotBeRemoved param.
      * <BR>The removal process removes only chars at the beginning and at the end of the string.
      * <BR>For example if you call trimButCharsBeginEnd(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;+.1234567890&quot;),
@@ -591,7 +591,7 @@ public class ParserUtils
      * <BR>For example if you call trimChars(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;<>DIV/ &quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (&lt;,&gt;,D,I,V,/ and space char are chars that must be removed).
      * <BR>For example if you call trimChars(&quot;&lt;DIV&gt;  Trim All Chars Also The Ones Inside The String &lt;/DIV&gt;&quot;, &quot;<>DIV/ &quot;),
-     * <BR>you obtain a string &quot;TrimAllCharsAlsoTheOnesInsideTheString&quot; as output (all the space inside the string are removed).
+     * <BR>you obtain a string &quot;TrimAllCharsAlsoTheOnesInsideTheString&quot; as output (all the spaces inside the string are removed).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
      * @return The string as output.
@@ -617,12 +617,12 @@ public class ParserUtils
     }
 
     /**
-     * Remove from the input string all the chars specified in the input variable charsToBeRemoved.
+     * Remove from the beginning and the end of the input string all the chars specified in the input variable charsToBeRemoved.
      * <BR>The removal process removes only chars at the beginning and at the end of the string.
      * <BR>For example if you call trimCharsBeginEnd(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;<>DIV/ &quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (' ' is a space char and &lt;,&gt;,D,I,V,/ are chars that must be removed).
      * <BR>For example if you call trimCharsBeginEnd(&quot;&lt;DIV&gt;  Trim all spaces but not the ones inside the string &lt;/DIV&gt;&quot;, &quot;<>DIV/ &quot;),
-     * <BR>you obtain a string &quot;Trim all spaces but not the ones inside the string&quot; as output (all the space inside the string are preserved).
+     * <BR>you obtain a string &quot;Trim all spaces but not the ones inside the string&quot; as output (all the spaces inside the string are preserved).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
      * @return The string as output.
@@ -899,8 +899,48 @@ public class ParserUtils
     }
 
     /**
-     * Trim the input string in a string array,
-     * considering the tags as delimiter for splitting.
+     * Trim the input string, removing all the tags in the input string.
+     * <BR>The method trims all the substrings included in the input string of the following type:
+     * &quot;&lt;XXX&gt;&quot;, where XXX could be a string of any type.
+     * <BR>If you set to true the inside parameter, the method deletes also the YYY string in the following input string:
+     * &quot;&lt;XXX&gt;YYY&lt;ZZZ&gt;&quot;, note that ZZZ is not necessary the closing tag of XXX.
+     * @param input The string in input.
+     * @param inside If true, it forces the method to delete also what is inside the tags.
+     * @return The string without tags.
+     */
+    public static String trimAllTags (String input, boolean inside)
+    {
+ 	
+        StringBuffer output = new StringBuffer();
+
+        if (inside) {
+            if ((input.indexOf('<')==-1) || (input.lastIndexOf('>')==-1) || (input.lastIndexOf('>')<input.indexOf('<'))) {
+                output.append(input);
+            } else {
+                output.append(input.substring(0, input.indexOf('<')));
+                output.append(input.substring(input.lastIndexOf('>')+1, input.length()));
+            }
+        } else {
+            boolean write = true;
+            for (int index=0; index<input.length(); index++)
+            {    
+                if (input.charAt(index)=='<' && write)
+                    write = false;
+                if (write)
+                    output.append(input.charAt(index));
+                if (input.charAt(index)=='>' && (!write))
+                    write = true;
+            }
+        }
+
+        return output.toString();
+    }
+    
+
+    /**
+     * Trim all tags in the input string and
+     * return a string like the input one
+     * without the tags and their content.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
      */
     public static String trimTags (String input, String[] tags)
@@ -987,8 +1027,9 @@ public class ParserUtils
     }
     
     /**
-     * Trim the input string in a string array,
-     * considering the tags as delimiter for splitting.
+     * Trim all tags in the input string and
+     * return a string like the input one
+     * without the tags and their content.
      * <BR>Use Class class as input parameter
      * instead of tags[] string array.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
@@ -1000,8 +1041,9 @@ public class ParserUtils
     }
 
     /**
-     * Trim the input string in a string array,
-     * considering the tags as delimiter for splitting.
+     * Trim all tags in the input string and
+     * return a string like the input one
+     * without the tags and their content (optional).
      * <BR>Use Class class as input parameter
      * instead of tags[] string array.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
@@ -1013,8 +1055,9 @@ public class ParserUtils
     }
 
     /**
-     * Trim the input string in a string array,
-     * considering the tags as delimiter for splitting.
+     * Trim all tags in the input string and
+     * return a string like the input one
+     * without the tags and their content.
      * <BR>Use NodeFilter class as input parameter
      * instead of tags[] string array.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
@@ -1026,8 +1069,9 @@ public class ParserUtils
     }
     
     /**
-     * Trim the input string in a string array,
-     * considering the tags as delimiter for splitting.
+     * Trim all tags in the input string and
+     * return a string like the input one
+     * without the tags and their content (optional).
      * <BR>Use NodeFilter class as input parameter
      * instead of tags[] string array.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
