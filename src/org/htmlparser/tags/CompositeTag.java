@@ -249,12 +249,10 @@ public abstract class CompositeTag extends Tag {
 	}
 
 	public int getChildCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return childTags.size();
 	}
 
 	public Tag getStartTag() {
-		// TODO Auto-generated method stub
 		return startTag;
 	}
 

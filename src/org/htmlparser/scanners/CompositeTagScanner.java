@@ -34,6 +34,7 @@ import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public abstract class CompositeTagScanner extends TagScanner {
@@ -57,21 +58,37 @@ public abstract class CompositeTagScanner extends TagScanner {
 	}
 	
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
-		Tag endTag = (EndTag)reader.readElement();
-		
-		if (endTag == null) 
-			endTag = tag;
+		Tag endTag = tag;
+		NodeList nodeList = new NodeList();
+		Node node = null;
+		do {
+			node = reader.readElement();
+			if (node==null) continue;
+			if (node instanceof Tag) {
+				Tag possibleEndTag = (Tag)node;
+				if (tag.isEmptyXmlTag()) {
+					endTag = possibleEndTag;
+					node = endTag;					
+				}
+			}
+			if (node instanceof EndTag)
+				endTag = (Tag)node;
+			else 
+				nodeList.add(node);						
+		}
+		while (node!=null);
 		
 		return createTag(
 			new TagData(
-				0,17,0,0,"","","",tag.isEmptyXmlTag()
+				0,endTag.elementEnd(),0,0,"","","",tag.isEmptyXmlTag()
 			),
 			new CompositeTagData(
-				tag,endTag,null
+				tag,endTag,nodeList
 			)
 		);
 		
 	}
+	
 //	public Tag scan(Tag tag, String url, NodeReader reader,String currLine)
 //		throws ParserException {
 //		int startLine = reader.getLastLineNumber();
