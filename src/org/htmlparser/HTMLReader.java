@@ -175,36 +175,41 @@ public class HTMLReader extends BufferedReader
 			} else
 			posInLine=node.elementEnd()+1;
 			if (line==null) return null;
-			node = HTMLRemarkNode.find(this,line,posInLine);
-			if (node!=null) return node;
-	
-			node = HTMLTag.find(this,line,posInLine);
-			if (node!=null)
-			{
-				HTMLTag tag = (HTMLTag)node;
-				try
-				{
-					node = tag.scan(parser.getScanners(),url,this);
-					return node;
-				}
-				catch (Exception e)
-				{			
-					StringBuffer msgBuffer = new StringBuffer();
-					msgBuffer.append(DECIPHER_ERROR);
-					appendLineDetails(msgBuffer);
-					HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
-					
-					parser.getFeedback().error(msgBuffer.toString(),ex);
-					throw ex;
-				}
-			}
-	
-			node = HTMLEndTag.find(line,posInLine);
-			if (node!=null) return node;
-	
-			node = HTMLStringNode.find(this,line,posInLine);
-			if (node!=null) return node;
-			
+            
+            if ('<' == line.charAt (posInLine))
+            {
+                node = HTMLRemarkNode.find(this,line,posInLine);
+                if (node!=null) return node;
+
+                node = HTMLTag.find(this,line,posInLine);
+                if (node!=null)
+                {
+                    HTMLTag tag = (HTMLTag)node;
+                    try
+                    {
+                        node = tag.scan(parser.getScanners(),url,this);
+                        return node;
+                    }
+                    catch (Exception e)
+                    {			
+                        StringBuffer msgBuffer = new StringBuffer();
+                        msgBuffer.append(DECIPHER_ERROR);
+                        appendLineDetails(msgBuffer);
+                        HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
+
+                        parser.getFeedback().error(msgBuffer.toString(),ex);
+                        throw ex;
+                    }
+                }
+
+                node = HTMLEndTag.find(line,posInLine);
+                if (node!=null) return node;
+            }
+            else
+            {
+                node = HTMLStringNode.find(this,line,posInLine);
+                if (node!=null) return node;
+            }
 		
 			return null;
 		}
