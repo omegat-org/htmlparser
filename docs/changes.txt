@@ -1,3 +1,7 @@
+Integration Build 1.2 - 20021222
+--------------------------------
+[1] rewrite HTMLLinkProcessor.extract() so URL class does all the heavy lifting
+
 Integration Build 1.2 - 20021215
 --------------------------------
 [1] Modified API of HTMLImageTag (refactored name of image loc), HTMLLinkTag (added getters)
