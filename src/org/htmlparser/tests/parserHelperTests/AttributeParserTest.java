@@ -176,4 +176,13 @@ public class AttributeParserTest extends ParserTestCase {
 		getParameterTableFor("");
 		assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
     }
+
+    /**
+     * Case of script in attributes.
+     */
+    public void testScriptedTag ()
+    {
+		getParameterTableFor("<body onLoad=defaultStatus=''>");
+		assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
+    }
 }
