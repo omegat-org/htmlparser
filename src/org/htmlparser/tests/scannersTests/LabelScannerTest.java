@@ -31,8 +31,10 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import java.util.*;
 import junit.framework.TestSuite;
-
+import org.htmlparser.Node;
+import org.htmlparser.StringNode;
 import org.htmlparser.scanners.LabelScanner;
 import org.htmlparser.tags.LabelTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -51,6 +53,7 @@ public class LabelScannerTest extends ParserTestCase {
 		assertTrue(node[0] instanceof LabelTag);
 		//  check the title node
 		LabelTag labelTag = (LabelTag) node[0];
+		assertEquals("Label","This is a label tag",labelTag.getChildrenHTML());
 		assertEquals("Label","This is a label tag",labelTag.getLabel());
 		assertStringEquals("Label","<LABEL>This is a label tag</LABEL>",labelTag.toHtml());
 		assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
@@ -83,7 +86,59 @@ public class LabelScannerTest extends ParserTestCase {
 		assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
 	}
 	
+	public void testLabelWithManyCompositeTags() throws ParserException {
+		createParser("<label><span>Jane <b> Doe </b> Smith</span></label>");
+		parser.registerScanners();
+		LabelScanner labelScanner = new LabelScanner("-l");
+		parser.addScanner(labelScanner);
+		parseAndAssertNodeCount(1);
+		assertTrue(node[0] instanceof LabelTag);
+		LabelTag labelTag = (LabelTag) node[0];
+		assertEquals("Label value","<SPAN>Jane <B> Doe </B> Smith</SPAN>",labelTag.getChildrenHTML());
+		assertEquals("Label value","Jane  Doe  Smith",labelTag.getLabel());
+		assertStringEquals("Label","<LABEL><SPAN>Jane <B> Doe </B> Smith</SPAN></LABEL>",labelTag.toHtml());
+		assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
+	}
+	
+
+	public void testLabelsID() throws ParserException {
+		createParser("<label>John Doe</label>");
+		parser.registerScanners();
+		LabelScanner labelScanner = new LabelScanner("-l");
+		parser.addScanner(labelScanner);
+		parseAndAssertNodeCount(1);
+		assertTrue(node[0] instanceof LabelTag);
+		
+		LabelTag labelTag = (LabelTag) node[0];
+		assertStringEquals("Label","<LABEL>John Doe</LABEL>",labelTag.toHtml());
+		Hashtable attr = labelTag.getAttributes();
+		assertNull("ID",attr.get("id"));
+	}
+	
+	public void testNestedLabels() throws ParserException {
+		createParser("<label>John Doe<label>Jane Doe</label>");
+		parser.registerScanners();
+		LabelScanner labelScanner = new LabelScanner("-l");
+		parser.addScanner(labelScanner);
+		parseAndAssertNodeCount(2);
+		assertTrue(node[0] instanceof LabelTag);
+		assertTrue(node[1] instanceof LabelTag);
+		
+		LabelTag labelTag = (LabelTag) node[0];
+		assertStringEquals("Label","<LABEL>John Doe</LABEL>",labelTag.toHtml());		
+		labelTag = (LabelTag) node[1];
+		assertStringEquals("Label","<LABEL>Jane Doe</LABEL>",labelTag.toHtml());
+		Hashtable attr = labelTag.getAttributes();
+		assertNull("ID",attr.get("id"));
+	}
+	
 	public static TestSuite suite() {
 		return new TestSuite(LabelScannerTest.class);
 	}
+	
+	public static void main(String[] args) 
+	{
+		new junit.awtui.TestRunner().start(new String[] {LabelScannerTest.class.getName()});
+	}
+
 }
