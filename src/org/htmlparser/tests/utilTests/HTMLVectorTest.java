@@ -5,7 +5,7 @@ import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLEnumeration;
+import org.htmlparser.util.HTMLSimpleEnumeration;
 import org.htmlparser.util.HTMLVector;
 
 public class HTMLVectorTest extends HTMLParserTestCase {
@@ -78,7 +78,7 @@ public class HTMLVectorTest extends HTMLParserTestCase {
 		createTestDataAndPutInVector(11);
 		HTMLNode [] resultNodes = new HTMLNode[11];
 		int i = 0;
-		for (HTMLEnumeration e = vector.elements();e.hasMoreNodes();) {
+		for (HTMLSimpleEnumeration e = vector.elements();e.hasMoreNodes();) {
 			resultNodes[i] = e.nextHTMLNode();
 			assertTrue("Node "+i+" did not match",testNodes[i]==resultNodes[i]);
 			i++;

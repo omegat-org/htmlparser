@@ -47,8 +47,8 @@ public class HTMLVector {
 	public int getNumberOfAdjustments() {
 		return numberOfAdjustments;
 	}
-	public HTMLEnumeration elements() {
-		return new HTMLEnumeration() {
+	public HTMLSimpleEnumeration elements() {
+		return new HTMLSimpleEnumeration() {
 			int count = 0;
 	
 			public boolean hasMoreNodes() {
