@@ -1,6 +1,7 @@
 Integration Build 1.2 - 20021222
 --------------------------------
-[1] rewrite HTMLLinkProcessor.extract() so URL class does all the heavy lifting
+[1] Rewrite HTMLLinkProcessor.extract() so URL class does all the heavy lifting
+[2] Partially fixed bug 654746 - HTMLLinkScanner error, code review needed
 
 Integration Build 1.2 - 20021215
 --------------------------------
