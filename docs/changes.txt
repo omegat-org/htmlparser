@@ -13,7 +13,11 @@ Integration build 1.3 - 20021228
 	(viii) HTMLScriptTag
 	(ix) HTMLAppletTag
 [4] Performed Refactoring "Introduce Parameter Object" on HTMLTag, 
-	HTMLCompositeTag, HTMLLinkTag
+	HTMLCompositeTag, HTMLLinkTag, HTMLFormTag
+[5] Refactored HTMLFormTag, pulling up the search methods into HTMLCompositeTag
+[6] Added HTMLVector, which can return HTMLSimpleEnumeration - a no-exception
+	flavor of HTMLEnumeration
+[7] Refactored HTMLEnumeration - created new interface - HTMLPeekingEnumeration
 	
 Production Release 1.2
 ----------------------
