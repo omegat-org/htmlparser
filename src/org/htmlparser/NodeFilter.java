@@ -43,6 +43,7 @@ public interface NodeFilter
      * or printed out. See the calling routine for details.
      * @return <code>true</code> if the node is to be kept, <code>false</code>
      * if it is to be discarded.
+     * @param node The node to test.
      */
     boolean accept (Node node);
 }

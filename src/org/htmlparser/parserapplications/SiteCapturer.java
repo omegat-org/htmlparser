@@ -344,6 +344,53 @@ public class SiteCapturer
     }
 
     /**
+     * Unescape a URL to form a file name.
+     * Very crude.
+     * @param raw The escaped URI.
+     * @return The native URI.
+     */
+    protected String decode (String raw)
+    {
+        int length;
+        int start;
+        int index;
+        int value;
+        StringBuffer ret;
+        
+        ret = new StringBuffer (raw.length ());
+
+        length = raw.length ();
+        start = 0;
+        while (-1 != (index = raw.indexOf ('%', start)))
+        {   // append the part up to the % sign
+            ret.append (raw.substring (start, index));
+            // there must be two hex digits after the percent sign
+            if (index + 2 < length)
+            {
+                try
+                {
+                    value = Integer.parseInt (raw.substring (index + 1, index + 3), 16);
+                    ret.append ((char)value);
+                    start = index + 3;
+                }
+                catch (NumberFormatException nfe)
+                {
+                    ret.append ('%');
+                    start = index + 1;
+                }
+            }
+            else
+            {   // this case is actually illegal in a URI, but...
+                ret.append ('%');
+                start = index + 1;
+            }
+        }
+        ret.append (raw.substring (start));
+        
+        return (ret.toString ());
+    }
+
+    /**
      * Copy a resource (image) locally.
      * Removes one element from the 'to be copied' list and saves the
      * resource it points to locally as a file.
@@ -351,6 +398,8 @@ public class SiteCapturer
     protected void copy ()
     {
         String link;
+        String raw;
+        String name;
         File file;
         File dir;
         URL source;
@@ -364,7 +413,9 @@ public class SiteCapturer
 
         if (getCaptureResources ())
         {
-            file = new File (getTarget (), makeLocalLink (link, ""));
+            raw = makeLocalLink (link, "");
+            name = decode (raw);
+            file = new File (getTarget (), name);
             System.out.println ("copying " + link + " to " + file.getAbsolutePath ());
             // ensure directory exists
             dir = file.getParentFile ();

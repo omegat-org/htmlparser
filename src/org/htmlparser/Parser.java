@@ -45,16 +45,65 @@ import org.htmlparser.util.ParserFeedback;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
- * This is the class that the user will use, either to get an iterator into
- * the html page or to directly parse the page and print the results
- * <BR>
- * Typical usage of the parser is as follows : <BR>
- * [1] Create a parser object - passing the URL and a feedback object to the parser<BR>
- * [2] Enumerate through the elements from the parser object <BR>
- * It is important to note that the parsing occurs when you enumerate, ON DEMAND.
- * This is a thread-safe way, and you only get the control back after a
- * particular element is parsed and returned, which could be the entire body.
- * @see Parser#elements()
+ * The main parser class.
+ * This is the primary class of the HTML Parser library. It provides
+ * constructors that take a {@link #Parser(String) String},
+ * a {@link #Parser(URLConnection) URLConnection}, or a
+ * {@link #Parser(Lexer) Lexer}.  In the case of a String, an
+ * attempt is made to open it as a URL, and if that fails it assumes it is a
+ * local disk file. If you want to actually parse a String, use
+ * {@link #setInputHTML setInputHTML()} after using the
+ * {@link #Parser() no-args} constructor, or use {@link #createParser}.
+ * <p>The Parser provides access to the contents of the
+ * page, via a {@link #elements() NodeIterator}, a
+ * {@link #parse(NodeFilter) NodeList} or a
+ * {@link #visitAllNodesWith NodeVisitor}.
+ * <p>Typical usage of the parser is:
+ * <code>
+ * <pre>
+ * Parser parser = new Parser ("http://whatever");
+ * NodeList list = parser.parse ();
+ * // do something with your list of nodes.
+ * </pre>
+ * </code></p>
+ * <p>What types of nodes and what can be done with them is dependant on the
+ * setup, but in general a node can be converted back to HTML and it's
+ * children (enclosed nodes) and parent can be obtained, because nodes are
+ * nested. See the {@link Node} interface.</p>
+ * <p>For example, if the URL contains:<br>
+ * <code>
+ * {@.html
+ * <html>
+ * <head>
+ * <title>Mondays -- What a bad idea.</title>
+ * </head>
+ * <body BGCOLOR="#FFFFFF">
+ * Most people have a pathological hatred of Mondays...
+ * </body>
+ * </html>}
+ * </code><br>
+ * and the example code above is used, the list contain only one element, the
+ * {@.html <html>} node.  This node is a {@link org.htmlparser.tags tag},
+ * which is an object of class
+ * {@link org.htmlparser.tags.Html Html} if the default {@link NodeFactory}
+ * (a {@link PrototypicalNodeFactory}) is used.</p>
+ * <p>To get at further content, the children of the top
+ * level nodes must be examined. When digging through a node list one must be
+ * conscious of the possibility of whitespace between nodes, e.g. in the example
+ * above:
+ * <code>
+ * <pre>
+ * Node node = list.elementAt (0);
+ * NodeList sublist = node.getChildren ();
+ * System.out.println (sublist.size ());
+ * </pre>
+ * </code>
+ * would print out 5, not 2, because there are newlines after {@.html <html>},
+ * {@.html </head>} and {@.html </body>} that are children of the HTML node
+ * besides the {@.html <head>} and {@.html <body>} nodes.</p>
+ * <p>Because processing nodes is so common, two interfaces are provided to
+ * ease this task, {@link org.htmlparser.filters filters}
+ * and {@link org.htmlparser.visitors visitors}.
  */
 public class Parser
     implements
@@ -65,28 +114,28 @@ public class Parser
     // This is done so as to facilitate ant script processing.
 
     /**
-     * The floating point version number.
+     * The floating point version number ({@value}).
      */
     public final static double
     VERSION_NUMBER = 1.5
     ;
 
     /**
-     * The type of version.
+     * The type of version ({@value}).
      */
     public final static String
     VERSION_TYPE = "Integration Build"
     ;
 
     /**
-     * The date of the version.
+     * The date of the version ({@value}).
      */
     public final static String
     VERSION_DATE = "Mar 13, 2005"
     ;
 
     /**
-     * The display version.
+     * The display version ({@value}).
      */
     public final static String
     VERSION_STRING = "" + VERSION_NUMBER + " (" + VERSION_TYPE + " " + VERSION_DATE + ")"
@@ -185,8 +234,9 @@ public class Parser
 
     /**
      * Zero argument constructor.
-     * The parser is in a safe but useless state.
-     * Set the lexer or connection using setLexer() or setConnection().
+     * The parser is in a safe but useless state parsing an empty string.
+     * Set the lexer or connection using {@link #setLexer}
+     * or {@link #setConnection}.
      * @see #setLexer(Lexer)
      * @see #setConnection(URLConnection)
      */
@@ -196,19 +246,9 @@ public class Parser
     }
 
     /**
-     * This constructor enables the construction of test cases, with readers
-     * associated with test string buffers. It can also be used with readers of the user's choice
-     * streaming data into the parser.<p/>
-     * <B>Important:</B> If you are using this constructor, and you would like to use the parser
-     * to parse multiple times (multiple calls to parser.elements()), you must ensure the following:<br>
-     * <ul>
-     * <li>Before the first parse, you must mark the reader for a length that you anticipate (the size of the stream).</li>
-     * <li>After the first parse, calls to elements() must be preceded by calls to :
-     * <pre>
-     * parser.getReader().reset();
-     * </pre>
-     * </li>
-     * </ul>
+     * Construct a parser using the provided lexer and feedback object.
+     * This would be used to create a parser for special cases where the
+     * normal creation of a lexer on a URLConnection needs to be customized.
      * @param lexer The lexer to draw characters from.
      * @param fb The object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
@@ -225,9 +265,13 @@ public class Parser
 
     /**
      * Constructor for custom HTTP access.
+     * This would be used to create a parser for a URLConnection that needs
+     * a special setup or negotiation conditioning beyond what is available
+     * from the {@link #getConnectionManager ConnectionManager}.
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
      * @param fb The object to use for message communication.
+     * @throws ParserException If the creation of the underlying Lexer cannot be performed.
      */
     public Parser (URLConnection connection, ParserFeedback fb)
         throws
@@ -239,12 +283,13 @@ public class Parser
     /**
      * Creates a Parser object with the location of the resource (URL or file)
      * You would typically create a DefaultHTMLParserFeedback object and pass it in.
+     * @see #Parser(URLConnection,ParserFeedback)
      * @param resourceLocn Either the URL or the filename (autodetects).
      * A standard HTTP GET is performed to read the content of the URL.
      * @param feedback The HTMLParserFeedback object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
-     * @see #Parser(URLConnection,ParserFeedback)
+     * @throws ParserException If the URL is invalid.
      */
     public Parser (String resourceLocn, ParserFeedback feedback) throws ParserException
     {
@@ -255,6 +300,7 @@ public class Parser
      * Creates a Parser object with the location of the resource (URL or file).
      * A DefaultHTMLParserFeedback object is used for feedback.
      * @param resourceLocn Either the URL or the filename (autodetects).
+     * @throws ParserException If the resourceLocn argument does not resolve to a valid page or file.
      */
     public Parser (String resourceLocn) throws ParserException
     {
@@ -262,19 +308,11 @@ public class Parser
     }
 
     /**
-     * This constructor is present to enable users to plugin their own lexers.
-     * A DefaultHTMLParserFeedback object is used for feedback. It can also be used with readers of the user's choice
-     * streaming data into the parser.<p/>
-     * <B>Important:</B> If you are using this constructor, and you would like to use the parser
-     * to parse multiple times (multiple calls to parser.elements()), you must ensure the following:<br>
-     * <ul>
-     * <li>Before the first parse, you must mark the reader for a length that you anticipate (the size of the stream).</li>
-     * <li>After the first parse, calls to elements() must be preceded by calls to :
-     * <pre>
-     * parser.getReader().reset();
-     * </pre>
-     * </li>
-     * @param lexer The source for HTML to be parsed.
+     * Construct a parser using the provided lexer.
+     * A feedback object printing to {@link #stdout System.out} is used.
+     * This would be used to create a parser for special cases where the
+     * normal creation of a lexer on a URLConnection needs to be customized.
+     * @param lexer The lexer to draw characters from.
      */
     public Parser (Lexer lexer)
     {
@@ -282,11 +320,15 @@ public class Parser
     }
 
     /**
-     * Constructor for non-standard access.
-     * A DefaultHTMLParserFeedback object is used for feedback.
+     * Construct a parser using the provided URLConnection.
+     * This would be used to create a parser for a URLConnection that needs
+     * a special setup or negotiation conditioning beyond what is available
+     * from the {@link #getConnectionManager ConnectionManager}.
+     * A feedback object printing to {@link #stdout System.out} is used.
+     * @see #Parser(URLConnection,ParserFeedback)
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
-     * @see #Parser(URLConnection,ParserFeedback)
+     * @throws ParserException If the creation of the underlying Lexer cannot be performed.
      */
     public Parser (URLConnection connection) throws ParserException
     {
@@ -300,7 +342,6 @@ public class Parser
     /**
      * Set the connection for this parser.
      * This method creates a new <code>Lexer</code> reading from the connection.
-     * Trying to set the connection to null is a noop.
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
      * @exception ParserException if the character set specified in the
@@ -312,14 +353,15 @@ public class Parser
         throws
             ParserException
     {
-        if (null != connection)
-            setLexer (new Lexer (connection));
+        if (null == connection)
+            throw new IllegalArgumentException ("connection cannot be null");
+        setLexer (new Lexer (connection));
     }
 
     /**
      * Return the current connection.
      * @return The connection either created by the parser or passed into this
-     * parser via <code>setConnection</code>.
+     * parser via {@link #setConnection}.
      * @see #setConnection(URLConnection)
      */
     public URLConnection getConnection ()
@@ -330,21 +372,25 @@ public class Parser
     /**
      * Set the URL for this parser.
      * This method creates a new Lexer reading from the given URL.
-     * Trying to set the url to null or an empty string is a noop.
-     * @see #setConnection(URLConnection)
+     * Trying to set the url to null or an empty string is a no-op.
+     * @param url The new URL for the parser.
+     * @throws ParserException If the url is invalid or creation of the
+     * underlying Lexer cannot be performed.
      */
     public void setURL (String url)
         throws
             ParserException
     {
         if ((null != url) && !"".equals (url))
-            setConnection (Page.getConnectionManager ().openConnection (url));
+            setConnection (getConnectionManager ().openConnection (url));
     }
 
     /**
      * Return the current URL being parsed.
-     * @return The url passed into the constructor or the file name
-     * passed to the constructor modified to be a URL.
+     * @return The current url. This is the URL for the current page.
+     * A string passed into the constructor or set via setURL may be altered,
+     * for example, a file name may be modified to be a URL.
+     * @see Page#getUrl
      */
     public String getURL ()
     {
@@ -354,6 +400,10 @@ public class Parser
     /**
      * Set the encoding for the page this parser is reading from.
      * @param encoding The new character set to use.
+     * @throws ParserException If the encoding change causes characters that
+     * have already been consumed to differ from the characters that would
+     * have been seen had the new encoding been in force.
+     * @see org.htmlparser.util.EncodingChangeException
      */
     public void setEncoding (String encoding)
         throws
@@ -366,6 +416,7 @@ public class Parser
      * Get the encoding for the page this parser is reading from.
      * This item is set from the HTTP header but may be overridden by meta
      * tags in the head, so this may change after the head has been parsed.
+     * @return The encoding currently in force.
      */
     public String getEncoding ()
     {
@@ -374,11 +425,12 @@ public class Parser
 
     /**
      * Set the lexer for this parser.
-     * The current NodeFactory is set on the given lexer, since the lexer
-     * contains the node factory object.
+     * The current NodeFactory is transferred to (set on) the given lexer,
+     * since the lexer owns the node factory object.
      * It does not adjust the <code>feedback</code> object.
-     * Trying to set the lexer to <code>null</code> is a noop.
+     * Trying to set the lexer to <code>null</code> is a no-op.
      * @param lexer The lexer object to use.
+     * @see #setNodeFactory
      */
     public void setLexer (Lexer lexer)
     {
@@ -404,7 +456,7 @@ public class Parser
     }
 
     /**
-     * Returns the reader associated with the parser
+     * Returns the lexer associated with the parser
      * @return The current lexer.
      */
     public Lexer getLexer ()
@@ -414,7 +466,7 @@ public class Parser
 
     /**
      * Get the current node factory.
-     * @return The parser's node factory.
+     * @return The current lexer's node factory.
      */
     public NodeFactory getNodeFactory ()
     {
@@ -423,7 +475,7 @@ public class Parser
 
     /**
      * Set the current node factory.
-     * @param factory The new node factory for the parser.
+     * @param factory The new node factory for the current lexer.
      */
     public void setNodeFactory (NodeFactory factory)
     {
@@ -434,7 +486,8 @@ public class Parser
 
     /**
      * Sets the feedback object used in scanning.
-     * @param fb The new feedback object to use.
+     * @param fb The new feedback object to use. If this is null a
+     * {@link #noFeedback silent feedback object} is used.
      */
     public void setFeedback (ParserFeedback fb)
     {
@@ -442,8 +495,8 @@ public class Parser
     }
 
     /**
-     * Returns the feedback.
-     * @return HTMLParserFeedback
+     * Returns the current feedback object.
+     * @return The feedback object currently being used.
      */
     public ParserFeedback getFeedback()
     {
@@ -456,6 +509,8 @@ public class Parser
 
     /**
      * Reset the parser to start from the beginning again.
+     * This assumes support for a reset from the underlying
+     * {@link org.htmlparser.lexer.Source} object.
      */
     public void reset ()
     {
@@ -463,27 +518,53 @@ public class Parser
     }
 
     /**
-     * Returns an iterator (enumeration) to the html nodes. Each node can be a tag/endtag/
-     * string/link/image<br>
-     * This is perhaps the most important method of this class. In typical situations, you will need to use
-     * the parser like this :
+     * Returns an iterator (enumeration) over the html nodes.
+     * {@link org.htmlparser.nodes Nodes} can be of three main types:
+     * <ul>
+     * <li>{@link org.htmlparser.nodes.TagNode TagNode}</li>
+     * <li>{@link org.htmlparser.nodes.TextNode TextNode}</li>
+     * <li>{@link org.htmlparser.nodes.RemarkNode RemarkNode}</li>
+     * </ul>
+     * In general, when parsing with an iterator or processing a NodeList,
+     * you will need to use recursion. For example:
+     * <code>
      * <pre>
-     * Parser parser = new Parser("http://www.yahoo.com");
-     * for (NodeIterator i = parser.elements();i.hasMoreElements();) {
-     *    Node node = i.nextHTMLNode();
-     *    if (node instanceof StringNode) {
-     *      // Downcasting to StringNode
-     *      StringNode stringNode = (StringNode)node;
-     *      // Do whatever processing you want with the string node
-     *      System.out.println(stringNode.getText());
-     *    }
-     *    // Check for the node or tag that you want
-     *    if (node instanceof ...) {
-     *      // Downcast, and process
-     *      // recursively (nodes within nodes)
-     *    }
+     * void processMyNodes (Node node)
+     * {
+     *     if (node instanceof TextNode)
+     *     {
+     *         // downcast to TextNode
+     *         TextNode text = (TextNode)node;
+     *         // do whatever processing you want with the text
+     *         System.out.println (text.getText ());
+     *     }
+     *     if (node instanceof RemarkNode)
+     *     {
+     *         // downcast to RemarkNode
+     *         RemarkNode remark = (RemarkNode)node;
+     *         // do whatever processing you want with the comment
+     *     }
+     *     else if (node instanceof TagNode)
+     *     {
+     *         // downcast to TagNode
+     *         TagNode tag = (TagNode)node;
+     *         // do whatever processing you want with the tag itself
+     *         // ...
+     *         // process recursively (nodes within nodes) via getChildren()
+     *         NodeList list = tag.getChildren ();
+     *         if (null != list)
+     *             for (NodeIterator i = list.elements (); i.hasMoreElements (); )
+     *                 processMyNodes (i.nextNode ());
+     *     }
      * }
+     * 
+     * Parser parser = new Parser ("http://www.yahoo.com");
+     * for (NodeIterator i = parser.elements (); i.hasMoreElements (); )
+     *     processMyNodes (i.nextNode ());
      * </pre>
+     * </code>
+     * @throws ParserException If a parsing error occurs.
+     * @return An iterator over the top level nodes (usually {@.html <html>}).
      */
     public NodeIterator elements () throws ParserException
     {
@@ -492,9 +573,11 @@ public class Parser
 
     /**
      * Parse the given resource, using the filter provided.
-     * @param filter The filter to apply to the parsed nodes.
      * @return The list of matching nodes (for a <code>null</code>
      * filter this is all the top level nodes).
+     * @param filter The filter to apply to the parsed nodes,
+     * or <code>null</code> to retrieve all the top level nodes.
+     * @throws ParserException If a parsing error occurs.
      */
     public NodeList parse (NodeFilter filter) throws ParserException
     {
@@ -515,7 +598,16 @@ public class Parser
         return (ret);
     }
 
-    public void visitAllNodesWith(NodeVisitor visitor) throws ParserException {
+    /**
+     * Apply the given visitor to the current page.
+     * The visitor is passed to the <code>accept()</code> method of each node
+     * in the page in a depth first traversal. The visitor
+     * <code>beginParsing()</code> method is called prior to processing the
+     * page and <code>finishedParsing()</code> is called after the processing.
+     * @param visitor The visitor to visit all nodes with.
+     * @throws ParserException If a parse error occurs while traversing the page with the visitor.
+     */
+    public void visitAllNodesWith (NodeVisitor visitor) throws ParserException {
         Node node;
         visitor.beginParsing();
         for (NodeIterator e = elements();e.hasMoreNodes();) {
@@ -528,6 +620,7 @@ public class Parser
     /**
      * Initializes the parser with the given input HTML String.
      * @param inputHTML the input HTML that is to be parsed.
+     * @throws ParserException If a error occurs in setting up the underlying Lexer.
      */
     public void setInputHTML (String inputHTML)
         throws
@@ -542,6 +635,11 @@ public class Parser
     /**
      * Extract all nodes matching the given filter.
      * @see Node#collectInto(NodeList, NodeFilter)
+     * @param filter The filter to be applied to the nodes.
+     * @throws ParserException If a parse error occurs.
+     * @return A list of nodes matching the filter criteria,
+     * i.e. for which the filter's accept method
+     * returned <code>true</code>.
      */
     public NodeList extractAllNodesThatMatch (NodeFilter filter) throws ParserException
     {
@@ -557,9 +655,16 @@ public class Parser
 
     /**
      * Convenience method to extract all nodes of a given class type.
-     * @see Node#collectInto(NodeList, NodeFilter)
+     * Equivalent to <code>extractAllNodesThatMatch (new NodeClassFilter (nodeType))</code>.
+     * @param nodeType The class of the nodes to collect.
+     * @throws ParserException If a parse error occurs.
+     * @return A list of nodes which have the class specified.
+     * @deprecated Use extractAllNodesThatMatch (new NodeClassFilter (nodeType)).
+     * @see #extractAllNodesThatAre
      */
-    public Node [] extractAllNodesThatAre (Class nodeType) throws ParserException
+    public Node [] extractAllNodesThatAre (Class nodeType)
+        throws
+            ParserException
     {
         NodeList ret;
 
@@ -574,30 +679,31 @@ public class Parser
 
     /**
      * Called just prior to calling connect.
-     * The connection has been conditioned with proxy, URL user/password,
-     * and cookie information. It is still possible to adjust the
-     * connection to alter the request method for example. 
+     * Part of the ConnectionMonitor interface, this implementation just
+     * sends the request header to the feedback object if any.
      * @param connection The connection which is about to be connected.
-     * @exception This exception is thrown if the connection monitor
-     * wants the ConnectionManager to bail out.
+     * @throws ParserException <em>Not used</em>
+     * @see ConnectionMonitor#preConnect
      */
     public void preConnect (HttpURLConnection connection)
-    	throws
-    		ParserException
-	{
+        throws
+            ParserException
+    {
         if (null != getFeedback ())
             getFeedback ().info (ConnectionManager.getRequestHeader (connection));
-	}
+    }
 
-    /** Called just after calling connect.
-     * The response code and header fields can be examined.
+    /**
+     * Called just after calling connect.
+     * Part of the ConnectionMonitor interface, this implementation just
+     * sends the response header to the feedback object if any.
      * @param connection The connection that was just connected.
-     * @exception This exception is thrown if the connection monitor
-     * wants the ConnectionManager to bail out.
+     * @throws ParserException <em>Not used.</em>
+     * @see ConnectionMonitor#postConnect
      */
     public void postConnect (HttpURLConnection connection)
-		throws
-			ParserException
+        throws
+            ParserException
     {
         if (null != getFeedback ())
             getFeedback ().info (ConnectionManager.getResponseHeader (connection));
@@ -605,6 +711,8 @@ public class Parser
 
     /**
      * The main program, which can be executed from the command line
+     * @param args A URL or file name to parse, and an optional tag name to be
+     * used as a filter.
      */
     public static void main (String [] args)
     {
@@ -629,23 +737,23 @@ public class Parser
             System.out.println ();
         }
         else
-	        try
-	        {
-	            parser = new Parser ();
-	            if (1 < args.length)
-	                filter = new TagNameFilter (args[1]);
-	            else
-	            {   // for a simple dump, use more verbose settings
-	                filter = null;
-	                parser.setFeedback (Parser.stdout);
-	                getConnectionManager ().setMonitor (parser);
-	            }
-	            parser.setURL (args[0]);
-	            System.out.println (parser.parse (filter));
-	        }
-	        catch (ParserException e)
-	        {
-	            e.printStackTrace ();
-	        }
+            try
+            {
+                parser = new Parser ();
+                if (1 < args.length)
+                    filter = new TagNameFilter (args[1]);
+                else
+                {   // for a simple dump, use more verbose settings
+                    filter = null;
+                    parser.setFeedback (Parser.stdout);
+                    getConnectionManager ().setMonitor (parser);
+                }
+                parser.setURL (args[0]);
+                System.out.println (parser.parse (filter));
+            }
+            catch (ParserException e)
+            {
+                e.printStackTrace ();
+            }
     }
 }
