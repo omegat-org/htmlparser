@@ -99,7 +99,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		try {
 			Hashtable table = tag.parseParameters();
 			String relativeLink =  (String)table.get("HREF");
-			if (relativeLink!=null) relativeLink = removeChars(relativeLink,'\n');
+			if (relativeLink!=null) relativeLink = removeChars(relativeLink,HTMLNode.getLineSeparator());
 			return (new HTMLLinkProcessor()).extract(relativeLink,url);
 		}
 		catch (Exception e) {
