@@ -229,8 +229,8 @@ public class ParserTestCase extends TestCase {
 		
 		String expected = expectedNode.toPlainTextString().trim();
 		String actual = actualNode.toPlainTextString().trim();
-		expected = expected.replaceAll("\n"," ");
-		actual = actual.replaceAll("\n"," ");
+		expected = expected.replace('\n', ' ');
+		actual = actual.replace('\n',' ');
 		displayMessage = "String value mismatch\nEXPECTED:"+expected+"\nACTUAL:"+actual+displayMessage; 
 		assertStringEquals(displayMessage,expected,actual);
 		
