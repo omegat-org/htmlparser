@@ -158,7 +158,7 @@ public void testExtractType()
 		sb2.append("</SCRIPT>"); 
 		String testHTML2 = new String(sb2.toString()); 
 		
-		assertEquals("There should be 1 node identified",new 
+		assertEquals("There should be 2 nodes identified",new 
 		Integer(2),new Integer(i)); 
 		assertTrue("Node should be a script tag",node[1] 
 		instanceof HTMLScriptTag); 
@@ -167,4 +167,35 @@ public void testExtractType()
 		[1]; 
 		assertEquals("Expected Script Code",testHTML2,scriptTag.toRawString()); 
 	} 
+	public void testParamExtraction() {
+		StringBuffer sb1 = new StringBuffer(); 
+		sb1.append("<script src=\"/adb.js\" language=\"javascript\">\r\n"); 
+		sb1.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
+		sb1.append(" document.write ('xxx');\r\n"); 
+		sb1.append("else\r\n"); 
+		sb1.append(" document.write ('yyy');\r\n"); 
+		sb1.append("</script>\r\n"); 
+		String testHTML1 = new String(sb1.toString()); 
+		
+		StringReader sr = new StringReader(testHTML1); 
+		HTMLReader reader = new HTMLReader(new 
+		BufferedReader(sr),"http://www.google.com/test/index.html"); 
+		HTMLParser parser = new HTMLParser(reader); 
+		HTMLNode [] node = new HTMLNode[10]; 
+		// Register the image scanner 
+		parser.addScanner(new HTMLScriptScanner("-s")); 
+		
+		
+		int i = 0; 
+		for (Enumeration e = parser.elements();e.hasMoreElements();) 
+		{ 
+			node[i++] = (HTMLNode)e.nextElement(); 
+		} 
+		
+		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
+		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
+		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0]; 
+		assertEquals("Script Src","/adb.js",scriptTag.getParameter("src"));
+		assertEquals("Script Language","javascript",scriptTag.getParameter("language"));		
+	}
 }

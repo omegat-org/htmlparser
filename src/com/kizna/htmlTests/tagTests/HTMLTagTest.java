@@ -474,4 +474,26 @@ public void testToRawString() {
             fail("Bad class element = " + o.getClass().getName());
         }
     }
+    public void testStyleSheetTag(){
+     	String testHTML1 = new String("<link rel src=\"af.css\"/>"); 
+		
+		StringReader sr = new StringReader(testHTML1); 
+		HTMLReader reader = new HTMLReader(new 
+		BufferedReader(sr),"http://www.google.com/test/index.html"); 
+		HTMLParser parser = new HTMLParser(reader); 
+		HTMLNode [] node = new HTMLNode[10]; 
+		
+		
+		int i = 0; 
+		for (Enumeration e = parser.elements();e.hasMoreElements();) 
+		{ 
+			node[i++] = (HTMLNode)e.nextElement(); 
+		} 
+		
+		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
+		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
+		HTMLTag tag = (HTMLTag)node[0];
+		assertEquals("StyleSheet Source","af.css",tag.getParameter("src"));
+
+    }    
 }
