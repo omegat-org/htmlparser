@@ -134,7 +134,7 @@ public class ScriptScanner extends CompositeTagScanner {
                                 last.setEndPosition (node.elementEnd ());
                             else
                                 // TODO: need to remove this cast
-                                last = (StringNode)factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                                last = (StringNode)factory.createStringNode (lexer.getPage (), node.elementBegin (), node.elementEnd ());
                         }
                     else if (node instanceof RemarkNode)
                     {
@@ -144,7 +144,7 @@ public class ScriptScanner extends CompositeTagScanner {
                         {
                             // TODO: need to remove this cast
                             // last = (StringNode)factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
-                            last = (StringNode)factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                            last = (StringNode)factory.createStringNode (lexer.getPage (), node.elementBegin (), node.elementEnd ());
                         }
                     }
                     else // StringNode
@@ -162,7 +162,7 @@ public class ScriptScanner extends CompositeTagScanner {
             // build new string tag if required
             if (null == last)
                 // TODO: need to remove this cast
-                last = (StringNode)factory.createStringNode (lexer, position, position);
+                last = (StringNode)factory.createStringNode (lexer.getPage (), position, position);
             // build new end tag if required
             if (null == end)
                 end = new Tag (lexer.getPage (), tag.getEndPosition (), tag.getEndPosition (), new Vector ());

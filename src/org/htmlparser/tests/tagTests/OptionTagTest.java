@@ -31,8 +31,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.Stack;
-
 import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -69,7 +67,7 @@ public class OptionTagTest extends ParserTestCase
     protected void setUp() throws Exception {
         super.setUp();
         createParser(testHTML);
-        parser.addScanner(new OptionTagScanner("-option", new Stack ()));
+        parser.addScanner(new OptionTagScanner("-option"));
         parseAndAssertNodeCount(13);
     }
 

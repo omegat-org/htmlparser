@@ -31,8 +31,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.Stack;
-
 import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.scanners.SelectTagScanner;
 import org.htmlparser.tags.OptionTag;
@@ -79,8 +77,8 @@ public class SelectTagTest extends ParserTestCase
     protected void setUp() throws Exception{
         super.setUp();
         createParser(testHTML);
-        parser.addScanner(new SelectTagScanner("-s", new Stack ()));
-        parser.addScanner(new OptionTagScanner("-o", new Stack ()));
+        parser.addScanner(new SelectTagScanner("-s"));
+        parser.addScanner(new OptionTagScanner("-o"));
         parseAndAssertNodeCount(1);
         assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag);
         selectTag = (SelectTag) node[0];

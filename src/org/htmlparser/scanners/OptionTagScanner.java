@@ -28,7 +28,6 @@
 
 package org.htmlparser.scanners;
 
-import java.util.Stack;
 import java.util.Vector;
 import org.htmlparser.lexer.Page;
 
@@ -42,15 +41,9 @@ public class OptionTagScanner extends CompositeTagScanner
     private static final String MATCH_NAME [] = {"OPTION"};
     private static final String [] ENDERS = { "INPUT", "TEXTAREA", "SELECT", "OPTION" };
     private static final String [] END_TAG_ENDERS = { "SELECT", "FORM", "BODY", "HTML" };
-    private Stack stack;
 
-    public OptionTagScanner(Stack stack) {
-        this("", stack);
-    }
-
-    public OptionTagScanner(String filter, Stack stack) {
+    public OptionTagScanner(String filter) {
         super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
-        this.stack = stack;
     }
 
     public String [] getID() {
@@ -61,12 +54,6 @@ public class OptionTagScanner extends CompositeTagScanner
     {
         OptionTag ret;
 
-        // special step here...
-        // not sure why the recursion is tracked this way,
-        // rather than using the ENDERS and END_TAG_ENDERS arrays...
-        if (!stack.empty () && (this == stack.peek ()))
-            stack.pop ();
-
         ret = new OptionTag ();
         ret.setPage (page);
         ret.setStartPosition (start);
@@ -75,37 +62,6 @@ public class OptionTagScanner extends CompositeTagScanner
         ret.setStartTag (startTag);
         ret.setEndTag (endTag);
         ret.setChildren (children);
-
-        return (ret);
-    }
-
-    public void beforeScanningStarts ()
-    {
-        stack.push (this);
-    }
-
-    /**
-     * This is the logic that decides when a option tag can be allowed
-     */
-    public boolean shouldCreateEndTagAndExit ()
-    {
-        boolean ret;
-
-        ret = false;
-
-        if (0 != stack.size ())
-        {
-            TagScanner parentScanner = (TagScanner)stack.peek ();
-            if (parentScanner instanceof CompositeTagScanner)
-            {
-                CompositeTagScanner scanner = (CompositeTagScanner)parentScanner;
-                if (scanner.tagEnderSet.contains (MATCH_NAME[0])) // should loop over names
-                {
-                    stack.pop ();
-                    ret = true;
-                }
-            }
-        }
 
         return (ret);
     }

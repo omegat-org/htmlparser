@@ -431,13 +431,13 @@ public class CompositeTagScannerTest extends ParserTestCase {
         );
         customTag = (CustomTag)node[1];
         assertStringEquals(
-            "first custom tag html",
+            "second custom tag html",
             "<CUSTOM>something</CUSTOM>",
             customTag.toHtml()
         );
         Tag endTag = (Tag)node[2];
         assertStringEquals(
-            "first custom tag html",
+            "third custom tag html",
             "</CUSTOM>",
             endTag.toHtml()
         );
@@ -467,7 +467,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
         customTag = (CustomTag)node[1];
         assertStringEquals(
-            "first custom tag html",
+            "second custom tag html",
             "<CUSTOM>something</CUSTOM>",
             customTag.toHtml()
         );
@@ -484,7 +484,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
         Tag endTag = (Tag)node[2];
         assertStringEquals(
-            "first custom tag html",
+            "third custom tag html",
             "</CUSTOM>",
             endTag.toHtml()
         );

@@ -28,7 +28,6 @@
 
 package org.htmlparser.scanners;
 
-import java.util.Stack;
 import java.util.Vector;
 
 import org.htmlparser.Parser;
@@ -49,8 +48,6 @@ public class FormScanner extends CompositeTagScanner
     private boolean linkScannerAlreadyOpen=false;
     private static final String [] formTagEnders = {"HTML","BODY"};
     
-    private Stack stack = new Stack();
-
     /**
      * Constructs a form scanner.
      * Adds input, textarea, select and option scanners to the parser's
@@ -68,9 +65,9 @@ public class FormScanner extends CompositeTagScanner
     {
         super(filter,MATCH_ID,formTagEnders,false);
         parser.addScanner(new InputTagScanner("-i"));
-        parser.addScanner(new TextareaTagScanner("-t",stack));
-        parser.addScanner(new SelectTagScanner("-select", stack));
-        parser.addScanner(new OptionTagScanner("-option",stack));
+        parser.addScanner(new TextareaTagScanner("-t"));
+        parser.addScanner(new SelectTagScanner("-select"));
+        parser.addScanner(new OptionTagScanner("-option"));
     }
 
     /**
@@ -138,12 +135,6 @@ public class FormScanner extends CompositeTagScanner
     {
         FormTag ret;
 
-        // special step here...
-        // not sure why the recursion is tracked this way,
-        // rather than using the ENDERS and END_TAG_ENDERS arrays...
-        if (!stack.empty () && (this == stack.peek ()))
-            stack.pop ();
-
         ret = new FormTag ();
         ret.setPage (page);
         ret.setStartPosition (start);
@@ -160,10 +151,5 @@ public class FormScanner extends CompositeTagScanner
             startTag.setAttribute("ACTION",formUrl);
 
         return (ret);
-    }
-
-    public void beforeScanningStarts()
-    {
-        stack.push(this);
     }
 }

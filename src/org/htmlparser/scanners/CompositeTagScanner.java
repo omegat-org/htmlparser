@@ -187,11 +187,6 @@ public abstract class CompositeTagScanner extends TagScanner
 
     /**
      * Collect the children.
-     * Performs an immediate call to {@link #shouldCreateEndTagAndExit} to
-     * allow subclasses to override the scan is a primitive way. If
-     * <code>true</code>, returns a virtual end tag and repositions the lexer
-     * to re-read that same tag.<p>
-     * Otherwise, calls {@link #beforeScanningStarts} and begins scanning.
      * An initial test is performed for an empty XML tag, in which case
      * the start tag and end tag of the returned tag are the same and it has
      * no children.<p>
@@ -201,7 +196,7 @@ public abstract class CompositeTagScanner extends TagScanner
      * the same type is found and {@link #isAllowSelfChildren} returns
      * <code>false</code>. In all but the first case, a virtual end tag
      * is created. Each node found that is not the end tag is added to
-     * the list of children and a call made to {@link #childNodeEncountered}.<p>
+     * the list of children.<p>
      * The scanner's {@link #createTag} method is called with details about
      * the start tag, end tag and children. The attributes from the start tag
      * will wind up duplicated in the newly created tag, so the start tag is
@@ -210,76 +205,77 @@ public abstract class CompositeTagScanner extends TagScanner
      * start (and possibly end) tag passed to {@link #createTag}.
      * @param url The url for the page the tag is discovered on.
      * @param lexer The source of subsequent nodes.
-     * @return The scanner specific tag from the call to {@link #createTag}.,
-     * or the virtual end tag if {@link #shouldCreateEndTagAndExit} returned
-     * <code>true</code>.
+     * @return The scanner specific tag from the call to {@link #createTag}.
      */
     public Tag scan (Tag tag, String url, Lexer lexer) throws ParserException
     {
         Node node;
         NodeList nodeList;
         Tag endTag;
+        String name;
+        TagScanner scanner;
         CompositeTag composite;
         Tag ret;
         
-        if (shouldCreateEndTagAndExit ())
-        {
-            ret = createVirtualEndTag (tag, lexer.getPage (), tag.elementBegin ());
-            lexer.setPosition (tag.elementBegin ());
-        }
+        nodeList = new NodeList ();
+        endTag = null;
+
+        if (tag.isEmptyXmlTag ())
+            endTag = tag;
         else
-        {
-            beforeScanningStarts ();
-            nodeList = new NodeList ();
-            endTag = null;
-            
-            if (tag.isEmptyXmlTag ())
-                endTag = tag;
-            else
-                do
+            do
+            {
+                node = lexer.nextNode (balance_quotes);
+                if (null != node)
                 {
-                    node = lexer.nextNode (balance_quotes);
-                    if (null != node)
+                    if (node instanceof Tag)
                     {
-                        if (node instanceof Tag)
+                        Tag next = (Tag)node;
+                        name = next.getTagName ();
+                        // check for normal end tag
+                        if (next.isEndTag () && name.equals (tag.getTagName ()))
                         {
-                            Tag end = (Tag)node;
-                            // check for normal end tag
-                            if (end.isEndTag () && end.getTagName ().equals (tag.getTagName ()))
-                            {
-                                endTag = end;
-                                node = null;
-                            }
-                            else if (isTagToBeEndedFor (end) || // check DTD
-                                (   // check for child of same name not allowed
-                                    !(end.isEndTag ()) &&
-                                    !isAllowSelfChildren () &&
-                                    end.getTagName ().equals (tag.getTagName ())
-                                ))
-                            {
-                                endTag = createVirtualEndTag (tag, lexer.getPage (), end.elementBegin ());
-                                lexer.setPosition (end.elementBegin ());
-                                node = null;
-                            }
+                            endTag = next;
+                            node = null;
                         }
-                        
-                        if (null != node)
+                        else if (isTagToBeEndedFor (next) || // check DTD
+                            (   // check for child of same name not allowed
+                                !(next.isEndTag ()) &&
+                                !isAllowSelfChildren () &&
+                                name.equals (tag.getTagName ())
+                            ))
                         {
-                            nodeList.add (node);
-                            childNodeEncountered (node);
+                            // insert a virtual end tag and backup one node
+                            endTag = createVirtualEndTag (tag, lexer.getPage (), next.elementBegin ());
+                            lexer.setPosition (next.elementBegin ());
+                            node = null;
+                        }
+                        else if (!next.isEndTag ())
+                        {
+                            // now recurse if there is a scanner for this type of tag
+                            // whoah! really cheat here to get the parser
+                            // maybe eventually the tag will know it's own scanner eh
+                            org.htmlparser.Parser parser = (org.htmlparser.Parser)lexer.getNodeFactory ();
+                            scanner = parser.getScanner (name);
+                            if ((null != scanner) && scanner.evaluate (next, this))
+                                node = scanner.createScannedNode (next, lexer.getPage ().getUrl (), lexer);
                         }
                     }
+
+                    if (null != node)
+                        nodeList.add (node);
                 }
+            }
             while (null != node);
-            
-            if (null == endTag)
-                endTag = createVirtualEndTag (tag, lexer.getPage (), lexer.getCursor ().getPosition ());
-            
-            composite = (CompositeTag)createTag (lexer.getPage (), tag.elementBegin (), endTag.elementEnd (), tag.getAttributesEx (), tag, endTag, nodeList);
-            for (int i = 0; i < composite.getChildCount (); i++)
-                composite.childAt (i).setParent (composite);
-            ret = composite;
-        }
+
+        if (null == endTag)
+            endTag = createVirtualEndTag (tag, lexer.getPage (), lexer.getCursor ().getPosition ());
+
+        composite = (CompositeTag)createTag (lexer.getPage (), tag.elementBegin (), endTag.elementEnd (), tag.getAttributesEx (), tag, endTag, nodeList);
+        for (int i = 0; i < composite.getChildCount (); i++)
+            composite.childAt (i).setParent (composite);
+        ret = composite;
+
         
         return (ret);
     }
@@ -308,23 +304,6 @@ public abstract class CompositeTagScanner extends TagScanner
         ret = new Tag (page, position, position, attributes);
         
         return (ret);
-    }
-
-    /**
-     * Override this method if you wish to create any data structures or do anything
-     * before the start of the scan. This is just after a tag has triggered the scanner
-     * but before the scanner begins its processing.
-     */
-    public void beforeScanningStarts() 
-    {
-    }
-
-    /**
-     * This method is called everytime a child to the composite is found. It is useful when we
-     * need to store special children seperately. Though, all children are collected anyway into a node list.
-     */
-    public void childNodeEncountered(Node node) 
-    {
     }
 
     /**
@@ -367,17 +346,8 @@ public abstract class CompositeTagScanner extends TagScanner
         return (ret);
     }
 
-    public final boolean isAllowSelfChildren() {
+    public final boolean isAllowSelfChildren()
+    {
         return allowSelfChildren;
-    }
-
-    /**
-     * Override this method to implement scanner logic that determines if the current scanner is
-     * to be allowed. This is useful when there are rules which dont allow recursive tags of the same
-     * type. @see BulletScanner
-     * @return boolean true/false
-     */
-    public boolean shouldCreateEndTagAndExit() {
-        return false;
     }
 }

@@ -28,7 +28,6 @@
 
 package org.htmlparser.scanners;
 
-import java.util.Stack;
 import java.util.Vector;
 
 import org.htmlparser.Parser;
@@ -46,7 +45,6 @@ public class BulletListScanner extends CompositeTagScanner
 {
     private static final String [] MATCH_STRING = { "UL", "OL" };
     private final static String ENDERS [] = { "BODY", "HTML" };
-    private Stack ulli = new Stack();
 
     public BulletListScanner(Parser parser) 
     {
@@ -56,7 +54,7 @@ public class BulletListScanner extends CompositeTagScanner
     public BulletListScanner(String filter, Parser parser)
     {
         super(filter, MATCH_STRING, ENDERS);
-        parser.addScanner(new BulletScanner("-bullet",ulli));
+        parser.addScanner(new BulletScanner("-bullet"));
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
@@ -79,10 +77,4 @@ public class BulletListScanner extends CompositeTagScanner
     {
         return MATCH_STRING;
     }
-
-    public void beforeScanningStarts()
-    {
-        ulli.push(this);
-    }
-
 }

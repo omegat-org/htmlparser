@@ -57,7 +57,30 @@ public class IteratorImpl implements PeekingIterator
             {
                 ret = mLexer.nextNode ();
                 if (null != ret)
+                {
+                    // kick off recursion for the top level node
+                    if (ret instanceof org.htmlparser.tags.Tag)
+                    {
+                        org.htmlparser.tags.Tag tag;
+                        String name;
+                        org.htmlparser.scanners.TagScanner scanner;
+
+                        tag = (org.htmlparser.tags.Tag)ret;
+                        if (!tag.isEndTag ())
+                        {
+                            // now recurse if there is a scanner for this type of tag
+                            name = tag.getTagName ();
+                            // whoah! really cheat here to get the parser
+                            // maybe eventually the tag will know it's own scanner eh
+                            org.htmlparser.Parser parser = (org.htmlparser.Parser)mLexer.getNodeFactory ();
+                            scanner = parser.getScanner (name);
+                            if ((null != scanner) && scanner.evaluate (tag, null))
+                                ret = scanner.createScannedNode (tag, mLexer.getPage ().getUrl (), mLexer);
+                        }
+                    }
+
                     preRead.addElement (ret);
+                }
             }
             catch (Exception e) {
                 StringBuffer msgBuffer = new StringBuffer();
