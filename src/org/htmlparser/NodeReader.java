@@ -56,7 +56,6 @@ public class NodeReader extends BufferedReader
 	protected TagScanner previousOpenScanner = null;
 	protected String url;
 	private Parser parser;
-	private boolean tagUpgraded=false;
 	private int lineCount;
 	private String previousLine;
 	private StringParser stringParser = new StringParser();
@@ -119,6 +118,14 @@ public class NodeReader extends BufferedReader
 		return line;
 	}
 	/**
+	 * Get the last line number that the reader has read
+	 * @return int last line number read by the reader
+	 */ 
+	public int getLastLineNumber() {
+		return lineCount-1;
+	}
+
+	/**
 	 * This method is useful when designing your own scanners. You might need to find out what is the location where the
 	 * reader has stopped last.
 	 * @return int Last position read by the reader
@@ -127,6 +134,7 @@ public class NodeReader extends BufferedReader
 		if (node!=null) return node.elementEnd(); else
 		return 0;
 	}
+
 	/*
 	 * Read the next line
 	 * @return String containing the line
@@ -196,7 +204,9 @@ public class NodeReader extends BufferedReader
                     catch (Exception e)
                     {			
                         StringBuffer msgBuffer = new StringBuffer();
-                        msgBuffer.append(DECIPHER_ERROR+"\n" +                        	"    Tag being processed : "+tag.getTagName()+"\n" +                        	"    Current Tag Line : "+tag.getTagLine()
+                        msgBuffer.append(DECIPHER_ERROR+"\n" +
+                        	"    Tag being processed : "+tag.getTagName()+"\n" +
+                        	"    Current Tag Line : "+tag.getTagLine()
                         ); 
                         appendLineDetails(msgBuffer);
                         ParserException ex = new ParserException(msgBuffer.toString(),e);
@@ -270,8 +280,9 @@ public class NodeReader extends BufferedReader
 	}
 	
 	/**
-	 * @param lineSeparator New Line separator to be used
-	 */
+	 * Gets the line seperator that is being used
+	 * @return String
+	 */ 
 	public static String getLineSeparator()
 	{
 		return (Node.getLineSeparator());

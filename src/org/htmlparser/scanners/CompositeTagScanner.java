@@ -61,6 +61,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 	
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine)
 		throws ParserException {
+		int startLine = reader.getLastLineNumber();
 		Tag endTag=null; 
 		try {
 			if (isBrokenTag()) {
@@ -144,10 +145,12 @@ public abstract class CompositeTagScanner extends TagScanner {
 					new TagData(
 						startTag.elementBegin(),
 						endTag.elementEnd(),
+						startLine,
+						reader.getLastLineNumber(),
 						startTag.getText(),
 						currLine,
 						url,
-						isXmlEndTag				
+						isXmlEndTag
 					), new CompositeTagData(
 						startTag,endTag,childrenNodeList
 					)
