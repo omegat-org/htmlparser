@@ -56,7 +56,7 @@ public class HTMLReader extends BufferedReader
 	protected HTMLNode node = null;
 	protected HTMLTagScanner previousOpenScanner = null;
 	protected String url;
-	private java.io.BufferedReader in;
+//	private java.io.BufferedReader in;
 	private HTMLParser parser;
 	private boolean tagUpgraded=false;
 	/**
@@ -64,19 +64,19 @@ public class HTMLReader extends BufferedReader
 	 * BufferedReader class.
 	 */
 
-	public HTMLReader(BufferedReader in, int len)
+	public HTMLReader(Reader in, int len)
 	{
 		super(in,len);
-		this.in = in;
+//		this.in = in;
 		this.parser = null;
 	}
 	/**
 	 * The constructor takes in a reader object, and the url to be read.
 	 */
-	public HTMLReader(BufferedReader in,String url)
+	public HTMLReader(Reader in,String url)
 	{
 		super(in);
-		this.in = in;
+//		this.in = in;
 		this.url = url;
 		this.parser = null;		
 	}
@@ -189,13 +189,6 @@ public HTMLParser getParser() {
 			throw new HTMLParserException("HTMLReader.readElement() : Error occurred while trying to read the next element",e);
 		}
 	}
-/**
- * Delegates to the BufferedReader's readLine method
- * @return String line read by the reader
- */
-public String readLine() throws IOException{
-	return in.readLine();
-}
 	/**
 	 * Do we need to read the next line ?
 	 * @return true - yes/ false - no
