@@ -65,12 +65,12 @@ public class SelectTagScanner extends CompositeTagScanner
 		return new SelectTag(tagData,compositeTagData,optionTags);
 	}
 	
-	protected void childNodeEncountered(Node node) {
+	public void childNodeEncountered(Node node) {
 		if (node instanceof OptionTag)
 			optionTags.add(node);
 	}
 
-	protected void beforeScanningStarts() {
+	public void beforeScanningStarts() {
 		optionTags = new ArrayList();
 	}
 

@@ -62,11 +62,11 @@ public class TableScanner extends CompositeTagScanner {
 		return MATCH_STRING;
 	}
 
-	protected void beforeScanningStarts() {
+	public void beforeScanningStarts() {
 		rows = new ArrayList();
 	}
 
-	protected void childNodeEncountered(Node node) {
+	public void childNodeEncountered(Node node) {
 		if (node instanceof TableRow) 
 			rows.add(node);
 	}

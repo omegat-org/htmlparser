@@ -510,7 +510,6 @@ public class ParserTest extends ParserTestCase {
 
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 			Node node = e.nextNode();
-			System.out.println(node.toString()+","+node.toHtml());
 			node.collectInto(collectionList,LinkTag.class);
 		}
 		assertEquals("Size of collection vector should be 11",11,collectionList.size());

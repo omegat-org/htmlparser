@@ -194,7 +194,7 @@ public class ImageScannerTest extends ParserTestCase
 	
 		// Register the image scanner
 		parser.registerScanners();
-		parser.addScanner(new TableScanner(parser));
+//		parser.addScanner(new TableScanner(parser));
 		parseAndAssertNodeCount(2);
 		assertType("first node type",TableRow.class,node[0]);
 		TableRow row = (TableRow)node[0];

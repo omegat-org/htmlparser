@@ -201,10 +201,10 @@ public abstract class CompositeTagScanner extends TagScanner {
 		return (lastSlash == tagText.length()-1 || tag.isEmptyXmlTag()) && tag.getText().indexOf("://")==-1;
 	}
 	
-	protected void beforeScanningStarts() {
+	public void beforeScanningStarts() {
 	}
 	
-	protected void childNodeEncountered(Node node) {
+	public void childNodeEncountered(Node node) {
 	}
 
 	public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;

@@ -34,7 +34,6 @@ package org.htmlparser.scanners;
 import java.util.Vector;
 
 import org.htmlparser.NodeReader;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
@@ -54,20 +53,20 @@ public class FormScanner extends CompositeTagScanner
 	public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";	
 	private Vector textAreaVector;
 	private boolean linkScannerAlreadyOpen=false;
-	private static final String [] formTagEnders = {"FORM"
+	private static final String [] formTagEnders = {"HTML","BODY"
 	};
  	/**
 	 * HTMLFormScanner constructor comment.
 	 */
 	public FormScanner() {
-		super(MATCH_ID);
+		this("");
 	}
 	/**
 	 * Overriding the constructor to accept the filter
 	 */
 	public FormScanner(String filter)
 	{
-		super(filter,MATCH_ID);
+		super(filter,MATCH_ID,false);
 	}
 	
   /**
@@ -176,11 +175,11 @@ public class FormScanner extends CompositeTagScanner
 		}	
 		return match;
 	}
-
-	public Tag scan(Tag tag, String url, NodeReader reader, String currLine)
-		throws ParserException {
-		// TODO Auto-generated method stub
-		return super.scan(tag, url, reader, currLine);
-	}
+//
+//	public Tag scan(Tag tag, String url, NodeReader reader, String currLine)
+//		throws ParserException {
+//		// TODO Auto-generated method stub
+//		return super.scan(tag, url, reader, currLine);
+//	}
 
 }

@@ -44,6 +44,7 @@ public class CompositeTagScannerHelper {
 	}
 		
 	public Tag scan() throws ParserException {
+		scanner.beforeScanningStarts();
 		Node currentNode = tag;
 		doEmptyXmlTagCheckOn(currentNode);
 		if (!endTagFound) { 
@@ -109,8 +110,10 @@ public class CompositeTagScannerHelper {
 			if (isExpectedEndTagFound())
 				endTagFound = true;
 		}
-		else 
-			nodeList.add(currentNode);	
+		else { 
+			nodeList.add(currentNode);
+			scanner.childNodeEncountered(currentNode);
+		}	
 	}
 
 	private boolean isExpectedEndTagFound() {
