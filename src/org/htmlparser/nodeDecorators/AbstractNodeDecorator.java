@@ -42,6 +42,18 @@ public abstract class AbstractNodeDecorator implements Text
         this.delegate = delegate;
     }
 
+    /**
+     * Clone this object.
+     * Exposes java.lang.Object clone as a public method.
+     * @return A clone of this object.
+     * @exception CloneNotSupportedException This shouldn't be thrown since
+     * the {@link Node} interface extends Cloneable.
+     */
+    public Object clone() throws CloneNotSupportedException
+    {
+        return (super.clone ());
+    }
+
     public void accept (NodeVisitor visitor)
     {
         delegate.accept (visitor);

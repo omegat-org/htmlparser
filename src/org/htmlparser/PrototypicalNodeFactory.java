@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import org.htmlparser.Attribute;
@@ -38,6 +39,7 @@ import org.htmlparser.Remark;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.nodes.AbstractNode;
 import org.htmlparser.nodes.TextNode;
 import org.htmlparser.nodes.RemarkNode;
 import org.htmlparser.tags.AppletTag;
@@ -73,9 +75,18 @@ import org.htmlparser.util.ParserException;
 
 /**
  * A node factory based on the prototype pattern.
- * This factory uses the prototype pattern to generate new Tag nodes.
+ * This factory uses the prototype pattern to generate new nodes.
+ * It generates generic text and remark nodes from prototypes accessed
+ * via the textPrototype and remarkPrototype properties respectively.
+ * These are cloned as needed to form new {@link Text} and {@link Remark} nodes.
  * Prototype tags, in the form of undifferentiated tags are held in a hash
- * table. On a 
+ * table. On a request for a tag, the attributes are examined for the name
+ * of the tag and if a prototype of that name is registered, it is cloned
+ * and the clone is given the characteristics
+ * {@link Attribute Attributes}, start and end position) of the requested tag.
+ * If no tag is registered under the needed name, a generic tag is created.
+ * Note that in all casses, the {@link Page} property is only set if the node
+ * is a subclass of {@link AbstractNode}.
  */
 public class PrototypicalNodeFactory
     implements
@@ -83,13 +94,23 @@ public class PrototypicalNodeFactory
         NodeFactory
 {
     /**
-     * The list of tags to return at the top level.
+     * The prototypical text node.
+     */
+    protected Text mText;
+
+    /**
+     * The prototypical remark node.
+     */
+    protected Remark mRemark;
+
+    /**
+     * The list of tags to return.
      * The list is keyed by tag name.
      */
     protected Map mBlastocyst;
 
     /**
-     * Create a new factory with all but DOM tags registered.
+     * Create a new factory with all tags registered.
      */
     public PrototypicalNodeFactory ()
     {
@@ -98,16 +119,21 @@ public class PrototypicalNodeFactory
 
     /**
      * Create a new factory with no registered tags.
+     * @param empty If <code>true</code>, creates an empty factory,
+     * otherwise is equivalent to {@link #PrototypicalNodeFactory()}.
      */
     public PrototypicalNodeFactory (boolean empty)
     {
         clear ();
+        mText = new TextNode (null, 0, 0);
+        mRemark = new RemarkNode (null, 0, 0);
         if (!empty)
             registerTags ();
     }
 
     /**
-     * Create a new factory with the given tag as the only one registered.
+     * Create a new factory with the given tag as the only registered tag.
+     * @param tag The single tag to register in the otherwise empty factory.
      */
     public PrototypicalNodeFactory (org.htmlparser.tags.Tag tag)
     {
@@ -117,6 +143,7 @@ public class PrototypicalNodeFactory
 
     /**
      * Create a new factory with the given tags registered.
+     * @param tags The tags to register in the otherwise empty factory.
      */
     public PrototypicalNodeFactory (org.htmlparser.tags.Tag[] tags)
     {
@@ -128,11 +155,11 @@ public class PrototypicalNodeFactory
     /**
      * Adds a tag to the registry.
      * @param id The name under which to register the tag.
-     * @param tag The tag to be returned from a createTag(id) call.
-     * @return The tag previously registered with that id,
+     * @param tag The tag to be returned from a {@link #createTagNode} call.
+     * @return The tag previously registered with that id if any,
      * or <code>null</code> if none.
      */
-    public Tag put (String id, org.htmlparser.tags.Tag tag)
+    public Tag put (String id, Tag tag)
     {
         return ((Tag)mBlastocyst.put (id, tag));
     }
@@ -140,21 +167,21 @@ public class PrototypicalNodeFactory
     /**
      * Gets a tag from the registry.
      * @param id The name of the tag to return.
-     * @return The tag registered under the id name or <code>null</code> if none.
+     * @return The tag registered under the <code>id</code> name or <code>null</code> if none.
      */
-    public org.htmlparser.tags.Tag get (String id)
+    public Tag get (String id)
     {
-        return ((org.htmlparser.tags.Tag)mBlastocyst.get (id));
+        return ((Tag)mBlastocyst.get (id));
     }
 
     /**
      * Remove a tag from the registry.
      * @param id The name of the tag to remove.
-     * @return The tag that was registered with that id.
+     * @return The tag that was registered with that <code>id</code>.
      */
-    public org.htmlparser.tags.Tag remove (String id)
+    public Tag remove (String id)
     {
-        return ((org.htmlparser.tags.Tag)mBlastocyst.remove (id));
+        return ((Tag)mBlastocyst.remove (id));
     }
 
     /**
@@ -165,7 +192,21 @@ public class PrototypicalNodeFactory
         mBlastocyst = new Hashtable ();
     }
 
+    /**
+     * Get the list of tag names.
+     * @return The names of the tags currently registered.
+     */
+    public Set getTagNames ()
+    {
+        return (mBlastocyst.keySet ());
+    }
 
+    /**
+     * Register a tag.
+     * Registers the given tag under every id the tag has.
+     * @param tag The tag to register (subclass of
+     * {@link org.htmlparser.tags.Tag}).
+     */
     public void registerTag (org.htmlparser.tags.Tag tag)
     {
         String ids[];
@@ -175,6 +216,12 @@ public class PrototypicalNodeFactory
             put (ids[i], tag);
     }
 
+    /**
+     * Unregister a tag.
+     * Unregisters the given tag from every id the tag has.
+     * @param tag The tag to unregister (subclass of
+     * {@link org.htmlparser.tags.Tag}).
+     */
     public void unregisterTag (org.htmlparser.tags.Tag tag)
     {
         String ids[];
@@ -184,6 +231,32 @@ public class PrototypicalNodeFactory
             remove (ids[i]);
     }
 
+    /**
+     * Register a tag.
+     * Registers the given tag under the tag {@link Tag#getTagName() name}.
+     * @param tag The tag to register (implements {@link org.htmlparser.Tag}).
+     */
+    public void registerTag (Tag tag)
+    {
+        put (tag.getTagName (), tag);
+    }
+
+    /**
+     * Unregister a tag.
+     * Unregisters the given tag from the tag {@link Tag#getTagName() name}.
+     * @param tag The tag to unregister (implements {@link org.htmlparser.Tag}).
+     */
+    public void unregisterTag (Tag tag)
+    {
+        remove (tag.getTagName ());
+    }
+
+    /**
+     * Register all known tags in the tag package.
+     * Registers tags from the {@link org.htmlparser.tags tag package} by
+     * calling {@link #registerTag(org.htmlparser.tags.Tag) registerTag()}.
+     * @return 'this' nodefactory as a convenience.
+     */
     public PrototypicalNodeFactory registerTags ()
     {
         registerTag (new AppletTag ());
@@ -219,6 +292,48 @@ public class PrototypicalNodeFactory
         return (this);
     }
 
+    /**
+     * Get the object being used to generate text nodes.
+     * @return The prototype for {@link Text} nodes.
+     */
+    public Text getTextPrototype ()
+    {
+        return (mText);
+    }
+
+    /**
+     * Set the object to be used to generate text nodes.
+     * @param text The prototype for {@link Text} nodes.
+     */
+    public void setTextPrototype (Text text)
+    {
+        if (null == text)
+            throw new IllegalArgumentException ("text prototype node cannot be null");
+        else
+            mText = text;
+    }
+
+    /**
+     * Get the object being used to generate remark nodes.
+     * @return The prototype for {@link Remark} nodes.
+     */
+    public Remark getRemarkPrototype ()
+    {
+        return (mRemark);
+    }
+
+    /**
+     * Set the object to be used to generate remark nodes.
+     * @param remark The prototype for {@link Remark} nodes.
+     */
+    public void setRemarkPrototype (Remark remark)
+    {
+        if (null == remark)
+            throw new IllegalArgumentException ("remark prototype node cannot be null");
+        else
+            mRemark = remark;
+    }
+
     //
     // NodeFactory interface
     //
@@ -227,11 +342,28 @@ public class PrototypicalNodeFactory
      * Create a new string node.
      * @param page The page the node is on.
      * @param start The beginning position of the string.
-     * @param end The ending positiong of the string.
+     * @param end The ending position of the string.
      */
     public Text createStringNode (Page page, int start, int end)
     {
-        return (new TextNode (page, start, end));
+        Text ret;
+
+        try
+        {
+            ret = (Text)(getTextPrototype ().clone ());
+            if (ret instanceof AbstractNode)
+                ((AbstractNode)ret).setPage (page);
+            else
+                ret.setText (page.getText (start, end));
+            ret.setStartPosition (start);
+            ret.setEndPosition (end);
+        }
+        catch (CloneNotSupportedException cnse)
+        {
+            ret = new TextNode (page, start, end);
+        }
+
+        return (ret);
     }
 
     /**
@@ -242,7 +374,33 @@ public class PrototypicalNodeFactory
      */
     public Remark createRemarkNode (Page page, int start, int end)
     {
-        return (new RemarkNode (page, start, end));
+        int first;
+        int last;
+        Remark ret;
+        
+        try
+        {
+            ret = (Remark)(getRemarkPrototype ().clone ());
+//            if (ret instanceof AbstractNode)
+//                ((AbstractNode)ret).setPage (page);
+//            else
+            {
+                first = start + 4; // <!--
+                last = end - 3; // -->
+                if (first >= last)
+                    ret.setText ("");
+                else
+                    ret.setText (page.getText (first, last));
+            }
+            ret.setStartPosition (start);
+            ret.setEndPosition (end);
+        }
+        catch (CloneNotSupportedException cnse)
+        {
+            ret = new RemarkNode (page, start, end);
+        }
+
+        return (ret);
     }
 
     /**
@@ -262,8 +420,8 @@ public class PrototypicalNodeFactory
     {
         Attribute attribute;
         String id;
-        org.htmlparser.tags.Tag prototype;
-        org.htmlparser.tags.Tag ret;
+        Tag prototype;
+        Tag ret;
 
         ret = null;
 
@@ -280,11 +438,12 @@ public class PrototypicalNodeFactory
                     {
                         if (id.endsWith ("/"))
                             id = id.substring (0, id.length () - 1);
-                        prototype = (org.htmlparser.tags.Tag)mBlastocyst.get (id);
+                        prototype = (Tag)mBlastocyst.get (id);
                         if (null != prototype)
                         {
-                            ret = (org.htmlparser.tags.Tag)prototype.clone ();
-                            ret.setPage (page);
+                            ret = (Tag)prototype.clone ();
+                            if (ret instanceof AbstractNode)
+                                ((AbstractNode)ret).setPage (page);
                             ret.setStartPosition (start);
                             ret.setEndPosition (end);
                             ret.setAttributesEx (attributes);
@@ -298,6 +457,7 @@ public class PrototypicalNodeFactory
             }
         }
         if (null == ret)
+            // generate a generic node
             ret = new org.htmlparser.tags.Tag (page, start, end, attributes);
 
         return (ret);

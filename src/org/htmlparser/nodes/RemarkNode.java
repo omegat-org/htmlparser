@@ -201,9 +201,9 @@ public class RemarkNode
             ret.append (",");
             ret.append (endpos);
             ret.append ("): ");
-            while (startpos < endpos)
+            for (int i = 0; i < mText.length (); i++)
             {
-                c = mText.charAt (startpos);
+                c = mText.charAt (i);
                 switch (c)
                 {
                     case '\t':
@@ -223,7 +223,6 @@ public class RemarkNode
                     ret.append ("...");
                     break;
                 }
-                startpos++;
             }
         }
 

@@ -28,17 +28,32 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 -->
 </head>
-<body bgcolor="white">
-The basic API classes which will be used by most users when working with the html parser (the Parser class is the most important one in this).
-
-<h2>Related Documentation</h2>
-
-For overviews, tutorials, examples, guides, and tool documentation, please see:
-<ul>
-    <li><a href="http://htmlparser.sourceforge.net">HTML Parser Home Page</a>
-</ul>
-
-<!-- Put @see and @since tags down here. -->
-
+<body>
+The basic API classes which will be used by most developers when working with
+the HTML Parser.
+<p>The {@link org.htmlparser.Parser} class is the main high level class that
+provides simplified access to the contents of an HTML page. The page can be
+specified as either a URLConnection or a String. In the case of a String, an
+attempt is made to open it as a URL, and if that fails it assumes it is a local
+disk file.
+A wide range of methods is available to customize the operation of the Parser,
+as well as access specific pieces of the page as
+{@link org.htmlparser.Node Nodes}.</p>
+<p>The {@link org.htmlparser.NodeFactory} interface specifies the requirements
+for a developer to have the Parser or Lexer generate nodes. Three types of
+nodes are required: {@link org.htmlparser.Text}, {@link org.htmlparser.Remark}
+and {@link org.htmlparser.Tag Tags}. Tags contain lists
+of child nodes and {@link org.htmlparser.Attribute attributes}.</p>
+<p>The only provided implementation of the NodeFactory interface
+is the {@link org.htmlparser.PrototypicalNodeFactory} which
+operates by holding example nodes and cloning them as needed to satisfy the
+requests for nodes by the Parser. The Lexer is it's own NodeFactory, returning
+new {@link org.htmlparser.nodes.TextNode},
+{@link org.htmlparser.nodes.RemarkNode} and undifferentiated
+{@link org.htmlparser.nodes.TagNode Tagnodes} (see the
+{@link org.htmlparser.nodes nodes} package).</p>
+<p>The {@link org.htmlparser.NodeFilter} interface is used by the filtering
+code to determine if a node meets a certain criteria. Some generic examples of
+filters can be found in the {@link org.htmlparser.filters filters} package.
 </body>
 </html>

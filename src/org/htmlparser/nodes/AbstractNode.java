@@ -83,6 +83,18 @@ public abstract class AbstractNode implements Node, Serializable
     }
 
     /**
+     * Clone this object.
+     * Exposes java.lang.Object clone as a public method.
+     * @return A clone of this object.
+     * @exception CloneNotSupportedException This shouldn't be thrown since
+     * the {@link Node} interface extends Cloneable.
+     */
+    public Object clone() throws CloneNotSupportedException
+    {
+        return (super.clone ());
+    }
+
+    /**
      * Returns a string representation of the node. This is an important method, it allows a simple string transformation
      * of a web page, regardless of a node.<br>
      * Typical application code (for extracting only the text from a web page) would then be simplified to  :<br>

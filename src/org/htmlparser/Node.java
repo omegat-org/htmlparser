@@ -30,39 +30,70 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 
+/**
+ * Specifies the minimum requirements for nodes returned by the Lexer or Parser.
+ * There are three types of nodes in HTML: text, remarks and tags. You may wish
+ * to define your own nodes to be returned by the
+ * {@link org.htmlparser.lexer.Lexer} or {@link Parser}, but each of the types
+ * must support this interface. 
+ * More specific interface requirements for each of the node types are specified
+ * by the {@link Text}, {@link Remark} and {@link Tag} interfaces.
+ */
 public interface Node
+    extends
+        Cloneable
 {
     /**
-     * Returns a string representation of the node. This is an important method, it allows a simple string transformation
-     * of a web page, regardless of a node.<br>
-     * Typical application code (for extracting only the text from a web page) would then be simplified to  :<br>
+     * A string representation of the node.
+     * This is an important method, it allows a simple string transformation
+     * of a web page, regardless of a node. For a Text node this is obviously
+     * the textual contents itself. For a Remark node this is the remark
+     * contents (sic). For tags this is the text contents of it's children
+     * (if any). Because multiple nodes are combined when presenting
+     * a page in a browser, this will not reflect what a user would see.
+     * See HTML specification section 9.1 White space
+     * <a href="http://www.w3.org/TR/html4/struct/text.html#h-9.1">
+     * http://www.w3.org/TR/html4/struct/text.html#h-9.1</a>.<br>
+     * Typical application code (for extracting only the text from a web page)
+     * would be:<br>
      * <pre>
-     * Node node;
-     * for (Enumeration e = parser.elements();e.hasMoreElements();) {
-     *    node = (Node)e.nextElement();
-     *    System.out.println(node.toPlainTextString()); // Or do whatever processing you wish with the plain text string
-     * }
+     * for (Enumeration e = parser.elements (); e.hasMoreElements ();)
+     *     // or do whatever processing you wish with the plain text string
+     *     System.out.println ((Node)e.nextElement ()).toPlainTextString ());
      * </pre>
+     * @return The text of this node including it's children.
      */
-    public abstract String toPlainTextString();
+    public abstract String toPlainTextString ();
 
     /**
-     * This method will make it easier when using html parser to reproduce html pages (with or without modifications)
-     * Applications reproducing html can use this method on nodes which are to be used or transferred as they were
-     * recieved, with the original html
+     * Return the HTML for this node.
+     * This should be the exact sequence of characters that were encountered by
+     * the parser that caused this node to be created. Where this breaks down is
+     * where broken nodes (tags and remarks) have been encountered and fixed. 
+     * Applications reproducing html can use this method on nodes which are to
+     * be used or transferred as they were received or created.
+     * @return The (exact) sequence of characters that would cause this node
+     * to be returned by the parser or lexer.
      */
-    public abstract String toHtml();
+    public abstract String toHtml ();
 
     /**
      * Return the string representation of the node.
-     * Subclasses must define this method, and this is typically to be used in the manner<br>
-     * <pre>System.out.println(node)</pre>
-     * @return java.lang.String
+     * The return value may not be the entire contents of the node, and non-
+     * printable characters may be translated in order to make them visible. 
+     * This is typically to be used in
+     * the manner<br>
+     * <pre>
+     * System.out.println (node);
+     * </pre>
+     * or within a debugging environment.
+     * @return A string representation of this node suitable for printing,
+     * that isn't too large.
      */
-    public abstract String toString();
+    public abstract String toString ();
 
     /**
-     * Collect this node and its child nodes (if-applicable) into the collectionList parameter, provided the node
+     * Collect this node and its child nodes (if applicable) into a list, provided the node
      * satisfies the filtering criteria.<P>
      *
      * This mechanism allows powerful filtering code to be written very easily,
@@ -70,46 +101,50 @@ public interface Node
      * e.g. when we try to get all the links on a page, it is not possible to
      * get it at the top-level, as many tags (like form tags), can contain
      * links embedded in them. We could get the links out by checking if the
-     * current node is a {@link org.htmlparser.tags.CompositeTag}, and going through its children.
-     * So this method provides a convenient way to do this.<P>
+     * current node is a {@link org.htmlparser.tags.CompositeTag}, and going
+     * through its children. So this method provides a convenient way to do this.<P>
      *
      * Using collectInto(), programs get a lot shorter. Now, the code to
      * extract all links from a page would look like:
      * <pre>
-     * NodeList collectionList = new NodeList();
+     * NodeList list = new NodeList ();
      * NodeFilter filter = new TagNameFilter ("A");
-     * for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
-     *      e.nextNode().collectInto(collectionList, filter);
+     * for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
+     *      e.nextNode ().collectInto (list, filter);
      * </pre>
-     * Thus, collectionList will hold all the link nodes, irrespective of how
+     * Thus, <code>list</code> will hold all the link nodes, irrespective of how
      * deep the links are embedded.<P>
      *
      * Another way to accomplish the same objective is:
      * <pre>
-     * NodeList collectionList = new NodeList();
+     * NodeList list = new NodeList ();
      * NodeFilter filter = new TagClassFilter (LinkTag.class);
-     * for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
-     *      e.nextNode().collectInto(collectionList, filter);
+     * for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
+     *      e.nextNode ().collectInto (list, filter);
      * </pre>
      * This is slightly less specific because the LinkTag class may be
      * registered for more than one node name, e.g. &lt;LINK&gt; tags too.
+     * @param list The list to collect nodes into.
+     * @param filter The criteria to use when deciding if a node should
+     * be added to the list.
      */
-    public abstract void collectInto(NodeList collectionList, NodeFilter filter);
+    public abstract void collectInto (NodeList list, NodeFilter filter);
 
     /**
      * Returns the beginning position of the tag.
      * <br>deprecated Use {@link #getStartPosition}
      */
-    public abstract int elementBegin();
+    public abstract int elementBegin ();
 
     /**
      * Returns the ending position fo the tag
      * <br>deprecated Use {@link #getEndPosition}
      */
-    public abstract int elementEnd();
+    public abstract int elementEnd ();
 
     /**
      * Gets the starting position of the node.
+     * This is the character (not byte) offset of this node in the page.
      * @return The start position.
      */
     public abstract int getStartPosition ();
@@ -122,6 +157,8 @@ public interface Node
 
     /**
      * Gets the ending position of the node.
+     * This is the character (not byte) offset of the character following this
+     * node in the page.
      * @return The end position.
      */
     public abstract int getEndPosition ();
@@ -133,28 +170,33 @@ public interface Node
     public abstract void setEndPosition (int position);
 
     /**
-     * Apply the visitor object (of type NodeVisitor) to this node.
+     * Apply the visitor to this node.
+     * @param visitor The visitor to this node.
      */
     public abstract void accept (NodeVisitor visitor);
 
     /**
      * Get the parent of this node.
-     * This will always return null when parsing without scanners,
-     * i.e. if semantic parsing was not performed.
-     * The object returned from this method can be safely cast to a <code>CompositeTag</code>.
-     * @return The parent of this node, if it's been set, <code>null</code> otherwise.
+     * This will always return null when parsing with the
+     * {@link org.htmlparser.lexer.Lexer}.
+     * Currently, the object returned from this method can be safely cast to a
+     * {@link org.htmlparser.tags.CompositeTag}, but this behaviour should not
+     * be expected in the future.
+     * @return The parent of this node, if it's been set, <code>null</code>
+     * otherwise.
      */
     public abstract Node getParent ();
 
     /**
      * Sets the parent of this node.
-     * @param node The node that contains this node. Must be a <code>CompositeTag</code>.
+     * @param node The node that contains this node.
      */
     public abstract void setParent (Node node);
 
     /**
      * Get the children of this node.
-     * @return The list of children contained by this node, if it's been set, <code>null</code> otherwise.
+     * @return The list of children contained by this node, if it's been set,
+     * <code>null</code> otherwise.
      */
     public abstract NodeList getChildren ();
 
@@ -166,23 +208,97 @@ public interface Node
 
     /**
      * Returns the text of the node.
+     * @return The contents of the string or remark node, and in the case of
+     * a tag, the contents of the tag less the enclosing angle brackets.
      */
-    public String getText();
+    public String getText ();
 
     /**
      * Sets the string contents of the node.
      * @param text The new text for the node.
      */
-    public void setText(String text);
+    public void setText (String text);
 
     /**
      * Perform the meaning of this tag.
      * This is defined by the tag, for example the bold tag &lt;B&gt; may switch
      * bold text on and off.
      * Only a few tags have semantic meaning to the parser. These have to do
-     * with the character set to use (&lt;META&gt;), the base URL to use
+     * with the character set to use (&lt;META&gt;) and the base URL to use
      * (&lt;BASE&gt;). Other than that, the semantic meaning is up to the
-     * application and it's custom nodes.
+     * application and it's custom nodes.<br>
+     * The semantic action is performed when the node has been parsed. For
+     * composite nodes (those that contain other nodes), the children will have
+     * already been parsed and will be available via {@link #getChildren}.
      */
-    public void doSemanticAction () throws ParserException;
+    public void doSemanticAction ()
+        throws
+            ParserException;
+
+    //
+    // Cloneable interface
+    //
+
+    /**
+     * Allow cloning of nodes.
+     * Creates and returns a copy of this object.  The precise meaning 
+     * of "copy" may depend on the class of the object. The general 
+     * intent is that, for any object <tt>x</tt>, the expression:
+     * <blockquote>
+     * <pre>
+     * x.clone() != x</pre></blockquote>
+     * will be true, and that the expression:
+     * <blockquote>
+     * <pre>
+     * x.clone().getClass() == x.getClass()</pre></blockquote>
+     * will be <tt>true</tt>, but these are not absolute requirements. 
+     * While it is typically the case that:
+     * <blockquote>
+     * <pre>
+     * x.clone().equals(x)</pre></blockquote>
+     * will be <tt>true</tt>, this is not an absolute requirement. 
+     * <p>
+     * By convention, the returned object should be obtained by calling
+     * <tt>super.clone</tt>.  If a class and all of its superclasses (except
+     * <tt>Object</tt>) obey this convention, it will be the case that
+     * <tt>x.clone().getClass() == x.getClass()</tt>.
+     * <p>
+     * By convention, the object returned by this method should be independent
+     * of this object (which is being cloned).  To achieve this independence,
+     * it may be necessary to modify one or more fields of the object returned
+     * by <tt>super.clone</tt> before returning it.  Typically, this means
+     * copying any mutable objects that comprise the internal "deep structure"
+     * of the object being cloned and replacing the references to these
+     * objects with references to the copies.  If a class contains only
+     * primitive fields or references to immutable objects, then it is usually
+     * the case that no fields in the object returned by <tt>super.clone</tt>
+     * need to be modified.
+     * <p>
+     * The method <tt>clone</tt> for class <tt>Object</tt> performs a 
+     * specific cloning operation. First, if the class of this object does 
+     * not implement the interface <tt>Cloneable</tt>, then a 
+     * <tt>CloneNotSupportedException</tt> is thrown. Note that all arrays 
+     * are considered to implement the interface <tt>Cloneable</tt>. 
+     * Otherwise, this method creates a new instance of the class of this 
+     * object and initializes all its fields with exactly the contents of 
+     * the corresponding fields of this object, as if by assignment; the
+     * contents of the fields are not themselves cloned. Thus, this method 
+     * performs a "shallow copy" of this object, not a "deep copy" operation.
+     * <p>
+     * The class <tt>Object</tt> does not itself implement the interface 
+     * <tt>Cloneable</tt>, so calling the <tt>clone</tt> method on an object 
+     * whose class is <tt>Object</tt> will result in throwing an
+     * exception at run time.
+     *
+     * @return     a clone of this instance.
+     * @exception  CloneNotSupportedException  if the object's class does not
+     *               support the <code>Cloneable</code> interface. Subclasses
+     *               that override the <code>clone</code> method can also
+     *               throw this exception to indicate that an instance cannot
+     *               be cloned.
+     * @see java.lang.Cloneable
+     */
+    public Object clone ()
+        throws
+            CloneNotSupportedException;
 }

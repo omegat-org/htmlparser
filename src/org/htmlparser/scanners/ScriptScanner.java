@@ -74,13 +74,16 @@ public class ScriptScanner
         Node node;
         boolean done;
         int position;
-        Text last;
+        int startpos;
+        int endpos;
         Tag end;
         NodeFactory factory;
+        Text content;
         CompositeTag ret;
 
         done = false;
-        last = null;
+        startpos = lexer.getPosition ();
+        endpos = startpos;
         end = null;
         factory = lexer.getNodeFactory ();
         if (tag instanceof ScriptTag)
@@ -93,7 +96,7 @@ public class ScriptScanner
                 int start = lexer.getPosition ();
                 String code = ScriptDecoder.Decode (lexer.getPage (), lexer.getCursor ());
                 ((ScriptTag)tag).setScriptCode (code);
-                last = factory.createStringNode (lexer.getPage (), start, lexer.getPosition ());
+                endpos = lexer.getPosition ();
             }
         }
         lexer.setNodeFactory (new PrototypicalNodeFactory (true));
@@ -104,7 +107,7 @@ public class ScriptScanner
                 position = lexer.getPosition ();
                 node = lexer.nextNode (true);
                 if (null == node)
-                    break;
+                    done = true;
                 else
                     if (node instanceof Tag)
                         if (   ((Tag)node).isEndTag ()
@@ -119,45 +122,23 @@ public class ScriptScanner
                             done = true;
                         }
                         else
-                        {
                             // must be a string, even though it looks like a tag
-                            if (null != last)
-                                // append it to the previous one
-                                last.setEndPosition (node.elementEnd ());
-                            else
-                                last = factory.createStringNode (lexer.getPage (), node.elementBegin (), node.elementEnd ());
-                        }
+                            endpos = node.getEndPosition ();
                     else if (node instanceof Remark)
-                    {
-                        if (null != last)
-                            last.setEndPosition (node.getEndPosition ());
-                        else
-                        {
-                            // last = factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
-                            last = factory.createStringNode (lexer.getPage (), node.elementBegin (), node.elementEnd ());
-                        }
-                    }
+                        endpos = node.getEndPosition ();
                     else // Text
-                    {
-                        if (null != last)
-                            last.setEndPosition (node.getEndPosition ());
-                        else
-                            last = (Text)node;
-                    }
-
+                        endpos = node.getEndPosition ();
             }
             while (!done);
 
-            // build new string tag if required
-            if (null == last)
-                last = factory.createStringNode (lexer.getPage (), position, position);
+            content = factory.createStringNode (lexer.getPage (), startpos, endpos);
             // build new end tag if required
             if (null == end)
-                end = new Tag (lexer.getPage (), tag.getEndPosition (), tag.getEndPosition (), new Vector ());
+                end = new Tag (lexer.getPage (), endpos, endpos, new Vector ());
             ret = (CompositeTag)tag;
             ret.setEndTag (end);
-            ret.setChildren (new NodeList (last));
-            last.setParent (ret);
+            ret.setChildren (new NodeList (content));
+            content.setParent (ret);
             end.setParent (ret);
             ret.doSemanticAction ();
         }
