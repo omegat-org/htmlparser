@@ -1,19 +1,39 @@
-<html><head><title>Post Operation</title></head><body><DIV class="wikitext">
-<H4>POST Operation</H4>
-<P>The standard HTTP request submitted by the parser is a GET. This note describes how to use POST, which is the usual request submitted by a form.</P>
-<P>As an example, we'll submit a form to the U.S. postal service web site.<BR/><I>Note: This is suboptimal, the postal service provides tools for this type of thing: <A class="namedurl" href="http://www.uspswebtools.com"><SPAN style="white-space: nowrap">http://www.uspswebtools.com</SPAN></A></I><BR/></P>
-<P>On the USPS web site, the page <A class="namedurl" href="http://www.usps.com/zip4/citytown.htm"><SPAN style="white-space: nowrap">http://www.usps.com/zip4/citytown.htm</SPAN></A> has the following FORM that asks for a zip code and returns the cities or towns covered by the zip code (only form elements are shown removing all the formatting markup):</P>
-<PRE>&lt;form NAME="frmzip" ACTION="zip_response.jsp" METHOD="post" OnSubmit="return validate(frmzip)"&gt;
+<html><head><title>Post Operation</title></head><body>
+
+
+
+<div class="wikitext">
+<h4>POST Operation
+
+<p>The standard HTTP request submitted by the parser is a GET. This note describes how to use POST, which is the usual request submitted by a form.
+
+<p>As an example, we'll submit a form to the U.S. postal service web site.
+<br />
+<i>Note: This is suboptimal, the postal service provides tools for this type of thing: <a href="http://www.uspswebtools.com" class="namedurl"><span style="white-space: nowrap">http://www.uspswebtools.com</span></a>
+<br />
+
+<p>On the USPS web site, the page <a href="http://www.usps.com/zip4/citytown.htm" class="namedurl"><span style="white-space: nowrap">http://www.usps.com/zip4/citytown.htm</span></a> has the following FORM that asks for a zip code and returns the cities or towns covered by the zip code (only form elements are shown removing all the formatting markup):
+
+<pre>
+&lt;form NAME="frmzip" ACTION="zip_response.jsp" METHOD="post" OnSubmit="return validate(frmzip)"&gt;
 &lt;input type="text" id="zipcode" name="zipcode" size="5" maxlength="5" TABINDEX="10"&gt;
-&lt;input TYPE="image" NAME="Submit" SRC="/zip4/images/submit.jpg" BORDER="0" WIDTH="50" HEIGHT="17" ALT="Submit" TABINDEX="11"&gt;</PRE>
-<P>From this we determine that the <TT>METHOD</TT> is <TT>POST</TT> and the form should be submitted to <TT>zip_response.jsp</TT>. This relative URL is relative to the page it is found on, so the form should be submitted to <TT>http://www.usps.com/zip4/zip_response.jsp</TT> when the <TT>Submit</TT> input is clicked. The only <TT>input</TT> element other than the <TT>Submit</TT> is a single <TT>text</TT> field that takes 5 or fewer characters. Other types of input element are described in <A class="namedurl" href="http://www.w3.org/TR/html4/interact/forms.html"><SPAN style="white-space: nowrap">http://www.w3.org/TR/html4/interact/forms.html</SPAN></A>.</P>
-<P>The basic operation is to pass a fully prepared <TT>HttpURLConnection</TT> connected to the <TT>POST</TT> target URL into the <TT>Parser</TT>, either in the constructor or via the <TT>setConnection()</TT> method. To condition the connection, use the <TT>setRequestMethod()</TT> method to set the <TT>POST</TT> operation, and the <TT>setRequestProperty()</TT> and other explicit method calls. Then write the input fields as an ampersand concatenation (<TT>"input1=value1&amp;input2=value2&amp;..."</TT>) into the <TT>PrintWriter</TT> obtained by a call to <TT>getOutputStream()</TT>.</P>
-<P>The following sample program illustrates the principles using a <TT>StringBean</TT>, but the same code could be used with a <TT>Parser</TT> by replacing the last three lines in the <TT>try</TT> block with:</P>
-<PRE>        parser = new Parser ();
+&lt;input TYPE="image" NAME="Submit" SRC="/zip4/images/submit.jpg" BORDER="0" WIDTH="50" HEIGHT="17" ALT="Submit" TABINDEX="11"&gt;
+
+<p>From this we determine that the <tt>METHOD is <tt>POST and the form should be submitted to <tt>zip_response.jsp. This relative URL is relative to the page it is found on, so the form should be submitted to <tt>http://www.usps.com/zip4/zip_response.jsp when the <tt>Submit input is clicked. The only <tt>input element other than the <tt>Submit is a single <tt>text field that takes 5 or fewer characters. Other types of input element are described in <a href="http://www.w3.org/TR/html4/interact/forms.html" class="namedurl"><span style="white-space: nowrap">http://www.w3.org/TR/html4/interact/forms.html</span></a>.
+
+<p>The basic operation is to pass a fully prepared <tt>HttpURLConnection connected to the <tt>POST target URL into the <tt>Parser, either in the constructor or via the <tt>setConnection() method. To condition the connection, use the <tt>setRequestMethod() method to set the <tt>POST operation, and the <tt>setRequestProperty() and other explicit method calls. Then write the input fields as an ampersand concatenation (<tt>"input1=value1&amp;input2=value2&amp;...") into the <tt>PrintWriter obtained by a call to <tt>getOutputStream().
+
+<p>The following sample program illustrates the principles using a <tt>StringBean, but the same code could be used with a <tt>Parser by replacing the last three lines in the <tt>try block with:
+
+<pre>
+        parser = new Parser ();
         parser.setConnection (connection);
-        // ... do parser operations</PRE>
-<P><A class="namedurl" HREF="images/Zip.java"><SPAN style="white-space: nowrap"><IMG border="0" alt="http" src="/docs/themes/MacOSX/images/http.png" class="linkicon">Source</SPAN> Code.</A><A class="namedurl" HREF="images/Zip.java"><SPAN style="white-space: nowrap">Source</SPAN> Code.</A> <A class="namedurl" HREF="images/Zip.html"><SPAN style="white-space: nowrap"><IMG border="0" alt="http" src="/docs/themes/MacOSX/images/http.png" class="linkicon">Pretty</SPAN> Print Source Code</A><A class="namedurl" HREF="images/Zip.html"><SPAN style="white-space: nowrap">Pretty</SPAN> Print Source Code</A></P>
-<PRE>/*
+        // ... do parser operations
+
+<p><a HREF="images/Zip.java" class="namedurl"><span style="white-space: nowrap"><img SRC="/docs/themes/MacOSX/images/http.png" alt="http" class="linkicon" border="0" />Source</span> Code.</a><a HREF="images/Zip.java" class="namedurl"><span style="white-space: nowrap">Source</span> Code.</a> <a HREF="images/Zip.html" class="namedurl"><span style="white-space: nowrap"><img SRC="/docs/themes/MacOSX/images/http.png" alt="http" class="linkicon" border="0" />Pretty</span> Print Source Code</a><a HREF="images/Zip.html" class="namedurl"><span style="white-space: nowrap">Pretty</span> Print Source Code</a>
+
+<pre>
+/*
  * Zip.java
  * POST zip code to look up cities.
  *
@@ -101,4 +121,15 @@ public class Zip
         else
             System.out.println (new Zip (args[0]).getText ());
     }
-}</PRE></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Thursday, April 24, 2003  4:36:36 am.</P><HR noshade="noshade" class="toolbar"/></body></html>
+}
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Thursday, April 24, 2003  4:36:36 am.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

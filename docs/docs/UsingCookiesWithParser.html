@@ -1,20 +1,36 @@
-<html><head><title>Using Cookies With Parser</title></head><body><DIV class="wikitext">
-<P><B>Using Cookies with the Parser</B></P>
-<P><B>Problem:</B> (by <SPAN class="wikiunknown"><U>ShanSivakolundhu</U></SPAN>)<BR/>In order to access a particular site I neet to have
+<html><head><title>Using Cookies With Parser</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>Using Cookies with the Parser
+
+<p><b>Problem: (by <span class="wikiunknown"><u>ShanSivakolundhu)
+<br />
+In order to access a particular site I neet to have
 a cookie set. Is there any way I can set the cookie
-before I create a parser object ? Just like ...</P>
-<PRE>URLConnection.("Cookie", cookieValue);
-URLConnection.connect();</PRE>
-<P><B>Solution:</B> (by <SPAN class="wikiunknown"><U>BobLewis</U></SPAN>)<BR/>In order to send cookies in your Http requests, all
+before I create a parser object ? Just like ...
+
+<pre>
+URLConnection.("Cookie", cookieValue);
+URLConnection.connect();
+
+<p><b>Solution: (by <span class="wikiunknown"><u>BobLewis)
+<br />
+In order to send cookies in your Http requests, all
 you need to do is set the Cookie HTTP Header in the
-URL Connection.</P>
-<P>Generally what I've done is first create a
+URL Connection.
+
+<p>Generally what I've done is first create a
 HttpURLConnection, create some Cookie objects that are
 needed, and set the HTTP Header using those objects
-(See below for code to format the header value).</P>
-<P>Then I'll create the Parser using the URLConnection
-something like this:</P>
-<PRE>        DefaultHTMLParserFeedback feedback =
+(See below for code to format the header value).
+
+<p>Then I'll create the Parser using the URLConnection
+something like this:
+
+<pre>
+        DefaultHTMLParserFeedback feedback =
            new DefaultHTMLParserFeedback(DefaultHTMLParserFeedback.DEBUG);
 
         HTMLReader reader = null;
@@ -24,12 +40,15 @@ something like this:</P>
         InputStreamReader isr =
            new InputStreamReader(urlConn.getInputStream(), charset);
         reader = new HTMLReader(isr, 8192);
-        parser = new HTMLParser(reader, feedback);</PRE>
-<P>The <SPAN class="wikiunknown"><U>HttpUtil</U></SPAN>.getCharacterSet method used above is
+        parser = new HTMLParser(reader, feedback);
+
+<p>The <span class="wikiunknown"><u>HttpUtil.getCharacterSet method used above is
 basically just taken from the method of the same name
 in the HTMLParser class.  That method is protected, so
-I had to duplicate it elsewhere.</P>
-<PRE>    /**
+I had to duplicate it elsewhere.
+
+<pre>
+    /**
      * set cookies to send in a HttpURLConnection&lt;br&gt;
      * This method should only be called before any
      * parameters are posted
@@ -67,4 +86,15 @@ I had to duplicate it elsewhere.</P>
             else buf.append(" ");
         }
         return buf.toString();
-    }</PRE></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Wednesday, April  2, 2003  3:04:24 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>
+    }
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Wednesday, April  2, 2003  3:04:24 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

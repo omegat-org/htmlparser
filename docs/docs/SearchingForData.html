@@ -1,7 +1,14 @@
-<html><head><title>Searching For Data</title></head><body><DIV class="wikitext">
-<P>Searching for data is one of the most challenging tasks in a web page due to its seemingly unstructured (or badly structured) form. Complex searches are now possible with the parser in a simple to use API. Here's an example :</P>
-<P>We are looking at a page which has the following html:</P>
-<PRE>&lt;html&gt;
+<html><head><title>Searching For Data</title></head><body>
+
+
+
+<div class="wikitext">
+<p>Searching for data is one of the most challenging tasks in a web page due to its seemingly unstructured (or badly structured) form. Complex searches are now possible with the parser in a simple to use API. Here's an example :
+
+<p>We are looking at a page which has the following html:
+
+<pre>
+&lt;html&gt;
 ...
 &lt;body&gt;
    &lt;table&gt;
@@ -14,10 +21,14 @@
      &lt;/tr&gt;
    &lt;/table&gt;
 &lt;/body&gt;
-&lt;/html&gt;</PRE>
-<P>We'd like to extract the information corresponding to the field "Name". This is possible if we make use of the fact that the name appears two tags after "Name".</P>
-<P>Code to achieve this would look like:</P>
-<PRE>parser.registerScanners();
+&lt;/html&gt;
+
+<p>We'd like to extract the information corresponding to the field "Name". This is possible if we make use of the fact that the name appears two tags after "Name".
+
+<p>Code to achieve this would look like:
+
+<pre>
+parser.registerScanners();
 Node nodes [] = parser.extractAllNodesThatAre(TableTag.class);
 // Get the first table found
 TableTag table = (TableTag)nodes[0];
@@ -35,9 +46,13 @@ int posOfName = td.findPositionOf(name);
 
 // Its easy now to navigate to John Doe, as we know it is 3 positions away
 Node expectedName = td.childAt(posOfName + 3);
-</PRE><HR/>
-<P>You can move up the parent tree - e.g. when the data is in seperate columns,</P>
-<PRE>&lt;html&gt;
+
+
+<hr />
+<p>You can move up the parent tree - e.g. when the data is in seperate columns,
+
+<pre>
+&lt;html&gt;
 ...
 &lt;body&gt;
    &lt;table&gt;
@@ -50,10 +65,14 @@ Node expectedName = td.childAt(posOfName + 3);
      &lt;/tr&gt;
    &lt;/table&gt;
 &lt;/body&gt;
-&lt;/html&gt;</PRE>
-<P>We'd like to perform the same search on "Name".</P>
-<P>Code to achieve this would look like:</P>
-<PRE>parser.registerScanners();
+&lt;/html&gt;
+
+<p>We'd like to perform the same search on "Name".
+
+<p>Code to achieve this would look like:
+
+<pre>
+parser.registerScanners();
 Node nodes [] = parser.extractAllNodesThatAre(TableTag.class);
 // Get the first table found
 TableTag table = (TableTag)nodes[0];
@@ -75,4 +94,15 @@ int columnNo = tr.findPositionOf(td);
 TableColumn nextColumn = (TableColumn)tr.childAt(columnNo+1);
 
 // The name is the second item in the column tag
-Node expectedName = nextColumn.childAt(1);</PRE></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Saturday, April 19, 2003 10:38:30 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>
+Node expectedName = nextColumn.childAt(1);
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Saturday, April 19, 2003 10:38:30 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

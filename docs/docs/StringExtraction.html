@@ -1,12 +1,33 @@
-<html><head><title>String Extraction</title></head><body><DIV class="wikitext">
-<P><B>String Extraction</B></P>
-<P>To get all the text content from a web page, use the <A class="wiki" HREF="TextExtractingVisitor.html">TextExtractingVisitor</A>, like so :</P>
-<PRE>   Parser parser = new Parser("http://pageIwantToParse.com");
+<html><head><title>String Extraction</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>String Extraction
+
+<p>To get all the text content from a web page, use the <a HREF=TextExtractingVisitor.html class="wiki">TextExtractingVisitor</a>, like so :
+
+<pre>
+   Parser parser = new Parser("http://pageIwantToParse.com");
    TextExtractingVisitor visitor = new TextExtractingVisitor();
    parser.visitAllNodesWith(visitor);
-   System.out.println(visitor.getExtractedText());</PRE>
-<P>If you want to strip all escape characters, do:</P>
-<PRE>   String cleanText =
+   System.out.println(visitor.getExtractedText());
+
+<p>If you want to strip all escape characters, do:
+
+<pre>
+   String cleanText =
       ParserUtils.removeEscapeCharacters(
          visitor.getExtractedText()
-      );</PRE></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Sunday, February 23, 2003  5:20:23 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>
+      );
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Sunday, February 23, 2003  5:20:23 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

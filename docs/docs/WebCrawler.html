@@ -1,22 +1,39 @@
-<html><head><title>Web Crawler</title></head><body><DIV class="wikitext">
-<P><B>Web Crawler (aka Spider)</B></P>
-<P>A crawler is a program that picks up a page and follows all the links on the page. Crawlers are used in search engines to index all the pages on a website, starting only from the first page (as long as it is linked).</P>
-<P>There are several crawlers out there, but few are good quality open-source crawlers. The problem is most crawlers could fail if the parser they use is not powerful. Using HTMLParser, it is possible to crawl through dirty html - with great speed.</P>
-<P>There are two types of crawlers:</P>
-<UL>
-<LI>Breadth First</LI>
-<LI>Depth First</LI></UL>
-<P><B>Breadth First crawlers</B> use the BFS (Breadth-First Search) algorithm. Here's a brief description :</P>
-<P>Get all links from the starting page and add to the queue
+<html><head><title>Web Crawler</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>Web Crawler (aka Spider)
+
+<p>A crawler is a program that picks up a page and follows all the links on the page. Crawlers are used in search engines to index all the pages on a website, starting only from the first page (as long as it is linked).
+
+<p>There are several crawlers out there, but few are good quality open-source crawlers. The problem is most crawlers could fail if the parser they use is not powerful. Using HTMLParser, it is possible to crawl through dirty html - with great speed.
+
+<p>There are two types of crawlers:
+
+<ul>
+
+<li>Breadth First
+
+<li>Depth First
+
+
+<p><b>Breadth First crawlers use the BFS (Breadth-First Search) algorithm. Here's a brief description :
+
+<p>Get all links from the starting page and add to the queue
 Pick first link from queue, get all links on this page, and add to queue
-Repeat Step 2, until queue is empty</P>
-<P><B>Depth First crawlers</B> use the DFS (Depth-First Search) algorithm. Here's a brief description :</P>
-<P>Get first link that has not yet been visited, from the starting page.
+Repeat Step 2, until queue is empty
+
+<p><b>Depth First crawlers use the DFS (Depth-First Search) algorithm. Here's a brief description :
+
+<p>Get first link that has not yet been visited, from the starting page.
 Visit link and get first non-visited link
 Repeat Step 2, until there are no further non-visited links.
 Go to next non-visited link in the previous level of recursion, and repeat step 2, until no more non-visited links are present
-BFS crawlers are simple to write. DFS can be slightly more involved, so we shall present a simple DFS crawler program below. This is a basic program, and is included in the <I>org.htmlparser.parserapplications</I> package - <I>Robot.java</I>. Feel free to modify it or add functionality to it.</P>
-<PRE>import org.htmlparser.Parser;
+BFS crawlers are simple to write. DFS can be slightly more involved, so we shall present a simple DFS crawler program below. This is a basic program, and is included in the <i>org.htmlparser.parserapplications package - <i>Robot.java. Feel free to modify it or add functionality to it.
+
+<pre>
+import org.htmlparser.Parser;
 
 public class Robot {
   private Parser parser;
@@ -116,12 +133,32 @@ public class Robot {
       e.printStackTrace();
     }
   }
-}</PRE>
-<P>The method that does the crawling is the recursive method crawl(parser,depth). The crawler goes about creating multiple parsers and moving through sites using the DFS approach.</P>
-<P>You have to be careful of the depth provided to the crawler. Studying the time taken to map all the links is itself an interesting research project. A word of caution, some sites dont like crawlers going through them. They would have a file called robots.txt in the root directory which should be accessed to know the rules and honor them. Read more about this. The above program is only a demonstration program. Please note that it will only follow links that have ".com", ".htm" or ".org" ending. In real-life situations, you'd also want to support dynamic links.</P>
-<P>Before you set out to design an open-source or commercia crawler, please study what others have already researched in this area.</P>
-<P><B>Some Useful Links on Crawlers</B></P>
-<UL>
-<LI><A class="namedurl" href="http://dollar.biz.uiowa.edu/%7Efil/IS/"><SPAN style="white-space: nowrap">InfoSpiders</SPAN></A></LI>
-<LI><A class="namedurl" href="http://www.searchtools.com/robots/robots-articles.html"><SPAN style="white-space: nowrap">Collection</SPAN> of Crawler Links</A></LI></UL>
-<P>--<A class="wiki" HREF="SomikRaha.html">SomikRaha</A>, Sunday, February 16, 2003 2:13:46 pm.</P></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Sunday, February 23, 2003  5:30:30 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>
+}
+
+<p>The method that does the crawling is the recursive method crawl(parser,depth). The crawler goes about creating multiple parsers and moving through sites using the DFS approach.
+
+<p>You have to be careful of the depth provided to the crawler. Studying the time taken to map all the links is itself an interesting research project. A word of caution, some sites dont like crawlers going through them. They would have a file called robots.txt in the root directory which should be accessed to know the rules and honor them. Read more about this. The above program is only a demonstration program. Please note that it will only follow links that have ".com", ".htm" or ".org" ending. In real-life situations, you'd also want to support dynamic links.
+
+<p>Before you set out to design an open-source or commercia crawler, please study what others have already researched in this area.
+
+<p><b>Some Useful Links on Crawlers
+
+<ul>
+
+<li><a href="http://dollar.biz.uiowa.edu/%7Efil/IS/" class="namedurl"><span style="white-space: nowrap">InfoSpiders</span></a>
+
+<li><a href="http://www.searchtools.com/robots/robots-articles.html" class="namedurl"><span style="white-space: nowrap">Collection</span> of Crawler Links</a>
+
+
+<p>--<a HREF=SomikRaha.html class="wiki">SomikRaha</a>, Sunday, February 16, 2003 2:13:46 pm.
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Sunday, February 23, 2003  5:30:30 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

@@ -12,6 +12,439 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20031026
+--------------------------------
+2003-10-26 12:58  derrickoswald
+
+	* src/org/htmlparser/lexer/: PageIndex.java, package.html,
+	nodes/PageAttribute.java, nodes/package.html:
+
+	Doco update. Move the lexer from future tense to current.
+	
+2003-10-26 11:44  derrickoswald
+
+	* src/org/htmlparser/lexerapplications/thumbelina/Thumbelina.java:
+
+	Get thumbelina working again. The tag.getName() method doesn't include the / of end tags.
+	
+2003-10-26 11:04  derrickoswald
+
+	* src/org/htmlparser/: scanners/CompositeTagScanner.java,
+	tests/parserHelperTests/CompositeTagScannerHelperTest.java:
+
+	Oops, remove references to CompositeTagScannerHelper.
+	
+2003-10-26 10:50  derrickoswald
+
+	* src/org/htmlparser/scanners/CompositeTagScanner.java:
+
+	Removed the need for CompositeTagScannerHelper, finally getting rid of the parserHelper package.
+	
+2003-10-25 23:53  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java, tags/AppletTag.java,
+	tests/ParserTest.java, tests/ParserTestCase.java,
+	tests/lexerTests/StreamTests.java,
+	tests/scannersTests/BulletScannerTest.java,
+	tests/tagTests/OptionTagTest.java,
+	visitors/LinkFindingVisitor.java:
+
+	Quiet down the test output.
+	
+2003-10-25 16:19  derrickoswald
+
+	* src/org/htmlparser/: tags/CompositeTag.java,
+	tests/parserHelperTests/CompositeTagScannerHelperTest.java,
+	tests/parserHelperTests/StringParserTest.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/tagTests/JspTagTest.java, tests/tagTests/OptionTagTest.java,
+	tests/tagTests/SelectTagTest.java, tests/tagTests/TagTest.java:
+
+	Clean up the last few failing tests.
+	*** The bar is green again ***
+	
+2003-10-25 11:46  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	lexer/nodes/RemarkNode.java, scanners/TitleScanner.java,
+	tests/scannersTests/TitleScannerTest.java:
+
+	Handle some broken end tags.
+	Handle some pathological remark nodes.
+	
+2003-10-25 08:03  derrickoswald
+
+	* build.xml, bin/parser:
+
+	Fix htmllexer.jar, add parser linux/unix script.
+	
+2003-10-20 22:24  derrickoswald
+
+	* src/org/htmlparser/tests/: AllTests.java,
+	AssertXmlEqualsTest.java, FunctionalTests.java,
+	LineNumberAssignedByNodeReaderTest.java, ParserTest.java,
+	ParserTestCase.java, lexerTests/AllTests.java,
+	lexerTests/AttributeTests.java, lexerTests/LexerTests.java,
+	lexerTests/PageIndexTests.java, lexerTests/PageTests.java,
+	lexerTests/SourceTests.java, lexerTests/StreamTests.java,
+	lexerTests/TagTests.java, nodeDecoratorTests/AllTests.java,
+	nodeDecoratorTests/DecodingNodeTest.java,
+	nodeDecoratorTests/EscapeCharacterRemovingNodeTest.java,
+	nodeDecoratorTests/NonBreakingSpaceConvertingNodeTest.java,
+	parserHelperTests/AllTests.java,
+	parserHelperTests/CompositeTagScannerHelperTest.java,
+	parserHelperTests/RemarkNodeParserTest.java,
+	parserHelperTests/StringParserTest.java,
+	scannersTests/AllTests.java, scannersTests/AppletScannerTest.java,
+	scannersTests/BaseHREFScannerTest.java,
+	scannersTests/BodyScannerTest.java,
+	scannersTests/BulletListScannerTest.java,
+	scannersTests/BulletScannerTest.java,
+	scannersTests/CompositeTagScannerTest.java,
+	scannersTests/DivScannerTest.java,
+	scannersTests/FormScannerTest.java,
+	scannersTests/FrameScannerTest.java,
+	scannersTests/FrameSetScannerTest.java,
+	scannersTests/HeadScannerTest.java, scannersTests/HtmlTest.java,
+	scannersTests/ImageScannerTest.java,
+	scannersTests/InputTagScannerTest.java,
+	scannersTests/JspScannerTest.java,
+	scannersTests/LabelScannerTest.java,
+	scannersTests/LinkScannerTest.java,
+	scannersTests/MetaTagScannerTest.java,
+	scannersTests/OptionTagScannerTest.java,
+	scannersTests/ScriptScannerTest.java,
+	scannersTests/SelectTagScannerTest.java,
+	scannersTests/SpanScannerTest.java,
+	scannersTests/StyleScannerTest.java,
+	scannersTests/TableScannerTest.java,
+	scannersTests/TagScannerTest.java,
+	scannersTests/TextareaTagScannerTest.java,
+	scannersTests/TitleScannerTest.java,
+	scannersTests/XmlEndTagScanningTest.java, tagTests/AllTests.java,
+	tagTests/AppletTagTest.java, tagTests/BaseHrefTagTest.java,
+	tagTests/BodyTagTest.java, tagTests/CompositeTagTest.java,
+	tagTests/DoctypeTagTest.java, tagTests/EndTagTest.java,
+	tagTests/FormTagTest.java, tagTests/FrameSetTagTest.java,
+	tagTests/FrameTagTest.java, tagTests/ImageTagTest.java,
+	tagTests/InputTagTest.java, tagTests/JspTagTest.java,
+	tagTests/LinkTagTest.java, tagTests/MetaTagTest.java,
+	tagTests/ObjectCollectionTest.java, tagTests/OptionTagTest.java,
+	tagTests/ScriptTagTest.java, tagTests/SelectTagTest.java,
+	tagTests/StyleTagTest.java, tagTests/TagTest.java,
+	tagTests/TextareaTagTest.java, tagTests/TitleTagTest.java,
+	utilTests/AllTests.java, utilTests/BeanTest.java,
+	utilTests/CharacterTranslationTest.java,
+	utilTests/HTMLLinkProcessorTest.java,
+	utilTests/HTMLParserUtilsTest.java, utilTests/NodeListTest.java,
+	utilTests/SortTest.java, visitorsTests/AllTests.java,
+	visitorsTests/CompositeTagFindingVisitorTest.java,
+	visitorsTests/HtmlPageTest.java,
+	visitorsTests/LinkFindingVisitorTest.java,
+	visitorsTests/NodeVisitorTest.java,
+	visitorsTests/StringFindingVisitorTest.java,
+	visitorsTests/TagFindingVisitorTest.java,
+	visitorsTests/TextExtractingVisitorTest.java,
+	visitorsTests/UrlModifyingVisitorTest.java:
+
+	Consolidated the various testing main() methods into ParserTestCase.
+	All unit test classes in the org.htmlparser.tests heirarchy should now be executable.
+	
+2003-10-19 21:28  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, Parser.java,
+	lexer/Lexer.java, lexer/nodes/AbstractNode.java,
+	lexer/nodes/NodeFactory.java, lexer/nodes/RemarkNode.java,
+	lexer/nodes/StringNode.java, lexer/nodes/TagNode.java,
+	scanners/AppletScanner.java, scanners/BaseHrefScanner.java,
+	scanners/BodyScanner.java, scanners/BulletListScanner.java,
+	scanners/BulletScanner.java, scanners/CompositeTagScanner.java,
+	scanners/DivScanner.java, scanners/DoctypeScanner.java,
+	scanners/FormScanner.java, scanners/FrameScanner.java,
+	scanners/FrameSetScanner.java, scanners/HeadScanner.java,
+	scanners/HtmlScanner.java, scanners/ImageScanner.java,
+	scanners/InputTagScanner.java, scanners/JspScanner.java,
+	scanners/LabelScanner.java, scanners/LinkScanner.java,
+	scanners/MetaTagScanner.java, scanners/OptionTagScanner.java,
+	scanners/ScriptScanner.java, scanners/SelectTagScanner.java,
+	scanners/SpanScanner.java, scanners/StyleScanner.java,
+	scanners/TableColumnScanner.java, scanners/TableRowScanner.java,
+	scanners/TableScanner.java, scanners/TagScanner.java,
+	scanners/TextareaTagScanner.java, scanners/TitleScanner.java,
+	tags/AppletTag.java, tags/BaseHrefTag.java, tags/BodyTag.java,
+	tags/Bullet.java, tags/BulletList.java, tags/CompositeTag.java,
+	tags/Div.java, tags/DoctypeTag.java, tags/FormTag.java,
+	tags/FrameSetTag.java, tags/FrameTag.java, tags/HeadTag.java,
+	tags/Html.java, tags/ImageTag.java, tags/InputTag.java,
+	tags/JspTag.java, tags/LabelTag.java, tags/LinkTag.java,
+	tags/MetaTag.java, tags/OptionTag.java, tags/ScriptTag.java,
+	tags/SelectTag.java, tags/Span.java, tags/StyleTag.java,
+	tags/TableColumn.java, tags/TableRow.java, tags/TableTag.java,
+	tags/Tag.java, tags/TextareaTag.java, tags/TitleTag.java,
+	tests/FunctionalTests.java,
+	tests/LineNumberAssignedByNodeReaderTest.java,
+	tests/ParserTestCase.java, tests/lexerTests/AttributeTests.java,
+	tests/lexerTests/KitTest.java,
+	tests/parserHelperTests/CompositeTagScannerHelperTest.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/scannersTests/ImageScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/scannersTests/TableScannerTest.java,
+	tests/scannersTests/TagScannerTest.java,
+	tests/tagTests/BaseHrefTagTest.java,
+	tests/tagTests/LinkTagTest.java, tests/tagTests/ScriptTagTest.java,
+	tests/utilTests/NodeListTest.java,
+	tests/visitorsTests/UrlModifyingVisitorTest.java,
+	util/LinkProcessor.java, util/NodeList.java:
+
+	Removed lexer level AbstractNode.
+	Removed data package from parser level tags.
+	Separated tag creation from recursion in NodeFactory interface.
+	
+2003-10-18 16:50  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	lexer/nodes/Attribute.java, lexer/nodes/PageAttribute.java,
+	lexer/nodes/TagNode.java, tags/AppletTag.java,
+	tests/lexerTests/AttributeTests.java,
+	tests/scannersTests/FormScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/tagTests/AppletTagTest.java, tests/tagTests/FormTagTest.java,
+	tests/tagTests/JspTagTest.java, tests/tagTests/ScriptTagTest.java,
+	tests/tagTests/TagTest.java, tests/utilTests/AllTests.java,
+	tests/utilTests/HTMLTagParserTest.java, util/NodeList.java:
+
+	Partition Attribute into a base class and PageAttribute class for the Lexer.
+	Fixed the AppletTag.setAppletParams in a cheesy manner.
+	Clear out the released NodeList entry on remove().
+	Dropped the HTMLTagParserTest tests, because they really weren't relevant any more.
+	
+2003-10-13 17:48  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, lexer/Cursor.java,
+	lexer/Lexer.java, lexer/Page.java, lexer/nodes/Attribute.java,
+	lexer/nodes/TagNode.java, scanners/ScriptScanner.java,
+	tests/AllTests.java, tests/lexerTests/AllTests.java,
+	tests/lexerTests/AttributeTests.java,
+	tests/lexerTests/TagTests.java,
+	tests/scannersTests/JspScannerTest.java,
+	tests/scannersTests/MetaTagScannerTest.java,
+	tests/scannersTests/ScriptScannerTest.java,
+	tests/tagTests/FormTagTest.java, tests/tagTests/InputTagTest.java,
+	tests/tagTests/JspTagTest.java, tests/tagTests/MetaTagTest.java,
+	tests/tagTests/TagTest.java, tests/tagTests/TextareaTagTest.java:
+
+	Eliminated ParserHelper static class.
+	Add fixAttributes() to handle bad tags.
+	Provide for more than just an equals sign between the attribute name and the value.
+	Unquote the values in getAttributes() hashtable.
+	Fixed a bug regarding factory creation in script scanner.
+	Returned temporaryFailures classes to servicability.
+	Skip JSP testing, fix tests broken because of unquoted attribute values.
+	Some JavaDoc cleanup.
+	
+2003-10-05 21:43  derrickoswald
+
+	* src/org/htmlparser/: tags/JspTag.java,
+	tests/parserHelperTests/RemarkNodeParserTest.java,
+	tests/parserHelperTests/StringParserTest.java,
+	tests/scannersTests/BodyScannerTest.java,
+	tests/scannersTests/BulletListScannerTest.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/scannersTests/FormScannerTest.java,
+	tests/scannersTests/LabelScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/scannersTests/MetaTagScannerTest.java,
+	tests/scannersTests/StyleScannerTest.java,
+	tests/scannersTests/TableScannerTest.java,
+	tests/scannersTests/TitleScannerTest.java,
+	tests/tagTests/AppletTagTest.java,
+	tests/tagTests/BaseHrefTagTest.java,
+	tests/tagTests/EndTagTest.java, tests/tagTests/FormTagTest.java,
+	tests/tagTests/FrameSetTagTest.java,
+	tests/tagTests/FrameTagTest.java, tests/tagTests/ImageTagTest.java,
+	tests/tagTests/InputTagTest.java, tests/tagTests/LinkTagTest.java,
+	tests/tagTests/MetaTagTest.java, tests/tagTests/OptionTagTest.java,
+	tests/tagTests/ScriptTagTest.java,
+	tests/tagTests/SelectTagTest.java,
+	tests/tagTests/StyleTagTest.java, tests/tagTests/TagTest.java,
+	tests/tagTests/TextareaTagTest.java:
+
+	Updated tests to correspond to new behaviour.
+	Mostly due to changes in order and case of tag contents.
+	Of the forty odd remaining failing tests, the majority comprise altered functionality that needs to be resolved.
+	
+2003-10-05 09:49  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, Node.java,
+	lexer/Cursor.java, lexer/Lexer.java, lexer/nodes/Attribute.java,
+	lexer/nodes/TagNode.java,
+	nodeDecorators/AbstractNodeDecorator.java,
+	scanners/CompositeTagScanner.java, scanners/ImageScanner.java,
+	scanners/LinkScanner.java, scanners/ScriptScanner.java,
+	scanners/TagScanner.java, tests/ParserTest.java,
+	tests/ParserTestCase.java,
+	tests/scannersTests/AppletScannerTest.java,
+	tests/scannersTests/FormScannerTest.java,
+	tests/scannersTests/FrameScannerTest.java,
+	tests/scannersTests/ImageScannerTest.java,
+	tests/scannersTests/JspScannerTest.java,
+	tests/scannersTests/LabelScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/scannersTests/MetaTagScannerTest.java,
+	tests/scannersTests/OptionTagScannerTest.java,
+	tests/scannersTests/ScriptScannerTest.java,
+	tests/scannersTests/TagScannerTest.java,
+	tests/scannersTests/TitleScannerTest.java,
+	tests/tagTests/AppletTagTest.java,
+	tests/tagTests/DoctypeTagTest.java, tests/tagTests/JspTagTest.java,
+	tests/tagTests/LinkTagTest.java, tests/tagTests/MetaTagTest.java,
+	tests/tagTests/ScriptTagTest.java, util/IteratorImpl.java,
+	util/NodeList.java:
+
+	Add bean like accessors for positions on Node, AbstractNode and AbstractNodeDecorator.
+	Handle null page in Cursor.
+	Add smartquotes mode in Lexer and CompositeTagScannerHelper.
+	Add simple name constructor in Attribute.
+	Remove emptyxmltag member, replace with computing accessors in TagNode.
+	Removed ScriptScannerHelper and moved scanning logic to ScriptScanner.
+	Reworked extractImageLocn in ImageScanner
+	Implement extractXMLData in TagScanner.
+	Made virtual tags zero length in TagData.
+	Added push() to IteratorImpl.
+	Added single node constructor to NodeList.
+	Numerous and various test adjustments. Still 133 failures.
+	
+2003-10-02 22:15  derrickoswald
+
+	* src/org/htmlparser/: lexer/nodes/StringNode.java,
+	tags/CompositeTag.java, tags/FrameSetTag.java, tags/SelectTag.java,
+	tests/AllTests.java, tests/ParserTestCase.java:
+
+	Fix all testcases generating exceptions. Still 160 failures.
+	
+2003-10-02 20:20  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, lexer/nodes/TagNode.java,
+	tests/LineNumberAssignedByNodeReaderTest.java:
+
+	Updated tag line numbers test.
+	***** Line numbers reported by tags are now zero based, not one based. *****
+	Strip off possible ending slash in tag name.
+	
+2003-10-02 19:48  derrickoswald
+
+	* src/org/htmlparser/: lexer/nodes/Attribute.java,
+	lexer/nodes/TagNode.java, tags/Tag.java, tests/ParserTestCase.java,
+	tests/tagTests/TagTest.java, util/ParserUtils.java,
+	util/SpecialHashtable.java:
+
+	Moved SpecialHashTable to util.
+	Fixed some attribute bugs and some test cases.
+	
+2003-09-29 22:12  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java, tags/Tag.java:
+
+	Doco update. Privatize tag fields leading up to removal.
+	
+2003-09-28 20:00  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, lexer/Cursor.java,
+	lexer/Lexer.java, lexer/Page.java, lexer/PageIndex.java,
+	lexer/Source.java, tests/utilTests/BeanTest.java:
+
+	Fix broken serializability.
+	
+2003-09-28 15:30  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, RemarkNode.java,
+	StringNode.java, beans/StringBean.java, tags/CompositeTag.java,
+	tags/ImageTag.java, tags/LinkTag.java, tags/Tag.java,
+	tags/TitleTag.java,
+	tests/visitorsTests/UrlModifyingVisitorTest.java,
+	util/LinkProcessor.java, visitors/HtmlPage.java,
+	visitors/NodeVisitor.java, visitors/TagFindingVisitor.java,
+	visitors/TextExtractingVisitor.java,
+	visitors/UrlModifyingVisitor.java:
+
+	Fixed up the broken visitor logic.
+	Added some docos on NodeVisitor.
+	
+2003-09-28 11:33  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, NodeReader.java,
+	Parser.java, RemarkNode.java, RemarkNodeParser.java,
+	StringNode.java, beans/StringBean.java, lexer/Cursor.java,
+	lexer/Lexer.java, lexer/Page.java, lexer/Source.java,
+	lexer/nodes/StringNode.java, lexer/nodes/TagNode.java,
+	lexer/nodes/NodeFactory.java, scanners/CompositeTagScanner.java,
+	scanners/DoctypeScanner.java, scanners/ImageScanner.java,
+	scanners/JspScanner.java, scanners/ScriptScanner.java,
+	scanners/TagScanner.java, tags/AppletTag.java,
+	tags/CompositeTag.java, tags/DoctypeTag.java, tags/EndTag.java,
+	tags/ImageTag.java, tags/JspTag.java, tags/StyleTag.java,
+	tags/Tag.java, tests/ParserTest.java, tests/ParserTestCase.java,
+	tests/lexerTests/LexerTests.java,
+	tests/parserHelperTests/CompositeTagScannerHelperTest.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/scannersTests/ImageScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/scannersTests/MetaTagScannerTest.java,
+	tests/scannersTests/TagScannerTest.java,
+	tests/tagTests/BaseHrefTagTest.java,
+	tests/tagTests/EndTagTest.java, tests/tagTests/LinkTagTest.java,
+	tests/tagTests/ScriptTagTest.java, tests/tagTests/TagTest.java,
+	tests/utilTests/HTMLTagParserTest.java, util/Generate.java,
+	util/IteratorImpl.java, util/ParserUtils.java,
+	visitors/HtmlPage.java, visitors/NodeVisitor.java,
+	visitors/TagFindingVisitor.java,
+	visitors/TextExtractingVisitor.java,
+	visitors/UrlModifyingVisitor.java:
+
+	Lexer Integration
+	Removed old Parser classes.
+	Removed EndTag,  this class was replaced by a call to the new isEndTag() method on the Tag class
+	The StringNode, RemarkNode and tags.Tag class now derive from their lexeme counterparts in lexer.nodes instead of the other way around.
+	The beginnings of a node factory interface are included. This was added so the lexer could return 'visitable' nodes to the parser. The parser acts as it's own node factory, as does the Lexer.
+	The node count for parsing goes up in most cases because every whitespace (i.e. newline) now counts as a StringNode. This has whacked out a lot of the tests that were expecting fewer nodes or a certain type of node at a particular index.
+	Attributes now maintain their order and case. The count of attributes also went up because whitespace is maintained within tags too. The storage in a Vector means the element 0 Attribute is actually the name of the tag, rather than having the $TAGNAME entry in a HashTable.
+	
+2003-09-22 23:41  derrickoswald
+
+	* build.xml, cvs2cl.pl, htmlparser_checks.xml, java.header,
+	src/org/htmlparser/lexer/nodes/TagNode.java,
+	src/org/htmlparser/tags/AppletTag.java, bin/crawler.bat, bin/lexer,
+	bin/lexer.bat, bin/parser.bat, bin/ripper.bat, bin/thumbelina,
+	bin/thumbelina.bat, lib/fit.jar, resources/cvs2cl.pl,
+	resources/fit.jar, resources/htmlparser_checks.xml,
+	resources/java.header, resources/lexer, resources/runCrawler.bat,
+	resources/runLexer.bat, resources/runParser.bat,
+	resources/runRipper.bat, resources/runThumbelina.bat,
+	resources/thumbelina:
+
+	Distribution cleanup.
+	
+	- Removed duplicate documentation files from src.zip.
+	- Jars are now built in lib, and stay there, rather than being deleting in the clean task.
+	*** NOTE *** No more release directory.
+	- Added checkstyle-all-3.1.jar to the lib directory, so others can run it too.
+	- Moved executable scripts from resources to a new bin directory
+	so they can be executed in a development environment.
+	- Moved fit.jar from resources to the lib directory.
+	  This left the resources directory empty, but...
+	- Moved cvs2cl and checkstyle files into the resources directory.
+	- Eliminated staging of source files and release files just to construct a
+	zip. These are now aggregated by their respective zip tasks.
+	- Changed name of changeLog task to changelog.
+	- Fixed a few javadoc warnings.
+	- Removed the spurious 'run' from the front of all the names of the DOS batch files.
+	
+	The only files that aren't shipped now are the results, specs and .ssh directory,
+	(whatever they are), and the development environment is identical to the unpacked
+	zips except for maybe the built directories (distribution, javadocs).
+
 Integration Build 1.4 - 20030921
 --------------------------------
 

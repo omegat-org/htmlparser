@@ -1,7 +1,14 @@
-<html><head><title>Template Method</title></head><body><DIV class="wikitext">
-<P><B>Template Method</B></P>
-<P><I><A class="wiki" HREF="TagScanner.html">TagScanner</A></I> uses a template method to create a scanned node - it calls a matching tag scanner to do its job and produce a scanned node in a series of steps.</P>
-<PRE>  public final Tag createScannedNode(
+<html><head><title>Template Method</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>Template Method
+
+<p><i><a HREF=TagScanner.html class="wiki">TagScanner</a> uses a template method to create a scanned node - it calls a matching tag scanner to do its job and produce a scanned node in a series of steps.
+
+<pre>
+  public final Tag createScannedNode(
     Tag tag,
     String url,
     NodeReader reader,
@@ -11,6 +18,19 @@
     thisTag.setThisScanner(this);
     thisTag.setAttributes(tag.getAttributes());
     return thisTag;
-  }</PRE>
-<P>This is useful as the tag has some necessary associations established here - the association with the scanner that parsed it, and the attributes of the original tag that was processed to produce the specialized tag.</P>
-<P>--<A class="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Sunday, February 23, 2003  5:38:42 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>
+  }
+
+<p>This is useful as the tag has some necessary associations established here - the association with the scanner that parsed it, and the attributes of the original tag that was processed to produce the specialized tag.
+
+<p>--<a HREF=SomikRaha.html class="wiki">SomikRaha</a>
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Sunday, February 23, 2003  5:38:42 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

@@ -1,11 +1,33 @@
-<html><head><title>Web Ripper</title></head><body><DIV class="wikitext">
-<P><B>Web Ripper</B></P>
-<P>A ripper is a program that downloads html content to your hard disk. It involves <B>modifying links and image locations</B> to point to locations in your hard disk.</P>
-<P>You can write rippers easily with the parser. Here's one way to do it:</P>
-<PRE>Parser parser = new Parser(..);
+<html><head><title>Web Ripper</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>Web Ripper
+
+<p>A ripper is a program that downloads html content to your hard disk. It involves <b>modifying links and image locations to point to locations in your hard disk.
+
+<p>You can write rippers easily with the parser. Here's one way to do it:
+
+<pre>
+Parser parser = new Parser(..);
 UrlModifyingVisitor visitor = new UrlModifyingVisitor(parser,"c:\\webpages\\mylocation");
 parser.visitAllNodesWith(visitor);
-writeToFile(visitor.getModifiedResult()); // you have to define writeToFile in your app program</PRE>
-<P>This visitor simply modifies the links it finds in the page with the prefix you have provided. It then passes back the representation of the page via <I>getModifiedResult()</I>.</P>
-<P>If you're dealing with frames, you might want to enhance this visitor to be able to modify links on the frame tags. In such a case, override visitTag(), and check if the tag is a <SPAN class="wikiunknown"><U>FrameTag</U></SPAN> (Note, <SPAN class="wikiunknown"><U>UrlModifyingVisitor</U></SPAN> will register link and image scanners only, so you will need to register the frame scanner seperately). Then, you can proceed to modify the src attribute, use <I>Tag.setAttribute()</I></P>
-<P>--<A class="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Sunday, February 23, 2003  5:32:39 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>
+writeToFile(visitor.getModifiedResult()); // you have to define writeToFile in your app program
+
+<p>This visitor simply modifies the links it finds in the page with the prefix you have provided. It then passes back the representation of the page via <i>getModifiedResult().
+
+<p>If you're dealing with frames, you might want to enhance this visitor to be able to modify links on the frame tags. In such a case, override visitTag(), and check if the tag is a <span class="wikiunknown"><u>FrameTag (Note, <span class="wikiunknown"><u>UrlModifyingVisitor will register link and image scanners only, so you will need to register the frame scanner seperately). Then, you can proceed to modify the src attribute, use <i>Tag.setAttribute()
+
+<p>--<a HREF=SomikRaha.html class="wiki">SomikRaha</a>
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Sunday, February 23, 2003  5:32:39 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

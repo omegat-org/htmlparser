@@ -1,12 +1,32 @@
-<html><head><title>External Iterators</title></head><body><DIV class="wikitext">
-<P><B>External Iterators</B></P>
-<P>You can use external iterators to drive the entire parsing process like so :</P>
-<PRE>  for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
+<html><head><title>External Iterators</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>External Iterators
+
+<p>You can use external iterators to drive the entire parsing process like so :
+
+<pre>
+  for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
      Node node = e.nextNode();
      if (node instanceof LinkTag) {
      }
      if (node instanceof ImageTag) {
      }
-  }</PRE>
-<P>You should think of this only when you want to conduct a really quick search, and the moment you've found what you've wanted, you want to stop parsing. The iterator here drives the parsing.</P>
-<P>--<A class="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Sunday, February 23, 2003  5:36:09 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>
+  }
+
+<p>You should think of this only when you want to conduct a really quick search, and the moment you've found what you've wanted, you want to stop parsing. The iterator here drives the parsing.
+
+<p>--<a HREF=SomikRaha.html class="wiki">SomikRaha</a>
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Sunday, February 23, 2003  5:36:09 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

@@ -1,4 +1,4 @@
-HTMLParser Version 1.4 (Integration Build Sep 21, 2003)
+HTMLParser Version 1.4 (Integration Build Oct 26, 2003)
 *********************************************
 
 Q1. What are the contents of the distribution ? 

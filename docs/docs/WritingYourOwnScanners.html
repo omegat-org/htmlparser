@@ -1,18 +1,58 @@
-<html><head><title>Writing Your Own Scanners</title></head><body><DIV class="wikitext">
-<P><B>Writing Your Own Scanners</B></P>
-<P>There are two types of scanners, depending on the type of tags that you wish to parse:</P>
-<UL>
-<LI><A class="wiki" HREF="TagScanner.html">TagScanner</A> - for parsing tags that have no child elements</LI>
-<LI>CompositeTagScanner - for parsing tags with children</LI></UL>
-<P>Your scanner should subclass either of these two classes. You should then register your scanner with the parser with a call like:
-parser.addScanner(new MyOwnScanner());</P>
-<P><B>The Anatomy of a Scanner</B></P>
-<P>The scanner allows you to customize parts of the scanning process. The scanning process is :<BR/><BR/>1. Given a tag, match the tag name with a registered scanner<BR/><BR/>2. If a match is found (using getId()-  which you MUST override), a closer match or special processing can be done by calling the evaluate() method of the scanner. This is optional, subclasses don't have to override the evaluate() method.<BR/><BR/>3. If a match was found, call the scan() method. For both <A class="wiki" HREF="TagScanner.html">TagScanner</A> and CompositeTagScanner, overriding this method is optional, and NOT recommended for standard cases. The default scan() methods will make a call to createTag.<BR/><BR/>4. createTag describes the creation of a new tag. This method MUST be overridden in your scanner.<BR/><BR/></P>
-<P><B>For your own scanner - simply override</B> :<BR/><BR/>1. getID() and have it return an array of strings that will be matched against the tag. For most cases, a single string is enough.<BR/><BR/>2. createTag() and have it create your special tag. The data needed for construction of your tag will be within tagData and compositeTagData (mostly within the latter if you are creating a composite tag - a tag with children).<BR/><BR/></P>
-<P>Note: Tags with children must subclass CompositeTag</P>
-<P><B>Examples</B></P>
-<P>1. Simple tag with no children</P>
-<PRE>public class MySimpleScanner extends TagScanner {
+<html><head><title>Writing Your Own Scanners</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>Writing Your Own Scanners
+
+<p>There are two types of scanners, depending on the type of tags that you wish to parse:
+
+<ul>
+
+<li><a HREF=TagScanner.html class="wiki">TagScanner</a> - for parsing tags that have no child elements
+
+<li>CompositeTagScanner - for parsing tags with children
+
+
+<p>Your scanner should subclass either of these two classes. You should then register your scanner with the parser with a call like:
+parser.addScanner(new MyOwnScanner());
+
+<p><b>The Anatomy of a Scanner
+
+<p>The scanner allows you to customize parts of the scanning process. The scanning process is :
+<br />
+<br />
+1. Given a tag, match the tag name with a registered scanner
+<br />
+<br />
+2. If a match is found (using getId()-  which you MUST override), a closer match or special processing can be done by calling the evaluate() method of the scanner. This is optional, subclasses don't have to override the evaluate() method.
+<br />
+<br />
+3. If a match was found, call the scan() method. For both <a HREF=TagScanner.html class="wiki">TagScanner</a> and CompositeTagScanner, overriding this method is optional, and NOT recommended for standard cases. The default scan() methods will make a call to createTag.
+<br />
+<br />
+4. createTag describes the creation of a new tag. This method MUST be overridden in your scanner.
+<br />
+<br />
+
+<p><b>For your own scanner - simply override :
+<br />
+<br />
+1. getID() and have it return an array of strings that will be matched against the tag. For most cases, a single string is enough.
+<br />
+<br />
+2. createTag() and have it create your special tag. The data needed for construction of your tag will be within tagData and compositeTagData (mostly within the latter if you are creating a composite tag - a tag with children).
+<br />
+<br />
+
+<p>Note: Tags with children must subclass CompositeTag
+
+<p><b>Examples
+
+<p>1. Simple tag with no children
+
+<pre>
+public class MySimpleScanner extends TagScanner {
    private static String [] MATCH_ID = {"MYSPECIALTAG"};
    ..
    public String getID() {
@@ -27,9 +67,12 @@ parser.addScanner(new MyOwnScanner());</P>
 public class MySimpleTag extends Tag {
    public MySimpleTag(TagData,..) {
    }
-}</PRE>
-<P>2. Composite tag with children</P>
-<PRE>public class MyCompositeScanner extends CompositeTagScanner {
+}
+
+<p>2. Composite tag with children
+
+<pre>
+public class MyCompositeScanner extends CompositeTagScanner {
    private static String [] MATCH_ID = {"MYSPECIALTAG"};
    ..
    public String getID() {
@@ -55,5 +98,17 @@ public class MyCompositeTag extends CompositeTag {
        //       SomeTag.class
        //    ).toNodeArray();
    }
-}</PRE>
-<P>You can customize the composite tag with an array of tag(strings) which indicate when to trigger corrections. You can also specify if you wish to prevent the same tag from appear as its child. Check the javadocs of CompositeTagScanner for more info.</P></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Thursday, May  1, 2003  6:54:01 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>
+}
+
+<p>You can customize the composite tag with an array of tag(strings) which indicate when to trigger corrections. You can also specify if you wish to prevent the same tag from appear as its child. Check the javadocs of CompositeTagScanner for more info.
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Thursday, May  1, 2003  6:54:01 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

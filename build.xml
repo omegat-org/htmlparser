@@ -19,8 +19,8 @@ Release Procedure
   and 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/images/*'
   deletes local Wiki pages, of course any one else would have to adjust this and
   also the hard-coded path in WikiCapturer
-- 'javac -classpath release/htmlparser1_4/lib/htmlparser.jar ../WikiCapturer/src/org/htmlparser/wikicapturer/CaptureWiki.java ../WikiCapturer/src/org/htmlparser/wikicapturer/PhpWikiVisitor.java'
-  and 'java -classpath release/htmlparser1_4/lib/htmlparser.jar:../WikiCapturer/src org.htmlparser.wikicapturer.CaptureWiki'
+- 'javac -classpath lib/htmlparser.jar ../WikiCapturer/src/org/htmlparser/wikicapturer/CaptureWiki.java ../WikiCapturer/src/org/htmlparser/wikicapturer/PhpWikiVisitor.java'
+  and 'java -classpath lib/htmlparser.jar:../WikiCapturer/src org.htmlparser.wikicapturer.CaptureWiki'
   fetches current Wiki pages
 - perform a CVS update on htmlparser/docs/docs to identify new and changed files
   and commit them - that's why this step can't be automated

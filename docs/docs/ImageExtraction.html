@@ -1,8 +1,16 @@
-<html><head><title>Image Extraction</title></head><body><DIV class="wikitext">
-<P><B>Image Extractions</B></P>
-<P>This is very similar to <A class="wiki" HREF="LinkExtraction.html">LinkExtraction</A>.</P>
-<P>1. Use the <I><SPAN class="wikiunknown"><U>ObjectFindingVisitor</U></SPAN></I> like so :</P>
-<PRE>Parser parser = new Parser("http://urlIWantToParse.com");
+<html><head><title>Image Extraction</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>Image Extractions
+
+<p>This is very similar to <a HREF=LinkExtraction.html class="wiki">LinkExtraction</a>.
+
+<p>1. Use the <i><span class="wikiunknown"><u>ObjectFindingVisitor like so :
+
+<pre>
+Parser parser = new Parser("http://urlIWantToParse.com");
    // Create a visitor, specify that you want to recurse through its children
    // Recursion is needed only if you register all scanners, and a link tag could be embedded
    // within a form tag. But if you register only the link scanner, you don't need recursion.
@@ -18,9 +26,12 @@
    for (int i=0;i&lt;images.length;i++) {
       ImageTag imageTag = (ImageTag)images[i];
       System.out.println(imageTag.getImageLocation());
-   }</PRE>
-<P>2: Use <I>extractAllNodesThatAre()</I></P>
-<PRE>   Parser parser = new Parser("http://urlIWantToParse.com");
+   }
+
+<p>2: Use <i>extractAllNodesThatAre()
+
+<pre>
+   Parser parser = new Parser("http://urlIWantToParse.com");
    parser.registerScanners();
    // Instead of registering all scanners,
    // you could also do - parser.addScanner(new ImageScanner(""));
@@ -29,5 +40,17 @@
    for (int i=0;i&lt;images.length;i++) {
       ImageTag imageTag = (ImageTag)images[i];
       System.out.println(imageTag.getImageLocation());
-   }</PRE>
-<P>--<A class="wiki" HREF="SomikRaha.html">SomikRaha</A>, Sunday, February 16, 2003 2:02:18 pm.</P></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Wednesday, June 25, 2003  9:11:46 am.</P><HR noshade="noshade" class="toolbar"/></body></html>
+   }
+
+<p>--<a HREF=SomikRaha.html class="wiki">SomikRaha</a>, Sunday, February 16, 2003 2:02:18 pm.
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Wednesday, June 25, 2003  9:11:46 am.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>
