@@ -115,17 +115,12 @@ public class HTMLTag extends HTMLNode
 			if (state==TAG_IGNORE_DATA_STATE) {
 				// Now, either this is a valid > input, and should be ignored,
 				// or it is a mistake in the html, in which case we need to correct it *sigh*
-				state = checkValidity(state, tag);
-				// If the state has changed to TAG_FINISH_STATE
-				// then we must perform a correction routine to the text that
-				// has just been parsed
-				if (state==TAG_FINISHED_PARSING_STATE) {
-					tag.setTagEnd(i);
-					// Do Correction
-					// Correct the tag - assuming its grouped into name value pairs
-					// Remove all inverted commas.
-					correctTag(tag);
-				}
+				state = TAG_FINISHED_PARSING_STATE;
+				tag.setTagEnd(i);
+				// Do Correction
+				// Correct the tag - assuming its grouped into name value pairs
+				// Remove all inverted commas.
+				correctTag(tag);
 			}
 		}
 		return state;

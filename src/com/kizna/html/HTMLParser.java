@@ -127,7 +127,7 @@ public HTMLParser(HTMLReader reader)
 {
 	this.reader = reader;
 	reader.setParser(this);
-	initializeStrictness();
+
 }
 	/**
 	 * Creates a HTMLParser object with the location of the resource (URL or file)
@@ -137,13 +137,6 @@ public HTMLParser(HTMLReader reader)
 	{
 		this.resourceLocn = resourceLocn;
 		openConnection();
-		initializeStrictness();
-	}
-	public void initializeStrictness() {
-		Vector strictVector = new Vector();
-		strictVector.addElement(new String("INPUT"));
-		//strictVector.addElement(new String("META"));		
-		HTMLTag.setStrictTags(strictVector);
 	}
 /**
  * Add a new Tag Scanner.
