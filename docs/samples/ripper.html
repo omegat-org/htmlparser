@@ -76,38 +76,49 @@
  <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
    <tr>
   <!-- start line numbers -->
-   <td align="right" valign="top">
-    <code>
-     <font color="#808080">
-1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>
-11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>
-   </font>
-    </code>
-   </td>
+      <td align="right" valign="top"> <code> <font color="#808080"> 1<br>
+        2<br>
+        3<br>
+        4<br>
+        5<br>
+        6<br>
+        7<br>
+        8<br>
+        9<br>
+        10<br>
+        11<br>
+        12<br>
+        13<br>
+        14<br>
+        15<br>
+        16<br>
+        17<br>
+        18<br>
+        19<br>
+        20 <br>
+        </font> </code> </td>
   <!-- end line numbers -->
   <!-- start source code -->
-   <td valign="top">
-    <code>
-<font color="#0000c0">public&nbsp;class&nbsp;</font><font color="#000000">RipperRenderer&nbsp;</font><font color="#0000c0">implements&nbsp;</font><font color="#000000">HTMLRenderer&nbsp;{<br>
-&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#000000">String&nbsp;renderLinksToHTML(HTMLLinkTag&nbsp;linkTag)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;modifiedLink&nbsp;=&nbsp;modifyLink(linkTag.getLink());<br>
-&nbsp;&nbsp;&nbsp;&nbsp;linkTag.setLink(modifiedLink);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">return&nbsp;</font><font color="#000000">linkTag.toHTML();<br>
-&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#000000">String&nbsp;renderImagesToHTML(HTMLImageTag&nbsp;imageTag)&nbsp;{<br>
+      <td valign="top"> <code> <font color="#0000c0">public&nbsp;class&nbsp;</font><font color="#000000">RipperRenderer&nbsp;</font><font color="#0000c0">implements&nbsp;</font><font color="#000000">HTMLRenderer&nbsp;{<br>
+        &nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#000000">String&nbsp;renderLinksToHTML(HTMLLinkTag&nbsp;linkTag)&nbsp;{<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">StringBuffer&nbsp;sb&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">StringBuffer</font><font color="#000000">()</font><font color="#000000">;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;linkTag.setLink</font><font color="#000000">(</font><font color="#000000">modifyLink(linkTag.getLink</font><font color="#000000">()))</font><font color="#000000">;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;linkTag.putLinkStartTagInto</font><font color="#000000">(</font><font color="#000000">sb</font><font color="#000000">)</font><font color="#000000">;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;sb.append</font><font color="#000000">(</font><font color="#000000">linkTag.getLinkContentsAndEndTagWith</font><font color="#000000">(</font><font color="#0000c0">this</font><font color="#000000">))</font><font color="#000000">;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">return&nbsp;</font><font color="#000000">sb.toString</font><font color="#000000">()</font><font color="#000000">;</font><font color="#000000"><br>
+        &nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#000000">String&nbsp;renderImagesToHTML(HTMLImageTag&nbsp;imageTag)&nbsp;{<br>
         &nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;modifiedImageURL&nbsp;=&nbsp;modifyImageURL(imageTag.getImageURL());<br>
         &nbsp;&nbsp;&nbsp;&nbsp;imageTag.setImageURL(modifiedImageURL);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">return&nbsp;</font><font color="#000000">imageTag.toHTML();<br>
-&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;</font><font color="#0000c0">private&nbsp;</font><font color="#000000">String&nbsp;modifyLink(String&nbsp;link)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#008000">//&nbsp;Put&nbsp;your&nbsp;modification&nbsp;logic&nbsp;here<br>
-&nbsp;&nbsp;</font><font color="#000000">}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">return&nbsp;</font><font color="#000000">imageTag.toHTML();<br>
+        &nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;</font><font color="#0000c0">private&nbsp;</font><font color="#000000">String&nbsp;modifyLink(String&nbsp;link)&nbsp;{<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#008000">//&nbsp;Put&nbsp;your&nbsp;modification&nbsp;logic&nbsp;here<br>
+        &nbsp;&nbsp;</font><font color="#000000">}<br>
         &nbsp;&nbsp;</font><font color="#0000c0">private&nbsp;</font><font color="#000000">String&nbsp;modifyImageURL(String&nbsp;imageURL)&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#008000">//&nbsp;Put&nbsp;your&nbsp;modification&nbsp;logic&nbsp;here<br>
-&nbsp;&nbsp;</font><font color="#000000">}<br>
-}</font></code>
-    
-   </td>
+        &nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#008000">//&nbsp;Put&nbsp;your&nbsp;modification&nbsp;logic&nbsp;here<br>
+        &nbsp;&nbsp;</font><font color="#000000">}<br>
+        }</font></code> </td>
   </tr>
   <!-- end source code -->
   <!-- start J2H link -->

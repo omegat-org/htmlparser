@@ -105,19 +105,20 @@
   <!-- =     Further information: http://www.java2html.de     = -->
 </p>
 <center>
- <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
-   <tr>
+  <table width="525" border="2"  align="center" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+    <tr>
   <!-- start line numbers -->
-   <td align="right" valign="top">
+   <td width="8" align="right" valign="top">
     <code>
      <font color="#808080">
-1<br>
+1<br>2
    </font>
     </code>
    </td>
   <!-- end line numbers -->
   <!-- start source code -->
-      <td valign="top"> <code> <font color="#000000">HTMLParser&nbsp;parser&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser(someUrl,DefaultHTMLParserFeedback.QUIET);</font></code> 
+      <td width="772" valign="top"> <code> <font color="#000000">HTMLParser&nbsp;parser&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser(someUrl,</font><font color="#0000c0">new</font><font color="#000000"> 
+        DefaultHTMLParserFeedback(DefaultHTMLParserFeedback.QUIET));</font></code> 
       </td>
   </tr>
   <!-- end source code -->
@@ -149,13 +150,14 @@
    <td align="right" valign="top">
     <code>
      <font color="#808080">
-1<br>
+1<br>2<br>
    </font>
     </code>
    </td>
   <!-- end line numbers -->
   <!-- start source code -->
-      <td valign="top"> <code> <font color="#000000">HTMLParser&nbsp;parser&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser(someUrl,DefaultHTMLParserFeedback.DEBUG);</font></code> 
+      <td valign="top"> <code> <font color="#000000">HTMLParser&nbsp;parser&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser(someUrl,</font><font color="#0000c0">new</font> 
+        DefaultHTMLParserFeedback(<font color="#000000">DefaultHTMLParserFeedback.DEBUG));</font></code> 
       </td>
   </tr>
   <!-- end source code -->
@@ -230,10 +232,5 @@
   accordingly channel the feedback.</p>
 <p><a href="index.html">Back to Samples</a><br>
   <a href="../index.html">Back to HTMLParser Home Page</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
 </body>
 </html>
