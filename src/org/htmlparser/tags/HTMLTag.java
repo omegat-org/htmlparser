@@ -163,8 +163,8 @@ public class HTMLTag extends HTMLNode
 	 	return paramParser.parseAttributes(this);
 	}
 	
-	/*
-	 * in case the tag is parsed at the scan method this will return value of a
+	/**
+	 * In case the tag is parsed at the scan method this will return value of a
 	 * parameter not implemented yet
 	 * @param name of parameter
 	 * @author Kaarle Kaila 23.10.2001
@@ -239,7 +239,12 @@ public class HTMLTag extends HTMLNode
 			// Now, get the scanner associated with this.
 			HTMLTagScanner scanner = (HTMLTagScanner)scanners.get(firstWord);
 			// Now do a deep check
-			if (scanner != null && scanner.evaluate(tagContents.toString(),reader.getPreviousOpenScanner()))
+			if (scanner != null && 
+					scanner.evaluate(
+						tagContents.toString(),
+						reader.getPreviousOpenScanner()
+					)
+				)
 			{
 				found=true;
 				reader.setPreviousOpenScanner(scanner);
