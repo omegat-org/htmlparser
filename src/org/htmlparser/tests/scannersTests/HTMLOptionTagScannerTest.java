@@ -33,9 +33,10 @@ import junit.framework.*;
 import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.*;
 
-public class HTMLOptionTagScannerTest extends TestCase 
+public class HTMLOptionTagScannerTest extends HTMLParserTestCase 
 {
 	
 	private String testHTML = new String(
@@ -53,46 +54,17 @@ public class HTMLOptionTagScannerTest extends TestCase
 	private HTMLNode[] node;
 	private int i;
 	
-	/**
-	 * Constructor for HTMLOptionTagScannerTest.
-	 * @param arg0
-	 */
 	public HTMLOptionTagScannerTest(String name) 
 	{
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(HTMLOptionTagScannerTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {HTMLOptionTagScannerTest.class.getName()});
-	}
-	
-	public void setUp() throws Exception
-	{
-		super.setUp();
-		scanner = new HTMLOptionTagScanner("-i");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
-		scanner = new HTMLOptionTagScanner("-i");
-		parser.addScanner(scanner);
-		
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-	}
-	
 	public void testScan() throws HTMLParserException 
 	{
-		assertEquals("There should be 9 nodes identified",9,i);	
+		scanner = new HTMLOptionTagScanner("-i");
+		createParser(testHTML,"http://www.google.com/test/index.html");
+		parser.addScanner(scanner);
+		parseAndAssertNodeCount(9);	
 		for(int j=0;j<i;j++)
 		{
 			assertTrue("Node " + j + " should be Option Tag",node[j] instanceof HTMLOptionTag);

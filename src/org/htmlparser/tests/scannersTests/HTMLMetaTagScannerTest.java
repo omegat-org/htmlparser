@@ -34,25 +34,20 @@ import java.io.*;
 import java.util.*;
 import org.htmlparser.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.scanners.HTMLMetaTagScanner;
-/**
- * @version 	1.0
- * @author
- */
-public class HTMLMetaTagScannerTest extends TestCase {
 
-	/**
-	 * Constructor for HTMLMetaTagScannerTest.
-	 * @param arg0
-	 */
-	public HTMLMetaTagScannerTest(String arg0) {
-		super(arg0);
+public class HTMLMetaTagScannerTest extends HTMLParserTestCase {
+
+	public HTMLMetaTagScannerTest(String name) {
+		super(name);
 	}
+
 	public void testScan() throws HTMLParserException {
-		String testHTML = new String(
+		createParser(
 		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
 		"<html>\n"+
 		"<head><title>SpamCop - Welcome to SpamCop\n"+
@@ -61,20 +56,11 @@ public class HTMLMetaTagScannerTest extends TestCase {
 		"<META name=\"keywords\" content=\"SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns\">\n"+
 		"<META name=\"language\" content=\"en\">\n"+
 		"<META name=\"owner\" content=\"service@admin.spamcop.net\">\n"+
-		"<META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
+		"<META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">","http://www.google.com/test/index.html");
 		HTMLMetaTagScanner scanner = new HTMLMetaTagScanner("-t");
 		parser.addScanner(scanner);
 		
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 11 nodes identified",11,i);	
+		parseAndAssertNodeCount(11);
 		assertTrue("Node 5 should be End Tag",node[5] instanceof HTMLEndTag);
 		assertTrue("Node 6 should be META Tag",node[6] instanceof HTMLMetaTag);
 		HTMLMetaTag metaTag;
@@ -108,34 +94,18 @@ public class HTMLMetaTagScannerTest extends TestCase {
 
 		assertEquals("This Scanner",scanner,metaTag.getThisScanner());
 	}
+
 	public void testScanTagsInMeta() throws HTMLParserException {
-		String testHTML = new String(
-		"<META NAME=\"Description\" CONTENT=\"Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles\">"
+		createParser(
+		"<META NAME=\"Description\" CONTENT=\"Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles\">",
+		"http://www.google.com/test/index.html"
 		);
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
 		HTMLMetaTagScanner scanner = new HTMLMetaTagScanner("-t");
 		parser.addScanner(scanner);
-		
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",1,i);	
+		parseAndAssertNodeCount(1);
 		assertTrue("Node should be meta tag",node[0] instanceof HTMLMetaTag);
 		HTMLMetaTag metaTag = (HTMLMetaTag)node[0];
 		assertEquals("Meta Tag Name","Description",metaTag.getMetaTagName());
 		assertEquals("Content","Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles",metaTag.getMetaTagContents());
-	}
-	public static void main(String[] args) {
-		new junit.awtui.TestRunner().start(new String[] {"org.htmlparser.tests.scannersTests.HTMLMetaTagScannerTest"});
-	}
-	public static TestSuite suite() 
-	{
-		TestSuite suite = new TestSuite(HTMLMetaTagScannerTest.class);
-		return suite;
 	}
 }
