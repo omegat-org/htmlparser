@@ -155,16 +155,36 @@ public class ParserTestCase extends TestCase {
 		Parser resultParser   = Parser.createParser(result);
 		Node expectedNode, actualNode;
 		NodeIterator actualEnumeration = resultParser.elements();
+		int cnt=0;
+		Node prevNode=null;
 		for (NodeIterator e = expectedParser.elements();e.hasMoreNodes();) {
 			expectedNode = e.nextNode();
 			actualNode   = actualEnumeration.nextNode();
+			cnt++;
+			String expectedNodeHtml="null", actualNodeHtml="null";
+			String expectedNodeName="null", actualNodeName="null";
+			if (expectedNode!=null) {
+				expectedNodeHtml = expectedNode.toHtml();
+				expectedNodeName = expectedNode.getClass().getName();
+			}
+			if (actualNode!=null) {
+				actualNodeHtml = actualNode.toHtml();
+				actualNodeName = actualNode.getClass().getName();
+			}
+			String prevNodeHtml="null";
+			if (prevNode!=null)
+				prevNodeHtml = prevNode.toHtml();
 			assertEquals(
 				"the two nodes should be the same type\n"+
-				"expected node:"+expectedNode.toHTML()+"\n"+
-				"  actual node:"+actualNode.toHTML()+
+				"expected node:"+expectedNodeHtml+"\n"+
+				"  actual node:"+actualNodeHtml+"\n"+
+				"comparison no: "+cnt+"\n"+
+				"expected node type: "+expectedNodeName+"\n"+
+				"actual node type  : "+actualNodeName+"\n"+
+				"previous matched node : "+prevNodeHtml+
 				displayMessage,
-				expectedNode.getClass().getName(),
-				actualNode.getClass().getName()
+				expectedNodeName,
+				actualNodeName
 			);
 			assertTagEquals(
 				displayMessage,
@@ -177,6 +197,8 @@ public class ParserTestCase extends TestCase {
 				expectedNode, 
 				actualNode
 			);			
+			prevNode = actualNode;
+			
 		}
 	}
 
@@ -254,11 +276,11 @@ public class ParserTestCase extends TestCase {
 				continue;
 			}
 				
-			String expectedHTML = expectedTag.toHTML();
+			String expectedHTML = expectedTag.toHtml();
 			assertStringEquals(
 				"\nvalue for key "+key+" in tag "+expectedTag.getTagName()+" expected="+expectedValue+" but was "+actualValue+
-				"\n\nComplete Tag expected:\n"+expectedTag.toHTML()+
-				"\n\nComplete Tag actual:\n"+actualTag.toHTML()+
+				"\n\nComplete Tag expected:\n"+expectedTag.toHtml()+
+				"\n\nComplete Tag actual:\n"+actualTag.toHtml()+
 				displayMessage,
 				expectedValue,
 				actualValue
