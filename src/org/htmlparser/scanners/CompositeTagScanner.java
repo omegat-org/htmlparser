@@ -76,7 +76,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 			boolean endTagFound = false;
 			Node node=tag;
 			
-			NodeList childVector = new NodeList();
+			NodeList childrenNodeList = new NodeList();
 			
 			Hashtable tempScanners=null;
 			if (removeScanners) {
@@ -129,7 +129,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 					}
 				} 
 				if (!endTagFound && node!=null){
-					childVector.add(node);
+					childrenNodeList.add(node);
 					childNodeEncountered(node);
 				}
 			}
@@ -152,7 +152,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 						url,
 						isXmlEndTag				
 					), new CompositeTagData(
-						startTag,endTag,childVector
+						startTag,endTag,childrenNodeList
 					)
 				);
 			}

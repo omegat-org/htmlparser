@@ -49,4 +49,13 @@ public class EndTagTest extends ParserTestCase {
 		EndTag endTag = (EndTag)node[1];
 		assertEquals("Raw String","</HTML>",endTag.toHtml());
 	}
+	
+	public void testEndTagFind() {
+		String testHtml = 
+			"<SCRIPT>document.write(d+\".com\")</SCRIPT>";
+		int pos = testHtml.indexOf("</SCRIPT>");
+		EndTag endTag = (EndTag)EndTag.find(testHtml,pos);
+		assertEquals("endtag element begin",32,endTag.elementBegin());
+		assertEquals("endtag element end",40,endTag.elementEnd());
+	}
 }

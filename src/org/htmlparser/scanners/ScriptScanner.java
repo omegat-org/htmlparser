@@ -30,15 +30,22 @@ package org.htmlparser.scanners;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
+import org.htmlparser.StringNode;
+import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 /**
  * The HTMLScriptScanner identifies javascript code
  */
 
 public class ScriptScanner extends CompositeTagScanner {
+	private static final String SCRIPT_END_TAG = "</SCRIPT>";
 	private static final String MATCH_NAME [] = {"SCRIPT"};
 	
 	public ScriptScanner() {
@@ -57,6 +64,113 @@ public class ScriptScanner extends CompositeTagScanner {
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new ScriptTag(tagData,compositeTagData);
+	}
+
+	public Tag scan(Tag tag, String url, NodeReader reader, String currLine)
+		throws ParserException {
+		try {
+			String line = null;
+			StringBuffer scriptContents = 
+				new StringBuffer();
+			boolean endTagFound = false;
+			Tag startTag = tag;
+			Tag endTag = null;
+			line = currLine;
+			boolean sameLine = true;
+			int startingPos = startTag.elementEnd();
+			do {
+				int endTagLoc = line.toUpperCase().indexOf(SCRIPT_END_TAG,startingPos);
+				while (endTagLoc>0 && isScriptEmbeddedInDocumentWrite(line, endTagLoc)) {
+					startingPos = endTagLoc+SCRIPT_END_TAG.length();
+					endTagLoc = line.toUpperCase().indexOf(SCRIPT_END_TAG, startingPos); 	
+				}
+				 
+				if (endTagLoc!=-1) {
+					endTagFound = true;
+					endTag = (EndTag)EndTag.find(line,endTagLoc);
+					if (endTag.elementBegin()==0)
+						scriptContents.append(
+							Node.getLineSeparator()
+						);
+					if (sameLine) 
+						scriptContents.append(
+							getCodeBetweenStartAndEndTags(
+								line,
+								startTag,
+								endTagLoc)
+						);
+					else 
+						scriptContents.append(line.substring(0,endTagLoc));
+					
+					reader.setPosInLine(endTag.elementEnd());
+				} else {
+					if (sameLine) 
+						scriptContents.append(
+							line.substring(
+								startTag.elementEnd()+1
+							)
+						);
+					else {
+						scriptContents.append(Node.getLineSeparator());
+						scriptContents.append(line);
+					}
+				}
+				if (!endTagFound) {
+					line = reader.getNextLine();
+					startingPos = 0;
+				}
+				if (sameLine) 
+					sameLine = false;
+			}
+			while (line!=null && !endTagFound);
+			NodeList childrenNodeList = new NodeList();
+			childrenNodeList.add(
+				new StringNode(
+					scriptContents,
+					startTag.elementEnd(),
+					endTag.elementBegin()-1
+				)
+			);
+			return createTag(
+				new TagData(
+					startTag.elementBegin(),
+					endTag.elementEnd(),
+					startTag.getText(),
+					currLine,
+					url
+				), new CompositeTagData(
+					startTag,endTag,childrenNodeList
+				)
+			);
+			
+		}
+		catch (Exception e) {
+			throw new ParserException("Error in ScriptScanner: ",e);
+		}
+	}
+
+	public String getCodeBetweenStartAndEndTags(
+		String line,
+		Tag startTag,
+		int endTagLoc) throws ParserException {
+		try {
+			
+			return line.substring(
+				startTag.elementEnd()+1,
+				endTagLoc
+			);
+		}
+		catch (Exception e) {
+			StringBuffer msg = new StringBuffer("Error in getCodeBetweenStartAndEndTags():\n");
+			msg.append("substring starts at: "+(startTag.elementEnd()+1)).append("\n");
+			msg.append("substring ends at: "+(endTagLoc));
+			throw new ParserException(msg.toString(),e);
+		}
+	}
+
+	private boolean isScriptEmbeddedInDocumentWrite(String line, int endTagLoc) {
+		if (endTagLoc+9 > line.length()-1) return false;
+		return line.charAt(endTagLoc+SCRIPT_END_TAG.length())=='"';
 	}
 
 }

@@ -113,12 +113,12 @@ public class TagParserTest extends ParserTestCase {
 		results = new HashMap();
 		testProgress = 0;
 		for (int i=0;i<parsingThread.length;i++) {
-			if (i<5) 
+			if (i<parsingThread.length/2) 
 				parsingThread[i] = 
-					new ParsingThread(i,testHtml1);
+					new ParsingThread(i,testHtml1,parsingThread.length);
 				else
 					parsingThread[i] = 
-						new ParsingThread(i,testHtml2);
+						new ParsingThread(i,testHtml2,parsingThread.length);
 					
 			Thread thread = new Thread(parsingThread[i]);					
 			thread.start();
@@ -136,27 +136,30 @@ public class TagParserTest extends ParserTestCase {
 		while (testProgress!=completionValue);
 		for (int i=0;i<parsingThread.length;i++) {
 			if (!parsingThread[i].passed()) {
-				if (i<5) {
+				assertNotNull("Thread "+i+" link 1",parsingThread[i].getLink1());
+				assertNotNull("Thread "+i+" link 2",parsingThread[i].getLink2());
+				if (i<parsingThread.length/2) {
 					assertStringEquals(
 						"Thread "+i+", link 1:",
 						"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
-						parsingThread[i].getLink1()
+						parsingThread[i].getLink1().getLink()
 					);
 					assertStringEquals(
 						"Thread "+i+", link 2:",
 						"http://normallink.com/sometext.html",
-						parsingThread[i].getLink2()
+						parsingThread[i].getLink2().getLink()
 					);
 				} else {
 					assertStringEquals(
 						"Thread "+i+", link 1:",
 						"http://normallink.com/sometext.html",
-						parsingThread[i].getLink1()
+						parsingThread[i].getLink1().getLink()
 					);
+					assertNotNull("Thread "+i+" link 2",parsingThread[i].getLink2());
 					assertStringEquals(
 						"Thread "+i+", link 2:",
 						"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
-						parsingThread[i].getLink2()
+						parsingThread[i].getLink2().getLink()
 					);
 				}				
 			}
@@ -173,9 +176,11 @@ public class TagParserTest extends ParserTestCase {
 		int id;
 		LinkTag link1, link2;
 		boolean result;
+		int max;
 		
-		ParsingThread(int id, String testHtml) {
+		ParsingThread(int id, String testHtml, int max) {
 			this.id = id;
+			this.max = max;
 			this.parser = 
 				Parser.createParser(testHtml);
 			parser.registerScanners();
@@ -187,7 +192,7 @@ public class TagParserTest extends ParserTestCase {
 				Node linkTag [] = parser.extractAllNodesThatAre(LinkTag.class);
 				link1 = (LinkTag)linkTag[0];
 				link2 = (LinkTag)linkTag[1];
-				if (id<5) {
+				if (id<max/2) {
 					if (link1.getLink().equals("/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html") &&
 						link2.getLink().equals("http://normallink.com/sometext.html"))
 						result = true;
@@ -206,12 +211,12 @@ public class TagParserTest extends ParserTestCase {
 			}
 		}
 		
-		public String getLink1() {
-			return link1.getLink();
+		public LinkTag getLink1() {
+			return link1;
 		}
 		
-		public String getLink2() {
-			return link2.getLink();
+		public LinkTag getLink2() {
+			return link2;
 		}
 		
 		public boolean passed() {

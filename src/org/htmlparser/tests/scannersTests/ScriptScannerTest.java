@@ -53,14 +53,16 @@ public class ScriptScannerTest extends ParserTestCase
 
 	public void testScan() throws ParserException
 	{
-		createParser("<SCRIPT>document.write(d+\".com\")</SCRIPT>","http://www.google.com/test/index.html");
+		String testHtml = "<SCRIPT>document.write(d+\".com\")</SCRIPT>";
+		createParser(testHtml,"http://www.google.com/test/index.html");
 		// Register the script scanner
 		parser.addScanner(new ScriptScanner("-s"));
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
 		// Check the data in the applet tag
 		ScriptTag scriptTag = (ScriptTag)node[0];
-		assertEquals("Expected Script Code","document.write(d+\".com\")",scriptTag.getScriptCode());
+		assertStringEquals("Expected Script Code","document.write(d+\".com\")",scriptTag.getScriptCode());
+		assertStringEquals("script tag html",testHtml,scriptTag.toHtml());
 	}
 
 	/**
@@ -114,7 +116,7 @@ public class ScriptScannerTest extends ParserTestCase
 		parseAndAssertNodeCount(2);
 		
 		StringBuffer sb2 = new StringBuffer();
-		sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
+		sb2.append("\r\nif(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
 		sb2.append(" document.write ('xxx');\r\n"); 
 		sb2.append("else\r\n"); 
 		sb2.append(" document.write ('yyy');\r\n"); 
@@ -168,7 +170,7 @@ public class ScriptScannerTest extends ParserTestCase
 		// Check the data in the applet tag 
 		ScriptTag scriptTag = (ScriptTag)node[0];
 		String scriptCode = scriptTag.getScriptCode();	  
-		String expectedCode = "<!--\r\n"+
+		String expectedCode = "\r\n<!--\r\n"+
 						  "  function validateForm()\r\n"+
 						  "  {\r\n"+
 						  "     var i = 10;\r\n"+
@@ -176,7 +178,7 @@ public class ScriptScannerTest extends ParserTestCase
 						  "     i = i - 1 ; \r\n"+
 						  "     return true;\r\n"+
 						  "  }\r\n"+
-						  "// -->";
+						  "// -->\r\n";
 		assertStringEquals("Expected Code",expectedCode,scriptCode);
 	}
 	
@@ -231,7 +233,7 @@ public class ScriptScannerTest extends ParserTestCase
 	
 	public void testScriptCodeExtraction() throws ParserException {
 		createParser(
-			"<SCRIPT language=JavaScript> " +
+			"<SCRIPT language=JavaScript>" +
 			"document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
 			"width=\"80\" height=\"20\" border=\"0\"></a>\");" + 
 			"</SCRIPT>"
@@ -250,7 +252,7 @@ public class ScriptScannerTest extends ParserTestCase
 
 	public void testScriptCodeExtractionWithMultipleQuotes() throws ParserException {
 		createParser(
-			"<SCRIPT language=JavaScript> " +
+			"<SCRIPT language=JavaScript>" +
 			"document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
 			"width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");" + 
 			"</SCRIPT>"
@@ -261,8 +263,8 @@ public class ScriptScannerTest extends ParserTestCase
 		ScriptTag scriptTag = (ScriptTag)node[0];
 		assertStringEquals(
 			"script code",
-			"document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
-			"width=\"80\" height=\"20\" border=\"0\"></a>\");",
+			"document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
+			"width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");",
 			scriptTag.getScriptCode()
 		);
 	}
