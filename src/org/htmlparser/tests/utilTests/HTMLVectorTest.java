@@ -4,10 +4,10 @@ package org.htmlparser.tests.utilTests;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLVisitor;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLSimpleEnumeration;
 import org.htmlparser.util.HTMLVector;
+import org.htmlparser.visitors.HTMLVisitor;
 
 public class HTMLVectorTest extends HTMLParserTestCase {
 	private HTMLVector vector;

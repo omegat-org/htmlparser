@@ -31,6 +31,8 @@ package org.htmlparser;
 
 import java.util.Vector;
 
+import org.htmlparser.visitors.*;
+
 /**
  * Normal text in the html document is identified and represented by this class.
  */

@@ -50,6 +50,7 @@ import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserFeedback;
 import org.htmlparser.util.HTMLTagParser;
+import org.htmlparser.visitors.*;
 
 /**
  * This is the class that the user will use, either to get an iterator into 

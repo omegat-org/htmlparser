@@ -165,7 +165,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("The node should be a link tag",node[0] instanceof HTMLLinkTag);
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
-        assertEquals("Extracted Text","Vancouver schools plan 'Great Northern Way'", linkTag.getLinkText ());
+        assertStringEquals("Extracted Text","Vancouver schools plan 'Great Northern Way'", linkTag.getLinkText ());
 	}
 
 	/**

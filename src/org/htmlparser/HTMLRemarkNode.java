@@ -31,6 +31,8 @@ package org.htmlparser;
 
 import java.util.Vector;
 
+import org.htmlparser.visitors.*;
+
 /**
  * The remark tag is identified and represented by this class.
  */

@@ -33,6 +33,8 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Vector;
 
+import org.htmlparser.visitors.*;
+
 
 /**
  * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)

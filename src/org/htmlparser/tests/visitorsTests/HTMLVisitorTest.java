@@ -1,11 +1,12 @@
-package org.htmlparser.tests;
+package org.htmlparser.tests.visitorsTests;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.htmlparser.HTMLStringNode;
-import org.htmlparser.HTMLVisitor;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.visitors.HTMLVisitor;
 
 public class HTMLVisitorTest extends HTMLParserTestCase {
 
@@ -43,6 +44,5 @@ public class HTMLVisitorTest extends HTMLParserTestCase {
 				lastKeyVisited = tag.getParameter("NAME");
 			}
 		}
-
 	}
 }
