@@ -269,9 +269,8 @@ public class LinkScanner extends CompositeTagScanner
 			}
 			while (endFlag==false && node!=null);
 			if (node==null)  {
-				// Add an end link tag
-				endTag = new EndTag(new TagData(0,3,"A","</A>"));
-				node = endTag;
+				// Add an end tag
+				node = createEndTagFor(tag);
 			}
 			if (node instanceof EndTag)
 			{

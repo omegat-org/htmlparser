@@ -139,5 +139,18 @@ public abstract class CompositeTagScanner extends TagScanner {
 
 	protected abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData);
 
+	protected EndTag createEndTagFor(Tag tag) {
+		return new EndTag(
+			new TagData(
+				0,
+				3,
+				tag.getTagName(),
+				"</"+
+				tag.getTagName()+
+				">"
+			)
+		);
+	}
+
 
 }
