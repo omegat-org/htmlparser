@@ -160,8 +160,8 @@ public abstract class HTMLNode
 	 * }
 	 * </pre>
 	 */
-	public final String toHTML(HTMLRenderer renderer) {
-		return renderer.render(this);
+	public String toHTML(HTMLRenderer renderer) {
+		return toHTML();
 	}
 
 	/**

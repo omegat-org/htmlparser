@@ -261,4 +261,8 @@ public class HTMLLinkTag extends HTMLTag
 		sb.append("  "+"*** END of LinkData ***\n");
 		return sb.toString();
 	}
+	public String toHTML(HTMLRenderer renderer) {
+		return renderer.renderLinksToHTML(this);
+	}
+
 }

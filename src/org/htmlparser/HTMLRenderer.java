@@ -28,6 +28,9 @@
 
 package org.htmlparser;
 
+import org.htmlparser.tags.HTMLImageTag;
+import org.htmlparser.tags.HTMLLinkTag;
+
 /**
  * @author Somik Raha
  *
@@ -37,5 +40,6 @@ package org.htmlparser;
  * Window>Preferences>Java>Code Generation.
  */
 public interface HTMLRenderer {
-	public String render(HTMLNode node);
+	public String renderLinksToHTML(HTMLLinkTag linkTag);
+	public String renderImagesToHTML(HTMLImageTag imageTag);
 }

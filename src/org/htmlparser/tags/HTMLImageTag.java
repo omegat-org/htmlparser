@@ -28,6 +28,8 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.HTMLRenderer;
+
 /**
  * Identifies an image tag 
  */
@@ -60,4 +62,8 @@ public class HTMLImageTag extends HTMLTag
 	{
 		return "IMAGE TAG : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	public String toHTML(HTMLRenderer renderer) {
+		return renderer.renderImagesToHTML(this);
+	}
+
 }
