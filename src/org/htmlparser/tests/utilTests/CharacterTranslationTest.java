@@ -152,91 +152,91 @@ public class CharacterTranslationTest extends ParserTestCase
             Translate.encode ("<a href=\"http://www.w3.org/TR/REC-html40/sgml/entities.html\">http://www.w3.org/TR/REC-html40/sgml/entities.html</a>"));
     }
 
-    public byte[] encodedecode (byte[] bytes)
-        throws
-            IOException
-    {
-        InputStream in;
-        ByteArrayOutputStream out;
-
-        // encode
-        in = new ByteArrayInputStream (bytes);
-        out = new ByteArrayOutputStream ();
-        Translate.encode (in, new PrintStream (out));
-        in.close ();
-        out.close ();
-        
-        // decode
-        in = new ByteArrayInputStream (out.toByteArray ());
-        out = new ByteArrayOutputStream ();
-        Translate.decode (in, new PrintStream (out));
-        in.close ();
-        out.close ();
-
-        return (out.toByteArray ());
-    }
-
-    public void check (byte[] reference, byte[] result)
-        throws
-            IOException
-    {
-        InputStream ref;
-        InputStream in;
-        int i;
-        int i1;
-        int i2;
-
-        ref = new ByteArrayInputStream (reference);
-        in = new ByteArrayInputStream (result);
-        i = 0;
-        do
-        {
-            i1 = ref.read ();
-            i2 = in.read ();
-            if (i1 != i2)
-                fail ("byte difference detected at offset " + i);
-            i++;
-        }
-        while (-1 != i1);
-        ref.close ();
-        in.close ();
-    }
-
-//    public void testInitialCharacterEntityReferenceCodec ()
+//    public byte[] encodedecode (byte[] bytes)
 //        throws
 //            IOException
 //    {
-//        byte[] data = "\u00f7 is the division sign.".getBytes ();
-//        check (data, encodedecode (data));
+//        InputStream in;
+//        ByteArrayOutputStream out;
+//
+//        // encode
+//        in = new ByteArrayInputStream (bytes);
+//        out = new ByteArrayOutputStream ();
+//        Translate.encode (in, new PrintStream (out));
+//        in.close ();
+//        out.close ();
+//        
+//        // decode
+//        in = new ByteArrayInputStream (out.toByteArray ());
+//        out = new ByteArrayOutputStream ();
+//        Translate.decode (in, new PrintStream (out));
+//        in.close ();
+//        out.close ();
+//
+//        return (out.toByteArray ());
 //    }
-
-    public void testEncodeDecodePage () throws IOException
-    {
-        URL url;
-        URLConnection connection;
-        InputStream in;
-        ByteArrayOutputStream out;
-        byte[] bytes;
-        byte[] result;
-        int c;
-
-        // get some bytes
-        url = new URL ("http://sourceforge.net/projects/htmlparser");
-        connection = url.openConnection ();
-        in = connection.getInputStream ();
-        out = new ByteArrayOutputStream ();
-        while (-1 != (c = in.read ()))
-            out.write (c);
-        in.close ();
-        out.close ();
-        bytes = out.toByteArray ();
-
-        // run it through
-        result = encodedecode (bytes);
-        
-        // check
-        check (bytes, result);
-    }
+//
+//    public void check (byte[] reference, byte[] result)
+//        throws
+//            IOException
+//    {
+//        InputStream ref;
+//        InputStream in;
+//        int i;
+//        int i1;
+//        int i2;
+//
+//        ref = new ByteArrayInputStream (reference);
+//        in = new ByteArrayInputStream (result);
+//        i = 0;
+//        do
+//        {
+//            i1 = ref.read ();
+//            i2 = in.read ();
+//            if (i1 != i2)
+//                fail ("byte difference detected at offset " + i);
+//            i++;
+//        }
+//        while (-1 != i1);
+//        ref.close ();
+//        in.close ();
+//    }
+//
+////    public void testInitialCharacterEntityReferenceCodec ()
+////        throws
+////            IOException
+////    {
+////        byte[] data = "\u00f7 is the division sign.".getBytes ();
+////        check (data, encodedecode (data));
+////    }
+//
+//    public void testEncodeDecodePage () throws IOException
+//    {
+//        URL url;
+//        URLConnection connection;
+//        InputStream in;
+//        ByteArrayOutputStream out;
+//        byte[] bytes;
+//        byte[] result;
+//        int c;
+//
+//        // get some bytes
+//        url = new URL ("http://sourceforge.net/projects/htmlparser");
+//        connection = url.openConnection ();
+//        in = connection.getInputStream ();
+//        out = new ByteArrayOutputStream ();
+//        while (-1 != (c = in.read ()))
+//            out.write (c);
+//        in.close ();
+//        out.close ();
+//        bytes = out.toByteArray ();
+//
+//        // run it through
+//        result = encodedecode (bytes);
+//        
+//        // check
+//        check (bytes, result);
+//    }
 }
 
 
