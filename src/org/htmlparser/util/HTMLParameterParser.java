@@ -34,12 +34,12 @@ import java.util.StringTokenizer;
 import org.htmlparser.tags.HTMLTag;
 
 /**
- * @author Somik Raha
- *
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
+ * @author Somik Raha, Kaarle Kaila
+ * @version 7 AUG 2001
  */
 public class HTMLParameterParser {
     private final String delim = " \t\r\n\f=\"'>";
@@ -87,10 +87,7 @@ public class HTMLParameterParser {
     *    }
 	* </pre>
 	*
-	* @author Kaarle Kaila
-	* @version 7 AUG 2001
 	*/
-    
    public Hashtable parseAttributes(HTMLTag tag){
         Hashtable h = new Hashtable();
         String element,name,value,nextPart=null;     

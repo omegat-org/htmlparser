@@ -42,6 +42,7 @@ import org.htmlparser.HTMLReader;
  * tag scanners, which can identify links, or image references. This tag asks the
  * scanners to run over the text, and identify. It can be used to dynamically 
  * configure a parser.
+ * @author Kaarle Kaila 23.10.2001
  */
 public class HTMLTag extends HTMLNode
 {
@@ -166,7 +167,6 @@ public class HTMLTag extends HTMLNode
 	 * In case the tag is parsed at the scan method this will return value of a
 	 * parameter not implemented yet
 	 * @param name of parameter
-	 * @author Kaarle Kaila 23.10.2001
 	 */
 	public String getParameter(String name){
 	    return (String)getAttributes().get(name.toUpperCase());

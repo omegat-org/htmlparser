@@ -36,9 +36,9 @@ package org.htmlparser.util;
  * are also possible.
  *
  * @author Claude Duguay
- * @see DefaultHTMLParserFeedback, FeedbackManager
+ * @see DefaultHTMLParserFeedback
+ * @see FeedbackManager
 **/
-
 public interface HTMLParserFeedback
 {
   public void info(String message);

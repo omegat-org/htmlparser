@@ -31,7 +31,7 @@ package org.htmlparser.tags;
 import org.htmlparser.tags.data.HTMLTagData;
 
 /**
- * The JSP/ASP tags like &lt;%...%&gt; can be identified by this class.
+ * The JSP/ASP tags like &lt;%&#46;&#46;&#46;%&gt; can be identified by this class.
  */
 public class HTMLJspTag extends HTMLTag
 {

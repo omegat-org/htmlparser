@@ -41,12 +41,12 @@ public class HTMLImageTag extends HTMLTag
 	 * The URL where the image is stored.
 	 */
 	protected String imageURL;
-	/**
+
+    /**
 	 * Constructor creates an HTMLImageNode object, which stores the location
 	 * where the image is to be found.
-	 * @imageURL location of the image
-	 * @imageBegin Beginning position of the image tag
-	 * @imageEnd Ending position of the image tag
+     * @param tagData Specifies character position and content of the tag.
+	 * @param imageURL Location of the image.
 	 */
 	public HTMLImageTag(HTMLTagData tagData,String imageURL)
 	{

@@ -51,10 +51,10 @@ public abstract class HTMLNode
 	protected int nodeEnd;
 
 	/**
-	 * Variable to store lineSeparator.<br>
-	 * This is setup to read line.separator from the System property.<br>
+	 * Variable to store lineSeparator.
+	 * This is setup to read <code>line.separator</code> from the System property.
 	 * However it can also be changed using the mutator methods.
-	 * THis will be used in the toHTML() methods in all the sub-classes of HTMLNode.
+	 * This will be used in the toHTML() methods in all the sub-classes of HTMLNode.
 	 */
     protected static String lineSeparator = System.getProperty ("line.separator", "\n");
 

@@ -212,7 +212,7 @@ public class Generate
 
     /**
      * Find the lowest index of whitespace (space or newline).
-     * @parm string The string to look in.
+     * @param string The string to look in.
      * @param index Where to start looking.
      * @return -1 if there is no whitespace, the minimum index otherwise.
      */

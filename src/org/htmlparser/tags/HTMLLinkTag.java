@@ -93,10 +93,10 @@ public class HTMLLinkTag extends HTMLCompositeTag
 	 * }
 	 * </pre>
 	 * The link tag processes all its contents in collectInto().
-	 * @tagData The data relating to the tag
-	 * @compositeTagData The data regarding the composite structure of the tag
-	 * @linkTagData The data specific to the link tag
-	 * @see linkData()
+	 * @param tagData The data relating to the tag.
+	 * @param compositeTagData The data regarding the composite structure of the tag.
+	 * @param linkTagData The data specific to the link tag.
+	 * @see #linkData()
 	 */
 	public HTMLLinkTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData,HTMLLinkTagData linkTagData) {
 		super(tagData,compositeTagData);  

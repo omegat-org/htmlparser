@@ -32,7 +32,7 @@ package org.htmlparser.tags;
 import org.htmlparser.tags.data.HTMLTagData;
 
 /**
- * The HTML Document Declaration Tag can identify &lt;!DOCTYPE&gt; tags
+ * The HTML Document Declaration Tag can identify &lt;&#33;DOCTYPE&gt; tags.
  */
 public class HTMLDoctypeTag extends HTMLTag
 {

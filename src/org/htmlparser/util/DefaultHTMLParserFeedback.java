@@ -36,9 +36,9 @@ import java.io.Serializable;
  * can implement their own classes to support alternate behavior.
  *
  * @author Claude Duguay
- * @see HTMLParserFeedback, FeedbackManager
+ * @see HTMLParserFeedback
+ * @see FeedbackManager
 **/
-
 public class DefaultHTMLParserFeedback
     implements
         HTMLParserFeedback,
