@@ -30,14 +30,14 @@ package org.htmlparser.tests.scannersTests;
 
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.ScriptTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class ScriptScannerTest extends HTMLParserTestCase 
+public class ScriptScannerTest extends ParserTestCase 
 {
 
 	public ScriptScannerTest(String name) {
@@ -107,7 +107,7 @@ public class ScriptScannerTest extends HTMLParserTestCase
 		String testHTML1 = new String(sb1.toString()); 
 		
 		createParser(testHTML1,"http://www.google.com/test/index.html"); 
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		// Register the image scanner 
 		parser.addScanner(new ScriptScanner("-s")); 
 		
@@ -213,7 +213,7 @@ public class ScriptScannerTest extends HTMLParserTestCase
 			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 " +			"Transitional//EN\">" +			"<html>" +			"<head>" +			"<title>Untitled Document</title>" +			"<meta http-equiv=\"Content-Type\" content=\"text/html; " +			"charset=iso-8859-1\">" +			"</head>" +			"<script language=\"JavaScript\">" +			"document.write(\"<script " +			"language=\\\"JavaScript\\\">\");" +			"document.write(\"function onmousedown" +			"(event)\");" +			"document.write(\"{ // do something\"); " +			"document.write(\"}\"); " +			"// parser thinks this is the end tag. " +			"document.write(\"</script>\");" +			"</script>" +			"<body>" +			"</body>" +			"</html>"
 		);
 		parser.registerScanners();
-		HTMLNode scriptNodes [] =
+		Node scriptNodes [] =
 			parser.extractAllNodesThatAre(ScriptTag.class);
 		assertType(
 			"scriptnode",

@@ -47,15 +47,15 @@ import org.htmlparser.scanners.*;
  * HTMLReader builds on the BufferedReader, providing methods to read one element
  * at a time
  */
-public class HTMLReader extends BufferedReader
+public class NodeReader extends BufferedReader
 {
 	public static final String DECIPHER_ERROR="HTMLReader.readElement() : Error occurred while trying to decipher the tag using scanners";
 	protected int posInLine=-1;
 	protected String line;
-	protected HTMLNode node = null;
+	protected Node node = null;
 	protected TagScanner previousOpenScanner = null;
 	protected String url;
-	private HTMLParser parser;
+	private Parser parser;
 	private boolean tagUpgraded=false;
 	private int lineCount;
 	private String previousLine;
@@ -65,7 +65,7 @@ public class HTMLReader extends BufferedReader
 	/**
 	 * The constructor takes in a reader object, it's length and the url to be read.
 	 */
-	public HTMLReader(Reader in,int len,String url)
+	public NodeReader(Reader in,int len,String url)
 	{
 		super(in, len);
 		this.url = url;
@@ -79,7 +79,7 @@ public class HTMLReader extends BufferedReader
      * @see #HTMLReader(Reader,int,String)
 	 */
 
-	public HTMLReader(Reader in, int len)
+	public NodeReader(Reader in, int len)
 	{
 		this(in,len,"");
 	}
@@ -88,7 +88,7 @@ public class HTMLReader extends BufferedReader
      * The buffer size defaults to 8192.
      * @see #HTMLReader(Reader,int,String)
 	 */
-	public HTMLReader(Reader in,String url)
+	public NodeReader(Reader in,String url)
 	{
 		this(in, 8192, url);
 	}
@@ -151,7 +151,7 @@ public class HTMLReader extends BufferedReader
 	 * Returns the parser object for which this reader exists
 	 * @return org.htmlparser.HTMLParser
 	 */
-	public HTMLParser getParser() {
+	public Parser getParser() {
 		return parser;
 	}
 	/**
@@ -165,7 +165,7 @@ public class HTMLReader extends BufferedReader
 	 * Read the next element
 	 * @return HTMLNode - The next node
  	 */
-	public HTMLNode readElement() throws ParserException
+	public Node readElement() throws ParserException
 	{
 		try {
 			if (readNextLine())
@@ -247,7 +247,7 @@ public class HTMLReader extends BufferedReader
 	 * The setParser method is used by the parser to put its own object into the reader. This happens internally,
 	 * so this method is not generally for use by the developer or the user.
 	 */
-	public void setParser(HTMLParser newParser) {
+	public void setParser(Parser newParser) {
 		parser = newParser;
 	}
 	/**
@@ -263,7 +263,7 @@ public class HTMLReader extends BufferedReader
 	 */
 	public static void setLineSeparator(String lineSeparator)
 	{
-		HTMLNode.setLineSeparator(lineSeparator);	
+		Node.setLineSeparator(lineSeparator);	
 	}
 	
 	/**
@@ -271,7 +271,7 @@ public class HTMLReader extends BufferedReader
 	 */
 	public static String getLineSeparator()
 	{
-		return (HTMLNode.getLineSeparator());
+		return (Node.getLineSeparator());
 	}
 	/**
 	 * Returns the lineCount.

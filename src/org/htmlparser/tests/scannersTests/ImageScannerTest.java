@@ -27,8 +27,8 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.scannersTests;
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.ImageTag;
@@ -37,12 +37,12 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
-public class ImageScannerTest extends HTMLParserTestCase
+public class ImageScannerTest extends ParserTestCase
 {
 	
 	public ImageScannerTest(String name) {
@@ -145,7 +145,7 @@ public class ImageScannerTest extends HTMLParserTestCase
 	public void testImageWithNewLineChars() throws ParserException
 	{
 		createParser("<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">","http://www.yahoo.com/ghi");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		// Register the image scanner
 		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
 		parseAndAssertNodeCount(1);
@@ -163,13 +163,13 @@ public class ImageScannerTest extends HTMLParserTestCase
 	{
 		createParser("<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n"+
 		"<input type=submit value=Search> <a href=r/so>advanced search</a></td></tr></table><table border=0 cellspacing=0 cellpadding=3 width=640><tr><td nowrap align=center><table border=0 cellspacing=0 cellpadding=0><tr><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif\" width=20 height=20 border=0></a></td><td> &nbsp; &nbsp; <a href=s/1048><b>Yahooligans!</b></a> - <a href=s/5282>Eet & Ern</a>, <a href=s/5283>Games</a>, <a href=s/5284>Science</a>, <a href=s/5285>Sports</a>, <a href=s/5286>Movies</a>, <a href=s/1048>more</a> &nbsp; &nbsp; </td><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif\" width=20 height=20 border=0></a></td></tr></table></td></tr><tr><td nowrap align=center><small><b>Shop</b>&nbsp;\n","http://www.yahoo.com");
-		HTMLNode [] node = new HTMLNode[10];
+		Node [] node = new Node[10];
 		// Register the image scanner
 		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
 		int i = 0;
-		HTMLNode thisNode;
+		Node thisNode;
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-			thisNode = (HTMLNode)e.nextNode();
+			thisNode = (Node)e.nextNode();
 			if (thisNode instanceof ImageTag)
                 node[i++] = thisNode;
 		}	
@@ -199,10 +199,10 @@ public class ImageScannerTest extends HTMLParserTestCase
 		assertType("first node type",TableRow.class,node[0]);
 		TableRow row = (TableRow)node[0];
 		TableColumn col = row.getColumns()[1];
-		HTMLNode node = col.children().nextNode();
+		Node node = col.children().nextNode();
 		assertType("Node identified should be HTMLLinkTag",LinkTag.class,node);
 		LinkTag linkTag = (LinkTag)node;
-		HTMLNode nodeInsideLink = linkTag.children().nextNode();
+		Node nodeInsideLink = linkTag.children().nextNode();
 		assertType("Tag within link should be an image tag",ImageTag.class,nodeInsideLink);
 		ImageTag imageTag = (ImageTag)nodeInsideLink;
 		assertStringEquals(
@@ -231,7 +231,7 @@ public class ImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertType("node should be", TableColumn.class, node[0]);
 		TableColumn col = (TableColumn)node[0];
-		HTMLNode node = col.children().nextNode();
+		Node node = col.children().nextNode();
 		assertType("node inside column",ImageTag.class,node);
 		ImageTag imageTag = (ImageTag)node;
 		// Get the data from the node

@@ -32,10 +32,10 @@
 
 package org.htmlparser.util;
 
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Parser;
+import org.htmlparser.Node;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
@@ -62,7 +62,7 @@ public class Generate
     /**
      * The working parser.
      */
-    protected HTMLParser parser;
+    protected Parser parser;
     
     /**
      * The system specific line separator string.
@@ -78,7 +78,7 @@ public class Generate
     public Generate ()
         throws ParserException
     {
-        parser = new HTMLParser ("http://www.w3.org/TR/REC-html40/sgml/entities.html");
+        parser = new Parser ("http://www.w3.org/TR/REC-html40/sgml/entities.html");
         parser.registerScanners ();
     }
 
@@ -159,7 +159,7 @@ public class Generate
         throws
             ParserException
     {
-        HTMLNode node;
+        Node node;
         StringBuffer buffer = new StringBuffer (4096);
 
         // Run through an enumeration of html elements, and pick up
@@ -168,11 +168,11 @@ public class Generate
         {
             node = e.nextNode ();
             
-            if (node instanceof HTMLStringNode)
+            if (node instanceof StringNode)
             {
                 // Node is a plain string
                 // Cast it to an HTMLStringNode
-                HTMLStringNode stringNode = (HTMLStringNode)node;
+                StringNode stringNode = (StringNode)node;
                 // Retrieve the data from the object
                 buffer.append (stringNode.getText ());
             }
@@ -196,7 +196,7 @@ public class Generate
                 if (contents.equals ("BR") || contents.equals ("P"))
                     buffer.append (nl);
             }
-            else if (node instanceof HTMLRemarkNode)
+            else if (node instanceof RemarkNode)
             {
             }
             else

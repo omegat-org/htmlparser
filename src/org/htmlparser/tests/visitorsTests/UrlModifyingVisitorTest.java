@@ -1,10 +1,10 @@
 package org.htmlparser.tests.visitorsTests;
 
-import org.htmlparser.HTMLParser;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.Parser;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.UrlModifyingVisitor;
 
-public class UrlModifyingVisitorTest extends HTMLParserTestCase {
+public class UrlModifyingVisitorTest extends ParserTestCase {
 	private static final String HTML_WITH_LINK = 
 	"<HTML><BODY>" +
 		"<A HREF=\"mylink.html\"><IMG SRC=\"mypic.jpg\">" +
@@ -23,7 +23,7 @@ public class UrlModifyingVisitorTest extends HTMLParserTestCase {
 	}
 	
 	public void testUrlModificationWithVisitor() throws Exception {
-		HTMLParser parser = HTMLParser.createParser(HTML_WITH_LINK);
+		Parser parser = Parser.createParser(HTML_WITH_LINK);
 		UrlModifyingVisitor visitor = 
 			new UrlModifyingVisitor(parser, "localhost://");		
 		parser.visitAllNodesWith(visitor);

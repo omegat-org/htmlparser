@@ -28,7 +28,7 @@
 
 package org.htmlparser.util;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 
 public interface NodeIterator {
     /**
@@ -41,12 +41,12 @@ public interface NodeIterator {
      * Get the next node.
      * @return The next node in the HTML stream, or null if there are no more nodes.
      */
-	public HTMLNode nextNode() throws ParserException;
+	public Node nextNode() throws ParserException;
 	
 	/**
 	 * Get the next node.
 	 * @return The next node in the HTML stream, or null if there are no more nodes.
 	 * @deprecated Use nextNode() instead.
 	 */
-	public HTMLNode nextHTMLNode() throws ParserException;	
+	public Node nextHTMLNode() throws ParserException;	
 }

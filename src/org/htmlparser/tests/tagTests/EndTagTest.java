@@ -30,10 +30,10 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.tags.EndTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class EndTagTest extends HTMLParserTestCase {
+public class EndTagTest extends ParserTestCase {
 
 	public EndTagTest(String name) {
 		super(name);

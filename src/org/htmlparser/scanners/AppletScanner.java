@@ -32,7 +32,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
@@ -93,7 +93,7 @@ public class AppletScanner extends TagScanner {
 	 * @param url The initiating url of the scan (Where the html page lies)
 	 * @param reader The reader object responsible for reading the html page
 	 */
-	public Tag scan(Tag tag, String url, org.htmlparser.HTMLReader reader, String currLine) throws ParserException
+	public Tag scan(Tag tag, String url, org.htmlparser.NodeReader reader, String currLine) throws ParserException
 	{
 		try {
 			String tagContents = tag.getText();
@@ -103,7 +103,7 @@ public class AppletScanner extends TagScanner {
 			String line;
 			Tag startTag = tag;
 			Tag endTag=null;
-			HTMLNode node = null;
+			Node node = null;
 			boolean endScriptFound=false;
 			Vector childrenVector=new Vector();
 			Hashtable table = new Hashtable();

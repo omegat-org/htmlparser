@@ -30,10 +30,10 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.scanners.TextareaTagScanner;
 import org.htmlparser.tags.TextareaTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class TextareaTagTest extends HTMLParserTestCase 
+public class TextareaTagTest extends ParserTestCase 
 {
 	private String testHTML = new String(
 									"<TEXTAREA name=\"Remarks\" >The intervention by the UN proved beneficial</TEXTAREA>" +

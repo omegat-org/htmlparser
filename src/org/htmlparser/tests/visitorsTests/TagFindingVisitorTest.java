@@ -1,9 +1,9 @@
 package org.htmlparser.tests.visitorsTests;
 
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.TagFindingVisitor;
 
-public class TagFindingVisitorTest extends HTMLParserTestCase {
+public class TagFindingVisitorTest extends ParserTestCase {
 	private String html = 
 		"<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD>" +
 		"<BODY>Hello World, this is an excellent parser</BODY>" +

@@ -30,18 +30,18 @@ package org.htmlparser.tests.tagTests;
 
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.StringNode;
 import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
-public class TagTest extends HTMLParserTestCase
+public class TagTest extends ParserTestCase
 {
 	public TagTest(String name) {
 		super(name);
@@ -108,8 +108,8 @@ public class TagTest extends HTMLParserTestCase
     public void testParseParameter3() throws ParserException {
         Tag tag;
         EndTag etag;
-        HTMLStringNode snode;
-        HTMLNode node=null;
+        StringNode snode;
+        Node node=null;
         String lin1 = "<DIV class=\"userData\" id=\"oLayout\" name=\"oLayout\"></DIV>";
        	createParser(lin1);
     	NodeIterator en = parser.elements();
@@ -142,8 +142,8 @@ public class TagTest extends HTMLParserTestCase
     public void testParseParameterA() throws ParserException {
         Tag tag;
         EndTag etag;
-        HTMLStringNode snode;
-		HTMLNode node=null;
+        StringNode snode;
+		Node node=null;
         String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
        	createParser(lin1);
         NodeIterator en = parser.elements();
@@ -171,7 +171,7 @@ public class TagTest extends HTMLParserTestCase
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreNodes()) {
                     node = en.nextNode();
-                    snode = (HTMLStringNode)node;
+                    snode = (StringNode)node;
                     assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
                 }
 
@@ -190,7 +190,7 @@ public class TagTest extends HTMLParserTestCase
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                snode = (HTMLStringNode)node;
+                snode = (StringNode)node;
                 assertEquals("paragraph contents",snode.getText(),"Paragraph");
             }
             if (en.hasMoreNodes()) {
@@ -213,8 +213,8 @@ public class TagTest extends HTMLParserTestCase
     public void testParseParameterG() throws ParserException{
         Tag tag;
         EndTag etag;
-        HTMLStringNode snode;
-        HTMLNode node=null;
+        StringNode snode;
+        Node node=null;
         String lin1 = "<G href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaila\">Kaarle's homepage</G><p>Paragraph</p>";
        	createParser(lin1);
         NodeIterator en = parser.elements();
@@ -240,7 +240,7 @@ public class TagTest extends HTMLParserTestCase
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                snode = (HTMLStringNode)node;
+                snode = (StringNode)node;
                 assertEquals("The text of the element",snode.getText(),"Kaarle's homepage");
             }
 
@@ -258,7 +258,7 @@ public class TagTest extends HTMLParserTestCase
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                snode = (HTMLStringNode)node;
+                snode = (StringNode)node;
                 assertEquals("Verify the paragraph text",snode.getText(),"Paragraph");
             }
             if (en.hasMoreNodes()) {
@@ -282,8 +282,8 @@ public class TagTest extends HTMLParserTestCase
     public void testParseParameterSpace() throws ParserException{
         Tag tag;
         EndTag etag;
-        HTMLStringNode snode;
-        HTMLNode node=null;
+        StringNode snode;
+        Node node=null;
         String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
        	createParser(lin1);
         NodeIterator en = parser.elements();
@@ -307,7 +307,7 @@ public class TagTest extends HTMLParserTestCase
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreNodes()) {
                     node = en.nextNode();
-                    snode = (HTMLStringNode)node;
+                    snode = (StringNode)node;
                     assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
                 }
 
@@ -392,8 +392,8 @@ public class TagTest extends HTMLParserTestCase
     public void testWithoutParseParameter() throws ParserException{
         Tag tag;
         EndTag etag;
-        HTMLStringNode snode;
-        HTMLNode node=null;
+        StringNode snode;
+        Node node=null;
         String testHTML = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle\">Kaarle's homepage</A><p>Paragraph</p>";
        	createParser(testHTML);
         NodeIterator en = parser.elements();
@@ -418,8 +418,8 @@ public class TagTest extends HTMLParserTestCase
    public void testEmptyTagParseParameter() throws ParserException{
        Tag tag;
        EndTag etag;
-       HTMLStringNode snode;
-       HTMLNode node=null;
+       StringNode snode;
+       Node node=null;
        String testHTML = "<INPUT name=\"foo\" value=\"foobar\" type=\"text\" />";
 
        createParser(testHTML);
@@ -544,7 +544,7 @@ public class TagTest extends HTMLParserTestCase
 		String testHTML = "<A \n"+
 		"HREF=\"/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
 		createParser(testHTML);
-		HTMLNode node = Tag.find(parser.getReader(),testHTML,0);
+		Node node = Tag.find(parser.getReader(),testHTML,0);
 		assertTrue("Node should be a tag",node instanceof Tag);
 		Tag tag = (Tag)node;
 		String href = tag.getAttribute("HREF");

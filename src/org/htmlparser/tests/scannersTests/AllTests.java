@@ -66,14 +66,14 @@ public class AllTests extends junit.framework.TestCase
 		suite.addTestSuite(LinkScannerTest.class);
 		suite.addTestSuite(StyleScannerTest.class);	
 		suite.addTestSuite(MetaTagScannerTest.class);			
-		suite.addTestSuite(HTMLTitleScannerTest.class);				
+		suite.addTestSuite(TitleScannerTest.class);				
 		suite.addTestSuite(FormScannerTest.class);	
 		suite.addTestSuite(FrameScannerTest.class);	
 		suite.addTestSuite(FrameSetScannerTest.class);
 		suite.addTestSuite(InputTagScannerTest.class);
 		suite.addTestSuite(OptionTagScannerTest.class);
 		suite.addTestSuite(SelectTagScannerTest.class);
-		suite.addTestSuite(HTMLTextareaTagScannerTest.class);
+		suite.addTestSuite(TextareaTagScannerTest.class);
 		suite.addTestSuite(BaseHREFScannerTest.class);
 		suite.addTestSuite(JspScannerTest.class);	
 		suite.addTestSuite(TableScannerTest.class);	

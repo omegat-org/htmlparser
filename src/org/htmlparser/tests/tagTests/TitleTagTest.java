@@ -32,10 +32,10 @@ import org.htmlparser.scanners.MetaTagScanner;
 import org.htmlparser.scanners.StyleScanner;
 import org.htmlparser.scanners.TitleScanner;
 import org.htmlparser.tags.TitleTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class TitleTagTest extends HTMLParserTestCase {
+public class TitleTagTest extends ParserTestCase {
 	private TitleTag titleTag;
 
 	public TitleTagTest(String name) {

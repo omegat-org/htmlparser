@@ -28,13 +28,13 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.tags.OptionTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class OptionTagScannerTest extends HTMLParserTestCase 
+public class OptionTagScannerTest extends ParserTestCase 
 {
 	
 	private String testHTML = new String(
@@ -49,7 +49,7 @@ public class OptionTagScannerTest extends HTMLParserTestCase
 									"<OPTION>Cricinfo"
 									);
 	private OptionTagScanner scanner;
-	private HTMLNode[] node;
+	private Node[] node;
 	private int i;
 	
 	public OptionTagScannerTest(String name) 

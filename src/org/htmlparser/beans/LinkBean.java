@@ -36,8 +36,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.ObjectFindingVisitor;
@@ -72,14 +72,14 @@ public class LinkBean extends Object implements Serializable
     /**
      * The parser used to extract strings.
      */
-    protected HTMLParser mParser;
+    protected Parser mParser;
 
     /** Creates new StringBean */
     public LinkBean ()
     {
         mPropertySupport = new PropertyChangeSupport (this);
         mLinks = null;
-        mParser = new HTMLParser ();
+        mParser = new Parser ();
     }
 
     //
@@ -88,17 +88,17 @@ public class LinkBean extends Object implements Serializable
 
     protected URL[] extractLinks (String url) throws ParserException
     {
-        HTMLParser parser;
+        Parser parser;
         Vector vector;
-        HTMLNode node;
+        Node node;
         LinkTag link;
         URL[] ret;
         
-        parser = new HTMLParser (url);
+        parser = new Parser (url);
         parser.registerScanners ();
         ObjectFindingVisitor visitor = new ObjectFindingVisitor(LinkTag.class);
         parser.visitAllNodesWith(visitor);
-        HTMLNode [] nodes = visitor.getTags();
+        Node [] nodes = visitor.getTags();
         vector = new Vector();
         for (int i = 0; i < nodes.length; i++)
             try

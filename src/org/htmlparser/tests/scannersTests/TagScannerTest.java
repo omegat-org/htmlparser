@@ -28,17 +28,17 @@
 
 
 package org.htmlparser.tests.scannersTests;
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.NodeReader;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 
-public class TagScannerTest extends HTMLParserTestCase
+public class TagScannerTest extends ParserTestCase
 {
 
 	public TagScannerTest(String name) {
@@ -58,10 +58,10 @@ public class TagScannerTest extends HTMLParserTestCase
 			"Abhi\n"+
 			"Sri\n"+
 			"</MESSAGE>"); 
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		NodeIterator e = parser.elements(); 
 	
-		HTMLNode node = e.nextNode();
+		Node node = e.nextNode();
 		try {
 			String result = TagScanner.extractXMLData(node,"MESSAGE",parser.getReader());
 			assertEquals("Result","Abhi\r\nSri\r\n",result);
@@ -76,7 +76,7 @@ public class TagScannerTest extends HTMLParserTestCase
 			"<MESSAGE>Test</MESSAGE>");
 		NodeIterator e = parser.elements(); 
 	
-		HTMLNode node = (HTMLNode)e.nextNode();
+		Node node = (Node)e.nextNode();
 		try {
 			String result = TagScanner.extractXMLData(node,"MESSAGE",parser.getReader());
 			assertEquals("Result","Test",result);
@@ -101,16 +101,16 @@ public class TagScannerTest extends HTMLParserTestCase
 	 */
 	public void testIsXMLTag() throws ParserException {
 		createParser("<OPTION value=\"#\">Select a destination</OPTION>");
-		HTMLNode node;
+		Node node;
 		NodeIterator e = parser.elements();
-		node = (HTMLNode)e.nextNode();
+		node = (Node)e.nextNode();
 		assertTrue("OPTION tag could not be identified",TagScanner.isXMLTagFound(node,"OPTION"));
 	}
 
 	public void testRemoveChars() {
 		String test = "hello\nworld\n\tqsdsds";
 		TagScanner scanner = new TagScanner() { 
-			public Tag scan(Tag tag,String url,HTMLReader reader,String currLine) { return null;}
+			public Tag scan(Tag tag,String url,NodeReader reader,String currLine) { return null;}
 			public boolean evaluate(String s,TagScanner previousOpenScanner) { return false; }
 			public String []getID() {
 				
@@ -124,7 +124,7 @@ public class TagScannerTest extends HTMLParserTestCase
 	public void testRemoveChars2() {
 		String test = "hello\r\nworld\r\n\tqsdsds";
 		TagScanner scanner = new TagScanner() { 
-			public Tag scan(Tag tag,String url,HTMLReader reader,String currLine) { return null;}
+			public Tag scan(Tag tag,String url,NodeReader reader,String currLine) { return null;}
 			public boolean evaluate(String s,TagScanner previousOpenScanner) { return false; }
 			public String [] getID() {
 				return null;

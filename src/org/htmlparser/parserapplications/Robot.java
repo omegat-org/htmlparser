@@ -27,8 +27,8 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.parserapplications;
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
@@ -37,13 +37,13 @@ import org.htmlparser.util.ParserException;
  * The Robot Crawler application will crawl through urls recursively, based on a depth value.
  */
 public class Robot {
-  private org.htmlparser.HTMLParser parser;
+  private org.htmlparser.Parser parser;
 	/**
 	 * Robot crawler - Provide the starting url 
 	 */
 	public Robot(String resourceLocation) {
 		try {
-		  parser = new HTMLParser(resourceLocation,new DefaultParserFeedback());
+		  parser = new Parser(resourceLocation,new DefaultParserFeedback());
 		  parser.registerScanners();
 		}
 		catch (ParserException e) {
@@ -69,11 +69,11 @@ public class Robot {
 	 * @param parser HTMLParser object
 	 * @param crawlDepth Depth of crawling
 	 */
-	public void crawl(HTMLParser parser,int crawlDepth) throws ParserException {
+	public void crawl(Parser parser,int crawlDepth) throws ParserException {
 	  System.out.println(" crawlDepth = "+crawlDepth);
 	  for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 	  {
-	    HTMLNode node = e.nextNode();
+	    Node node = e.nextNode();
 	    if (node instanceof LinkTag)
 	    {
 	      LinkTag linkTag = (LinkTag)node;
@@ -86,7 +86,7 @@ public class Robot {
 	          {
 	            if (crawlDepth>0)
 	            {
-	              HTMLParser newParser = new HTMLParser(linkTag.getLink(),new DefaultParserFeedback());
+	              Parser newParser = new Parser(linkTag.getLink(),new DefaultParserFeedback());
 	              newParser.registerScanners();
 	              System.out.print("Crawling to "+linkTag.getLink());
 	              crawl(newParser,crawlDepth-1);
@@ -101,7 +101,7 @@ public class Robot {
 
 	public static void main(String[] args) 
 	{
-	  System.out.println("Robot Crawler v"+HTMLParser.VERSION_STRING);
+	  System.out.println("Robot Crawler v"+Parser.VERSION_STRING);
 	  if (args.length<2 || args[0].equals("-help"))
 	  {
 	    System.out.println();

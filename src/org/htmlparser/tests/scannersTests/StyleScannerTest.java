@@ -29,10 +29,10 @@
 package org.htmlparser.tests.scannersTests;
 import org.htmlparser.scanners.StyleScanner;
 import org.htmlparser.tags.StyleTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class StyleScannerTest extends HTMLParserTestCase
+public class StyleScannerTest extends ParserTestCase
 {
 
 	public StyleScannerTest(String name) {

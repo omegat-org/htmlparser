@@ -30,17 +30,17 @@ package org.htmlparser.util;
 
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
 
 public class IteratorImpl implements PeekingIterator
 {
-    HTMLReader reader;
+    NodeReader reader;
     Vector preRead;
     String resourceLocn;
     ParserFeedback feedback;
 
-    public IteratorImpl (HTMLReader rd, String resource, ParserFeedback fb)
+    public IteratorImpl (NodeReader rd, String resource, ParserFeedback fb)
     {
         reader = rd;
         preRead = new Vector (25);
@@ -48,9 +48,9 @@ public class IteratorImpl implements PeekingIterator
         feedback = fb;
     }
 
-    public HTMLNode peek () throws ParserException
+    public Node peek () throws ParserException
     {
-        HTMLNode ret;
+        Node ret;
 
         if (null == reader)
             ret = null;
@@ -80,7 +80,7 @@ public class IteratorImpl implements PeekingIterator
      * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
      */
     public boolean hasMoreNodes() throws ParserException {
-        HTMLNode node;
+        Node node;
         boolean ret;
 
         if (null == reader)
@@ -97,11 +97,11 @@ public class IteratorImpl implements PeekingIterator
      * Get the next node.
      * @return The next node in the HTML stream, or null if there are no more nodes.
      */
-    public HTMLNode nextNode() throws ParserException {
-        HTMLNode ret;
+    public Node nextNode() throws ParserException {
+        Node ret;
 
         if (hasMoreNodes ())
-            ret = (HTMLNode)preRead.remove (0);
+            ret = (Node)preRead.remove (0);
         else
             // should perhaps throw an exception?
             ret = null;
@@ -109,7 +109,7 @@ public class IteratorImpl implements PeekingIterator
         return (ret);
     }
     
-    public HTMLNode nextHTMLNode() throws ParserException {
+    public Node nextHTMLNode() throws ParserException {
     	return nextNode();
     }
 }

@@ -31,10 +31,10 @@ package org.htmlparser.tests.tagTests;
 import org.htmlparser.scanners.FrameScanner;
 import org.htmlparser.scanners.FrameSetScanner;
 import org.htmlparser.tags.FrameSetTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class FrameSetTagTest extends HTMLParserTestCase {
+public class FrameSetTagTest extends ParserTestCase {
 
 	public FrameSetTagTest(String name) {
 		super(name);

@@ -56,7 +56,7 @@ public class AllTests extends junit.framework.TestCase
 		suite.addTestSuite(SelectTagTest.class);
 		suite.addTestSuite(TextareaTagTest.class);
 		suite.addTestSuite(FormTagTest.class);
-		suite.addTestSuite(BaseHREFTagTest.class);
+		suite.addTestSuite(BaseHrefTagTest.class);
 		suite.addTestSuite(ObjectCollectionTest.class);
 		suite.addTestSuite(BodyTagTest.class);
 		return suite; 

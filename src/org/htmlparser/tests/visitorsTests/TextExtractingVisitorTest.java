@@ -1,9 +1,9 @@
 package org.htmlparser.tests.visitorsTests;
 
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.TextExtractingVisitor;
 
-public class TextExtractingVisitorTest extends HTMLParserTestCase {
+public class TextExtractingVisitorTest extends ParserTestCase {
 
 	public TextExtractingVisitorTest(String name) {
 		super(name);

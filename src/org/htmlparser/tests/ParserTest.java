@@ -34,9 +34,9 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeIterator;
@@ -44,9 +44,9 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
-public class HTMLParserTest extends HTMLParserTestCase {
+public class ParserTest extends ParserTestCase {
 
-	public HTMLParserTest(String name) {
+	public ParserTest(String name) {
 		super(name);
 	}
 	public void testElements() throws Exception {
@@ -75,16 +75,16 @@ public class HTMLParserTest extends HTMLParserTestCase {
 	 * This testcase needs you to be online.
 	 */
 	public void testElementsFromWeb() throws Exception {
-		HTMLParser parser;
+		Parser parser;
 		try {
-			parser = new HTMLParser("http://www.google.com");
+			parser = new Parser("http://www.google.com");
 		}
 		catch (Exception e ){
 			throw new ParserException("You must be offline! This test needs you to be connected to the internet.",e);
 		}
 		parser.getReader().mark(5000);
 
-		HTMLNode [] node = new HTMLNode[500];
+		Node [] node = new Node[500];
 		int i = 0;
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 		{
@@ -203,15 +203,15 @@ public class HTMLParserTest extends HTMLParserTestCase {
         // the correct answer
         final String postal_code = "K2B 7V4";
 
-		HTMLParser parser;
+		Parser parser;
         URL url;
         HttpURLConnection connection;
         StringBuffer buffer;
         PrintWriter out;
         boolean pass;
         NodeIterator enumeration;
-        HTMLNode node;
-        HTMLStringNode string;
+        Node node;
+        StringNode string;
 
         try
         {
@@ -282,7 +282,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
             out = new PrintWriter (connection.getOutputStream ());
             out.print (buffer);
             out.close ();
-			parser = new HTMLParser (connection);
+			parser = new Parser (connection);
 		}
 		catch (Exception e)
         {
@@ -293,9 +293,9 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)
 		{
             node = enumeration.nextNode ();
-            if (node instanceof HTMLStringNode)
+            if (node instanceof StringNode)
             {
-                string = (HTMLStringNode)node;
+                string = (StringNode)node;
                 if (-1 != string.getText ().indexOf (postal_code))
                     pass = true;
             }
@@ -311,8 +311,8 @@ public class HTMLParserTest extends HTMLParserTestCase {
         String path;
         File file;
         PrintWriter out;
-        HTMLParser parser;
-        HTMLNode nodes[];
+        Parser parser;
+        Node nodes[];
         int i;
         NodeIterator enumeration;
         
@@ -334,8 +334,8 @@ public class HTMLParserTest extends HTMLParserTestCase {
             out.println ("</body>");
             out.println ("</html>");
             out.close ();
-            parser = new HTMLParser (file.getAbsolutePath ());
-            nodes = new HTMLNode[30];
+            parser = new Parser (file.getAbsolutePath ());
+            nodes = new Node[30];
             i = 0;
             for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)
             {
@@ -361,10 +361,10 @@ public class HTMLParserTest extends HTMLParserTestCase {
      */
     public void _testHTTPCharset ()
     {
-		HTMLParser parser;
+		Parser parser;
 		try
         {
-			parser = new HTMLParser("http://www.ibm.com/jp/", HTMLParser.noFeedback);
+			parser = new Parser("http://www.ibm.com/jp/", Parser.noFeedback);
 			assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
 		}
 		catch (ParserException e)
@@ -381,12 +381,12 @@ public class HTMLParserTest extends HTMLParserTestCase {
      */
     public void _testHTMLCharset ()
     {
-		HTMLParser parser;
+		Parser parser;
         NodeIterator enumeration;
         
 		try
         {
-			parser = new HTMLParser("http://www.sony.co.jp", HTMLParser.noFeedback);
+			parser = new Parser("http://www.sony.co.jp", Parser.noFeedback);
 			assertEquals("Character set by default is ISO-8859-1", "ISO-8859-1", parser.getEncoding ());
             enumeration = parser.elements();
 			assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
@@ -398,9 +398,9 @@ public class HTMLParserTest extends HTMLParserTestCase {
     }
 
 	public void testNullUrl() {
-		HTMLParser parser;
+		Parser parser;
 		try {
-			parser = new HTMLParser("http://someoneexisting.com", HTMLParser.noFeedback);
+			parser = new Parser("http://someoneexisting.com", Parser.noFeedback);
 			assertTrue("Should have thrown an exception!",false);
 		}
 		catch (ParserException e) {
@@ -409,11 +409,11 @@ public class HTMLParserTest extends HTMLParserTestCase {
 	}
 	
 	public void testURLWithSpaces() throws ParserException{
-		HTMLParser parser;
+		Parser parser;
 		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
 		
-		parser = new HTMLParser(url);
-		HTMLNode node [] = new HTMLNode[30];
+		parser = new Parser(url);
+		Node node [] = new Node[30];
 		int i = 0;
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 			node[i] = e.nextNode();
@@ -446,13 +446,13 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		NodeList collectionList = new NodeList();
 
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-			HTMLNode node = e.nextNode();
+			Node node = e.nextNode();
 			node.collectInto(collectionList,LinkTag.LINK_TAG_FILTER);
 		}
 		assertEquals("Size of collection vector should be 11",11,collectionList.size());
 		// All items in collection vector should be links
 		for (SimpleNodeIterator e = collectionList.elements();e.hasMoreNodes();) {
-			HTMLNode node = e.nextNode();
+			Node node = e.nextNode();
 			assertTrue("Only links should have been parsed",node instanceof LinkTag);
 		}
 	}
@@ -503,13 +503,13 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		NodeList collectionList = new NodeList();
 
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-			HTMLNode node = e.nextNode();
+			Node node = e.nextNode();
 			node.collectInto(collectionList,ImageTag.IMAGE_TAG_FILTER);
 		}
 		assertEquals("Size of collection vector should be 5",5,collectionList.size());
 		// All items in collection vector should be links
 		for (SimpleNodeIterator e = collectionList.elements();e.hasMoreNodes();) {
-			HTMLNode node = e.nextNode();
+			Node node = e.nextNode();
 			assertTrue("Only images should have been parsed",node instanceof ImageTag);
 		}
 	}

@@ -30,10 +30,10 @@ package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.scanners.TextareaTagScanner;
 import org.htmlparser.tags.TextareaTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class HTMLTextareaTagScannerTest extends HTMLParserTestCase
+public class TextareaTagScannerTest extends ParserTestCase
 {
 	
 	private String testHTML = new String(
@@ -47,7 +47,7 @@ public class HTMLTextareaTagScannerTest extends HTMLParserTestCase
 									);
 	private TextareaTagScanner scanner;
 	
-	public HTMLTextareaTagScannerTest(String name) 
+	public TextareaTagScannerTest(String name) 
 	{
 		super(name);
 	}

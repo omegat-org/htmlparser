@@ -28,12 +28,12 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.StyleTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class StyleTagTest extends HTMLParserTestCase {
+public class StyleTagTest extends ParserTestCase {
 
 	public StyleTagTest(String name) {
 		super(name);
@@ -59,7 +59,7 @@ public class StyleTagTest extends HTMLParserTestCase {
 		"-->"+
 		"</STYLE>");
 
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		parser.registerScanners();
 	 	parseAndAssertNodeCount(1);
 		assertTrue(node[0] instanceof StyleTag);

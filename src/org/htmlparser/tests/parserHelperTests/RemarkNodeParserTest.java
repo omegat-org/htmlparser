@@ -29,14 +29,14 @@
 
 package org.htmlparser.tests.parserHelperTests;
 
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Parser;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class RemarkNodeParserTest extends HTMLParserTestCase 
+public class RemarkNodeParserTest extends ParserTestCase 
 {
 	public RemarkNodeParserTest(String name) {
 		super(name);
@@ -69,15 +69,15 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 			"-->\n"+
 			"<TEST>\n"+
 			"</TEST>\n");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
-		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[0];
 		assertEquals("Text of the remarkNode #1"," saved from url=(0022)http://internet.e-mail ",remarkNode.getText());	
 		// The sixth node should be a HTMLRemarkNode 
-		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
-		remarkNode = (HTMLRemarkNode)node[5];
+		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof RemarkNode);
+		remarkNode = (RemarkNode)node[5];
 		assertEquals("Text of the remarkNode #6","\r\n   Whats gonna happen now ?\r\n",remarkNode.getText());
 	}
 
@@ -92,15 +92,15 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 			"-->\n"+
 			"<TEST>\n"+
 			"</TEST>\n");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
-		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[0];
 		assertEquals("Plain Text of the remarkNode #1"," saved from url=(0022)http://internet.e-mail ",remarkNode.toPlainTextString());	
 		// The sixth node should be a HTMLRemarkNode 
-		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
-		remarkNode = (HTMLRemarkNode)node[5];
+		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof RemarkNode);
+		remarkNode = (RemarkNode)node[5];
 		assertEquals("Plain Text of the remarkNode #6","\r\n   Whats gonna happen now ?\r\n",remarkNode.getText());	
 		
 	}
@@ -116,15 +116,15 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 			"-->\n"+
 			"<TEST>\n"+
 			"</TEST>\n");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
-		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[0];
 		assertStringEquals("Raw String of the remarkNode #1","<!-- saved from url=(0022)http://internet.e-mail -->",remarkNode.toHTML());	
 		// The sixth node should be a HTMLRemarkNode 
-		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
-		remarkNode = (HTMLRemarkNode)node[5];
+		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof RemarkNode);
+		remarkNode = (RemarkNode)node[5];
 		assertStringEquals("Raw String of the remarkNode #6","<!--\r\n   Whats gonna happen now ?\r\n-->",remarkNode.toHTML());			
 	}
 	
@@ -132,9 +132,9 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 		createParser("&nbsp;<![endif]>");
 		parseAndAssertNodeCount(2);
 		// The first node should be a HTMLRemarkNode
-		assertTrue("First node should be a string node",node[0] instanceof HTMLStringNode);
+		assertTrue("First node should be a string node",node[0] instanceof StringNode);
 		assertTrue("Second node should be a HTMLTag",node[1] instanceof Tag);
-		HTMLStringNode stringNode = (HTMLStringNode)node[0];
+		StringNode stringNode = (StringNode)node[0];
 		Tag tag = (Tag)node[1];
 		assertEquals("Text contents","&nbsp;",stringNode.getText());
 		assertEquals("Tag Contents","![endif]",tag.getText());
@@ -151,10 +151,10 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 		createParser("<!--\n"+
 		"\n"+
 		"-->");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[0];
 		assertEquals("Expected contents","\r\n",remarkNode.getText());
 		
 	}
@@ -167,8 +167,8 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 	public void testRemarkNodeWithNothing() throws ParserException {
 		createParser("<!-->");
 		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[0];
 		assertEquals("Expected contents","",remarkNode.getText());
 		
 	}	
@@ -183,10 +183,10 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 		createParser("<!-- \n"+
 		"<A>\n"+
 		"bcd -->");
-		HTMLParser.setLineSeparator("\n");
+		Parser.setLineSeparator("\n");
 		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[0];
 		assertStringEquals("Expected contents"," \n<A>\nbcd ",remarkNode.getText());
 				
 	}
@@ -204,7 +204,7 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 		"-\n"+
 		"-\n"+
 		"ssd -->");
-		HTMLParser.setLineSeparator("\n");
+		Parser.setLineSeparator("\n");
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLTag but was "+node[0],node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
@@ -212,7 +212,7 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 		"-\n"+
 		"-\n"+
 		"ssd --",tag.getText());
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 	}
 	
 	/**
@@ -222,8 +222,8 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
 	public void testDashesInComment() throws ParserException{
 		createParser("<!-- -- -->");
 		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a HTMLRemarkNode but was "+node[0],node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertTrue("Node should be a HTMLRemarkNode but was "+node[0],node[0] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[0];
 		assertEquals("Remark Node contents"," -- ",remarkNode.getText());
 	}
 
@@ -268,8 +268,8 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
             + "</HTML>\n"
             );
 		parseAndAssertNodeCount(10);
-		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[7];
+		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[7];
 		assertEquals("Remark Node contents"," Id: html-sgml.sgm,v 1.5 1995/05/26 21:29:50 connolly Exp  ",remarkNode.getText());
     }
     
@@ -291,8 +291,8 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
             + "</HTML>\n"
             );
 		parseAndAssertNodeCount(10);
-		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[7];
+		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[7];
 		assertEquals("Remark Node contents"," another -- -- comment ",remarkNode.getText());
     }
 
@@ -314,8 +314,8 @@ public class RemarkNodeParserTest extends HTMLParserTestCase
             + "</HTML>\n"
             );
 		parseAndAssertNodeCount(10);
-		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[7];
+		assertTrue("Node should be a HTMLRemarkNode but was "+node[7],node[7] instanceof RemarkNode);
+		RemarkNode remarkNode = (RemarkNode)node[7];
 		assertEquals("Remark Node contents","",remarkNode.getText());
     }
 

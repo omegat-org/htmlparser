@@ -31,8 +31,8 @@ package org.htmlparser.parserapplications;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
@@ -44,14 +44,14 @@ import org.htmlparser.util.ParserException;
  * Pass a web site (or html file on your local disk) as an argument.
  */
 public class MailRipper {
-  private org.htmlparser.HTMLParser parser;
+  private org.htmlparser.Parser parser;
 	/**
 	 * MailRipper c'tor takes the url to be ripped
 	 * @param resourceLocation url to be ripped
 	 */
 	public MailRipper(String resourceLocation) {
 		try {
-		  parser = new HTMLParser(resourceLocation,new DefaultParserFeedback());
+		  parser = new Parser(resourceLocation,new DefaultParserFeedback());
 		  parser.registerScanners();
 		}
 		catch (ParserException e) {
@@ -60,7 +60,7 @@ public class MailRipper {
 		}
 	}
 	public static void main(String[] args) {
-	  System.out.println("Mail Ripper v"+HTMLParser.VERSION_STRING);
+	  System.out.println("Mail Ripper v"+Parser.VERSION_STRING);
 	  if (args.length<1 || args[0].equals("-help"))
 	  {
 	    System.out.println();
@@ -97,7 +97,7 @@ public class MailRipper {
 	 * @return Enumeration of mail addresses (a vector of HTMLLinkTag)
 	 */
 	public Enumeration rip() throws ParserException {
-	  HTMLNode node;
+	  Node node;
 	  Vector mailAddresses = new Vector();
 	  for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 	  {

@@ -1,15 +1,15 @@
 package org.htmlparser.tests.utilTests;
 
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.Node;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 import org.htmlparser.visitors.NodeVisitor;
 
-public class NodeListTest extends HTMLParserTestCase {
+public class NodeListTest extends ParserTestCase {
 	private NodeList nodeList;
-	private HTMLNode[] testNodes;
+	private Node[] testNodes;
 		
 	public NodeListTest(String name) {
 		super(name);
@@ -20,15 +20,15 @@ public class NodeListTest extends HTMLParserTestCase {
 	}
 	
 	public void testAddOneItem() {
-		HTMLNode node = createHTMLNodeObject();
+		Node node = createHTMLNodeObject();
 		nodeList.add(node);
 		assertEquals("Vector Size",1,nodeList.size());
 		assertTrue("First Element",node==nodeList.elementAt(0));
 	}
 
 	public void testAddTwoItems() {
-		HTMLNode node1 = createHTMLNodeObject();
-		HTMLNode node2 = createHTMLNodeObject();
+		Node node1 = createHTMLNodeObject();
+		Node node2 = createHTMLNodeObject();
 		nodeList.add(node1);
 		nodeList.add(node2);
 		assertEquals("Vector Size",2,nodeList.size());
@@ -77,7 +77,7 @@ public class NodeListTest extends HTMLParserTestCase {
 	
 	public void testElements() throws Exception {
 		createTestDataAndPutInVector(11);
-		HTMLNode [] resultNodes = new HTMLNode[11];
+		Node [] resultNodes = new Node[11];
 		int i = 0;
 		for (SimpleNodeIterator e = nodeList.elements();e.hasMoreNodes();) {
 			resultNodes[i] = e.nextNode();
@@ -87,8 +87,8 @@ public class NodeListTest extends HTMLParserTestCase {
 		
 	}
 	
-	private HTMLNode createHTMLNodeObject() {
-		HTMLNode node = new HTMLNode(10,20) {
+	private Node createHTMLNodeObject() {
+		Node node = new Node(10,20) {
 			public void accept(NodeVisitor visitor) {
 			}
 
@@ -111,7 +111,7 @@ public class NodeListTest extends HTMLParserTestCase {
 	}
 
 	private void createTestDataAndPutInVector(int nodeCount) {
-		testNodes = new HTMLNode[nodeCount]; 
+		testNodes = new Node[nodeCount]; 
 		for (int i=0;i<nodeCount;i++) {
 			testNodes[i]= createHTMLNodeObject();
 			nodeList.add(testNodes[i]);
@@ -126,7 +126,7 @@ public class NodeListTest extends HTMLParserTestCase {
 	
 	public void testToNodeArray() {
 		createTestDataAndPutInVector(387);
-		HTMLNode nodes [] = nodeList.toNodeArray();
+		Node nodes [] = nodeList.toNodeArray();
 		assertEquals("Length of array",387,nodes.length);
 		for (int i=0;i<nodes.length;i++)
 			assertNotNull("node "+i+" should not be null",nodes[i]);

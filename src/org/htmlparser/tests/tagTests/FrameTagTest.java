@@ -30,10 +30,10 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.scanners.FrameScanner;
 import org.htmlparser.tags.FrameTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class FrameTagTest extends HTMLParserTestCase {
+public class FrameTagTest extends ParserTestCase {
 
 	public FrameTagTest(String name) {
 		super(name);

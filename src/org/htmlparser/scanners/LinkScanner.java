@@ -35,9 +35,9 @@ package org.htmlparser.scanners;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
@@ -75,7 +75,7 @@ public class LinkScanner extends TagScanner
 		super(filter);
 		processor = new LinkProcessor();		
 	}
-	protected Tag createLinkTag(String currentLine, HTMLNode node, boolean mailLink, boolean javascriptLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) {
+	protected Tag createLinkTag(String currentLine, Node node, boolean mailLink, boolean javascriptLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
@@ -235,7 +235,7 @@ public class LinkScanner extends TagScanner
 	 * @param reader The HTML reader used to read this url
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */
-	public Tag scan(Tag tag,String url,HTMLReader reader,String currentLine) throws ParserException
+	public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
 	{
 		try {
 			if (previousOpenLinkScanner!=null) {
@@ -270,7 +270,7 @@ public class LinkScanner extends TagScanner
 				}
 			}
 			previousOpenLinkScanner = this;
-			HTMLNode node;
+			Node node;
 			boolean mailLink = false;
 			boolean javascriptLink = false;
 
@@ -313,10 +313,10 @@ public class LinkScanner extends TagScanner
 			{
 				node = reader.readElement();
 	
-				if (node instanceof HTMLStringNode)
+				if (node instanceof StringNode)
 				{
 					
-					tmp =((HTMLStringNode)node).getText();
+					tmp =((StringNode)node).getText();
 					linkText += tmp;
 					linkContents += tmp;   // Kaarle Kaila 23.10.2001
 					
@@ -383,8 +383,8 @@ public class LinkScanner extends TagScanner
 		
 		return newLine;
 	}
-	public BaseHREFScanner createBaseHREFScanner(String filter) {
-		return new BaseHREFScanner(filter,processor);
+	public BaseHrefScanner createBaseHREFScanner(String filter) {
+		return new BaseHrefScanner(filter,processor);
 	}
 	public ImageScanner createImageScanner(String filter) {
 		return new ImageScanner(filter,processor);

@@ -38,8 +38,8 @@ import java.net.URL;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.util.DefaultParserFeedback;
@@ -92,12 +92,12 @@ public class FunctionalTests extends TestCase {
 	}
 
 	public int countImageTagsWithHTMLParser() throws ParserException {
-		HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultParserFeedback());
+		Parser parser = new Parser("http://www.yahoo.com",new DefaultParserFeedback());
 		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
 		int parserImgTagCount = 0;
-		HTMLNode node;
+		Node node;
 		for (NodeIterator e= parser.elements();e.hasMoreNodes();) {
-			node = (HTMLNode)e.nextNode();
+			node = (Node)e.nextNode();
 			if (node instanceof ImageTag) {
 				parserImgTagCount++;				
 			}		

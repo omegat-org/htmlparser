@@ -125,7 +125,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * </pre>
  *  @see HTMLParser#elements() 
  */
-public class HTMLParser
+public class Parser
     implements
         Serializable
 {
@@ -157,7 +157,7 @@ public class HTMLParser
 	/** 
 	 * The html reader associated with this parser.
 	 */
-	protected transient HTMLReader reader;
+	protected transient NodeReader reader;
 
     /**
      * The list of scanners to apply at the top level.
@@ -195,7 +195,7 @@ public class HTMLParser
 	 */
 	public static void setLineSeparator(String lineSeparator)
 	{
-		HTMLNode.setLineSeparator(lineSeparator);	
+		Node.setLineSeparator(lineSeparator);	
 	}
 	
     /**
@@ -295,7 +295,7 @@ public class HTMLParser
      * @see #setReader(HTMLReader)
      * @see #setConnection(URLConnection)
      */
-    public HTMLParser ()
+    public Parser ()
     {
         setFeedback (null);
         setScanners (null);
@@ -325,7 +325,7 @@ public class HTMLParser
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
 	 */
-	public HTMLParser(HTMLReader rd, ParserFeedback fb) 
+	public Parser(NodeReader rd, ParserFeedback fb) 
 	{
         setFeedback (fb);
         setScanners (null);
@@ -339,7 +339,7 @@ public class HTMLParser
      * method will be called so it need not be connected yet.
      * @param fb The object to use for message communication.
      */
-    public HTMLParser (URLConnection connection, ParserFeedback fb)
+    public Parser (URLConnection connection, ParserFeedback fb)
         throws
             ParserException
     {
@@ -359,7 +359,7 @@ public class HTMLParser
      * is provided.
      * @see #HTMLParser(URLConnection,HTMLParserFeedback)
 	 */
-	public HTMLParser(String resourceLocn, ParserFeedback feedback) throws ParserException
+	public Parser(String resourceLocn, ParserFeedback feedback) throws ParserException
 	{
         this (openConnection (resourceLocn, feedback), feedback);
     }
@@ -369,7 +369,7 @@ public class HTMLParser
 	 * A DefaultHTMLParserFeedback object is used for feedback.
 	 * @param resourceLocn Either the URL or the filename (autodetects).
 	 */
-	public HTMLParser(String resourceLocn) throws ParserException
+	public Parser(String resourceLocn) throws ParserException
 	{
 		this (resourceLocn, stdout);
 	}
@@ -389,7 +389,7 @@ public class HTMLParser
 	 * </li>
      * @param reader The source for HTML to be parsed.
 	 */
-	public HTMLParser(HTMLReader reader) 
+	public Parser(NodeReader reader) 
 	{
 		this (reader, stdout);	
 	}	
@@ -401,7 +401,7 @@ public class HTMLParser
      * method will be called so it need not be connected yet.
      * @see #HTMLParser(URLConnection,HTMLParserFeedback)
      */
-    public HTMLParser (URLConnection connection) throws ParserException
+    public Parser (URLConnection connection) throws ParserException
     {
         this (connection, stdout);
     }
@@ -461,7 +461,7 @@ public class HTMLParser
             ParserException
     {
         String res;
-        HTMLReader rd;
+        NodeReader rd;
         String chs;
         URLConnection con;
 
@@ -563,7 +563,7 @@ public class HTMLParser
             ParserException
     {
         String chs;
-        HTMLReader rd;
+        NodeReader rd;
 
         if ((null != encoding) && !"".equals (encoding))
             if (null == getConnection ())
@@ -621,7 +621,7 @@ public class HTMLParser
      * @param rd The reader object to use. This reader will be bound to this
      * parser after this call.
      */
-    public void setReader (HTMLReader rd)
+    public void setReader (NodeReader rd)
     {
         if (null != rd)
         {
@@ -637,7 +637,7 @@ public class HTMLParser
 	 * Returns the reader associated with the parser
 	 * @return HTMLReader
 	 */
-	public HTMLReader getReader() {
+	public NodeReader getReader() {
 		return reader;
 	}
 
@@ -706,7 +706,7 @@ public class HTMLParser
         
         stream = url_conn.getInputStream ();
         in = new InputStreamReader (stream, character_set);
-        reader = new HTMLReader (new BufferedReader (in), resourceLocn);
+        reader = new NodeReader (new BufferedReader (in), resourceLocn);
         reader.setParser (this);
     }
 
@@ -890,7 +890,7 @@ public class HTMLParser
 	public NodeIterator elements() throws ParserException
     {
         boolean remove_scanner;
-        HTMLNode node;
+        Node node;
         MetaTag meta;
         String httpEquiv;
         String charset;
@@ -984,7 +984,7 @@ public class HTMLParser
 	 */
 	public void parse(String filter) throws Exception
 	{
-		HTMLNode node;
+		Node node;
 		for (NodeIterator e=elements();e.hasMoreNodes();)
 		{
 			node = e.nextNode();
@@ -1098,7 +1098,7 @@ public class HTMLParser
 			System.exit(-1);
 		}
 		try {
-			HTMLParser parser = new HTMLParser(args[0]);
+			Parser parser = new Parser(args[0]);
             System.out.println("Parsing " + parser.getURL ());
 			parser.registerScanners();
 			try {
@@ -1118,7 +1118,7 @@ public class HTMLParser
 	}
 	
 	public void visitAllNodesWith(NodeVisitor visitor) throws ParserException {
-		HTMLNode node;
+		Node node;
 		for (NodeIterator e = elements();e.hasMoreNodes();) {
 			node = e.nextNode();
 			node.accept(visitor);
@@ -1130,11 +1130,11 @@ public class HTMLParser
 	 */
 	public void setInputHTML(String inputHTML) {
 	  if ("".equals(inputHTML)) {
-		reader = new HTMLReader(new StringReader(inputHTML),"");      
+		reader = new NodeReader(new StringReader(inputHTML),"");      
 	  }
 	}	
 	
-	public HTMLNode [] extractAllNodesThatAre(Class nodeType) throws ParserException {
+	public Node [] extractAllNodesThatAre(Class nodeType) throws ParserException {
 		NodeList nodeList = new NodeList();
 		for (NodeIterator e = elements();e.hasMoreNodes();) {
 			e.nextNode().collectInto(nodeList,nodeType);
@@ -1147,14 +1147,14 @@ public class HTMLParser
 	 * @param inputHTML
 	 * @return HTMLParser
 	 */
-	public static HTMLParser createParser(String inputHTML) {
-		HTMLReader reader =	
-			new HTMLReader(new StringReader(inputHTML),"");
-		return new HTMLParser(reader);
+	public static Parser createParser(String inputHTML) {
+		NodeReader reader =	
+			new NodeReader(new StringReader(inputHTML),"");
+		return new Parser(reader);
 	}
 	
-	public static HTMLParser createLinkRecognizingParser(String inputHTML) {
-		HTMLParser parser = createParser(inputHTML);
+	public static Parser createLinkRecognizingParser(String inputHTML) {
+		Parser parser = createParser(inputHTML);
 		parser.addScanner(new LinkScanner(LinkTag.LINK_TAG_FILTER));
 		return parser;
 	}

@@ -29,8 +29,8 @@
 
 package org.htmlparser.tests;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -51,7 +51,7 @@ public class PerformanceTest {
 	}
 
 	public void beginTestWithoutScanners() throws ParserException {
-		HTMLParser parser;
+		Parser parser;
 		long sumTimes=0;
 		double avg=0;
 		System.out.println("***************************************");
@@ -59,8 +59,8 @@ public class PerformanceTest {
 		System.out.println("***************************************");				
 		for (int i=0;i<=numTimes;i++) {
 			// Create the parser object
-			parser = new HTMLParser(file,new DefaultParserFeedback());
-			HTMLNode node;
+			parser = new Parser(file,new DefaultParserFeedback());
+			Node node;
 			long start=System.currentTimeMillis();
 			for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 				node = e.nextNode();
@@ -79,7 +79,7 @@ public class PerformanceTest {
 	}
 
 	public void beginTestWithScanners() throws ParserException {
-		HTMLParser parser;
+		Parser parser;
 		long sumTimes=0;
 		double avg=0;
 		System.out.println("***************************************");
@@ -87,9 +87,9 @@ public class PerformanceTest {
 		System.out.println("***************************************");					
 		for (int i=0;i<=numTimes;i++) {
 			// Create the parser object
-			parser = new HTMLParser(file,new DefaultParserFeedback());
+			parser = new Parser(file,new DefaultParserFeedback());
 			parser.registerScanners();
-			HTMLNode node;
+			Node node;
 			long start=System.currentTimeMillis();
 			for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 				node = e.nextNode();

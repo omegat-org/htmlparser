@@ -31,12 +31,12 @@ import org.htmlparser.scanners.MetaTagScanner;
 import org.htmlparser.scanners.StyleScanner;
 import org.htmlparser.scanners.TitleScanner;
 import org.htmlparser.tags.TitleTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class HTMLTitleScannerTest extends HTMLParserTestCase {
+public class TitleScannerTest extends ParserTestCase {
 
-	public HTMLTitleScannerTest(String name) {
+	public TitleScannerTest(String name) {
 		super(name);
 	}
 

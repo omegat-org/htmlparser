@@ -1,10 +1,10 @@
 package org.htmlparser.tests.visitorsTests;
 
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 
 
 
-public class CompositeTagFindingVisitorTest extends HTMLParserTestCase {
+public class CompositeTagFindingVisitorTest extends ParserTestCase {
 
 	public CompositeTagFindingVisitorTest(String name) {
 		super(name);

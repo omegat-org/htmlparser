@@ -30,10 +30,10 @@ package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.tags.JspTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class JspScannerTest extends HTMLParserTestCase {
+public class JspScannerTest extends ParserTestCase {
 
 	public JspScannerTest(String name) {
 		super(name);

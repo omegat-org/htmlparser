@@ -30,11 +30,11 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.tags.ImageTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
-public class ImageTagTest extends HTMLParserTestCase 
+public class ImageTagTest extends ParserTestCase 
 {
 	public ImageTagTest(String name) {
 		super(name);

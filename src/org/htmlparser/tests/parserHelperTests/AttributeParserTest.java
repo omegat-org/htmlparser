@@ -33,9 +33,9 @@ import java.util.Hashtable;
 import org.htmlparser.parserHelper.AttributeParser;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 
-public class AttributeParserTest extends HTMLParserTestCase {
+public class AttributeParserTest extends ParserTestCase {
 	private AttributeParser parser;
 	private Tag tag;
 	private Hashtable table;

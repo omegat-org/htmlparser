@@ -33,10 +33,10 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.tags.OptionTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class OptionTagTest extends HTMLParserTestCase 
+public class OptionTagTest extends ParserTestCase 
 {
 	private String testHTML = new String(
 									"<OPTION value=\"Google Search\">Google</OPTION>" +

@@ -35,8 +35,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
@@ -116,7 +116,7 @@ public class FormScanner extends TagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)
 	 */
-	public Tag scan(Tag tag,String url,HTMLReader reader,String currentLine) throws ParserException
+	public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
 	{
 		if (linkScannerAlreadyOpen) {
 			String newLine = insertEndTagBeforeNode(tag, currentLine);
@@ -131,7 +131,7 @@ public class FormScanner extends TagScanner
 			);
 		}
 		try {
-			HTMLNode node;
+			Node node;
 			Tag startFormTag = tag;
 			Tag endFormTag = null;
 	      	Vector inputVector = new Vector(), textAreaVector = new Vector(), 
@@ -193,7 +193,7 @@ public class FormScanner extends TagScanner
 			if (node==null && endFlag==false) {
 				StringBuffer msg = new StringBuffer();
 				for (Enumeration e = inputVector.elements();e.hasMoreElements();) {
-					msg.append((HTMLNode)e.nextElement()+"\n");
+					msg.append((Node)e.nextElement()+"\n");
 				}
 				throw new ParserException("HTMLFormScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
 				"Input Vector contents : "+msg.toString());

@@ -32,11 +32,11 @@ import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.scanners.SelectTagScanner;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tags.SelectTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
 
-public class SelectTagScannerTest extends HTMLParserTestCase 
+public class SelectTagScannerTest extends ParserTestCase 
 {
 	
 	private String testHTML = new String(

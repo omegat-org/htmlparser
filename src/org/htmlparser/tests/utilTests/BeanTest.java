@@ -40,8 +40,8 @@ import java.util.Vector;
 
 import junit.framework.TestCase;
 
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Parser;
+import org.htmlparser.Node;
 import org.htmlparser.beans.StringBean;
 import org.htmlparser.beans.LinkBean;
 import org.htmlparser.util.NodeIterator;
@@ -94,12 +94,12 @@ public class BeanTest extends TestCase
             ClassNotFoundException,
             ParserException
     {
-        HTMLParser parser;
+        Parser parser;
         byte[] data;
         
-        parser = new HTMLParser ();
+        parser = new Parser ();
         data = pickle (parser);
-        parser = (HTMLParser)unpickle (data);
+        parser = (Parser)unpickle (data);
     }
         
     public void testSerializable ()
@@ -108,26 +108,26 @@ public class BeanTest extends TestCase
             ClassNotFoundException,
             ParserException
     {
-        HTMLParser parser;
+        Parser parser;
         Vector vector;
         NodeIterator enumeration;
         byte[] data;
         
-        parser = new HTMLParser ("http://htmlparser.sourceforge.net/test/example.html");
+        parser = new Parser ("http://htmlparser.sourceforge.net/test/example.html");
         enumeration = parser.elements ();
         vector = new Vector (50);
         while (enumeration.hasMoreNodes ())
             vector.addElement (enumeration.nextNode ());
 
         data = pickle (parser);
-        parser = (HTMLParser)unpickle (data);
+        parser = (Parser)unpickle (data);
 
         enumeration = parser.elements ();
         while (enumeration.hasMoreNodes ())
             assertEquals (
                 "Nodes before and after serialization differ",
-                ((HTMLNode)vector.remove (0)).toHTML (),
-                ((HTMLNode)enumeration.nextNode ()).toHTML ());
+                ((Node)vector.remove (0)).toHTML (),
+                ((Node)enumeration.nextNode ()).toHTML ());
     }
     
     public void testSerializableScanners ()
@@ -136,12 +136,12 @@ public class BeanTest extends TestCase
             ClassNotFoundException,
             ParserException
     {
-        HTMLParser parser;
+        Parser parser;
         Vector vector;
         NodeIterator enumeration;
         byte[] data;
         
-        parser = new HTMLParser ("http://htmlparser.sourceforge.net/test/example.html");
+        parser = new Parser ("http://htmlparser.sourceforge.net/test/example.html");
         parser.registerScanners ();
         enumeration = parser.elements ();
         vector = new Vector (50);
@@ -149,14 +149,14 @@ public class BeanTest extends TestCase
             vector.addElement (enumeration.nextNode ());
 
         data = pickle (parser);
-        parser = (HTMLParser)unpickle (data);
+        parser = (Parser)unpickle (data);
 
         enumeration = parser.elements ();
         while (enumeration.hasMoreNodes ())
             assertEquals (
                 "Nodes before and after serialization differ",
-                ((HTMLNode)vector.remove (0)).toHTML (),
-                ((HTMLNode)enumeration.nextNode ()).toHTML ());
+                ((Node)vector.remove (0)).toHTML (),
+                ((Node)enumeration.nextNode ()).toHTML ());
     }
 
     public void testSerializableStringBean ()

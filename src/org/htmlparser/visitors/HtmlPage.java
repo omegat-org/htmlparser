@@ -28,10 +28,10 @@
 
 package org.htmlparser.visitors;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
@@ -45,7 +45,7 @@ public class HtmlPage extends NodeVisitor {
 	private NodeList tables;
 	private boolean bodyTagBegin;
 	
-	public HtmlPage(HTMLParser parser) {
+	public HtmlPage(Parser parser) {
 		super(false);
 		parser.registerScanners();
 		parser.addScanner(new TableScanner(parser));
@@ -86,7 +86,7 @@ public class HtmlPage extends NodeVisitor {
 		return tag instanceof TableTag;
 	}
 
-	private void addTagToBodyIfApplicable(HTMLNode node) {
+	private void addTagToBodyIfApplicable(Node node) {
 		if (bodyTagBegin)
 			nodesInBody.add(node);
 	}
@@ -97,11 +97,11 @@ public class HtmlPage extends NodeVisitor {
 		addTagToBodyIfApplicable(endTag);	
 	}
 
-	public void visitRemarkNode(HTMLRemarkNode remarkNode) {
+	public void visitRemarkNode(RemarkNode remarkNode) {
 		addTagToBodyIfApplicable(remarkNode);
 	}
 
-	public void visitStringNode(HTMLStringNode stringNode) {
+	public void visitStringNode(StringNode stringNode) {
 		addTagToBodyIfApplicable(stringNode);
 	}
 	

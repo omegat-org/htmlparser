@@ -31,8 +31,8 @@ package org.htmlparser.scanners;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
@@ -43,11 +43,11 @@ public class TableRowScanner extends CompositeTagScanner {
 	private final static String MATCH_STRING [] = { "TR" };
 	private List columns;
 	
-	public TableRowScanner(HTMLParser parser) {
+	public TableRowScanner(Parser parser) {
 		this("",parser);
 	}
 
-	public TableRowScanner(String filter,HTMLParser parser) {
+	public TableRowScanner(String filter,Parser parser) {
 		super(filter, MATCH_STRING);
 		parser.addScanner(new TableColumnScanner());
 	}
@@ -74,7 +74,7 @@ public class TableRowScanner extends CompositeTagScanner {
 		columns = new ArrayList();
 	}
 
-	protected void childNodeEncountered(HTMLNode node) {
+	protected void childNodeEncountered(Node node) {
 		if (node instanceof TableColumn)
 			columns.add(node);
 	}

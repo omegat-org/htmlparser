@@ -35,10 +35,10 @@ import junit.framework.TestSuite;
 
 import org.htmlparser.scanners.LabelScanner;
 import org.htmlparser.tags.LabelTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class LabelScannerTest extends HTMLParserTestCase {
+public class LabelScannerTest extends ParserTestCase {
 
 	public LabelScannerTest(String name) {
 		super(name);

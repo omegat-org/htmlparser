@@ -28,10 +28,10 @@
 
 package org.htmlparser.parserapplications;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.LinkTag;
@@ -143,24 +143,24 @@ public class StringExtractor
         throws
             ParserException
     {
-        HTMLParser parser;
-        HTMLNode node;
+        Parser parser;
+        Node node;
         Tag tag;
         boolean preformatted;
         StringBuffer results;
         
-        parser = new HTMLParser (resource);
+        parser = new Parser (resource);
         parser.registerScanners ();
         results = new StringBuffer (4096);
         preformatted = false;
         for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
-            if (node instanceof HTMLStringNode)
+            if (node instanceof StringNode)
             {
                 // node is a plain string
                 // cast it to an HTMLStringNode
-                HTMLStringNode string = (HTMLStringNode)node;
+                StringNode string = (StringNode)node;
                 // retrieve the data from the object
                 if (preformatted)
                     results.append (string.getText ());
@@ -194,7 +194,7 @@ public class StringExtractor
                 else
                     collapse (results, Translate.decode (form.toPlainTextString ()));
             }
-            else if (node instanceof HTMLRemarkNode)
+            else if (node instanceof RemarkNode)
             {
                 // skip comments
             }

@@ -27,14 +27,14 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.tagTests;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Parser;
 import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.tags.JspTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class JspTagTest extends HTMLParserTestCase
+public class JspTagTest extends ParserTestCase
 {
 
 	public JspTagTest(String name) {
@@ -73,7 +73,7 @@ public class JspTagTest extends HTMLParserTestCase
 			"        if(transfer.validate(request))\n"+
 			"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
 			"%>\n");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		// Register the Jsp Scanner
 		parser.addScanner(new JspScanner("-j"));	
 		parseAndAssertNodeCount(5);
@@ -135,7 +135,7 @@ public class JspTagTest extends HTMLParserTestCase
 			"        if(transfer.validate(request))\n"+
 			"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
 			"%>\n");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		// Register the Jsp Scanner
 		parser.addScanner(new JspScanner("-j"));	
 		parseAndAssertNodeCount(5);

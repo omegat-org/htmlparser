@@ -32,10 +32,10 @@ import org.htmlparser.scanners.FrameScanner;
 import org.htmlparser.scanners.FrameSetScanner;
 import org.htmlparser.tags.FrameSetTag;
 import org.htmlparser.tags.FrameTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class FrameSetScannerTest extends HTMLParserTestCase {
+public class FrameSetScannerTest extends ParserTestCase {
 	
 	public FrameSetScannerTest(String name) {
 		super(name);

@@ -32,8 +32,8 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
 import org.htmlparser.parserHelper.AttributeParser;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.TagScanner;
@@ -48,7 +48,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * configure a parser.
  * @author Kaarle Kaila 23.10.2001
  */
-public class Tag extends HTMLNode
+public class Tag extends Node
 {
 	public static final String TYPE = "TAG";
     /**
@@ -151,7 +151,7 @@ public class Tag extends HTMLNode
 	 * @param input Input String
 	 * @param position Position to start parsing from
 	 */
-	public static Tag find(HTMLReader reader,String input,int position)
+	public static Tag find(NodeReader reader,String input,int position)
 	{
 		return tagParser.find(reader,input,position);
 	}
@@ -252,12 +252,12 @@ public class Tag extends HTMLNode
 	 * @param url URL at which HTML page is located
 	 * @param reader The HTMLReader that is to be used for reading the url
 	 */
-	public HTMLNode scan(Hashtable scanners,String url,HTMLReader reader) throws ParserException
+	public Node scan(Hashtable scanners,String url,NodeReader reader) throws ParserException
 	{
 		if (tagContents.length()==0) return this;
 		try {
 			boolean found=false;
-			HTMLNode retVal=null;
+			Node retVal=null;
 			// Find the first word in the scanners
 			String firstWord = extractWord(tagContents.toString());
 			// Now, get the scanner associated with this.

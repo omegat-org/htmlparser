@@ -31,7 +31,7 @@ package org.htmlparser.tags.data;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 
@@ -47,7 +47,7 @@ public class CompositeTagData {
 		this.children = new NodeList();
 		if (children!=null)
 		for (Enumeration e = children.elements();e.hasMoreElements();) {
-			this.children.add((HTMLNode)e.nextElement());
+			this.children.add((Node)e.nextElement());
 		}
 	}
 

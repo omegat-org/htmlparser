@@ -29,7 +29,7 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.LinkData;
 import org.htmlparser.tags.data.TagData;
@@ -221,11 +221,11 @@ public class LinkTag extends CompositeTag
 			sb.append("  "+"LinkData\n");
 			sb.append("  "+"--------\n");
 			
-			HTMLNode node;
+			Node node;
 			int i = 0;
 			for (SimpleNodeIterator e=children();e.hasMoreNodes();)
 			{
-				node = (HTMLNode)e.nextNode();
+				node = (Node)e.nextNode();
 				sb.append("   "+(i++)+ " ");
 				sb.append(node.toString()+"\n");
 			}

@@ -1,23 +1,23 @@
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.scanners.SpanScanner;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
 
-public class ObjectCollectionTest extends HTMLParserTestCase {
+public class ObjectCollectionTest extends ParserTestCase {
 
 	public ObjectCollectionTest(String name) {
 		super(name);
 	}
 
-	private void assertSpanContent(HTMLNode[] spans) {
+	private void assertSpanContent(Node[] spans) {
 		assertEquals("number of span objects expected",2,spans.length);
 		assertType("span",Span.class,spans[0]);
 		assertType("span",Span.class,spans[1]);
@@ -57,7 +57,7 @@ public class ObjectCollectionTest extends HTMLParserTestCase {
 		Div div = (Div)node[0];
 		NodeList nodeList = new NodeList();
 		div.collectInto(nodeList,Span.class);
-		HTMLNode [] spans = nodeList.toNodeArray();
+		Node [] spans = nodeList.toNodeArray();
 		assertSpanContent(spans);
 	}
 
@@ -76,7 +76,7 @@ public class ObjectCollectionTest extends HTMLParserTestCase {
 		TableTag tableTag = (TableTag)node[0];
 		NodeList nodeList = new NodeList();
 		tableTag.collectInto(nodeList,Span.class);
-		HTMLNode [] spans = nodeList.toNodeArray();
+		Node [] spans = nodeList.toNodeArray();
 		assertSpanContent(spans);
 	}
 }

@@ -35,7 +35,7 @@ import org.htmlparser.visitors.NodeVisitor;
 /**
  * Normal text in the html document is identified and represented by this class.
  */
-public class HTMLStringNode extends HTMLNode
+public class StringNode extends Node
 {
 	public static final String TYPE="STRING_NODE";
 	public static final String STRING_FILTER="-string";
@@ -50,7 +50,7 @@ public class HTMLStringNode extends HTMLNode
 	 * @param textBegin The beginning position of the string
 	 * @param textEnd The ending positiong of the string
 	 */
-	public HTMLStringNode(StringBuffer textBuffer,int textBegin,int textEnd)
+	public StringNode(StringBuffer textBuffer,int textBegin,int textEnd)
 	{
 		super(textBegin,textEnd);
 		this.textBuffer = textBuffer;

@@ -31,10 +31,10 @@ package org.htmlparser.tests.utilTests;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.DefaultParserFeedback;
 
-public class HTMLTagParserTest extends HTMLParserTestCase {
+public class HTMLTagParserTest extends ParserTestCase {
 	private TagParser tagParser;
 
 	public HTMLTagParserTest(String name) {

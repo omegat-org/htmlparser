@@ -30,7 +30,7 @@
 
 package org.htmlparser.visitors;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
@@ -75,7 +75,7 @@ public class TagFindingVisitor extends NodeVisitor {
 			}
 	}
 
-	public HTMLNode [] getTags(int index) {
+	public Node [] getTags(int index) {
 		return tags[index].toNodeArray();
 	}
 

@@ -31,7 +31,7 @@ package org.htmlparser.scanners;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tags.SelectTag;
 import org.htmlparser.tags.Tag;
@@ -65,7 +65,7 @@ public class SelectTagScanner extends CompositeTagScanner
 		return new SelectTag(tagData,compositeTagData,optionTags);
 	}
 	
-	protected void childNodeEncountered(HTMLNode node) {
+	protected void childNodeEncountered(Node node) {
 		if (node instanceof OptionTag)
 			optionTags.add(node);
 	}

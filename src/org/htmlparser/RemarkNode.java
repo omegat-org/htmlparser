@@ -35,7 +35,7 @@ import org.htmlparser.visitors.NodeVisitor;
 /**
  * The remark tag is identified and represented by this class.
  */
-public class HTMLRemarkNode extends HTMLNode
+public class RemarkNode extends Node
 {
 	public static final String TYPE="REMARK_NODE";
 	public final static String REMARK_NODE_FILTER="-r";
@@ -52,7 +52,7 @@ public class HTMLRemarkNode extends HTMLNode
 	 * @param tagContents contents of the remark tag
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public HTMLRemarkNode(int tagBegin, int tagEnd, String tagContents)
+	public RemarkNode(int tagBegin, int tagEnd, String tagContents)
 	{
 		super(tagBegin,tagEnd);
 		this.tagContents = tagContents;

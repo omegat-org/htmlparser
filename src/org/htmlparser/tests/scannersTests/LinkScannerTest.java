@@ -29,20 +29,20 @@
 package org.htmlparser.tests.scannersTests;
 
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.StringNode;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
-public class LinkScannerTest extends HTMLParserTestCase
+public class LinkScannerTest extends ParserTestCase
 {
 	public LinkScannerTest(String name) {
 		super(name);
@@ -66,8 +66,8 @@ public class LinkScannerTest extends HTMLParserTestCase
 		// The first node should be a HTMLTag 
 		assertTrue("First node should be a HTMLTag",node[0] instanceof Tag);
 		// The second node should be a HTMLStringNode
-		assertTrue("Second node should be a HTMLStringNode",node[1] instanceof HTMLStringNode);
-		HTMLStringNode stringNode = (HTMLStringNode)node[1];
+		assertTrue("Second node should be a HTMLStringNode",node[1] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[1];
 		assertEquals("Text of the StringNode","Site Comments?",stringNode.getText());
 		assertTrue("Third node should be a tag",node[2] instanceof Tag);
 	
@@ -86,7 +86,7 @@ public class LinkScannerTest extends HTMLParserTestCase
 			"<td>" +				"<a href=s/8741>" +				"<img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>" +				"</img>" +			"</td>" +			"<td nowrap> &nbsp;\n"+
 				"<a href=s/7509><b>Yahoo! Movies</b></a>" +			"</td>","http://www.yahoo.com");
 		parser.registerScanners();
-		HTMLNode linkNodes [] = parser.extractAllNodesThatAre(LinkTag.class);
+		Node linkNodes [] = parser.extractAllNodesThatAre(LinkTag.class);
 		
 		assertEquals("number of links",2,linkNodes.length);
 		LinkTag linkTag = (LinkTag)linkNodes[0];
@@ -180,7 +180,7 @@ public class LinkScannerTest extends HTMLParserTestCase
 		createParser("<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font><a \n"+
 		"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
 		"nical.html\"> Journalism 3.0</a> by Rajesh Jain");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		parser.addScanner(new LinkScanner("-l"));
 		parseAndAssertNodeCount(8);
 		assertTrue("Seventh node should be a link tag",node[6] instanceof LinkTag);
@@ -189,8 +189,8 @@ public class LinkScannerTest extends HTMLParserTestCase
 		//assertEquals("Length of link tag",exp.length(), linkTag.getLink().length());
 		assertStringEquals("Link URL of link tag",exp,linkTag.getLink());
 		assertEquals("Link Text of link tag"," Journalism 3.0",linkTag.getLinkText());
-		assertTrue("Eight node should be a string node",node[7] instanceof HTMLStringNode);
-		HTMLStringNode stringNode = (HTMLStringNode)node[7];
+		assertTrue("Eight node should be a string node",node[7] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[7];
 		assertEquals("String node contents"," by Rajesh Jain",stringNode.getText());
 	}
 
@@ -240,20 +240,20 @@ public class LinkScannerTest extends HTMLParserTestCase
 	
 		LinkTag linkTag = (LinkTag)node[0];
 		// Get the link data and cross-check
-		HTMLNode [] dataNode= new HTMLNode[10];
+		Node [] dataNode= new Node[10];
 		int i = 0;
 		for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();)
 		{
-			dataNode[i++] = (HTMLNode)e.nextNode();
+			dataNode[i++] = (Node)e.nextNode();
 		}
 		assertEquals("Number of data nodes",new Integer(2),new Integer(i));
 		assertTrue("First data node should be an Image Node",dataNode[0] instanceof ImageTag);
-		assertTrue("Second data node shouls be a String Node",dataNode[1] instanceof HTMLStringNode);
+		assertTrue("Second data node shouls be a String Node",dataNode[1] instanceof StringNode);
 	
 		// Check the contents of each data node
 		ImageTag imageTag = (ImageTag)dataNode[0];
 		assertEquals("Image URL","http://www.yahoo.com/abcd.jpg",imageTag.getImageURL());
-		HTMLStringNode stringNode = (HTMLStringNode)dataNode[1];
+		StringNode stringNode = (StringNode)dataNode[1];
 		assertEquals("String Contents","Hello World",stringNode.getText());
 	}
 
@@ -287,8 +287,8 @@ public class LinkScannerTest extends HTMLParserTestCase
 		assertTrue("Node 0 should be a tag",node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
 		assertEquals("Tag Contents","a",tag.getText());
-		assertTrue("Node 1 should be a string node",node[1] instanceof HTMLStringNode);
-		HTMLStringNode stringNode = (HTMLStringNode)node[1];
+		assertTrue("Node 1 should be a string node",node[1] instanceof StringNode);
+		StringNode stringNode = (StringNode)node[1];
 		assertEquals("StringNode Contents","Revision",stringNode.getText());
 		assertTrue("Node 2 should be a string node",node[2] instanceof EndTag);
 		EndTag endTag = (EndTag)node[2];
@@ -323,7 +323,7 @@ public class LinkScannerTest extends HTMLParserTestCase
 		LinkTag linkTag = (LinkTag)node[0];
 		assertEquals("Link URL","http://transfer.go.com/cgi/atransfer.pl?goto=http://www.signs.movies.com&name=114332&srvc=nws&context=283&guid=4AD5723D-C802-4310-A388-0B24E1A79689",linkTag.getLink());
 		assertEquals("Link Text","",linkTag.getLinkText());
-		HTMLNode [] containedNodes = new HTMLNode[10];
+		Node [] containedNodes = new Node[10];
 		int i=0;
 		for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();) {
 			containedNodes[i++] = e.nextNode();
@@ -475,10 +475,10 @@ public class LinkScannerTest extends HTMLParserTestCase
 		LinkTag linkTag = (LinkTag) node[0];
 		// Get the image tag from the link
 
-		HTMLNode insideNodes [] = new HTMLNode[10];
+		Node insideNodes [] = new Node[10];
 		int j =0 ;
 		for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();) {
-			insideNodes[j++]= (HTMLNode)e.nextNode();
+			insideNodes[j++]= (Node)e.nextNode();
 		}
 		assertEquals("Number of contained internal nodes",1,j);
 		assertTrue(insideNodes[0] instanceof ImageTag);

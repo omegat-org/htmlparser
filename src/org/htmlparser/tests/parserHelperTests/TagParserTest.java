@@ -29,9 +29,9 @@
 
 package org.htmlparser.tests.parserHelperTests;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 
-public class TagParserTest extends HTMLParserTestCase {
+public class TagParserTest extends ParserTestCase {
 
 	public TagParserTest(String name) {
 		super(name);

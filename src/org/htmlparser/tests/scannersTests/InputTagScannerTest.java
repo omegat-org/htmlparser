@@ -30,10 +30,10 @@ package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.scanners.InputTagScanner;
 import org.htmlparser.tags.InputTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class InputTagScannerTest extends HTMLParserTestCase 
+public class InputTagScannerTest extends ParserTestCase 
 {
 	
 	private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");

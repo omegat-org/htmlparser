@@ -32,10 +32,10 @@ import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.TableTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class DivScannerTest extends HTMLParserTestCase {
+public class DivScannerTest extends ParserTestCase {
 
 	public DivScannerTest(String name) {
 		super(name);

@@ -28,7 +28,7 @@
 
 package org.htmlparser.util;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 
 /**
  * The HTMLSimpleEnumeration interface is similar to HTMLEnumeration,
@@ -50,5 +50,5 @@ public interface SimpleNodeIterator {
 	 * @return The next node in the HTML stream, or null if there are no more
 	 * nodes. 
 	 */
-	public HTMLNode nextNode();
+	public Node nextNode();
 }

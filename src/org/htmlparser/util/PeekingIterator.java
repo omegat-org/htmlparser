@@ -1,6 +1,6 @@
 package org.htmlparser.util;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 
 public interface PeekingIterator extends NodeIterator{
 	/**
@@ -25,5 +25,5 @@ public interface PeekingIterator extends NodeIterator{
 	 * is later in the stream. or null if there are no more nodes available via
 	 * the above rules.
 	 */
-	public HTMLNode peek () throws ParserException;
+	public Node peek () throws ParserException;
 }

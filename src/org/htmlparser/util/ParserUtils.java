@@ -31,8 +31,8 @@ package org.htmlparser.util;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.Tag;
 
@@ -87,7 +87,7 @@ public class ParserUtils
 		return lString.toString();
 	}
 	
-	public static Hashtable adjustScanners(HTMLReader pReader) 
+	public static Hashtable adjustScanners(NodeReader pReader) 
 	{
 		Hashtable tempScanners= new Hashtable();
 		tempScanners = pReader.getParser().getScanners();		
@@ -95,7 +95,7 @@ public class ParserUtils
 		pReader.getParser().flushScanners();
 		return tempScanners;
 	}
-	public static void restoreScanners(HTMLReader pReader, Hashtable tempScanners)
+	public static void restoreScanners(NodeReader pReader, Hashtable tempScanners)
 	{
 		// Flush the scanners
 		pReader.getParser().setScanners(tempScanners);
@@ -141,10 +141,10 @@ public class ParserUtils
 	 * @param type
 	 * @return HTMLNode[]
 	 */
-	public static HTMLNode[] findTypeInNode(HTMLNode node, Class type) {
+	public static Node[] findTypeInNode(Node node, Class type) {
 		NodeList nodeList = new NodeList();
 		node.collectInto(nodeList,type);
-		HTMLNode spans [] = nodeList.toNodeArray();
+		Node spans [] = nodeList.toNodeArray();
 		return spans;
 	}	
 	

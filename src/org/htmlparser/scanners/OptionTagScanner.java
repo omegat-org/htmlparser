@@ -46,14 +46,14 @@ public class OptionTagScanner extends TagScanner
 		super(filter);
 	}
 	
-	public Tag scan(Tag tag, String pUrl, HTMLReader reader, String currLine)
+	public Tag scan(Tag tag, String pUrl, NodeReader reader, String currLine)
 			throws ParserException
 	{
 		try
 		{
 			EndTag endTag=null;
-			HTMLNode node = null;
-			HTMLNode prevNode = tag;
+			Node node = null;
+			Node prevNode = tag;
 			boolean endTagFound=false;
 			StringBuffer text=new StringBuffer("");
 			// Remove all existing scanners, so as to parse only till the end tag
@@ -75,7 +75,7 @@ public class OptionTagScanner extends TagScanner
 						}
 					}
 				}
-				else if (node instanceof HTMLStringNode)
+				else if (node instanceof StringNode)
 				{
 					text.append(node.toHTML());
 				}

@@ -29,10 +29,10 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.tags.MetaTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class MetaTagTest extends HTMLParserTestCase {
+public class MetaTagTest extends ParserTestCase {
 
 	public MetaTagTest(String name) {
 		super(name);

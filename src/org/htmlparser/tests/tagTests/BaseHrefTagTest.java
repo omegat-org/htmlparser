@@ -26,40 +26,31 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
-package org.htmlparser.scanners;
+package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.tags.BaseHREFTag;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class BaseHREFScanner extends TagScanner {
-	private LinkProcessor processor;
+public class BaseHrefTagTest extends ParserTestCase {
 
-	public BaseHREFScanner() {
-		super();
+	public BaseHrefTagTest(String name) {
+		super(name);
+	}
+	
+	public void testConstruction() {
+		BaseHrefTag baseRefTag = new BaseHrefTag(new TagData(0,0,"",""),"http://www.abc.com");
+		assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
+	}
+	
+	public void testNotHREFBaseTag() throws ParserException {
+		createParser("<base target=\"_top\">");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Should be a base tag but was "+node[0].getClass().getName(),node[0] instanceof BaseHrefTag);
+		BaseHrefTag baseTag = (BaseHrefTag)node[0];
+		assertStringEquals("Base Tag HTML","<BASE TARGET=\"_top\">",baseTag.toHTML());
 	}
 
-	public BaseHREFScanner(String filter,LinkProcessor processor) {
-		super(filter);
-		this.processor = processor;
-	}
-
-	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "BASE";
-		return ids;
-	}
-
-	protected Tag createTag(TagData tagData, Tag tag, String url)
-		throws ParserException {
-		String baseUrl = (String)tag.getAttribute("HREF");
-		String absoluteBaseUrl="";
-		if (baseUrl != null && baseUrl.length()>0) {
-			absoluteBaseUrl = LinkProcessor.removeLastSlash(baseUrl.trim());
-			processor.setBaseUrl(absoluteBaseUrl);
-		}	
-		return new BaseHREFTag(tagData,absoluteBaseUrl);
-	}
 }

@@ -28,18 +28,18 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLRemarkNode;
+import org.htmlparser.Node;
+import org.htmlparser.RemarkNode;
 import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.TextareaTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
-public class FormScannerTest extends HTMLParserTestCase {
+public class FormScannerTest extends ParserTestCase {
 	public static final String FORM_HTML =
 	"<FORM METHOD=\""+FormTag.POST+"\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
@@ -174,7 +174,7 @@ public class FormScannerTest extends HTMLParserTestCase {
 		LinkTag [] linkTag = new LinkTag[10];
 		int i = 0;
 		for (SimpleNodeIterator e=formTag.children();e.hasMoreNodes();) {
-			HTMLNode formNode = e.nextNode();
+			Node formNode = e.nextNode();
 			if (formNode instanceof LinkTag) {
 				linkTag[i++] = (LinkTag)formNode;		
 			}
@@ -204,12 +204,12 @@ public class FormScannerTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Should be a HTMLFormTag",node[0] instanceof FormTag);
 		FormTag formTag = (FormTag)node[0];
-		HTMLRemarkNode [] remarkNode = new HTMLRemarkNode[10];
+		RemarkNode [] remarkNode = new RemarkNode[10];
 		int i = 0;
 		for (SimpleNodeIterator e=formTag.children();e.hasMoreNodes();) {
-			HTMLNode formNode = (HTMLNode)e.nextNode();
-			if (formNode instanceof HTMLRemarkNode) {
-				remarkNode[i++] = (HTMLRemarkNode)formNode;		
+			Node formNode = (Node)e.nextNode();
+			if (formNode instanceof RemarkNode) {
+				remarkNode[i++] = (RemarkNode)formNode;		
 			}
 		}
 		assertEquals("Remark Node Count",1,i);
@@ -229,12 +229,12 @@ public class FormScannerTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Should be a HTMLFormTag",node[0] instanceof FormTag);
 		FormTag formTag = (FormTag)node[0];
-		HTMLRemarkNode [] remarkNode = new HTMLRemarkNode[10];
+		RemarkNode [] remarkNode = new RemarkNode[10];
 		int i = 0;
 		for (SimpleNodeIterator e=formTag.children();e.hasMoreNodes();) {
-			HTMLNode formNode = (HTMLNode)e.nextNode();
-			if (formNode instanceof HTMLRemarkNode) {
-				remarkNode[i++] = (HTMLRemarkNode)formNode;		
+			Node formNode = (Node)e.nextNode();
+			if (formNode instanceof RemarkNode) {
+				remarkNode[i++] = (RemarkNode)formNode;		
 			}
 		}
 		assertEquals("Remark Node Count",1,i);

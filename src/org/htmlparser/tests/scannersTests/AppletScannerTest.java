@@ -32,10 +32,10 @@ import java.util.Hashtable;
 
 import org.htmlparser.scanners.AppletScanner;
 import org.htmlparser.tags.AppletTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class AppletScannerTest extends HTMLParserTestCase
+public class AppletScannerTest extends ParserTestCase
 {
 
 	public AppletScannerTest(String name) {

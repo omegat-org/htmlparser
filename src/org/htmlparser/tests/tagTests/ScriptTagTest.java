@@ -30,16 +30,16 @@ package org.htmlparser.tests.tagTests;
 
 import java.util.Vector;
 
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Parser;
+import org.htmlparser.StringNode;
 import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class ScriptTagTest extends HTMLParserTestCase{
+public class ScriptTagTest extends ParserTestCase{
 	private ScriptScanner scriptScanner;
 
 	public ScriptTagTest(String name) 
@@ -54,8 +54,8 @@ public class ScriptTagTest extends HTMLParserTestCase{
 	}
 
 	public void testCreation() {
-		HTMLStringNode stringNode = 
-			new HTMLStringNode(new StringBuffer("Script Code"),0,0);
+		StringNode stringNode = 
+			new StringNode(new StringBuffer("Script Code"),0,0);
 		Vector childVector = new Vector();
 		childVector.add(stringNode);
 		ScriptTag scriptTag = 
@@ -108,7 +108,7 @@ public class ScriptTagTest extends HTMLParserTestCase{
 		String testHTML1 = new String(sb1.toString()); 
 		
 		createParser(testHTML1); 
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		// Register the image scanner 
 		parser.addScanner(new ScriptScanner("-s")); 
 		

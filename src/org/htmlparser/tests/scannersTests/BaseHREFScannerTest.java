@@ -28,24 +28,24 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import org.htmlparser.scanners.BaseHREFScanner;
+import org.htmlparser.scanners.BaseHrefScanner;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.scanners.TitleScanner;
-import org.htmlparser.tags.BaseHREFTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tags.BaseHrefTag;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
-public class BaseHREFScannerTest extends HTMLParserTestCase {
+public class BaseHREFScannerTest extends ParserTestCase {
 
-	private BaseHREFScanner scanner;
+	private BaseHrefScanner scanner;
 
 	public BaseHREFScannerTest(String arg0) {
 		super(arg0);
 	}
 	
 	protected void setUp() {
-		scanner=new BaseHREFScanner();
+		scanner=new BaseHrefScanner();
 	}
 
 	public void testRemoveLastSlash() {
@@ -72,8 +72,8 @@ public class BaseHREFScannerTest extends HTMLParserTestCase {
 		parser.addScanner(linkScanner.createBaseHREFScanner("-b"));
 		parseAndAssertNodeCount(7);
 		//Base href tag should be the 4th tag
-		assertTrue(node[3] instanceof BaseHREFTag);
-		BaseHREFTag baseRefTag = (BaseHREFTag)node[3];
+		assertTrue(node[3] instanceof BaseHrefTag);
+		BaseHrefTag baseRefTag = (BaseHrefTag)node[3];
 		assertEquals("Base HREF Url","http://www.abc.com",baseRefTag.getBaseUrl());	
 	}
 	

@@ -38,7 +38,7 @@ import org.htmlparser.visitors.NodeVisitor;
 /**
  * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)
  */
-public abstract class HTMLNode
+public abstract class Node
     implements
         Serializable
 {
@@ -60,7 +60,7 @@ public abstract class HTMLNode
 	 */
     protected static String lineSeparator = System.getProperty ("line.separator", "\n");
 
-	public HTMLNode(int nodeBegin, int nodeEnd) {
+	public Node(int nodeBegin, int nodeEnd) {
 		this.nodeBegin = nodeBegin;
 		this.nodeEnd = nodeEnd;
 	}
@@ -70,7 +70,7 @@ public abstract class HTMLNode
 	 */
 	public static void setLineSeparator(String lineSeparator)
 	{
-		HTMLNode.lineSeparator = lineSeparator;	
+		Node.lineSeparator = lineSeparator;	
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public abstract class HTMLNode
 	 */
 	public static String getLineSeparator()
 	{
-		return HTMLNode.lineSeparator;
+		return Node.lineSeparator;
 	}
 
 	/**

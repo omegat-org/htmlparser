@@ -28,8 +28,8 @@
 
 package org.htmlparser.visitors;
 
-import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
@@ -50,7 +50,7 @@ public abstract class NodeVisitor {
 		
 	}
 
-	public void visitStringNode(HTMLStringNode stringNode) {
+	public void visitStringNode(StringNode stringNode) {
 	}
 	
 	public void visitLinkTag(LinkTag linkTag) {
@@ -63,7 +63,7 @@ public abstract class NodeVisitor {
 		
 	}
 	
-	public void visitRemarkNode(HTMLRemarkNode remarkNode) {
+	public void visitRemarkNode(RemarkNode remarkNode) {
 		
 	}
 	

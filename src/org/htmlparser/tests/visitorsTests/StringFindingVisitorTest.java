@@ -1,9 +1,9 @@
 package org.htmlparser.tests.visitorsTests;
 
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.StringFindingVisitor;
 
-public class StringFindingVisitorTest extends HTMLParserTestCase {
+public class StringFindingVisitorTest extends ParserTestCase {
 	private static final String HTML = 
 		"<HTML><HEAD><TITLE>This is the Title</TITLE>" +
 		"</HEAD><BODY>Hello World, this is an excellent parser</BODY></HTML>";

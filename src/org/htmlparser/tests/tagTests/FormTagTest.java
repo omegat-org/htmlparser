@@ -28,17 +28,17 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.tests.scannersTests.FormScannerTest;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
 
-public class FormTagTest extends HTMLParserTestCase {
+public class FormTagTest extends ParserTestCase {
 
 	public FormTagTest(String name) {
 		super(name);
@@ -79,11 +79,11 @@ public class FormTagTest extends HTMLParserTestCase {
 		NodeList nodeList = formTag.searchFor("USER NAME");
 		assertEquals("Should have found nodes",1,nodeList.size());
 		
-		HTMLNode [] nodes = nodeList.toNodeArray();
+		Node [] nodes = nodeList.toNodeArray();
 		
 		assertEquals("Number of nodes founs",1,nodes.length);
-		assertTrue("Should have found a string node",nodes[0] instanceof HTMLStringNode);
-		HTMLStringNode stringNode = (HTMLStringNode)nodes[0];
+		assertTrue("Should have found a string node",nodes[0] instanceof StringNode);
+		StringNode stringNode = (StringNode)nodes[0];
 		assertEquals("Expected contents of string node","User Name",stringNode.getText());
 	}
 

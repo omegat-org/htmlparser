@@ -29,8 +29,8 @@
 // This class was contributed by Joshua Kerievsky
 
 package org.htmlparser.visitors;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Parser;
+import org.htmlparser.StringNode;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ImageTag;
@@ -41,9 +41,9 @@ import org.htmlparser.visitors.NodeVisitor;
 public class UrlModifyingVisitor extends NodeVisitor {
 	private String linkPrefix;
 	private StringBuffer modifiedResult;
-	private HTMLParser parser;
+	private Parser parser;
 	
-	public UrlModifyingVisitor(HTMLParser parser, String linkPrefix) {
+	public UrlModifyingVisitor(Parser parser, String linkPrefix) {
 		this.parser = parser;
 		LinkScanner linkScanner = new LinkScanner();  
 		parser.addScanner(linkScanner);
@@ -69,7 +69,7 @@ public class UrlModifyingVisitor extends NodeVisitor {
 		modifiedResult.append(endTag.toHTML());
 	}
 
-	public void visitStringNode(HTMLStringNode stringNode) {
+	public void visitStringNode(StringNode stringNode) {
 		modifiedResult.append(stringNode.toHTML());
 	}
 

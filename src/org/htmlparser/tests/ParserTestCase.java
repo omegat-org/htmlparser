@@ -6,10 +6,10 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.NodeReader;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
@@ -19,13 +19,13 @@ import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 
-public class HTMLParserTestCase extends TestCase {
-	protected HTMLParser parser;
-	protected HTMLNode node [];
+public class ParserTestCase extends TestCase {
+	protected Parser parser;
+	protected Node node [];
 	protected int nodeCount;
-	protected HTMLReader reader;
+	protected NodeReader reader;
 	
-	public HTMLParserTestCase(String name) {
+	public ParserTestCase(String name) {
 		super(name);
 	}
 
@@ -38,33 +38,33 @@ public class HTMLParserTestCase extends TestCase {
 	protected void createParser(String inputHTML) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
-		reader =  new HTMLReader(new BufferedReader(sr),5000);
-		parser = new HTMLParser(reader,new DefaultParserFeedback());
-		node = new HTMLNode[40];
+		reader =  new NodeReader(new BufferedReader(sr),5000);
+		parser = new Parser(reader,new DefaultParserFeedback());
+		node = new Node[40];
 	}
 
 	protected void createParser(String inputHTML,int numNodes) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
-		reader =  new HTMLReader(new BufferedReader(sr),5000);
-		parser = new HTMLParser(reader,new DefaultParserFeedback());
-		node = new HTMLNode[numNodes];
+		reader =  new NodeReader(new BufferedReader(sr),5000);
+		parser = new Parser(reader,new DefaultParserFeedback());
+		node = new Node[numNodes];
 	}
 
 	protected void createParser(String inputHTML, String url) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
-		reader =  new HTMLReader(new BufferedReader(sr),url);
-		parser = new HTMLParser(reader,new DefaultParserFeedback());
-		node = new HTMLNode[40];
+		reader =  new NodeReader(new BufferedReader(sr),url);
+		parser = new Parser(reader,new DefaultParserFeedback());
+		node = new Node[40];
 	}
 
 	protected void createParser(String inputHTML, String url,int numNodes) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
-		reader =  new HTMLReader(new BufferedReader(sr),url);
-		parser = new HTMLParser(reader,new DefaultParserFeedback());
-		node = new HTMLNode[numNodes];
+		reader =  new NodeReader(new BufferedReader(sr),url);
+		parser = new Parser(reader,new DefaultParserFeedback());
+		node = new Node[numNodes];
 	}
 	
 	public void assertStringEquals(String message, String expected, 
@@ -138,9 +138,9 @@ public class HTMLParserTestCase extends TestCase {
 		"\n\nActual XML:\n"+result;
 		expected = removeEscapeCharacters(expected);
 		result   = removeEscapeCharacters(result);
-		HTMLParser expectedParser = HTMLParser.createParser(expected);
-		HTMLParser resultParser   = HTMLParser.createParser(result);
-		HTMLNode expectedNode, actualNode;
+		Parser expectedParser = Parser.createParser(expected);
+		Parser resultParser   = Parser.createParser(result);
+		Node expectedNode, actualNode;
 		NodeIterator actualEnumeration = resultParser.elements();
 		for (NodeIterator e = expectedParser.elements();e.hasMoreNodes();) {
 			expectedNode = e.nextNode();
@@ -169,13 +169,13 @@ public class HTMLParserTestCase extends TestCase {
 
 	private void assertStringNodeEquals(
 		String displayMessage,
-		HTMLNode expectedNode,
-		HTMLNode actualNode) {
-		if (expectedNode instanceof HTMLStringNode) {
-			HTMLStringNode expectedString = 
-				(HTMLStringNode)expectedNode;
-			HTMLStringNode actualString = 
-				(HTMLStringNode)actualNode;
+		Node expectedNode,
+		Node actualNode) {
+		if (expectedNode instanceof StringNode) {
+			StringNode expectedString = 
+				(StringNode)expectedNode;
+			StringNode actualString = 
+				(StringNode)actualNode;
 			assertStringEquals(
 				displayMessage,
 				expectedString.getText(), 
@@ -186,8 +186,8 @@ public class HTMLParserTestCase extends TestCase {
 
 	private void assertTagEquals(
 		String displayMessage,
-		HTMLNode expectedNode,
-		HTMLNode actualNode,
+		Node expectedNode,
+		Node actualNode,
 		NodeIterator actualEnumeration)
 		throws ParserException {
 		
@@ -197,7 +197,7 @@ public class HTMLParserTestCase extends TestCase {
 			if (isTagAnXmlEndTag(expectedTag)) {
 				if (!isTagAnXmlEndTag(actualTag)) {
 					assertTagEquals(displayMessage, expectedTag, actualTag);
-					HTMLNode tempNode =
+					Node tempNode =
 						actualEnumeration.nextNode();
 					assertTrue(
 						"should be an end tag but was "+

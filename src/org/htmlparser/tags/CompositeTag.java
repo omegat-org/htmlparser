@@ -28,7 +28,7 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
@@ -50,7 +50,7 @@ public abstract class CompositeTag extends Tag {
 		return childTags.elements();
 	}
 
-	public HTMLNode getChild(int index) {
+	public Node getChild(int index) {
 		return childTags.elementAt(index);	
 	}
 	
@@ -67,7 +67,7 @@ public abstract class CompositeTag extends Tag {
 	}
 
 	protected void putChildrenInto(StringBuffer sb) {
-		HTMLNode node,prevNode=startTag;
+		Node node,prevNode=startTag;
 		for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			if (prevNode!=null) {
@@ -102,11 +102,11 @@ public abstract class CompositeTag extends Tag {
 	 * @return HTMLTag Tag matching the name attribute
 	 */
 	public Tag searchByName(String name) {
-		HTMLNode node;
+		Node node;
 		Tag tag=null;
 		boolean found = false;
 		for (SimpleNodeIterator e = children();e.hasMoreNodes() && !found;) {
-			node = (HTMLNode)e.nextNode();
+			node = (Node)e.nextNode();
 			if (node instanceof Tag) {
 				tag = (Tag)node;
 				String nameAttribute = tag.getAttribute("NAME");
@@ -136,7 +136,7 @@ public abstract class CompositeTag extends Tag {
 
 	public NodeList searchFor(String searchString, boolean caseSensitive) {
 		NodeList foundVector = new NodeList();
-		HTMLNode node;
+		Node node;
 		if (!caseSensitive) searchString = searchString.toUpperCase();
 		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			node = e.nextNode();
@@ -158,7 +158,7 @@ public abstract class CompositeTag extends Tag {
 	 */
 	public NodeList searchFor(Class classType) {
 		NodeList foundVector = new NodeList();
-		HTMLNode node;
+		Node node;
 		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			if (node.getClass().getName().equals(classType.getName())) 
@@ -191,7 +191,7 @@ public abstract class CompositeTag extends Tag {
 	 * @return int
 	 */
 	public int findPositionOf(String text) {
-		HTMLNode node;
+		Node node;
 		int loc = 0;
 		for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
 			node = e.nextNode();
@@ -208,13 +208,13 @@ public abstract class CompositeTag extends Tag {
 	 * @param index
 	 * @return HTMLNode
 	 */
-	public HTMLNode childAt(int index) {
+	public Node childAt(int index) {
 		return childTags.elementAt(index);
 	}
 	
 	public void collectInto(NodeList collectionList, String filter) {
 		super.collectInto(collectionList, filter);
-		HTMLNode node;
+		Node node;
 		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			node.collectInto(collectionList,filter);
@@ -231,7 +231,7 @@ public abstract class CompositeTag extends Tag {
 	public String getChildrenHTML() {
 		StringBuffer buff = new StringBuffer();
 		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
-			HTMLNode node = (HTMLNode)e.nextNode();
+			Node node = (Node)e.nextNode();
 			buff.append(node.toHTML());
 		}
 		return buff.toString();
@@ -242,7 +242,7 @@ public abstract class CompositeTag extends Tag {
 			startTag.accept(visitor);
 			SimpleNodeIterator children = children();
 			while (children.hasMoreNodes()) {
-				HTMLNode child = (HTMLNode)children.nextNode();
+				Node child = (Node)children.nextNode();
 				child.accept(visitor);
 			}
 			endTag.accept(visitor);

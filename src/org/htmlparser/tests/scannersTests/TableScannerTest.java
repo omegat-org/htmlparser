@@ -31,9 +31,9 @@ package org.htmlparser.tests.scannersTests;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 
-public class TableScannerTest extends HTMLParserTestCase {
+public class TableScannerTest extends ParserTestCase {
 	
 	public TableScannerTest(String name) {
 		super(name);

@@ -30,7 +30,7 @@
 
 package org.htmlparser.visitors;
 
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.StringNode;
 
 public class StringFindingVisitor extends NodeVisitor {
 	private boolean stringFound = false;
@@ -48,7 +48,7 @@ public class StringFindingVisitor extends NodeVisitor {
 		multipleSearchesWithinStrings = true;
 	}
 	
-	public void visitStringNode(HTMLStringNode stringNode) {
+	public void visitStringNode(StringNode stringNode) {
 		String stringToBeSearched = stringNode.getText().toUpperCase();
 		if (!multipleSearchesWithinStrings && 
 			stringToBeSearched.indexOf(stringToFind) != -1) {

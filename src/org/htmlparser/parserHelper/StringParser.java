@@ -28,9 +28,9 @@
 
 package org.htmlparser.parserHelper;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
+import org.htmlparser.StringNode;
 
 public class StringParser {
 	private final static int BEFORE_PARSE_BEGINS_STATE=0;	
@@ -40,7 +40,7 @@ public class StringParser {
 	private boolean ignoreStateMode=false;
 
 	
-	public HTMLNode find(HTMLReader reader,String input,int position) {
+	public Node find(NodeReader reader,String input,int position) {
 		return find(reader, input, position, ignoreStateMode);	
 	}
 	
@@ -52,7 +52,7 @@ public class StringParser {
 	 * @param ignoreStateMode enter ignoring state - if set, will enter ignoring
 	 * state on encountering apostrophes
 	 */		
-	public HTMLNode find(HTMLReader reader,String input,int position, boolean ignoreStateMode)
+	public Node find(NodeReader reader,String input,int position, boolean ignoreStateMode)
 	{
 		StringBuffer textBuffer = new StringBuffer();
 		int state = BEFORE_PARSE_BEGINS_STATE;
@@ -107,7 +107,7 @@ public class StringParser {
 				do {
 					input = reader.getNextLine();
 					if (input!=null && input.length()==0)
-						textBuffer.append(HTMLNode.getLineSeparator());
+						textBuffer.append(Node.getLineSeparator());
 				}
 				while (input!=null && input.length()==0);
 				
@@ -116,14 +116,14 @@ public class StringParser {
 					state =PARSE_COMPLETED_STATE;
 					
 				} else {
-					textBuffer.append(HTMLNode.getLineSeparator());
+					textBuffer.append(Node.getLineSeparator());
 					inputLen = input.length();
 					i=-1;
 				}
 
 			}
 		}
-		return new HTMLStringNode(textBuffer,textBegin,textEnd);
+		return new StringNode(textBuffer,textBegin,textEnd);
 	}
 	
 	public boolean isIgnoreStateMode() {

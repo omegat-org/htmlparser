@@ -28,16 +28,16 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Parser;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.LinkData;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class LinkTagTest extends HTMLParserTestCase {
+public class LinkTagTest extends ParserTestCase {
 
 	public LinkTagTest(String name) {
 		super(name);
@@ -126,7 +126,7 @@ public class LinkTagTest extends HTMLParserTestCase {
 		createParser("<a href=http://note.kimo.com.tw/>筆記</a>&nbsp; <a \n"+
 		"href=http://photo.kimo.com.tw/>相簿</a>&nbsp; <a\n"+
 		"href=http://address.kimo.com.tw/>通訊錄</a>&nbsp;&nbsp;","http://www.cj.com");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		// Register the image scanner
 		parser.addScanner(new LinkScanner("-l"));
 			
@@ -271,7 +271,7 @@ public class LinkTagTest extends HTMLParserTestCase {
 			"<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font><a \n"+
 			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
 			"nical.html\"> Journalism 3.0</a> by Rajesh Jain","http://www.cj.com/");
-		HTMLParser.setLineSeparator("\r\n");
+		Parser.setLineSeparator("\r\n");
 		// Register the image scanner
 		parser.addScanner(new LinkScanner("-l"));
 			

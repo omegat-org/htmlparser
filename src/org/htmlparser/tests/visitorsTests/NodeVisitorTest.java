@@ -3,12 +3,12 @@ package org.htmlparser.tests.visitorsTests;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.NodeVisitor;
 
-public class NodeVisitorTest extends HTMLParserTestCase {
+public class NodeVisitorTest extends ParserTestCase {
 
 	public NodeVisitorTest(String name) {
 		super(name);
@@ -35,7 +35,7 @@ public class NodeVisitorTest extends HTMLParserTestCase {
 			return (String)paramsMap.get(key);
 		}
 		
-		public void visitStringNode(HTMLStringNode stringNode) {
+		public void visitStringNode(StringNode stringNode) {
 			paramsMap.put(lastKeyVisited,stringNode.getText());
 		}
 		

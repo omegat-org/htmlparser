@@ -31,10 +31,10 @@ package org.htmlparser.tests.scannersTests;
 import org.htmlparser.scanners.MetaTagScanner;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.MetaTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class MetaTagScannerTest extends HTMLParserTestCase {
+public class MetaTagScannerTest extends ParserTestCase {
 
 	public MetaTagScannerTest(String name) {
 		super(name);

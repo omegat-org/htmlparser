@@ -39,10 +39,10 @@ import org.htmlparser.tags.data.TagData;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-public class BaseHREFTag extends Tag {
+public class BaseHrefTag extends Tag {
 	private String baseUrl;
 
-	public BaseHREFTag(TagData tagData, String baseUrl) {
+	public BaseHrefTag(TagData tagData, String baseUrl) {
 		super(tagData);
 		this.baseUrl = baseUrl;
 	}

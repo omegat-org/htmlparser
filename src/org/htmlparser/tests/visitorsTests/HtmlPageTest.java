@@ -1,15 +1,15 @@
 package org.htmlparser.tests.visitorsTests;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.HtmlPage;
 
-public class HtmlPageTest extends HTMLParserTestCase {
+public class HtmlPageTest extends ParserTestCase {
 
 	private static final String SIMPLE_PAGE = 
 		"<html>" +			"<head>" +				"<title>Welcome to the HTMLParser website</title>" +			"</head>" +			"<body>" +				"Welcome to HTMLParser" +
@@ -41,9 +41,9 @@ public class HtmlPageTest extends HTMLParserTestCase {
 		);
 		NodeList bodyNodes = page.getBody();
 		assertEquals("number of nodes in body",1,bodyNodes.size());
-		HTMLNode node = bodyNodes.elementAt(0);
+		Node node = bodyNodes.elementAt(0);
 		assertTrue("expected stringNode but was "+node.getClass().getName(),
-			node instanceof HTMLStringNode
+			node instanceof StringNode
 		);
 		assertStringEquals(
 			"body contents",

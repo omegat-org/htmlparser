@@ -29,10 +29,10 @@
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.tags.Div;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class XmlEndTagScanningTest extends HTMLParserTestCase{
+public class XmlEndTagScanningTest extends ParserTestCase{
 
 	public XmlEndTagScanningTest(String name) {
 		super(name);

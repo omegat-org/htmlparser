@@ -1,6 +1,6 @@
 package org.htmlparser.tests;
 
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Parser;
 import org.htmlparser.visitors.TagFindingVisitor;
 
 public class BadTagIdentifier {
@@ -21,8 +21,8 @@ public class BadTagIdentifier {
 		String [] tagsBeingChecked = 
 		{"TABLE","DIV","SPAN"};
 		
-		HTMLParser parser =
-			new HTMLParser("http://www.amazon.com");
+		Parser parser =
+			new Parser("http://www.amazon.com");
 		TagFindingVisitor tagFinder =
 			new TagFindingVisitor(tagsBeingChecked, true);
 		parser.visitAllNodesWith(tagFinder);

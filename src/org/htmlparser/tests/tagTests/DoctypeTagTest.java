@@ -29,10 +29,10 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.tags.DoctypeTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class DoctypeTagTest extends HTMLParserTestCase {
+public class DoctypeTagTest extends ParserTestCase {
 
 	public DoctypeTagTest(String name) {
 		super(name);

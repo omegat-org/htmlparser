@@ -3,8 +3,8 @@ package org.htmlparser.tests;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tests.scannersTests.FormScannerTest;
 import org.htmlparser.util.NodeIterator;
@@ -14,13 +14,13 @@ public class InstanceofPerformanceTest {
 	FormTag formTag;
 	Vector formChildren;
 	public void setUp() throws Exception {
-		HTMLParser parser =
-			HTMLParser.createParser(
+		Parser parser =
+			Parser.createParser(
 				FormScannerTest.FORM_HTML
 			);
 		parser.registerScanners();
 		NodeIterator e = parser.elements();
-		HTMLNode node = e.nextNode();
+		Node node = e.nextNode();
 		formTag = (FormTag)node;
 		formChildren = new Vector();
 		for (SimpleNodeIterator se = formTag.children();se.hasMoreNodes();) {
@@ -33,7 +33,7 @@ public class InstanceofPerformanceTest {
 		long start = System.currentTimeMillis();
 		for (long i=0;i<numTimes;i++) {
 			for (Enumeration e = formChildren.elements();e.hasMoreElements();) {
-				HTMLNode node = (HTMLNode)e.nextElement();				
+				Node node = (Node)e.nextElement();				
 			}
 		}
 		long end = System.currentTimeMillis();
@@ -45,7 +45,7 @@ public class InstanceofPerformanceTest {
 		long start = System.currentTimeMillis();
 		for (long i=0;i<numTimes;i++) {
 			for (SimpleNodeIterator e = formTag.children();e.hasMoreNodes();) {
-				HTMLNode node = e.nextNode();
+				Node node = e.nextNode();
 			}
 		}
 		long end = System.currentTimeMillis();

@@ -31,12 +31,12 @@ package org.htmlparser.util;
 import java.io.Serializable;
 import java.util.NoSuchElementException;
 
-import org.htmlparser.HTMLNode;
+import org.htmlparser.Node;
 
 public class NodeList implements Serializable {
 	private static final int INITIAL_CAPACITY=10;
 	//private static final int CAPACITY_INCREMENT=20;
-	private HTMLNode nodeData[];
+	private Node nodeData[];
 	private int size;
 	private int capacity;
 	private int capacityIncrement;
@@ -45,12 +45,12 @@ public class NodeList implements Serializable {
 	public NodeList() {
 		size = 0;
 		capacity = INITIAL_CAPACITY;
-		nodeData = new HTMLNode[capacity];
+		nodeData = new Node[capacity];
 		capacityIncrement = capacity*2;
 		numberOfAdjustments = 0;
 	}
 	
-	public void add(HTMLNode node) {
+	public void add(Node node) {
 		if (size==capacity) 
 			adjustVectorCapacity();
 		nodeData[size++]=node;
@@ -59,8 +59,8 @@ public class NodeList implements Serializable {
 	private void adjustVectorCapacity() {
 		capacity += capacityIncrement;
 		capacityIncrement *= 2;
-		HTMLNode oldData [] = nodeData;
-		nodeData = new HTMLNode[capacity];
+		Node oldData [] = nodeData;
+		nodeData = new Node[capacity];
 		System.arraycopy(oldData, 0, nodeData, 0, size);
 		numberOfAdjustments++;
 	}
@@ -69,7 +69,7 @@ public class NodeList implements Serializable {
 		return size;
 	}
 	
-	public HTMLNode elementAt(int i) {
+	public Node elementAt(int i) {
 		return nodeData[i];
 	}
 
@@ -85,7 +85,7 @@ public class NodeList implements Serializable {
 				return count < size;
 			}
 	
-			public HTMLNode nextNode() {
+			public Node nextNode() {
 			synchronized (NodeList.this) {
 				if (count < size) {
 				return nodeData[count++];
@@ -96,8 +96,8 @@ public class NodeList implements Serializable {
 		};
 	}
 	
-	public HTMLNode [] toNodeArray() {
-		HTMLNode [] nodeArray = new HTMLNode[size];
+	public Node [] toNodeArray() {
+		Node [] nodeArray = new Node[size];
 		System.arraycopy(nodeData, 0, nodeArray, 0, size);		
 		return nodeArray;
 	}

@@ -30,8 +30,8 @@ package org.htmlparser.parserHelper;
 
 import java.util.StringTokenizer;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.*;
 import org.htmlparser.util.ParserFeedback;
@@ -58,7 +58,7 @@ public class TagParser {
 	public TagParser(ParserFeedback feedback) {
 		this.feedback = feedback;
 	}
-	public Tag find(HTMLReader reader,String input,int position) {
+	public Tag find(NodeReader reader,String input,int position) {
 		int state = TAG_BEFORE_PARSING_STATE;
 		StringBuffer tagContents = new StringBuffer();
 		i=position;
@@ -217,7 +217,7 @@ public class TagParser {
 		}
 		return state;
 	}	
-	public int incrementCounter(HTMLReader reader, int state, Tag tag) {
+	public int incrementCounter(NodeReader reader, int state, Tag tag) {
 		String nextLine = null;
 		if ((state==TAG_BEGIN_PARSING_STATE || state == TAG_IGNORE_DATA_STATE) && i==tag.getTagLine().length()-1)
 		{
@@ -233,7 +233,7 @@ public class TagParser {
 				nextLine = ">";
 			} else {
 				// This means this is just a new line, hence add the new line character
-				tag.append(HTMLNode.getLineSeparator());
+				tag.append(Node.getLineSeparator());
 			}
 
 			// We need to continue parsing to the next line

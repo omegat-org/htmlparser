@@ -33,10 +33,10 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.net.URLConnection;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.LinkTag;
@@ -95,7 +95,7 @@ public class StringBean implements Serializable
     /**
      * The parser used to extract strings.
      */
-    protected HTMLParser mParser;
+    protected Parser mParser;
 
     /** Creates new StringBean */
     public StringBean ()
@@ -103,7 +103,7 @@ public class StringBean implements Serializable
         mPropertySupport = new PropertyChangeSupport (this);
         mStrings = null;
         mLinks = false;
-        mParser = new HTMLParser ();
+        mParser = new Parser ();
     }
 
     //
@@ -196,7 +196,7 @@ public class StringBean implements Serializable
         throws
             ParserException
     {
-        HTMLNode node;
+        Node node;
         Tag tag;
         boolean preformatted;
         StringBuffer results;
@@ -208,11 +208,11 @@ public class StringBean implements Serializable
         for (NodeIterator e = mParser.elements (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
-            if (node instanceof HTMLStringNode)
+            if (node instanceof StringNode)
             {
                 // node is a plain string
                 // cast it to an HTMLStringNode
-                HTMLStringNode string = (HTMLStringNode)node;
+                StringNode string = (StringNode)node;
                 // retrieve the data from the object
                 if (preformatted)
                     results.append (string.getText ());
@@ -246,7 +246,7 @@ public class StringBean implements Serializable
                 else
                     collapse (results, Translate.decode (form.toPlainTextString ()));
             }
-            else if (node instanceof HTMLRemarkNode)
+            else if (node instanceof RemarkNode)
             {
                 // skip comments
             }

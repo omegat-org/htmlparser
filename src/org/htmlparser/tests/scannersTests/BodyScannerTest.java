@@ -31,11 +31,11 @@ package org.htmlparser.tests.scannersTests;
 import junit.framework.*;
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.tags.BodyTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
 
-public class BodyScannerTest extends HTMLParserTestCase {
+public class BodyScannerTest extends ParserTestCase {
 
 	public BodyScannerTest(String name) {
 		super(name);

@@ -30,8 +30,8 @@
 package org.htmlparser.parserapplications;
 
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -42,11 +42,11 @@ import org.htmlparser.util.ParserException;
  */
 public class LinkExtractor {
 	private String location;
-	private HTMLParser parser;
+	private Parser parser;
 	public LinkExtractor(String location) {
 		this.location = location;
 		try {
-			this.parser   = new HTMLParser(location); // Create the parser object
+			this.parser   = new Parser(location); // Create the parser object
 			parser.registerScanners(); // Register standard scanners (Very Important)
 		}
 		catch (ParserException e) {
@@ -55,7 +55,7 @@ public class LinkExtractor {
 		
 	}
 	public void extractLinks() throws ParserException {
-		HTMLNode node;
+		Node node;
 		LinkTag linkTag;
 		System.out.println("Parsing "+location+" for links...");
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {

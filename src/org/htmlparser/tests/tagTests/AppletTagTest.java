@@ -31,10 +31,10 @@ package org.htmlparser.tests.tagTests;
 import java.util.Hashtable;
 
 import org.htmlparser.tags.AppletTag;
-import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class AppletTagTest extends HTMLParserTestCase {
+public class AppletTagTest extends ParserTestCase {
 
 	public AppletTagTest(String name) {
 		super(name);

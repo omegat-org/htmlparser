@@ -46,7 +46,7 @@ public class RemarkNodeParser {
 	 * @param input Input String
 	 * @param position Position to start parsing from
 	 */	
-	public HTMLRemarkNode find(HTMLReader reader,String input,int position)
+	public RemarkNode find(NodeReader reader,String input,int position)
 	{
 		int state = REMARK_NODE_BEFORE_PARSING_STATE;
 		StringBuffer tagContents = new StringBuffer();
@@ -148,7 +148,7 @@ public class RemarkNodeParser {
 			{
 				// We need to continue parsing to the next line
 				//input = reader.getNextLine();
-				tagContents.append(HTMLNode.getLineSeparator());
+				tagContents.append(Node.getLineSeparator());
 				do {
 					input = reader.getNextLine();		
 				}
@@ -165,7 +165,7 @@ public class RemarkNodeParser {
 			prevChar = ch;
 		}
 		if (state==REMARK_NODE_ACCEPTED_STATE)
-		return new HTMLRemarkNode(tagBegin,tagEnd,tagContents.toString());
+		return new RemarkNode(tagBegin,tagEnd,tagContents.toString());
 		else
 		return null;	
 	}

@@ -31,8 +31,8 @@ package org.htmlparser.scanners;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
@@ -57,7 +57,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 		this.stringNodeIgnoreMode = stringNodeIgnoreMode;
 	}
 	
-	public Tag scan(Tag tag, String url, HTMLReader reader,String currLine)
+	public Tag scan(Tag tag, String url, NodeReader reader,String currLine)
 		throws ParserException {
 		Tag endTag=null; 
 		try {
@@ -66,7 +66,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 			Tag startTag = tag;
 			endTag = null;
 			boolean endTagFound = false;
-			HTMLNode node=tag;
+			Node node=tag;
 			
 			Vector childVector = new Vector();
 			
@@ -129,7 +129,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 	protected void beforeScanningStarts() {
 	}
 	
-	protected void childNodeEncountered(HTMLNode node) {
+	protected void childNodeEncountered(Node node) {
 	}
 
 	protected abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData);

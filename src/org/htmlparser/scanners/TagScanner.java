@@ -33,9 +33,9 @@ package org.htmlparser.scanners;
 import java.io.Serializable;
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLStringNode;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
@@ -125,7 +125,7 @@ public abstract class TagScanner
 	  public boolean evaluate(String s,TagScanner previousOpenScanner) {
 	  	return true;
 	  }
-	  public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) throws ParserException{
+	  public static String extractXMLData(Node node, String tagName, NodeReader reader) throws ParserException{
 		try {	  
 		  String xmlData = "";
 	
@@ -135,15 +135,15 @@ public abstract class TagScanner
 	      do {
 	        node = reader.readElement();
 	        if (node!=null) {
-	          if (node instanceof HTMLStringNode) {
-	            HTMLStringNode stringNode = (HTMLStringNode)node;
+	          if (node instanceof StringNode) {
+	            StringNode stringNode = (StringNode)node;
 	            if (xmlData.length()>0) xmlData+=" ";
 	        xmlData += stringNode.getText();
 	      } else if (!(node instanceof org.htmlparser.tags.EndTag))
 	        xmlTagFound = false;
 	    }
 	  }
-	  while (node instanceof HTMLStringNode);
+	  while (node instanceof StringNode);
 	  
 	}
 	
@@ -178,7 +178,7 @@ public abstract class TagScanner
 	 * Insert the method's description here.
 	 * Creation date: (10/24/2001 6:27:02 PM)
 	 */
-	public static boolean isXMLTagFound(HTMLNode node, String tagName) {
+	public static boolean isXMLTagFound(Node node, String tagName) {
 		boolean xmlTagFound=false;
 		if (node instanceof Tag) {
 			Tag tag = (Tag)node;
@@ -189,7 +189,7 @@ public abstract class TagScanner
 		return xmlTagFound;
 	}
 	
-	public final Tag createScannedNode(Tag tag,String url,HTMLReader reader,String currLine) throws ParserException {
+	public final Tag createScannedNode(Tag tag,String url,NodeReader reader,String currLine) throws ParserException {
 		Tag thisTag = scan(tag,url,reader,currLine);
 		thisTag.setThisScanner(this);
 		thisTag.setAttributes(tag.getAttributes());		
@@ -206,7 +206,7 @@ public abstract class TagScanner
 	 * @param url The initiating url of the scan (Where the html page lies)
 	 * @param reader The reader object responsible for reading the html page
 	 */
-  	public Tag scan(Tag tag,String url,HTMLReader reader,String currLine) throws ParserException {
+  	public Tag scan(Tag tag,String url,NodeReader reader,String currLine) throws ParserException {
   		return createTag(new TagData(
 			tag.elementBegin(), 
 			tag.elementEnd(), 
@@ -237,7 +237,7 @@ public abstract class TagScanner
 	  	this.feedback = feedback;
 	}
 	
-	public static Hashtable adjustScanners(HTMLReader pReader) 
+	public static Hashtable adjustScanners(NodeReader pReader) 
 	{
 		Hashtable tempScanners= new Hashtable();
 		tempScanners = pReader.getParser().getScanners();		
@@ -246,7 +246,7 @@ public abstract class TagScanner
 		return tempScanners;
 	}
 	
-	public static void restoreScanners(HTMLReader pReader, Hashtable tempScanners)
+	public static void restoreScanners(NodeReader pReader, Hashtable tempScanners)
 	{
 		// Flush the scanners
 		pReader.getParser().setScanners(tempScanners);
@@ -255,7 +255,7 @@ public abstract class TagScanner
 	/**
 	 * Insert an EndTag in the currentLine, just before the occurence of the provided tag
 	 */
-	public String insertEndTagBeforeNode(HTMLNode node, String currentLine) {
+	public String insertEndTagBeforeNode(Node node, String currentLine) {
 		String newLine = currentLine.substring(0,node.elementBegin());
 		newLine += "</A>";
 		newLine += currentLine.substring(node.elementBegin(),currentLine.length());
