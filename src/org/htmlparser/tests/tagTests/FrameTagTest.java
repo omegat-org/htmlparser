@@ -54,7 +54,7 @@ public class FrameTagTest extends ParserTestCase {
 		FrameTag frameTag1 = (FrameTag)node[1];
 		FrameTag frameTag2 = (FrameTag)node[2];		
 		
-		assertStringEquals("Frame 1 toHTML()","<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE=\"\">",frameTag1.toHtml());
+		assertStringEquals("Frame 1 toHTML()","<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE>",frameTag1.toHtml());
 		assertStringEquals("Frame 2 toHTML()","<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">",frameTag2.toHtml());		
 	}
 }

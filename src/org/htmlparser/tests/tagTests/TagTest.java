@@ -164,7 +164,7 @@ public class TagTest extends ParserTestCase
                 nice = (String)h.get("YOURPARAMETER");
                 assertEquals ("Link tag (A)","A",a);
                 assertEquals ("href value","http://www.iki.fi/kaila",href);
-                assertEquals ("myparameter value","",myValue);
+                assertEquals ("myparameter value",null,myValue);
                 assertEquals ("yourparameter value","Kaarle Kaaila",nice);
             }
             if (!(node instanceof LinkTag)) {
@@ -235,7 +235,7 @@ public class TagTest extends ParserTestCase
                 nice = (String)h.get("YOURPARAMETER");
                 assertEquals ("The tagname should be G",a,"G");
                 assertEquals ("Check the http address",href,"http://www.iki.fi/kaila");
-                assertEquals ("myValue is empty",myValue,"");
+                assertEquals ("myValue is not null",myValue,null);
                 assertEquals ("The second parameter value",nice,"Kaila");
             }
             if (en.hasMoreNodes()) {
@@ -375,7 +375,7 @@ public class TagTest extends ParserTestCase
 		// The node should be an Tag
 		assertTrue("1st Node should be a Tag",node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
-		assertStringEquals("toHTML()","<MYTAG EFGH=\"\" ABCD=\"\" MNOP=\"\" IJKL=\"\">",tag.toHtml());
+		assertStringEquals("toHTML()","<MYTAG EFGH ABCD MNOP IJKL>",tag.toHtml());
 		assertTrue("2nd Node should be a Tag",node[1] instanceof Tag);
 		assertTrue("5th Node should be a Tag",node[4] instanceof Tag);
 		tag = (Tag)node[1];
@@ -404,7 +404,7 @@ public class TagTest extends ParserTestCase
                 node = en.nextNode();
                 result += node.toHtml();
             }
-            String expected = "<A YOURPARAMETER=\"Kaarle\" MYPARAMETER=\"\" HREF=\"http://www.iki.fi/kaila\">Kaarle's homepage</A><P>Paragraph</P>";
+            String expected = "<A YOURPARAMETER=\"Kaarle\" MYPARAMETER HREF=\"http://www.iki.fi/kaila\">Kaarle's homepage</A><P>Paragraph</P>";
             assertStringEquals("Check collected contents to original", expected, result);
         } catch (ClassCastException ce) {
             fail("Bad class element = " + node.getClass().getName());
@@ -626,17 +626,17 @@ public class TagTest extends ParserTestCase
      */
     public void testSetText() throws ParserException
     {
-        String testHTML = "<LABEL ID=\"JohnDoe\" >John Doe</LABEL>";
+        String testHTML = "<LABEL ID=\"JohnDoe\">John Doe</LABEL>";
         createParser(testHTML);
         parser.addScanner(new org.htmlparser.scanners.LabelScanner("-l"));
         parseAndAssertNodeCount(1);
         org.htmlparser.tags.LabelTag htmlTag = (org.htmlparser.tags.LabelTag)node[0];
-        String expectedHTML = "<LABEL ID=\"JohnDoe\" >John Doe</LABEL>";
+        String expectedHTML = "<LABEL ID=\"JohnDoe\">John Doe</LABEL>";
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
         assertStringEquals("Expected HTML","John Doe",htmlTag.getLabel());
 
         ((org.htmlparser.StringNode)((org.htmlparser.tags.CompositeTag)htmlTag).getChild(0)).setText("Jane Doe");
-        expectedHTML = "<LABEL ID=\"JohnDoe\" >Jane Doe</LABEL>";
+        expectedHTML = "<LABEL ID=\"JohnDoe\">Jane Doe</LABEL>";
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
         assertStringEquals("Expected HTML","Jane Doe",htmlTag.getLabel());
     }
@@ -694,6 +694,6 @@ public class TagTest extends ParserTestCase
 		tag.setAttributes (tempHash);
 
         String s = tag.toHtml ();
-		assertEquals("HTML should be","<TABLE BORDER=\"1\" >", s);
+		assertEquals("HTML should be","<TABLE BORDER=\"1\">", s);
     }	
 }

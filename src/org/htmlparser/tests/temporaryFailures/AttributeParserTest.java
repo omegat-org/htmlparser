@@ -78,7 +78,7 @@ public class AttributeParserTest extends ParserTestCase {
 
 	public void testParseMissingEqual() {
 		getParameterTableFor("a b\"c\"");
-		assertEquals("ValueB","",table.get("B"));
+		assertEquals("ValueB",null,table.get("B"));
                 
 	}
         
@@ -100,7 +100,7 @@ public class AttributeParserTest extends ParserTestCase {
         assertEquals("Type","checkbox",table.get("TYPE"));                
         assertEquals("Name","Authorize",table.get("NAME"));
         assertEquals("Value","Y",table.get("VALUE"));
-        assertEquals("Checked","",table.get("CHECKED"));
+        assertEquals("Checked",null,table.get("CHECKED"));
     }
 
     /**
@@ -208,5 +208,27 @@ public class AttributeParserTest extends ParserTestCase {
             String value = (String)table.get ("ONLOAD");
             assertStringEquals ("parameter parsed incorrectly", "defaultStatus=''", value);
         }
+    }
+    
+    /**
+     * Test that stand-alone attributes are kept that way, rather than being
+     * given empty values.
+     * -Joe Robins, 6/19/03
+     */
+    public void testStandaloneAttribute ()
+    {
+        getParameterTableFor ("INPUT DISABLED");
+        assertTrue ("Standalone attribue has no entry in table keyset",table.containsKey("DISABLED"));
+        assertNull ("Standalone attribute has non-null value",(String)table.get("DISABLED"));
+    }
+
+    /**
+     * Test missing value.
+     */
+    public void testMissingAttribute ()
+    {
+        getParameterTableFor ("INPUT DISABLED=");
+        assertTrue ("Attribue has no entry in table keyset",table.containsKey("DISABLED"));
+        assertEquals ("Attribute has non-blank value","",(String)table.get("DISABLED"));
     }
 }

@@ -409,5 +409,32 @@ public class TagParserTest extends ParserTestCase {
 		public boolean passed() {
 			return result;
 		}
-	}	
+    }
+    
+    /**
+     * Test the toHTML method for a standalone attribute.
+     */
+    public void testStandAloneToHTML () throws ParserException
+    {
+        createParser("<input disabled>");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<INPUT DISABLED>", html);
+    }
+    
+    /**
+     * Test the toHTML method for a missing value attribute.
+     */
+    public void testMissingValueToHTML () throws ParserException
+    {
+        createParser("<input disabled=>");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<INPUT DISABLED=>", html);
+    }
+    
 }

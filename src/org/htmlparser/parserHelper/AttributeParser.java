@@ -104,7 +104,7 @@ public class AttributeParser {
 	*
 	*/
    public Hashtable parseAttributes(Tag tag) {
-		attributeTable = new Hashtable();
+		attributeTable = new SpecialHashtable();
 		part = null;
 		empty = null;
         name=null;
@@ -136,17 +136,27 @@ public class AttributeParser {
         return attributeTable;
     }
 
-	private void processInvalidPart() {
-		 if (name != null) {
-		      if (name.equals("/")) {
-		        putDataIntoTable(attributeTable,Tag.EMPTYTAG,"",false);
-		      } else {
-		        putDataIntoTable(attributeTable,name,"",false);
-		      }
-		      name=null;
-		      value=null;
-		    }
-	}
+    private void processInvalidPart ()
+    {
+        if (name != null)
+        {
+            if (name.equals ("/"))
+                putDataIntoTable (attributeTable,Tag.EMPTYTAG,"",false);
+            else
+            {
+                if (null == part)
+                    if ((null != value) && value == Tag.NOTHING)
+                        putDataIntoTable (attributeTable,name,Tag.NOTHING,false);
+                    else
+                        putDataIntoTable (attributeTable,name,Tag.NULLVALUE,false);
+                else
+                    putDataIntoTable (attributeTable,name,"",false);
+            }
+            name=null;
+            value=null;
+            equal=false;
+        }
+    }
 
 	private boolean isValid(String part) {
 		return part != null && (0 < part.length ());
@@ -164,9 +174,10 @@ public class AttributeParser {
 		        if (part.equals("=")) {
 		            equal=false;
 		            delim=DELIMETERS_WITHOUT_EQUALS;
+                    value=Tag.NOTHING;
 		        }
 		        else {
-		             putDataIntoTable(attributeTable,name,"",false);
+		             putDataIntoTable(attributeTable,name,Tag.NULLVALUE,false);
 		             name=part;
 		             value=null;
 		        }

@@ -123,7 +123,7 @@ public class LabelScannerTest extends ParserTestCase {
 		assertTrue(node[1] instanceof LabelTag);
 		
 		LabelTag labelTag = (LabelTag) node[0];
-		assertStringEquals("Label","<LABEL ID=\"attr1\" ></LABEL>",labelTag.toHtml());		
+		assertStringEquals("Label","<LABEL ID=\"attr1\"></LABEL>",labelTag.toHtml());		
 		labelTag = (LabelTag) node[1];
 		assertStringEquals("Label","<LABEL>Jane Doe</LABEL>",labelTag.toHtml());
 		Hashtable attr = labelTag.getAttributes();

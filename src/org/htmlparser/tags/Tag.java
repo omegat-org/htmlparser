@@ -36,6 +36,7 @@ import java.util.Map;
 import org.htmlparser.AbstractNode;
 import org.htmlparser.NodeReader;
 import org.htmlparser.parserHelper.AttributeParser;
+import org.htmlparser.parserHelper.SpecialHashtable;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.data.TagData;
@@ -58,6 +59,8 @@ public class Tag extends AbstractNode
 	 */
 	public final static String TAGNAME = "$<TAGNAME>$";
 	public final static String EMPTYTAG = "$<EMPTYTAG>$";
+    public final static String NULLVALUE = "$<NULL>$";
+    public final static String NOTHING = "$<NOTHING>$";
 	private final static String EMPTY_STRING="";
 	
 	private AttributeParser attributeParser;
@@ -412,36 +415,52 @@ public class Tag extends AbstractNode
 	 * do not need to override toHTML().
 	 * @see org.htmlparser.Node#toHTML()
 	 */
-	public String toHtml() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("<");
-		sb.append(getTagName());
-		if (containsMoreThanOneKey()) sb.append(" ");
-		String key,value;
-                String empty=null;
-		int i=0;
-		for (Enumeration e = attributes.keys();e.hasMoreElements();) {
-			key = (String)e.nextElement();
-			i++;
-			if (!key.equals(TAGNAME)) {
-                          if (key.equals(EMPTYTAG)){
-                            empty="/";
-                          } else {
-				value = getAttribute(key);
-				sb.append(key+"=\""+value+"\"");
-				if (i<attributes.size()) sb.append(" ");
-                          }
+	public String toHtml()
+    {
+		StringBuffer ret;
+		String key;
+        String value;
+        String empty;
+        
+        ret = new StringBuffer ();
+		ret.append ("<");
+		ret.append (getTagName ());
+        empty = null;
+		for (Enumeration e = attributes.keys(); e.hasMoreElements(); )
+        {
+			key = (String)e.nextElement ();
+			if (!key.equals (TAGNAME))
+            {
+                if (key.equals (EMPTYTAG))
+                    empty="/";
+                else
+                {
+                    ret.append (" ");
+                    ret.append (key);
+                    value = (String)(((SpecialHashtable)getAttributes()).getRaw (key.toUpperCase ()));
+                    if (Tag.NULLVALUE != value)
+                    {
+                        ret.append ("=");
+                        if (!(Tag.NOTHING == value))
+                        {
+                            ret.append ("\"");
+                            ret.append (value);
+                            ret.append ("\"");
+                        }
+                        else
+                            ret.append ("");
+                    }
+                }
 			}
 		}
-		if (empty != null) sb.append(empty);
-		if (isEmptyXmlTag()) sb.append("/");
-		sb.append(">");
-		return sb.toString();
-	}
+		if (null != empty)
+            ret.append (empty);
+		if (isEmptyXmlTag ())
+            ret.append ("/");
+		ret.append (">");
 
-	private boolean containsMoreThanOneKey() {
-		return attributes.keySet().size()>1;
-	}
+		return (ret.toString ());
+    }
 
 	/**
 	 * Print the contents of the tag

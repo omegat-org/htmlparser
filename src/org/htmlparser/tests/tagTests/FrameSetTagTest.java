@@ -55,7 +55,7 @@ public class FrameSetTagTest extends ParserTestCase {
 		FrameSetTag frameSetTag = (FrameSetTag)node[0];
 		assertStringEquals("HTML Contents",
 		"<FRAMESET BORDER=\"0\" ROWS=\"115,*\" FRAMESPACING=\"0\" FRAMEBORDER=\"NO\">\r\n"+ 
-  			"<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE=\"\">\r\n"+
+  			"<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE>\r\n"+
 	  		"<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">\r\n"+
 		"</FRAMESET>",
 		frameSetTag.toHtml());

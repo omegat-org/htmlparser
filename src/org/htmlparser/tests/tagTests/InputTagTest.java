@@ -86,7 +86,7 @@ public class InputTagTest extends ParserTestCase {
 		InputTag InputTag;
 		InputTag = (InputTag) node[0];
 		assertStringEquals("HTML String", 
-			"<INPUT CHECKED=\"\" NAME=\"cbCheck\" TYPE=\"checkbox\">",
+			"<INPUT CHECKED NAME=\"cbCheck\" TYPE=\"checkbox\">",
 			InputTag.toHtml());
 	}
 	
