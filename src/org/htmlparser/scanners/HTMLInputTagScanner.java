@@ -28,10 +28,10 @@
 
 package org.htmlparser.scanners;
 
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.tags.data.*;
-import org.htmlparser.util.*;
+import org.htmlparser.tags.HTMLInputTag;
+import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLInputTagScanner extends HTMLTagScanner
 {
@@ -40,39 +40,20 @@ public class HTMLInputTagScanner extends HTMLTagScanner
 		super();
 	}
 	
-	public HTMLInputTagScanner(String pFilter)
+	public HTMLInputTagScanner(String filter)
 	{
-		super(pFilter);
+		super(filter);
 	}
-	
-	public HTMLTag scan(HTMLTag tag, String url, HTMLReader pReader, String currentLine)
-			throws HTMLParserException
-	{
-		try
-		{
-			HTMLInputTag inputTag = 
-			new HTMLInputTag(
-				new HTMLTagData(
-					tag.elementBegin(),
-					tag.elementEnd(),
-					tag.getText(), 
-					currentLine
-				)
-			);
-			return inputTag;
-		}
-		catch (Exception e) 
-		{
-			throw new HTMLParserException("HTMLInputTagScanner.scan() : Error while scanning input tags, current line = "+currentLine,e);
-		}
-	}
-	
-	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
-	 */
+
 	public String [] getID() {
 		String [] ids = new String[1];
 		ids[0] = "INPUT";
 		return ids;
 	}
+	
+	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+		throws HTMLParserException {
+		return new HTMLInputTag(tagData);
+	}
+
 }

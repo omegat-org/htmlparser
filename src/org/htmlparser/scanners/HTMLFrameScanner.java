@@ -35,8 +35,6 @@ package org.htmlparser.scanners;
 //////////////////
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLFrameTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLTagData;
@@ -91,48 +89,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 	{
 		return tag.getParameter("NAME");
 	}
-	
-	/**
-	 * Scan the tag and extract the information related to the <IMG> tag. The url of the
-	 * initiating scan has to be provided in case relative links are found. The initial
-	 * url is then prepended to it to give an absolute link.
-	 * The HTMLReader is provided in order to do a lookahead operation. We assume that
-	 * the identification has already been performed using the evaluate() method.
-	 * @param tag HTML Tag to be scanned for identification
-	 * @param url The initiating url of the scan (Where the html page lies)
-	 * @param reader The reader object responsible for reading the html page
-	 * @param currentLine The current line (automatically provided by HTMLTag)
-	 */
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
-	{
-		try {
-			HTMLNode node;
-			String frame, frameName, linkText="";
-			int frameBegin, frameEnd;
-	
-			// Yes, the tag is a link
-			// Extract the link
-			//link = extractImageLocn(tag.getText(),url);
-			frame = extractFrameLocn(tag,url);
-		    frameName = extractFrameName(tag,url);
-			frameBegin = tag.elementBegin();
-			frameEnd = tag.elementEnd();
-			HTMLFrameTag frameTag = new HTMLFrameTag(
-				new HTMLTagData(
-					frameBegin, 
-					frameEnd, 
-					tag.getText(),
-					currentLine
-				), 
-				frame,
-				frameName
-			);
-			return frameTag;
-		}
-		catch (Exception e) {
-			throw new HTMLParserException("HTMLFrameScanner.scan() : Error while scanning frame tag, current line = "+currentLine,e);
-		}
-	}
+
 	/**
 	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
 	 */
@@ -140,6 +97,13 @@ public class HTMLFrameScanner extends HTMLTagScanner
 		String [] ids = new String[1];
 		ids[0] = "FRAME";
 		return ids;
+	}
+
+	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url) throws HTMLParserException {
+		String frameUrl = extractFrameLocn(tag,url);
+		String frameName = extractFrameName(tag,url);
+		
+		return new HTMLFrameTag(tagData,frameUrl,frameName);
 	}
 
 }

@@ -30,57 +30,35 @@ package org.htmlparser.scanners;
 
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLMetaTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 
-/**
- * Scans meta tags.
- */
 public class HTMLMetaTagScanner extends HTMLTagScanner {
 	public HTMLMetaTagScanner(String filter) {
 		super(filter);
 	}
-		/*
-	 * @see HTMLTagScanner#scan(HTMLTag, String, HTMLReader, String)
-	 */
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader, String currLine)
-		throws HTMLParserException {
-		try {
-			// Since its a simple tag, all META TAG info will 
-			// be in the tag itself
-			Hashtable table = tag.getAttributes();
-			String metaTagName = (String)table.get("NAME");					
-			String metaTagContents = (String)table.get("CONTENT");
-			String httpEquiv = (String)table.get("HTTP-EQUIV");
-			HTMLMetaTag metaTag = 
-			new HTMLMetaTag(
-				new HTMLTagData(
-					tag.elementBegin(),
-					tag.elementEnd(),
-					tag.getText(),
-					currLine
-				), 
-				httpEquiv,
-				metaTagName,
-				metaTagContents
-			);
-			return metaTag;
-		}
-		catch (Exception e) {
-			throw new HTMLParserException("HTMLMetaTagScanner.scan() : Error while scanning meta tags, current line = "+currLine,e);
-		}
-	}
 
-	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
-	 */
 	public String [] getID() {
 		String [] ids = new String[1];
 		ids[0] = "META";
 		return ids;
+	}
+
+	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+		throws HTMLParserException {
+		Hashtable table = tag.getAttributes();
+		String metaTagName = (String)table.get("NAME");					
+		String metaTagContents = (String)table.get("CONTENT");
+		String httpEquiv = (String)table.get("HTTP-EQUIV");
+
+		return new HTMLMetaTag(
+			tagData,
+			httpEquiv,
+			metaTagName,
+			metaTagContents 
+		);
 	}
 
 }

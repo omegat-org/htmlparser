@@ -175,8 +175,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	 * @param text Text to be parsed to pick out the access key.
      * @return The value of the ACCESSKEY attribute.
 	 */
-	public String getAccessKey (String text)
-	{
+	public String getAccessKey (String text) {
 		final String sub = "ACCESSKEY";
         int n;
         int length;

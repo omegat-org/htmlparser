@@ -33,6 +33,7 @@ import org.htmlparser.scanners.HTMLLinkScanner;
 import org.htmlparser.scanners.HTMLTitleScanner;
 import org.htmlparser.tags.HTMLBaseHREFTag;
 import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 
 public class HTMLBaseHREFScannerTest extends HTMLParserTestCase {
@@ -50,8 +51,8 @@ public class HTMLBaseHREFScannerTest extends HTMLParserTestCase {
 	public void testRemoveLastSlash() {
 		String url1 = "http://www.yahoo.com/";
 		String url2 = "http://www.google.com";
-		String modifiedUrl1 = scanner.removeLastSlash(url1);
-		String modifiedUrl2 = scanner.removeLastSlash(url2);
+		String modifiedUrl1 = HTMLLinkProcessor.removeLastSlash(url1);
+		String modifiedUrl2 = HTMLLinkProcessor.removeLastSlash(url2);
 		assertEquals("Url1","http://www.yahoo.com",modifiedUrl1);
 		assertEquals("Url2","http://www.google.com",modifiedUrl2);
 	}

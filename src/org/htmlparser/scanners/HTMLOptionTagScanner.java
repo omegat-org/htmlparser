@@ -41,9 +41,9 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 		super();
 	}
 	
-	public HTMLOptionTagScanner(String pFilter)
+	public HTMLOptionTagScanner(String filter)
 	{
-		super(pFilter);
+		super(filter);
 	}
 	
 	public HTMLTag scan(HTMLTag tag, String pUrl, HTMLReader reader, String currLine)

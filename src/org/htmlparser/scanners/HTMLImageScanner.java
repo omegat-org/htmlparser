@@ -33,8 +33,6 @@ package org.htmlparser.scanners;
 //////////////////
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLTagData;
@@ -103,53 +101,16 @@ public class HTMLImageScanner extends HTMLTagScanner
 		}
 	}
 	
-	/** 
-	 * Scan the tag and extract the information related to the <IMG> tag. The url of the 
-	 * initiating scan has to be provided in case relative links are found. The initial 
-	 * url is then prepended to it to give an absolute link.
-	 * The HTMLReader is provided in order to do a lookahead operation. We assume that
-	 * the identification has already been performed using the evaluate() method.
-	 * @param tag HTML Tag to be scanned for identification
-	 * @param url The initiating url of the scan (Where the html page lies)
-	 * @param reader The reader object responsible for reading the html page
-	 * @param currentLine The current line (automatically provided by HTMLTag)	 
-	 */	
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
-	{
-		try {
-			HTMLNode node;
-			String link,linkText="";
-			int linkBegin, linkEnd;
-	
-			// Yes, the tag is a link
-			// Extract the link
-			//link = extractImageLocn(tag.getText(),url);
-			link = extractImageLocn(tag,url);
-			linkBegin = tag.elementBegin();
-			linkEnd = tag.elementEnd();
-			HTMLImageTag imageTag = new HTMLImageTag(
-				new HTMLTagData(
-					linkBegin,
-					linkEnd,
-					tag.getText(),
-					currentLine
-				),
-				link
-			);		
-			return imageTag;
-		}
-		catch (Exception e) {
-			throw new HTMLParserException("HTMLImageScanner.scan() : Some Error occurred while scanning an image tag\n"+
-			"specifically, tag being parsed was "+tag.getText()+",\n currentLine = "+currentLine,e);
-		}
-	}
-	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
-	 */
 	public String [] getID() {
 		String [] ids = new String[1];
 		ids[0] = IMAGE_SCANNER_ID;
 		return ids;
+	}
+
+	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+		throws HTMLParserException {
+		String link = extractImageLocn(tag,url);
+		return new HTMLImageTag(tagData, link);
 	}
 
 }

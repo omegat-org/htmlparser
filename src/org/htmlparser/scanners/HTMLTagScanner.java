@@ -37,6 +37,7 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserFeedback;
 /**
@@ -205,7 +206,14 @@ public abstract class HTMLTagScanner
 	 * @param url The initiating url of the scan (Where the html page lies)
 	 * @param reader The reader object responsible for reading the html page
 	 */
-  	public abstract HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException;
+  	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException {
+  		return createTag(new HTMLTagData(
+			tag.elementBegin(), 
+			tag.elementEnd(), 
+			tag.getText(),
+			currLine
+		), tag, url);
+  	}
 	
 	public String removeChars(String s,char occur)  {
 	    StringBuffer newString = new StringBuffer();
@@ -264,5 +272,5 @@ public abstract class HTMLTagScanner
 		return newLine;
 	}
 	// Creates a Base Ref Scanner sharing the same link processor
-  
+	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url) throws HTMLParserException { return null; }  
 }

@@ -192,5 +192,16 @@ public class HTMLLinkProcessor
     {
         this.baseUrl = baseUrl;
     }
+
+	public static String removeLastSlash(String baseUrl) {
+	  if(baseUrl.charAt(baseUrl.length()-1)=='/')
+	  {
+	     return baseUrl.substring(0,baseUrl.length()-1);
+	  }
+	  else
+	  {
+	     return baseUrl;
+	  }
+	}
     
 }

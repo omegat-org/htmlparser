@@ -28,69 +28,38 @@
 
 package org.htmlparser.scanners;
 
-import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLBaseHREFTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 
-/**
- * @author Somik Raha
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
 public class HTMLBaseHREFScanner extends HTMLTagScanner {
 	private HTMLLinkProcessor processor;
-	/**
-	 * Constructor for HTMLBaseHREFScanner.
-	 */
+
 	public HTMLBaseHREFScanner() {
 		super();
 	}
 
-	/**
-	 * Constructor for HTMLBaseHREFScanner.
-	 * @param filter
-	 */
 	public HTMLBaseHREFScanner(String filter,HTMLLinkProcessor processor) {
 		super(filter);
 		this.processor = processor;
 	}
 
-	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#scan(HTMLTag, String, HTMLReader, String)
-	 */
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine)	throws HTMLParserException {
-		String baseUrl = (String)tag.getParameter("HREF");
-		String absoluteBaseUrl="";
-		if (baseUrl != null && baseUrl.length()>0) {
-	      	absoluteBaseUrl = removeLastSlash(baseUrl.trim());
-    	  	processor.setBaseUrl(absoluteBaseUrl);
-		} 
-		return new HTMLBaseHREFTag(new HTMLTagData(tag.elementBegin(),tag.elementEnd(),tag.getText(),currLine),absoluteBaseUrl);
-	}
-	public String removeLastSlash(String baseUrl)
-   	{
-      if(baseUrl.charAt(baseUrl.length()-1)=='/')
-      {
-         return baseUrl.substring(0,baseUrl.length()-1);
-      }
-      else
-      {
-         return baseUrl;
-      }
-   	}
-	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
-	 */
 	public String [] getID() {
 		String [] ids = new String[1];
 		ids[0] = "BASE";
 		return ids;
 	}
 
+	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+		throws HTMLParserException {
+		String baseUrl = (String)tag.getParameter("HREF");
+		String absoluteBaseUrl="";
+		if (baseUrl != null && baseUrl.length()>0) {
+			absoluteBaseUrl = HTMLLinkProcessor.removeLastSlash(baseUrl.trim());
+			processor.setBaseUrl(absoluteBaseUrl);
+		}	
+		return new HTMLBaseHREFTag(tagData,absoluteBaseUrl);
+	}
 }

@@ -28,4 +28,8 @@ public class HTMLTagData {
 		return tagLine;
 	}
 
+	public void setTagContents(String tagContents) {
+		this.tagContents = tagContents;
+	}
+
 }
