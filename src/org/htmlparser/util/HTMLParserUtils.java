@@ -52,7 +52,7 @@ public class HTMLParserUtils
 		StringBuffer htmlString = new StringBuffer();
 		
 		Hashtable attrs = tag.getAttributes();
-		String pTagName = tag.getParameter(HTMLTag.TAGNAME);
+		String pTagName = tag.getAttribute(HTMLTag.TAGNAME);
 		htmlString.append("<").append(pTagName);
 		for (Enumeration e = attrs.keys();e.hasMoreElements();)
 		{
@@ -68,7 +68,7 @@ public class HTMLParserUtils
 	
 	public static String toString(HTMLTag tag)
 	{
-		String tagName = tag.getParameter(HTMLTag.TAGNAME);
+		String tagName = tag.getAttribute(HTMLTag.TAGNAME);
 		Hashtable attrs = tag.getAttributes();
 		
 		StringBuffer lString = new StringBuffer(tagName);

@@ -441,7 +441,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
-		assertEquals("StyleSheet Source","af.css",tag.getParameter("src"));
+		assertEquals("StyleSheet Source","af.css",tag.getAttribute("src"));
     }
 
     /**
@@ -464,7 +464,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
 		assertEquals("Node contents","META name=\"Hello\" value=\"World </I>\"",tag.getText());
-		assertEquals("Meta Content","World </I>",tag.getParameter("value"));
+		assertEquals("Meta Content","World </I>",tag.getAttribute("value"));
 
     }
 
@@ -476,7 +476,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		HTMLTag tag = (HTMLTag)node[0];
 		assertStringEquals("Node contents","META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"",tag.getText());
 		Hashtable table = tag.getAttributes();
-		assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getParameter("CONTENT"));
+		assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getAttribute("CONTENT"));
 
     }
 
@@ -543,7 +543,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		HTMLNode node = HTMLTag.find(parser.getReader(),testHTML,0);
 		assertTrue("Node should be a tag",node instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node;
-		String href = tag.getParameter("HREF");
+		String href = tag.getAttribute("HREF");
 		assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
 
 	}

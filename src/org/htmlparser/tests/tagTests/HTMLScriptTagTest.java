@@ -146,8 +146,8 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0]; 
-		assertEquals("Script Src","/adb.js",scriptTag.getParameter("src"));
-		assertEquals("Script Language","javascript",scriptTag.getParameter("language"));		
+		assertEquals("Script Src","/adb.js",scriptTag.getAttribute("src"));
+		assertEquals("Script Language","javascript",scriptTag.getAttribute("language"));		
 	}
 
 	public void testVariableDeclarations() throws HTMLParserException {

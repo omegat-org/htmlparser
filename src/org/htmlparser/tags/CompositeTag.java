@@ -107,7 +107,7 @@ public abstract class CompositeTag extends HTMLTag {
 			node = (HTMLNode)e.nextNode();
 			if (node instanceof HTMLTag) {
 				tag = (HTMLTag)node;
-				String nameAttribute = tag.getParameter("NAME");
+				String nameAttribute = tag.getAttribute("NAME");
 				if (nameAttribute!=null && nameAttribute.equals(name)) found=true;
 			}
 		}

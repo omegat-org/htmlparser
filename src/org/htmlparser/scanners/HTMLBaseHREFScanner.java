@@ -54,7 +54,7 @@ public class HTMLBaseHREFScanner extends HTMLTagScanner {
 
 	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
 		throws HTMLParserException {
-		String baseUrl = (String)tag.getParameter("HREF");
+		String baseUrl = (String)tag.getAttribute("HREF");
 		String absoluteBaseUrl="";
 		if (baseUrl != null && baseUrl.length()>0) {
 			absoluteBaseUrl = HTMLLinkProcessor.removeLastSlash(baseUrl.trim());

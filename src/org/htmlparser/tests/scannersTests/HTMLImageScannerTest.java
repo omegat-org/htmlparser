@@ -90,9 +90,9 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Expected Image Locn","",imageTag.getImageURL());		
-		assertEquals("Image width","1",imageTag.getParameter("WIDTH"));
-		assertEquals("Image height","1",imageTag.getParameter("HEIGHT"));
-		assertEquals("alt","a",imageTag.getParameter("ALT"));
+		assertEquals("Image width","1",imageTag.getAttribute("WIDTH"));
+		assertEquals("Image height","1",imageTag.getAttribute("HEIGHT"));
+		assertEquals("alt","a",imageTag.getAttribute("ALT"));
 	}
 	
 	public void testRelativeImageScan() throws HTMLParserException {
@@ -221,9 +221,9 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		HTMLImageTag imageTag = (HTMLImageTag)node[1];
 		// Get the data from the node
 		assertEquals("Image location","http://www.cia.gov/graphics/images_home2/cia_banners_template3_01.gif",imageTag.getImageURL());
-		assertEquals("Alt Value","Central Intelligence Agency, Director of Central Intelligence",imageTag.getParameter("ALT"));
-		assertEquals("Width","241",imageTag.getParameter("WIDTH"));	
-		assertEquals("Height","49",imageTag.getParameter("HEIGHT"));
+		assertEquals("Alt Value","Central Intelligence Agency, Director of Central Intelligence",imageTag.getAttribute("ALT"));
+		assertEquals("Width","241",imageTag.getAttribute("WIDTH"));	
+		assertEquals("Height","49",imageTag.getAttribute("HEIGHT"));
 	}
 
 	public void testDirectRelativeLinks() throws HTMLParserException {
@@ -251,8 +251,8 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);	
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertStringEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageURL());
-		assertEquals("Width","1",imageTag.getParameter("WIDTH"));
-		assertEquals("Height","1",imageTag.getParameter("HEIGHT"));
-		assertEquals("Alt","",imageTag.getParameter("ALT"));
+		assertEquals("Width","1",imageTag.getAttribute("WIDTH"));
+		assertEquals("Height","1",imageTag.getAttribute("HEIGHT"));
+		assertEquals("Alt","",imageTag.getAttribute("ALT"));
 	}
 }

@@ -76,7 +76,7 @@ public class HTMLAppletTag extends CompositeTag
 		return codeBase;
 	}
 	
-	public String getParameter(String key)
+	public String getAttribute(String key)
 	{
 		return (String)appletParams.get(key);
 	}

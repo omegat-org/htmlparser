@@ -897,10 +897,10 @@ public class HTMLParser
                     if (node instanceof HTMLMetaTag)
                     {   // check for charset on Content-Type
                         meta = (HTMLMetaTag)node;
-                        httpEquiv = meta.getParameter ("HTTP-EQUIV");
+                        httpEquiv = meta.getAttribute ("HTTP-EQUIV");
                         if ("Content-Type".equalsIgnoreCase (httpEquiv))
                         {
-                            charset = getCharset (meta.getParameter ("CONTENT"));
+                            charset = getCharset (meta.getAttribute ("CONTENT"));
                             if (!charset.equalsIgnoreCase (character_set))
                             {   // oops, different character set, restart
                                 character_set = charset;

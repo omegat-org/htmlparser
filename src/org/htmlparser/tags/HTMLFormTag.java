@@ -109,7 +109,7 @@ public class HTMLFormTag extends CompositeTag
 		boolean found=false;
 		for (Enumeration e = formInputVector.elements();e.hasMoreElements() && !found;) {
 			inputTag = (HTMLInputTag)e.nextElement();
-			String inputTagName = inputTag.getParameter("NAME");
+			String inputTagName = inputTag.getAttribute("NAME");
 			if (inputTagName!=null && inputTagName.equalsIgnoreCase(name)) {
 				found=true;
 			}
@@ -151,7 +151,7 @@ public class HTMLFormTag extends CompositeTag
 		boolean found = false;
 		for (Enumeration e=textAreaVector.elements();e.hasMoreElements() && !found;) {
 			textareaTag = (HTMLTextareaTag)e.nextElement();
-			String textAreaName = textareaTag.getParameter("NAME");
+			String textAreaName = textareaTag.getAttribute("NAME");
 			if (textAreaName!=null && textAreaName.equals(name)) {
 				found = true;
 			}

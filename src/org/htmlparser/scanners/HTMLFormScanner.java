@@ -81,7 +81,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 	public String extractFormLocn(HTMLTag tag,String url) throws HTMLParserException
 	{
 		try {
-			String formURL= tag.getParameter("ACTION");
+			String formURL= tag.getAttribute("ACTION");
 			if (formURL==null) return ""; else
 			return (new HTMLLinkProcessor()).extract(formURL, url);
 		}
@@ -94,12 +94,12 @@ public class HTMLFormScanner extends HTMLTagScanner
 
 	public String extractFormName(HTMLTag tag)
 	{
-		return tag.getParameter("NAME");
+		return tag.getAttribute("NAME");
 	}
 
 	public String extractFormMethod(HTMLTag tag)
 	{
-		String method = tag.getParameter("METHOD");
+		String method = tag.getAttribute("METHOD");
 		if (method==null) method = HTMLFormTag.GET;
 		return method.toUpperCase();
 

@@ -37,7 +37,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 /**
  * Scans title tags.
  */
-public class HTMLTitleScanner extends HTMLCompositeTagScanner {
+public class HTMLTitleScanner extends CompositeTagScanner {
 	private static final String MATCH_NAME [] = {"TITLE"};
 
 	public HTMLTitleScanner(String filter) {

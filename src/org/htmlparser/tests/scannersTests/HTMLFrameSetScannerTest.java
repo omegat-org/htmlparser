@@ -65,10 +65,10 @@ public class HTMLFrameSetScannerTest extends HTMLParserTestCase {
 		assertTrue("Node 0 should be End Tag",node[0] instanceof HTMLFrameSetTag);
 		HTMLFrameSetTag frameSetTag = (HTMLFrameSetTag)node[0];
 		// Find the details of the frameset itself
-		assertEquals("Rows","115,*",frameSetTag.getParameter("rows"));
-		assertEquals("FrameBorder","NO",frameSetTag.getParameter("FrameBorder"));
-		assertEquals("FrameSpacing","0",frameSetTag.getParameter("FrameSpacing"));		
-		assertEquals("Border","0",frameSetTag.getParameter("Border"));
+		assertEquals("Rows","115,*",frameSetTag.getAttribute("rows"));
+		assertEquals("FrameBorder","NO",frameSetTag.getAttribute("FrameBorder"));
+		assertEquals("FrameSpacing","0",frameSetTag.getAttribute("FrameSpacing"));		
+		assertEquals("Border","0",frameSetTag.getAttribute("Border"));
 		// Now check the frames
 		HTMLFrameTag topFrame = frameSetTag.getFrame("topFrame");
 		HTMLFrameTag mainFrame = frameSetTag.getFrame("mainFrame");
@@ -78,7 +78,7 @@ public class HTMLFrameSetScannerTest extends HTMLParserTestCase {
 		assertEquals("Top Frame Location","http://www.google.com/test/demo_bc_top.html",topFrame.getFrameLocation());
 		assertEquals("Main Frame Name","mainFrame",mainFrame.getFrameName());
 		assertEquals("Main Frame Location","http://www.kizna.com/web_e/",mainFrame.getFrameLocation());		
-		assertEquals("Scrolling in Main Frame","AUTO",mainFrame.getParameter("Scrolling"));
+		assertEquals("Scrolling in Main Frame","AUTO",mainFrame.getAttribute("Scrolling"));
 	}
 }
 

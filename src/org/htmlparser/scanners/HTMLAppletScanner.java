@@ -66,9 +66,9 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 	 */
 	public void extractFields(HTMLTag tag) 
 	{
-	    className = tag.getParameter("CODE");
-	    archive = tag.getParameter("ARCHIVE");
-	    codebase = tag.getParameter("CODEBASE");
+	    className = tag.getAttribute("CODE");
+	    archive = tag.getAttribute("ARCHIVE");
+	    codebase = tag.getAttribute("CODEBASE");
 	}
 	
 	public String getArchive() {
@@ -118,10 +118,10 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 				}
 				else if (node instanceof HTMLTag) {
 					HTMLTag htag = (HTMLTag)node;
-					String paramName = htag.getParameter("NAME");
+					String paramName = htag.getAttribute("NAME");
 					if (paramName!=null && paramName.length()!=0)
 					{
-						String paramValue = htag.getParameter("VALUE");
+						String paramValue = htag.getAttribute("VALUE");
 						table.put(paramName,paramValue);
 					}
 				}

@@ -79,7 +79,7 @@ public class HTMLAppletScannerTest extends HTMLParserTestCase
 		for (Enumeration e = appletTag.getParameterNames();e.hasMoreElements();)
 		{
 			String paramName = (String)e.nextElement();
-			String paramValue = appletTag.getParameter(paramName);
+			String paramValue = appletTag.getAttribute(paramName);
 			assertEquals("Param "+cnt+" value",paramsMap.get(paramName),paramValue);
 			cnt++;
 		}

@@ -39,7 +39,7 @@ import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 
 
-public class HTMLSelectTagScanner extends HTMLCompositeTagScanner
+public class HTMLSelectTagScanner extends CompositeTagScanner
 {
 	private static final String MATCH_NAME [] = {"SELECT"};
 	private List optionTags;

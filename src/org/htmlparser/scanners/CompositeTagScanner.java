@@ -11,19 +11,19 @@ import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 
-public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
+public abstract class CompositeTagScanner extends HTMLTagScanner {
 	protected String [] nameOfTagToMatch;
 	private boolean removeScanners;
 	private boolean stringNodeIgnoreMode;
 
-	public HTMLCompositeTagScanner(String [] nameOfTagToMatch) {
+	public CompositeTagScanner(String [] nameOfTagToMatch) {
 		this("",nameOfTagToMatch,false,false);
 	}
 
-	public HTMLCompositeTagScanner(String filter, String [] nameOfTagToMatch) {
+	public CompositeTagScanner(String filter, String [] nameOfTagToMatch) {
 		this(filter,nameOfTagToMatch,false,false);
 	}
-	public HTMLCompositeTagScanner(String filter, String [] nameOfTagToMatch, boolean removeScanners, boolean stringNodeIgnoreMode) {
+	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, boolean removeScanners, boolean stringNodeIgnoreMode) {
 		this.nameOfTagToMatch = nameOfTagToMatch;
 		this.removeScanners = removeScanners;
 		this.stringNodeIgnoreMode = stringNodeIgnoreMode;

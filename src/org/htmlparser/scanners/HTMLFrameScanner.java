@@ -87,7 +87,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 
 	public String extractFrameName(HTMLTag tag,String url)
 	{
-		return tag.getParameter("NAME");
+		return tag.getAttribute("NAME");
 	}
 
 	/**

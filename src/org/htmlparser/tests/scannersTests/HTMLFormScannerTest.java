@@ -88,14 +88,14 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 	}
 	
 	public void assertTypeNameSize(String description,String type,String name,String size,HTMLInputTag inputTag) {
-		assertEquals(description+" type",type,inputTag.getParameter("TYPE"));
-		assertEquals(description+" name",name,inputTag.getParameter("NAME"));
-		assertEquals(description+" size",size,inputTag.getParameter("SIZE"));
+		assertEquals(description+" type",type,inputTag.getAttribute("TYPE"));
+		assertEquals(description+" name",name,inputTag.getAttribute("NAME"));
+		assertEquals(description+" size",size,inputTag.getAttribute("SIZE"));
 	}
 	public void assertTypeNameValue(String description,String type,String name,String value,HTMLInputTag inputTag) {
-		assertEquals(description+" type",type,inputTag.getParameter("TYPE"));
-		assertEquals(description+" name",name,inputTag.getParameter("NAME"));
-		assertEquals(description+" value",value,inputTag.getParameter("VALUE"));
+		assertEquals(description+" type",type,inputTag.getAttribute("TYPE"));
+		assertEquals(description+" name",name,inputTag.getAttribute("NAME"));
+		assertEquals(description+" value",value,inputTag.getAttribute("VALUE"));
 	}	
 	public void testScan() throws HTMLParserException {
 		createParser(FORM_HTML,"http://www.google.com/test/index.html");

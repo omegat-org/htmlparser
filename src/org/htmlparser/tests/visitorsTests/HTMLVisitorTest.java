@@ -41,7 +41,7 @@ public class HTMLVisitorTest extends HTMLParserTestCase {
 		
 		public void visitTag(HTMLTag tag) {
 			if (tag.getTagName().equals("PARAM")) {
-				lastKeyVisited = tag.getParameter("NAME");
+				lastKeyVisited = tag.getAttribute("NAME");
 			}
 		}
 	}

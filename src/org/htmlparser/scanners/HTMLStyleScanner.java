@@ -38,7 +38,7 @@ import org.htmlparser.tags.data.HTMLTagData;
  * The HTMLStyleScanner scans identifies &lt;style&gt; code
  */
 
-public class HTMLStyleScanner extends HTMLCompositeTagScanner {
+public class HTMLStyleScanner extends CompositeTagScanner {
 	private static final String MATCH_NAME [] = {"STYLE"};
 
 	public HTMLStyleScanner() {

@@ -344,10 +344,10 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		assertTrue("First contained node should be an image tag",containedNodes[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)containedNodes[0];
 		assertEquals("Image Location","http://ad.abcnews.com/ad/sponsors/buena_vista_pictures/bvpi-ban0003.gif",imageTag.getImageURL());
-		assertEquals("Image Height","60",imageTag.getParameter("HEIGHT"));
-		assertEquals("Image Width","468",imageTag.getParameter("WIDTH"));
-		assertEquals("Image Border","0",imageTag.getParameter("BORDER"));
-		assertEquals("Image Alt","See Signs in Theaters 8-2 - Starring Mel Gibson",imageTag.getParameter("ALT"));
+		assertEquals("Image Height","60",imageTag.getAttribute("HEIGHT"));
+		assertEquals("Image Width","468",imageTag.getAttribute("WIDTH"));
+		assertEquals("Image Border","0",imageTag.getAttribute("BORDER"));
+		assertEquals("Image Alt","See Signs in Theaters 8-2 - Starring Mel Gibson",imageTag.getAttribute("ALT"));
 		assertTrue("Second contained node should be HTMLTag",containedNodes[1] instanceof HTMLTag);
 		HTMLTag tag1 = (HTMLTag)containedNodes[1];
 		assertEquals("Tag Contents","font face=\"verdana,arial,helvetica\" SIZE=\"1\"",tag1.getText());

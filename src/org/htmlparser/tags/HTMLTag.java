@@ -171,10 +171,20 @@ public class HTMLTag extends HTMLNode
 	 * parameter not implemented yet
 	 * @param name of parameter
 	 */
-	public String getParameter(String name){
+	public String getAttribute(String name){
 	    return (String)getAttributes().get(name.toUpperCase());
 	}
 
+	/**
+	 * In case the tag is parsed at the scan method this will return value of a
+	 * parameter not implemented yet
+	 * @param name of parameter
+	 * @deprecated use getAttribute instead
+	 */
+	public String getParameter(String name){
+		return (String)getAttributes().get(name.toUpperCase());
+	}
+	
 	/**
 	 * Gets the attributes in the tag.
 	 * @return Returns a Hashtable of attributes
@@ -344,7 +354,7 @@ public class HTMLTag extends HTMLNode
                           if (key.equals(EMPTYTAG)){
                             empty="/";
                           } else {
-				value = getParameter(key);
+				value = getAttribute(key);
 				sb.append(key+"=\""+value+"\"");
 				if (i<attributes.size()) sb.append(" ");
                           }

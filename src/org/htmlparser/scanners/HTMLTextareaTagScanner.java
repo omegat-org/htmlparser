@@ -33,7 +33,7 @@ import org.htmlparser.tags.HTMLTextareaTag;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 
-public class HTMLTextareaTagScanner extends HTMLCompositeTagScanner
+public class HTMLTextareaTagScanner extends CompositeTagScanner
 {
 	private static final String MATCH_NAME [] = {"TEXTAREA"};
 

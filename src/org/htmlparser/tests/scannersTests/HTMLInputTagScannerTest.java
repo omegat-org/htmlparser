@@ -55,7 +55,7 @@ public class HTMLInputTagScannerTest extends HTMLParserTestCase
 		// check the input node
 		HTMLInputTag inputTag = (HTMLInputTag) node[0];
 		assertEquals("Input Scanner",scanner,inputTag.getThisScanner());
-		assertEquals("Type","text",inputTag.getParameter("TYPE"));
-		assertEquals("Name","Google",inputTag.getParameter("NAME"));
+		assertEquals("Type","text",inputTag.getAttribute("TYPE"));
+		assertEquals("Name","Google",inputTag.getAttribute("NAME"));
 	}
 }

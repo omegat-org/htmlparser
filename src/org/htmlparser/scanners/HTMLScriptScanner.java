@@ -38,7 +38,7 @@ import org.htmlparser.tags.data.HTMLTagData;
  * The HTMLScriptScanner identifies javascript code
  */
 
-public class HTMLScriptScanner extends HTMLCompositeTagScanner {
+public class HTMLScriptScanner extends CompositeTagScanner {
 	private static final String MATCH_NAME [] = {"SCRIPT"};
 	
 	public HTMLScriptScanner() {

@@ -53,8 +53,8 @@ public class HTMLScriptTag extends CompositeTag {
 	{
 		super(tagData,compositeTagData);
 		this.scriptCode = getChildrenHTML();
-		this.language = getParameter("LANGUAGE"); 
-		this.type = getParameter("TYPE");
+		this.language = getAttribute("LANGUAGE"); 
+		this.type = getAttribute("TYPE");
 	}
 
 	public java.lang.String getLanguage() {

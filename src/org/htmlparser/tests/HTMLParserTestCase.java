@@ -229,9 +229,9 @@ public class HTMLParserTestCase extends TestCase {
 			String key = (String)i.next();
 			if (key=="/") continue;
 			String expectedValue = 
-				expectedTag.getParameter(key);
+				expectedTag.getAttribute(key);
 			String actualValue =
-				actualTag.getParameter(key);
+				actualTag.getAttribute(key);
 			if (key==HTMLTag.TAGNAME) {
 				expectedValue = HTMLParserUtils.removeChars(expectedValue,'/');
 				actualValue = HTMLParserUtils.removeChars(actualValue,'/');

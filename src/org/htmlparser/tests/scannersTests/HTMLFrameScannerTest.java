@@ -59,7 +59,7 @@ public class HTMLFrameScannerTest extends HTMLParserTestCase {
 		assertEquals("Frame 1 Name","topFrame",frameTag1.getFrameName());
 		assertEquals("Frame 2 Locn","http://www.kizna.com/web_e/",frameTag2.getFrameLocation());		
 		assertEquals("Frame 2 Name","mainFrame",frameTag2.getFrameName());
-		assertEquals("Frame 1 Scrolling","NO",frameTag1.getParameter("scrolling"));
-		assertEquals("Frame 1 Border","NO",frameTag1.getParameter("frameborder"));		
+		assertEquals("Frame 1 Scrolling","NO",frameTag1.getAttribute("scrolling"));
+		assertEquals("Frame 1 Border","NO",frameTag1.getAttribute("frameborder"));		
 	}
 }

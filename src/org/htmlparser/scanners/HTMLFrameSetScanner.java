@@ -44,7 +44,7 @@ import org.htmlparser.tags.data.HTMLTagData;
  * given string contains an image tag. Extraction is done by the scan method thereafter
  * by the user of this class.
  */
-public class HTMLFrameSetScanner extends HTMLCompositeTagScanner
+public class HTMLFrameSetScanner extends CompositeTagScanner
 {
 	private static final String MATCH_NAME [] = {"FRAMESET"};
 	
