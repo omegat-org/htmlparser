@@ -12,6 +12,35 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20030713
+--------------------------------
+
+2003-07-13 07:40  derrickoswald
+
+	* docs/docs/: FrequentlyAskedQuestions.html, ImageExtraction.html,
+	index.html, ParsingXml.html:
+
+	update Wiki image
+	
+2003-07-13 07:31  derrickoswald
+
+	* src/org/htmlparser/parserapplications/LinkExtractor.java:
+
+	fix bug #765413 typo
+	
+2003-07-11 20:33  jkerievsky
+
+	* src/org/htmlparser/: NodeReader.java, Parser.java,
+	StringNode.java, StringNodeFactory.java,
+	nodeDecorators/AbstractNodeDecorator.java,
+	parserHelper/StringParser.java, scanners/ScriptScanner.java,
+	tests/nodeDecoratorTests/DecodingNodeTest.java,
+	tests/nodeDecoratorTests/EscapeCharacterRemovingNodeTest.java,
+	tests/nodeDecoratorTests/NonBreakingSpaceConvertingNodeTest.java,
+	util/NodeList.java:
+
+	added more support for string node factory, fixed an error in the NodeArray class
+
 Integration Build 1.4 - 20030629
 --------------------------------
 
