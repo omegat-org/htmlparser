@@ -1,4 +1,4 @@
-HTMLParser Integration Release 1.2 - 2002_08_04
+HTMLParser Integration Release 1.2 - 2002_08_11
 ***********************************************
 
 Q1. What are the contents of the distribution ? 
