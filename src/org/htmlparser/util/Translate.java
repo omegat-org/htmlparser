@@ -428,30 +428,28 @@ public class Translate
      */
     public static char convertToChar (String string)
     {
-        int length;
         Character item;
+        int start;
+        int end;
         char ret;
 
         ret = 0;
-
-        length = string.length ();
-        if (0 < length)
+        start = 0;
+        end = string.length ();
+        if (0 < end)
         {
             if ('&' == string.charAt (0))
+                start++;
+            if (0 < end)
             {
-                string = string.substring (1);
-                length--;
-            }
-            if (0 < length)
-            {
-                if (';' == string.charAt (length - 1))
-                    string = string.substring (0, --length);
-                if (0 < length)
+                if (';' == string.charAt (end - 1))
+                    --end;
+                if (0 < end)
                 {
-                    if ('#' == string.charAt (0))
+                    if ('#' == string.charAt (start))
                         try
                         {
-                            ret = (char)Integer.parseInt (string.substring (1));
+                            ret = (char)Integer.parseInt (string.substring (start + 1, end));
                         }
                         catch (NumberFormatException nfe)
                         {
@@ -459,7 +457,7 @@ public class Translate
                         }
                     else
                     {
-                        item = (Character)refChar.get (string);
+                        item = (Character)refChar.get (string.substring (start,end));
                         if (null != item)
                             ret = item.charValue ();
                     }
