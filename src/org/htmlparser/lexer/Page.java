@@ -683,7 +683,7 @@ public class Page
         char[] new_chars;
 
         encoding = getEncoding ();
-        if (!encoding.equals (character_set))
+        if (!encoding.equalsIgnoreCase (character_set))
         {
             stream = getSource ().getStream ();
             try
