@@ -42,7 +42,7 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.NodeVisitor;
 /**
- * HTMLTag represents a generic tag. This class allows users to register specific
+ * Tag represents a generic tag. This class allows users to register specific
  * tag scanners, which can identify links, or image references. This tag asks the
  * scanners to run over the text, and identify. It can be used to dynamically
  * configure a parser.
@@ -125,7 +125,7 @@ public class Tag extends Node
     }
 
 	/**
-	 * Set the HTMLTag with the beginning posn, ending posn and tag contents (in
+	 * Set the Tag with the beginning posn, ending posn and tag contents (in
 	 * a tagData object.
 	 * @param tagData The data for this tag
 	 */
@@ -348,7 +348,7 @@ public class Tag extends Node
 
 	/**
 	 * A call to a tag's toHTML() method will render it in HTML
-	 * Most tags that do not have children and inherit from HTMLTag,
+	 * Most tags that do not have children and inherit from Tag,
 	 * do not need to override toHTML().
 	 * @see org.htmlparser.Node#toHTML()
 	 */

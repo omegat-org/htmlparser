@@ -72,7 +72,7 @@ public abstract class TagScanner
 	  protected ParserFeedback feedback;
 	  /**
 	   * Default Constructor, automatically registers the scanner into a static array of 
-	   * scanners inside HTMLTag
+	   * scanners inside Tag
 	   */
 	  public TagScanner()
 	  {
@@ -118,7 +118,7 @@ public abstract class TagScanner
 	   * <strong>This method has to be implemented meaningfully only if a first-word match with 
 	   * the scanner id does not imply a match (or extra processing needs to be done).
 	   * Default returns true</strong>
-	   * @param s The complete text contents of the HTMLTag.
+	   * @param s The complete text contents of the Tag.
 	   * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
 	   * scan has begun, and hence allows us to write scanners that can work with dirty html
 	   */
@@ -267,7 +267,7 @@ public abstract class TagScanner
 	 * @param tagData
 	 * @param tag
 	 * @param url
-	 * @return HTMLTag
+	 * @return Tag
 	 * @throws HTMLParserException
 	 */
 	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException { return null; }  

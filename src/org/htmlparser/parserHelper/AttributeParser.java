@@ -55,8 +55,8 @@ public class AttributeParser {
 	* Method to break the tag into pieces.
 	* @param returns a Hastable with elements containing the
 	* pieces of the tag. The tag-name has the value field set to
-	* the constant HTMLTag.TAGNAME. In addition the tag-name is
-	* stored into the Hashtable with the name HTMLTag.TAGNAME
+	* the constant Tag.TAGNAME. In addition the tag-name is
+	* stored into the Hashtable with the name Tag.TAGNAME
 	* where the value is the name of the tag.
 	* Tag parameters without value
 	* has the value "". Parameters with value are represented
@@ -66,7 +66,7 @@ public class AttributeParser {
 	* E.g extract the href values from A-tag's and print them
 	* <pre>
 	*
-    *    HTMLTag tag;
+    *    Tag tag;
 	*    Hashtable h;
 	*    String tmp;
     *    try {
@@ -75,7 +75,7 @@ public class AttributeParser {
     *        Enumeration en = p.elements();
     *        while (en.hasMoreElements()) {
     *            try {
-    *                tag = (HTMLTag)en.nextElement();
+    *                tag = (Tag)en.nextElement();
     *                h = tag.parseParameters();
     *                tmp = (String)h.get(tag.TAGNAME);
     *                if (tmp != null && tmp.equalsIgnoreCase("A")) {;

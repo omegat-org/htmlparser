@@ -327,7 +327,7 @@ public class TagTest extends ParserTestCase
     /**
      * Reproduction of a bug reported by Annette Doyle
      * This is actually a pretty good example of dirty html - we are in a fix
-     * here, bcos the font tag (the first one) has an erroneous inverted comma. In HTMLTag,
+     * here, bcos the font tag (the first one) has an erroneous inverted comma. In Tag,
      * we ignore anything in inverted commas, and dont if its outside. This kind of messes
      * up our parsing almost completely.
      */
@@ -504,7 +504,7 @@ public class TagTest extends ParserTestCase
 
 	/**
 	 * Bug reported by John Zook, if there is an empty tag,
-	 * then HTMLTag shouldnt pass it down to the scanners.
+	 * then Tag shouldnt pass it down to the scanners.
 	 */
 	public void testEmptyTag() throws ParserException {
 		String testHTML = "<html><body><>text</body></html>";
@@ -518,7 +518,7 @@ public class TagTest extends ParserTestCase
 
 	/**
 	 * Bug reported by John Zook, if there is an empty tag,
-	 * then HTMLTag shouldnt pass it down to the scanners.
+	 * then Tag shouldnt pass it down to the scanners.
 	 */
 	public void testEmptyTag2() throws ParserException {
 		String testHTML = "<html><body>text<></body></html>";

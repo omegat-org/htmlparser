@@ -114,7 +114,7 @@ public class FormScanner extends TagScanner
 	 * @param tag HTML Tag to be scanned for identification
 	 * @param url The initiating url of the scan (Where the html page lies)
 	 * @param reader The reader object responsible for reading the html page
-	 * @param currentLine The current line (automatically provided by HTMLTag)
+	 * @param currentLine The current line (automatically provided by Tag)
 	 */
 	public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
 	{

@@ -109,7 +109,7 @@ public class LinkScanner extends TagScanner
 	/**
 	 * Template Method, used to decide if this scanner can handle the Link tag type. If 
 	 * the evaluation returns true, the calling side makes a call to scan().
-	 * @param s The complete text contents of the HTMLTag.
+	 * @param s The complete text contents of the Tag.
 	 * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
 	 * scan has begun, and hence allows us to write scanners that can work with dirty html
 	 */
@@ -233,7 +233,7 @@ public class LinkScanner extends TagScanner
 	 * @param tag HTML Tag to be scanned
 	 * @param url The URL of the html page in which this tag is located
 	 * @param reader The HTML reader used to read this url
-	 * @param currentLine The current line (automatically provided by HTMLTag)	 
+	 * @param currentLine The current line (automatically provided by Tag)	 
 	 */
 	public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
 	{

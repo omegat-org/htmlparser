@@ -105,7 +105,7 @@ public class FormTag extends CompositeTag
 	/**
 	 * Get the input tag in the form corresponding to the given name
 	 * @param name The name of the input tag to be retrieved
-	 * @return HTMLTag The input tag corresponding to the name provided
+	 * @return Tag The input tag corresponding to the name provided
 	 */
 	public InputTag getInputTag(String name) {
 		InputTag inputTag=null;

@@ -43,7 +43,7 @@ public class ScriptTag extends CompositeTag {
 	 * and the tag contents.
 	 * @param nodeBegin beginning position of the tag
 	 * @param nodeEnd ending position of the tag
-	 * @param tagContents The contents of the Script Tag (should be kept the same as that of the original HTMLTag contents)
+	 * @param tagContents The contents of the Script Tag (should be kept the same as that of the original Tag contents)
 	 * @param scriptCode The Javascript code b/w the tags
 	 * @param language The language parameter
 	 * @param type The type parameter

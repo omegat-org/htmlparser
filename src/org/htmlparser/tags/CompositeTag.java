@@ -103,7 +103,7 @@ public abstract class CompositeTag extends Tag {
 	/**
 	 * Searches all children who for a name attribute. Returns first match.
 	 * @param name Attribute to match in tag
-	 * @return HTMLTag Tag matching the name attribute
+	 * @return Tag Tag matching the name attribute
 	 */
 	public Tag searchByName(String name) {
 		Node node;
