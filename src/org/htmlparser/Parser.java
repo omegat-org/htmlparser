@@ -87,7 +87,7 @@ public class Parser
      * The date of the version.
      */
     public final static String
-    VERSION_DATE = "Jan 25, 2004"
+    VERSION_DATE = "Feb 16, 2004"
     ;
 
     /**

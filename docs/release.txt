@@ -1,4 +1,4 @@
-HTMLParser Version 1.4 (Integration Build Jan 25, 2004)
+HTMLParser Version 1.4 (Integration Build Feb 16, 2004)
 *********************************************
 
 Contents of the distribution
@@ -20,6 +20,11 @@ Contents of the distribution
 
 Changes since Version 1.3
 -------------------------
+Translation
+    Character entity encoding and decoding has been revamped, leading to
+    higher throughput and less memory churn.
+Beans
+    The StringBean can now be used as a visitor for parsers external to the bean.
 Decorators
     The node decorator package has been added to provide support for the
     delegate model.
@@ -56,9 +61,12 @@ Filters
     specific tags very easy.
 Applications
     New example applications Thumbelina and SiteCapturer.
+    A mainline has been added to the Translate class to encode/decode stdin to
+    stdout.
 
 Bug Fixes
 ---------
+891058 Bug in lexer
 865279 Documentation
 851882 zero length alt tag causes bug in ImageScanner
 839264 toHtml() parse error in Javascripts with "form" keyword
@@ -120,6 +128,9 @@ The following people have contributed important bug reports, feature ideas :
 [25] Joshua Kerievsky
 [26] Stephen Nightingale
 [27] Donnla Nic Gearailt
+[28] Pim Schrama
+[29] Nick Burch
+[30] Gernot Fricke
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 

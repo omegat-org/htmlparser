@@ -12,6 +12,67 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20040216
+--------------------------------
+
+2004-02-11 07:37  derrickoswald
+
+	* docs/contributors.html, src/org/htmlparser/beans/StringBean.java:
+
+	Incorporate patch from Nick Burch to make StringBean a NodeVisistor for other parsers.
+	See task #93155 StringBean driven by visitor.
+	
+2004-02-08 21:09  derrickoswald
+
+	* build.xml, src/org/htmlparser/lexer/nodes/Attribute.java,
+	src/org/htmlparser/lexer/nodes/TagNode.java,
+	src/org/htmlparser/tests/tagTests/TagTest.java,
+	src/org/htmlparser/tests/utilTests/CharacterTranslationTest.java,
+	bin/translate, bin/translate.bat,
+	src/org/htmlparser/util/CharacterReference.java,
+	src/org/htmlparser/util/Generate.java,
+	src/org/htmlparser/util/Translate.java,
+	src/org/htmlparser/util/package.html:
+
+	Rework character entity translation.
+	See task 58599  enhance character reference translation.
+	Decode now handles missing semi colons, encoding is more efficient,
+	hexadecimal numeric character entity references are handled and
+	both encoding and decoding make minimal use of substring().
+	Augmented the tests in CharacterTranslationTest significantly, and
+	merged the Generate class into the tests.
+	Added translate command scripts in bin, which read from stdin and write to stdout.
+	
+2004-02-07 07:53  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	tests/lexerTests/AttributeTests.java:
+
+	Fix bug #891058 Bug in lexer.
+	Patch submitted by Gernot Fricke.
+	This change causes attribute parsing to be more 'greedy' resulting in 'empty' attributes
+	consuming the next attribute. This brings the lexer parsing more in line with other
+	(browser) interpretations and simplifies it immensely.
+	
+2004-01-31 15:51  derrickoswald
+
+	* src/org/htmlparser/lexer/Page.java:
+
+	Compare encoding names without case sensitivity.
+	From HTML spec (http://www.w3.org/TR/html4/charset.html section 5.2.1):
+	  Names for character encodings are case-insensitive, so that for
+	  example "SHIFT_JIS", "Shift_JIS", and "shift_jis" are equivalent.
+	and from to IANA(http://www.iana.org/assignments/character-sets):
+	  The character set names may be up to 40 characters taken from the
+	  printable characters of US-ASCII.  However, no distinction is made
+	  between use of upper and lower case letters.
+	
+2004-01-31 11:31  derrickoswald
+
+	* src/doc-files/: overview.html, todo.html:
+
+	Move ToDo list to SourceForge trackers and tasks.
+
 Integration Build 1.4 - 20040125
 --------------------------------
 
