@@ -104,8 +104,6 @@ public interface Tag extends Node
      * Note: This value is converted to uppercase and does not
      * begin with "/" if it is an end tag. Nor does it end with
      * a slash in the case of an XML type tag.
-     * To get at the original text of the tag name use
-     * {@link #getRawTagName getRawTagName()}.
      * The conversion to uppercase is performed with an ENGLISH locale.
      * </em>
      * @return The tag name.
