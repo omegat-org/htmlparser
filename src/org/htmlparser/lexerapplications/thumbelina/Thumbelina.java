@@ -790,53 +790,56 @@ public class Thumbelina
                 name = tag.getTagName ();
                 if ("A".equals (name))
                 {
-                    startatag = tag;
-                    imgtag = null;
-                    ina = true;
-                    href = startatag.getAttribute ("HREF");
-                    if (null != href)
+                    if (tag.isEndTag ())
                     {
-                        if (!isImage (href))
-                            try
+                        ina = false;
+                        if (null != imgtag)
+                        {
+                            // evidence of a thumb
+                            href = startatag.getAttribute ("HREF");
+                            if (null != href)
                             {
-                                url = new URL (docbase, href);
-                                // eliminate duplicates
-                                href = url.toExternalForm ();
-                                if (!links.containsKey (href))
-                                    links.put (href, url);
+                                if (isImage (href))
+                                {
+                                    src = imgtag.getAttribute ("SRC");
+                                    if (null != src)
+                                        try
+                                        {
+                                            url = new URL (docbase, href);
+                                            // eliminate duplicates
+                                            href = url.toExternalForm ();
+                                            if (!images.containsKey (href))
+                                                images.put (href, url);
+                                        }
+                                        catch (MalformedURLException murle)
+                                        {
+                                            // oops, forget it
+                                        }
+                                }
                             }
-                            catch (MalformedURLException murle)
-                            {
-                                // well, obviously we don't want this one
-                            }
+                        }
                     }
-                }
-                else if ("/A".equals (name))
-                {
-                    ina = false;
-                    if (null != imgtag)
+                    else
                     {
-                        // evidence of a thumb
+                        startatag = tag;
+                        imgtag = null;
+                        ina = true;
                         href = startatag.getAttribute ("HREF");
                         if (null != href)
                         {
-                            if (isImage (href))
-                            {
-                                src = imgtag.getAttribute ("SRC");
-                                if (null != src)
-                                    try
-                                    {
-                                        url = new URL (docbase, href);
-                                        // eliminate duplicates
-                                        href = url.toExternalForm ();
-                                        if (!images.containsKey (href))
-                                            images.put (href, url);
-                                    }
-                                    catch (MalformedURLException murle)
-                                    {
-                                        // oops, forget it
-                                    }
-                            }
+                            if (!isImage (href))
+                                try
+                                {
+                                    url = new URL (docbase, href);
+                                    // eliminate duplicates
+                                    href = url.toExternalForm ();
+                                    if (!links.containsKey (href))
+                                        links.put (href, url);
+                                }
+                                catch (MalformedURLException murle)
+                                {
+                                    // well, obviously we don't want this one
+                                }
                         }
                     }
                 }
@@ -1423,6 +1426,9 @@ public class Thumbelina
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.2  2003/10/26 16:44:01  derrickoswald
+ * Get thumbelina working again. The tag.getName() method doesn't include the / of end tags.
+ *
  * Revision 1.1  2003/09/21 18:20:56  derrickoswald
  * Thumbelina
  * Created a lexer GUI application to extract images behind thumbnails.
