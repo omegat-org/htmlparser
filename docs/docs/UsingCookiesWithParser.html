@@ -1,75 +1,61 @@
-<html><head><title>Using Cookies With Parser</title></head><body><DIV CLASS="wikitext"><P><B>Using Cookies with the Parser</B></P><P><B>Problem:</B> (by <SPAN CLASS="wikiunknown"><U>ShanSivakolundhu</U></SPAN>)<BR />In order to access a particular site I neet to have
+<html><head><title>Using Cookies With Parser</title></head><body><DIV CLASS="wikitext"><P><B>Using Cookies with the Parser</B></P><P><B>Problem:</B> (by <SPAN CLASS="wikiunknown"><U>ShanSivakolundhu</U></SPAN>)<BR/>In order to access a particular site I neet to have
 a cookie set. Is there any way I can set the cookie
 before I create a parser object ? Just like ...</P><PRE>URLConnection.("Cookie", cookieValue);
-URLConnection.connect();</PRE><P><B>Solution:</B> (by <SPAN CLASS="wikiunknown"><U>BobLewis</U></SPAN>)<BR />In order to send cookies in your Http requests, all
+URLConnection.connect();</PRE><P><B>Solution:</B> (by <SPAN CLASS="wikiunknown"><U>BobLewis</U></SPAN>)<BR/>In order to send cookies in your Http requests, all
 you need to do is set the Cookie HTTP Header in the
 URL Connection.</P><P>Generally what I've done is first create a
 HttpURLConnection, create some Cookie objects that are
 needed, and set the HTTP Header using those objects
 (See below for code to format the header value).</P><P>Then I'll create the Parser using the URLConnection
-something like this:</P><PRE>        DefaultHTMLParserFeedback feedback
-            = new
-DefaultHTMLParserFeedback(DefaultHTMLParserFeedback.DEBUG);
+something like this:</P><PRE>        DefaultHTMLParserFeedback feedback =
+           new DefaultHTMLParserFeedback(DefaultHTMLParserFeedback.DEBUG);
 
         HTMLReader reader = null;
         HTMLParser parser = null;
-        String charset =
-HttpUtil.getCharacterSet(urlConn);
+        String charset = HttpUtil.getCharacterSet(urlConn);
 
-        InputStreamReader isr
-            = new
-InputStreamReader(urlConn.getInputStream(), charset);
+        InputStreamReader isr =
+           new InputStreamReader(urlConn.getInputStream(), charset);
         reader = new HTMLReader(isr, 8192);
         parser = new HTMLParser(reader, feedback);</PRE><P>The <SPAN CLASS="wikiunknown"><U>HttpUtil</U></SPAN>.getCharacterSet method used above is
 basically just taken from the method of the same name
 in the HTMLParser class.  That method is protected, so
-I had to duplicate it elsewhere.</P><PRE>    /** set cookies to send in a HttpURLConnection&lt;br&gt;
+I had to duplicate it elsewhere.</P><PRE>    /**
+     * set cookies to send in a HttpURLConnection&lt;br&gt;
      * This method should only be called before any
-parameters are posted
+     * parameters are posted
      * and before the connection is made.
      * @param urlConn the HttpURLConnection to send
-the cookies through
+     * the cookies through
      * @param cookies the cookies to send
      */
-    public static void postCookies(HttpURLConnection
-urlConn, Cookie[] cookies)
-    {
-        if ((cookies == null) || (cookies.length ==
-0))
-        {
+    public static void postCookies(HttpURLConnection urlConn, Cookie[] cookies) {
+        if ((cookies == null) || (cookies.length ==0)) {
             return;
         }
-
-        String[] cookieHeaders = new
-String[cookies.length];
-
-        urlConn.setRequestProperty("cookie",
-generateCookieHeader(cookies));
+        String[] cookieHeaders = new String[cookies.length];
+        urlConn.setRequestProperty("cookie",generateCookieHeader(cookies));
     }
 
-    /** generate a HTTP cookie header value string
-from an array of cookies
+    /**
+     * generate a HTTP cookie header value string
+     * from an array of cookies
      * @param cookies the cookies which should be set
-in the header value
+     * in the header value
      * @return A string containing the HTTP Cookie
-Header value
+     * Header value
      */
-    private static String
-generateCookieHeader(Cookie[] cookies)
-    {
+    private static String generateCookieHeader(Cookie[] cookies) {
         StringBuffer buf = new StringBuffer();
 
-        for (int i=0; i &lt; cookies.length;i++)
-        {
+        for (int i=0; i &lt; cookies.length;i++) {
             buf.append(cookies[i].getName());
             buf.append("=");
             buf.append(cookies[i].getValue());
-            if (i+1 != cookies.length)
-            {
+            if (i+1 != cookies.length) {
                 buf.append("; ");
             }
             else buf.append(" ");
         }
-
         return buf.toString();
-    }</PRE></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, March 16, 2003  1:17:31 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
+    }</PRE></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Wednesday, April  2, 2003  3:04:24 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
