@@ -43,6 +43,7 @@ import org.htmlparser.tags.HTMLFrameSetTag;
 import org.htmlparser.tags.HTMLFrameTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLParserException;
+
 /**
  * Scans for the Frame Tag. This is a subclass of HTMLTagScanner, and is called using a
  * variant of the template method. If the evaluate() method returns true, that means the
