@@ -148,7 +148,7 @@ public class AppletTag extends CompositeTag
 
     /**
      * Set the <code>CODE<code> attribute.
-     * @param The new applet class.
+     * @param newAppletClass The new applet class.
      */
     public void setAppletClass (String newAppletClass)
     {
@@ -157,7 +157,7 @@ public class AppletTag extends CompositeTag
 
     /**
      * Set the enclosed <code>PARM<code> children.
-     * @param The new parameters.
+     * @param newAppletParams The new parameters.
      */
     public void setAppletParams (Hashtable newAppletParams)
     {
@@ -199,7 +199,7 @@ public class AppletTag extends CompositeTag
 
     /**
      * Set the <code>ARCHIVE<code> attribute.
-     * @param The new archive file.
+     * @param newArchive The new archive file.
      */
     public void setArchive (String newArchive)
     {
@@ -208,7 +208,7 @@ public class AppletTag extends CompositeTag
 
     /**
      * Set the <code>CODEBASE<code> attribute.
-     * @param The new applet code base.
+     * @param newCodeBase The new applet code base.
      */
     public void setCodeBase (String newCodeBase)
     {

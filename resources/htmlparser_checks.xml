@@ -76,7 +76,7 @@
             <!-- to have access to ANT properties. In this case it uses -->
             <!-- the ${basedir} property to allow Checkstyle to be run  -->
             <!-- from any directory within a project.                   -->
-            <property name="headerFile" value="${basedir}/java.header"/>
+            <property name="headerFile" value="${basedir}/resources/java.header"/>
         </module>
 
         <!-- Following interprets the header file as regular expressions. -->

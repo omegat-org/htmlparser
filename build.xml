@@ -1,12 +1,12 @@
 <!--
 Build Procedure
 - cd htmlparser
-- 'ant jar' generates new htmlparser.jar and htmllexer.jar in htmlparser/release/htmlparser1_4/lib
+- 'ant jar' generates new htmlparser.jar and htmllexer.jar in htmlparser/lib
 
 Release Procedure
 - cd htmlparser
-- set environment variables CVSROOT and CVS_RSH (see changeLog task)
-- 'ant changeLog' generates htmlparser/ChangeLog
+- set environment variables CVSROOT and CVS_RSH (see changelog task)
+- 'ant changelog' generates htmlparser/ChangeLog
 - edit the ChangeLog to exclude changes already incorporated and the previous 
   release's "update of version headers" drop - the CVS date spec is only accurate
   to the day since it comes from the version coded in the Parser.java file,
@@ -83,18 +83,18 @@ HTML Parser Integration Release 1.4-20030824
   <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
   <property name="src" value="src"/>
   <property name="docs" value="docs"/>
+  <property name="bin" value="bin"/>
+  <property name="lib" value="lib"/>
   <property name="resources" value="resources"/>
-  <property name="dist"  value="release/htmlparser${versionQualifier}"/>
-  <property name="releaseDir" value="release"/>
-  <property name="finalLoc" value="distribution"/>
-  <property name="junit.jar" value="lib/junit.jar"/>
-  <property name="commons-logging.jar" value="lib/commons-logging.jar"/>
+  <property name="distribution" value="distribution"/>
+  <property name="junit.jar" value="${lib}/junit.jar"/>
+  <property name="commons-logging.jar" value="${lib}/commons-logging.jar"/>
 
   <taskdef resource="checkstyletask.properties"
-           classpath="lib/checkstyle-all-3.1.jar"/>
+           classpath="${lib}/checkstyle-all-3.1.jar"/>
 
   <target name="checkstyle" description="check source code adheres to coding standards">
-    <checkstyle config="./htmlparser_checks.xml">
+    <checkstyle config="${resources}/htmlparser_checks.xml">
       <fileset dir="src" includes="**/*.java"/>
     </checkstyle>
   </target>
@@ -174,7 +174,7 @@ HTML Parser Integration Release 1.4-20030824
     </replace>
   </target>
  
-  <target name="changeLog" depends="init" description="create the change log from CVS logs">
+  <target name="changelog" depends="init" description="create the change log from CVS logs">
     <!-- ant has a changelog task already, but it outputs XML and doesn't unify dates or spit them out in chronological order -->
     <!-- cvschangelog daysinpast="7" destfile="changelog.xml" / -->
     <!-- so we use cvs2cl instead -->
@@ -196,8 +196,8 @@ HTML Parser Integration Release 1.4-20030824
     <echo message="**********************************"/>
     <echo message="*  Creating change log           *"/>
     <echo message="**********************************"/>
-    <echo message="./cvs2cl.pl --no-wrap --separate-header -l &quot;-d'&gt;${VERSION_DATE}'&quot;"/>
-    <exec executable="./cvs2cl.pl">
+    <echo message="${resources}/cvs2cl.pl --no-wrap --separate-header -l &quot;-d'&gt;${VERSION_DATE}'&quot;"/>
+    <exec executable="${resources}/cvs2cl.pl">
       <arg value="--no-wrap"/>
       <arg value="--separate-header"/>
       <arg value="-l"/>
@@ -249,14 +249,14 @@ HTML Parser Integration Release 1.4-20030824
   <!-- Create the distribution of htmllexer.jar -->
   <target name="jarlexer" depends="compilelexer" description="create htmllexer.jar">
     <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${lib}"/>
 
     <echo message="**********************************"/>
     <echo message="*  Creating htmllexer.jar....   *"/>
     <echo message="**********************************"/>
 
     <!-- Put classes and images into the htmllexer.jar file -->
-    <jar jarfile="${dist}/lib/htmllexer.jar"
+    <jar jarfile="${lib}/htmllexer.jar"
       basedir="${src}">
       <include name="org/htmlparser/lexer/**/*.class"/>
       <include name="org/htmlparser/AbstractNode.class"/>
@@ -278,14 +278,14 @@ HTML Parser Integration Release 1.4-20030824
   <!-- Create the distribution of htmlparser.jar -->
   <target name="jarparser" depends="compileparser" description="create htmlparser.jar">
     <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${lib}"/>
 
     <echo message="**********************************"/>
     <echo message="*  Creating htmlparser.jar....   *"/>
     <echo message="**********************************"/>
 
     <!-- Put classes and images into the htmlparser.jar file -->
-    <jar jarfile="${dist}/lib/htmlparser.jar"
+    <jar jarfile="${lib}/htmlparser.jar"
       basedir="${src}"
       includes="**/*.class **/*.gif"
       excludes="org/htmlparser/tests/**/*.class,org/htmlparser/util/Generate.class">
@@ -313,21 +313,21 @@ HTML Parser Integration Release 1.4-20030824
   <!-- Create the Thumbelina jar -->
   <target name="thumbelina" depends="JDK1.4,jarlexer" description="create thumbelina.jar" if="JDK1.4">
     <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${lib}"/>
 
     <echo message="**********************************"/>
     <echo message="*  Creating thumbelina.jar....   *"/>
     <echo message="**********************************"/>
 
-    <javac compiler="javac1.4" srcdir="${src}" debug="on" classpath="src:${dist}/lib/htmllexer.jar">
+    <javac compiler="javac1.4" srcdir="${src}" debug="on" classpath="src:${lib}/htmllexer.jar">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.java"/>
     </javac>
-    <jar jarfile="${dist}/lib/thumbelina.jar"
+    <jar jarfile="${lib}/thumbelina.jar"
       basedir="${src}"
       defaultexcludes="no"
       update="true">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.class"/>
-      <zipfileset src="${dist}/lib/htmllexer.jar" includes="**/*.class"/>
+      <zipfileset src="${lib}/htmllexer.jar" includes="**/*.class"/>
       <manifest>
         <attribute name="Main-Class" value="org.htmlparser.lexerapplications.thumbelina.Thumbelina"/>
       </manifest>
@@ -348,7 +348,7 @@ HTML Parser Integration Release 1.4-20030824
     </javac>
     <java classname="org.htmlparser.tests.AllTests" fork="yes" failonerror="yes">
       <classpath>
-        <pathelement location="${dist}/lib/htmlparser.jar"/>
+        <pathelement location="${lib}/htmlparser.jar"/>
         <pathelement location="${src}"/>
         <pathelement location="${junit.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
@@ -358,13 +358,13 @@ HTML Parser Integration Release 1.4-20030824
   </target>
 
   <!-- Create the javadoc for the project -->
-  <target name="javadoc" depends="init,CopyDoc" description="create JavaDoc (API) documentation">
+  <target name="javadoc" depends="init" description="create JavaDoc (API) documentation">
     <echo message="**********************************"/>
     <echo message="*  Generating Javadoc....        *"/>
     <echo message="**********************************"/>
 
     <!-- Create the javadoc directory -->
-    <mkdir dir="${dist}/docs/javadoc"/>
+    <mkdir dir="${docs}/javadoc"/>
     
     <property name="javadoc.doctitle" value="&lt;h1>HTML Parser ${versionNumber}&lt;/h1>"/>
     <property name="javadoc.header" value="&lt;A HREF=&quot;http://htmlparser.sourceforge.net&quot; target=&quot;_top&quot;>HTML Parser Home Page&lt;/A>"/>
@@ -384,7 +384,7 @@ HTML Parser Integration Release 1.4-20030824
            classpath="src:${commons-logging.jar}"
            defaultexcludes="yes"
            excludepackagenames="org.htmlparser.tests.*"
-           destdir="${dist}/docs/javadoc"
+           destdir="${docs}/javadoc"
            author="true"
            version="true"
            use="true"
@@ -404,49 +404,25 @@ HTML Parser Integration Release 1.4-20030824
     </javadoc>         
   </target>
 
-  <!-- Copy the design documentation and release notes into the doc director -->
-  <target name="CopyDoc" description="copy documentation to distribution directory">
-    <echo message="**********************************"/>
-    <echo message="*  Copying Documentation....     *"/>
-    <echo message="**********************************"/>
-
-    <copy todir="${dist}/docs">
-    	<fileset dir="${docs}"/>
-    </copy> 
-    <!-- Copy the release notes as readme.txt in the base release directory -->
-    <copy file="${docs}/release.txt" tofile="${dist}/readme.txt"/>
-
-  </target>
-
-  <!-- Copy the batch files into the htmlparser release directory -->
-  <target name="CopyBatch" description="copy batch files to distribution directory">
-    <echo message="**********************************"/>
-    <echo message="*  Copying Batch Files....       *"/>
-    <echo message="**********************************"/>
-
-     <mkdir dir="${dist}/bin"/>   
-     <copy todir="${dist}/bin" >
-        <fileset dir="${resources}" includes="*.bat"/>
-        <fileset dir="${resources}" includes="lexer"/>
-        <fileset dir="${resources}" includes="thumbelina"/>
-     </copy>
-  </target>
-
-  <!-- The release directory structuring finishes here -->
-  <target name="Release" depends="versionSource,jar,thumbelina,javadoc,CopyBatch" description="prepare the release files">
+  <target name="Release" depends="versionSource,jar,thumbelina,javadoc" description="prepare the release files">
   </target>
 
   <!-- Package the release -->
-  <target name="Package" depends="Release,sources" description="glom the release and source files into the distribution zip file">
+  <target name="Package" depends="Release,sources"
+    description="glom the release and source files into the distribution zip file">
     <echo message="**********************************"/>
     <echo message="*  Packaging....                 *"/>
     <echo message="**********************************"/>
 
-    <copy file="lib/commons-logging.jar" todir="${dist}/lib"/>
-    <copy file="lib/junit.jar" todir="${dist}/lib"/>
-    <mkdir dir="${finalLoc}"/>
-    <zip zipfile="${finalLoc}/htmlparser${versionTag}.zip"
-       basedir="${releaseDir}"/>
+    <mkdir dir="${distribution}"/>
+    <zip zipfile="${distribution}/htmlparser${versionTag}.zip">
+      <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}"/>
+      <zipfileset dir="${docs}" prefix="htmlparser${versionQualifier}/${docs}"/>
+      <zipfileset dir="${lib}" prefix="htmlparser${versionQualifier}/${lib}"/>
+      <zipfileset dir="." prefix="htmlparser${versionQualifier}/" includes="src.zip"/>
+      <!-- Copy the release notes as readme.txt in the base release directory -->
+      <zipfileset dir="${docs}" includes="release.txt" fullpath="htmlparser${versionQualifier}/readme.txt"/>
+    </zip>
   </target>
   
   <!-- Prepare the sources zip, allowing folks to build the code -->
@@ -455,36 +431,26 @@ HTML Parser Integration Release 1.4-20030824
     <echo message="*  Preparing Sources....         *"/>
     <echo message="**********************************"/>
 
-    <mkdir dir="${dist}/sources/src"/>
-    <copy todir="${dist}/sources/src">
-    	<fileset dir="${src}" includes="**/*.java **/*.html **/*.gif **/*.form **/*.properties"/>
-    </copy>
-    <copy file="build.xml" todir="${dist}/sources"/>
-	<mkdir dir="${dist}/sources/resources"/>
-	<copy todir="${dist}/sources/resources" >
-        <fileset dir="${resources}"/>
-    </copy>
-    <mkdir dir="${dist}/sources/docs"/>
-    <copy todir="${dist}/sources/docs">
-    	<fileset dir="${docs}"/>
-    </copy>
-    <zip zipfile="${dist}/src.zip"
-       basedir="${dist}/sources"/>
-    <delete dir="${dist}/sources"/>
+    <zip destfile="src.zip" defaultexcludes="no">
+      <zipfileset dir="${src}" prefix="${src}" includes="**/*.java **/*.html **/*.gif **/*.form **/*.properties"/>
+      <zipfileset dir="." includes="build.xml"/>
+      <zipfileset dir="${resources}" prefix="${resources}" excludes="cvs2cl.pl"/>
+      <zipfileset dir="${resources}" prefix="${resources}" includes="cvs2cl.pl" filemode="755"/>
+    </zip>
   </target>
 
-	<target name="clean" description="cleanup">
-		<echo message="**********************************"/>
-		<echo message="*  Cleaning up and finishing.... *"/>
-		<echo message="**********************************"/>
+  <target name="clean" description="cleanup">
+    <echo message="**********************************"/>
+    <echo message="*  Cleaning up....               *"/>
+    <echo message="**********************************"/>
 
-		<!-- delete the release directory -->
-		<delete dir="${releaseDir}"/> 
-		<!-- delete the classes -->
-		<delete>
-			<fileset dir="${src}" includes="**/*.class"/>
-		</delete>
-	</target>
+    <!-- delete the src.zip, classes and javadocs leave the jars -->
+    <delete>
+      <fileset dir="." includes="src.zip"/>
+      <fileset dir="${src}" includes="**/*.class"/>
+    </delete>
+    <delete dir="${docs}/javadoc/"/>
+  </target>
 	
   <!-- Perform the htmlparser integration -->
   <target name="htmlparser" depends="Package,clean" description="same as Package plus cleanup">

@@ -121,12 +121,7 @@ public class TagNode extends AbstractNode
     }
 
     /**
-     * Create a tag with the location and attributes provided
-     * @param page The page this tag was read from.
-     * @param start The starting offset of this node within the page.
-     * @param end The ending offset of this node within the page.
-     * @param attributes The list of attributes that were parsed in this tag.
-     * @see Attribute
+     * Create an empty tag.
      */
     public TagNode ()
     {
