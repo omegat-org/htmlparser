@@ -179,6 +179,15 @@ public class HTMLTag extends HTMLNode
 	}
 
 	/**
+	 * Set attribute with given key, value pair.
+	 * @param key
+	 * @param value
+	 */
+	public void setAttribute(String key, String value) {
+		attributes.put(key,value);
+	}
+
+	/**
 	 * In case the tag is parsed at the scan method this will return value of a
 	 * parameter not implemented yet
 	 * @param name of parameter
@@ -283,8 +292,8 @@ public class HTMLTag extends HTMLNode
 	 * Sets the parsed.
 	 * @param parsed The parsed to set
 	 */
-	public void setAttributes(Hashtable parsed) {
-		this.attributes = parsed;
+	public void setAttributes(Hashtable attributes) {
+		this.attributes = attributes;
 	}
 
 	/**
