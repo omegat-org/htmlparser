@@ -130,4 +130,29 @@ public void testStringNodeBug2()
 	HTMLStringNode stringNode2 = (HTMLStringNode)node[2];
 	assertEquals("Contents of third node"," installed on your computer.",stringNode2.getText());
 }
+/**
+ * Bug reported by Roger Sollberger<br>
+ * For the following HTML :
+ * &lt;a href="http://asgard.ch"&gt;[&lt; ASGARD &gt;&lt;/a&gt;&lt;br&gt;
+ * The string node is not correctly identified
+ */
+
+public void testTagCharsInStringNode() {
+	String testHTML = new String("<a href=\"http://asgard.ch\">[> ASGARD <]</a>");
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	HTMLParser parser = new HTMLParser(reader);
+	parser.addScanner(new HTMLLinkScanner("-l"));
+	HTMLNode [] node = new HTMLNode[10];
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+	assertTrue("Node identified must be a link tag",node[0] instanceof HTMLLinkTag);
+	HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+	assertEquals("[> ASGARD <]",linkTag.getLinkText());
+	assertEquals("http://asgard.ch",linkTag.getLink());
+}
 }

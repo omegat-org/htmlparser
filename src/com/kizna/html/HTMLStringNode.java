@@ -93,7 +93,14 @@ public class HTMLStringNode implements HTMLNode
 			{
 				return null;
 			}
-			if (input.charAt(i)=='<') 
+			// The following conditionals are a bug fix
+			// done by Roger Sollberger. They correspond to a
+			// testcase in HTMLStringNodeTest (testTagCharsInStringNode)
+			if ((input.charAt(i)=='<') &&
+			   (((i+1)<input.length()) &&  // test if next char available
+			    (((input.charAt(i+1)>='A') && (input.charAt(i+1)<='Z')) || // next char must be A-Z 
+			     ((input.charAt(i+1)>='a') && (input.charAt(i+1)<='z')) || // next char must be a-z
+			     (input.charAt(i+1)=='/'))))   // or next char is a '/' 
 			{
 				state = 2;
 				textEnd=i-1;
