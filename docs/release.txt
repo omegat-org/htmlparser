@@ -1,5 +1,5 @@
-HTMLParser Integration Release 1.2
-**********************************
+HTMLParser Integration Release 1.2 - 2002_08_04
+***********************************************
 
 Q1. What are the contents of the distribution ? 
 Q2. Which part of the source code should I analyze to be able to use it in my project ? 
