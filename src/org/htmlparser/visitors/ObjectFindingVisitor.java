@@ -31,10 +31,10 @@
 package org.htmlparser.visitors;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 
-public class ObjectFindingVisitor extends HTMLVisitor {
+public class ObjectFindingVisitor extends NodeVisitor {
 	private Class classTypeToFind;
 	private int count = 0;
 	private NodeList tags;
@@ -53,7 +53,7 @@ public class ObjectFindingVisitor extends HTMLVisitor {
 		return count;
 	}
 
-	public void visitTag(HTMLTag tag) {
+	public void visitTag(Tag tag) {
 		if (tag.getClass().getName().equals(classTypeToFind.getName())) {
 			count++;
 			tags.add(tag);

@@ -33,13 +33,13 @@ import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.ParserException;
 
-public abstract class CompositeTagScanner extends HTMLTagScanner {
+public abstract class CompositeTagScanner extends TagScanner {
 	protected String [] nameOfTagToMatch;
 	private boolean removeScanners;
 	private boolean stringNodeIgnoreMode;
@@ -57,13 +57,13 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 		this.stringNodeIgnoreMode = stringNodeIgnoreMode;
 	}
 	
-	public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currLine)
-		throws HTMLParserException {
-		HTMLTag endTag=null; 
+	public Tag scan(Tag tag, String url, HTMLReader reader,String currLine)
+		throws ParserException {
+		Tag endTag=null; 
 		try {
 			
 			beforeScanningStarts();
-			HTMLTag startTag = tag;
+			Tag startTag = tag;
 			endTag = null;
 			boolean endTagFound = false;
 			HTMLNode node=tag;
@@ -85,8 +85,8 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 				node = reader.readElement();
 				if (stringNodeIgnoreMode)
 					reader.getStringParser().setIgnoreStateMode(false);
-				if (node instanceof HTMLEndTag) {
-					endTag = (HTMLTag)node;
+				if (node instanceof EndTag) {
+					endTag = (Tag)node;
 					for (int i=0;i<nameOfTagToMatch.length && !endTagFound;i++) {
 						if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch[i])) 
 							endTagFound = true;
@@ -117,11 +117,11 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 			msg.append(tag.toHTML());
 			if (endTag==null) 
 				msg.append("\n no </"+tag.getTagName()+"> end tag was found!");
-			throw new HTMLParserException(msg.toString(),e);
+			throw new ParserException(msg.toString(),e);
 		}
 	}
 
-	public boolean isXmlEndTag(HTMLTag tag) {
+	public boolean isXmlEndTag(Tag tag) {
 		String tagText = tag.getText();
 		return tagText.charAt(tagText.length()-1)=='/';
 	}
@@ -132,7 +132,7 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 	protected void childNodeEncountered(HTMLNode node) {
 	}
 
-	protected abstract HTMLTag createTag(TagData tagData, CompositeTagData compositeTagData);
+	protected abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData);
 
 
 }

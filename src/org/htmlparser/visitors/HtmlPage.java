@@ -33,13 +33,13 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.TableScanner;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.HTMLTitleTag;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.NodeList;
 
-public class HtmlPage extends HTMLVisitor {
+public class HtmlPage extends NodeVisitor {
 	private String title;
 	private NodeList nodesInBody;
 	private NodeList tables;
@@ -62,11 +62,11 @@ public class HtmlPage extends HTMLVisitor {
 		this.title = title;
 	}
 
-	public void visitTag(HTMLTag tag) {
+	public void visitTag(Tag tag) {
 		addTagToBodyIfApplicable(tag);
 			
 		if (isTitle(tag)) {
-			HTMLTitleTag titleTag = (HTMLTitleTag)tag;
+			TitleTag titleTag = (TitleTag)tag;
 			title = titleTag.getTitle();
 		} 
 		else if (isTable(tag)) {
@@ -78,11 +78,11 @@ public class HtmlPage extends HTMLVisitor {
 		}
 	}
 
-	private boolean isTitle(HTMLTag tag) {
-		return tag instanceof HTMLTitleTag;
+	private boolean isTitle(Tag tag) {
+		return tag instanceof TitleTag;
 	}
 
-	private boolean isTable(HTMLTag tag) {
+	private boolean isTable(Tag tag) {
 		return tag instanceof TableTag;
 	}
 
@@ -91,7 +91,7 @@ public class HtmlPage extends HTMLVisitor {
 			nodesInBody.add(node);
 	}
 
-	public void visitEndTag(HTMLEndTag endTag) {
+	public void visitEndTag(EndTag endTag) {
 		if (isBodyTag(endTag)) 
 			bodyTagBegin = false;
 		addTagToBodyIfApplicable(endTag);	
@@ -105,7 +105,7 @@ public class HtmlPage extends HTMLVisitor {
 		addTagToBodyIfApplicable(stringNode);
 	}
 	
-	private boolean isBodyTag(HTMLTag tag) {
+	private boolean isBodyTag(Tag tag) {
 		return tag.getTagName().equals("BODY");
 	}
 	

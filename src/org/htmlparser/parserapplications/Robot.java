@@ -29,10 +29,10 @@
 package org.htmlparser.parserapplications;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.DefaultParserFeedback;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 /**
  * The Robot Crawler application will crawl through urls recursively, based on a depth value.
  */
@@ -43,10 +43,10 @@ public class Robot {
 	 */
 	public Robot(String resourceLocation) {
 		try {
-		  parser = new HTMLParser(resourceLocation,new DefaultHTMLParserFeedback());
+		  parser = new HTMLParser(resourceLocation,new DefaultParserFeedback());
 		  parser.registerScanners();
 		}
-		catch (HTMLParserException e) {
+		catch (ParserException e) {
 			System.err.println("Error, could not create parser object");
 			e.printStackTrace();
 		}
@@ -55,13 +55,13 @@ public class Robot {
 	 * Crawl using a given crawl depth.
 	 * @param crawlDepth Depth of crawling
 	 */
-	public void crawl(int crawlDepth) throws HTMLParserException
+	public void crawl(int crawlDepth) throws ParserException
 	{
 		try {
 		  crawl(parser,crawlDepth);
 		}
-		catch (HTMLParserException e) {
-			throw new HTMLParserException("HTMLParserException at crawl("+crawlDepth+")",e);
+		catch (ParserException e) {
+			throw new ParserException("HTMLParserException at crawl("+crawlDepth+")",e);
 		}
 	}
 	/**
@@ -69,14 +69,14 @@ public class Robot {
 	 * @param parser HTMLParser object
 	 * @param crawlDepth Depth of crawling
 	 */
-	public void crawl(HTMLParser parser,int crawlDepth) throws HTMLParserException {
+	public void crawl(HTMLParser parser,int crawlDepth) throws ParserException {
 	  System.out.println(" crawlDepth = "+crawlDepth);
-	  for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+	  for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 	  {
 	    HTMLNode node = e.nextNode();
-	    if (node instanceof HTMLLinkTag)
+	    if (node instanceof LinkTag)
 	    {
-	      HTMLLinkTag linkTag = (HTMLLinkTag)node;
+	      LinkTag linkTag = (LinkTag)node;
 	      {
 	        if (!linkTag.isMailLink())
 	        {
@@ -86,7 +86,7 @@ public class Robot {
 	          {
 	            if (crawlDepth>0)
 	            {
-	              HTMLParser newParser = new HTMLParser(linkTag.getLink(),new DefaultHTMLParserFeedback());
+	              HTMLParser newParser = new HTMLParser(linkTag.getLink(),new DefaultParserFeedback());
 	              newParser.registerScanners();
 	              System.out.print("Crawling to "+linkTag.getLink());
 	              crawl(newParser,crawlDepth-1);
@@ -130,7 +130,7 @@ public class Robot {
 	  try {
 		  robot.crawl(crawlDepth);
 	  }
-	  catch (HTMLParserException e) {
+	  catch (ParserException e) {
 	  	e.printStackTrace();
 	  }
 	}

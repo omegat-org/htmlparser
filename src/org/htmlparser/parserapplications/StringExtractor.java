@@ -32,12 +32,12 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLFormTag;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.FormTag;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 import org.htmlparser.util.Translate;
 
 public class StringExtractor
@@ -141,11 +141,11 @@ public class StringExtractor
      */
     public String extractStrings (boolean links)
         throws
-            HTMLParserException
+            ParserException
     {
         HTMLParser parser;
         HTMLNode node;
-        HTMLTag tag;
+        Tag tag;
         boolean preformatted;
         StringBuffer results;
         
@@ -153,7 +153,7 @@ public class StringExtractor
         parser.registerScanners ();
         results = new StringBuffer (4096);
         preformatted = false;
-        for (HTMLEnumeration e = parser.elements (); e.hasMoreNodes ();)
+        for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
             if (node instanceof HTMLStringNode)
@@ -167,11 +167,11 @@ public class StringExtractor
                 else
                     collapse (results, Translate.decode (string.getText ()));
             }
-            else if (node instanceof HTMLLinkTag)
+            else if (node instanceof LinkTag)
             {
                 // node is a link
                 // cast it to an HTMLLinkTag
-                HTMLLinkTag link = (HTMLLinkTag)node;
+                LinkTag link = (LinkTag)node;
                 // retrieve the data from the object
                 if (preformatted)
                     results.append (link.getLinkText ());
@@ -184,9 +184,9 @@ public class StringExtractor
                     results.append (">");
                 }
             }
-            else if (node instanceof HTMLFormTag)
+            else if (node instanceof FormTag)
             {
-                HTMLFormTag form = (HTMLFormTag)node;
+                FormTag form = (FormTag)node;
                 if (form.breaksFlow ()) // it does
                     carriage_return (results);
                 if (preformatted)
@@ -198,13 +198,13 @@ public class StringExtractor
             {
                 // skip comments
             }
-            else if (node instanceof HTMLTag)
+            else if (node instanceof Tag)
             {
-                tag = (HTMLTag)node;
+                tag = (Tag)node;
                 if (tag.breaksFlow ())
                     carriage_return (results);
                 if (tag.getText ().toUpperCase ().equals ("PRE"))
-                    preformatted = !(tag instanceof HTMLEndTag);
+                    preformatted = !(tag instanceof EndTag);
             }
         }
         
@@ -235,7 +235,7 @@ public class StringExtractor
             {
                 System.out.println (se.extractStrings (links));
             }
-            catch (HTMLParserException e)
+            catch (ParserException e)
             {
                 e.printStackTrace ();
             }

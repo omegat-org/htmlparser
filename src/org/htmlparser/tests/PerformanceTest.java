@@ -31,9 +31,9 @@ package org.htmlparser.tests;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.DefaultParserFeedback;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 
 public class PerformanceTest {
 	private int numTimes;
@@ -50,7 +50,7 @@ public class PerformanceTest {
 		this.numTimes = numTimes;		
 	}
 
-	public void beginTestWithoutScanners() throws HTMLParserException {
+	public void beginTestWithoutScanners() throws ParserException {
 		HTMLParser parser;
 		long sumTimes=0;
 		double avg=0;
@@ -59,10 +59,10 @@ public class PerformanceTest {
 		System.out.println("***************************************");				
 		for (int i=0;i<=numTimes;i++) {
 			// Create the parser object
-			parser = new HTMLParser(file,new DefaultHTMLParserFeedback());
+			parser = new HTMLParser(file,new DefaultParserFeedback());
 			HTMLNode node;
 			long start=System.currentTimeMillis();
-			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 				node = e.nextNode();
 			}
 			long elapsedTime=System.currentTimeMillis()-start;
@@ -78,7 +78,7 @@ public class PerformanceTest {
 		System.out.println("***************************************");
 	}
 
-	public void beginTestWithScanners() throws HTMLParserException {
+	public void beginTestWithScanners() throws ParserException {
 		HTMLParser parser;
 		long sumTimes=0;
 		double avg=0;
@@ -87,11 +87,11 @@ public class PerformanceTest {
 		System.out.println("***************************************");					
 		for (int i=0;i<=numTimes;i++) {
 			// Create the parser object
-			parser = new HTMLParser(file,new DefaultHTMLParserFeedback());
+			parser = new HTMLParser(file,new DefaultParserFeedback());
 			parser.registerScanners();
 			HTMLNode node;
 			long start=System.currentTimeMillis();
-			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 				node = e.nextNode();
 			}
 			long elapsedTime=System.currentTimeMillis()-start;
@@ -121,7 +121,7 @@ public class PerformanceTest {
 			pt.beginTestWithoutScanners();
 			pt.beginTestWithScanners();
 		}
-		catch (HTMLParserException e) {
+		catch (ParserException e) {
 			e.printStackTrace();
 		}
 	}

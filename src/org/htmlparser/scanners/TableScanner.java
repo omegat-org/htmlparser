@@ -33,7 +33,7 @@ import java.util.List;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.data.CompositeTagData;
@@ -52,7 +52,7 @@ public class TableScanner extends CompositeTagScanner {
 		parser.addScanner(new TableRowScanner(parser));
 	}
 
-	protected HTMLTag createTag(
+	protected Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new TableTag(tagData,compositeTagData,rows);

@@ -33,7 +33,7 @@ import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.ParserException;
 
 public class DivScannerTest extends HTMLParserTestCase {
 
@@ -41,7 +41,7 @@ public class DivScannerTest extends HTMLParserTestCase {
 		super(name);
 	}
 
-	public void testScan() throws HTMLParserException {
+	public void testScan() throws ParserException {
 		createParser("<table><div align=\"left\">some text</div></table>");
 		parser.registerScanners();
 		parser.addScanner(new TableScanner(parser));

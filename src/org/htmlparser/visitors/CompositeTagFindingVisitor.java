@@ -31,7 +31,7 @@
 package org.htmlparser.visitors;
 
 
-public class CompositeTagFindingVisitor extends HTMLVisitor {
+public class CompositeTagFindingVisitor extends NodeVisitor {
 	
 	public CompositeTagFindingVisitor(String compositeTag) {
 		

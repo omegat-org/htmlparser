@@ -29,8 +29,8 @@
 package org.htmlparser.visitors;
 
 import org.htmlparser.HTMLStringNode;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.util.Translate;
 
 
@@ -44,7 +44,7 @@ import org.htmlparser.util.Translate;
  * String textInPage = visitor.getExtractedText();
  * </code>
  */
-public class TextExtractingVisitor extends HTMLVisitor {
+public class TextExtractingVisitor extends NodeVisitor {
 	private StringBuffer textAccumulator;
 	private boolean preTagBeingProcessed;
 	
@@ -70,17 +70,17 @@ public class TextExtractingVisitor extends HTMLVisitor {
 		return text.replace('\u00a0',' ');
 	}
 
-	public void visitEndTag(HTMLEndTag endTag) {
+	public void visitEndTag(EndTag endTag) {
 		if (isPreTag(endTag)) 
 			preTagBeingProcessed = false;
 	}
 
-	public void visitTag(HTMLTag tag) {
+	public void visitTag(Tag tag) {
 		if (isPreTag(tag)) 
 			preTagBeingProcessed = true;
 	}
 
-	private boolean isPreTag(HTMLTag tag) {
+	private boolean isPreTag(Tag tag) {
 		return tag.getTagName().equals("PRE");
 	}
 

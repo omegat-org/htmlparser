@@ -32,11 +32,11 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.SimpleEnumeration;
-import org.htmlparser.visitors.HTMLVisitor;
+import org.htmlparser.util.SimpleNodeIterator;
+import org.htmlparser.visitors.NodeVisitor;
 
-public abstract class CompositeTag extends HTMLTag {
-	protected HTMLTag startTag, endTag;
+public abstract class CompositeTag extends Tag {
+	protected Tag startTag, endTag;
 	protected NodeList childTags; 
 
 	public CompositeTag(TagData tagData, CompositeTagData compositeTagData) {
@@ -46,7 +46,7 @@ public abstract class CompositeTag extends HTMLTag {
 		this.endTag    = compositeTagData.getEndTag();
 	}
 	
-	public SimpleEnumeration children() {
+	public SimpleNodeIterator children() {
 		return childTags.elements();
 	}
 
@@ -56,7 +56,7 @@ public abstract class CompositeTag extends HTMLTag {
 	
 	public String toPlainTextString() {
 		StringBuffer stringRepresentation = new StringBuffer();
-		for (SimpleEnumeration e=children();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
 			stringRepresentation.append(e.nextNode().toPlainTextString());
 		}
 		return stringRepresentation.toString();
@@ -68,7 +68,7 @@ public abstract class CompositeTag extends HTMLTag {
 
 	protected void putChildrenInto(StringBuffer sb) {
 		HTMLNode node,prevNode=startTag;
-		for (SimpleEnumeration e=children();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			if (prevNode!=null) {
 				if (prevNode.elementEnd()>node.elementBegin()) {
@@ -101,14 +101,14 @@ public abstract class CompositeTag extends HTMLTag {
 	 * @param name Attribute to match in tag
 	 * @return HTMLTag Tag matching the name attribute
 	 */
-	public HTMLTag searchByName(String name) {
+	public Tag searchByName(String name) {
 		HTMLNode node;
-		HTMLTag tag=null;
+		Tag tag=null;
 		boolean found = false;
-		for (SimpleEnumeration e = children();e.hasMoreNodes() && !found;) {
+		for (SimpleNodeIterator e = children();e.hasMoreNodes() && !found;) {
 			node = (HTMLNode)e.nextNode();
-			if (node instanceof HTMLTag) {
-				tag = (HTMLTag)node;
+			if (node instanceof Tag) {
+				tag = (Tag)node;
 				String nameAttribute = tag.getAttribute("NAME");
 				if (nameAttribute!=null && nameAttribute.equals(name)) found=true;
 			}
@@ -138,7 +138,7 @@ public abstract class CompositeTag extends HTMLTag {
 		NodeList foundVector = new NodeList();
 		HTMLNode node;
 		if (!caseSensitive) searchString = searchString.toUpperCase();
-		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			String nodeTextString = node.toPlainTextString(); 
 			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
@@ -159,7 +159,7 @@ public abstract class CompositeTag extends HTMLTag {
 	public NodeList searchFor(Class classType) {
 		NodeList foundVector = new NodeList();
 		HTMLNode node;
-		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			if (node.getClass().getName().equals(classType.getName())) 
 				foundVector.add(node);
@@ -193,7 +193,7 @@ public abstract class CompositeTag extends HTMLTag {
 	public int findPositionOf(String text) {
 		HTMLNode node;
 		int loc = 0;
-		for (SimpleEnumeration e=children();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			if (node.toPlainTextString().toUpperCase().indexOf(text.toUpperCase())!=-1) {
 				return loc;			
@@ -215,7 +215,7 @@ public abstract class CompositeTag extends HTMLTag {
 	public void collectInto(NodeList collectionList, String filter) {
 		super.collectInto(collectionList, filter);
 		HTMLNode node;
-		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			node.collectInto(collectionList,filter);
 		}
@@ -223,24 +223,24 @@ public abstract class CompositeTag extends HTMLTag {
 
 	public void collectInto(NodeList collectionList, Class nodeType) {
 		super.collectInto(collectionList,nodeType);
-		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			e.nextNode().collectInto(collectionList,nodeType);
 		}
 	}
 	
 	public String getChildrenHTML() {
 		StringBuffer buff = new StringBuffer();
-		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			HTMLNode node = (HTMLNode)e.nextNode();
 			buff.append(node.toHTML());
 		}
 		return buff.toString();
 	}
 	
-	public void accept(HTMLVisitor visitor) {
+	public void accept(NodeVisitor visitor) {
 		if (visitor.shouldRecurseChildren()) { 
 			startTag.accept(visitor);
-			SimpleEnumeration children = children();
+			SimpleNodeIterator children = children();
 			while (children.hasMoreNodes()) {
 				HTMLNode child = (HTMLNode)children.nextNode();
 				child.accept(visitor);

@@ -37,9 +37,9 @@ import java.io.*;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.util.ParserException;
 import org.htmlparser.parserHelper.*;
 import org.htmlparser.scanners.*;
 
@@ -53,7 +53,7 @@ public class HTMLReader extends BufferedReader
 	protected int posInLine=-1;
 	protected String line;
 	protected HTMLNode node = null;
-	protected HTMLTagScanner previousOpenScanner = null;
+	protected TagScanner previousOpenScanner = null;
 	protected String url;
 	private HTMLParser parser;
 	private boolean tagUpgraded=false;
@@ -158,14 +158,14 @@ public class HTMLReader extends BufferedReader
 	 * Gets the previousOpenScanner.
 	 * @return Returns a HTMLTagScanner
 	 */
-	public HTMLTagScanner getPreviousOpenScanner() {
+	public TagScanner getPreviousOpenScanner() {
 		return previousOpenScanner;
 	}
 	/**
 	 * Read the next element
 	 * @return HTMLNode - The next node
  	 */
-	public HTMLNode readElement() throws HTMLParserException
+	public HTMLNode readElement() throws ParserException
 	{
 		try {
 			if (readNextLine())
@@ -184,10 +184,10 @@ public class HTMLReader extends BufferedReader
             {
                 node = remarkNodeParser.find(this,line,posInLine);
                 if (node!=null) return node;
-                node = HTMLTag.find(this,line,posInLine);
+                node = Tag.find(this,line,posInLine);
                 if (node!=null)
                 {
-                    HTMLTag tag = (HTMLTag)node;
+                    Tag tag = (Tag)node;
                     try
                     {
                         node = tag.scan(parser.getScanners(),url,this);
@@ -199,14 +199,14 @@ public class HTMLReader extends BufferedReader
                         msgBuffer.append(DECIPHER_ERROR+"\n" +                        	"    Tag being processed : "+tag.getTagName()+"\n" +                        	"    Current Tag Line : "+tag.getTagLine()
                         ); 
                         appendLineDetails(msgBuffer);
-                        HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
+                        ParserException ex = new ParserException(msgBuffer.toString(),e);
 
                         parser.getFeedback().error(msgBuffer.toString(),ex);
                         throw ex;
                     }
                 }
 
-                node = HTMLEndTag.find(line,posInLine);
+                node = EndTag.find(line,posInLine);
                 if (node!=null) return node;
             }
             else
@@ -220,7 +220,7 @@ public class HTMLReader extends BufferedReader
 		catch (Exception e) {
 			StringBuffer msgBuffer = new StringBuffer("HTMLReader.readElement() : Error occurred while trying to read the next element,");
 			appendLineDetails(msgBuffer);
-			HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
+			ParserException ex = new ParserException(msgBuffer.toString(),e);
 			parser.getFeedback().error(msgBuffer.toString(),ex);
 			throw ex;			
 		}
@@ -254,7 +254,7 @@ public class HTMLReader extends BufferedReader
 	 * Sets the previousOpenScanner.
 	 * @param previousOpenScanner The previousOpenScanner to set
 	 */
-	public void setPreviousOpenScanner(HTMLTagScanner previousOpenScanner) {
+	public void setPreviousOpenScanner(TagScanner previousOpenScanner) {
 		this.previousOpenScanner = previousOpenScanner;
 	}
 	

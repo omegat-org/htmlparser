@@ -31,13 +31,13 @@ package org.htmlparser.tests.parserHelperTests;
 import java.util.Hashtable;
 
 import org.htmlparser.parserHelper.AttributeParser;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 
 public class AttributeParserTest extends HTMLParserTestCase {
 	private AttributeParser parser;
-	private HTMLTag tag;
+	private Tag tag;
 	private Hashtable table;
 	
 	public AttributeParserTest(String name) {
@@ -49,7 +49,7 @@ public class AttributeParserTest extends HTMLParserTestCase {
 	}
 	
 	public void getParameterTableFor(String tagContents) {
-		tag = new HTMLTag(new TagData(0,0,tagContents,""));
+		tag = new Tag(new TagData(0,0,tagContents,""));
 		table = parser.parseAttributes(tag);
 		
 	}
@@ -89,7 +89,7 @@ public class AttributeParserTest extends HTMLParserTestCase {
     
     public void testValueMissing() {
         getParameterTableFor("INPUT type=\"checkbox\" name=\"Authorize\" value=\"Y\" checked");
-        assertEquals("Name of Tag","INPUT",table.get(HTMLTag.TAGNAME));
+        assertEquals("Name of Tag","INPUT",table.get(Tag.TAGNAME));
         assertEquals("Type","checkbox",table.get("TYPE"));                
         assertEquals("Name","Authorize",table.get("NAME"));
         assertEquals("Value","Y",table.get("VALUE"));
@@ -109,13 +109,13 @@ public class AttributeParserTest extends HTMLParserTestCase {
 		String key1 = "NAME";
 		String value1 = (String)table.get(key1);
 		assertEquals("Expected value 1", "Remarks",value1);
-		String key2 = HTMLTag.TAGNAME;
+		String key2 = Tag.TAGNAME;
 		assertEquals("Expected Value 2","TEXTAREA",table.get(key2));
     }
 
     public void testNullTag(){
         getParameterTableFor("INPUT type=");
-        assertEquals("Name of Tag","INPUT",table.get(HTMLTag.TAGNAME));
+        assertEquals("Name of Tag","INPUT",table.get(Tag.TAGNAME));
         assertEquals("Type","",table.get("TYPE"));                
     }
     

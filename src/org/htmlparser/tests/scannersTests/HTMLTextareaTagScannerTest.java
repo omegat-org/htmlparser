@@ -28,10 +28,10 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import org.htmlparser.scanners.HTMLTextareaTagScanner;
-import org.htmlparser.tags.HTMLTextareaTag;
+import org.htmlparser.scanners.TextareaTagScanner;
+import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.ParserException;
 
 public class HTMLTextareaTagScannerTest extends HTMLParserTestCase
 {
@@ -45,30 +45,30 @@ public class HTMLTextareaTagScannerTest extends HTMLParserTestCase
 									"<TEXTAREA name=\"Remarks\">The death threats of the LTTE\n" +
 									"refused to intimidate the Tamilians\n</TEXTAREA>"
 									);
-	private HTMLTextareaTagScanner scanner;
+	private TextareaTagScanner scanner;
 	
 	public HTMLTextareaTagScannerTest(String name) 
 	{
 		super(name);
 	}
 	
-	public void testScan() throws HTMLParserException 
+	public void testScan() throws ParserException 
 	{
-		scanner = new HTMLTextareaTagScanner("-i");
+		scanner = new TextareaTagScanner("-i");
 		createParser(testHTML);
-		scanner = new HTMLTextareaTagScanner("-ta");
+		scanner = new TextareaTagScanner("-ta");
 		parser.addScanner(scanner);
 		parseAndAssertNodeCount(5);
-	 	assertTrue(node[0] instanceof HTMLTextareaTag);
-	 	assertTrue(node[1] instanceof HTMLTextareaTag);
-	 	assertTrue(node[2] instanceof HTMLTextareaTag);
-	 	assertTrue(node[3] instanceof HTMLTextareaTag);
-	 	assertTrue(node[4] instanceof HTMLTextareaTag);
+	 	assertTrue(node[0] instanceof TextareaTag);
+	 	assertTrue(node[1] instanceof TextareaTag);
+	 	assertTrue(node[2] instanceof TextareaTag);
+	 	assertTrue(node[3] instanceof TextareaTag);
+	 	assertTrue(node[4] instanceof TextareaTag);
 	 	
 		// check the Textarea node
 		for(int j=0;j<nodeCount;j++)
 		{
-			HTMLTextareaTag TextareaTag = (HTMLTextareaTag) node[j];
+			TextareaTag TextareaTag = (TextareaTag) node[j];
 			assertEquals("Textarea Scanner",scanner,TextareaTag.getThisScanner());
 		}
 	}

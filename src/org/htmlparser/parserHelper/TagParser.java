@@ -32,9 +32,9 @@ import java.util.StringTokenizer;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.*;
-import org.htmlparser.util.HTMLParserFeedback;
+import org.htmlparser.util.ParserFeedback;
 
 /**
  * @author Somik Raha
@@ -52,18 +52,18 @@ public class TagParser {
 	public final static int TAG_IGNORE_DATA_STATE=5;	    
 	public final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
 	public final static String ENCOUNTERED_QUERY_MESSAGE = "TagParser : Encountered > after a query. Accepting without correction and continuing parsing";
-	private HTMLParserFeedback feedback;
+	private ParserFeedback feedback;
 	private boolean encounteredQuery;
 	private int i;
-	public TagParser(HTMLParserFeedback feedback) {
+	public TagParser(ParserFeedback feedback) {
 		this.feedback = feedback;
 	}
-	public HTMLTag find(HTMLReader reader,String input,int position) {
+	public Tag find(HTMLReader reader,String input,int position) {
 		int state = TAG_BEFORE_PARSING_STATE;
 		StringBuffer tagContents = new StringBuffer();
 		i=position;
 		char ch;
-		HTMLTag tag = new HTMLTag(new TagData(0,0,"",input));
+		Tag tag = new Tag(new TagData(0,0,"",input));
 		encounteredQuery = false;
 		while (i<tag.getTagLine().length()&& state!=TAG_FINISHED_PARSING_STATE && state!=TAG_ILLEGAL_STATE)
 		{
@@ -76,7 +76,7 @@ public class TagParser {
 		else
 		return null;	
 	}
-	protected int automataInput(int state,char ch, HTMLTag tag) {
+	protected int automataInput(int state,char ch, Tag tag) {
 		state = checkIllegalState(state, ch, tag);
 		state = checkFinishedState(state, ch, tag);
 		state = toggleIgnoringState(state, ch);
@@ -94,7 +94,7 @@ public class TagParser {
 
 		return state;
 	}
-	private int checkBeginParsingState(int state, char ch, HTMLTag tag) {
+	private int checkBeginParsingState(int state, char ch, Tag tag) {
 		if (ch=='<' && (state==TAG_BEFORE_PARSING_STATE || state==TAG_ILLEGAL_STATE))
 		{
 			// Transition from State 0 to State 1 - Record data till > is encountered
@@ -103,7 +103,7 @@ public class TagParser {
 		}
 		return state;
 	}
-	private int checkFinishedState(int state,  char ch, HTMLTag tag) {
+	private int checkFinishedState(int state,  char ch, Tag tag) {
 		if (ch=='>')
 		{
 			if (state==TAG_BEGIN_PARSING_STATE)
@@ -145,13 +145,13 @@ public class TagParser {
 		}
 		return state;
 	}
-	private void checkIfAppendable(int state, char ch, HTMLTag tag) {
+	private void checkIfAppendable(int state, char ch, Tag tag) {
 		if (state==TAG_IGNORE_DATA_STATE || state==TAG_BEGIN_PARSING_STATE || state==TAG_IGNORE_BEGIN_TAG_STATE) {
 			if (ch=='?') encounteredQuery=true;
 			tag.append(ch);
 		}
 	}
-	private int checkIllegalState(int state, char ch, HTMLTag tag) {
+	private int checkIllegalState(int state, char ch, Tag tag) {
 		if (ch=='/' && i>0 && tag.getTagLine().charAt(i-1)=='<' && state!=TAG_IGNORE_DATA_STATE && state!=TAG_IGNORE_BEGIN_TAG_STATE)
 		{
 			state = TAG_ILLEGAL_STATE;
@@ -160,7 +160,7 @@ public class TagParser {
 		return state;
 	}
 	
-	public void correctTag(HTMLTag tag) {
+	public void correctTag(Tag tag) {
 		String tempText = tag.getText();
 		StringBuffer absorbedText = new StringBuffer();
 		char c;
@@ -217,7 +217,7 @@ public class TagParser {
 		}
 		return state;
 	}	
-	public int incrementCounter(HTMLReader reader, int state, HTMLTag tag) {
+	public int incrementCounter(HTMLReader reader, int state, Tag tag) {
 		String nextLine = null;
 		if ((state==TAG_BEGIN_PARSING_STATE || state == TAG_IGNORE_DATA_STATE) && i==tag.getTagLine().length()-1)
 		{

@@ -29,7 +29,7 @@
 package org.htmlparser.scanners;
 
 import org.htmlparser.tags.Div;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
@@ -44,7 +44,7 @@ public class DivScanner extends CompositeTagScanner {
 		super(filter, MATCH_STRING);
 	}
 
-	protected HTMLTag createTag(
+	protected Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new Div(tagData,compositeTagData);

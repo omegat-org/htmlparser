@@ -27,35 +27,35 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.utilTests;
-import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLLinkProcessor;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.ParserException;
 
 public class HTMLLinkProcessorTest extends HTMLParserTestCase {
-	private HTMLLinkProcessor lp;
+	private LinkProcessor lp;
 
 	public HTMLLinkProcessorTest(String name) {
 		super(name);
 	}
 
 	protected void setUp() {
-		lp = new HTMLLinkProcessor();
+		lp = new LinkProcessor();
 	}
 
 	public void testIsURL() {
 		String resourceLoc1 = "http://someurl.com";
 		String resourceLoc2 = "myfilehttp.dat";		
-		assertTrue(resourceLoc1+" should be a url",HTMLLinkProcessor.isURL(resourceLoc1));
-		assertTrue(resourceLoc2+" should not be a url",!HTMLLinkProcessor.isURL(resourceLoc2));	
+		assertTrue(resourceLoc1+" should be a url",LinkProcessor.isURL(resourceLoc1));
+		assertTrue(resourceLoc2+" should not be a url",!LinkProcessor.isURL(resourceLoc2));	
 		String resourceLoc3 = "file://localhost/D:/java/jdk1.3/docs/api/overview-summary.html";
-		assertTrue(resourceLoc3+" should be a url",HTMLLinkProcessor.isURL(resourceLoc3));
+		assertTrue(resourceLoc3+" should be a url",LinkProcessor.isURL(resourceLoc3));
 		
 	}
 
 	public void testFixSpaces() {
 		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
-		String fixedURL = HTMLLinkProcessor.fixSpaces(url);
+		String fixedURL = LinkProcessor.fixSpaces(url);
 		int index = fixedURL.indexOf(" ");
 		assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html",fixedURL);
 	}
@@ -68,8 +68,8 @@ public class HTMLLinkProcessorTest extends HTMLParserTestCase {
 		createParser("<A HREF=\".foo.txt\">Foo</A>","http://www.oygevalt.com");
 		parser.registerScanners();
 		parseAndAssertNodeCount(1);
-		assertTrue(node[0] instanceof HTMLLinkTag);
-		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		assertTrue(node[0] instanceof LinkTag);
+		LinkTag linkTag = (LinkTag)node[0];
 		assertStringEquals("link","http://www.oygevalt.com/foo.txt",linkTag.getLink());
 		assertEquals("link","Foo",linkTag.getLinkText());
 	}
@@ -107,94 +107,94 @@ public class HTMLLinkProcessorTest extends HTMLParserTestCase {
     //  ../../        =  http://a/
     //  ../../g       =  http://a/g
 
-    public void test1 () throws HTMLParserException
+    public void test1 () throws ParserException
     {
-        assertEquals ("test1 failed", "https:h", (new HTMLLinkProcessor ()).extract ("https:h", baseURI));
+        assertEquals ("test1 failed", "https:h", (new LinkProcessor ()).extract ("https:h", baseURI));
     }
-    public void test2 () throws HTMLParserException
+    public void test2 () throws ParserException
     {
-        assertEquals ("test2 failed", "http://a/b/c/g", (new HTMLLinkProcessor ()).extract ("g", baseURI));
+        assertEquals ("test2 failed", "http://a/b/c/g", (new LinkProcessor ()).extract ("g", baseURI));
     }
-    public void test3 () throws HTMLParserException
+    public void test3 () throws ParserException
     {
-        assertEquals ("test3 failed", "http://a/b/c/g", (new HTMLLinkProcessor ()).extract ("./g", baseURI));
+        assertEquals ("test3 failed", "http://a/b/c/g", (new LinkProcessor ()).extract ("./g", baseURI));
     }
-    public void test4 () throws HTMLParserException
+    public void test4 () throws ParserException
     {
-        assertEquals ("test4 failed", "http://a/b/c/g/", (new HTMLLinkProcessor ()).extract ("g/", baseURI));
+        assertEquals ("test4 failed", "http://a/b/c/g/", (new LinkProcessor ()).extract ("g/", baseURI));
     }
-    public void test5 () throws HTMLParserException
+    public void test5 () throws ParserException
     {
-        assertEquals ("test5 failed", "http://a/g", (new HTMLLinkProcessor ()).extract ("/g", baseURI));
+        assertEquals ("test5 failed", "http://a/g", (new LinkProcessor ()).extract ("/g", baseURI));
     }
-    public void test6 () throws HTMLParserException
+    public void test6 () throws ParserException
     {
-        assertEquals ("test6 failed", "http://g", (new HTMLLinkProcessor ()).extract ("//g", baseURI));
+        assertEquals ("test6 failed", "http://g", (new LinkProcessor ()).extract ("//g", baseURI));
     }
-    public void test7 () throws HTMLParserException
+    public void test7 () throws ParserException
     {
-        assertEquals ("test7 failed", "http://a/b/c/?y", (new HTMLLinkProcessor ()).extract ("?y", baseURI));
+        assertEquals ("test7 failed", "http://a/b/c/?y", (new LinkProcessor ()).extract ("?y", baseURI));
     }
-    public void test8 () throws HTMLParserException
+    public void test8 () throws ParserException
     {
-        assertEquals ("test8 failed", "http://a/b/c/g?y", (new HTMLLinkProcessor ()).extract ("g?y", baseURI));
+        assertEquals ("test8 failed", "http://a/b/c/g?y", (new LinkProcessor ()).extract ("g?y", baseURI));
     }
-    public void test9 () throws HTMLParserException
+    public void test9 () throws ParserException
     {
-        assertEquals ("test9 failed", "https:h", (new HTMLLinkProcessor ()).extract ("https:h", baseURI));
+        assertEquals ("test9 failed", "https:h", (new LinkProcessor ()).extract ("https:h", baseURI));
     }
-    public void test10 () throws HTMLParserException
+    public void test10 () throws ParserException
     {
-        assertEquals ("test10 failed", "https:h", (new HTMLLinkProcessor ()).extract ("https:h", baseURI));
+        assertEquals ("test10 failed", "https:h", (new LinkProcessor ()).extract ("https:h", baseURI));
     }
     //  #s            =  (current document)#s
-    public void test11 () throws HTMLParserException
+    public void test11 () throws ParserException
     {
-        assertEquals ("test11 failed", "http://a/b/c/g#s", (new HTMLLinkProcessor ()).extract ("g#s", baseURI));
+        assertEquals ("test11 failed", "http://a/b/c/g#s", (new LinkProcessor ()).extract ("g#s", baseURI));
     }
-    public void test12 () throws HTMLParserException
+    public void test12 () throws ParserException
     {
-        assertEquals ("test12 failed", "http://a/b/c/g?y#s", (new HTMLLinkProcessor ()).extract ("g?y#s", baseURI));
+        assertEquals ("test12 failed", "http://a/b/c/g?y#s", (new LinkProcessor ()).extract ("g?y#s", baseURI));
     }
-    public void test13 () throws HTMLParserException
+    public void test13 () throws ParserException
     {
-        assertEquals ("test13 failed", "http://a/b/c/;x", (new HTMLLinkProcessor ()).extract (";x", baseURI));
+        assertEquals ("test13 failed", "http://a/b/c/;x", (new LinkProcessor ()).extract (";x", baseURI));
     }
-    public void test14 () throws HTMLParserException
+    public void test14 () throws ParserException
     {
-        assertEquals ("test14 failed", "http://a/b/c/g;x", (new HTMLLinkProcessor ()).extract ("g;x", baseURI));
+        assertEquals ("test14 failed", "http://a/b/c/g;x", (new LinkProcessor ()).extract ("g;x", baseURI));
     }
-    public void test15 () throws HTMLParserException
+    public void test15 () throws ParserException
     {
-        assertEquals ("test15 failed", "http://a/b/c/g;x?y#s", (new HTMLLinkProcessor ()).extract ("g;x?y#s", baseURI));
+        assertEquals ("test15 failed", "http://a/b/c/g;x?y#s", (new LinkProcessor ()).extract ("g;x?y#s", baseURI));
     }
-    public void test16 () throws HTMLParserException
+    public void test16 () throws ParserException
     {
-        assertEquals ("test16 failed", "http://a/b/c/", (new HTMLLinkProcessor ()).extract (".", baseURI));
+        assertEquals ("test16 failed", "http://a/b/c/", (new LinkProcessor ()).extract (".", baseURI));
     }
-    public void test17 () throws HTMLParserException
+    public void test17 () throws ParserException
     {
-        assertEquals ("test17 failed", "http://a/b/c/", (new HTMLLinkProcessor ()).extract ("./", baseURI));
+        assertEquals ("test17 failed", "http://a/b/c/", (new LinkProcessor ()).extract ("./", baseURI));
     }
-    public void test18 () throws HTMLParserException
+    public void test18 () throws ParserException
     {
-        assertEquals ("test18 failed", "http://a/b/", (new HTMLLinkProcessor ()).extract ("..", baseURI));
+        assertEquals ("test18 failed", "http://a/b/", (new LinkProcessor ()).extract ("..", baseURI));
     }
-    public void test19 () throws HTMLParserException
+    public void test19 () throws ParserException
     {
-        assertEquals ("test19 failed", "http://a/b/", (new HTMLLinkProcessor ()).extract ("../", baseURI));
+        assertEquals ("test19 failed", "http://a/b/", (new LinkProcessor ()).extract ("../", baseURI));
     }
-    public void test20 () throws HTMLParserException
+    public void test20 () throws ParserException
     {
-        assertEquals ("test20 failed", "http://a/b/g", (new HTMLLinkProcessor ()).extract ("../g", baseURI));
+        assertEquals ("test20 failed", "http://a/b/g", (new LinkProcessor ()).extract ("../g", baseURI));
     }
-    public void test21 () throws HTMLParserException
+    public void test21 () throws ParserException
     {
-        assertEquals ("test21 failed", "http://a/", (new HTMLLinkProcessor ()).extract ("../..", baseURI));
+        assertEquals ("test21 failed", "http://a/", (new LinkProcessor ()).extract ("../..", baseURI));
     }
-    public void test22 () throws HTMLParserException
+    public void test22 () throws ParserException
     {
-        assertEquals ("test22 failed", "http://a/g", (new HTMLLinkProcessor ()).extract ("../../g", baseURI));
+        assertEquals ("test22 failed", "http://a/g", (new LinkProcessor ()).extract ("../../g", baseURI));
     }
     
     // C.2.  Abnormal Examples
@@ -269,84 +269,84 @@ public class HTMLLinkProcessorTest extends HTMLParserTestCase {
 //    {
 //        assertEquals ("test24 failed", "http://a/../../g", (new HTMLLinkProcessor ()).extract ("../../../../g", baseURI));
 //    }
-    public void test23 () throws HTMLParserException
+    public void test23 () throws ParserException
     {
-        assertEquals ("test23 failed", "http://a/g", (new HTMLLinkProcessor ()).extract ("../../../g", baseURI));
+        assertEquals ("test23 failed", "http://a/g", (new LinkProcessor ()).extract ("../../../g", baseURI));
     }
-    public void test24 () throws HTMLParserException
+    public void test24 () throws ParserException
     {
-        assertEquals ("test24 failed", "http://a/g", (new HTMLLinkProcessor ()).extract ("../../../../g", baseURI));
+        assertEquals ("test24 failed", "http://a/g", (new LinkProcessor ()).extract ("../../../../g", baseURI));
     }
-    public void test25 () throws HTMLParserException
+    public void test25 () throws ParserException
     {
-        assertEquals ("test25 failed", "http://a/./g", (new HTMLLinkProcessor ()).extract ("/./g", baseURI));
+        assertEquals ("test25 failed", "http://a/./g", (new LinkProcessor ()).extract ("/./g", baseURI));
     }
-    public void test26 () throws HTMLParserException
+    public void test26 () throws ParserException
     {
-        assertEquals ("test26 failed", "http://a/../g", (new HTMLLinkProcessor ()).extract ("/../g", baseURI));
+        assertEquals ("test26 failed", "http://a/../g", (new LinkProcessor ()).extract ("/../g", baseURI));
     }
-    public void test27 () throws HTMLParserException
+    public void test27 () throws ParserException
     {
-        assertEquals ("test27 failed", "http://a/b/c/g.", (new HTMLLinkProcessor ()).extract ("g.", baseURI));
+        assertEquals ("test27 failed", "http://a/b/c/g.", (new LinkProcessor ()).extract ("g.", baseURI));
     }
-    public void test28 () throws HTMLParserException
+    public void test28 () throws ParserException
     {
-        assertEquals ("test28 failed", "http://a/b/c/.g", (new HTMLLinkProcessor ()).extract (".g", baseURI));
+        assertEquals ("test28 failed", "http://a/b/c/.g", (new LinkProcessor ()).extract (".g", baseURI));
     }
-    public void test29 () throws HTMLParserException
+    public void test29 () throws ParserException
     {
-        assertEquals ("test29 failed", "http://a/b/c/g..", (new HTMLLinkProcessor ()).extract ("g..", baseURI));
+        assertEquals ("test29 failed", "http://a/b/c/g..", (new LinkProcessor ()).extract ("g..", baseURI));
     }
-    public void test30 () throws HTMLParserException
+    public void test30 () throws ParserException
     {
-        assertEquals ("test30 failed", "http://a/b/c/..g", (new HTMLLinkProcessor ()).extract ("..g", baseURI));
+        assertEquals ("test30 failed", "http://a/b/c/..g", (new LinkProcessor ()).extract ("..g", baseURI));
     }
-    public void test31 () throws HTMLParserException
+    public void test31 () throws ParserException
     {
-        assertEquals ("test31 failed", "http://a/b/g", (new HTMLLinkProcessor ()).extract ("./../g", baseURI));
+        assertEquals ("test31 failed", "http://a/b/g", (new LinkProcessor ()).extract ("./../g", baseURI));
     }
-    public void test32 () throws HTMLParserException
+    public void test32 () throws ParserException
     {
-        assertEquals ("test32 failed", "http://a/b/c/g/", (new HTMLLinkProcessor ()).extract ("./g/.", baseURI));
+        assertEquals ("test32 failed", "http://a/b/c/g/", (new LinkProcessor ()).extract ("./g/.", baseURI));
     }
-    public void test33 () throws HTMLParserException
+    public void test33 () throws ParserException
     {
-        assertEquals ("test33 failed", "http://a/b/c/g/h", (new HTMLLinkProcessor ()).extract ("g/./h", baseURI));
+        assertEquals ("test33 failed", "http://a/b/c/g/h", (new LinkProcessor ()).extract ("g/./h", baseURI));
     }
-    public void test34 () throws HTMLParserException
+    public void test34 () throws ParserException
     {
-        assertEquals ("test34 failed", "http://a/b/c/h", (new HTMLLinkProcessor ()).extract ("g/../h", baseURI));
+        assertEquals ("test34 failed", "http://a/b/c/h", (new LinkProcessor ()).extract ("g/../h", baseURI));
     }
-    public void test35 () throws HTMLParserException
+    public void test35 () throws ParserException
     {
-        assertEquals ("test35 failed", "http://a/b/c/g;x=1/y", (new HTMLLinkProcessor ()).extract ("g;x=1/./y", baseURI));
+        assertEquals ("test35 failed", "http://a/b/c/g;x=1/y", (new LinkProcessor ()).extract ("g;x=1/./y", baseURI));
     }
-    public void test36 () throws HTMLParserException
+    public void test36 () throws ParserException
     {
-        assertEquals ("test36 failed", "http://a/b/c/y", (new HTMLLinkProcessor ()).extract ("g;x=1/../y", baseURI));
+        assertEquals ("test36 failed", "http://a/b/c/y", (new LinkProcessor ()).extract ("g;x=1/../y", baseURI));
     }
-    public void test37 () throws HTMLParserException
+    public void test37 () throws ParserException
     {
-        assertEquals ("test37 failed", "http://a/b/c/g?y/./x", (new HTMLLinkProcessor ()).extract ("g?y/./x", baseURI));
+        assertEquals ("test37 failed", "http://a/b/c/g?y/./x", (new LinkProcessor ()).extract ("g?y/./x", baseURI));
     }
-    public void test38 () throws HTMLParserException
+    public void test38 () throws ParserException
     {
-        assertEquals ("test38 failed", "http://a/b/c/g?y/../x", (new HTMLLinkProcessor ()).extract ("g?y/../x", baseURI));
+        assertEquals ("test38 failed", "http://a/b/c/g?y/../x", (new LinkProcessor ()).extract ("g?y/../x", baseURI));
     }
-    public void test39 () throws HTMLParserException
+    public void test39 () throws ParserException
     {
-        assertEquals ("test39 failed", "http://a/b/c/g#s/./x", (new HTMLLinkProcessor ()).extract ("g#s/./x", baseURI));
+        assertEquals ("test39 failed", "http://a/b/c/g#s/./x", (new LinkProcessor ()).extract ("g#s/./x", baseURI));
     }
-    public void test40 () throws HTMLParserException
+    public void test40 () throws ParserException
     {
-        assertEquals ("test40 failed", "http://a/b/c/g#s/../x", (new HTMLLinkProcessor ()).extract ("g#s/../x", baseURI));
+        assertEquals ("test40 failed", "http://a/b/c/g#s/../x", (new LinkProcessor ()).extract ("g#s/../x", baseURI));
     }
 //    public void test41 () throws HTMLParserException
 //    {
 //        assertEquals ("test41 failed", "http:g", (new HTMLLinkProcessor ()).extract ("http:g", baseURI));
 //    }
-    public void test41 () throws HTMLParserException
+    public void test41 () throws ParserException
     {
-        assertEquals ("test41 failed", "http://a/b/c/g", (new HTMLLinkProcessor ()).extract ("http:g", baseURI));
+        assertEquals ("test41 failed", "http://a/b/c/g", (new LinkProcessor ()).extract ("http:g", baseURI));
     }
 }

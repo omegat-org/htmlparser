@@ -37,12 +37,12 @@ import java.net.URL;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLStringNode;
-import org.htmlparser.tags.HTMLImageTag;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.SimpleEnumeration;
+import org.htmlparser.util.SimpleNodeIterator;
 
 public class HTMLParserTest extends HTMLParserTestCase {
 
@@ -54,7 +54,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		for (int i=0;i<5001;i++) hugeData.append('a');
 		createParser(hugeData.toString());
 		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 		{
 			node[i++] = e.nextNode();
 		}
@@ -80,13 +80,13 @@ public class HTMLParserTest extends HTMLParserTestCase {
 			parser = new HTMLParser("http://www.google.com");
 		}
 		catch (Exception e ){
-			throw new HTMLParserException("You must be offline! This test needs you to be connected to the internet.",e);
+			throw new ParserException("You must be offline! This test needs you to be connected to the internet.",e);
 		}
 		parser.getReader().mark(5000);
 
 		HTMLNode [] node = new HTMLNode[500];
 		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 		{
 			node[i++] = e.nextNode();
 		}
@@ -94,7 +94,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		parser.getReader().reset();
 		// Now try getting the elements again
 		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 		{
 			node[i++] = e.nextNode();
 		}
@@ -209,7 +209,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
         StringBuffer buffer;
         PrintWriter out;
         boolean pass;
-        HTMLEnumeration enumeration;
+        NodeIterator enumeration;
         HTMLNode node;
         HTMLStringNode string;
 
@@ -286,7 +286,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		}
 		catch (Exception e)
         {
-			throw new HTMLParserException ("You must be offline! This test needs you to be connected to the internet.", e);
+			throw new ParserException ("You must be offline! This test needs you to be connected to the internet.", e);
 		}
 
         pass = false;
@@ -314,7 +314,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
         HTMLParser parser;
         HTMLNode nodes[];
         int i;
-        HTMLEnumeration enumeration;
+        NodeIterator enumeration;
         
         path = System.getProperty ("user.dir");
         if (!path.endsWith (File.separator))
@@ -367,7 +367,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 			parser = new HTMLParser("http://www.ibm.com/jp/", HTMLParser.noFeedback);
 			assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
 		}
-		catch (HTMLParserException e)
+		catch (ParserException e)
         {
             fail ("could not open http://www.ibm.com/jp/");
 		}
@@ -382,7 +382,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
     public void _testHTMLCharset ()
     {
 		HTMLParser parser;
-        HTMLEnumeration enumeration;
+        NodeIterator enumeration;
         
 		try
         {
@@ -391,7 +391,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
             enumeration = parser.elements();
 			assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
 		}
-		catch (HTMLParserException e)
+		catch (ParserException e)
         {
             fail ("could not open http://www.sony.co.jp");
 		}
@@ -403,26 +403,26 @@ public class HTMLParserTest extends HTMLParserTestCase {
 			parser = new HTMLParser("http://someoneexisting.com", HTMLParser.noFeedback);
 			assertTrue("Should have thrown an exception!",false);
 		}
-		catch (HTMLParserException e) {
+		catch (ParserException e) {
 			
 		}
 	}
 	
-	public void testURLWithSpaces() throws HTMLParserException{
+	public void testURLWithSpaces() throws ParserException{
 		HTMLParser parser;
 		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
 		
 		parser = new HTMLParser(url);
 		HTMLNode node [] = new HTMLNode[30];
 		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 			node[i] = e.nextNode();
 			i++;
 			
 		}
 		assertEquals("Expected nodes",12,i);
 	}
-	public void testLinkCollection() throws HTMLParserException {
+	public void testLinkCollection() throws ParserException {
 		createParser(
 		"<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"><title>Google</title><style><!--\n"+
 		"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\n"+
@@ -445,18 +445,18 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		int i = 0;
 		NodeList collectionList = new NodeList();
 
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 			HTMLNode node = e.nextNode();
-			node.collectInto(collectionList,HTMLLinkTag.LINK_TAG_FILTER);
+			node.collectInto(collectionList,LinkTag.LINK_TAG_FILTER);
 		}
 		assertEquals("Size of collection vector should be 11",11,collectionList.size());
 		// All items in collection vector should be links
-		for (SimpleEnumeration e = collectionList.elements();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e = collectionList.elements();e.hasMoreNodes();) {
 			HTMLNode node = e.nextNode();
-			assertTrue("Only links should have been parsed",node instanceof HTMLLinkTag);
+			assertTrue("Only links should have been parsed",node instanceof LinkTag);
 		}
 	}
-	public void testImageCollection() throws HTMLParserException {
+	public void testImageCollection() throws ParserException {
 		createParser(
 		"<html>\n"+
 		"<head>\n"+
@@ -502,15 +502,15 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		int i = 0;
 		NodeList collectionList = new NodeList();
 
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 			HTMLNode node = e.nextNode();
-			node.collectInto(collectionList,HTMLImageTag.IMAGE_TAG_FILTER);
+			node.collectInto(collectionList,ImageTag.IMAGE_TAG_FILTER);
 		}
 		assertEquals("Size of collection vector should be 5",5,collectionList.size());
 		// All items in collection vector should be links
-		for (SimpleEnumeration e = collectionList.elements();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e = collectionList.elements();e.hasMoreNodes();) {
 			HTMLNode node = e.nextNode();
-			assertTrue("Only images should have been parsed",node instanceof HTMLImageTag);
+			assertTrue("Only images should have been parsed",node instanceof ImageTag);
 		}
 	}
 	

@@ -32,7 +32,7 @@ package org.htmlparser;
 import java.io.Serializable;
 
 import org.htmlparser.util.NodeList;
-import org.htmlparser.visitors.HTMLVisitor;
+import org.htmlparser.visitors.NodeVisitor;
 
 
 /**
@@ -190,6 +190,6 @@ public abstract class HTMLNode
 		return nodeEnd;
 	}
 
-	public abstract void accept(HTMLVisitor visitor);
+	public abstract void accept(NodeVisitor visitor);
 
 }

@@ -36,14 +36,14 @@ import junit.framework.TestSuite;
 import org.htmlparser.scanners.LabelScanner;
 import org.htmlparser.tags.LabelTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.ParserException;
 
 public class LabelScannerTest extends HTMLParserTestCase {
 
 	public LabelScannerTest(String name) {
 		super(name);
 	}
-	public void testSimpleLabels() throws HTMLParserException {
+	public void testSimpleLabels() throws ParserException {
 		createParser("<label>This is a label tag</label>");
 		LabelScanner labelScanner = new LabelScanner("-l");
 		parser.addScanner(labelScanner);
@@ -56,7 +56,7 @@ public class LabelScannerTest extends HTMLParserTestCase {
 		assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
 	}
 	
-	public void testLabelWithJspTag() throws HTMLParserException {
+	public void testLabelWithJspTag() throws ParserException {
 		createParser("<label><%=labelValue%></label>");
 		parser.registerScanners();
 		LabelScanner labelScanner = new LabelScanner("-l");
@@ -69,7 +69,7 @@ public class LabelScannerTest extends HTMLParserTestCase {
 		assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
 	}
 	
-	public void testLabelWithOtherTags() throws HTMLParserException {
+	public void testLabelWithOtherTags() throws ParserException {
 		createParser("<label><span>Span within label</span></label>");
 		parser.registerScanners();
 		LabelScanner labelScanner = new LabelScanner("-l");

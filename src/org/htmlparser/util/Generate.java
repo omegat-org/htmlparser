@@ -36,11 +36,11 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 
 /**
  * Create a character reference translation class source file.
@@ -76,7 +76,7 @@ public class Generate
      * with the standard scanners registered.
      */
     public Generate ()
-        throws HTMLParserException
+        throws ParserException
     {
         parser = new HTMLParser ("http://www.w3.org/TR/REC-html40/sgml/entities.html");
         parser.registerScanners ();
@@ -157,14 +157,14 @@ public class Generate
      */    
     public void parse ()
         throws
-            HTMLParserException
+            ParserException
     {
         HTMLNode node;
         StringBuffer buffer = new StringBuffer (4096);
 
         // Run through an enumeration of html elements, and pick up
         // only those that are plain string.
-        for (HTMLEnumeration e = parser.elements (); e.hasMoreNodes ();)
+        for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
             
@@ -176,23 +176,23 @@ public class Generate
                 // Retrieve the data from the object
                 buffer.append (stringNode.getText ());
             }
-            else if (node instanceof HTMLLinkTag)
+            else if (node instanceof LinkTag)
             {
                 // Node is a link
                 // Cast it to an HTMLLinkTag
-                HTMLLinkTag linkNode = (HTMLLinkTag)node;
+                LinkTag linkNode = (LinkTag)node;
                 // Retrieve the data from the object and print it
                 buffer.append (linkNode.getLinkText ());
             }
-            else if (node instanceof HTMLTag)
+            else if (node instanceof Tag)
             {
-                String contents = ((HTMLTag)node).getText ();
+                String contents = ((Tag)node).getText ();
                 if (contents.equals ("BR") || contents.equals ("P"))
                     buffer.append (nl);
             }
-            else if (node instanceof HTMLEndTag)
+            else if (node instanceof EndTag)
             {
-                String contents = ((HTMLEndTag)node).getText ();
+                String contents = ((EndTag)node).getText ();
                 if (contents.equals ("BR") || contents.equals ("P"))
                     buffer.append (nl);
             }
@@ -441,7 +441,7 @@ public class Generate
      */
     public static void main (String [] args)
         throws
-            HTMLParserException
+            ParserException
     {
         Generate filter = new Generate ();
         System.out.println ("import java.util.Hashtable;");

@@ -33,10 +33,10 @@ import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.DefaultParserFeedback;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 
 
 /**
@@ -51,10 +51,10 @@ public class MailRipper {
 	 */
 	public MailRipper(String resourceLocation) {
 		try {
-		  parser = new HTMLParser(resourceLocation,new DefaultHTMLParserFeedback());
+		  parser = new HTMLParser(resourceLocation,new DefaultParserFeedback());
 		  parser.registerScanners();
 		}
-		catch (HTMLParserException e) {
+		catch (ParserException e) {
 			System.err.println("Could not create parser object");
 			e.printStackTrace();
 		}
@@ -84,11 +84,11 @@ public class MailRipper {
 	  System.out.println("Ripping Site "+resourceLocation);
 	  try {
 		  for (Enumeration e=ripper.rip();e.hasMoreElements();) {
-		    HTMLLinkTag tag = (HTMLLinkTag)e.nextElement();
+		    LinkTag tag = (LinkTag)e.nextElement();
 		    System.out.println("Ripped mail address : "+tag.getLink());
 		  }
 	  }
-	  catch (HTMLParserException e) {
+	  catch (ParserException e) {
 	  	e.printStackTrace();
 	  }
 	}
@@ -96,15 +96,15 @@ public class MailRipper {
 	 * Rip all mail addresses from the given url, and return an enumeration of such mail addresses.
 	 * @return Enumeration of mail addresses (a vector of HTMLLinkTag)
 	 */
-	public Enumeration rip() throws HTMLParserException {
+	public Enumeration rip() throws ParserException {
 	  HTMLNode node;
 	  Vector mailAddresses = new Vector();
-	  for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+	  for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 	  {
 	    node = e.nextNode();
-	    if (node instanceof HTMLLinkTag)
+	    if (node instanceof LinkTag)
 	    {
-	      HTMLLinkTag linkTag = (HTMLLinkTag)node;
+	      LinkTag linkTag = (LinkTag)node;
 	      if (linkTag.isMailLink()) mailAddresses.addElement(linkTag);
 	    }
 	  }

@@ -46,30 +46,30 @@ import java.net.URLConnection;
 import java.util.Hashtable;
 
 import org.htmlparser.parserHelper.TagParser;
-import org.htmlparser.scanners.HTMLAppletScanner;
-import org.htmlparser.scanners.HTMLDoctypeScanner;
-import org.htmlparser.scanners.HTMLFormScanner;
-import org.htmlparser.scanners.HTMLFrameSetScanner;
-import org.htmlparser.scanners.HTMLJspScanner;
-import org.htmlparser.scanners.HTMLLinkScanner;
-import org.htmlparser.scanners.HTMLMetaTagScanner;
-import org.htmlparser.scanners.HTMLScriptScanner;
-import org.htmlparser.scanners.HTMLStyleScanner;
-import org.htmlparser.scanners.HTMLTagScanner;
-import org.htmlparser.scanners.HTMLTitleScanner;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLImageTag;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLMetaTag;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLEnumerationImpl;
-import org.htmlparser.util.HTMLLinkProcessor;
-import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.util.HTMLParserFeedback;
+import org.htmlparser.scanners.AppletScanner;
+import org.htmlparser.scanners.DoctypeScanner;
+import org.htmlparser.scanners.FormScanner;
+import org.htmlparser.scanners.FrameSetScanner;
+import org.htmlparser.scanners.JspScanner;
+import org.htmlparser.scanners.LinkScanner;
+import org.htmlparser.scanners.MetaTagScanner;
+import org.htmlparser.scanners.ScriptScanner;
+import org.htmlparser.scanners.StyleScanner;
+import org.htmlparser.scanners.TagScanner;
+import org.htmlparser.scanners.TitleScanner;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.MetaTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.util.DefaultParserFeedback;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.IteratorImpl;
+import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.ParserException;
+import org.htmlparser.util.ParserFeedback;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.visitors.HTMLVisitor;
+import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * This is the class that the user will use, either to get an iterator into 
@@ -147,7 +147,7 @@ public class HTMLParser
 	/**
 	 * Feedback object.
 	 */
-	protected HTMLParserFeedback feedback;
+	protected ParserFeedback feedback;
 	
 	/**
 	 * The URL or filename to be parsed.
@@ -178,13 +178,13 @@ public class HTMLParser
      * A quiet message sink.
      * Use this for no feedback.
      */
-    public static HTMLParserFeedback noFeedback = new DefaultHTMLParserFeedback (DefaultHTMLParserFeedback.QUIET);
+    public static ParserFeedback noFeedback = new DefaultParserFeedback (DefaultParserFeedback.QUIET);
     
     /**
      * A verbose message sink.
      * Use this for output on <code>System.out</code>.
      */
-    public static HTMLParserFeedback stdout = new DefaultHTMLParserFeedback ();
+    public static ParserFeedback stdout = new DefaultParserFeedback ();
 
     //
     // Static methods
@@ -204,9 +204,9 @@ public class HTMLParser
      * @param feedback The ibject to use for messages or <code>null</code>.
      * @exception HTMLParserException if an i/o exception occurs accessing the url.
      */
-    private static URLConnection openConnection (URL url, HTMLParserFeedback feedback)
+    private static URLConnection openConnection (URL url, ParserFeedback feedback)
         throws
-            HTMLParserException
+            ParserException
     {
         URLConnection ret;
         
@@ -217,7 +217,7 @@ public class HTMLParser
         catch (IOException ioe)
         {
             String msg = "HTMLParser.openConnection() : Error in opening a connection to " + url.toExternalForm ();
-            HTMLParserException ex = new HTMLParserException (msg, ioe);
+            ParserException ex = new ParserException (msg, ioe);
             if (null != feedback)
                 feedback.error (msg, ex);
             throw ex;
@@ -235,9 +235,9 @@ public class HTMLParser
      * @param feedback The object to use for messages or <code>null</code> for no feedback.
      * @exception HTMLParserException if the string is not a valid url or file.
      */
-    private static URLConnection openConnection (String string, HTMLParserFeedback feedback)
+    private static URLConnection openConnection (String string, ParserFeedback feedback)
         throws
-            HTMLParserException
+            ParserException
     {
         final String prefix = "file://localhost";
         String resource;
@@ -246,7 +246,7 @@ public class HTMLParser
         URLConnection ret;
 
         // for a while we warn people about spaces in their URL
-        resource = HTMLLinkProcessor.fixSpaces (string);
+        resource = LinkProcessor.fixSpaces (string);
         if (!resource.equals (string) && (null != feedback))
             feedback.warning ("URL containing spaces was adjusted to \""
                 + resource
@@ -274,7 +274,7 @@ public class HTMLParser
             catch (MalformedURLException murle2)
             {
                 String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
-                HTMLParserException ex = new HTMLParserException (msg, murle2);
+                ParserException ex = new ParserException (msg, murle2);
                 if (null != feedback)
                     feedback.error (msg, ex);
                 throw ex;
@@ -303,7 +303,7 @@ public class HTMLParser
         reader = null;
         character_set = DEFAULT_CHARSET;
         url_conn = null;
-		HTMLTag.setTagParser (new TagParser (getFeedback ()));
+		Tag.setTagParser (new TagParser (getFeedback ()));
     }
 
     /**
@@ -325,12 +325,12 @@ public class HTMLParser
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
 	 */
-	public HTMLParser(HTMLReader rd, HTMLParserFeedback fb) 
+	public HTMLParser(HTMLReader rd, ParserFeedback fb) 
 	{
         setFeedback (fb);
         setScanners (null);
         setReader (rd);
-		HTMLTag.setTagParser(new TagParser(feedback));
+		Tag.setTagParser(new TagParser(feedback));
 	}
 	
     /**
@@ -339,13 +339,13 @@ public class HTMLParser
      * method will be called so it need not be connected yet.
      * @param fb The object to use for message communication.
      */
-    public HTMLParser (URLConnection connection, HTMLParserFeedback fb)
+    public HTMLParser (URLConnection connection, ParserFeedback fb)
         throws
-            HTMLParserException
+            ParserException
     {
         setFeedback (fb);
         setScanners (null);
-        HTMLTag.setTagParser (new TagParser (feedback));
+        Tag.setTagParser (new TagParser (feedback));
         setConnection (connection);
     }
 
@@ -359,7 +359,7 @@ public class HTMLParser
      * is provided.
      * @see #HTMLParser(URLConnection,HTMLParserFeedback)
 	 */
-	public HTMLParser(String resourceLocn, HTMLParserFeedback feedback) throws HTMLParserException
+	public HTMLParser(String resourceLocn, ParserFeedback feedback) throws ParserException
 	{
         this (openConnection (resourceLocn, feedback), feedback);
     }
@@ -369,7 +369,7 @@ public class HTMLParser
 	 * A DefaultHTMLParserFeedback object is used for feedback.
 	 * @param resourceLocn Either the URL or the filename (autodetects).
 	 */
-	public HTMLParser(String resourceLocn) throws HTMLParserException
+	public HTMLParser(String resourceLocn) throws ParserException
 	{
 		this (resourceLocn, stdout);
 	}
@@ -401,7 +401,7 @@ public class HTMLParser
      * method will be called so it need not be connected yet.
      * @see #HTMLParser(URLConnection,HTMLParserFeedback)
      */
-    public HTMLParser (URLConnection connection) throws HTMLParserException
+    public HTMLParser (URLConnection connection) throws ParserException
     {
         this (connection, stdout);
     }
@@ -432,7 +432,7 @@ public class HTMLParser
             // reopen the connection and create a reader which are transient fields
             setURL (getURL ());
         }
-        catch (HTMLParserException hpe)
+        catch (ParserException hpe)
         {
             throw new IOException (hpe.toString ());
         }
@@ -458,7 +458,7 @@ public class HTMLParser
      */
     public void setConnection (URLConnection connection)
         throws
-            HTMLParserException
+            ParserException
     {
         String res;
         HTMLReader rd;
@@ -482,7 +482,7 @@ public class HTMLParser
             catch (UnsupportedEncodingException uee)
             {
                 String msg = "setConnection() : The content of " + connection.getURL ().toExternalForm () + " has an encoding which is not supported";
-                HTMLParserException ex = new HTMLParserException (msg, uee);
+                ParserException ex = new ParserException (msg, uee);
                 feedback.error (msg, ex);
                 resourceLocn = res;
                 url_conn = con;
@@ -493,7 +493,7 @@ public class HTMLParser
             catch (IOException ioe)
             {
                 String msg = "setConnection() : Error in opening a connection to " + connection.getURL ().toExternalForm ();
-                HTMLParserException ex = new HTMLParserException (msg, ioe);
+                ParserException ex = new ParserException (msg, ioe);
                 feedback.error (msg, ex);
                 resourceLocn = res;
                 url_conn = con;
@@ -526,7 +526,7 @@ public class HTMLParser
      */
     public void setURL (String url)
         throws
-            HTMLParserException
+            ParserException
     {
         if ((null != url) && !"".equals (url))
             setConnection (openConnection (url, getFeedback ()));
@@ -560,7 +560,7 @@ public class HTMLParser
      */
     public void setEncoding (String encoding)
         throws
-            HTMLParserException
+            ParserException
     {
         String chs;
         HTMLReader rd;
@@ -580,7 +580,7 @@ public class HTMLParser
                 catch (UnsupportedEncodingException uee)
                 {
                     String msg = "setEncoding() : The specified encoding is not supported";
-                    HTMLParserException ex = new HTMLParserException (msg, uee);
+                    ParserException ex = new ParserException (msg, uee);
                     feedback.error (msg, ex);
                     character_set = chs;
                     reader = rd;
@@ -589,7 +589,7 @@ public class HTMLParser
                 catch (IOException ioe)
                 {
                     String msg = "setEncoding() : Error in opening a connection to " + getConnection ().getURL ().toExternalForm ();
-                    HTMLParserException ex = new HTMLParserException (msg, ioe);
+                    ParserException ex = new ParserException (msg, ioe);
                     feedback.error (msg, ex);
                     character_set = chs;
                     reader = rd;
@@ -670,7 +670,7 @@ public class HTMLParser
 	 * Sets the feedback object used in scanning.
 	 * @param fb The new feedback object to use.
 	 */
-	public void setFeedback(HTMLParserFeedback fb)
+	public void setFeedback(ParserFeedback fb)
     {
         feedback = (null == fb) ? noFeedback : fb;
 	}
@@ -679,7 +679,7 @@ public class HTMLParser
 	 * Returns the feedback.
 	 * @return HTMLParserFeedback
 	 */
-	public HTMLParserFeedback getFeedback() {
+	public ParserFeedback getFeedback() {
 		return feedback;
 	}
 
@@ -856,7 +856,7 @@ public class HTMLParser
 	 * would also be of use when you have developed custom scanners, and need to register them into the parser.
 	 * @param scanner HTMLTagScanner object (or derivative) to be added to the list of registered scanners
 	 */
-	public void addScanner(HTMLTagScanner scanner) {
+	public void addScanner(TagScanner scanner) {
 		String ids[] = scanner.getID();
 		for (int i=0;i<ids.length;i++) {
 			scanners.put(ids[i],scanner);
@@ -887,35 +887,35 @@ public class HTMLParser
 	 * }
 	 * </pre>
 	 */
-	public HTMLEnumeration elements() throws HTMLParserException
+	public NodeIterator elements() throws ParserException
     {
         boolean remove_scanner;
         HTMLNode node;
-        HTMLMetaTag meta;
+        MetaTag meta;
         String httpEquiv;
         String charset;
         boolean restart;
-        HTMLEndTag end;
-        HTMLEnumerationImpl ret;
+        EndTag end;
+        IteratorImpl ret;
 
         remove_scanner = false;
         restart = false;
-        ret = new HTMLEnumerationImpl (reader, resourceLocn, feedback);
+        ret = new IteratorImpl (reader, resourceLocn, feedback);
         if (null != url_conn)
             try
             {
                 if (null == scanners.get ("-m"))
                 {
-                    addScanner (new HTMLMetaTagScanner ("-m"));
+                    addScanner (new MetaTagScanner ("-m"));
                     remove_scanner = true;
                 }
 
                 /* pre-read up to </HEAD> looking for charset directive */
                 while (null != (node = ret.peek ()))
                 {
-                    if (node instanceof HTMLMetaTag)
+                    if (node instanceof MetaTag)
                     {   // check for charset on Content-Type
-                        meta = (HTMLMetaTag)node;
+                        meta = (MetaTag)node;
                         httpEquiv = meta.getAttribute ("HTTP-EQUIV");
                         if ("Content-Type".equalsIgnoreCase (httpEquiv))
                         {
@@ -924,15 +924,15 @@ public class HTMLParser
                             {   // oops, different character set, restart
                                 character_set = charset;
                                 createReader ();
-                                ret = new HTMLEnumerationImpl (reader, resourceLocn, feedback);
+                                ret = new IteratorImpl (reader, resourceLocn, feedback);
                             }
                             // once we see the Content-Type meta tag we're finished the pre-read
                             break;
                         }
                     }
-                    else if (node instanceof HTMLEndTag)
+                    else if (node instanceof EndTag)
                     {
-                        end = (HTMLEndTag)node;
+                        end = (EndTag)node;
                         if (end.getTagName ().equalsIgnoreCase ("HEAD"))
                             // or, once we see the </HEAD> tag we're finished the pre-read
                             break;
@@ -942,14 +942,14 @@ public class HTMLParser
             catch (UnsupportedEncodingException uee)
             {
                 String msg = "elements() : The content of " + url_conn.getURL ().toExternalForm () + " has an encoding which is not supported";
-                HTMLParserException ex = new HTMLParserException (msg, uee);
+                ParserException ex = new ParserException (msg, uee);
                 feedback.error (msg, ex);
                 throw ex;
             }
             catch (IOException ioe)
             {
                 String msg = "elements() : Error in opening a connection to " + url_conn.getURL ().toExternalForm ();
-                HTMLParserException ex = new HTMLParserException (msg, ioe);
+                ParserException ex = new ParserException (msg, ioe);
                 feedback.error (msg, ex);
                 throw ex;
             }
@@ -975,8 +975,8 @@ public class HTMLParser
 	 * @param id The id of the requested scanner
 	 * @return HTMLTagScanner The Tag Scanner
 	 */
-	public HTMLTagScanner getScanner(String id) {
-		return (HTMLTagScanner)scanners.get(id);
+	public TagScanner getScanner(String id) {
+		return (TagScanner)scanners.get(id);
 	}
 
 	/**
@@ -985,7 +985,7 @@ public class HTMLParser
 	public void parse(String filter) throws Exception
 	{
 		HTMLNode node;
-		for (HTMLEnumeration e=elements();e.hasMoreNodes();)
+		for (NodeIterator e=elements();e.hasMoreNodes();)
 		{
 			node = e.nextNode();
 	  	  	if (node!=null)
@@ -996,9 +996,9 @@ public class HTMLParser
 				{
 					// There is a filter. Find if the associated filter of this node
 					// matches the specified filter
-					if (!(node instanceof HTMLTag)) continue;
-					HTMLTag tag=(HTMLTag)node;
-					HTMLTagScanner scanner = tag.getThisScanner();
+					if (!(node instanceof Tag)) continue;
+					Tag tag=(Tag)node;
+					TagScanner scanner = tag.getThisScanner();
 					if (scanner==null) continue;
 					String tagFilter = scanner.getFilter();
 					if (tagFilter==null) continue;
@@ -1038,21 +1038,21 @@ public class HTMLParser
 			System.err.println("Other scanners already exist, hence this method call wont have any effect");
 			return;
 		}
-		HTMLLinkScanner linkScanner = new HTMLLinkScanner(HTMLLinkTag.LINK_TAG_FILTER);
+		LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
 		// Note - The BaseHREF and Image scanners share the same
 		// link processor - internally linked up with the factory
 		// method in the link scanner class
 		addScanner(linkScanner);
-		addScanner(linkScanner.createImageScanner(HTMLImageTag.IMAGE_TAG_FILTER));
-		addScanner(new HTMLScriptScanner("-s"));
-		addScanner(new HTMLStyleScanner("-t"));
-		addScanner(new HTMLJspScanner("-j"));
-		addScanner(new HTMLAppletScanner("-a"));
-		addScanner(new HTMLMetaTagScanner("-m"));
-		addScanner(new HTMLTitleScanner("-T"));
-		addScanner(new HTMLDoctypeScanner("-d"));
-		addScanner(new HTMLFormScanner("-f"));
-		addScanner(new HTMLFrameSetScanner("-r"));	
+		addScanner(linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
+		addScanner(new ScriptScanner("-s"));
+		addScanner(new StyleScanner("-t"));
+		addScanner(new JspScanner("-j"));
+		addScanner(new AppletScanner("-a"));
+		addScanner(new MetaTagScanner("-m"));
+		addScanner(new TitleScanner("-T"));
+		addScanner(new DoctypeScanner("-d"));
+		addScanner(new FormScanner("-f"));
+		addScanner(new FrameSetScanner("-r"));	
 		addScanner(linkScanner.createBaseHREFScanner("-b"));
 	//	addScanner(new SpanScanner("-p"));
 	//	addScanner(new DivScanner("-div"));
@@ -1063,7 +1063,7 @@ public class HTMLParser
 	 * Removes a specified scanner object.
 	 * @param scanner HTMLTagScanner object to be removed from the list of registered scanners
 	 */
-	public void removeScanner(HTMLTagScanner scanner) {
+	public void removeScanner(TagScanner scanner) {
 		scanners.remove(scanner);
 	}
 
@@ -1112,14 +1112,14 @@ public class HTMLParser
 				e.printStackTrace();
 			}
 		}
-		catch (HTMLParserException e) {
+		catch (ParserException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void visitAllNodesWith(HTMLVisitor visitor) throws HTMLParserException {
+	public void visitAllNodesWith(NodeVisitor visitor) throws ParserException {
 		HTMLNode node;
-		for (HTMLEnumeration e = elements();e.hasMoreNodes();) {
+		for (NodeIterator e = elements();e.hasMoreNodes();) {
 			node = e.nextNode();
 			node.accept(visitor);
 		}
@@ -1134,9 +1134,9 @@ public class HTMLParser
 	  }
 	}	
 	
-	public HTMLNode [] extractAllNodesThatAre(Class nodeType) throws HTMLParserException {
+	public HTMLNode [] extractAllNodesThatAre(Class nodeType) throws ParserException {
 		NodeList nodeList = new NodeList();
-		for (HTMLEnumeration e = elements();e.hasMoreNodes();) {
+		for (NodeIterator e = elements();e.hasMoreNodes();) {
 			e.nextNode().collectInto(nodeList,nodeType);
 		}
 		return nodeList.toNodeArray();
@@ -1155,7 +1155,7 @@ public class HTMLParser
 	
 	public static HTMLParser createLinkRecognizingParser(String inputHTML) {
 		HTMLParser parser = createParser(inputHTML);
-		parser.addScanner(new HTMLLinkScanner(HTMLLinkTag.LINK_TAG_FILTER));
+		parser.addScanner(new LinkScanner(LinkTag.LINK_TAG_FILTER));
 		return parser;
 	}
 }

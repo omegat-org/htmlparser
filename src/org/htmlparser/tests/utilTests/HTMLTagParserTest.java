@@ -29,10 +29,10 @@
 package org.htmlparser.tests.utilTests;
 
 import org.htmlparser.parserHelper.TagParser;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
+import org.htmlparser.util.DefaultParserFeedback;
 
 public class HTMLTagParserTest extends HTMLParserTestCase {
 	private TagParser tagParser;
@@ -42,7 +42,7 @@ public class HTMLTagParserTest extends HTMLParserTestCase {
 	}
 
     public void testCorrectTag() {
-    	HTMLTag tag = new HTMLTag(new TagData(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">"));
+    	Tag tag = new Tag(new TagData(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">"));
 		tagParser.correctTag(tag);
 		assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
     }	
@@ -59,6 +59,6 @@ public class HTMLTagParserTest extends HTMLParserTestCase {
 	}   
 
 	protected void setUp() {
-		tagParser = new TagParser(new DefaultHTMLParserFeedback());	
+		tagParser = new TagParser(new DefaultParserFeedback());	
 	} 
 }

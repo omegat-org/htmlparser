@@ -32,9 +32,9 @@ package org.htmlparser.parserapplications;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 
 /**
  * LinkExtractor extracts all the links from the given webpage
@@ -49,19 +49,19 @@ public class LinkExtractor {
 			this.parser   = new HTMLParser(location); // Create the parser object
 			parser.registerScanners(); // Register standard scanners (Very Important)
 		}
-		catch (HTMLParserException e) {
+		catch (ParserException e) {
 			e.printStackTrace();
 		}
 		
 	}
-	public void extractLinks() throws HTMLParserException {
+	public void extractLinks() throws ParserException {
 		HTMLNode node;
-		HTMLLinkTag linkTag;
+		LinkTag linkTag;
 		System.out.println("Parsing "+location+" for links...");
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 			node = e.nextNode();	// Get the next HTML Node
-			if (node instanceof HTMLLinkTag) {
-				linkTag = (HTMLLinkTag)node; // Downcast to a Link Tag
+			if (node instanceof LinkTag) {
+				linkTag = (LinkTag)node; // Downcast to a Link Tag
 				
 				System.out.println(linkTag.toString()); // Print it
 				
@@ -79,7 +79,7 @@ public class LinkExtractor {
 		try {
 			linkExtractor.extractLinks();
 		}
-		catch (HTMLParserException e) {
+		catch (ParserException e) {
 			e.printStackTrace();
 		}
 	}

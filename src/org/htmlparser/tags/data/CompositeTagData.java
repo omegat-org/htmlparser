@@ -32,16 +32,16 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 
 public class CompositeTagData {
-	private HTMLTag startTag;
-	private HTMLTag endTag;
+	private Tag startTag;
+	private Tag endTag;
 	private NodeList children;
 	
 	public CompositeTagData(
-		HTMLTag startTag, HTMLTag endTag, Vector children) {
+		Tag startTag, Tag endTag, Vector children) {
 		this.startTag = startTag;
 		this.endTag   = endTag;
 		this.children = new NodeList();
@@ -55,11 +55,11 @@ public class CompositeTagData {
 		return children;
 	}
 
-	public HTMLTag getEndTag() {
+	public Tag getEndTag() {
 		return endTag;
 	}
 
-	public HTMLTag getStartTag() {
+	public Tag getStartTag() {
 		return startTag;
 	}
 

@@ -31,41 +31,41 @@
 package org.htmlparser.visitors;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLStringNode;
-import org.htmlparser.scanners.HTMLLinkScanner;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLImageTag;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.visitors.HTMLVisitor;
+import org.htmlparser.scanners.LinkScanner;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.visitors.NodeVisitor;
 
-public class UrlModifyingVisitor extends HTMLVisitor {
+public class UrlModifyingVisitor extends NodeVisitor {
 	private String linkPrefix;
 	private StringBuffer modifiedResult;
 	private HTMLParser parser;
 	
 	public UrlModifyingVisitor(HTMLParser parser, String linkPrefix) {
 		this.parser = parser;
-		HTMLLinkScanner linkScanner = new HTMLLinkScanner();  
+		LinkScanner linkScanner = new LinkScanner();  
 		parser.addScanner(linkScanner);
 		parser.addScanner(
 			linkScanner.createImageScanner(
-				HTMLImageTag.IMAGE_TAG_FILTER
+				ImageTag.IMAGE_TAG_FILTER
 			)
 		);
 		this.linkPrefix =linkPrefix; 
 		modifiedResult = new StringBuffer();
 	}
 	
-	public void visitLinkTag(HTMLLinkTag linkTag) {
+	public void visitLinkTag(LinkTag linkTag) {
 		linkTag.setLink(linkPrefix + linkTag.getLink());
 	}
 
-	public void visitImageTag(HTMLImageTag imageTag) {
+	public void visitImageTag(ImageTag imageTag) {
 		imageTag.setImageURL(linkPrefix + imageTag.getImageURL());
 		modifiedResult.append(imageTag.toHTML());
 	}
 	
-	public void visitEndTag(HTMLEndTag endTag) {
+	public void visitEndTag(EndTag endTag) {
 		modifiedResult.append(endTag.toHTML());
 	}
 
@@ -73,7 +73,7 @@ public class UrlModifyingVisitor extends HTMLVisitor {
 		modifiedResult.append(stringNode.toHTML());
 	}
 
-	public void visitTag(HTMLTag tag) {
+	public void visitTag(Tag tag) {
 		modifiedResult.append(tag.toHTML());
 	}
 	

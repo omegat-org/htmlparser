@@ -32,7 +32,7 @@ package org.htmlparser.visitors;
 
 import org.htmlparser.HTMLStringNode;
 
-public class StringFindingVisitor extends HTMLVisitor {
+public class StringFindingVisitor extends NodeVisitor {
 	private boolean stringFound = false;
 	private String stringToFind;
 	private int foundCount;

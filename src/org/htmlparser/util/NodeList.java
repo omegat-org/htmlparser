@@ -77,8 +77,8 @@ public class NodeList implements Serializable {
 		return numberOfAdjustments;
 	}
 	
-	public SimpleEnumeration elements() {
-		return new SimpleEnumeration() {
+	public SimpleNodeIterator elements() {
+		return new SimpleNodeIterator() {
 			int count = 0;
 	
 			public boolean hasMoreNodes() {

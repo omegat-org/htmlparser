@@ -43,10 +43,10 @@ package org.htmlparser.util;
 
 public class FeedbackManager
 {
-  protected static HTMLParserFeedback callback =
-    new DefaultHTMLParserFeedback();
+  protected static ParserFeedback callback =
+    new DefaultParserFeedback();
 
-  public static void setParserFeedback(HTMLParserFeedback feedback)
+  public static void setParserFeedback(ParserFeedback feedback)
   {
     callback = feedback;
   }
@@ -61,7 +61,7 @@ public class FeedbackManager
     callback.warning(message);
   }
 
-  public static void error(String message, HTMLParserException e)
+  public static void error(String message, ParserException e)
   {
     callback.error(message, e);
   }

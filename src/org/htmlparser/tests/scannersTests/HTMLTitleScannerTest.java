@@ -27,12 +27,12 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.scannersTests;
-import org.htmlparser.scanners.HTMLMetaTagScanner;
-import org.htmlparser.scanners.HTMLStyleScanner;
-import org.htmlparser.scanners.HTMLTitleScanner;
-import org.htmlparser.tags.HTMLTitleTag;
+import org.htmlparser.scanners.MetaTagScanner;
+import org.htmlparser.scanners.StyleScanner;
+import org.htmlparser.scanners.TitleScanner;
+import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.ParserException;
 
 public class HTMLTitleScannerTest extends HTMLParserTestCase {
 
@@ -40,16 +40,16 @@ public class HTMLTitleScannerTest extends HTMLParserTestCase {
 		super(name);
 	}
 
-	public void testScan() throws HTMLParserException {
+	public void testScan() throws ParserException {
 		createParser("<html><head><title>Yahoo!</title><base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
-		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
+		TitleScanner titleScanner = new TitleScanner("-t");
 		parser.addScanner(titleScanner);
-		parser.addScanner(new HTMLStyleScanner("-s"));
-		parser.addScanner(new HTMLMetaTagScanner("-m"));
+		parser.addScanner(new StyleScanner("-s"));
+		parser.addScanner(new MetaTagScanner("-m"));
 	 	parseAndAssertNodeCount(7);
-	 	assertTrue(node[2] instanceof HTMLTitleTag);
+	 	assertTrue(node[2] instanceof TitleTag);
 		// check the title node
-		HTMLTitleTag titleTag = (HTMLTitleTag) node[2];
+		TitleTag titleTag = (TitleTag) node[2];
 		assertEquals("Title","Yahoo!",titleTag.getTitle());
 		assertEquals("Title Scanner",titleScanner,titleTag.getThisScanner());
 	}
@@ -59,15 +59,15 @@ public class HTMLTitleScannerTest extends HTMLParserTestCase {
 	 * on not ending the title tag correctly, we would get 
 	 * null pointer exceptions..
 	 */
-	public void testIncompleteTitle() throws HTMLParserException {
+	public void testIncompleteTitle() throws ParserException {
 		createParser(
 		"<TITLE>SISTEMA TERRA, VOL. VI , No. 1-3, December 1997</TITLE\n"+
 		"</HEAD>");
-		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
+		TitleScanner titleScanner = new TitleScanner("-t");
 		parser.addScanner(titleScanner);
 	 	parseAndAssertNodeCount(2);
-	 	assertTrue("First Node is a title tag",node[0] instanceof HTMLTitleTag);
-	 	HTMLTitleTag titleTag = (HTMLTitleTag)node[0];
+	 	assertTrue("First Node is a title tag",node[0] instanceof TitleTag);
+	 	TitleTag titleTag = (TitleTag)node[0];
 	 	assertEquals("Title","SISTEMA TERRA, VOL. VI , No. 1-3, December 1997",titleTag.getTitle());
 	
 	}
@@ -76,18 +76,18 @@ public class HTMLTitleScannerTest extends HTMLParserTestCase {
 	 * If there are duplicates of the title tag, the parser crashes.
 	 * This bug was reported by Claude Duguay
 	 */
-	public void testDoubleTitleTag() throws HTMLParserException{
+	public void testDoubleTitleTag() throws ParserException{
 		createParser(
 		"<html><head><TITLE>\n"+
 		"<html><head><TITLE>\n"+
 		"Double tags can hang the code\n"+
 		"</TITLE></head><body>\n"+
 		"<body><html>");
-		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
+		TitleScanner titleScanner = new TitleScanner("-t");
 		parser.addScanner(titleScanner);
 	 	parseAndAssertNodeCount(7);
-	 	assertTrue("Third tag should be a title tag",node[2] instanceof HTMLTitleTag);
-		HTMLTitleTag titleTag = (HTMLTitleTag)node[2];
+	 	assertTrue("Third tag should be a title tag",node[2] instanceof TitleTag);
+		TitleTag titleTag = (TitleTag)node[2];
 	 	assertEquals("Title","Double tags can hang the code\r\n",titleTag.getTitle());
 	 	
 	}
@@ -96,26 +96,26 @@ public class HTMLTitleScannerTest extends HTMLParserTestCase {
 	 * Testcase based on Claude Duguay's report. This proves
 	 * that the parser throws exceptions when faced with malformed html
 	 */
-	public void testNoEndTitleTag() throws HTMLParserException {
+	public void testNoEndTitleTag() throws ParserException {
 		createParser(
 		"<TITLE>KRP VALIDATION<PROCESS/TITLE>");
 		try {
-			HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
+			TitleScanner titleScanner = new TitleScanner("-t");
 			parser.addScanner(titleScanner);
 		 	parseAndAssertNodeCount(1);
 			assertTrue("Should have thrown an HTMLParserException",false);
 		}
-		catch (HTMLParserException e) {
+		catch (ParserException e) {
 
 		}
 	}	
 	
-	public void testTitleTagContainsJspTag() throws HTMLParserException {
+	public void testTitleTagContainsJspTag() throws ParserException {
 		createParser("<html><head><title><%=gTitleString%></title><base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
 		parser.registerScanners();
 		parseAndAssertNodeCount(7);
-		assertTrue(node[2] instanceof HTMLTitleTag);
-		HTMLTitleTag titleTag = (HTMLTitleTag) node[2];
+		assertTrue(node[2] instanceof TitleTag);
+		TitleTag titleTag = (TitleTag) node[2];
 		assertStringEquals("HTML Rendering","<TITLE><%=gTitleString%></TITLE>",titleTag.toHTML());				
 	}
 }

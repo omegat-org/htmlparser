@@ -4,8 +4,8 @@ package org.htmlparser.tests.utilTests;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.SimpleEnumeration;
-import org.htmlparser.visitors.HTMLVisitor;
+import org.htmlparser.util.SimpleNodeIterator;
+import org.htmlparser.visitors.NodeVisitor;
 
 public class NodeListTest extends HTMLParserTestCase {
 	private NodeList nodeList;
@@ -79,7 +79,7 @@ public class NodeListTest extends HTMLParserTestCase {
 		createTestDataAndPutInVector(11);
 		HTMLNode [] resultNodes = new HTMLNode[11];
 		int i = 0;
-		for (SimpleEnumeration e = nodeList.elements();e.hasMoreNodes();) {
+		for (SimpleNodeIterator e = nodeList.elements();e.hasMoreNodes();) {
 			resultNodes[i] = e.nextNode();
 			assertTrue("Node "+i+" did not match",testNodes[i]==resultNodes[i]);
 			i++;
@@ -89,7 +89,7 @@ public class NodeListTest extends HTMLParserTestCase {
 	
 	private HTMLNode createHTMLNodeObject() {
 		HTMLNode node = new HTMLNode(10,20) {
-			public void accept(HTMLVisitor visitor) {
+			public void accept(NodeVisitor visitor) {
 			}
 
 			public void collectInto(NodeList collectionList, String filter) {

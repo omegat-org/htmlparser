@@ -28,7 +28,7 @@
 
 
 package org.htmlparser.tests.parserHelperTests;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.HTMLParserTestCase;
 
 public class TagParserTest extends HTMLParserTestCase {
@@ -43,8 +43,8 @@ public class TagParserTest extends HTMLParserTestCase {
 		
 		createParser(testHtml);
 		parseAndAssertNodeCount(1);
-		assertType("should be HTMLTag",HTMLTag.class,node[0]);
-		HTMLTag tag = (HTMLTag)node[0];
+		assertType("should be HTMLTag",Tag.class,node[0]);
+		Tag tag = (Tag)node[0];
 		assertStringEquals("alt","Marshall Field's",tag.getAttribute("ALT"));
 		assertStringEquals(
 			"html",

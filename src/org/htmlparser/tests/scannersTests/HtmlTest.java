@@ -1,9 +1,9 @@
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.scanners.HTMLTitleScanner;
+import org.htmlparser.scanners.TitleScanner;
 import org.htmlparser.scanners.HtmlScanner;
-import org.htmlparser.tags.HTMLTitleTag;
+import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.NodeList;
@@ -17,17 +17,17 @@ public class HtmlTest extends HTMLParserTestCase {
 	public void testScan() throws Exception {
 		createParser(
 			"<html>" +			"	<head>" +			"		<title>Some Title</title>" +			"	</head>" +			"	<body>" +			"		Some data" +			"	</body>" +			"</html>");
-		parser.addScanner(new HTMLTitleScanner(""));
+		parser.addScanner(new TitleScanner(""));
 		parser.addScanner(new HtmlScanner());
 		parseAndAssertNodeCount(1);
 		assertType("html tag",Html.class,node[0]);
 		Html html = (Html)node[0];
 		NodeList nodeList = new NodeList();
-		html.collectInto(nodeList, HTMLTitleTag.class);
+		html.collectInto(nodeList, TitleTag.class);
 		assertEquals("nodelist size",1,nodeList.size());
 		HTMLNode node = nodeList.elementAt(0);
-		assertType("expected title tag",HTMLTitleTag.class,node);
-		HTMLTitleTag titleTag = (HTMLTitleTag)node;
+		assertType("expected title tag",TitleTag.class,node);
+		TitleTag titleTag = (TitleTag)node;
 		assertStringEquals("title","Some Title",titleTag.getTitle());
 	}
 }

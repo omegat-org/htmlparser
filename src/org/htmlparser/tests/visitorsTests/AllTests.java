@@ -41,7 +41,7 @@ public class AllTests extends junit.framework.TestCase
 		suite.addTestSuite(StringFindingVisitorTest.class);
 		suite.addTestSuite(TagFindingVisitorTest.class);
 		suite.addTestSuite(LinkFindingVisitorTest.class);
-		suite.addTestSuite(HTMLVisitorTest.class);
+		suite.addTestSuite(NodeVisitorTest.class);
 		suite.addTestSuite(UrlModifyingVisitorTest.class);
 		suite.addTestSuite(HtmlPageTest.class);
 		return suite;

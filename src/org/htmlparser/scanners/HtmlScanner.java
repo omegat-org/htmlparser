@@ -28,7 +28,7 @@
 
 package org.htmlparser.scanners;
 
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -48,7 +48,7 @@ public class HtmlScanner extends CompositeTagScanner {
 		return MATCH_STRING;
 	}
 
-	protected HTMLTag createTag(
+	protected Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new Html(tagData,compositeTagData);

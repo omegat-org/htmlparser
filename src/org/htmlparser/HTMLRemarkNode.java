@@ -30,7 +30,7 @@
 package org.htmlparser;
 
 import org.htmlparser.util.NodeList;
-import org.htmlparser.visitors.HTMLVisitor;
+import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * The remark tag is identified and represented by this class.
@@ -83,7 +83,7 @@ public class HTMLRemarkNode extends HTMLNode
 		if (filter==REMARK_NODE_FILTER) collectionList.add(this);
 	}
 
-	public void accept(HTMLVisitor visitor) {
+	public void accept(NodeVisitor visitor) {
 		visitor.visitRemarkNode(this);
 	}
 

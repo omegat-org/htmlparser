@@ -30,7 +30,7 @@ package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.tags.Div;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.ParserException;
 
 public class XmlEndTagScanningTest extends HTMLParserTestCase{
 
@@ -38,7 +38,7 @@ public class XmlEndTagScanningTest extends HTMLParserTestCase{
 		super(name);
 	}
 
-	public void testSingleTagParsing() throws HTMLParserException {
+	public void testSingleTagParsing() throws ParserException {
 		createParser("<div style=\"page-break-before: always; \" />");
 		parser.registerScanners();
 		parseAndAssertNodeCount(1);

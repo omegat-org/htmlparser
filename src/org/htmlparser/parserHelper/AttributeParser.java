@@ -31,7 +31,7 @@ package org.htmlparser.parserHelper;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 
 
 /**
@@ -90,7 +90,7 @@ public class AttributeParser {
 	* </pre>
 	*
 	*/
-   public Hashtable parseAttributes(HTMLTag tag){
+   public Hashtable parseAttributes(Tag tag){
         Hashtable h = new Hashtable();
         String element,name,value,nextPart=null;
         String empty=null;
@@ -138,7 +138,7 @@ public class AttributeParser {
                 else {
                     if (name != null) {
                       if (name.equals("/")) {
-                        putDataIntoTable(h,HTMLTag.EMPTYTAG,"",false);
+                        putDataIntoTable(h,Tag.EMPTYTAG,"",false);
                       } else {
                         putDataIntoTable(h,name,"",false);
                       }
@@ -204,7 +204,7 @@ public class AttributeParser {
 
 
     private void putDataIntoTable(Hashtable h,String name,String value,boolean isName) {
-        if (isName && value == null) value=HTMLTag.TAGNAME;
+        if (isName && value == null) value=Tag.TAGNAME;
         else if (value==null) value = ""; // Hashtable does not accept nulls
         if (isName) {
             // store tagname as tag.TAGNAME,tag

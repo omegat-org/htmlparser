@@ -44,8 +44,8 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.beans.StringBean;
 import org.htmlparser.beans.LinkBean;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 
 public class BeanTest extends TestCase
 {
@@ -92,7 +92,7 @@ public class BeanTest extends TestCase
         throws
             IOException,
             ClassNotFoundException,
-            HTMLParserException
+            ParserException
     {
         HTMLParser parser;
         byte[] data;
@@ -106,11 +106,11 @@ public class BeanTest extends TestCase
         throws
             IOException,
             ClassNotFoundException,
-            HTMLParserException
+            ParserException
     {
         HTMLParser parser;
         Vector vector;
-        HTMLEnumeration enumeration;
+        NodeIterator enumeration;
         byte[] data;
         
         parser = new HTMLParser ("http://htmlparser.sourceforge.net/test/example.html");
@@ -134,11 +134,11 @@ public class BeanTest extends TestCase
         throws
             IOException,
             ClassNotFoundException,
-            HTMLParserException
+            ParserException
     {
         HTMLParser parser;
         Vector vector;
-        HTMLEnumeration enumeration;
+        NodeIterator enumeration;
         byte[] data;
         
         parser = new HTMLParser ("http://htmlparser.sourceforge.net/test/example.html");
@@ -163,7 +163,7 @@ public class BeanTest extends TestCase
         throws
             IOException,
             ClassNotFoundException,
-            HTMLParserException
+            ParserException
     {
         StringBean sb;
         String text;
@@ -186,7 +186,7 @@ public class BeanTest extends TestCase
         throws
             IOException,
             ClassNotFoundException,
-            HTMLParserException
+            ParserException
     {
         LinkBean lb;
         URL[] links;

@@ -30,7 +30,7 @@
 package org.htmlparser;
 
 import org.htmlparser.util.NodeList;
-import org.htmlparser.visitors.HTMLVisitor;
+import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * Normal text in the html document is identified and represented by this class.
@@ -78,7 +78,7 @@ public class HTMLStringNode extends HTMLNode
 		if (filter==STRING_FILTER) collectionList.add(this);
 	}
 
-	public void accept(HTMLVisitor visitor) {
+	public void accept(NodeVisitor visitor) {
 		visitor.visitStringNode(this);
 	}
 

@@ -31,11 +31,11 @@
 package org.htmlparser.visitors;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 
-public class TagFindingVisitor extends HTMLVisitor {
+public class TagFindingVisitor extends NodeVisitor {
 	private String [] tagsToBeFound;
 	private int count [];
 	private int endTagCount [];
@@ -67,7 +67,7 @@ public class TagFindingVisitor extends HTMLVisitor {
 		return count[index];
 	}
 
-	public void visitTag(HTMLTag tag) {
+	public void visitTag(Tag tag) {
 		for (int i=0;i<tagsToBeFound.length;i++)
 			if (tag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
 				count[i]++;
@@ -79,7 +79,7 @@ public class TagFindingVisitor extends HTMLVisitor {
 		return tags[index].toNodeArray();
 	}
 
-	public void visitEndTag(HTMLEndTag endTag) {
+	public void visitEndTag(EndTag endTag) {
 		if (!endTagCheck) return;
 		for (int i=0;i<tagsToBeFound.length;i++)
 			if (endTag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {

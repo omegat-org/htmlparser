@@ -40,12 +40,12 @@ import junit.framework.TestSuite;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.scanners.HTMLImageScanner;
-import org.htmlparser.tags.HTMLImageTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLLinkProcessor;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.scanners.ImageScanner;
+import org.htmlparser.tags.ImageTag;
+import org.htmlparser.util.DefaultParserFeedback;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.ParserException;
 
 public class FunctionalTests extends TestCase {
 
@@ -58,7 +58,7 @@ public class FunctionalTests extends TestCase {
 	 * to check if the no of image tags are correctly 
 	 * identified by the parser
 	 */
-	public void testNumImageTagsInYahooWithoutRegisteringScanners() throws HTMLParserException {
+	public void testNumImageTagsInYahooWithoutRegisteringScanners() throws ParserException {
 		// First count the image tags as is
 		int imgTagCount;
 		imgTagCount = findImageTagCount();
@@ -66,8 +66,8 @@ public class FunctionalTests extends TestCase {
 			int parserImgTagCount = countImageTagsWithHTMLParser();
 			assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);	
 		}
-		catch (HTMLParserException e) {
-			throw new HTMLParserException("Error thrown in call to countImageTagsWithHTMLParser()",e);
+		catch (ParserException e) {
+			throw new ParserException("Error thrown in call to countImageTagsWithHTMLParser()",e);
 		}
 			
 	}
@@ -91,14 +91,14 @@ public class FunctionalTests extends TestCase {
 		return imgTagCount;
 	}
 
-	public int countImageTagsWithHTMLParser() throws HTMLParserException {
-		HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
-		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
+	public int countImageTagsWithHTMLParser() throws ParserException {
+		HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultParserFeedback());
+		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
 		int parserImgTagCount = 0;
 		HTMLNode node;
-		for (HTMLEnumeration e= parser.elements();e.hasMoreNodes();) {
+		for (NodeIterator e= parser.elements();e.hasMoreNodes();) {
 			node = (HTMLNode)e.nextNode();
-			if (node instanceof HTMLImageTag) {
+			if (node instanceof ImageTag) {
 				parserImgTagCount++;				
 			}		
 		}

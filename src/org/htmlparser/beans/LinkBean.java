@@ -38,8 +38,8 @@ import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.ObjectFindingVisitor;
 
 /**
@@ -86,24 +86,24 @@ public class LinkBean extends Object implements Serializable
     // internals
     //
 
-    protected URL[] extractLinks (String url) throws HTMLParserException
+    protected URL[] extractLinks (String url) throws ParserException
     {
         HTMLParser parser;
         Vector vector;
         HTMLNode node;
-        HTMLLinkTag link;
+        LinkTag link;
         URL[] ret;
         
         parser = new HTMLParser (url);
         parser.registerScanners ();
-        ObjectFindingVisitor visitor = new ObjectFindingVisitor(HTMLLinkTag.class);
+        ObjectFindingVisitor visitor = new ObjectFindingVisitor(LinkTag.class);
         parser.visitAllNodesWith(visitor);
         HTMLNode [] nodes = visitor.getTags();
         vector = new Vector();
         for (int i = 0; i < nodes.length; i++)
             try
             {
-                link = (HTMLLinkTag)nodes[i];
+                link = (LinkTag)nodes[i];
                 vector.add(new URL (link.getLink ()));
             }
             catch (MalformedURLException murle)
@@ -192,7 +192,7 @@ public class LinkBean extends Object implements Serializable
                     mPropertySupport.firePropertyChange (PROP_LINKS_PROPERTY, oldValue, mLinks);
                 }
             }
-            catch (HTMLParserException hpe)
+            catch (ParserException hpe)
             {
                 mLinks = null;
             }
@@ -210,7 +210,7 @@ public class LinkBean extends Object implements Serializable
                 mLinks = extractLinks (getURL ());
                 mPropertySupport.firePropertyChange (PROP_LINKS_PROPERTY, null, mLinks);
             }
-            catch (HTMLParserException hpe)
+            catch (ParserException hpe)
             {
                 mLinks = null;
             }
@@ -245,7 +245,7 @@ public class LinkBean extends Object implements Serializable
                 mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, old, getURL ());
                 setLinks ();
             }
-            catch (HTMLParserException hpe)
+            catch (ParserException hpe)
             {
                 // failed... now what
             }
@@ -272,7 +272,7 @@ public class LinkBean extends Object implements Serializable
             mParser.setConnection (connection);
             setLinks ();
         }
-        catch (HTMLParserException hpe)
+        catch (ParserException hpe)
         {
             // failed... now what
         }

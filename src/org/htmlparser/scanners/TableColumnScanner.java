@@ -28,7 +28,7 @@
 
 package org.htmlparser.scanners;
 
-import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -52,7 +52,7 @@ public class TableColumnScanner extends CompositeTagScanner {
 		super(filter, nameOfTagToMatch, removeScanners, stringNodeIgnoreMode);
 	}
 
-	protected HTMLTag createTag(
+	protected Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return new TableColumn(tagData,compositeTagData);

@@ -1,7 +1,7 @@
 package org.htmlparser.tests.utilTests;
 
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLParserUtils;
+import org.htmlparser.util.ParserUtils;
 
 public class HTMLParserUtilsTest extends HTMLParserTestCase {
 
@@ -14,7 +14,7 @@ public class HTMLParserUtilsTest extends HTMLParserTestCase {
 		assertStringEquals(
 			"modified text",
 			"Hello World",
-			HTMLParserUtils.removeTrailingBlanks(text)
+			ParserUtils.removeTrailingBlanks(text)
 		);
 	}
 }

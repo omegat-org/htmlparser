@@ -8,7 +8,7 @@ import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
 
 public class ObjectCollectionTest extends HTMLParserTestCase {
@@ -33,7 +33,7 @@ public class ObjectCollectionTest extends HTMLParserTestCase {
 		);
 	}
 	
-	public void testSimpleSearch() throws HTMLParserException {
+	public void testSimpleSearch() throws ParserException {
 		createParser(
 			"<SPAN>The Refactoring Challenge</SPAN>" +
 			"<SPAN>&#013;id: 6</SPAN>" 
@@ -43,7 +43,7 @@ public class ObjectCollectionTest extends HTMLParserTestCase {
 		assertSpanContent(parser.extractAllNodesThatAre(Span.class));
 	}
 	
-	public void testOneLevelNesting() throws HTMLParserException {
+	public void testOneLevelNesting() throws ParserException {
 		createParser(
 			"<DIV>" +
 			"	<SPAN>The Refactoring Challenge</SPAN>" +
@@ -61,7 +61,7 @@ public class ObjectCollectionTest extends HTMLParserTestCase {
 		assertSpanContent(spans);
 	}
 
-	public void testTwoLevelNesting() throws HTMLParserException {
+	public void testTwoLevelNesting() throws ParserException {
 		createParser(
 			"<table>" +			"	<DIV>" +
 			"		<SPAN>The Refactoring Challenge</SPAN>" +

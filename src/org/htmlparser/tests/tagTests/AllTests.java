@@ -38,26 +38,27 @@ public class AllTests extends junit.framework.TestCase
 
 	public static TestSuite suite() {
 		TestSuite suite = new TestSuite("Tag Tests");
-		suite.addTestSuite(HTMLJspTagTest.class);
-		suite.addTestSuite(HTMLScriptTagTest.class);
-		suite.addTestSuite(HTMLImageTagTest.class);
-		suite.addTestSuite(HTMLLinkTagTest.class);		
-		suite.addTestSuite(HTMLTagTest.class);
-		suite.addTestSuite(HTMLTitleTagTest.class);
-		suite.addTestSuite(HTMLDoctypeTagTest.class);
-		suite.addTestSuite(HTMLEndTagTest.class);
-		suite.addTestSuite(HTMLMetaTagTest.class);
-		suite.addTestSuite(HTMLStyleTagTest.class);
-		suite.addTestSuite(HTMLAppletTagTest.class);
-		suite.addTestSuite(HTMLFrameTagTest.class);
-		suite.addTestSuite(HTMLFrameSetTagTest.class);	
-		suite.addTestSuite(HTMLInputTagTest.class);
-		suite.addTestSuite(HTMLOptionTagTest.class);
-		suite.addTestSuite(HTMLSelectTagTest.class);
-		suite.addTestSuite(HTMLTextareaTagTest.class);
-		suite.addTestSuite(HTMLFormTagTest.class);
-		suite.addTestSuite(HTMLBaseHREFTagTest.class);
+		suite.addTestSuite(JspTagTest.class);
+		suite.addTestSuite(ScriptTagTest.class);
+		suite.addTestSuite(ImageTagTest.class);
+		suite.addTestSuite(LinkTagTest.class);		
+		suite.addTestSuite(TagTest.class);
+		suite.addTestSuite(TitleTagTest.class);
+		suite.addTestSuite(DoctypeTagTest.class);
+		suite.addTestSuite(EndTagTest.class);
+		suite.addTestSuite(MetaTagTest.class);
+		suite.addTestSuite(StyleTagTest.class);
+		suite.addTestSuite(AppletTagTest.class);
+		suite.addTestSuite(FrameTagTest.class);
+		suite.addTestSuite(FrameSetTagTest.class);	
+		suite.addTestSuite(InputTagTest.class);
+		suite.addTestSuite(OptionTagTest.class);
+		suite.addTestSuite(SelectTagTest.class);
+		suite.addTestSuite(TextareaTagTest.class);
+		suite.addTestSuite(FormTagTest.class);
+		suite.addTestSuite(BaseHREFTagTest.class);
 		suite.addTestSuite(ObjectCollectionTest.class);
+		suite.addTestSuite(BodyTagTest.class);
 		return suite; 
 	}
 }

@@ -31,11 +31,11 @@ package org.htmlparser.tests.parserHelperTests;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
-import org.htmlparser.scanners.HTMLLinkScanner;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLMetaTag;
+import org.htmlparser.scanners.LinkScanner;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.ParserException;
 
 public class StringParserTest extends HTMLParserTestCase {
 
@@ -51,7 +51,7 @@ public class StringParserTest extends HTMLParserTestCase {
 	 * with the end tag). The bug lies in HTMLReader.readElement().
 	 * Creation date: (6/17/2001 4:01:06 PM)
 	 */
-	public void testStringNodeBug1() throws HTMLParserException {
+	public void testStringNodeBug1() throws ParserException {
 		createParser("<HTML><HEAD><TITLE>Google</TITLE>");
 		parseAndAssertNodeCount(5);
 		// The fourth node should be a HTMLStringNode-  with the text - Google
@@ -68,20 +68,20 @@ public class StringParserTest extends HTMLParserTestCase {
 	 * The first string before the link is not identified, and the space after the link is also not identified
 	 * Creation date: (8/2/2001 2:07:32 AM)
 	 */
-	public void testStringNodeBug2() throws HTMLParserException {
+	public void testStringNodeBug2() throws ParserException {
 		// Register the link scanner
 		
 		createParser("view these documents, you must have <A href='http://www.adobe.com'>Adobe \n"+
 			"Acrobat Reader</A> installed on your computer.");
 		HTMLParser.setLineSeparator("\r\n");
-		parser.addScanner(new HTMLLinkScanner("-l"));
+		parser.addScanner(new LinkScanner("-l"));
 		parseAndAssertNodeCount(3);
 		// The first node should be a HTMLStringNode-  with the text - view these documents, you must have 
 		assertTrue("First node should be a HTMLStringNode",node[0] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
 		assertEquals("Text of the StringNode","view these documents, you must have ",stringNode.getText());
-		assertTrue("Second node should be a link node",node[1] instanceof HTMLLinkTag);
-		HTMLLinkTag linkNode = (HTMLLinkTag)node[1];
+		assertTrue("Second node should be a link node",node[1] instanceof LinkTag);
+		LinkTag linkNode = (LinkTag)node[1];
 		assertEquals("Link is","http://www.adobe.com",linkNode.getLink());
 		assertEquals("Link text is","Adobe \r\nAcrobat Reader",linkNode.getLinkText());
 	
@@ -96,17 +96,17 @@ public class StringParserTest extends HTMLParserTestCase {
 	 * &lt;a href="http://asgard.ch"&gt;[&lt; ASGARD &gt;&lt;/a&gt;&lt;br&gt;
 	 * The string node is not correctly identified
 	 */
-	public void testTagCharsInStringNode() throws HTMLParserException {
+	public void testTagCharsInStringNode() throws ParserException {
 		createParser("<a href=\"http://asgard.ch\">[> ASGARD <]</a>");
-		parser.addScanner(new HTMLLinkScanner("-l"));
+		parser.addScanner(new LinkScanner("-l"));
 		parseAndAssertNodeCount(1);
-		assertTrue("Node identified must be a link tag",node[0] instanceof HTMLLinkTag);
-		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+		assertTrue("Node identified must be a link tag",node[0] instanceof LinkTag);
+		LinkTag linkTag = (LinkTag) node[0];
 		assertEquals("[> ASGARD <]",linkTag.getLinkText());
 		assertEquals("http://asgard.ch",linkTag.getLink());
 	}
 	
-	public void testToPlainTextString() throws HTMLParserException {
+	public void testToPlainTextString() throws ParserException {
 		createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		parseAndAssertNodeCount(10);
 		assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
@@ -117,7 +117,7 @@ public class StringParserTest extends HTMLParserTestCase {
 		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toPlainTextString());
 	}
 	
-	public void testToHTML() throws HTMLParserException {
+	public void testToHTML() throws ParserException {
 		createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		parseAndAssertNodeCount(10);
 		assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
@@ -128,7 +128,7 @@ public class StringParserTest extends HTMLParserTestCase {
 		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHTML());
 	}
 
-	public void testEmptyLines() throws HTMLParserException {
+	public void testEmptyLines() throws ParserException {
 		createParser(
 		"David Nirenberg (Center for Advanced Study in the Behavorial Sciences, Stanford).<br>\n"+
 		"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \n"+
@@ -142,7 +142,7 @@ public class StringParserTest extends HTMLParserTestCase {
 	 * This is a bug reported by John Zook (586222), where the first few chars
 	 * before a remark is being missed, if its on the same line.
 	 */
-	public void testStringBeingMissedBug() throws HTMLParserException {
+	public void testStringBeingMissedBug() throws ParserException {
 		createParser(
 		"Before Comment <!-- Comment --> After Comment"
 		);
@@ -163,7 +163,7 @@ public class StringParserTest extends HTMLParserTestCase {
 	 * Based on a bug report submitted by Cedric Rosa, if the last line contains a single character,
 	 * HTMLStringNode does not return the string node correctly.
 	 */
-	public void testLastLineWithOneChar() throws HTMLParserException {
+	public void testLastLineWithOneChar() throws ParserException {
 		createParser("a");
 		parseAndAssertNodeCount(1);
 		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
@@ -171,7 +171,7 @@ public class StringParserTest extends HTMLParserTestCase {
 		assertEquals("First String node contents","a",stringNode.getText());
 	}
 	
-	public void testStringWithEmptyLine() throws HTMLParserException {
+	public void testStringWithEmptyLine() throws ParserException {
 		createParser("a\n\nb");
 		parseAndAssertNodeCount(1);
 		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
@@ -188,8 +188,8 @@ public class StringParserTest extends HTMLParserTestCase {
 			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 " +			"Transitional//EN\">" +			"<html>" +			"<head>" +			"<title>Untitled Document</title>" +			"<meta http-equiv=\"Content-Type\" content=\"text/html; " +			"charset=iso-8859-1\">" +			"</head>" +			"<script language=\"JavaScript\" type=\"text/JavaScript\">" +			"// if this fails, output a 'hello' " +			"if (true) " +			"{ " +			"//something good... " +			"} " +			"</script>" +			"<body>" +			"</body>" +			"</html>" 		);	
 		parser.registerScanners();
 		parseAndAssertNodeCount(10);
-		assertType("fourth node",HTMLMetaTag.class,node[4]);
-		HTMLMetaTag metaTag = (HTMLMetaTag)node[4];
+		assertType("fourth node",MetaTag.class,node[4]);
+		MetaTag metaTag = (MetaTag)node[4];
 		
 		assertStringEquals(
 			"content",
