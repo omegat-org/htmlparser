@@ -117,6 +117,20 @@ public int getLastReadPosition() {
 public HTMLParser getParser() {
 	return parser;
 }
+
+/**
+ * This method is intended to be called only by scanners, when a situation of dirty html has arisen, 
+ * and action has been taken to correct the parsed tags. For e.g. if we have html of the form :
+ * <pre>
+ * <a href="somelink.html"><img src=...><td><tr><a href="someotherlink.html">...</a>
+ * </pre>
+ * Now to salvage the first link, we'd probably like to insert an end tag somewhere (typically before the
+ * second begin link tag). So that the parsing continues uninterrupted, we will need to change the existing
+ * line being parsed, to contain the end tag in it. 
+ */
+public void changeLine(String line) {
+	this.line = line;
+}
 	/**
 	 * Read the next element
 	 * @return HTMLNode - The next node

@@ -54,18 +54,12 @@ public void testAccessKey() {
 	assertEquals("Link Text of link tag","Click Here",linkTag.getLinkText());
 	assertEquals("Access key","1",linkTag.getAccessKey());	
 }
-public void testDirtyHTMLEvaluate() {
-	HTMLLinkScanner scanner = new HTMLLinkScanner();
-	boolean retVal = scanner.evaluate("A HREF",scanner);
-	assertEquals("Link found, when previous link scanner was open",true,retVal);
-	assertEquals("Dirty",true,scanner.isPreviousLinkScannerOpen());
-}
 public void testErroneousLinkBug() {
 	String testHTML = new String("<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 	HTMLParser parser = new HTMLParser(reader);
-	parser.addScanner(new HTMLLinkScanner("-l"));
+	parser.registerScanners();
 	HTMLNode [] node = new HTMLNode[10];
 	int i = 0;
 	for (Enumeration e = parser.elements();e.hasMoreElements();)
@@ -103,14 +97,17 @@ public void testErroneousLinkBugFromYahoo() {
 	{
 		node[i++] = (HTMLNode)e.nextElement();
 	}
-	assertEquals("There should be 5 nodes identified",5,i);
+	assertEquals("There should be 2 nodes identified",2,i);
 	// The first node should be a HTMLTag 
 	assertTrue("First node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
 	// The second node should be a HTMLStringNode
-	assertTrue("Second node should be a HTMLEndTag",node[1] instanceof HTMLEndTag);
-	assertTrue("Fifth node should be HTMLLiknTag",node[4] instanceof HTMLLinkTag);
+	assertTrue("Second node should be a HTMLLinkTag",node[1] instanceof HTMLLinkTag);
 	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
 	assertEquals("Link","http://www.yahoo.com/s/8741",linkTag.getLink());
+	// Verify the link data
+	assertEquals("Link Text"," &nbsp;",linkTag.getLinkText());
+	// Verify the reconstruction html
+	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img></td><td nowrap> &nbsp;</A>",linkTag.toRawString());
 }
 /**
  * Insert the method's description here.
@@ -291,4 +288,19 @@ public void testScan()
 	HTMLStringNode stringNode = (HTMLStringNode)dataNode[1];
 	assertEquals("String Contents","Hello World",stringNode.getText());
 }
+public void testReplaceFaultyTagWithEndTag() {
+	String currentLine = "<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>";
+	HTMLTag tag = new HTMLTag(85,87,"a",currentLine);
+	HTMLLinkScanner linkScanner = new HTMLLinkScanner();
+	String newLine = linkScanner.replaceFaultyTagWithEndTag(tag,currentLine);
+	assertEquals("Expected replacement","<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us</A></p>",newLine);
+}
+public void testInsertEndTagBeforeTag() {
+	String currentLine = "<a href=s/7509><b>Yahoo! Movies</b></a>";
+	HTMLTag tag = new HTMLTag(0,14,"a href=s/7509",currentLine);
+	HTMLLinkScanner linkScanner = new HTMLLinkScanner();
+	String newLine = linkScanner.insertEndTagBeforeTag(tag,currentLine);
+	assertEquals("Expected insertion","</A><a href=s/7509><b>Yahoo! Movies</b></a>",newLine);
+}
+
 }

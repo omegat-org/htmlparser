@@ -152,7 +152,19 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		if (previousOpenLinkScanner!=null) {
 			// Fool the reader into thinking this is an end tag (to handle dirty html, where there is 
 			// actually no end tag for the link
-			return new HTMLEndTag(tag.elementBegin(),tag.elementEnd(),"A");
+			if (tag.getText().length()==1) {
+				// Replace tag - it was a <A> tag - replace with </a>
+				String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
+				reader.changeLine(newLine);
+				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A");
+			}
+			 else 
+			{
+				// Insert end tag
+				String newLine = insertEndTagBeforeTag(tag, currentLine);
+				reader.changeLine(newLine);
+				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A");
+			}
 		}
 		previousOpenLinkScanner = this;
 		HTMLNode node;
@@ -209,5 +221,21 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		}
 		
 		return null;
+	}
+	public String replaceFaultyTagWithEndTag(HTMLTag tag, String currentLine) {
+		String newLine = currentLine.substring(0,tag.elementBegin());
+		newLine+="</A>";
+		newLine+=currentLine.substring(tag.elementEnd()+1,currentLine.length());
+		
+		return newLine;
+	}
+	/**
+	 * Insert an EndTag in the currentLine, just before the occurence of the provided tag
+	 */
+	public String insertEndTagBeforeTag(HTMLTag tag, String currentLine) {
+		String newLine = currentLine.substring(0,tag.elementBegin());
+		newLine += "</A>";
+		newLine += currentLine.substring(tag.elementBegin(),currentLine.length());
+		return newLine;
 	}
 }
