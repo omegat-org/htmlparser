@@ -39,6 +39,7 @@ import org.htmlparser.scanners.HTMLFrameScanner;
 import org.htmlparser.scanners.HTMLFrameSetScanner;
 import org.htmlparser.tags.HTMLFrameSetTag;
 import org.htmlparser.tags.HTMLFrameTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -46,18 +47,12 @@ import org.htmlparser.util.HTMLParserException;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * @author Somik Raha
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
-public class HTMLFrameSetScannerTest extends TestCase {
+public class HTMLFrameSetScannerTest extends HTMLParserTestCase {
+	
 	public HTMLFrameSetScannerTest(String name) {
 		super(name);
 	}
+	
 	public void testEvaluate() {
 		String line1="frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\"";
 		String line2="FRAMESET rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\"";
@@ -67,26 +62,18 @@ public class HTMLFrameSetScannerTest extends TestCase {
 		assertTrue("Line 2",frameSetScanner.evaluate(line2,null));
 		assertTrue("Line 3",frameSetScanner.evaluate(line3,null));		
 	}
+	
 	public void testScan() throws HTMLParserException {
-		String testHTML = new String(
+		createParser(
 		"<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+ 
   			"<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"+
 	  		"<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n"+
-		"</frameset>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
+		"</frameset>","http://www.google.com/test/index.html");
 
 		parser.addScanner(new HTMLFrameSetScanner(""));
 		parser.addScanner(new HTMLFrameScanner());
 		
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 nodes identified",1,i);	
+		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be End Tag",node[0] instanceof HTMLFrameSetTag);
 		HTMLFrameSetTag frameSetTag = (HTMLFrameSetTag)node[0];
 		// Find the details of the frameset itself
@@ -104,9 +91,6 @@ public class HTMLFrameSetScannerTest extends TestCase {
 		assertEquals("Main Frame Name","mainFrame",mainFrame.getFrameName());
 		assertEquals("Main Frame Location","http://www.kizna.com/web_e/",mainFrame.getFrameLocation());		
 		assertEquals("Scrolling in Main Frame","AUTO",mainFrame.getParameter("Scrolling"));
-	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLFrameSetScannerTest.class);
 	}
 }
 

@@ -36,70 +36,40 @@ import org.htmlparser.*;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.scanners.HTMLImageScanner;
 import junit.framework.TestSuite;
-/**
- * Insert the type's description here.
- * Creation date: (6/18/2001 2:20:43 AM)
- * @author: Administrator
- */
-public class HTMLImageScannerTest extends junit.framework.TestCase 
+
+public class HTMLImageScannerTest extends HTMLParserTestCase
 {
-	/**
-	 * HTMLAppletScannerTest constructor comment.
-	 * @param name java.lang.String
-	 */
+	
 	public HTMLImageScannerTest(String name) {
 		super(name);
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 11:22:36 AM)
-	 * @return junit.framework.TestSuite
-	 */
-	public static TestSuite suite() 
-	{
-		TestSuite suite = new TestSuite(HTMLImageScannerTest.class);
-		return suite;
-	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (12/25/2001 12:02:50 PM)
-	 */
+	
 	public void testDynamicRelativeImageScan() throws HTMLParserException {
-		String testHTML = "<IMG SRC=\"../abc/def/mypic.jpg\">";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi?abcdefg");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser("<IMG SRC=\"../abc/def/mypic.jpg\">","http://www.yahoo.com/ghi?abcdefg");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLTag)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageLocation());
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/18/2001 2:23:14 AM)
-	 */
+	
 	public void testEvaluate() 
 	{
 		HTMLImageScanner scanner = new HTMLImageScanner("-i",new HTMLLinkProcessor());
 		boolean retVal = scanner.evaluate("   img ",null);
 		assertEquals("Evaluation of IMG tag",new Boolean(true),new Boolean(retVal));
 	}
+	
 	/**
 	 * This is the reproduction of a bug which causes a null pointer exception
-	 * Creation date: (6/18/2001 2:26:41 AM)
 	 */
 	public void testExtractImageLocnInvertedCommasBug() throws HTMLParserException
 	{
@@ -109,24 +79,18 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLImageScanner scanner = new HTMLImageScanner("-i",new HTMLLinkProcessor());
 		assertEquals("Extracted Image Locn","http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif",scanner.extractImageLocn(tag,url));
 	}
+	
 	/**
 	 * This test has been improved to check for params
 	 * in the image tag, based on requirement by Annette Doyle.
 	 * Thereby an important bug was detected.
 	 */
 	public void testPlaceHolderImageScan() throws HTMLParserException {
-		String testHTML = "<IMG width=1 height=1 alt=\"a\">";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi?abcdefg");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser("<IMG width=1 height=1 alt=\"a\">","http://www.yahoo.com/ghi?abcdefg");
+		
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLTag)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Expected Image Locn","",imageTag.getImageLocation());		
@@ -134,122 +98,73 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		assertEquals("Image height","1",imageTag.getParameter("HEIGHT"));
 		assertEquals("alt","a",imageTag.getParameter("ALT"));
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (12/25/2001 12:02:50 PM)
-	 */
+	
 	public void testRelativeImageScan() throws HTMLParserException {
-		String testHTML = "<IMG SRC=\"mypic.jpg\">";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser("<IMG SRC=\"mypic.jpg\">","http://www.yahoo.com");
+		
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLTag)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Expected Link","http://www.yahoo.com/mypic.jpg",imageTag.getImageLocation());
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (12/25/2001 12:02:50 PM)
-	 */
+	
 	public void testRelativeImageScan2() throws HTMLParserException {
-		String testHTML = "<IMG SRC=\"abc/def/mypic.jpg\">";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
-		// Register the image scanner
+		createParser("<IMG SRC=\"abc/def/mypic.jpg\">","http://www.yahoo.com");		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLTag)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageLocation());
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (12/25/2001 12:02:50 PM)
-	 */
+	
 	public void testRelativeImageScan3() throws HTMLParserException {
-		String testHTML = "<IMG SRC=\"../abc/def/mypic.jpg\">";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser("<IMG SRC=\"../abc/def/mypic.jpg\">","http://www.yahoo.com/ghi");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLTag)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageLocation());
 	}
+	
 	/**
 	 * Test image url which contains spaces in it.
 	 * This was actually a bug reported by Sam Joseph (sam@neurogrid.net)
 	 */
 	public void testImageWithSpaces() throws HTMLParserException
 	{
-		String testHTML = "<IMG SRC=\"../abc/def/Hello World.jpg\">";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser("<IMG SRC=\"../abc/def/Hello World.jpg\">","http://www.yahoo.com/ghi");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLTag)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Expected Link","http://www.yahoo.com/abc/def/Hello World.jpg",imageTag.getImageLocation());		
 	}
+	
 	public void testImageWithNewLineChars() throws HTMLParserException
 	{
-		String testHTML = "<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		createParser("<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">","http://www.yahoo.com/ghi");
 		parser.setLineSeparator("\r\n");
-		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLTag)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		String exp = new String("http://www.yahoo.com/abc/def/Hello World.jpg");
 		//assertEquals("Length of image",exp.length(),imageTag.getImageLocation().length());
 		assertStringEquals("Expected Image",exp,imageTag.getImageLocation());		
 	}
+	
 	/**
 	 * Test case to reproduce bug reported by Annette
 	 */
 	public void testImageTagsFromYahoo() throws HTMLParserException
 	{
-		String testHTML = "<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n"+
-		"<input type=submit value=Search> <a href=r/so>advanced search</a></td></tr></table><table border=0 cellspacing=0 cellpadding=3 width=640><tr><td nowrap align=center><table border=0 cellspacing=0 cellpadding=0><tr><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif\" width=20 height=20 border=0></a></td><td> &nbsp; &nbsp; <a href=s/1048><b>Yahooligans!</b></a> - <a href=s/5282>Eet & Ern</a>, <a href=s/5283>Games</a>, <a href=s/5284>Science</a>, <a href=s/5285>Sports</a>, <a href=s/5286>Movies</a>, <a href=s/1048>more</a> &nbsp; &nbsp; </td><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif\" width=20 height=20 border=0></a></td></tr></table></td></tr><tr><td nowrap align=center><small><b>Shop</b>&nbsp;\n";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		createParser("<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n"+
+		"<input type=submit value=Search> <a href=r/so>advanced search</a></td></tr></table><table border=0 cellspacing=0 cellpadding=3 width=640><tr><td nowrap align=center><table border=0 cellspacing=0 cellpadding=0><tr><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif\" width=20 height=20 border=0></a></td><td> &nbsp; &nbsp; <a href=s/1048><b>Yahooligans!</b></a> - <a href=s/5282>Eet & Ern</a>, <a href=s/5283>Games</a>, <a href=s/5284>Science</a>, <a href=s/5285>Sports</a>, <a href=s/5286>Movies</a>, <a href=s/1048>more</a> &nbsp; &nbsp; </td><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif\" width=20 height=20 border=0></a></td></tr></table></td></tr><tr><td nowrap align=center><small><b>Shop</b>&nbsp;\n","http://www.yahoo.com");
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
@@ -269,25 +184,17 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLImageTag imageTag3 = (HTMLImageTag)node[2];
 		assertEquals("Expected Image 3","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif",imageTag3.getImageLocation());	
 	}
+	
 	/**
 	 * Test case to reproduce bug reported by Annette
 	 */
 	public void testImageTagsFromYahooWithAllScannersRegistered() throws HTMLParserException
 	{
-		String testHTML = "<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n";
+		createParser("<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n","http://www.yahoo.com",30);
 	
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[100];
 		// Register the image scanner
 		parser.registerScanners();
-		int i = 0;
-		HTMLNode thisNode;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLNode)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 22",22,i);
+		parseAndAssertNodeCount(22);
 		assertTrue("Node identified should be HTMLLinkTag",node[11] instanceof HTMLLinkTag);
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[11];
 		HTMLNode [] node2 = new HTMLNode[10];
@@ -300,28 +207,20 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLImageTag imageTag = (HTMLImageTag)node2[0];
 		assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageLocation());		
 	}
+	
 	/**
 	 * This is the reproduction of a bug reported
 	 * by Annette Doyle
 	 */
 	public void testImageTagOnMultipleLines() throws HTMLParserException {
-		String testHTML = "  <td rowspan=3><img height=49 \n\n"+
+		createParser("  <td rowspan=3><img height=49 \n\n"+
 	      "alt=\"Central Intelligence Agency, Director of Central Intelligence\" \n\n"+
 	      "src=\"graphics/images_home2/cia_banners_template3_01.gif\" \n\n"+
-	      "width=241></td>"; 
+	      "width=241></td>","http://www.cia.gov"); 
 	
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[100];
 		// Register the image scanner
 		parser.registerScanners();
-		int i = 0;
-		HTMLNode thisNode;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLNode)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 3",3,i);
+		parseAndAssertNodeCount(3);
 		assertTrue("Node identified should be HTMLImageTag",node[1] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[1];
 		// Get the data from the node
@@ -330,66 +229,34 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		assertEquals("Width","241",imageTag.getParameter("WIDTH"));	
 		assertEquals("Height","49",imageTag.getParameter("HEIGHT"));
 	}
-	public void testDirectRelativeLinks() throws HTMLParserException {
-		String testHTML = "<IMG SRC  = \"/images/lines/li065.jpg\">"; 
-	
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cybergeo.presse.fr/REVGEO/ttsavoir/joly.htm"); 
 
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[100];
+	public void testDirectRelativeLinks() throws HTMLParserException {
+		createParser("<IMG SRC  = \"/images/lines/li065.jpg\">","http://www.cybergeo.presse.fr/REVGEO/ttsavoir/joly.htm"); 
+	
 		// Register the image scanner
 		parser.registerScanners();
-		int i = 0;
-		HTMLNode thisNode;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLNode)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);	
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Image Location","http://www.cybergeo.presse.fr/images/lines/li065.jpg",imageTag.getImageLocation());
 		
 	}
+
 	/**
-	 * Based on a page submitted by Claude Duguya, the image tag has IMG SRC"somefile.jpg" - a missing equal 
+	 * Based on a page submitted by Claude Duguay, the image tag has IMG SRC"somefile.jpg" - a missing equal 
 	 * to sign
 	 */
 	public void testMissingEqualTo() throws HTMLParserException {
-		String testHTML = "<img src\"/images/spacer.gif\" width=\"1\" height=\"1\" alt=\"\">";
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.htmlparser.org/subdir1/subdir2"); 
+		createParser("<img src\"/images/spacer.gif\" width=\"1\" height=\"1\" alt=\"\">","http://www.htmlparser.org/subdir1/subdir2");
 
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[100];
 		// Register the image scanner
 		parser.registerScanners();
-		int i = 0;
-		HTMLNode thisNode;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = (HTMLNode)e.nextHTMLNode();
-		}	
-		assertEquals("Number of nodes identified should be 1",1,i);
+		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);	
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		assertEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageLocation());
 		assertEquals("Width","1",imageTag.getParameter("WIDTH"));
 		assertEquals("Height","1",imageTag.getParameter("HEIGHT"));
 		assertEquals("Alt","",imageTag.getParameter("ALT"));
-		
 	}
-	public void assertStringEquals(String message,String s1,String s2) {
-		for (int i=0;i<s1.length();i++) {
-			if (s1.charAt(i)!=s2.charAt(i)) {
-				assertTrue(message+
-					" \nMismatch of strings at char posn "+i+
-					" \nString 1 upto mismatch = "+s1.substring(0,i)+
-					" \nString 2 upto mismatch = "+s2.substring(0,i)+
-					" \nString 1 mismatch character = "+s1.charAt(i)+", code = "+(int)s1.charAt(i)+
-					" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i)+
-					" \nComplete String 1 = "+s1+
-					" \nComplete String 2 = "+s2,false);
-			}
-		}
-	}    	
 }
