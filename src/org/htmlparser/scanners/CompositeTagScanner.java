@@ -43,7 +43,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 	protected String [] nameOfTagToMatch;
 	private boolean removeScanners;
 	private boolean stringNodeIgnoreMode;
-	protected TagScanner previousOpenScanner=null; 
+	private TagScanner previousOpenScanner = null;
 	
 	public CompositeTagScanner(String [] nameOfTagToMatch) {
 		this("",nameOfTagToMatch,false,false);
@@ -68,6 +68,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 				else  
 					return getInsertedEndTag(tag, reader, currLine);
 			}
+			previousOpenScanner = this;
 			beforeScanningStarts();
 			Tag startTag = tag;
 			endTag = null;
@@ -116,28 +117,36 @@ public abstract class CompositeTagScanner extends TagScanner {
 						} 
 					}
 				} 
-				if (!endTagFound){
+				if (!endTagFound && node!=null){
 					childVector.add(node);
 					childNodeEncountered(node);
 				}
 			}
 			if (node==null)  {
 				// Add an end tag
-				node = createEndTagFor(tag);
+				endTag = createEndTagFor(tag);
+				node = endTag;
 			}
 			if (removeScanners)
 				reader.getParser().setScanners(tempScanners);
-			return createTag(
-				new TagData(
-					startTag.elementBegin(),
-					endTag.elementEnd(),
-					startTag.getText(),
-					currLine,
-					url				
-				), new CompositeTagData(
-					startTag,endTag,childVector
-				)
-			);
+			if (node instanceof EndTag)
+			{
+				previousOpenScanner = null;
+				return createTag(
+					new TagData(
+						startTag.elementBegin(),
+						endTag.elementEnd(),
+						startTag.getText(),
+						currLine,
+						url				
+					), new CompositeTagData(
+						startTag,endTag,childVector
+					)
+				);
+			}
+			ParserException ex = new ParserException("CompositeTagScanner.scan() : Could not create tag from "+currLine+",\n tag being parsed = "+tag.getTagName());
+			feedback.error("CompositeTagScanner.scan() : Could not create tag from "+currLine+",\n tag being parsed = "+tag.getTagName(),ex);
+			throw ex;
 		}
 		catch (Exception e) {
 			StringBuffer msg = new StringBuffer();
@@ -152,7 +161,8 @@ public abstract class CompositeTagScanner extends TagScanner {
 
 	public boolean isXmlEndTag(Tag tag) {
 		String tagText = tag.getText();
-		return tagText.charAt(tagText.length()-1)=='/';
+		int firstSlash = tagText.indexOf("/");
+		return firstSlash == tagText.length()-1;
 	}
 	
 	protected void beforeScanningStarts() {

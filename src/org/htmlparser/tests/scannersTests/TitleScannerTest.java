@@ -99,15 +99,11 @@ public class TitleScannerTest extends ParserTestCase {
 	public void testNoEndTitleTag() throws ParserException {
 		createParser(
 		"<TITLE>KRP VALIDATION<PROCESS/TITLE>");
-		try {
-			TitleScanner titleScanner = new TitleScanner("-t");
-			parser.addScanner(titleScanner);
-		 	parseAndAssertNodeCount(1);
-			assertTrue("Should have thrown an HTMLParserException",false);
-		}
-		catch (ParserException e) {
-
-		}
+		TitleScanner titleScanner = new TitleScanner("-t");
+		parser.addScanner(titleScanner);
+	 	parseAndAssertNodeCount(1);
+	 	TitleTag titleTag = (TitleTag)node[0];
+		assertEquals("Expected title","KRP VALIDATION",titleTag.getTitle());
 	}	
 	
 	public void testTitleTagContainsJspTag() throws ParserException {

@@ -34,16 +34,12 @@ package org.htmlparser.scanners;
 //////////////////
 import java.util.Hashtable;
 
-import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.LinkData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.LinkProcessor;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 /**
@@ -188,107 +184,6 @@ public class LinkScanner extends CompositeTagScanner
 		return tag.getAttribute("ACCESSKEY");
 	}
 	
-	/**
-	 * Scan the tag and extract the information relevant to the link tag.
-	 * @param tag HTML Tag to be scanned
-	 * @param url The URL of the html page in which this tag is located
-	 * @param reader The HTML reader used to read this url
-	 * @param currentLine The current line (automatically provided by Tag)	 
-	 */
-	public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
-	{
-		try {
-			if (isBrokenTag()) {
-				if (isTagFoundAtAll(tag)) 
-					return getReplacedEndTag(tag, reader, currentLine);
-				else 
-					return getInsertedEndTag(tag, reader, currentLine);
-			}
-			previousOpenScanner = this;
-			Node node;
-			
-			String tmp;
-			int linkBegin, linkEnd;
-			String tagContents =  tag.getText();
-			
-			linkBegin = tag.elementBegin();
-			// Get the next element, which is string, till </a> is encountered
-			boolean endFlag=false;
-			NodeList nodeVector = new NodeList();
-			Tag startTag = tag;
-			Tag endTag   = null;
-			
-			do
-			{
-				node = reader.readElement();
-	
-				if (node instanceof EndTag)
-				{
-				    tmp = ((EndTag)node).getText();
-					char ch = tmp.charAt(0);
-					if (ch=='a' || ch=='A') {
-						endFlag=true;
-						endTag = (Tag)node;
-					} else {
-						// This is the case that we found some wierd end tag inside
-						// a link tag.
-						endFlag=false;
-						// If this happens to be a td, or a tr tag,
-						// then we definitely dont want to treat it as part
-						// of the link tag. We would instead add the missing </A>
-						if (isTagToBeEndedFor(tmp)) {
-							// Yes, we need to assume that the link tag has ended here.
-							String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
-							reader.changeLine(newLine);
-							endFlag = true;
-							endTag = new EndTag(
-								new TagData(
-									node.elementBegin(),
-									node.elementBegin()+3,
-									"A",
-									newLine
-								)
-							);
-							node = endTag;
-						} else nodeVector.add(node);
-					}
-				} 
-				else if (node!=null) nodeVector.add(node);
-			}
-			while (endFlag==false && node!=null);
-			if (node==null)  {
-				// Add an end tag
-				node = createEndTagFor(tag);
-			}
-			if (node instanceof EndTag)
-			{
-				
-				previousOpenScanner = null;
-				return createTag(
-					new TagData(
-						linkBegin, 
-						node.elementEnd(),
-						tagContents, 
-						currentLine,
-						url
-					),
-					new CompositeTagData(
-						startTag, 
-						endTag,
-						nodeVector
-					) 
-				);
-			}
-			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
-			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);
-			throw ex;
-		}
-		catch (Exception e) {
-			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Error while scanning a link tag, current line = "+currentLine,e);
-			feedback.error("HTMLLinkScanner.scan() : Error while scanning a link tag, current line = "+currentLine,ex);
-			throw ex;
-		}	
-	}
 	public BaseHrefScanner createBaseHREFScanner(String filter) {
 		return new BaseHrefScanner(filter,processor);
 	}
