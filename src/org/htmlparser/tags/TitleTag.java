@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030215 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030223 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * A Title Tag
@@ -47,4 +48,9 @@ public class TitleTag extends CompositeTag {
 	public String toString() {
 		return "TITLE: "+getTitle();
 	}
+	
+	public void accept(NodeVisitor visitor) {
+		visitor.visitTitleTag(this);
+	}
+
 }

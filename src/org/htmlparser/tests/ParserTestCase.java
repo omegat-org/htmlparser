@@ -174,6 +174,8 @@ public class ParserTestCase extends TestCase {
 			String prevNodeHtml="null";
 			if (prevNode!=null)
 				prevNodeHtml = prevNode.toHtml();
+		
+			System.out.println("Matching: \n" +				"expectedNode = "+expectedNodeHtml+"\n" +				"actualNode = "+actualNodeHtml);
 			assertEquals(
 				"the two nodes should be the same type\n"+
 				"expected node:"+expectedNodeHtml+"\n"+

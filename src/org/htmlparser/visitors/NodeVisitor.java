@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030215 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030223 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 // 
 // This library is free software; you can redistribute it and/or
@@ -34,6 +34,7 @@ import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.TitleTag;
 
 public abstract class NodeVisitor {
 	private boolean recurseChildren;
@@ -70,6 +71,9 @@ public abstract class NodeVisitor {
 		
 	}
 	
+	public void visitTitleTag(TitleTag titleTag) {
+		
+	}
 	public void visitRemarkNode(RemarkNode remarkNode) {
 		
 	}
