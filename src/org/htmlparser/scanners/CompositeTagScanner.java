@@ -107,7 +107,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 								new TagData(
 									node.elementBegin(),
 									node.elementBegin()+3,
-									"A",
+									tag.getTagName(),
 									newLine
 								)
 							);
@@ -120,7 +120,10 @@ public abstract class CompositeTagScanner extends TagScanner {
 					childNodeEncountered(node);
 				}
 			}
-			
+			if (node==null)  {
+				// Add an end tag
+				node = createEndTagFor(tag);
+			}
 			if (removeScanners)
 				reader.getParser().setScanners(tempScanners);
 			return createTag(new TagData(
