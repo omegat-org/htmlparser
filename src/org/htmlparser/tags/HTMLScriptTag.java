@@ -94,7 +94,7 @@ public class HTMLScriptTag extends HTMLCompositeTag {
 		{
 			sb.append("Properties -->\n");
 			if (language.length()!=0) sb.append("[Language : "+language+"]\n");
-			if (type.length()!=0) sb.append("[Type : "+type+"]\n");
+			if (type!=null && type.length()!=0) sb.append("[Type : "+type+"]\n");
 		}
 		sb.append("\n");
 		sb.append("Code\n");
