@@ -1,3 +1,12 @@
+Integration Build 1.2 - 20020707
+--------------------------------
+[1] Fixed major slowdown bug in HTMLStringNode.find().
+This version is twice as fast as ver 1.1.
+[2] Fixed bug in ScriptScanner, would break on incorrect
+html inside script code. 
+[3] Removed FormScanner from standard registered scanners
+as it has a bug in parsing non-ended forms (infinite loop).
+
 Integration Build 1.2 - 20020630
 --------------------------------
 [1] Fixed bug in linking of meta and title tags
