@@ -98,17 +98,14 @@ public abstract class CompositeTagScanner extends TagScanner {
 					reader.getStringParser().setIgnoreStateMode(false);
 				if (node instanceof Tag) {
 					Tag testTag = (Tag)node;
-					if (testTag.isEmptyXmlTag()) {
+					if (isMatch(testTag) && testTag.isEmptyXmlTag()) {
 						node = morphToEndTag(testTag);
 					}
 				}
 									
 				if (node instanceof EndTag) {
 					endTag = (Tag)node;
-					for (int i=0;i<nameOfTagToMatch.length && !endTagFound;i++) {
-						if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch[i])) 
-							endTagFound = true;
-					}
+					endTagFound = isMatch(endTag);
 					if (!endTagFound) {
 						String tmp = endTag.getText();
 						if (isTagToBeEndedFor(tmp)) {
@@ -169,6 +166,15 @@ public abstract class CompositeTagScanner extends TagScanner {
 				msg.append("\n no </"+tag.getTagName()+"> end tag was found!");
 			throw new ParserException(msg.toString(),e);
 		}
+	}
+
+	private boolean isMatch(Tag endTag) {
+		boolean endTagFound=false;
+		for (int i=0;i<nameOfTagToMatch.length && !endTagFound;i++) {
+			if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch[i])) 
+				endTagFound = true;
+		}
+		return endTagFound;
 	}
 
 	public EndTag morphToEndTag(Tag testTag) {

@@ -81,6 +81,8 @@ public class AllTests extends junit.framework.TestCase
 		suite.addTestSuite(DivScannerTest.class);
 		suite.addTestSuite(LabelScannerTest.class);
 		suite.addTestSuite(BodyScannerTest.class);
+		suite.addTestSuite(CompositeTagScannerTest.class);
 		return suite;
 	}
 }
+

@@ -1,5 +1,6 @@
 package org.htmlparser.tests.scannersTests;
 
+import org.htmlparser.Node;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Tag;
@@ -55,7 +56,11 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		parser.addScanner(new CustomScanner());
 		parser.addScanner(new AnotherScanner());
 		parseAndAssertNodeCount(2);
-		
+		assertType("first node",CustomTag.class,node[0]);
+		assertType("second node",CustomTag.class,node[1]);
+		CustomTag customTag = (CustomTag)node[0];
+		Node node = customTag.childAt(0);
+		assertType("child",AnotherTag.class,node);
 	}
 	
 	private static class CustomScanner extends CompositeTagScanner {

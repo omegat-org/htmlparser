@@ -181,7 +181,7 @@ public class ParserTestCase extends TestCase {
 				prevNodeHtml = prevNode.toHtml();
 		
 			System.out.println("Matching: \n" +				"expectedNode = "+expectedNodeHtml+"\n" +				"actualNode = "+actualNodeHtml);
-			assertEquals(
+			assertStringEquals(
 				"the two nodes should be the same type\n"+
 				"expected node:"+expectedNodeHtml+"\n"+
 				"  actual node:"+actualNodeHtml+"\n"+
@@ -280,7 +280,7 @@ public class ParserTestCase extends TestCase {
 			if (key==Tag.TAGNAME) {
 				expectedValue = ParserUtils.removeChars(expectedValue,'/');
 				actualValue = ParserUtils.removeChars(actualValue,'/');
-				assertEquals(displayMessage+"\ntag name",expectedValue,actualValue);
+				assertStringEquals(displayMessage+"\ntag name",expectedValue,actualValue);
 				continue;
 			}
 				
@@ -323,7 +323,7 @@ public class ParserTestCase extends TestCase {
 	protected void assertHiddenIDTagPresent(FormTag formTag, String name, String inputTagValue) {
 	    InputTag inputTag = formTag.getInputTag(name);
 	    assertNotNull("Hidden Tag "+name+" should have been there", inputTag);
-	    assertEquals("Hidden Tag Contents", inputTagValue, inputTag.getAttribute("VALUE"));
-	    assertEquals("Hidden Tag Type", "hidden", inputTag.getAttribute("TYPE"));
+	    assertStringEquals("Hidden Tag Contents", inputTagValue, inputTag.getAttribute("VALUE"));
+	    assertStringEquals("Hidden Tag Type", "hidden", inputTag.getAttribute("TYPE"));
 	}	
 }
