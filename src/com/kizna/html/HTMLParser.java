@@ -54,7 +54,7 @@ import com.kizna.html.util.HTMLParserFeedback;
  * the html page or to directly parse the page and print the results
  * <BR>
  * Typical usage of the parser is as follows : <BR>
- * [1] Create a parser object - passing the URL to the parser<BR>
+ * [1] Create a parser object - passing the URL and a feedback object to the parser<BR>
  * [2] Register the common scanners. See {@link #registerScanners()} <BR>
  * You wouldnt do this if you want to configure a custom lightweight parser. In that case, 
  * you would add the scanners of your choice using {@link #addScanner(HTMLTagScanner)}<BR>
@@ -65,7 +65,7 @@ import com.kizna.html.util.HTMLParserFeedback;
  * <BR>
  * Below is some sample code to parse Yahoo.com and print all the tags.
  * <pre>
- * HTMLParser parser = new HTMLParser("http://www.yahoo.com");
+ * HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * // In this example, we are registering all the common scanners
  * parser.registerScanners(); 
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
@@ -76,7 +76,7 @@ import com.kizna.html.util.HTMLParserFeedback;
  * Below is some sample code to parse Yahoo.com and print only the text information. This scanning
  * will run faster, as there are no scanners registered here.
  * <pre>
- * HTMLParser parser = new HTMLParser("http://www.yahoo.com");
+ * HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * // In this example, none of the scanners need to be registered
  * // as a string node is not a tag to be scanned for.
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
@@ -91,7 +91,7 @@ import com.kizna.html.util.HTMLParserFeedback;
  * Here's another snippet that will only print out the link urls in a document. 
  * This is an example of adding a link scanner.
  * <pre>
- * HTMLParser parser = new HTMLParser("http://www.yahoo.com");
+ * HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * parser.addScanner(new HTMLLinkScanner("-l"));
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
  *    HTMLNode node = (HTMLNode)e.nextElement();
@@ -413,7 +413,7 @@ public class HTMLParser
 		addScanner(new HTMLMetaTagScanner("-m"));
 		addScanner(new HTMLTitleScanner("-T"));
 		addScanner(new HTMLDoctypeScanner("-d"));
-		//addScanner(new HTMLFormScanner("-f"));
+		addScanner(new HTMLFormScanner("-f"));
 		addScanner(new HTMLFrameSetScanner("-r"));	
 	}
 	/**

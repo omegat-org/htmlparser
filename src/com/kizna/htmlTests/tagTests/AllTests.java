@@ -72,7 +72,7 @@ public static TestSuite suite() {
 	suite.addTest(HTMLOptionTagTest.suite());
 	suite.addTest(HTMLSelectTagTest.suite());
 	suite.addTest(HTMLTextareaTagTest.suite());
-
+	suite.addTest(HTMLFormTagTest.suite());
 	return suite; 
 }
 }

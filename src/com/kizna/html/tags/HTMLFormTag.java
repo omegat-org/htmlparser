@@ -33,6 +33,7 @@
 package com.kizna.html.tags;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import com.kizna.html.HTMLNode;
@@ -97,7 +98,7 @@ public class HTMLFormTag extends HTMLTag
 	{
 		this.formInputVector = formInputVector;
 	}
-	public void setFormLocation(String formUrl)
+	public void setFormLocation(String formURL)
 	{
 		this.formURL = formURL;
 	}
@@ -134,7 +135,23 @@ public class HTMLFormTag extends HTMLTag
 	public String toHTML() {
 		StringBuffer rawBuffer = new StringBuffer();
 		HTMLNode node,prevNode=null;
-		for (Enumeration e = allNodesVector.elements();e.hasMoreElements();) {
+		rawBuffer.append("<FORM METHOD=\""+formMethod+"\" ACTION=\""+formURL+"\"");
+		if (formName!=null && formName.length()>0) rawBuffer.append(" NAME=\""+formName+"\"");
+		Enumeration e = allNodesVector.elements();
+		node = (HTMLNode)e.nextElement();
+		HTMLTag tag = (HTMLTag)node;
+		Hashtable table = tag.getParsed();
+		String key,value;
+		for (Enumeration en = table.keys();en.hasMoreElements();) {
+			key=(String)en.nextElement();
+			if (!(key.equals("METHOD") || key.equals("ACTION") || key.equals("NAME") || key.equals(HTMLTag.TAGNAME))) {
+				value = (String)table.get(key);		
+				rawBuffer.append(" "+key+"="+"\""+value+"\"");
+			}
+		}
+		rawBuffer.append(">");
+		rawBuffer.append(lineSeparator);
+		for (;e.hasMoreElements();) {
 			node = (HTMLNode)e.nextElement();
 			if (prevNode!=null) {
 				if (prevNode.elementEnd()>node.elementBegin()) {

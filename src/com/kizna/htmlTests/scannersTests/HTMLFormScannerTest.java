@@ -47,7 +47,9 @@ import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
+import com.kizna.htmlTests.tagTests.HTMLTagTest;
 
+import junit.extensions.ExceptionTestCase;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
@@ -116,7 +118,7 @@ public class HTMLFormScannerTest extends TestCase {
 		assertEquals("Input Password Tag","<INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\">",passwdTag.toHTML());
 		assertEquals("Input Submit Tag","<INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\">",submitTag.toHTML());
 		
-		String tempString = "<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\r\n"+
+		String tempString = "<FORM METHOD=\"post\" ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\">\r\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\r\n"+
@@ -129,19 +131,9 @@ public class HTMLFormScannerTest extends TestCase {
 		"</FORM>";
 		assertEquals("Length of string",tempString.length(),formTag.toHTML().length());
 
-		assertEquals("Raw String","<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\r\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\r\n"+
-		"</FORM>",formTag.toHTML());
+		HTMLTagTest.assertStringEquals("Raw String",tempString,formTag.toHTML());
 	}
-	/*public void testScanFormWithNoEnding() throws HTMLParserException{
+	public void testScanFormWithNoEnding() {
 		String testHTML = new String(
 		"<TABLE>\n"+
 		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
@@ -157,21 +149,23 @@ public class HTMLFormScannerTest extends TestCase {
 		"</TABLE>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(new DefaultHTMLParserFeedback(),reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLFormScanner(""));
 		
 		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
+		try {
+			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+			{
+				node[i++] = e.nextHTMLNode();
+			}
+			assertTrue("Should have thrown an HTMLParserException",false);
+
 		}
-		assertEquals("There should be 1 nodes identified",3,i);	
-		assertTrue("Node 0 should be a Tag",node[0] instanceof HTMLTag);	
-		assertTrue("Node 1 should be a Form Tag",node[1] instanceof HTMLFormTag);	
-		assertTrue("Node 2 should be End Tag",node[2] instanceof HTMLEndTag);			
-	}*/
+		catch (HTMLParserException e) {
+		}
+	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLFormScannerTest.class);
 	}
