@@ -76,7 +76,7 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createLinkTag(String url, String currentLine, Node node, boolean mailLink, String linkText, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) throws ParserException {
+	protected Tag createLinkTag(String url, String currentLine, Node node, String linkText, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) throws ParserException {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
@@ -84,19 +84,20 @@ public class LinkScanner extends CompositeTagScanner
 		// Kaarle Kaila 23.10.2001
 		linkEnd = node.elementEnd();
 		
-		String myLink = extractLink(startTag,url);
-		int mailto = myLink.indexOf("mailto");
+		String link = extractLink(startTag,url);
+		int mailto = link.indexOf("mailto");
+		boolean mailLink=false;
 		if (mailto==0)
 		{
 			// yes it is
-			mailto = myLink.indexOf(":");
-			myLink = myLink.substring(mailto+1);
+			mailto = link.indexOf(":");
+			link = link.substring(mailto+1);
 			mailLink = true;			
 		} 
-		int javascript = myLink.indexOf("javascript:");
+		int javascript = link.indexOf("javascript:");
 		boolean javascriptLink = false;
 		if (javascript == 0) {
-			myLink = myLink.substring(11); // this magic number is "javascript:".length()
+			link = link.substring(11); // this magic number is "javascript:".length()
 			javascriptLink = true;
 		}  
 		String accessKey = getAccessKey(startTag);
@@ -114,7 +115,7 @@ public class LinkScanner extends CompositeTagScanner
 				nodeVector
 			),
 			new LinkData(
-				myLink,
+				link,
 				linkText,
 				accessKey,
 				mailLink,
@@ -218,24 +219,13 @@ public class LinkScanner extends CompositeTagScanner
 			}
 			previousOpenScanner = this;
 			Node node;
-			boolean mailLink = false;
-			boolean javascriptLink = false;
-
 			
-			String link,linkText="",accessKey=null,tmp;
+			String linkText="",tmp;
 			int linkBegin, linkEnd;
 			String tagContents =  tag.getText();
 			String linkContents=""; // Kaarle Kaila 23.10.2001
 			// Yes, the tag is a link
 			// Extract the link
-			link = extractLink(tag,url);
-			
-			//link = extractLink(tag.getText(),url);
-			// Check if its a mailto link
-			int mailto = link.indexOf("mailto");
-			int http = link.indexOf("http://");
-			int https = link.indexOf("https://");
-			
 			
 			linkBegin = tag.elementBegin();
 			// Get the next element, which is string, till </a> is encountered
@@ -251,7 +241,7 @@ public class LinkScanner extends CompositeTagScanner
 				if (node instanceof StringNode)
 				{
 					
-					tmp =((StringNode)node).getText();
+					tmp =node.toPlainTextString();
 					linkText += tmp;
 					linkContents += tmp;   // Kaarle Kaila 23.10.2001
 					
@@ -300,7 +290,7 @@ public class LinkScanner extends CompositeTagScanner
 			{
 				
 				previousOpenScanner = null;
-				return createLinkTag(url,currentLine, node, mailLink, linkText, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
+				return createLinkTag(url,currentLine, node, linkText, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
 			}
 			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
 			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);
