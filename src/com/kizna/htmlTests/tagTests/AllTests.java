@@ -31,7 +31,7 @@
 // Website : www.kizna.com
 
 package com.kizna.htmlTests.tagTests;
-import com.kizna.html.scanners.HTMLDoctypeScanner;
+
 
 import junit.framework.TestSuite;
 /**
@@ -65,6 +65,7 @@ public static TestSuite suite() {
 	suite.addTest(HTMLEndTagTest.suite());
 	suite.addTest(HTMLMetaTagTest.suite());
 	suite.addTest(HTMLStyleTagTest.suite());
+	suite.addTest(HTMLAppletTagTest.suite());
 	return suite; 
 }
 }
