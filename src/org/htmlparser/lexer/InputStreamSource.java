@@ -124,6 +124,21 @@ public class InputStreamSource
     {
         if (null == stream)
             stream = new Stream (null);
+        else
+            // bug #1044707 mark()/reset() issues
+            if (!stream.markSupported ())
+                // wrap the stream so we can reset
+                stream = new Stream (stream);
+            // else
+                // just because mark is supported doesn't guarantee
+                // proper reset operation; there is no call to mark
+                // in this code, so if reset misbehaves there is an
+                // appropriate message in setEncoding() to suggest
+                // wraping it in a Stream.
+                // This was deemed better than an attempt to call
+                // reset at this point just to check if we would
+                // succeed later, or to call mark with an arbitrary
+                // lookahead size
         mStream = stream;
         if (null == charset)
         {
@@ -234,38 +249,48 @@ public class InputStreamSource
                 buffer = mBuffer;
                 offset = mOffset;
                 stream.reset ();
-                mEncoding = character_set;
-                mReader = new InputStreamReader (stream, character_set);
-                mBuffer = new char[mBuffer.length];
-                mLevel = 0;
-                mOffset = 0;
-                mMark = -1;
-                if (0 != offset)
+                try
                 {
-                    new_chars = new char[offset];
-                    if (offset != read (new_chars))
-                        throw new ParserException ("reset stream failed");
-                    for (int i = 0; i < offset; i++)
-                        if (new_chars[i] != buffer[i])
-                            throw new EncodingChangeException ("character mismatch (new: "
-                            + new_chars[i]
-                            + " [0x"
-                            + Integer.toString (new_chars[i], 16)
-                            + "] != old: "
-                            + " [0x"
-                            + Integer.toString (buffer[i], 16)
-                            + buffer[i]
-                            + "]) for encoding change from "
-                            + encoding
-                            + " to "
-                            + character_set
-                            + " at character offset "
-                            + i);
+                    mEncoding = character_set;
+                    mReader = new InputStreamReader (stream, character_set);
+                    mBuffer = new char[mBuffer.length];
+                    mLevel = 0;
+                    mOffset = 0;
+                    mMark = -1;
+                    if (0 != offset)
+                    {
+                        new_chars = new char[offset];
+                        if (offset != read (new_chars))
+                            throw new ParserException ("reset stream failed");
+                        for (int i = 0; i < offset; i++)
+                            if (new_chars[i] != buffer[i])
+                                throw new EncodingChangeException ("character mismatch (new: "
+                                + new_chars[i]
+                                + " [0x"
+                                + Integer.toString (new_chars[i], 16)
+                                + "] != old: "
+                                + " [0x"
+                                + Integer.toString (buffer[i], 16)
+                                + buffer[i]
+                                + "]) for encoding change from "
+                                + encoding
+                                + " to "
+                                + character_set
+                                + " at character offset "
+                                + i);
+                    }
+                }
+                catch (IOException ioe)
+                {
+                    throw new ParserException (ioe.getMessage (), ioe);
                 }
             }
             catch (IOException ioe)
-            {
-                throw new ParserException (ioe.getMessage (), ioe);
+            {   // bug #1044707 mark()/reset() issues
+                throw new ParserException ("Stream reset failed ("
+                    + ioe.getMessage ()
+                    + "), try wrapping it with a org.htmlparser.lexer.Stream",
+                    ioe);
             }
         }
     }

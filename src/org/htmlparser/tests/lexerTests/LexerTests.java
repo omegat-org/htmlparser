@@ -604,6 +604,12 @@ public class LexerTests extends ParserTestCase
         mAcceptable.add ("STRONG");
         mAcceptable.add ("FORM");
         mAcceptable.add ("INPUT");
+        mAcceptable.add ("!DOCTYPE");
+        mAcceptable.add ("TBODY");
+        mAcceptable.add ("B");
+        mAcceptable.add ("DIV");
+        mAcceptable.add ("SCRIPT");
+        mAcceptable.add ("NOSCRIPT");
     }
 
     /**
