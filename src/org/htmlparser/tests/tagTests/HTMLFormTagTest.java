@@ -38,6 +38,8 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLFormTag;
+import org.htmlparser.tags.HTMLInputTag;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.tests.scannersTests.HTMLFormScannerTest;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
@@ -100,4 +102,18 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 		HTMLStringNode stringNode = (HTMLStringNode)nodes[0];
 		assertEquals("Expected contents of string node","User Name",stringNode.getText());
 	}
+
+	
+	public void testSearchByName() throws HTMLParserException {
+		createParser(HTMLFormScannerTest.FORM_HTML);
+
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
+		HTMLFormTag formTag = (HTMLFormTag)node[0];
+
+		HTMLTag tag= formTag.searchByName("passwd");
+		assertNotNull("Should have found the password node",node);
+		assertTrue("Should be an input tag",tag instanceof HTMLInputTag);
+	}	
 }

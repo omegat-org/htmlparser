@@ -262,4 +262,22 @@ public class HTMLFormTag extends HTMLTag
 		}
 		return foundVector;
 	}
+	public HTMLTag searchByName(String name) {
+		HTMLNode node;
+		HTMLTag tag=null;
+		boolean found = false;
+		for (Enumeration e = allNodesVector.elements();e.hasMoreElements() && !found;) {
+			node = (HTMLNode)e.nextElement();
+			if (node instanceof HTMLTag) {
+				tag = (HTMLTag)node;
+				String nameAttribute = tag.getParameter("NAME");
+				if (nameAttribute!=null && nameAttribute.equals(name)) found=true;
+			}
+		}
+		if (found) 
+			return tag;
+		else
+			return null;
+	}
+
 }
