@@ -63,7 +63,7 @@ public class LinkExtractor {
 			if (node instanceof HTMLLinkTag) {
 				linkTag = (HTMLLinkTag)node; // Downcast to a Link Tag
 				
-				linkTag.print(); // Print it
+				System.out.println(linkTag.toString()); // Print it
 				
 				// To extract only mail addresses, uncomment the following line
 				//if (linkTag.isMailLink()) System.out.println(linkTag.getLink());

@@ -202,7 +202,7 @@ public class Generate
             else
             {
                 System.out.println ();
-                node.print ();
+                System.out.println(node.toString());
             }
         }
         

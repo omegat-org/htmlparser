@@ -991,7 +991,7 @@ public class HTMLParser
 	  	  	if (node!=null)
 			{
 			 	if (filter==null)
-				node.print(); 
+				System.out.println(node.toString()); 
 				else
 				{
 					// There is a filter. Find if the associated filter of this node
@@ -1003,7 +1003,7 @@ public class HTMLParser
 					String tagFilter = scanner.getFilter();
 					if (tagFilter==null) continue;
 					if (tagFilter.equals(filter))
-							node.print();
+						System.out.println(node.toString()); 
 				}		
 			}
 			else System.out.println("Node is null");

@@ -129,7 +129,7 @@ public class HTMLAppletTag extends CompositeTag
 			sb.append("Miscellaneous items :\n");
 			for (SimpleEnumeration e = children();e.hasMoreNodes();)
 			{
-				((HTMLTag)e.nextNode()).print();
+				sb.append(((HTMLTag)e.nextNode()).toString());
 			}
 		}
 		sb.append("End of Applet Tag\n");
