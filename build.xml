@@ -19,17 +19,17 @@ Release Procedure
   to the day since it comes from the version coded in the Parser.java file,
   that's why this step can't be automated
 - incorporate changes from ChangeLog into htmlparser/docs/changes under
-  a heading like "Integration Build 1.4 - 20040104"
+  a heading like "Integration Build 1.5 - 20040522"
 - 'ant versionSource' updates the version in Parser.java and release.txt
 - perform a CVS update on htmlparser to identify new and changed files
 - commit changed files (i.e. Parser.java, release.txt, docs/changes, docs/wiki
   and docs/wiki/images) to the head revision using a reason of the form:
-Update version to 1.4-20040104.
-- use CVS to tag the current head revisions with a name like v1_4_20040104
+Update version to 1.5-20040522.
+- use CVS to tag the current head revisions with a name like v1_5_20040522.
 - use CVS to checkout everything with the tag used above
 - 'ant test' compiles and runs the unit tests
 - 'ant clean htmlparser' updates the version headers, creates the jar file and doc files and zips
-  everything into a file htmlparser/distribution/htmlparser1_4_20040104.zip
+  everything into a file htmlparser/distribution/htmlparser1_5_20040522.zip
 - use CVS to checkout everything against the head revision to reset your workspace
 
 Sourceforge File Release Procedure
@@ -39,10 +39,10 @@ Name: anonymous
 Password: yourname@users.sourceforge.org
 ftp> cd incoming
 ftp> bin
-ftp> put htmlparser1_4_20040104.zip
+ftp> put htmlparser1_5_20040522.zip
 ftp> bye
 - add a release to the 'Integation Builds' package
-Admin-File Releases-Add Release, use a name of the form '1_4_20040104'
+Admin-File Releases-Add Release, use a name of the form '1_5_20040522'
 - Step 1, 'Paste The Notes' (using numeric character references and
   character entity references because this is displayed as HTML) with a
   format like :
@@ -51,7 +51,7 @@ Failing Unit Tests:
 Open Bugs:
 Pending Bugs:
 - use the 'Upload Change Log:' field to specify the ChamgeLog file you edited
-- Step 2, check the checkbox of the htmlparser1_4_20040104.zip file from the
+- Step 2, check the checkbox of the htmlparser1_5_20040522.zip file from the
   list of files in the uploads section
 - Submit/Refresh
 - Step 3, mark the zip file Processor-Independent, and give it a .zip type
@@ -64,7 +64,7 @@ Pending Bugs:
 
 Submit News
 - from the project summary screen, select 'Submit News' and title it like:
-HTML Parser Integration Release 1.4-20040104 
+HTML Parser Integration Release 1.5-20040522 
 - type in a summary of the changes made
 - SUBMIT
 - delete the previous release news item using Admin-Publicity-Administrate project news
@@ -76,10 +76,10 @@ HTML Parser Integration Release 1.4-20040104
   <!-- set global properties for this build -->
   <!--
        Note: These can be overridden on the command line, as in:
-       ant -DversionMinor=4 -DversionType=Release\ Build versionSource
+       ant -DversionMinor=5 -DversionType=Release\ Build versionSource
   -->
   <property name="versionMajor" value="1"/>
-  <property name="versionMinor" value="4"/>
+  <property name="versionMinor" value="5"/>
   <property name="versionType" value="Integration Build"/>
   <property name="versionNumber" value="${versionMajor}.${versionMinor}"/>
   <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
@@ -103,7 +103,10 @@ HTML Parser Integration Release 1.4-20040104
 
   <target name="JDK1.4">
       <condition property="JDK1.4">
-        <equals arg1="1.4" arg2="${ant.java.version}"/>
+        <or>
+          <equals arg1="1.4" arg2="${ant.java.version}"/>
+          <equals arg1="1.4" arg2="${ant.java.version}"/>
+        </or>
       </condition>
   </target>
 
@@ -320,7 +323,7 @@ HTML Parser Integration Release 1.4-20040104
     <mkdir dir="${docs}/javadoc"/>
     <property name="javadoc.doctitle" value="HTML Parser ${versionNumber}"/>
     <property name="javadoc.header" value="&lt;A HREF=&quot;http://htmlparser.sourceforge.net&quot; target=&quot;_top&quot;>HTML Parser Home Page&lt;/A>"/>
-    <property name="javadoc.footer" value="&amp;copy; 2004 Somik Raha&lt;div align=&quot;right&quot;&gt;${TODAY_STRING}&lt;/div&gt;"/>
+    <property name="javadoc.footer" value="&amp;copy; 2004 Derrick Oswald&lt;div align=&quot;right&quot;&gt;${TODAY_STRING}&lt;/div&gt;"/>
     <property name="javadoc.bottom" value="HTML Parser is an open source library released under
     &lt;A HREF=&quot;http://www.opensource.org/licenses/lgpl-license.html&quot; target=&quot;_top&quot;&gt;LGPL&lt;/A&gt;.&lt;BR&gt;
     &lt;div align=&quot;right&quot;&gt;&lt;A HREF=&quot;http://sourceforge.net/projects/htmlparser&quot; target=&quot;_top&quot;&gt;
