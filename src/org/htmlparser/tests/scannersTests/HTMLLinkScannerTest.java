@@ -98,7 +98,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		// Verify the link data
 		assertEquals("Link Text","",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img></A>",linkTag.toHTML());
+		assertStringEquals("Raw String","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></img></A>",linkTag.toHTML());
 		// Verify the tags in between
 		assertTrue("Second node should be an end tag",node[1] instanceof HTMLEndTag);
 		assertTrue("Third node should be an HTMLTag",node[2] instanceof HTMLTag);		
@@ -136,7 +136,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		// Verify the link data
 		assertEquals("Link Text","This is a test\r\n",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img>This is a test\r\n</A>",linkTag.toHTML());
+		assertStringEquals("Raw String","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></img>This is a test\r\n</A>",linkTag.toHTML());
 	}
 	
 	public void testEvaluate() 

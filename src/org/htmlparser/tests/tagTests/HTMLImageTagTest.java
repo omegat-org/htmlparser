@@ -141,7 +141,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 		// The node should be an HTMLLinkTag
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("The image location","",imageTag.getImageURL());
+		assertStringEquals("The image location","",imageTag.getImageURL());
 	}
 
 	public void testToHTML() throws HTMLParserException {
@@ -153,7 +153,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 		// The node should be an HTMLImageTag
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("The image locn","<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>",imageTag.toHTML());
+		assertStringEquals("The image locn","<IMG WIDTH=\"305\" ALT=\"Google\" SRC=\"../../goo/title_homepage4.gif\" HEIGHT=\"115\">",imageTag.toHTML());
 		assertEquals("Alt","Google",imageTag.getParameter("alt"));
 		assertEquals("Height","115",imageTag.getParameter("height"));
 		assertEquals("Width","305",imageTag.getParameter("width"));

@@ -28,6 +28,8 @@
 
 package org.htmlparser.tags;
 
+import java.util.Enumeration;
+
 import org.htmlparser.HTMLRenderer;
 
 /**
@@ -63,12 +65,31 @@ public class HTMLImageTag extends HTMLTag
 	{
 		return "IMAGE TAG : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	public String toHTML() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<IMG ");
+		String key,value;
+		int i = 0;
+		for (Enumeration e = parsed.keys();e.hasMoreElements();) {
+			key = (String)e.nextElement();
+			i++;
+			if (key!=TAGNAME) {
+				value = getParameter(key);
+				sb.append(key+"=\""+value+"\"");
+				if (i<parsed.size()) sb.append(" ");				
+			}
+		}		
+		sb.append(">");
+		return sb.toString();
+	}
 	public String toHTML(HTMLRenderer renderer) {
+		if (renderer==null) return toHTML(); else		
 		return renderer.renderImagesToHTML(this);
 	}
 
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
+		parsed.put("SRC",imageURL);
 	}
 
 }

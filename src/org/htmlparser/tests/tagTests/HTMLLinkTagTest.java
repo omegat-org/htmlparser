@@ -284,12 +284,10 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(9);
 		assertTrue("First Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
-		assertEquals("Link Raw Text","<A HREF='mailto:somik@yahoo.com'>hello</A>",linkTag.toHTML());
+		assertStringEquals("Link Raw Text","<A HREF=\"mailto:somik@yahoo.com\">hello</A>",linkTag.toHTML());
 		assertTrue("Eighth Node should be a HTMLLinkTag",node[7] instanceof HTMLLinkTag);
 		linkTag = (HTMLLinkTag)node[7];
-		assertEquals("Link Raw Text","<a \r\n"+
-			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\r\n"+
-			"nical.html\"> Journalism 3.0</A>",linkTag.toHTML());
+		assertStringEquals("Link Raw Text","<A HREF=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\r\nnical.html\"> Journalism 3.0</A>",linkTag.toHTML());
 	}
 
 	public void testTypeHttps() throws HTMLParserException{
@@ -323,5 +321,13 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 		HTMLLinkTag linkTag2 = new HTMLLinkTag("https://www.someurl.com","",0,0,"","",null,false,false,"","");
 		assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
 
+	}	
+	public void testGetLinkContentsAndEndTagWith() throws HTMLParserException {
+		createParser("<A HREF=\"test.html\"><IMG SRC=\"pic.jpg\">abcd</A>","http://www.google.com/test/index.html");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Expected link",node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		assertEquals("contents and end of link","<IMG SRC=\"pic.jpg\">abcd</A>",linkTag.getLinkContentsAndEndTagWith(null));		
 	}	
 }

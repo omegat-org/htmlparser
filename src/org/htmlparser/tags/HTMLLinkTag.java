@@ -235,11 +235,11 @@ public class HTMLLinkTag extends HTMLTag
 		}
 		return sb.toString();
 	}
+	
 	public String toHTML() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("<");
-		sb.append(tagContents.toString());
-		sb.append(">");
+		putLinkStartTagInto(sb);
+		//sb.append(tagContents.toString());
 		HTMLNode node;
 		for (Enumeration e = linkData();e.hasMoreElements();) {
 			node = (HTMLNode)e.nextElement();
@@ -247,6 +247,33 @@ public class HTMLLinkTag extends HTMLTag
 		}
 		sb.append("</A>");
 		return sb.toString();
+	}
+	
+	public String getLinkContentsAndEndTagWith(HTMLRenderer renderer) {
+		StringBuffer sb = new StringBuffer();
+		HTMLNode node;
+		for (Enumeration e = linkData();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			sb.append(node.toHTML(renderer));
+		}
+		sb.append("</A>");
+		return sb.toString();
+	}	
+	
+	public void putLinkStartTagInto(StringBuffer sb) {
+		sb.append("<A ");
+		String key,value;
+		int i = 0;
+		for (Enumeration e = parsed.keys();e.hasMoreElements();) {
+			key = (String)e.nextElement();
+			i++;
+			if (key!=TAGNAME) {
+				value = getParameter(key);
+				sb.append(key+"=\""+value+"\"");
+				if (i<parsed.size()-1) sb.append(" ");
+			}
+		}
+		sb.append(">");
 	}
 	/**
 	 * Print the contents of this Link Node
@@ -280,6 +307,7 @@ public class HTMLLinkTag extends HTMLTag
 
 	public void setLink(String link) {
 		this.link = link;
+		parsed.put("HREF",link);
 	}
 
 	public void collectInto(Vector collectionVector, String filter) {
