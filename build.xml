@@ -357,10 +357,11 @@ HTML Parser Integration Release 1.4-20030824
       <group title="Main Package" packages="org.htmlparser"/>
       <group title="Example Applications" packages="org.htmlparser.parserapplications"/>
       <group title="Tags" packages="org.htmlparser.tags,org.htmlparser.tags.data"/>
+      <group title="Lexer" packages="org.htmlparser.lexer,org.htmlparser.lexer.nodes"/>
       <group title="Scanners" packages="org.htmlparser.scanners"/>
       <group title="Beans" packages="org.htmlparser.beans"/>
       <group title="Visitors" packages="org.htmlparser.visitors"/>
-      <group title="Utility Packages (of developer interest only)" packages="org.htmlparser.util"/>
+      <group title="Utility Packages (of developer interest only)" packages="org.htmlparser.util,org.htmlparser.util.sort"/>
     </javadoc>         
   </target>
 
