@@ -1,5 +1,5 @@
-HTMLParser Integration Release 1.2 - 2002_10_02
-***********************************************
+HTMLParser Integration Release 1_2_20021031 (c1)
+************************************************
 
 Q1. What are the contents of the distribution ? 
 Q2. Which part of the source code should I analyze to be able to use it in my project ? 
@@ -54,8 +54,8 @@ code to identify a generic tag. You could add further processing code based
 on the tag contents. For more information on how to do this, examine the code 
 of the scanners in the com.kizna.html.scanners package. The scanners 
 basically use a Template Method+Factory Method approach. You need to 
-override the evaluate() and scan() methods, and register your 
-scanner to the parser before you begin parsing.
+override the evaluate() - optional,scan() and getID() methods - compulsory, and register your 
+scanner to the parser before you begin parsing. 
 
 This process is simple, check the com.kizna.html.scanners package
 to see how the existing scanners work.
