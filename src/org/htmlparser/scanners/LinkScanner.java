@@ -75,7 +75,7 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createLinkTag(CompositeTagData compositeTagData, String url, String currentLine, Node node, int linkBegin, String tagContents) throws ParserException {
+	protected Tag createLinkTag(TagData tagData, CompositeTagData compositeTagData, String url, Node node) throws ParserException {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
@@ -103,12 +103,7 @@ public class LinkScanner extends CompositeTagScanner
 		String myLinkText = compositeTagData.getChildren().toString();
 		
 		LinkTag linkTag = new LinkTag(
-			new TagData(
-				linkBegin,
-				linkEnd,
-				tagContents,
-				currentLine
-			),
+			tagData,
 			compositeTagData,
 			new LinkData(
 				link,
@@ -273,12 +268,15 @@ public class LinkScanner extends CompositeTagScanner
 				
 				previousOpenScanner = null;
 				return createLinkTag(
+					new TagData(
+						linkBegin, node.elementEnd(),tagContents, currentLine
+					),
 					new CompositeTagData(
 						startTag, 
 						endTag,
 						nodeVector
 					),
-					url,currentLine, node, linkBegin, tagContents
+					url,node 
 				);
 			}
 			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
