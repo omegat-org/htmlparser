@@ -205,10 +205,10 @@ public class StringParserTest extends ParserTestCase {
             "charset=iso-8859-1\">" +
             "</head>" +
             "<script language=\"JavaScript\" type=\"text/JavaScript\">" +
-            "// if this fails, output a 'hello' " +
+            "// if this fails, output a 'hello' \n" +
             "if (true) " +
             "{ " +
-            "//something good... " +
+            "//something good...\n" +
             "} " +
             "</script>" +
             "<body>" +

@@ -52,6 +52,7 @@ public class AllTests extends ParserTestCase
         sub.addTestSuite (AssertXmlEqualsTest.class);
         sub.addTestSuite (FunctionalTests.class);
         sub.addTestSuite (LineNumberAssignedByNodeReaderTest.class);
+        sub.addTestSuite (MemoryTest.class);
         suite.addTest (sub);
         suite.addTest (org.htmlparser.tests.lexerTests.AllTests.suite ());
         suite.addTest (org.htmlparser.tests.scannersTests.AllTests.suite ());

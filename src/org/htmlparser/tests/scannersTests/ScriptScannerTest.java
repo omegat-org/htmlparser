@@ -202,7 +202,7 @@ public class ScriptScannerTest extends ParserTestCase
             "(event)\");" +
             "document.write(\"{ // do something\"); " +
             "document.write(\"}\"); " +
-            "// parser thinks this is the end tag. " +
+            "// parser thinks this is the end tag.\n" +
             "document.write(\"</script>\");" +
             "</script>" +
             "<body>" +
@@ -225,7 +225,7 @@ public class ScriptScannerTest extends ParserTestCase
             "(event)\");" +
             "document.write(\"{ // do something\"); " +
             "document.write(\"}\"); " +
-            "// parser thinks this is the end tag. " +
+            "// parser thinks this is the end tag.\n" +
             "document.write(\"</script>\");",
             scriptTag.getScriptCode()
         );

@@ -26,7 +26,11 @@
 
 package org.htmlparser.tests.tagTests;
 
+import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
+import org.htmlparser.tags.TableColumn;
+import org.htmlparser.tags.TableRow;
+import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
@@ -81,4 +85,40 @@ public class InputTagTest extends ParserTestCase {
         assertEquals("Type","text",inputTag.getAttribute("TYPE"));
         assertEquals("Name","Google",inputTag.getAttribute("NAME"));
     }
+
+    /**
+     * Bug #923146 tag nesting rule too strict for forms
+     */
+    public void testTable () throws ParserException
+    {
+        String html =
+            "<table>" +
+            "<tr>" +
+            "<td>" +
+            "<form>" +
+            "<input name=input1>" +
+            "</td>" +
+            // <tr> missing
+            "<tr>" +
+            "<td>" +
+            "<input name=input2>" +
+            "</td>" +
+            "</tr>" +
+            "</form>" +
+            "</table>";
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue ("not a table", node[0] instanceof TableTag);
+        TableTag table = (TableTag)node[0];
+        assertTrue ("not two rows", 2 == table.getRowCount ());
+//        assertTrue ("not one row", 1 == table.getRowCount ());
+        TableRow row = table.getRow (0);
+        assertTrue ("not one column", 1 == row.getColumnCount ());
+        TableColumn column = row.getColumns ()[0];
+        assertTrue ("not one child", 1 == column.getChildCount ());
+        assertTrue ("column doesn't have a form", column.getChild (0) instanceof FormTag);
+        FormTag form = (FormTag)column.getChild (0);
+        assertTrue ("form only has one input field", 2 == form.getFormInputs ().size ());
+    }
+
 }

@@ -302,6 +302,7 @@ public class Lexer
                     ret = parseString (probe, quotesmart);
                 break;
             default:
+                probe.retreat (); // string needs to see leading foreslash
                 ret = parseString (probe, quotesmart);
                 break;
         }
@@ -411,6 +412,35 @@ public class Lexer
             }
             else if (quotesmart && (ch == quote))
                 quote = 0; // exit quoted state
+            else if (quotesmart && (0 == quote) && (ch == '/'))
+            {
+                // handle multiline and double slash comments (with a quote) in script like:
+                // I can't handle single quotations.
+                ch = mPage.getCharacter (cursor);
+                if (0 == ch)
+                    done = true;
+                else if ('/' == ch)
+                {
+                    do
+                        ch = mPage.getCharacter (cursor);
+                    while ((ch != 0) && (ch != '\n'));
+                }
+                else if ('*' == ch)
+                {
+                    do
+                    {
+                        do
+                            ch = mPage.getCharacter (cursor);
+                        while ((ch != 0) && (ch != '*'));
+                        ch = mPage.getCharacter (cursor);
+                        if (ch == '*')
+                            cursor.retreat ();
+                    }
+                    while ((ch != 0) && (ch != '/'));
+                }
+                else
+                    cursor.retreat ();
+            }
             else if ((0 == quote) && ('<' == ch))
             {
                 ch = mPage.getCharacter (cursor);
