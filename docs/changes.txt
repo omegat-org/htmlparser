@@ -15,6 +15,63 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.5 - 20050306
+--------------------------------
+2005-03-06 21:18  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java, lexer/Page.java,
+	scanners/ScriptScanner.java, scanners/StyleScanner.java,
+	tests/scannersTests/ScriptScannerTest.java:
+
+	Bug #1104627 Parser Crash reading javascript
+	Bug #1024045 StringBean crashes on an URL
+	Bug #1021925 StyleTag with missing linefeed prevents page from parsing
+	Corrected operation with script and style scanners to recognize the ETAGO
+	when parsing CDATA -- see http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data.
+	Original solution to bug #741769 ScriptScanner doesn't handle quoted &lt;/script&gt; tags,
+	was erroneous; it should have been recognized as faulty HTML.
+	Several test cases changed to follow this advice:
+	   "Authors should therefore escape "</" within the content."
+	
+2005-03-06 16:46  derrickoswald
+
+	* src/org/htmlparser/: lexer/InputStreamSource.java,
+	tests/lexerTests/LexerTests.java:
+
+	Bug #1044707 mark()/reset() issues
+	Added wrapping with a org.htmlparser.lexer.Stream if markSupported
+    returns false on the InputStream passed to InputStreamSource constructor.
+	Added better error message when reset fails in setEncoding().
+	
+2005-03-04 10:57  derrickoswald
+
+	*
+	src/org/htmlparser/parserapplications/filterbuilder/FilterBuilder.java:
+
+	Bug #1153508 CVS sources do not compile
+	Repaired sources so it would compile with Java 1.4.
+	
+2005-02-14 19:41  derrickoswald
+
+	* src/org/htmlparser/lexer/InputStreamSource.java:
+
+	Bug #1056438 Byte Order Mark
+	Not a solution, just a better error message.
+	
+2005-02-14 18:54  derrickoswald
+
+	* docs/contributors.html:
+
+	Add David Anderson to contributors list.
+	
+2005-02-14 18:49  derrickoswald
+
+	* src/org/htmlparser/parserapplications/SiteCapturer.java:
+
+	Implement suggested change for
+	  bug #1061869 Crashing when trying to capture link to XLS document
+	checking for null from getContentType().
+	
 Integration Build 1.5 - 20050213
 --------------------------------
 2005-02-13 15:49  derrickoswald

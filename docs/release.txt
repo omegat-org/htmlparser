@@ -1,4 +1,4 @@
-HTMLParser Version 1.5 (Integration Build Feb 13, 2005)
+HTMLParser Version 1.5 (Integration Build Mar 06, 2005)
 *********************************************
 
 Contents of the distribution
@@ -31,6 +31,10 @@ New APIs
 	A new http package is added, the primary class being Connectionmanager which
 	handles proxies, passwords and cookies. Some testing still needed.
 	Also removed some line separator cruft.
+    Added parseCDATA to the Lexer, used in script and style scanners.
+    Note that this is significantly new behaviour that now adheres to appendix
+    B.3.2 Specifying non-HTML data  of the HTML reference:
+    http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data
 Configuration Management
     Removed the need for the Translate class to be packaged with htmllexer.jar.
     This results in a lighter weight component.
@@ -68,6 +72,13 @@ Enhancement Requests
 
 Bug Fixes
 ---------
+1153508 CVS sources do not compile
+1104627 Parser Crash reading javascript
+1061869 Crashing when trying to capture link to XLS document
+1056438 Byte Order Mark
+1044707 mark()/reset() issues
+1024045 StringBean crashes on an URL
+1021925 StyleTag with missing linefeed prevents page from parsing
 1005409 Input file not free by parser.
 998195 SiteCatpurer just crashed
 995703 Parser Crash
@@ -114,6 +125,7 @@ The following people have contributed important bug reports, feature ideas :
 [33] Rogers George
 [34] Jon Gillette
 [35] Enrico Triolo
+[36] Dave Anderson
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 
