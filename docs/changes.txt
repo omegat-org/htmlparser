@@ -1,4 +1,3 @@
-
 *******************************************************************************
 * Developers                                                                  *
 *                                                                             *
@@ -15,10 +14,105 @@
 
 Integration Build 1.3 - 20030511
 --------------------------------
-[1] Nodelist modifications from Dhaval
-[2] Fixed bug #732517 Paser(String) c'tor not handling relative path local file
-[3] Fixed NPE in ScriptScanner when a script tag was not ended before the end of document
-[4] Added removeAll() to NodeList - Dhaval
+
+2003-05-11 20:59  derrickoswald
+
+	* docs/docs/index.html: Change the javadoc reference in the shipped
+	documentation to reference local javadocs.
+
+2003-05-11 16:42  derrickoswald
+
+	* src/org/htmlparser/: Parser.java,
+	tests/parserHelperTests/AttributeParserTest.java,
+	tests/parserHelperTests/TagParserTest.java,
+	tests/scannersTests/TableScannerTest.java: Moved pending bugs to
+	the 'feature request' tracker, and made the failing unit tests
+	execution conditional on the Parser version being >= 1.4.
+
+2003-05-11 15:32  derrickoswald
+
+	* src/org/htmlparser/tests/scannersTests/DivScannerTest.java: Added
+	testcase for bug #735193 Explicit tag type recognition for
+	CompositTags not working.
+
+2003-05-11 00:48  derrickoswald
+
+	* src/org/htmlparser/: tags/Tag.java, NodeReader.java,
+	scanners/OptionTagScanner.java,
+	tests/scannersTests/LabelScannerTest.java, util/NodeList.java,
+	tests/tagTests/SelectTagTest.java: Fixed bug #735183 Problem in
+	Label Scanning A NodeReader now prepends the pre-read tags onto the
+	internal list, maintaining the correct order in recursively
+	analysing unclosed tags.
+	
+	Also fixed OptionTagScanner tag enders.
+
+2003-05-09 21:47  derrickoswald
+
+	* src/org/htmlparser/: tests/tagTests/SelectTagTest.java,
+	scanners/OptionTagScanner.java, tags/OptionTag.java,
+	tests/scannersTests/OptionTagScannerTest.java,
+	tests/scannersTests/SelectTagScannerTest.java,
+	tests/tagTests/OptionTagTest.java: For Dhaval: I have converted the
+	OptionTag to a composite tag. The problem that is present with
+	Label tag exists here a well so my guess is that it is with
+	CompositeTag itself. Once solved, all related problems will also
+	get solved. In any case I have commented some test conditions in
+	the OptionTagTest class. You can uncomment it and see it for
+	yourself.  Some SelectTag test cases are also changed as a result.
+
+2003-05-09 21:22  derrickoswald
+
+	* src/org/htmlparser/tests/scannersTests/LabelScannerTest.java: For
+	Dhaval: New Test case.	I added the LabelScanner to the parser and
+	parsed. Strangely instead of returning node count as 13(number of
+	LABEL tags) I get 17. Also when I see output of every node (using
+	toHtml()), uptil "Microsoft Passport" everything is correct and I
+	am getting LABEL tags as well. But the next node that I get is a
+	String node with value as #alue="AOL"># (without the hash) and that
+	entire tag got messed up. Any ideas. I have attached test file for
+	that purpose. U'll also have to use the new LabelScanner.java file.
+	Its quite strange.
+
+2003-05-09 21:14  derrickoswald
+
+	* src/org/htmlparser/: scanners/LabelScanner.java,
+	tests/scannersTests/LabelScannerTest.java: For Dhaval: Changed code
+	and test case for LabelScanner.  Basically a string like
+	<label>John Doe<label>Jane Doe</label> gets parsed as <LABEL>John
+	Doe<LABEL>Jane Doe</LABEL></LABEL> instead of <LABEL>John
+	Doe</LABEL><LABEL>Jane Doe</LABEL> after call to toHtml() on the
+	single LabelTag.  Also it is parsed as a single node instead of 2
+	distinct nodes.
+
+2003-05-08 23:32  derrickoswald
+
+	* docs/changes.txt: switch to cvs2cl mechanism
+
+2003-05-07 18:00  derrickoswald
+
+	* src/org/htmlparser/: tests/utilTests/NodeListTest.java,
+	util/NodeList.java: added removeAll() to NodeList - Dhaval
+
+2003-05-07 16:16  polarys
+
+	* docs/changes.html, docs/changes.txt,
+	src/org/htmlparser/scanners/ScriptScanner.java,
+	src/org/htmlparser/tests/scannersTests/ScriptScannerTest.java:
+	Fixed NPE in ScriptScanner when a script tag was not ended before
+	the end of document
+
+2003-05-06 07:37  derrickoswald
+
+	* src/org/htmlparser/parserHelper/ParserHelper.java: Fix #732517
+	Paser(String) c'tor not handling relative path local file
+
+2003-05-05 20:43  derrickoswald
+
+	* src/org/htmlparser/: scanners/LabelScanner.java,
+	scanners/SelectTagScanner.java, tags/SelectTag.java: nodelist
+	modifications from Dhaval
+
 
 Integration Build 1.3 - 20030504
 --------------------------------
