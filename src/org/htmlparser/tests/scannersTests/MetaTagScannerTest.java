@@ -94,8 +94,6 @@ public class MetaTagScannerTest extends ParserTestCase {
         assertNull("Meta Tag 18 Name",metaTag.getMetaTagName());
         assertEquals("Meta Tag 18 Contents","text/html; charset=ISO-8859-1",metaTag.getMetaContent());
         assertEquals("Meta Tag 18 Http-Equiv","content-type",metaTag.getHttpEquiv());
-
-        assertEquals("This Scanner",scanner,metaTag.getThisScanner());
     }
 
     public void testScanTagsInMeta() throws ParserException {

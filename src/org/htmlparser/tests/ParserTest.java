@@ -40,10 +40,13 @@ import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
+import org.htmlparser.filters.NodeClassFilter;
+import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.scanners.TagScanner;
+import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
@@ -400,8 +403,13 @@ public class ParserTest extends ParserTestCase
         try
         {
             parser = new Parser("http://www.sony.co.jp", Parser.noFeedback);
+            parser.registerScanners ();
             assertEquals("Character set by default is ISO-8859-1", "ISO-8859-1", parser.getEncoding ());
             enumeration = parser.elements();
+            // search for the <BODY> tag
+            while (enumeration.hasMoreNodes ())
+                if (enumeration.nextNode () instanceof BodyTag)
+                    break;
             assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
         }
         catch (ParserException e)
@@ -445,6 +453,7 @@ public class ParserTest extends ParserTestCase
         String url = "http://htmlparser.sourceforge.net/test/DoublequotedCharset.html";
 
         parser = new Parser(url);
+        parser.registerScanners ();
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
             e.nextNode();
         assertTrue ("Wrong encoding", parser.getEncoding ().equals ("UTF-8"));
@@ -465,6 +474,7 @@ public class ParserTest extends ParserTestCase
         String url = "http://htmlparser.sourceforge.net/test/SinglequotedCharset.html";
 
         parser = new Parser(url);
+        parser.registerScanners ();
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
             e.nextNode();
         assertTrue ("Wrong encoding", parser.getEncoding ().equals ("UTF-8"));
@@ -533,6 +543,7 @@ public class ParserTest extends ParserTestCase
             };
             page.setConnection (connection);
             parser = new Parser (new Lexer (page));
+            parser.registerScanners ();
             // must be the default
             assertTrue ("Wrong encoding", parser.getEncoding ().equals ("ISO-8859-1"));
             for (NodeIterator e = parser.elements();e.hasMoreNodes();)
@@ -626,11 +637,9 @@ public class ParserTest extends ParserTestCase
         );
         parser.registerScanners();
         NodeList collectionList = new NodeList();
-
-        for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-            Node node = e.nextNode();
-            node.collectInto(collectionList,LinkTag.class);
-        }
+        NodeClassFilter filter = new NodeClassFilter (LinkTag.class);
+        for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+            e.nextNode().collectInto(collectionList,filter);
         assertEquals("Size of collection vector should be 11",11,collectionList.size());
         // All items in collection vector should be links
         for (SimpleNodeIterator e = collectionList.elements();e.hasMoreNodes();) {
@@ -682,11 +691,9 @@ public class ParserTest extends ParserTestCase
         "</html>");
         parser.registerScanners();
         NodeList collectionList = new NodeList();
-
-        for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-            Node node = e.nextNode();
-            node.collectInto(collectionList,ImageTag.IMAGE_TAG_FILTER);
-        }
+        TagNameFilter filter = new TagNameFilter ("IMG");
+        for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+            e.nextNode().collectInto(collectionList,filter);
         assertEquals("Size of collection vector should be 5",5,collectionList.size());
         // All items in collection vector should be links
         for (SimpleNodeIterator e = collectionList.elements();e.hasMoreNodes();) {

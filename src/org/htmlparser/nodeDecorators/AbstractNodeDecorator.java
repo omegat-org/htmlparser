@@ -31,7 +31,9 @@
 package org.htmlparser.nodeDecorators;
 
 import org.htmlparser.Node;
+import org.htmlparser.NodeFilter;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 public abstract class AbstractNodeDecorator implements Node {
     protected Node delegate;
@@ -44,12 +46,8 @@ public abstract class AbstractNodeDecorator implements Node {
         delegate.accept(visitor);
     }
 
-    public void collectInto(NodeList collectionList, Class nodeType) {
-        delegate.collectInto(collectionList, nodeType);
-    }
-
-    public void collectInto(NodeList collectionList, String filter) {
-        delegate.collectInto(collectionList, filter);
+    public void collectInto(NodeList list, NodeFilter filter) {
+        delegate.collectInto(list, filter);
     }
 
     public int elementBegin() {
@@ -146,7 +144,7 @@ public abstract class AbstractNodeDecorator implements Node {
         return delegate.toString();
     }
 
-    public void doSemanticAction () {
+    public void doSemanticAction () throws ParserException {
         delegate.doSemanticAction ();
     }
 }

@@ -58,7 +58,6 @@ public class InputTagScannerTest extends ParserTestCase
 
         // check the input node
         InputTag inputTag = (InputTag) node[0];
-        assertEquals("Input Scanner",scanner,inputTag.getThisScanner());
         assertEquals("Type","text",inputTag.getAttribute("TYPE"));
         assertEquals("Name","Google",inputTag.getAttribute("NAME"));
     }

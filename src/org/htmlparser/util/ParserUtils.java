@@ -33,7 +33,9 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.htmlparser.Node;
+import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.Tag;
 
 public class ParserUtils {
@@ -104,17 +106,21 @@ public class ParserUtils {
     }
 
     /**
-     * Search given node and pick up any objects of given type, return
-     * Node array.
-     * @param node
-     * @param type
-     * @return Node[]
+     * Search given node and pick up any objects of given type.
+     * @param node The node to search.
+     * @param type The class to search for.
+     * @return A node array with the matching nodes.
      */
-    public static Node[] findTypeInNode(Node node, Class type) {
-        NodeList nodeList = new NodeList();
-        node.collectInto(nodeList, type);
-        Node spans[] = nodeList.toNodeArray();
-        return spans;
+    public static Node[] findTypeInNode(Node node, Class type)
+    {
+        NodeFilter filter;
+        NodeList ret;
+        
+        ret = new NodeList ();
+        filter = new NodeClassFilter (type);
+        node.collectInto (ret, filter);
+
+        return (ret.toNodeArray ());
     }
 
 }

@@ -84,10 +84,6 @@ public class StringNode
         return (ret.toString ());
     }
 
-    public void collectInto(NodeList collectionList, String filter) {
-        if (filter==STRING_FILTER) collectionList.add(this);
-    }
-
     /**
      * String visiting code.
      * @param visitor The <code>NodeVisitor</code> object to invoke 

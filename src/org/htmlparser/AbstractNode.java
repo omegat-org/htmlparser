@@ -29,9 +29,10 @@
 package org.htmlparser;
 
 import java.io.Serializable;
-import org.htmlparser.lexer.Page;
 
+import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 /**
  * AbstractNode, which implements the Node interface, is the base class for all types of nodes, including tags, string elements, etc
@@ -109,67 +110,42 @@ public abstract class AbstractNode implements Node, Serializable
     public abstract String toString();
 
     /**
-     * Collect this node and its child nodes (if-applicable) into the collection parameter, provided the node
-     * satisfies the filtering criteria. <P/>
+     * Collect this node and its child nodes (if-applicable) into the collectionList parameter, provided the node
+     * satisfies the filtering criteria.<P>
      *
-     * This mechanism allows powerful filtering code to be written very easily, without bothering about collection
-     * of embedded tags separately. e.g. when we try to get all the links on a page, it is not possible to get it
-     * at the top-level, as many tags (like form tags), can contain links embedded in them. We could get the links
-     * out by checking if the current node is a form tag, and going through its contents. However, this ties us down
-     * to specific tags, and is not a very clean approach. <P/>
+     * This mechanism allows powerful filtering code to be written very easily,
+     * without bothering about collection of embedded tags separately.
+     * e.g. when we try to get all the links on a page, it is not possible to
+     * get it at the top-level, as many tags (like form tags), can contain
+     * links embedded in them. We could get the links out by checking if the
+     * current node is a {@link CompositeTag}, and going through its children.
+     * So this method provides a convenient way to do this.<P>
      *
-     * Using collectInto(), programs get a lot shorter. Now, the code to extract all links from a page would look
-     * like :
+     * Using collectInto(), programs get a lot shorter. Now, the code to
+     * extract all links from a page would look like:
      * <pre>
      * NodeList collectionList = new NodeList();
-     * Node node;
-     * String filter = LinkTag.LINK_TAG_FILTER;
-     * for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
-     *      node = e.nextNode();
-     *      node.collectInto (collectionVector, filter);
-     * }
+     * NodeFilter filter = new TagNameFilter ("A");
+     * for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
+     *      e.nextNode().collectInto(collectionList, filter);
      * </pre>
      * Thus, collectionList will hold all the link nodes, irrespective of how
-     * deep the links are embedded. This of course implies that tags must
-     * fulfill their responsibilities toward honouring certain filters.
+     * deep the links are embedded.<P>
      *
-     * <B>Important:</B> In order to keep performance optimal, <B>do not create</B> you own filter strings, as
-     * the internal matching occurs with the pre-existing filter string object (in the relevant class). i.e. do not
-     * make calls like :
-     * <I>collectInto(collectionList,"-l")</I>, instead, make calls only like :
-     * <I>collectInto(collectionList,LinkTag.LINK_TAG_FILTER)</I>.<P/>
-     *
-     * To find out if your desired tag has filtering support, check the API of the tag.
-     */
-    public abstract void collectInto(NodeList collectionList, String filter);
-
-    /**
-     * Collect this node and its child nodes (if-applicable) into the collection parameter, provided the node
-     * satisfies the filtering criteria. <P/>
-     *
-     * This mechanism allows powerful filtering code to be written very easily, without bothering about collection
-     * of embedded tags separately. e.g. when we try to get all the links on a page, it is not possible to get it
-     * at the top-level, as many tags (like form tags), can contain links embedded in them. We could get the links
-     * out by checking if the current node is a form tag, and going through its contents. However, this ties us down
-     * to specific tags, and is not a very clean approach. <P/>
-     *
-     * Using collectInto(), programs get a lot shorter. Now, the code to extract all links from a page would look
-     * like :
+     * Another way to accomplish the same objective is:
      * <pre>
      * NodeList collectionList = new NodeList();
-     * Node node;
-     * for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
-     *      node = e.nextNode();
-     *      node.collectInto (collectionVector, LinkTag.class);
-     * }
+     * NodeFilter filter = new TagClassFilter (LinkTag.class);
+     * for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
+     *      e.nextNode().collectInto(collectionList, filter);
      * </pre>
-     * Thus, collectionList will hold all the link nodes, irrespective of how
-     * deep the links are embedded.
+     * This is slightly less specific because the LinkTag class may be
+     * registered for more than one node name, e.g. &lt;LINK&gt; tags too.
      */
-    public void collectInto(NodeList collectionList, Class nodeType)
+    public void collectInto (NodeList list, NodeFilter filter)
     {
-        if (nodeType.getName().equals(this.getClass().getName()))
-            collectionList.add(this);
+        if (filter.accept (this))
+            list.add (this);
     }
 
     /**
@@ -311,7 +287,7 @@ public abstract class AbstractNode implements Node, Serializable
      * Perform the meaning of this tag.
      * The default action is to do nothing.
      */
-    public void doSemanticAction ()
+    public void doSemanticAction () throws ParserException
     {
     }
 }

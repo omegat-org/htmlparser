@@ -62,7 +62,6 @@ public class TitleScannerTest extends ParserTestCase {
         // check the title node
         TitleTag titleTag = (TitleTag) node[2];
         assertEquals("Title","Yahoo!",titleTag.getTitle());
-        assertEquals("Title Scanner",titleScanner,titleTag.getThisScanner());
     }
 
     /**

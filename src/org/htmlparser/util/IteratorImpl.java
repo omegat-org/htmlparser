@@ -28,92 +28,36 @@
 
 package org.htmlparser.util;
 
-import java.util.Vector;
-
 import org.htmlparser.Node;
+import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.scanners.TagScanner;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.util.NodeIterator;
 
-public class IteratorImpl implements PeekingIterator
+public class IteratorImpl implements NodeIterator
 {
     Lexer mLexer;
-    Vector preRead;
-    ParserFeedback feedback;
+    ParserFeedback mFeedback;
+    Cursor mCursor;
 
     public IteratorImpl (Lexer lexer, ParserFeedback fb)
     {
         mLexer = lexer;
-        preRead = new Vector (25);
-        feedback = fb;
-    }
-
-    public Node peek () throws ParserException
-    {
-        Node ret;
-
-        if (null == mLexer)
-            ret = null;
-        else
-            try
-            {
-                ret = mLexer.nextNode ();
-                if (null != ret)
-                {
-                    // kick off recursion for the top level node
-                    if (ret instanceof org.htmlparser.tags.Tag)
-                    {
-                        org.htmlparser.tags.Tag tag;
-                        String name;
-                        org.htmlparser.scanners.TagScanner scanner;
-
-                        tag = (org.htmlparser.tags.Tag)ret;
-                        if (!tag.isEndTag ())
-                        {
-                            // now recurse if there is a scanner for this type of tag
-                            scanner = tag.getThisScanner ();
-                            if ((null != scanner) && scanner.evaluate (tag, null))
-                                ret = scanner.scan (tag, mLexer.getPage ().getUrl (), mLexer);
-                        }
-                    }
-
-                    preRead.addElement (ret);
-                }
-            }
-            catch (Exception e) {
-                StringBuffer msgBuffer = new StringBuffer();
-                msgBuffer.append("Unexpected Exception occurred while reading ");
-                msgBuffer.append(mLexer.getPage ().getUrl ());
-                msgBuffer.append(", in nextHTMLNode");
-//                reader.appendLineDetails(msgBuffer);
-                ParserException ex = new ParserException(msgBuffer.toString(),e);
-                feedback.error(msgBuffer.toString(),ex);
-                throw ex;
-            }
-
-        return (ret);
-    }
-
-    /**
-     * Makes <code>node</code> the next <code>Node</code> that will be returned.
-     * @param node The node to return next.
-     */
-    public void push (Node node)
-    {
-        preRead.insertElementAt (node, 0);
+        mFeedback = fb;
+        mCursor = new Cursor (mLexer.getPage (), 0);
     }
 
     /**
      * Check if more nodes are available.
-     * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
+     * @return <code>true</code> if a call to <code>nextNode()</code> will succeed.
      */
-    public boolean hasMoreNodes() throws ParserException {
+    public boolean hasMoreNodes() throws ParserException
+    {
         boolean ret;
 
-        if (null == mLexer)
-            ret = false;
-        else if (0 != preRead.size ())
-            ret = true;
-        else
-            ret = !(null == peek ());
+        mCursor.setPosition (mLexer.getPosition ());
+        ret = 0 != mLexer.getPage ().getCharacter (mCursor); // more characters?
 
         return (ret);
     }
@@ -122,15 +66,45 @@ public class IteratorImpl implements PeekingIterator
      * Get the next node.
      * @return The next node in the HTML stream, or null if there are no more nodes.
      */
-    public Node nextNode() throws ParserException {
+    public Node nextNode() throws ParserException
+    {
         Node ret;
 
-        if (hasMoreNodes ())
-            ret = (Node)preRead.remove (0);
-        else
-            // should perhaps throw an exception?
-            ret = null;
+        try
+        {
+            ret = mLexer.nextNode ();
+            if (null != ret)
+            {
+                // kick off recursion for the top level node
+                if (ret instanceof Tag)
+                {
+                    Tag tag;
+                    String name;
+                    TagScanner scanner;
 
+                    tag = (Tag)ret;
+                    if (!tag.isEndTag ())
+                    {
+                        // now recurse if there is a scanner for this type of tag
+                        scanner = tag.getThisScanner ();
+                        if ((null != scanner) && scanner.evaluate (tag, null))
+                            ret = scanner.scan (tag, mLexer.getPage ().getUrl (), mLexer);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            StringBuffer msgBuffer = new StringBuffer();
+            msgBuffer.append("Unexpected Exception occurred while reading ");
+            msgBuffer.append(mLexer.getPage ().getUrl ());
+            msgBuffer.append(", in nextHTMLNode");
+//                reader.appendLineDetails(msgBuffer);
+            ParserException ex = new ParserException(msgBuffer.toString(),e);
+            mFeedback.error(msgBuffer.toString(),ex);
+            throw ex;
+        }
+        
         return (ret);
     }
 }

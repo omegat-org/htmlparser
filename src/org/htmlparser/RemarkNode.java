@@ -90,10 +90,6 @@ public class RemarkNode
         return (ret.toString ());
     }
 
-    public void collectInto(NodeList collectionList, String filter) {
-        if (filter==REMARK_NODE_FILTER) collectionList.add(this);
-    }
-
     /**
      * Remark visiting code.
      * @param visitor The <code>NodeVisitor</code> object to invoke 

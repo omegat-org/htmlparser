@@ -38,6 +38,7 @@ import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.ParserUtils;
 
 public class ObjectCollectionTest extends ParserTestCase {
 
@@ -88,9 +89,7 @@ public class ObjectCollectionTest extends ParserTestCase {
         parser.addScanner(new SpanScanner());
         parseAndAssertNodeCount(1);
         Div div = (Div)node[0];
-        NodeList nodeList = new NodeList();
-        div.collectInto(nodeList,Span.class);
-        Node[] spans = nodeList.toNodeArray();
+        Node[] spans = ParserUtils.findTypeInNode (div, Span.class);
         assertSpanContent(spans);
     }
 
@@ -110,8 +109,7 @@ public class ObjectCollectionTest extends ParserTestCase {
         parseAndAssertNodeCount(1);
         TableTag tableTag = (TableTag)node[0];
         NodeList nodeList = new NodeList();
-        tableTag.collectInto(nodeList,Span.class);
-        Node [] spans = nodeList.toNodeArray();
+        Node[] spans = ParserUtils.findTypeInNode (tableTag, Span.class);
         assertSpanContent(spans);
     }
 }

@@ -102,13 +102,6 @@ public class StringNode extends AbstractNode
         return ("Txt (" + start.toString () + "," + end.toString () + "): " + getText ());
     }
 
-
-    public void collectInto (NodeList collectionList, String filter)
-    {
-        if (STRING_FILTER == filter)
-            collectionList.add (this);
-    }
-
     public void accept (Object visitor)
     {
     }

@@ -58,7 +58,6 @@ public class BodyScannerTest extends ParserTestCase {
         BodyTag bodyTag = (BodyTag) node[4];
         assertEquals("Body","This is a body tag",bodyTag.getBody());
         assertEquals("Body","<body>This is a body tag</body>",bodyTag.toHtml());
-        assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
 
     public void testBodywithJsp() throws ParserException {
@@ -72,7 +71,6 @@ public class BodyScannerTest extends ParserTestCase {
         // check the body node
         BodyTag bodyTag = (BodyTag) node[4];
         assertStringEquals("Body",body,bodyTag.toHtml());
-        assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
 
     public void testBodyMixed() throws ParserException {
@@ -86,7 +84,6 @@ public class BodyScannerTest extends ParserTestCase {
         // check the body node
         BodyTag bodyTag = (BodyTag) node[4];
         assertEquals("Body",body,bodyTag.toHtml());
-        assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
 
     public void testBodyEnding() throws ParserException {
@@ -100,7 +97,6 @@ public class BodyScannerTest extends ParserTestCase {
         // check the body node
         BodyTag bodyTag = (BodyTag) node[1];
         assertEquals("Body",body + "</body>",bodyTag.toHtml());
-        assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
 
     public static TestSuite suite()

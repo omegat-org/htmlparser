@@ -308,6 +308,6 @@ public class FormScannerTest extends ParserTestCase {
         nodes = new AbstractNode[50];
         for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
             nodes[i++] = e.nextNode();
-        assertEquals ("Expected nodes", 40, i);
+        assertEquals ("Expected nodes", 39, i);
     }
 }

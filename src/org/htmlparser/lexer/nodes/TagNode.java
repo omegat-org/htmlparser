@@ -660,17 +660,6 @@ public class TagNode
     }
 
     /**
-     * This method verifies that the current tag matches the provided
-     * filter. The match is based on the string object and not its contents,
-     * so ensure that you are using static final filter strings provided
-     * in the tag classes.
-     * @see org.htmlparser.Node#collectInto(NodeList, String)
-     */
-    public void collectInto (NodeList collectionList, String filter)
-    {
-    }
-
-    /**
      * Returns table of attributes in the tag
      * @return Hashtable
      * @deprecated This method is deprecated. Use getAttributes() instead.

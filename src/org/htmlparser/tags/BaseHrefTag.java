@@ -31,6 +31,7 @@ package org.htmlparser.tags;
 
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.ParserException;
 
 /**
  * BaseHrefTag represents an &lt;Base&gt; tag.
@@ -91,7 +92,7 @@ public class BaseHrefTag extends Tag
      * Perform the meaning of this tag.
      * This sets the base URL to use for the rest of the page.
      */
-    public void doSemanticAction ()
+    public void doSemanticAction () throws ParserException
     {
         Page page;
         

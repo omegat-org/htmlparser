@@ -93,10 +93,6 @@ public class RemarkNode extends AbstractNode
         return ("Rem (" + start.toString () + "," + end.toString () + "): " + getText ());
     }
 
-    public void collectInto(NodeList collectionList, String filter) {
-        if (filter==REMARK_NODE_FILTER) collectionList.add(this);
-    }
-
     public void accept(Object visitor) {
     }
 }

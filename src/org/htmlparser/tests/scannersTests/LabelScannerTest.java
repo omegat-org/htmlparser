@@ -61,7 +61,6 @@ public class LabelScannerTest extends ParserTestCase {
         assertEquals("Label","This is a label tag",labelTag.getChildrenHTML());
         assertEquals("Label","This is a label tag",labelTag.getLabel());
         assertStringEquals("Label", html, labelTag.toHtml());
-        assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
     public void testLabelWithJspTag() throws ParserException {
@@ -75,7 +74,6 @@ public class LabelScannerTest extends ParserTestCase {
         //  check the title node
         LabelTag labelTag = (LabelTag) node[0];
         assertStringEquals("Label",label,labelTag.toHtml());
-        assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
     public void testLabelWithOtherTags() throws ParserException
@@ -91,7 +89,6 @@ public class LabelScannerTest extends ParserTestCase {
         LabelTag labelTag = (LabelTag) node[0];
         assertEquals("Label value","Span within label",labelTag.getLabel());
         assertStringEquals("Label", html, labelTag.toHtml());
-        assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
     public void testLabelWithManyCompositeTags() throws ParserException {
@@ -107,7 +104,6 @@ public class LabelScannerTest extends ParserTestCase {
         assertEquals("Label value",guts,labelTag.getChildrenHTML());
         assertEquals("Label value","Jane  Doe  Smith",labelTag.getLabel());
         assertStringEquals("Label",html,labelTag.toHtml());
-        assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
 

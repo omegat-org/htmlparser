@@ -34,18 +34,17 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-import org.htmlparser.Node;
+import org.htmlparser.filters.TagNameFilter;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.NodeFactory;
-import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.nodeDecorators.DecodingNode;
 import org.htmlparser.nodeDecorators.EscapeCharacterRemovingNode;
 import org.htmlparser.nodeDecorators.NonBreakingSpaceConvertingNode;
@@ -71,7 +70,6 @@ import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.scanners.TitleScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.IteratorImpl;
@@ -572,13 +570,11 @@ public class Parser
                 if (scanner instanceof CompositeTagScanner)
                 {
                     tag = ((CompositeTagScanner)scanner).createTag (null, 0, 0, null, null, null, null);
-                    tag.setThisScanner (scanner);
                     mBlastocyst.put (ids[i], tag);
                 }
                 else
                 {
                     tag = scanner.createTag (null, 0, 0, null, null, null);
-                    tag.setThisScanner (scanner);
                     mBlastocyst.put (ids[i], tag);
                 }
             }
@@ -611,68 +607,11 @@ public class Parser
      *    }
      * }
      * </pre>
+     * @param filter The filter to apply to the nodes.
      */
-    public NodeIterator elements() throws ParserException
+    public NodeIterator elements () throws ParserException
     {
-        boolean remove_scanner;
-        Node node;
-        TagNode tag;
-        MetaTag meta;
-        String httpEquiv;
-        String charset;
-        String original;
-        IteratorImpl ret;
-
-        ret = new IteratorImpl (getLexer (), feedback);
-        original = getLexer ().getPage ().getEncoding ();
-        remove_scanner = false;
-        try
-        {
-            if (null == mScanners.get ("META"))
-            {
-                addScanner (new MetaTagScanner ("-m"));
-                remove_scanner = true;
-            }
-
-            /* pre-read up to </HEAD> looking for charset directive */
-            while (null != (node = ret.peek ()))
-            {
-                if (node instanceof TagNode)
-                {
-                    tag = (TagNode)node;
-                    if (tag instanceof MetaTag)
-                    {   // check for charset on Content-Type
-                        meta = (MetaTag)node;
-                        httpEquiv = meta.getAttribute ("HTTP-EQUIV");
-                        if ("Content-Type".equalsIgnoreCase (httpEquiv))
-                        {
-                            charset = getLexer ().getPage ().getCharset (meta.getAttribute ("CONTENT"));
-                            if (!charset.equalsIgnoreCase (original))
-                            {   // oops, different character set, restart
-                                getLexer ().getPage ().setEncoding (charset);
-                                getLexer ().setPosition (0);
-                                ret = new IteratorImpl (getLexer (), feedback);
-                            }
-                            // once we see the Content-Type meta tag we're finished the pre-read
-                            break;
-                        }
-                    }
-                    else if (tag.isEndTag ())
-                    {
-                        if (tag.getTagName ().equalsIgnoreCase ("HEAD"))
-                            // or, once we see the </HEAD> tag we're finished the pre-read
-                            break;
-                    }
-                }
-            }
-        }
-        finally
-        {
-            if (remove_scanner)
-                mScanners.remove ("META");
-        }
-
-        return ret;
+        return (new IteratorImpl (getLexer (), feedback));
     }
 
     /**
@@ -706,39 +645,29 @@ public class Parser
     }
 
     /**
-     * Parse the given resource, using the filter provided
+     * Parse the given resource, using the filter provided.
+     * @param filter The filter to apply to the parsed nodes.
      */
-    public void parse(String filter) throws Exception
+    public void parse (NodeFilter filter) throws ParserException
     {
+        NodeIterator e;
         Node node;
-        for (NodeIterator e=elements();e.hasMoreNodes();)
+        NodeList list;
+
+        list = new NodeList ();
+        for (e = elements (); e.hasMoreNodes (); )
         {
-            node = e.nextNode();
-            if (node!=null)
+            node = e.nextNode ();
+            if (null != filter)
             {
-                if (filter==null)
-                    System.out.println(node.toString());
-                else
-                {
-                    // There is a filter. Find if the associated filter of this node
-                    // matches the specified filter
-                    if (!(node instanceof Tag))
-                        continue;
-                    Tag tag=(Tag)node;
-                    TagScanner scanner = tag.getThisScanner();
-                    if (scanner==null)
-                        continue;
-
-                    String tagFilter = scanner.getFilter();
-                    if (tagFilter==null)
-                        continue;
-                    if (tagFilter.equals(filter))
-                        System.out.println(node.toString());
-                }
+                node.collectInto (list, filter);
+                for (int i = 0; i < list.size (); i++)
+                    System.out.println (list.elementAt (i));
+                list.removeAll ();
             }
-            else System.out.println("Node is null");
+            else
+                System.out.println (node);
         }
-
     }
 
     /**
@@ -927,41 +856,31 @@ public class Parser
         if (args.length<1 || args[0].equals("-help"))
         {
             System.out.println();
-            System.out.println("Syntax : java -jar htmlparser.jar <resourceLocn/website> -l");
-            System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path if not in current directory)");
-            System.out.println("   -l Show only the link tags extracted from the document");
-            System.out.println("   -i Show only the image tags extracted from the document");
-            System.out.println("   -s Show only the Javascript code extracted from the document");
-            System.out.println("   -t Show only the Style code extracted from the document");
-            System.out.println("   -a Show only the Applet tag extracted from the document");
-            System.out.println("   -j Parse JSP tags");
-            System.out.println("   -m Parse Meta tags");
-            System.out.println("   -T Extract the Title");
-            System.out.println("   -f Extract forms");
-            System.out.println("   -r Extract frameset");
-            System.out.println("   -help This screen");
-            System.out.println();
-            System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
+            System.out.println("Syntax : java -jar htmlparser.jar <resourceLocn/website> [node_type]");
+            System.out.println("   <resourceLocn/website> the URL or file to be parsed");
+            System.out.println("   node_type an optional node name, for example:");
+            System.out.println("     A - Show only the link tags extracted from the document");
+            System.out.println("     IMG - Show only the image tags extracted from the document");
+            System.out.println("     TITLE - Extract the title from the document");
             System.out.println();
             System.out.println("Example : java -jar htmlparser.jar http://www.yahoo.com");
             System.out.println();
-            System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
+            System.out.println("For support, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page...");
+            System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
+            System.out.println();
             System.exit(-1);
         }
-        try {
-            Parser parser = new Parser(args[0]);
-            System.out.println("Parsing " + parser.getURL ());
-            parser.registerScanners();
-            try {
-                if (args.length==2)
-                {
-                    parser.parse(args[1]);
-                } else
-                parser.parse(null);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+        try
+        {
+            Parser parser = new Parser (args[0]);
+            parser.registerScanners ();
+            System.out.println ("Parsing " + parser.getURL ());
+            NodeFilter filter;
+            if (1 < args.length)
+                filter = new TagNameFilter (args[1]);
+            else
+                filter = null;
+            parser.parse (filter);
         }
         catch (ParserException e) {
             e.printStackTrace();
@@ -992,12 +911,33 @@ public class Parser
             setLexer (new Lexer (new Page (inputHTML)));
     }
 
-    public Node [] extractAllNodesThatAre(Class nodeType) throws ParserException {
-        NodeList nodeList = new NodeList();
-        for (NodeIterator e = elements();e.hasMoreNodes();) {
-            e.nextNode().collectInto(nodeList,nodeType);
-        }
-        return nodeList.toNodeArray();
+    /**
+     * Extract all nodes matching the given filter.
+     * @see Node#collectInto()
+     */
+    public NodeList extractAllNodesThatMatch (NodeFilter filter) throws ParserException
+    {
+        NodeIterator e;
+        NodeList ret;
+        
+        ret = new NodeList ();
+        for (e = elements (); e.hasMoreNodes (); )
+            e.nextNode ().collectInto (ret, filter);
+
+        return (ret);
+    }
+
+    /**
+     * Convenience method to extract all nodes of a given class type.
+     * @see Node#collectInto()
+     */
+    public Node [] extractAllNodesThatAre (Class nodeType) throws ParserException
+    {
+        NodeList ret;
+
+        ret = extractAllNodesThatMatch (new NodeClassFilter (nodeType)); 
+
+        return (ret.toNodeArray ());
     }
 
     /**

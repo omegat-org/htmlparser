@@ -99,6 +99,8 @@ public class CompositeTagTest extends ParserTestCase {
         assertNotNull("should have found string node",stringNode);
         CompositeTag parent = (CompositeTag)stringNode[0].getParent();
         int pos = parent.findPositionOf(stringNode[0]);
-        assertEquals("position",5,pos);
+        /* a(b(),string("sdsd"),/b(),string("Hello World")) */
+        /*   0   1              2    3 */
+        assertEquals("position",3,pos);
     }
 }

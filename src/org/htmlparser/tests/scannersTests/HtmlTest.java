@@ -29,6 +29,7 @@
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Node;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.scanners.HtmlScanner;
 import org.htmlparser.scanners.TitleScanner;
 import org.htmlparser.tags.Html;
@@ -63,7 +64,8 @@ public class HtmlTest extends ParserTestCase {
         assertType("html tag",Html.class,node[0]);
         Html html = (Html)node[0];
         NodeList nodeList = new NodeList();
-        html.collectInto(nodeList, TitleTag.class);
+        NodeClassFilter filter = new NodeClassFilter (TitleTag.class);
+        html.collectInto(nodeList, filter);
         assertEquals("nodelist size",1,nodeList.size());
         Node node = nodeList.elementAt(0);
         assertType("expected title tag",TitleTag.class,node);

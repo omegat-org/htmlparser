@@ -47,7 +47,6 @@ import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.DefaultParserFeedback;
-import org.htmlparser.util.IteratorImpl;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
@@ -225,7 +224,13 @@ public class ParserTestCase extends TestCase {
         assertStringEquals(displayMessage, expectedTagName, actualTagName);
     }
 
-    public void assertXmlEquals(String displayMessage, String expected, String actual) throws Exception {
+    public void assertXmlEquals(String displayMessage, String expected, String actual) throws Exception
+    {
+        Node nextExpectedNode;
+        Node nextActualNode;
+        Tag tag1;
+        Tag tag2;
+
         expected = removeEscapeCharacters(expected);
         actual   = removeEscapeCharacters(actual);
 
@@ -236,22 +241,31 @@ public class ParserTestCase extends TestCase {
         NodeIterator actualIterator =  resultParser.elements();
         displayMessage = createGenericFailureMessage(displayMessage, expected, actual);
 
-        Node nextExpectedNode = null, nextActualNode = null;
+        nextExpectedNode = null;
+        nextActualNode = null;
+        tag1 = null;
+        tag2 = null;
         do {
-            nextExpectedNode = getNextNodeUsing(expectedIterator);
-            nextActualNode = getNextNodeUsing(actualIterator);
+            if (null != tag1)
+                nextExpectedNode = tag1;
+            else
+                nextExpectedNode = getNextNodeUsing (expectedIterator);
+            if (null != tag2)
+                nextActualNode = tag2;
+            else
+                nextActualNode = getNextNodeUsing (actualIterator);
             assertNotNull (nextActualNode);
+            tag1 = fixIfXmlEndTag (nextExpectedNode);
+            tag2 = fixIfXmlEndTag (nextActualNode);
             assertStringValueMatches(
                 displayMessage,
                 nextExpectedNode,
                 nextActualNode
             );
-            fixIfXmlEndTag(actualIterator, nextActualNode);
-            fixIfXmlEndTag(expectedIterator, nextExpectedNode);
             assertSameType(displayMessage, nextExpectedNode, nextActualNode);
             assertTagEquals(displayMessage, nextExpectedNode, nextActualNode);
         }
-        while (expectedIterator.hasMoreNodes());
+        while (expectedIterator.hasMoreNodes() || (null != tag1));
         assertActualXmlHasNoMoreNodes(displayMessage, actualIterator);
     }
 
@@ -304,21 +318,25 @@ public class ParserTestCase extends TestCase {
         return "\n\n"+displayMessage+"\n\nComplete Xml\n************\nEXPECTED:\n"+expected+"\nACTUAL:\n"+actual;
     }
 
-    // TODO:
-    // Man, this is really screwed up.
-    private void fixIfXmlEndTag (NodeIterator iterator, Node node)
+    /**
+     * Return a following tag if node is an empty XML tag.
+     */
+    private Tag fixIfXmlEndTag (Node node)
     {
+        Tag ret;
+
+        ret = null;
         if (node instanceof Tag)
         {
             Tag tag = (Tag)node;
             if (tag.isEmptyXmlTag())
             {
                 tag.setEmptyXmlTag (false);
-                node = new Tag (tag.getPage (), tag.getStartPosition (), tag.getEndPosition (), tag.getAttributesEx ());
-                // cheat here and poink the new node into the iterator
-                ((IteratorImpl)iterator).push (node);
+                ret = new Tag (tag.getPage (), tag.getStartPosition (), tag.getEndPosition (), tag.getAttributesEx ());
             }
         }
+        
+        return (ret);
     }
 
     private void assertAttributesMatch(String displayMessage, Tag expectedTag, Tag actualTag) {
@@ -391,20 +409,37 @@ public class ParserTestCase extends TestCase {
         return inputString;
     }
 
-    public void assertType(
+    public void assertSuperType(
         String message,
         Class expectedType,
-        Object object) {
+        Object object)
+    {   
         String expectedTypeName = expectedType.getName();
         String actualTypeName   = object.getClass().getName();
-        if (!actualTypeName.equals(expectedTypeName)) {
+        if (!expectedType.isAssignableFrom (object.getClass ()))
             fail(
                 message+" should have been of type\n"+
                 expectedTypeName+
                 " but was of type \n"+
                 actualTypeName+"\n and is :"+((Node)object).toHtml()
             );
-        }
+    }
+
+    public void assertType(
+        String message,
+        Class expectedType,
+        Object object)
+    {
+        
+        String expectedTypeName = expectedType.getName();
+        String actualTypeName   = object.getClass().getName();
+        if (!actualTypeName.equals(expectedTypeName))
+            fail(
+                message+" should have been of type\n"+
+                expectedTypeName+
+                " but was of type \n"+
+                actualTypeName+"\n and is :"+((Node)object).toHtml()
+            );
     }
 
     protected void assertHiddenIDTagPresent(FormTag formTag, String name, String inputTagValue) {

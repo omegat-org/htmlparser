@@ -36,6 +36,7 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.ParserUtils;
 import org.htmlparser.util.SimpleNodeIterator;
 
 public class ImageTagTest extends ParserTestCase
@@ -167,17 +168,8 @@ public class ImageTagTest extends ParserTestCase
      */
     public ImageTag extractLinkImage (LinkTag link)
     {
-        NodeList subElements = new NodeList ();
-        link.collectInto (subElements, ImageTag.class);
-         SimpleNodeIterator subScan = subElements.elements ();
-        while (subScan.hasMoreNodes ())
-        {
-            Node subNode = subScan.nextNode ();
-            if (subNode instanceof ImageTag)
-                return (ImageTag) subNode;
-        }
-
-        return null;
+        Node[] list = ParserUtils.findTypeInNode (link, ImageTag.class);
+        return (0 == list.length ? null : (ImageTag)list[0]);
     }
 
     /**

@@ -50,12 +50,12 @@ public class LinkTag extends CompositeTag
     /**
      * The set of tag names that indicate the end of this tag.
      */
-    private static final String[] mEnders = new String[] {"A", "TD", "TR", "FORM", "LI"};
+    private static final String[] mEnders = new String[] {"A", "P", "DIV", "TD", "TR", "FORM", "LI"};
 
     /**
      * The set of end tag names that indicate the end of this tag.
      */
-    private static final String[] mEndTagEnders = new String[] {"TD", "TR", "FORM", "LI", "BODY", "HTML"};
+    private static final String[] mEndTagEnders = new String[] {"P", "DIV", "TD", "TR", "FORM", "LI", "BODY", "HTML"};
 
     /**
      * The URL where the link points to
@@ -91,18 +91,6 @@ public class LinkTag extends CompositeTag
      *      }
      * }
      * </pre>
-     * There is another mechanism available that allows for uniform extraction
-     * of images. You could do this to get all images from a web page :
-     * <pre>
-     * Node node;
-     * Vector imageCollectionVector = new Vector();
-     * for (NodeIterator e = parser.elements();e.hasMoreNode();) {
-     *      node = e.nextHTMLNode();
-     *      node.collectInto(imageCollectionVector,ImageTag.IMAGE_FILTER);
-     * }
-     * </pre>
-     * The link tag processes all its contents in collectInto().
-     * @see #linkData()
      */
     public LinkTag ()
     {

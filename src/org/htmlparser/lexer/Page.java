@@ -644,30 +644,63 @@ public class Page
     }
 
     /**
-     * Resets this page and begins reading from the source with the
-     * given character set.
+     * Begins reading from the source with the given character set.
+     * If the current encoding is the same as the requested encoding,
+     * this method is a no-op. Otherwise any subsequent characters read from
+     * this page will have been decoded using the given character set.<p>
+     * Some magic happens here to obtain this result if characters have already
+     * been consumed from this page.
+     * Since a Reader cannot be dynamically altered to use a different character
+     * set, the underlying stream is reset, a new Source is constructed
+     * and a comparison made of the characters read so far with the newly
+     * read characters up to the current position.
+     * If a difference is encountered, or some other problem occurs,
+     * an exception is thrown. 
      * @param character_set The character set to use to convert bytes into
      * characters.
+     * @exception ParserException If a character mismatch occurs between
+     * characters already provided and those that would have been returned
+     * had the new character set been in effect from the beginning. An
+     * exception is also thrown if the underlying stream won't put up with
+     * these shenanigans.
      */
     public void setEncoding (String character_set)
         throws
             ParserException
     {
         InputStream stream;
-        
-        stream = getSource ().getStream ();
-        try
+        char[] buffer;
+        int offset;
+        char[] new_chars;
+
+        if (!getEncoding ().equals (character_set))
         {
-            stream.reset ();
-            if (!getEncoding ().equals (character_set))
+            stream = getSource ().getStream ();
+            try
             {
+                buffer = mSource.mBuffer;
+                offset = mSource.mOffset;
+                stream.reset ();
                 mSource = new Source (stream, character_set);
-                mIndex = new PageIndex (this);
+                if (0 != offset)
+                {
+                    new_chars = new char[offset];
+                    if (offset != mSource.read (new_chars))
+                        throw new ParserException ("reset stream failed");
+                    for (int i = 0; i < offset; i++)
+                        if (new_chars[i] != buffer[i])
+                            throw new ParserException ("character mismatch (new: "
+                            + new_chars[i]
+                            + " != old: "
+                            + buffer[i]
+                            + ") for encoding at offset "
+                            + offset);
+                }
             }
-        }
-        catch (IOException ioe)
-        {
-            throw new ParserException (ioe.getMessage (), ioe);
+            catch (IOException ioe)
+            {
+                throw new ParserException (ioe.getMessage (), ioe);
+            }
         }
     }
 

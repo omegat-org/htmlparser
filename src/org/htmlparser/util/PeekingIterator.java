@@ -30,6 +30,9 @@ package org.htmlparser.util;
 
 import org.htmlparser.Node;
 
+/**
+ * @deprecated shouldn't need to pre-read tags.
+ */
 public interface PeekingIterator extends NodeIterator{
     /**
      * Fetch a node without consuming it.

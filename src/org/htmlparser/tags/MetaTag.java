@@ -29,6 +29,7 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.util.ParserException;
 
 /**
  * A Meta Tag
@@ -99,6 +100,22 @@ public class MetaTag extends Tag
             name.setValue (metaTagName);
         else
             getAttributesEx ().add (new Attribute ("NAME", metaTagName));
+    }
+    
+    /**
+     * Check for a charset directive, and if found, set the charset for the page.
+     */
+    public void doSemanticAction () throws ParserException
+    {
+        String httpEquiv;
+        String charset;
+
+        httpEquiv = getHttpEquiv ();
+        if ("Content-Type".equalsIgnoreCase (httpEquiv))
+        {
+            charset = getPage ().getCharset (getAttribute ("CONTENT"));
+            getPage ().setEncoding (charset);
+        }
     }
 
     public String toString()

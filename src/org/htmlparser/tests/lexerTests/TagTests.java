@@ -153,6 +153,7 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<meta name=\"foo\" content=\"foo<bar>\">";
         createParser(html);
+        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -167,6 +168,7 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<meta name=\"foo\" content=\"foo<bar\">";
         createParser(html);
+        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -181,6 +183,7 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<meta name=\"foo\" content=\"foobar>\">";
         createParser(html);
+        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -195,6 +198,7 @@ public class TagTests extends ParserTestCase {
     {
         String html = "<meta name=\"foo\" content=\"foo\nbar>\">";
         createParser(html);
+        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -215,6 +219,7 @@ public class TagTests extends ParserTestCase {
         // bar">
         String html = "<meta name=\"foo\" content=\"<foo>\nbar\">";
         createParser(html);
+        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -235,6 +240,7 @@ public class TagTests extends ParserTestCase {
         // bar">
         String html = "<meta name=\"foo\" content=\"foo>\nbar\">";
         createParser(html);
+        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
@@ -255,6 +261,7 @@ public class TagTests extends ParserTestCase {
         // bar">
         String html = "<meta name=\"foo\" content=\"<foo\nbar\"";
         createParser(html);
+        parser.registerScanners ();
         parseAndAssertNodeCount (1);
         assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];

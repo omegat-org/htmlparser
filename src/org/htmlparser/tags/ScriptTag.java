@@ -28,6 +28,8 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.scanners.ScriptScanner;
+
 /**
  * A script tag.
  */
@@ -48,6 +50,7 @@ public class ScriptTag extends CompositeTag
      */
     public ScriptTag ()
     {
+        setThisScanner (new ScriptScanner ());
     }
 
     /**

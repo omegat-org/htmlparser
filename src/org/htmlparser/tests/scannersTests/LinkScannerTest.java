@@ -298,23 +298,23 @@ public class LinkScannerTest extends ParserTestCase
      * A bug in the freshmeat page - really bad html
      * tag - &lt;A&gt;Revision&lt;\a&gt;
      * Reported by Mazlan Mat
+     * Note: Actually, this is completely legal HTML - Derrick
      */
-    public void testFreshMeatBug() throws ParserException {
-        createParser("<a>Revision</a>","http://www.yahoo.com");
-        // Register the image scanner
+    public void testFreshMeatBug() throws ParserException
+    {
+        String html = "<a>Revision</a>";
+        createParser(html,"http://www.yahoo.com");
+        // Register the link scanner
         parser.addScanner(new LinkScanner("-l"));
 
-        parseAndAssertNodeCount(3);
+        parseAndAssertNodeCount(1);
         assertTrue("Node 0 should be a tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
-        assertEquals("Tag Contents","a",tag.getText());
-        assertTrue("Node 1 should be a string node",node[1] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[1];
+        assertEquals("Tag Contents",html,tag.toHtml());
+        assertEquals("Node 0 should have one child", 1, tag.getChildren ().size ());
+        assertTrue("The child should be a string node", tag.getChildren ().elementAt (0) instanceof StringNode);
+        StringNode stringNode = (StringNode)tag.getChildren ().elementAt (0);
         assertEquals("StringNode Contents","Revision",stringNode.getText());
-        assertTrue("Node 2 should be an end tag",node[2] instanceof Tag);
-        tag = (Tag)node[2];
-        assertTrue("Node 2 should be an end tag",tag.isEndTag ());
-        assertEquals("End Tag Contents","/a",tag.getText());
     }
 
     /**

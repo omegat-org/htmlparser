@@ -93,6 +93,7 @@ public class LinkScanner extends CompositeTagScanner
      */
     public boolean evaluate (Tag tag, TagScanner previousOpenScanner)
     {
+        // actually, this is a bogus test, A tags can just have a name or id and be a destination anchor
         return (null != tag.getAttributeEx ("HREF"));
     }
 

@@ -74,18 +74,10 @@ public class SelectTagScannerTest extends ParserTestCase
 
 
         parseAndAssertNodeCount(5);
-        assertTrue(node[0] instanceof SelectTag);
-        assertTrue(node[1] instanceof SelectTag);
-        assertTrue(node[2] instanceof SelectTag);
-        assertTrue(node[3] instanceof SelectTag);
-        assertTrue(node[4] instanceof SelectTag);
 
         // check the Select node
         for(int j=0;j<nodeCount;j++)
-        {
-            SelectTag SelectTag = (SelectTag) node[j];
-            assertEquals("Select Scanner",scanner,SelectTag.getThisScanner());
-        }
+            assertTrue(node[j] instanceof SelectTag);
 
         SelectTag selectTag = (SelectTag)node[0];
         OptionTag [] optionTags = selectTag.getOptionTags();

@@ -73,8 +73,6 @@ public class OptionTagScannerTest extends ParserTestCase
             if (node[j] instanceof StringNode)
                 continue;
             assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
-            OptionTag OptionTag = (OptionTag) node[j];
-            assertEquals("Option Scanner",scanner,OptionTag.getThisScanner());
         }
     }
 }

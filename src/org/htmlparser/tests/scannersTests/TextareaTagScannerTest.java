@@ -63,17 +63,9 @@ public class TextareaTagScannerTest extends ParserTestCase
         scanner = new TextareaTagScanner("-ta");
         parser.addScanner(scanner);
         parseAndAssertNodeCount(5);
-        assertTrue(node[0] instanceof TextareaTag);
-        assertTrue(node[1] instanceof TextareaTag);
-        assertTrue(node[2] instanceof TextareaTag);
-        assertTrue(node[3] instanceof TextareaTag);
-        assertTrue(node[4] instanceof TextareaTag);
 
         // check the Textarea node
         for(int j=0;j<nodeCount;j++)
-        {
-            TextareaTag TextareaTag = (TextareaTag) node[j];
-            assertEquals("Textarea Scanner",scanner,TextareaTag.getThisScanner());
-        }
+            assertTrue(node[j] instanceof TextareaTag);
     }
 }
