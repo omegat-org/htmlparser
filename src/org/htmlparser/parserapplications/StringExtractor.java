@@ -29,6 +29,12 @@ package org.htmlparser.parserapplications;
 import org.htmlparser.beans.StringBean;
 import org.htmlparser.util.ParserException;
 
+/**
+ * Extract plaintext strings from a web page.
+ * Illustrative program to gather the textual contents of a web page.
+ * Uses a {@link org.htmlparser.beans.StringBean StringBean} to accumulate
+ * the user visible text (what a browser would display) into a single string.
+ */
 public class StringExtractor
 {
     private String resource;

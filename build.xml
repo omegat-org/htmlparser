@@ -344,13 +344,13 @@ HTML Parser Integration Release 1.4-20040104
       <footer>${javadoc.footer}</footer>
       <taglet name="HtmlTaglet" path="${resources}:${src}"/>
       <group title="Main Package" packages="org.htmlparser"/>
-      <group title="Example Applications" packages="org.htmlparser.parserapplications"/>
+      <group title="Example Applications" packages="org.htmlparser.parserapplications,org.htmlparser.lexerapplications.tabby,org.htmlparser.lexerapplications.thumbelina"/>
       <group title="Tags" packages="org.htmlparser.tags,org.htmlparser.tags.data"/>
       <group title="Lexer" packages="org.htmlparser.lexer,org.htmlparser.lexer.nodes"/>
       <group title="Scanners" packages="org.htmlparser.scanners"/>
       <group title="Beans" packages="org.htmlparser.beans"/>
-      <group title="Visitors" packages="org.htmlparser.visitors"/>
-      <group title="Utility Packages (of developer interest only)" packages="org.htmlparser.util,org.htmlparser.util.sort"/>
+      <group title="Patterns" packages="org.htmlparser.visitors,org.htmlparser.nodeDecorators,org.htmlparser.filters"/>
+      <group title="Utility" packages="org.htmlparser.util,org.htmlparser.util.sort"/>
       <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
     </javadoc>
     <delete file="${resources}/HtmlTaglet.class"/>

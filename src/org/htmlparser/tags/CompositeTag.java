@@ -237,7 +237,7 @@ public class CompositeTag extends Tag
      * @param caseSensitive If <code>true</code> this search should be case
      * sensitive. Otherwise, the search string and the node text are converted
      * to uppercase using the locale provided.
-     * @parem locale The locale for uppercase conversion.
+     * @param locale The locale for uppercase conversion.
      * @return A collection of nodes whose string contents or
      * representation have the <code>searchString</code> in them.
      */
