@@ -35,6 +35,8 @@ package com.kizna.html.tags;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import com.kizna.html.HTMLNode;
+
 /**
  * Identifies an image tag
  */
@@ -44,29 +46,19 @@ public class HTMLFormTag extends HTMLTag
 	 * The URL where the image is stored.
 	 */
 	protected String formURL;
-   protected String formName;
-   protected String formMethod;
-   protected Vector formInputVector;
-	/**
-	 * Constructor creates an HTMLImageNode object, which stores the location
-	 * where the image is to be found.
-	 * @imageURL location of the image
-	 * @imageBegin Beginning position of the image tag
-	 * @imageEnd Ending position of the image tag
-	 */
-	public HTMLFormTag(String formURL,int formBegin, int formEnd,String tagLine)
-	{
-		super(formBegin,formEnd,"",tagLine);
-		this.formURL = formURL;
-	}
+   	protected String formName;
+   	protected String formMethod;
+   	protected Vector formInputVector;
+   	protected Vector allNodesVector;
 	public HTMLFormTag(String formURL,String formName, String formMethod, int formBegin, int formEnd,
-                      String tagLine, Vector formInputVector)
+                      String tagLine, Vector formInputVector, Vector allNodesVector)
 	{
 		super(formBegin,formEnd,"",tagLine);
 		this.formURL = formURL;
-      this.formName = formName;
-      this.formMethod = formMethod;
-      this.formInputVector = formInputVector;
+	    this.formName = formName;
+      	this.formMethod = formMethod;
+      	this.formInputVector = formInputVector;
+      	this.allNodesVector = allNodesVector;
 	}
 	public Vector getFormInputs()
 	{
@@ -124,5 +116,36 @@ public class HTMLFormTag extends HTMLTag
 	public String toString()
 	{
 		return "FORM TAG : Form at "+formURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+	}
+	/**
+	 * Returns the allNodesVector.
+	 * @return Vector
+	 */
+	public Vector getAllNodesVector() {
+		return allNodesVector;
+	}
+
+	/**
+	 * Sets the allNodesVector.
+	 * @param allNodesVector The allNodesVector to set
+	 */
+	public void setAllNodesVector(Vector allNodesVector) {
+		this.allNodesVector = allNodesVector;
+	}
+	public String toRawString() {
+		StringBuffer rawBuffer = new StringBuffer();
+		HTMLNode node,prevNode=null;
+		for (Enumeration e = allNodesVector.elements();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			if (prevNode!=null) {
+				if (prevNode.elementEnd()>node.elementBegin()) {
+					// Its a new line
+					rawBuffer.append("\n");					
+				}
+			}
+			rawBuffer.append(node.toRawString());
+			prevNode=node;
+		}
+		return rawBuffer.toString();		
 	}
 }

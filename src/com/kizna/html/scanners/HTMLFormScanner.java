@@ -117,8 +117,8 @@ public class HTMLFormScanner extends HTMLTagScanner
 	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
 		HTMLNode node;
-      	Vector inputVector = new Vector();
-		String link,formText="",name="",method="GET";
+      	Vector inputVector = new Vector(), nodeVector = new Vector();
+		String link,name="",method="GET";
 		int linkBegin=-1, linkEnd=-1;
 
 		link = extractFormLocn(tag,url);
@@ -126,6 +126,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 	    method = extractFormMethod(tag);
 		linkBegin = tag.elementBegin();
 	    boolean endFlag = false;
+		nodeVector.addElement(tag);
 	    do
 		{
 			node = reader.readElement();
@@ -143,9 +144,10 @@ public class HTMLFormScanner extends HTMLTagScanner
 				if (thisTag.getText().toUpperCase().indexOf("INPUT")==0)
 				inputVector.addElement(thisTag);
 			}
+			nodeVector.addElement(node);
 		}
 		while (endFlag==false);
-		HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector);
+		HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,nodeVector);
         formTag.setThisScanner(this);
 		return formTag;
 	}

@@ -80,6 +80,17 @@ public class HTMLFormScannerTest extends TestCase {
 		assertEquals("Input Password Tag","<INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\">",passwdTag.toRawString());
 		assertEquals("Input Submit Tag","<INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\">",submitTag.toRawString());
 		
+		assertEquals("Raw String","<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
+		"</FORM>",formTag.toRawString());
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLFormScannerTest.class);
