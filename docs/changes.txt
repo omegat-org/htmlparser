@@ -1,5 +1,14 @@
 Integration Build 1.2 - 20020804
 --------------------------------
+[1] Fixed bug 590703 - Empty values dont get parsed 
+[2] Fixed bug 591435 - Missing values cause keys to be missed
+[3] Removed all infinite loops in scanners, replaced with throwing HTMLParserException
+[4] Fixed bug in HTMLTitleScanner, allowing certain malformed title tags to be parsed
+[5] Modified HTMLReader - now accepts Reader instead of BufferedReader
+[6] HTMLParser constructor now throws HTMLParserException.
+
+Integration Build 1.2 - 20020804
+--------------------------------
 [1] Fixed bug 590250, problem in HTMLStringNode, by which a single
 character on the last line was causing a parser crash
 [2] Optimized and refactored HTMLParameterParaser.parseParameters()
