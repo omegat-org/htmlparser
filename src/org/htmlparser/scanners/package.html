@@ -42,7 +42,8 @@ nested structure of HTML documents. The {@link
 org.htmlparser.scanners.ScriptScanner script scanner} overrides the nodes
 returned by the lexer and creates a tag containing a single string that is the
 script code.<br>
-You might need to create a scanner (that implements the {@link Scanner Scanner} interface) if
+You might need to create a scanner (that implements the
+{@link org.htmlparser.scanners.Scanner Scanner} interface) if
 the text you are trying to parse doesn't look like HTML, as is the case for the
 script scanner, or the normal processing of tags by nesting their structure is
 inadequate.

@@ -115,4 +115,49 @@ public class Cursor
         try
         {
             return ((Cursor)clone ());
+        }
+        catch (CloneNotSupportedException cnse)
+        {
+            return (new Cursor (getPage (), getPosition ()));
+        }
+    }
+
+    public String toString ()
+    {
+        int row;
+        int column;
+        StringBuffer ret;
+
+        ret = new StringBuffer (9 * 3 + 3); // three ints and delimiters
+        ret.append (getPosition ());
+        ret.append ("[");
+        if (null != mPage)
+            ret.append (mPage.row (this));
+        else
+            ret.append ("?");
+        ret.append (",");
+        if (null != mPage)
+            ret.append (mPage.column (this));
+        else
+            ret.append ("?");
+        ret.append ("]");
+
+        return (ret.toString ());
+    }
+
+    //
+    // Ordered interface
+    //
+
+    /**
+     * Compare one reference to another.
+     * @see org.htmlparser.util.sort.Ordered
+     */
+    public int compare (Object that)
+    {
+        Cursor r = (Cursor)that;
+        return (getPosition () - r.getPosition ());
+    }
+}
+
        

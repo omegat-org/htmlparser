@@ -138,20 +138,10 @@ HTML Parser Integration Release 1.4-20040104
     <echo message="previous version type = ${VERSION_TYPE}"/>
     <echo message="previous version date = ${VERSION_DATE}"/>
 
-    <!-- set property previousVersion to current version -->
-    <loadfile srcFile="${src}/org/htmlparser/Parser.java" property="previousTag">
-      <filterchain>
-        <headfilter lines="1"/>
-    	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
-          <param name="linebreaks" value="/Piy - A java-based parser for HTML"/>
-        </filterreader>
-        <striplinebreaks/>
-      </filterchain>      		
-    </loadfile>
-    <echo message="previous version tag = ${previousTag}"/>
   </target>
 
   <target name="versionSource" depends="init" description="update the version">
+    <chmod file="${src}/org/htmlparser/Parser.java" perm="u+w"/>
     <echo message="Replacing version VERSION_NUMBER = ${VERSION_NUMBER} with VERSION_NUMBER = ${versionNumber} in ${src}/org/htmlparser/Parser.java"/>
     <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_NUMBER = ${VERSION_NUMBER}" value="VERSION_NUMBER = ${versionNumber}"/>
 
@@ -161,6 +151,7 @@ HTML Parser Integration Release 1.4-20040104
     <echo message="Replacing version VERSION_DATE = &quot;${VERSION_DATE}&quot; with VERSION_DATE = &quot;${TODAY_STRING}&quot; in ${src}/org/htmlparser/Parser.java"/>
     <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_DATE = &quot;${VERSION_DATE}&quot;" value="VERSION_DATE = &quot;${TODAY_STRING}&quot;"/>
 
+    <chmod file="${docs}/release.txt" perm="u+w"/>
     <echo message="Replacing version &quot;${VERSION_NUMBER} (${VERSION_TYPE} ${VERSION_DATE})&quot; with &quot;${versionNumber} (${versionType} ${TODAY_STRING})&quot; in ${docs}/release.txt"/>
     <replace dir="${docs}" value="${versionNumber} (${versionType} ${TODAY_STRING})">
       <include name="release.txt"/>
