@@ -327,7 +327,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		createParser(
 			"<custom>" +				"<another>" +			"</custom>"
 		);
-		parser.addScanner(new AnotherScanner());
+		parser.addScanner(new AnotherScanner(true));
 		CustomTag customTag = parseCustomTag(1);
 		int x = customTag.getChildCount();
 		assertEquals("child count",1,customTag.getChildCount());
@@ -348,7 +348,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			"</custom>"+
 			"<custom>" +				"<another>else</another>" +			"</custom>"
 		);
-		parser.addScanner(new AnotherScanner());
+		parser.addScanner(new AnotherScanner(true));
 		CustomTag customTag = parseCustomTag(2);
 		int x = customTag.getChildCount();
 		assertEquals("child count",1,customTag.getChildCount());
@@ -379,7 +379,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 				"<another><abcdefg>\n" +
 			"</custom>"
 		);
-		parser.addScanner(new AnotherScanner());
+		parser.addScanner(new AnotherScanner(true));
 		CustomTag customTag = parseCustomTag(1);
 		int x = customTag.getChildCount();
 		assertEquals("child count",1,customTag.getChildCount());
@@ -496,6 +496,24 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertStringEquals("url","http://www.yahoo.com",url);		
 	}
+
+	public void testComplexNesting() throws ParserException {
+		createParser(
+			"<custom>" +				"<custom>" +					"<another>" +				"</custom>" +				"<custom>" +					"<another>" +				"</custom>" +			"</custom>"
+		);
+		parser.addScanner(new CustomScanner());
+		parser.addScanner(new AnotherScanner(false));
+		parseAndAssertNodeCount(1);
+		assertType("root node",CustomTag.class, node[0]);
+		CustomTag root = (CustomTag)node[0];
+		assertNodeCount("child count",2,root.getChildrenAsNodeArray());
+		Node child = root.childAt(0);
+		assertType("child",CustomTag.class,child);
+		CustomTag customChild = (CustomTag)child;
+		assertNodeCount("grand child count",1,customChild.getChildrenAsNodeArray());
+		Node grandchild = customChild.childAt(0);
+		assertType("grandchild",AnotherTag.class,grandchild);
+	}
 	
 	public static class CustomScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "CUSTOM" };
@@ -519,7 +537,11 @@ public class CompositeTagScannerTest extends ParserTestCase {
 	public static class AnotherScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "ANOTHER" };
 		public AnotherScanner() { 
-			super("", MATCH_NAME, new String[] {"CUSTOM"},true); 
+			super("", MATCH_NAME, new String[] {"CUSTOM"}); 
+		}
+		
+		public AnotherScanner(boolean acceptCustomTagsButDontAcceptCustomEndTags) { 
+			super("", MATCH_NAME, new String[] {}, new String[] {"CUSTOM"}, true); 
 		}
 		
 		public String[] getID() { 

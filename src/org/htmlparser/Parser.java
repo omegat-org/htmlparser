@@ -48,7 +48,7 @@ import org.htmlparser.parserHelper.ParserHelper;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.AppletScanner;
 import org.htmlparser.scanners.BodyScanner;
-import org.htmlparser.scanners.BulletScanner;
+import org.htmlparser.scanners.BulletListScanner;
 import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.scanners.DoctypeScanner;
 import org.htmlparser.scanners.FormScanner;
@@ -1015,8 +1015,7 @@ public class Parser
 		addScanner(new FormScanner("-f",this));
 		addScanner(new FrameSetScanner("-r"));	
 		addScanner(linkScanner.createBaseHREFScanner("-b"));
-		addScanner(new BulletScanner("-bullet"));
-		
+		addScanner(new BulletListScanner("-bulletList",this));
 	//	addScanner(new SpanScanner("-p"));
 		addScanner(new DivScanner("-div"));
 		addScanner(new TableScanner(this));

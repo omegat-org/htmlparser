@@ -427,5 +427,22 @@ public class ParserTestCase extends TestCase {
 	    assertNotNull("Hidden Tag "+name+" should have been there", inputTag);
 	    assertStringEquals("Hidden Tag Contents", inputTagValue, inputTag.getAttribute("VALUE"));
 	    assertStringEquals("Hidden Tag Type", "hidden", inputTag.getAttribute("TYPE"));
+	}
+
+	protected void assertNodeCount(String message, int expectedLength, Node[] nodes) {
+		if (expectedLength!=nodes.length) {
+			StringBuffer failMsg = new StringBuffer(message);
+			failMsg.append("\n");
+			failMsg.append("Number of nodes expected ").append(expectedLength).append(" \n");
+			failMsg.append("but was : ");
+			failMsg.append(nodes.length).append("\n");
+			failMsg.append("Nodes found are:\n");
+			for (int i=0;i<nodes.length;i++) {
+				failMsg.append("Node ").append(i).append(" : ");
+				failMsg.append(nodes[i].getClass().getName()).append("\n");
+				failMsg.append(nodes[i].toString()).append("\n\n");
+			}
+			fail(failMsg.toString());
+		}
 	}	
 }

@@ -191,7 +191,7 @@ public class CompositeTagScannerHelper {
 
 	private boolean isEndTagMissing(Tag possibleEndTag) {
 		return 
-			scanner.isTagToBeEndedFor(possibleEndTag.getTagName()) || 
+			scanner.isTagToBeEndedFor(possibleEndTag) || 
 			isSelfChildTagRecievedIncorrectly(possibleEndTag);
 	}
 

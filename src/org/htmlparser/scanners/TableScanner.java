@@ -39,14 +39,14 @@ import org.htmlparser.util.NodeList;
 public class TableScanner extends CompositeTagScanner {
 	private final static String MATCH_STRING [] = { "TABLE" };
 	private final static String ENDERS [] = { "BODY", "HTML" };
-
+	private final static String ENDTAG_ENDERS [] = { "BODY", "HTML" };
 	
 	public TableScanner(Parser parser) {
 		this(parser,"");
 	}
 
 	public TableScanner(Parser parser,String filter) {
-		super(filter, MATCH_STRING, ENDERS);
+		super(filter, MATCH_STRING, ENDERS, ENDTAG_ENDERS, true);
 		parser.addScanner(new TableRowScanner(parser));
 		
 	}

@@ -55,6 +55,7 @@ public class LinkScanner extends CompositeTagScanner
 	public static final String DIRTY_TAG_MESSAGE=" is a dirty link tag - the tag was not closed. \nWe encountered an open tag, before the previous end tag was found.\nCorrecting this..";
 	private LinkProcessor processor;
 	private final static String ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
+	private final static String ENDTAG_ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
 	
 	/**
 	 * Overriding the default constructor
@@ -67,7 +68,7 @@ public class LinkScanner extends CompositeTagScanner
 	 * Overriding the constructor to accept the filter 
 	 */
 	public LinkScanner(String filter) {
-		super(filter,MATCH_NAME,ENDERS, false);
+		super(filter,MATCH_NAME,ENDERS,ENDTAG_ENDERS, false);
 		processor = new LinkProcessor();		
 	}
 	

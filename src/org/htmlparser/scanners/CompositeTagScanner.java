@@ -34,6 +34,7 @@ import java.util.Set;
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.parserHelper.CompositeTagScannerHelper;
+import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -91,42 +92,55 @@ import org.htmlparser.util.ParserException;
 public abstract class CompositeTagScanner extends TagScanner {
 	protected String [] nameOfTagToMatch;
 	private boolean allowSelfChildren;
-	private Set enderSet;
-		
+	private Set tagEnderSet;
+	private Set endTagEnderSet;
+			
 	public CompositeTagScanner(String [] nameOfTagToMatch) {
 		this(nameOfTagToMatch,new String[] {});
 	}
 
-	public CompositeTagScanner(String [] nameOfTagToMatch, String [] enders) {
-		this("",nameOfTagToMatch,enders);
+	public CompositeTagScanner(String [] nameOfTagToMatch, String [] tagEnders) {
+		this("",nameOfTagToMatch,tagEnders);
 	}
 
-	public CompositeTagScanner(String [] nameOfTagToMatch, String [] enders, boolean allowSelfChildren) {
-		this("",nameOfTagToMatch,enders,allowSelfChildren);
+	public CompositeTagScanner(String [] nameOfTagToMatch, String [] tagEnders, boolean allowSelfChildren) {
+		this("",nameOfTagToMatch,tagEnders,allowSelfChildren);
 	}
 
 	public CompositeTagScanner(String filter, String [] nameOfTagToMatch) {
 		this(filter,nameOfTagToMatch,new String [] {},true);
 	}
 
-	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, String [] enders) {
-		this(filter,nameOfTagToMatch,enders,true);
+	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, String [] tagEnders) {
+		this(filter,nameOfTagToMatch,tagEnders,true);
 	}
 
 	public CompositeTagScanner(
 		String filter, 
 		String [] nameOfTagToMatch, 
-		String [] enders, 
+		String [] tagEnders, 
+		boolean allowSelfChildren) {
+		this(filter,nameOfTagToMatch,tagEnders,new String[] {}, allowSelfChildren);
+	}
+	
+	public CompositeTagScanner(
+		String filter, 
+		String [] nameOfTagToMatch, 
+		String [] tagEnders, 
+		String [] endTagEnders,
 		boolean allowSelfChildren) {
 		super(filter);
 		this.nameOfTagToMatch = nameOfTagToMatch;
 		this.allowSelfChildren = allowSelfChildren;
-		this.enderSet = new HashSet();
-		for (int i=0;i<enders.length;i++)
-			enderSet.add(enders[i]);
-			
+		System.out.println("Scanner for "+nameOfTagToMatch[0]+" allowSelfChildren: "+allowSelfChildren);
+		this.tagEnderSet = new HashSet();
+		for (int i=0;i<tagEnders.length;i++)
+			tagEnderSet.add(tagEnders[i]);
+		this.endTagEnderSet = new HashSet();
+		for (int i=0;i<endTagEnders.length;i++)
+			endTagEnderSet.add(endTagEnders[i]);
 	}
-	
+
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
 		CompositeTagScannerHelper helper = 
 			new CompositeTagScannerHelper(this,tag,url,reader,currLine);
@@ -155,8 +169,14 @@ public abstract class CompositeTagScanner extends TagScanner {
 	public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
 
 	
-	public final boolean isTagToBeEndedFor(String tagName) {
-		return enderSet.contains(tagName);
+	public final boolean isTagToBeEndedFor(Tag tag) {
+		boolean isEndTag = tag instanceof EndTag; 
+		String tagName = tag.getTagName();
+		if (  
+				( isEndTag && endTagEnderSet.contains(tagName)) ||
+			  	(!isEndTag &&    tagEnderSet.contains(tagName))
+		    )
+		return true; else return false;
 	}
 
 	public final boolean isAllowSelfChildren() {
