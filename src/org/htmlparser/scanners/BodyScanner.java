@@ -48,10 +48,10 @@ public class BodyScanner extends CompositeTagScanner {
 		return MATCH_NAME;
 	}
 	
-	public boolean evaluate(String tagNameBeingChecked, TagScanner previousOpenScanner) {
+	public boolean evaluate(String tagNameBeingChecked, TagScanner previousOpenScanner)
+    {
 		absorbLeadingBlanks(tagNameBeingChecked);
-		if (tagNameBeingChecked.equalsIgnoreCase(MATCH_NAME[0]) && previousOpenScanner==null)
-		return true; else return false;
+        return (tagNameBeingChecked.toUpperCase ().startsWith (MATCH_NAME[0]) && null == previousOpenScanner);
 	} 
 
 	public Tag createTag(

@@ -28,11 +28,16 @@
 
 package org.htmlparser.tests.tagTests;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
 import junit.framework.TestSuite;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
 
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class BodyTagTest extends ParserTestCase {
@@ -64,6 +69,39 @@ public class BodyTagTest extends ParserTestCase {
 	public void testToString() throws ParserException  {
 		assertEquals("Body","BODY: Yahoo!",bodyTag.toString());		
 	}
+    
+    public void testAttributes ()
+    {
+        NodeIterator iterator;
+        Node node;
+        Hashtable attributes;
+        
+        try
+        {
+            createParser("<body style=\"margin-top:4px; margin-left:20px;\" title=\"body\">");
+            parser.addScanner (new BodyScanner ("-b"));
+            iterator = parser.elements ();
+            node = null;
+            while (iterator.hasMoreNodes ())
+            {
+                node = iterator.nextNode ();
+                if (node instanceof BodyTag)
+                {
+                    attributes = ((BodyTag)node).getAttributes ();
+                    assertTrue ("no style attribute", attributes.containsKey ("STYLE"));
+                    assertTrue ("no title attribute", attributes.containsKey ("TITLE"));
+                }
+                else
+                    fail ("not a body tag");
+                assertTrue ("more than one node", !iterator.hasMoreNodes ());
+            }
+            assertNotNull ("no elements", node);
+        }
+        catch (ParserException pe)
+        {
+            fail ("exception thrown " + pe.getMessage ());
+        }
+    }
 	
 	public static TestSuite suite() 
 	{
