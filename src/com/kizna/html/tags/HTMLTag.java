@@ -449,7 +449,7 @@ public boolean isEndOfLineCharState() {
 			{
 				found=true;
 				reader.setPreviousOpenScanner(scanner);
-				retVal=scanner.scan(this,url,reader,tagLine);
+				retVal=scanner.createScannedNode(this,url,reader,tagLine);
 				reader.setPreviousOpenScanner(null);
 			}
 		}

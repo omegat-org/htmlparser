@@ -133,7 +133,7 @@ public static String extractXMLData(HTMLNode node, String tagName, HTMLReader re
 			if (node!=null) {
 				if (node instanceof com.kizna.html.tags.HTMLEndTag) {
 					com.kizna.html.tags.HTMLEndTag endTag = (com.kizna.html.tags.HTMLEndTag)node;
-					if (!endTag.getContents().equals(tagName)) xmlTagFound = false;		
+					if (!endTag.getText().equals(tagName)) xmlTagFound = false;		
 				}
 			
 			}
@@ -162,6 +162,12 @@ public static boolean isXMLTagFound(HTMLNode node, String tagName) {
 	}
 	return xmlTagFound;
 }
+	public final HTMLTag createScannedNode(HTMLTag tag,String url,HTMLReader reader,String currLine) throws IOException {
+		HTMLTag thisTag = scan(tag,url,reader,currLine);
+		thisTag.setThisScanner(this);
+		thisTag.setParsed(tag.getParsed());		
+		return thisTag;
+	}
 	/** 
 	 * Scan the tag and extract the information related to this type. The url of the 
 	 * initiating scan has to be provided in case relative links are found. The initial 
@@ -172,7 +178,7 @@ public static boolean isXMLTagFound(HTMLNode node, String tagName) {
 	 * @param url The initiating url of the scan (Where the html page lies)
 	 * @param reader The reader object responsible for reading the html page
 	 */
-	public abstract HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws IOException;
+	public abstract HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws IOException;
 
 	public String removeChars(String s,char occur)  {
 		StringBuffer newString = new StringBuffer();

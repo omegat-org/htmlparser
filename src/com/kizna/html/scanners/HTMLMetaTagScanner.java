@@ -34,7 +34,7 @@ public class HTMLMetaTagScanner extends HTMLTagScanner {
 	/*
 	 * @see HTMLTagScanner#scan(HTMLTag, String, HTMLReader, String)
 	 */
-	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader, String currLine)
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader, String currLine)
 		throws IOException {
 		// Since its a simple tag, all META TAG info will 
 		// be in the tag itself
@@ -43,7 +43,6 @@ public class HTMLMetaTagScanner extends HTMLTagScanner {
 		String metaTagContents = (String)table.get("CONTENT");
 		String httpEquiv = (String)table.get("HTTP-EQUIV");
 		HTMLMetaTag metaTag = new HTMLMetaTag(tag.elementBegin(),tag.elementEnd(),tag.getText(),httpEquiv, metaTagName,metaTagContents,currLine);
-		metaTag.setThisScanner(this);
 		return metaTag;
 	}
 

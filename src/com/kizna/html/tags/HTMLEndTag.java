@@ -36,46 +36,17 @@ import com.kizna.html.HTMLNode;
 /**
  * HTMLEndTag can identify closing tags, like &lt;/A&gt;, &lt;/FORM&gt;, etc.
  */
-public class HTMLEndTag extends HTMLNode
+public class HTMLEndTag extends HTMLTag
 {
-	/**
-	 * Holds the contents of the end tag
-	 */
-	String tagContents;
-	/**
-	 * Holds the beginning position of the tag
-	 */
-	int tagBegin;
-	/**
-	 * Holds the end position of the tag
-	 */
-	int tagEnd;
 	/**
 	 * Constructor takes 3 arguments to construct an HTMLEndTag object.
 	 * @param tagBegin Beginning position of the end tag
 	 * @param tagEnd Ending position of the end tag
 	 * @param tagContents Text contents of the tag
 	 */
-	public HTMLEndTag(int tagBegin, int tagEnd, String tagContents)
+	public HTMLEndTag(int tagBegin, int tagEnd, String tagContents,String tagLine)
 	{
-		// Initialize member variables with data provided inside the constructor
-		this.tagBegin = tagBegin;
-		this.tagEnd = tagEnd;
-		this.tagContents = tagContents;
-	}
-	/**
-	 * Return the beginning position of the tag
-	 */
-	public int elementBegin()
-	{
-		return tagBegin;
-	}
-	/**
-	 * Return the ending position of the tag
-	 */
-	public int elementEnd()
-	{
-		return tagEnd;
+		super(tagBegin,tagEnd,tagContents,tagLine);
 	}
 	/**
 	 * Locate the end tag withing the input string, by parsing from the given position
@@ -126,15 +97,8 @@ public class HTMLEndTag extends HTMLNode
 			
 		}
 		if (state==3)
-		return new HTMLEndTag(tagBegin,tagEnd,tagContents.toString());
+		return new HTMLEndTag(tagBegin,tagEnd,tagContents.toString(),input);
 		else return null;	
-	}
-	/**
-	 * Return the contents of the tag text
-	 */
-	public String getContents()
-	{
-		return tagContents;
 	}
 	public String toPlainTextString() {
 		return "";
@@ -142,7 +106,7 @@ public class HTMLEndTag extends HTMLNode
 	public String toHTML() {
 		return "</"+tagContents+">";
 	}
-public String toString() {
-	return "EndTag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-}
+	public String toString() {
+		return "EndTag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+	}
 }

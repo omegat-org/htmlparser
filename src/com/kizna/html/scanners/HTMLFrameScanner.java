@@ -116,7 +116,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)
 	 */
-	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
 		HTMLNode node;
 		String frame, frameName, linkText="";
@@ -130,8 +130,6 @@ public class HTMLFrameScanner extends HTMLTagScanner
 		frameBegin = tag.elementBegin();
 		frameEnd = tag.elementEnd();
 		HTMLFrameTag frameTag = new HTMLFrameTag(frame, frameName, tag.getText(), frameBegin,frameEnd,currentLine);
-		frameTag.setThisScanner(this);
-		frameTag.setParsed(tag.getParsed());
 		return frameTag;
 	}
 }

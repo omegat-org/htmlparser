@@ -85,7 +85,7 @@ public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)
 	 */
-public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws java.io.IOException 
+public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws java.io.IOException 
 {
 	// We know we have style stuff. 
 	// Parse on till the end tag </style> is found
@@ -99,14 +99,13 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 		node = reader.readElement();
 		if (node instanceof HTMLEndTag) {
 			endTag = (HTMLEndTag)node;
-			if (endTag.getContents().toUpperCase().equals("STYLE")) {
+			if (endTag.getText().toUpperCase().equals("STYLE")) {
 				endStyleFound = true;
 			}
 		} else buff.append(node.toHTML());
 	}
 	while (!endStyleFound);
 	HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine);
-	styleTag.setThisScanner(this);
 	return styleTag;
 }
 }

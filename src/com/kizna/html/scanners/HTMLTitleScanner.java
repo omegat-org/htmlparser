@@ -39,7 +39,7 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 	/**
 	 * @see HTMLTagScanner#scan(HTMLTag, String, HTMLReader, String)
 	 */
-	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws IOException {
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws IOException {
 		boolean endFlag = false;
 		String title = "";
 		String tmp;
@@ -56,7 +56,7 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 			if (node instanceof HTMLEndTag)
 			{
 				endTag = (HTMLEndTag)node;
-			    tmp = endTag.getContents();
+			    tmp = endTag.getText();
 			    if (tmp.toUpperCase().equals("TITLE")) {
 			    	endFlag = true;
 			    }
@@ -64,7 +64,6 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 		}
 		while (endFlag==false);
 		HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,tag.getText(),tag.getTagLine());
-		titleTag.setThisScanner(this);
 		return titleTag;		
 	}
 

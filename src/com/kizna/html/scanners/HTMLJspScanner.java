@@ -97,13 +97,12 @@ public void extractLanguage(HTMLTag tag)
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */
-public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws java.io.IOException 
+public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws java.io.IOException 
 {
 	// Find the JSP Tag - basically remove the first and last character
 	String tagContents = tag.getText();
 	tagContents=tagContents.substring(1,tagContents.length()-1);
 	HTMLJspTag jspTag = new HTMLJspTag(tag.elementBegin(),tag.elementEnd(),tagContents,currentLine);
-	jspTag.setThisScanner(this);
 	return jspTag;
 
 }

@@ -40,7 +40,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	{
 		super(filter);
 	}
-	protected HTMLNode createLinkTag(String currentLine, HTMLNode node, boolean mailLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector) {
+	protected HTMLTag createLinkTag(String currentLine, HTMLNode node, boolean mailLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector) {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
@@ -147,7 +147,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	 * @param reader The HTML reader used to read this url
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */
-	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
 		if (previousOpenLinkScanner!=null) {
 			// Fool the reader into thinking this is an end tag (to handle dirty html, where there is 
@@ -156,14 +156,14 @@ public class HTMLLinkScanner extends HTMLTagScanner
 				// Replace tag - it was a <A> tag - replace with </a>
 				String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
 				reader.changeLine(newLine);
-				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A");
+				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
 			}
 			 else 
 			{
 				// Insert end tag
 				String newLine = insertEndTagBeforeNode(tag, currentLine);
 				reader.changeLine(newLine);
-				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A");
+				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
 			}
 		}
 		previousOpenLinkScanner = this;
@@ -206,7 +206,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			}
 			if (node instanceof HTMLEndTag)
 			{
-			    tmp = ((HTMLEndTag)node).getContents();
+			    tmp = ((HTMLEndTag)node).getText();
 			    linkContents += "</" + tmp  ;   // Kaarle Kaila 23.10.2001
 				char ch = tmp.charAt(0);
 				if (ch=='a' || ch=='A') endFlag=true; else {
@@ -221,7 +221,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 						String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
 						reader.changeLine(newLine);
 						endFlag = true;
-						node = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A");
+						node = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A",newLine);
 					}
 				}
 			} 

@@ -122,7 +122,7 @@ public java.lang.String getType() {
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */
-public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws java.io.IOException 
+public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws java.io.IOException 
 {
 	// We know we have script stuff. So first extract the information from the tag about the language
 	extractLanguage(tag);
@@ -137,7 +137,7 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 		node = reader.readElement();
 		if (node instanceof HTMLEndTag) {
 			endTag = (HTMLEndTag)node;
-			if (endTag.getContents().toUpperCase().equals("SCRIPT")) 
+			if (endTag.getText().toUpperCase().equals("SCRIPT")) 
 			{
 				endScriptFound = true;
 				// Check if there was anything in front of endTag, and if so, add it to the code buffer
@@ -153,7 +153,7 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 	}
 	while (!endScriptFound);
 	HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
-	scriptTag.setThisScanner(this);
+
 	return scriptTag; 
 }
 /**

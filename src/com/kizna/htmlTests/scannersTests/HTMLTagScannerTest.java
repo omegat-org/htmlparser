@@ -135,7 +135,7 @@ public void testIsXMLTag() {
 public void testRemoveChars() {
 	String test = "hello\nworld\n\tqsdsds";
 	HTMLTagScanner scanner = new HTMLTagScanner() { 
-		public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currLine) { return null;}
+		public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) { return null;}
 		public boolean evaluate(String s,HTMLTagScanner previousOpenScanner) { return false; }
 	};
 	String result = scanner.removeChars(test,'\n');

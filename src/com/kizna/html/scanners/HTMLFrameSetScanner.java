@@ -98,7 +98,7 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)
 	 */
-	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
 		/* Remove all the existing scanners and register only the frame scanner. Proceed scanning till end
 		 * tag is found. Then register all the scanners back.
@@ -114,7 +114,7 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 			node = reader.readElement();
 			if (node instanceof HTMLEndTag) {
 				HTMLEndTag endTag = (HTMLEndTag)node;
-				if (endTag.getContents().toUpperCase().equals("FRAMESET")) {
+				if (endTag.getText().toUpperCase().equals("FRAMESET")) {
 					endFrameSetFound = true;
 					frameSetEnd = endTag.elementEnd();
 				}
@@ -125,8 +125,6 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 		}
 		while(!endFrameSetFound);
 		HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector);
-		frameSetTag.setThisScanner(this);
-		frameSetTag.setParsed(tag.getParsed());
 		restoreScanners(reader, tempScannerVector);
 		return frameSetTag;		
 	}

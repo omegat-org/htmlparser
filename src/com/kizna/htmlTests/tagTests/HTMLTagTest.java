@@ -248,7 +248,7 @@ public void testNestedTags() {
                 if (en.hasMoreElements()) {
                     o = en.nextElement();        
                     etag = (HTMLEndTag)o;        
-                    assertEquals("endtag of link",etag.getContents(),"A");
+                    assertEquals("endtag of link",etag.getText(),"A");
                 }
             }
             // testing rest
@@ -266,7 +266,7 @@ public void testNestedTags() {
             if (en.hasMoreElements()) {
                 o = en.nextElement();        
                 etag = (HTMLEndTag)o;        
-                assertEquals("paragrapg endtag",etag.getContents(),"p");
+                assertEquals("paragrapg endtag",etag.getText(),"p");
             }
             
         } catch (ClassCastException ce) {
@@ -318,7 +318,7 @@ public void testNestedTags() {
             if (en.hasMoreElements()) {
                 o = en.nextElement();        
                 etag = (HTMLEndTag)o;        
-                assertEquals("Endtag is G",etag.getContents(),"G");
+                assertEquals("Endtag is G",etag.getText(),"G");
             }
             // testing rest
             if (en.hasMoreElements()) {
@@ -335,7 +335,7 @@ public void testNestedTags() {
             if (en.hasMoreElements()) {
                 o = en.nextElement();        
                 etag = (HTMLEndTag)o;        
-                assertEquals("Still patragraph endtag",etag.getContents(),"p");
+                assertEquals("Still patragraph endtag",etag.getText(),"p");
             }
             
         } catch (ClassCastException ce) {
@@ -439,25 +439,27 @@ public void testToHTML() {
         try {
             while (en.hasMoreElements()) {                
                 o = en.nextElement();                        
-                if (o instanceof HTMLTag) {
-                    tag = (HTMLTag)o;     
-                    result += "<" + tag.getText() + ">";
-                }
-                else if (o instanceof HTMLStringNode) {
-                    snode = (HTMLStringNode)o;   
-                    result += snode.getText();
-                }
-                else {
-                    etag = (HTMLEndTag)o;        
-                    result += "</" + etag.getContents() + ">";
-                }
+                HTMLNode node = (HTMLNode)o;
+                result += node.toHTML();
             }
-            assertEquals("Check collected contents to original",result,data);            
+            assertStringEquals("Check collected contents to original",result,data);            
         } catch (ClassCastException ce) {
             fail("Bad class element = " + o.getClass().getName());
         }
 
     }
+	public void assertStringEquals(String message,String s1,String s2) {
+		for (int i=0;i<s1.length();i++) {
+			if (s1.charAt(i)!=s2.charAt(i)) {
+				assertTrue(message+
+					" \nMismatch of strings at char posn "+i+
+					" \nString 1 upto mismatch = "+s1.substring(0,i)+
+					" \nString 2 upto mismatch = "+s2.substring(0,i)+
+					" \nString 1 mismatch character = "+s1.charAt(i)+", code = "+(int)s1.charAt(i)+
+					" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i),false);
+			}
+		}
+	}    
     /**
     * Test parseParameter method
     * Created by Kaarle Kaila (22 Oct 2001)
@@ -476,19 +478,9 @@ public void testToHTML() {
         String result="";
         try {
             while (en.hasMoreElements()) {                
-                o = en.nextElement();                        
-                if (o instanceof HTMLTag) {
-                    tag = (HTMLTag)o;     
-                    result += "<" + tag.getText() + ">";
-                }
-                else if (o instanceof HTMLStringNode) {
-                    snode = (HTMLStringNode)o;   
-                    result += snode.getText();
-                }
-                else {
-                    etag = (HTMLEndTag)o;        
-                    result += "</" + etag.getContents() + ">";
-                }
+                o = en.nextElement();   
+                HTMLNode node = (HTMLNode)o;                     
+                result += node.toHTML();
             }
             assertEquals("Check collected contents to original",result,lin1);            
         } catch (ClassCastException ce) {

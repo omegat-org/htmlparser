@@ -111,7 +111,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */	
-	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
 		HTMLNode node;
 		String link,linkText="";
@@ -124,8 +124,6 @@ public class HTMLImageScanner extends HTMLTagScanner
 		linkBegin = tag.elementBegin();
 		linkEnd = tag.elementEnd();
 		HTMLImageTag imageTag = new HTMLImageTag(link,linkBegin,linkEnd,currentLine,tag.getText());
-		imageTag.setThisScanner(this);
-		imageTag.setParsed(table);
 		return imageTag;
 	}
 }

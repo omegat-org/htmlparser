@@ -147,7 +147,7 @@ public void testErroneousLinkBugFromYahoo2() {
 	
 	// Verify their contents
 	HTMLEndTag endTag = (HTMLEndTag)node[1];
-	assertEquals("Second node","td",endTag.getContents());
+	assertEquals("Second node","td",endTag.getText());
 	HTMLTag tag = (HTMLTag)node[2];
 	assertEquals("Third node","td nowrap",tag.getText());
 	HTMLStringNode stringNode = (HTMLStringNode)node[3];
@@ -409,6 +409,6 @@ public void testFreshMeatBug() {
 	assertEquals("StringNode Contents","Revision",stringNode.getText());
 	assertTrue("Node 2 should be a string node",node[2] instanceof HTMLEndTag);
 	HTMLEndTag endTag = (HTMLEndTag)node[2];
-	assertEquals("End Tag Contents","a",endTag.getContents());
+	assertEquals("End Tag Contents","a",endTag.getText());
 }
 }

@@ -124,7 +124,7 @@ public java.lang.String getCodebase() {
 	 * @param url The initiating url of the scan (Where the html page lies)
 	 * @param reader The reader object responsible for reading the html page
 	 */
-public com.kizna.html.HTMLNode scan(HTMLTag tag, String url, com.kizna.html.HTMLReader reader, String currLine) throws java.io.IOException 
+public HTMLTag scan(HTMLTag tag, String url, com.kizna.html.HTMLReader reader, String currLine) throws java.io.IOException 
 {
 	String tagContents = tag.getText();
 	// From the tagContents, get the class name, archive, codebase
@@ -142,7 +142,7 @@ public com.kizna.html.HTMLNode scan(HTMLTag tag, String url, com.kizna.html.HTML
 		node = reader.readElement();
 		if (node instanceof HTMLEndTag) {
 			endTag = (HTMLEndTag)node;
-			if (endTag.getContents().toUpperCase().equals("APPLET")) 
+			if (endTag.getText().toUpperCase().equals("APPLET")) 
 			{
 				endScriptFound = true; 
 			}
@@ -164,7 +164,6 @@ public com.kizna.html.HTMLNode scan(HTMLTag tag, String url, com.kizna.html.HTML
 	while (!endScriptFound);
 	
 	HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,misc);
-	appTag.setThisScanner(this);
 	return appTag;
 }
 /**

@@ -121,7 +121,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)
 	 */
-	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
 		HTMLNode node;
       	Vector inputVector = new Vector(), nodeVector = new Vector();
@@ -140,7 +140,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 			if (node instanceof HTMLEndTag)
 			{
 				HTMLEndTag endTag = (HTMLEndTag)node;
-				if (endTag.getContents().toUpperCase().equals("FORM")) {
+				if (endTag.getText().toUpperCase().equals("FORM")) {
 					endFlag=true;
 					linkEnd = endTag.elementEnd();
 				}
@@ -155,7 +155,6 @@ public class HTMLFormScanner extends HTMLTagScanner
 		}
 		while (endFlag==false);
 		HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,nodeVector);
-        formTag.setThisScanner(this);
 		return formTag;
 	}
 
