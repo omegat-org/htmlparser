@@ -46,8 +46,14 @@ public class Robot {
  * Robot crawler - Provide the starting url 
  */
 public Robot(String resourceLocation) {
-  parser = new HTMLParser(resourceLocation);
-  parser.registerScanners();
+	try {
+	  parser = new HTMLParser(resourceLocation);
+	  parser.registerScanners();
+	}
+	catch (HTMLParserException e) {
+		System.err.println("Error, could not create parser object");
+		e.printStackTrace();
+	}
 }
 /**
  * Crawl using a given crawl depth.

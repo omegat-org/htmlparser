@@ -52,8 +52,14 @@ public class MailRipper {
  * @param resourceLocation url to be ripped
  */
 public MailRipper(String resourceLocation) {
-  parser = new HTMLParser(resourceLocation);
-  parser.registerScanners();
+	try {
+	  parser = new HTMLParser(resourceLocation);
+	  parser.registerScanners();
+	}
+	catch (HTMLParserException e) {
+		System.err.println("Could not create parser object");
+		e.printStackTrace();
+	}
 }
 public static void main(String[] args) {
   System.out.println("Mail Ripper v"+HTMLParser.VERSION_STRING);
