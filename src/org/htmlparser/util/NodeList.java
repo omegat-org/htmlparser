@@ -32,6 +32,7 @@ import java.util.NoSuchElementException;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.filters.NodeClassFilter;
+import org.htmlparser.visitors.NodeVisitor;
 
 public class NodeList implements Serializable {
     private static final int INITIAL_CAPACITY=10;
@@ -299,5 +300,28 @@ public class NodeList implements Serializable {
     public NodeList searchFor (Class classType, boolean recursive)
     {
         return (extractAllNodesThatMatch (new NodeClassFilter (classType), recursive));
+    }
+
+    /**
+     * Utility to apply a visitor to a node list.
+     * Provides for a visitor to modify the contents of a page and get the
+     * modified HTML as a string with code like this:
+     * <pre>
+     * Parser parser = new Parser ("http://whatever");
+     * NodeList list = parser.parse (null); // no filter
+     * list.visitAllNodesWith (visitor);
+     * System.out.println (list.toHtml ());
+     * </pre>
+     */
+    public void visitAllNodesWith (NodeVisitor visitor)
+        throws
+            ParserException
+    {
+        Node node;
+
+        visitor.beginParsing ();
+        for (int i = 0; i < size; i++)
+            nodeData[i].accept (visitor);
+        visitor.finishedParsing ();
     }
 }

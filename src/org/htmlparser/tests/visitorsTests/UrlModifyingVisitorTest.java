@@ -27,7 +27,12 @@
 package org.htmlparser.tests.visitorsTests;
 
 import org.htmlparser.Parser;
+import org.htmlparser.Tag;
+import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.visitors.NodeVisitor;
 import org.htmlparser.visitors.UrlModifyingVisitor;
 
 public class UrlModifyingVisitorTest extends ParserTestCase {
@@ -61,6 +66,34 @@ public class UrlModifyingVisitorTest extends ParserTestCase {
             new UrlModifyingVisitor("localhost://");
         parser.visitAllNodesWith(visitor);
         String result = visitor.getModifiedResult();
+        assertStringEquals("Expected HTML",
+            MODIFIED_HTML,
+            result);
+    }
+
+    /**
+     * Test a better method of modifying an HTML page.
+     */
+    public void testPageModification ()
+        throws
+            Exception
+    {
+        Parser parser = Parser.createParser (HTML_WITH_LINK, null);
+        NodeList list = parser.parse (null); // no filter
+        // make an inner class that does the same thing as the UrlModifyingVisitor
+        NodeVisitor visitor = new NodeVisitor ()
+        {
+            String linkPrefix = "localhost://";
+            public void visitTag (Tag tag)
+            {
+                if (tag instanceof LinkTag)
+                    ((LinkTag)tag).setLink(linkPrefix + ((LinkTag)tag).getLink());
+                else if (tag instanceof ImageTag)
+                    ((ImageTag)tag).setImageURL(linkPrefix + ((ImageTag)tag).getImageURL());
+            }
+        };
+        list.visitAllNodesWith (visitor);
+        String result = list.toHtml ();
         assertStringEquals("Expected HTML",
             MODIFIED_HTML,
             result);
