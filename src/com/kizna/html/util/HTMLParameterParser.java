@@ -66,6 +66,7 @@ public class HTMLParameterParser {
         boolean isDoubleQuote=false;
         boolean isSingleQuote=false;
         boolean isValue=false;
+        boolean isValueInited=false;
         boolean isName=true;
         boolean waitingForValue = false;
         name=null;
@@ -91,10 +92,12 @@ public class HTMLParameterParser {
             } else if (currentToken.charAt(0)==doubleQuote){                
                 isDoubleQuote= true;
                 tokenAccumulator = "";
+                isValueInited=true;
                 continue;
             } else if (currentToken.charAt(0)==singleQuote){
                 isSingleQuote=true;
                 tokenAccumulator="";
+                isValueInited=true;
                 continue;                
             } else tokenAccumulator = currentToken;
             
@@ -102,9 +105,9 @@ public class HTMLParameterParser {
             // - a delimter
             // - a name of a parameter or the tag itself
             // - a value of a parameter
-            if (delim.indexOf(tokenAccumulator)>=0) {
+            if (!isValueInited && delim.indexOf(tokenAccumulator)>=0) {
                 // tokenAccumulator was a delimiter
-                if (waitingForValue) {
+                if ( waitingForValue) {
                   if (tokenAccumulator.charAt(0)==equalTo) {
                         // here set to receive next value of parameter
                         waitingForValue=false;

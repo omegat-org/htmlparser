@@ -23,13 +23,30 @@ public class HTMLParameterParserTest extends TestCase {
 		Hashtable table = parser.parseParameters(tag);
 		assertEquals("Value","c",table.get("B"));
 	}
+	public void testParseTokenValues() {
+		HTMLParameterParser parser = new HTMLParameterParser();
+		HTMLTag tag = new HTMLTag(0,0,"a b = \"'\"","");
+		Hashtable table = parser.parseParameters(tag);
+		assertEquals("Value","'",table.get("B"));
+	}
+        
 	public void testParseEmptyValues() {
 		HTMLParameterParser parser = new HTMLParameterParser();
 		HTMLTag tag = new HTMLTag(0,0,"a b = \"\"","");
 		Hashtable table = parser.parseParameters(tag);
-		assertEquals("Value","",table.get("B"));
-		
+		assertEquals("Value","",table.get("B"));		
 	}
+
+	public void testParseMissingEqual() {
+		HTMLParameterParser parser = new HTMLParameterParser();
+		HTMLTag tag = new HTMLTag(0,0,"a b\"c\"","");
+		Hashtable table = parser.parseParameters(tag);
+		assertEquals("Value","",table.get("B"));
+                assertEquals("Value","",table.get("C"));
+	}
+        
+
+        
 	public static TestSuite suite() {
 		return new TestSuite(HTMLParameterParserTest.class);
 	}
