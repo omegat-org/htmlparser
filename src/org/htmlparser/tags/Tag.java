@@ -52,8 +52,8 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class Tag extends TagNode
 {
-    TagScanner mScanner;
-    TagData mData;
+    private TagScanner mScanner;
+    private TagData mData;
 
     public Tag (TagNode node, TagScanner scanner)
     {

@@ -97,7 +97,7 @@ public class Page
     };
 
     /**
-     * Construct an empty page reading.
+     * Construct an empty page.
      */
     public Page ()
     {
@@ -168,6 +168,13 @@ public class Page
     // Serialization support
     //
 
+    /**
+     * Serialize the page.
+     * There are two modes to serializing a page based on the connected state.
+     * If connected, the URL and the current offset is saved, while if
+     * disconnected, the underling source is saved.
+     * @param out The object stream to store this object in.
+     */
     private void writeObject (ObjectOutputStream out)
         throws
             IOException
@@ -203,6 +210,11 @@ public class Page
         }
     }
 
+    /**
+     * Deserialize the page.
+     * @see #writeObject
+     * @param in The object stream to decode.
+     */
     private void readObject (ObjectInputStream in)
         throws
             IOException,
@@ -274,6 +286,8 @@ public class Page
 
     /**
      * Set the URLConnection to be used by this page.
+     * Starts reading from the given connection.
+     * This also resets the current url.
      * @param connection The connection to use.
      * It will be connected by this method.
      * @exception ParserException If the <code>connect()</code> method fails,
@@ -336,7 +350,11 @@ public class Page
 
     /**
      * Get the URL for this page.
-     * @return The url for the connection, or <code>null</code> if there is none.
+     * This is only available if the page has a connection
+     * (<code>getConnection()</code> returns non-null), or the document base has
+     * been set via a call to <code>setUrl()</code>.
+     * @return The url for the connection, or <code>null</code> if there is
+     * no conenction or the document base has not been set.
      */
     public String getUrl ()
     {
@@ -617,9 +635,10 @@ public class Page
     }
 
     /**
-     * Try and extract the character set from the HTTP header.
-     * @param connection The connection with the charset info.
-     * @return The character set name to use for this HTML page.
+     * Resets this page and begins reading from the source with the
+     * given character set.
+     * @param character_set The character set to use to convert bytes into
+     * characters.
      */
     public void setEncoding (String character_set)
         throws
@@ -631,58 +650,16 @@ public class Page
         try
         {
             stream.reset ();
-            mIndex = new PageIndex (this);
-            mSource = new Source (stream, character_set);
+            if (!getEncoding ().equals (character_set))
+            {
+                mSource = new Source (stream, character_set);
+                mIndex = new PageIndex (this);
+            }
         }
         catch (IOException ioe)
         {
             throw new ParserException (ioe.getMessage (), ioe);
         }
-        
-// code from Parser:
-
-//     /* If there is no connection (getConnection() returns null) it simply sets
-//     * the character set name stored in the parser (Note: the lexer object
-//     * which must have been set in the constructor or by <code>setLexer()</code>,
-//     * may or may not be using this character set).
-////     * Otherwise (getConnection() doesn't return null) it does this by reopening the
-////     * input stream of the connection and creating a reader that uses this
-////     * character set. In this case, this method sets two of the fields in the
-////     * parser object; <code>character_set</code> and <code>reader</code>.
-////     * It does not adjust <code>resourceLocn</code>, <code>url_conn</code>,
-////     * <code>scanners</code> or <code>feedback</code>. The two fields are set
-////     * atomicly by this method, either they are both set or none of them is set.
-////     * Trying to set the encoding to null or an empty string is a noop.
-////     * @exception ParserException If the opening of the reader
-//     */
-//        String chs;
-//        BufferedInputStream in;
-//
-//        if ((null != encoding) && !"".equals (encoding))
-//            if (null == getConnection ())
-//                character_set = encoding;
-//            else
-//            {
-//                chs = getEncoding ();
-//                in = input;
-//                try
-//                {
-//                    character_set = encoding;
-//                    if (null != getLexer ())
-//                        getLexer ().getPage ().setCharset (encoding);
-//                }
-//                catch (IOException ioe)
-//                {
-//                    String msg = "setEncoding() : Error in opening a connection to " + getConnection ().getURL ().toExternalForm ();
-//                    ParserException ex = new ParserException (msg, ioe);
-//                    feedback.error (msg, ex);
-//                    character_set = chs;
-//                    input = in;
-//                    throw ex;
-//                }
-//            }
-//    }
-//
     }
 
     /**
@@ -733,6 +710,8 @@ public class Page
      * zero based.
      * @return The text from <code>start</code> to <code>end</code>.
      * @see #getText(StringBuffer, int, int)
+     * @exception IllegalArgumentException If an attempt is made to get
+     * characters ahead of the current source offset (character position).
      */
     public String getText (int start, int end)
     {
@@ -751,6 +730,8 @@ public class Page
      * @param end The ending position
      * (exclusive, i.e. the character at the ending position is not included),
      * zero based.
+     * @exception IllegalArgumentException If an attempt is made to get
+     * characters ahead of the current source offset (character position).
      */
     public void getText (StringBuffer buffer, int start, int end)
     {
