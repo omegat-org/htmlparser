@@ -48,7 +48,7 @@ public class StringParserTest extends ParserTestCase {
 	 * &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Google&lt;/TITLE&gt; <BR>
 	 * The above line is incorrectly parsed in that, the text Google is missed.
 	 * The presence of this bug is typically when some tag is identified before the string node is. (usually seen
-	 * with the end tag). The bug lies in HTMLReader.readElement().
+	 * with the end tag). The bug lies in NodeReader.readElement().
 	 * Creation date: (6/17/2001 4:01:06 PM)
 	 */
 	public void testStringNodeBug1() throws ParserException {

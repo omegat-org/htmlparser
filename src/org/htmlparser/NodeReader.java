@@ -44,12 +44,12 @@ import org.htmlparser.parserHelper.*;
 import org.htmlparser.scanners.*;
 
 /**
- * HTMLReader builds on the BufferedReader, providing methods to read one element
+ * NodeReader builds on the BufferedReader, providing methods to read one element
  * at a time
  */
 public class NodeReader extends BufferedReader
 {
-	public static final String DECIPHER_ERROR="HTMLReader.readElement() : Error occurred while trying to decipher the tag using scanners";
+	public static final String DECIPHER_ERROR="NodeReader.readElement() : Error occurred while trying to decipher the tag using scanners";
 	protected int posInLine=-1;
 	protected String line;
 	protected Node node = null;
@@ -76,7 +76,7 @@ public class NodeReader extends BufferedReader
 	 * This constructor basically overrides the existing constructor in the
 	 * BufferedReader class.
      * The URL defaults to an empty string.
-     * @see #HTMLReader(Reader,int,String)
+     * @see #NodeReader(Reader,int,String)
 	 */
 
 	public NodeReader(Reader in, int len)
@@ -86,7 +86,7 @@ public class NodeReader extends BufferedReader
 	/**
 	 * The constructor takes in a reader object, and the url to be read.
      * The buffer size defaults to 8192.
-     * @see #HTMLReader(Reader,int,String)
+     * @see #NodeReader(Reader,int,String)
 	 */
 	public NodeReader(Reader in,String url)
 	{
@@ -218,8 +218,11 @@ public class NodeReader extends BufferedReader
 			return null;
 		}
 		catch (Exception e) {
-			StringBuffer msgBuffer = new StringBuffer("HTMLReader.readElement() : Error occurred while trying to read the next element,");
+			StringBuffer msgBuffer = new StringBuffer("NodeReader.readElement() : Error occurred while trying to read the next element,");
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
 			appendLineDetails(msgBuffer);
+			msgBuffer.append("\n Caused by:\n").append(sw.getBuffer());
 			ParserException ex = new ParserException(msgBuffer.toString(),e);
 			parser.getFeedback().error(msgBuffer.toString(),ex);
 			throw ex;			

@@ -267,5 +267,213 @@ public class ScriptScannerTest extends ParserTestCase
 		);
 	}
 
+	public void testScriptWithinComments() throws Exception {
+		createParser(
+			"<script language=\"JavaScript1.2\">" +
+			"\n" +
+			"var linkset=new Array()" +
+			"\n" +
+			"var ie4=document.all&&navigator.userAgent.indexOf(\"Opera\")==-1" +
+			"\n" +
+			"var ns6=document.getElementById&&!document.all" +
+			"\n" +
+			"var ns4=document.layers" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"function showmenu(e,which){" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"if (!document.all&&!document.getElementById&&!document.layers)" +
+			"\n" +
+			"return" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"clearhidemenu()" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"menuobj=ie4? document.all.popmenu : ns6? document.getElementById(\"popmenu\") : ns4? document.popmenu : \"\"\n" +
+			"\n" +
+			"menuobj.thestyle=(ie4||ns6)? menuobj.style : menuobj" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"if (ie4||ns6)" +
+			"\n" +
+			"menuobj.innerHTML=which" +
+			"\n" +
+			"else{" +
+			"\n" +
+			"menuobj.document.write('<layer name=gui bgColor=#E6E6E6 width=165 onmouseover=\"clearhidemenu()\" onmouseout=\"hidemenu()\">'+which+'</layer>')" +
+			"\n" +
+			"menuobj.document.close()" +
+			"\n" +
+			"}" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"menuobj.contentwidth=(ie4||ns6)? menuobj.offsetWidth : menuobj.document.gui.document.width" +
+			"\n" +
+			"menuobj.contentheight=(ie4||ns6)? menuobj.offsetHeight : menuobj.document.gui.document.height" +
+			"\n" +
+			"eventX=ie4? event.clientX : ns6? e.clientX : e.x" +
+			"\n" +
+			"eventY=ie4? event.clientY : ns6? e.clientY : e.y" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"//Find out how close the mouse is to the corner of the window" +
+			"\n" +
+			"var rightedge=ie4? document.body.clientWidth-eventX : window.innerWidth-eventX" +
+			"\n" +
+			"var bottomedge=ie4? document.body.clientHeight-eventY : window.innerHeight-eventY" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"//if the horizontal distance isn't enough to accomodate the width of the context menu" +
+			"\n" +
+			"if (rightedge < menuobj.contentwidth)" +
+			"\n" +
+			"//move the horizontal position of the menu to the left by it's width" +
+			"\n" +
+			"menuobj.thestyle.left=ie4? document.body.scrollLeft+eventX-menuobj.contentwidth : ns6? window.pageXOffset+eventX-menuobj.contentwidth : eventX-menuobj.contentwidth" +
+			"\n" +
+			"else" +
+			"\n" +
+			"//position the horizontal position of the menu where the mouse was clicked" +
+			"\n" +
+			"menuobj.thestyle.left=ie4? document.body.scrollLeft+eventX : ns6? window.pageXOffset+eventX : eventX" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"//same concept with the vertical position" +
+			"\n" +
+			"if (bottomedge<menuobj.contentheight)" +
+			"\n" +
+			"menuobj.thestyle.top=ie4? document.body.scrollTop+eventY-menuobj.contentheight : ns6? window.pageYOffset+eventY-menuobj.contentheight : eventY-menuobj.contentheight" +
+			"\n" +
+			"else" +
+			"\n" +
+			"menuobj.thestyle.top=ie4? document.body.scrollTop+event.clientY : ns6? window.pageYOffset+eventY : eventY" +
+			"\n" +
+			"menuobj.thestyle.visibility=\"visible\"\n" +
+			"\n" +
+			"return false" +
+			"\n" +
+			"}" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"function contains_ns6(a, b) {" +
+			"\n" +
+			"//Determines if 1 element in contained in another- by Brainjar.com" +
+			"\n" +
+			"while (b.parentNode)" +
+			"\n" +
+			"if ((b = b.parentNode) == a)" +
+			"\n" +
+			"return true;" +
+			"\n" +
+			"return false;" +
+			"\n" +
+			"}" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"function hidemenu(){" +
+			"\n" +
+			"if (window.menuobj)" +
+			"\n" +
+			"menuobj.thestyle.visibility=(ie4||ns6)? \"hidden\" : \"hide\"\n" +
+			"\n" +
+			"}" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"function dynamichide(e){" +
+			"\n" +
+			"if (ie4&&!menuobj.contains(e.toElement))" +
+			"\n" +
+			"hidemenu()" +
+			"\n" +
+			"else if (ns6&&e.currentTarget!= e.relatedTarget&& !contains_ns6(e.currentTarget, e.relatedTarget))" +
+			"\n" +
+			"hidemenu()" +
+			"\n" +
+			"}" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"function delayhidemenu(){" +
+			"\n" +
+			"if (ie4||ns6||ns4)" +
+			"\n" +
+			"delayhide=setTimeout(\"hidemenu()\",500)" +
+			"\n" +
+			"}" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"function clearhidemenu(){" +
+			"\n" +
+			"if (window.delayhide)" +
+			"\n" +
+			"clearTimeout(delayhide)" +
+			"\n" +
+			"}" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"function highlightmenu(e,state){" +
+			"\n" +
+			"if (document.all)" +
+			"\n" +
+			"source_el=event.srcElement" +
+			"\n" +
+			"else if (document.getElementById)" +
+			"\n" +
+			"source_el=e.target" +
+			"\n" +
+			"if (source_el.className==\"menuitems\"){" +
+			"\n" +
+			"source_el.id=(state==\"on\")? \"mouseoverstyle\" : \"\"\n" +
+			"\n" +
+			"}" +
+			"\n" +
+			"else{" +
+			"\n" +
+			"while(source_el.id!=\"popmenu\"){" +
+			"\n" +
+			"source_el=document.getElementById? source_el.parentNode : source_el.parentElement" +
+			"\n" +
+			"if (source_el.className==\"menuitems\"){" +
+			"\n" +
+			"source_el.id=(state==\"on\")? \"mouseoverstyle\" : \"\"\n" +
+			"\n" +
+			"}" +
+			"\n" +
+			"}" +
+			"\n" +
+			"}" +
+			"\n" +
+			"}" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"if (ie4||ns6)" +
+			"\n" +
+			"document.onclick=hidemenu" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"</script>" 
+		);
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+	
+	}	
 
 }

@@ -133,7 +133,7 @@ public class RemarkNodeParserTest extends ParserTestCase
 		parseAndAssertNodeCount(2);
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a string node",node[0] instanceof StringNode);
-		assertTrue("Second node should be a HTMLTag",node[1] instanceof Tag);
+		assertTrue("Second node should be a Tag",node[1] instanceof Tag);
 		StringNode stringNode = (StringNode)node[0];
 		Tag tag = (Tag)node[1];
 		assertEquals("Text contents","&nbsp;",stringNode.getText());
@@ -206,7 +206,7 @@ public class RemarkNodeParserTest extends ParserTestCase
 		"ssd -->");
 		Parser.setLineSeparator("\n");
 		parseAndAssertNodeCount(1);
-		assertTrue("Node should be a HTMLTag but was "+node[0],node[0] instanceof Tag);
+		assertTrue("Node should be a Tag but was "+node[0],node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
 		assertStringEquals("Expected contents","!\n"+
 		"-\n"+

@@ -250,7 +250,7 @@ public class Tag extends Node
 	/**
 	 * Scan the tag to see using the registered scanners, and attempt identification.
 	 * @param url URL at which HTML page is located
-	 * @param reader The HTMLReader that is to be used for reading the url
+	 * @param reader The NodeReader that is to be used for reading the url
 	 */
 	public Node scan(Hashtable scanners,String url,NodeReader reader) throws ParserException
 	{
@@ -285,7 +285,7 @@ public class Tag extends Node
 		catch (Exception e) {
 			String errorMsg;
 			if (tagContents!=null) errorMsg = tagContents.toString(); else errorMsg="null";
-			throw new ParserException("HTMLTag.scan() : Error while scanning tag, tag contents = "+errorMsg+", tagLine = "+tagLine,e);
+			throw new ParserException("Tag.scan() : Error while scanning tag, tag contents = "+errorMsg+", tagLine = "+tagLine,e);
 		}
 	}
 

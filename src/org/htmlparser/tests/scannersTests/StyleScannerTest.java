@@ -102,4 +102,5 @@ public class StyleScannerTest extends ParserTestCase
 		"//-->";
 		assertStringEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
 	}
+	
 }

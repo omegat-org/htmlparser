@@ -56,8 +56,8 @@ public class TagTest extends ParserTestCase
 	public void testBodyTagBug1() throws ParserException {
 		createParser("<BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\nvLink=#551a8b>");
 		parseAndAssertNodeCount(1);
-		// The node should be an HTMLTag
-		assertTrue("Node should be a HTMLTag",node[0] instanceof Tag);
+		// The node should be an Tag
+		assertTrue("Node should be a Tag",node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
 		assertEquals("Contents of the tag","BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\r\nvLink=#551a8b",tag.getText());
 	}
@@ -78,8 +78,8 @@ public class TagTest extends ParserTestCase
 			"mnop>"
 		);
 		parseAndAssertNodeCount(1);
-		// The node should be an HTMLTag
-		assertTrue("Node should be a HTMLTag",node[0] instanceof Tag);
+		// The node should be an Tag
+		assertTrue("Node should be a Tag",node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
 		assertEquals("Contents of the tag","MYTAG abcd\r\nefgh\r\nijkl\r\nmnop",tag.getText());
 
@@ -95,7 +95,7 @@ public class TagTest extends ParserTestCase
 		String line = "<"+s+">";
 	    createParser(line);
 		parseAndAssertNodeCount(1);
-		assertTrue("The node found should have been an HTMLTag",node[0] instanceof Tag);
+		assertTrue("The node found should have been an Tag",node[0] instanceof Tag);
 		Tag tag = (Tag) node[0];
 		assertEquals("Tag Contents",s,tag.getText());
 	}
@@ -371,12 +371,12 @@ public class TagTest extends ParserTestCase
 		);
 		createParser(testHTML);
 		parseAndAssertNodeCount(7);
-		// The node should be an HTMLTag
-		assertTrue("1st Node should be a HTMLTag",node[0] instanceof Tag);
+		// The node should be an Tag
+		assertTrue("1st Node should be a Tag",node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
 		assertStringEquals("toHTML()","<MYTAG EFGH=\"\" ABCD=\"\" MNOP=\"\" IJKL=\"\">",tag.toHtml());
-		assertTrue("2nd Node should be a HTMLTag",node[1] instanceof Tag);
-		assertTrue("5th Node should be a HTMLTag",node[4] instanceof Tag);
+		assertTrue("2nd Node should be a Tag",node[1] instanceof Tag);
+		assertTrue("5th Node should be a Tag",node[4] instanceof Tag);
 		tag = (Tag)node[1];
 		assertEquals("Raw String of the tag","<TITLE>",tag.toHtml());
 		tag = (Tag)node[4];

@@ -197,7 +197,7 @@ public abstract class TagScanner
      * Scan the tag and extract the information related to this type. The url of the 
 	 * initiating scan has to be provided in case relative links are found. The initial 
 	 * url is then prepended to it to give an absolute link.
-	 * The HTMLReader is provided in order to do a lookahead operation. We assume that
+	 * The NodeReader is provided in order to do a lookahead operation. We assume that
 	 * the identification has already been performed using the evaluate() method.
 	 * @param tag HTML Tag to be scanned for identification
 	 * @param url The initiating url of the scan (Where the html page lies)

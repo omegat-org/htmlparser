@@ -70,7 +70,7 @@ public class AttributeParser {
 	*    Hashtable h;
 	*    String tmp;
     *    try {
-    *        HTMLReader in = new HTMLReader(new FileReader(path),2048);
+    *        NodeReader in = new NodeReader(new FileReader(path),2048);
     *        Parser p = new Parser(in);
     *        Enumeration en = p.elements();
     *        while (en.hasMoreElements()) {

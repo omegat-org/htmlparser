@@ -63,8 +63,8 @@ public class LinkScannerTest extends ParserTestCase
 		createParser("<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>");
 		parser.registerScanners();
 		parseAndAssertNodeCount(5);
-		// The first node should be a HTMLTag 
-		assertTrue("First node should be a HTMLTag",node[0] instanceof Tag);
+		// The first node should be a Tag 
+		assertTrue("First node should be a Tag",node[0] instanceof Tag);
 		// The second node should be a HTMLStringNode
 		assertTrue("Second node should be a HTMLStringNode",node[1] instanceof StringNode);
 		StringNode stringNode = (StringNode)node[1];
@@ -111,7 +111,7 @@ public class LinkScannerTest extends ParserTestCase
 
 		parser.registerScanners();
 		parseAndAssertNodeCount(2);
-		// The first node should be a HTMLTag 
+		// The first node should be a Tag 
 		assertTrue("First node should be a HTMLLinkTag",node[0] instanceof LinkTag);
 		// The second node should be a HTMLStringNode
 		assertTrue("Second node should be a HTMLLinkTag",node[1] instanceof LinkTag);
@@ -336,10 +336,10 @@ public class LinkScannerTest extends ParserTestCase
 		assertEquals("Image Width","468",imageTag.getAttribute("WIDTH"));
 		assertEquals("Image Border","0",imageTag.getAttribute("BORDER"));
 		assertEquals("Image Alt","See Signs in Theaters 8-2 - Starring Mel Gibson",imageTag.getAttribute("ALT"));
-		assertTrue("Second contained node should be HTMLTag",containedNodes[1] instanceof Tag);
+		assertTrue("Second contained node should be Tag",containedNodes[1] instanceof Tag);
 		Tag tag1 = (Tag)containedNodes[1];
 		assertEquals("Tag Contents","font face=\"verdana,arial,helvetica\" SIZE=\"1\"",tag1.getText());
-		assertTrue("Third contained node should be HTMLTag",containedNodes[2] instanceof Tag);
+		assertTrue("Third contained node should be Tag",containedNodes[2] instanceof Tag);
 		Tag tag2 = (Tag)containedNodes[2];
 		assertEquals("Tag Contents","b",tag2.getText());
 		assertTrue("Fourth contained node should be HTMLEndTag",containedNodes[3] instanceof EndTag);		

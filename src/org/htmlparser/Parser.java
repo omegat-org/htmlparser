@@ -220,7 +220,7 @@ public class Parser
      * Zero argument constructor.
      * The parser is in a safe but useless state.
      * Set the reader or connection using setReader() or setConnection().
-     * @see #setReader(HTMLReader)
+     * @see #setReader(NodeReader)
      * @see #setConnection(URLConnection)
      */
     public Parser ()
@@ -578,7 +578,7 @@ public class Parser
 
 	/**
 	 * Returns the reader associated with the parser
-	 * @return HTMLReader
+	 * @return NodeReader
 	 */
 	public NodeReader getReader() {
 		return reader;
