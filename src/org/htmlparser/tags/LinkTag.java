@@ -230,7 +230,7 @@ public class LinkTag extends CompositeTag
 
 	public void setLink(String link) {
 		this.link = link;
-		attributes.put("HREF",link);
+        setAttribute ("HREF", link);
 	}
 
 	/**

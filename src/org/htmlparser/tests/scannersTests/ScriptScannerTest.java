@@ -554,7 +554,7 @@ public class ScriptScannerTest extends ParserTestCase
 		parser.addScanner(new ScriptScanner("-s"));
 		parseAndAssertNodeCount(1);
         String s = node[0].toHtml ();
-        assertEquals ("Parse error","<SCRIPT LANGUAGE=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>",s);
+        assertStringEquals ("Parse error","<SCRIPT LANGUAGE=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>",s);
 	}
 	
 	

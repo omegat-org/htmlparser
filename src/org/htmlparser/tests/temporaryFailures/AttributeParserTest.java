@@ -57,7 +57,7 @@ public class AttributeParserTest extends ParserTestCase {
 	
 	public void getParameterTableFor(String tagContents) {
 		tag = new Tag(new TagData(0,0,tagContents,""));
-		table = parser.parseAttributes(tag);
+		table = parser.parseAttributes(tag.getText ());
 		
 	}
 	

@@ -48,6 +48,8 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 
 public class ParserTestCase extends TestCase {
+    
+    static boolean mCaseInsensitiveComparisons = true;
 	protected Parser parser;
 	protected Node node [];
 	protected int nodeCount;
@@ -120,8 +122,9 @@ public class ParserTestCase extends TestCase {
 							i >= (expected.length()-1 ) || 
 							i >= (actual.length()-1 )
 						)
-					) || 
-					(actual.charAt(i) != expected.charAt(i))
+					) ||
+                    (mCaseInsensitiveComparisons && Character.toUpperCase (actual.charAt(i)) != Character.toUpperCase (expected.charAt(i))) ||
+					(!mCaseInsensitiveComparisons && (actual.charAt(i) != expected.charAt(i)))
 				) {
 					StringBuffer errorMsg = new StringBuffer();
 					errorMsg.append(

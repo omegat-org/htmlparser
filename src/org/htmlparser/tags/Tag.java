@@ -63,7 +63,6 @@ public class Tag extends AbstractNode
     public final static String NOTHING = "$<NOTHING>$";
 	private final static String EMPTY_STRING="";
 	
-	private AttributeParser attributeParser;
 	private static TagParser tagParser;
 	/**
 	 * Tag contents will have the contents of the comment tag.
@@ -75,7 +74,7 @@ public class Tag extends AbstractNode
 	 * not implemented yet
 	 * added by Kaarle Kaila 23.10.2001
 	 */
-	protected Hashtable attributes=null;
+	protected SpecialHashtable _attributes=null;
 
 	/**
 	 * Scanner associated with this tag (useful for extraction of filtering data from a
@@ -176,9 +175,8 @@ public class Tag extends AbstractNode
 	 * which can be used.
 	 * @return Hashtable
 	 */
-	private Hashtable parseAttributes(){
-	 	attributeParser = new AttributeParser();
-	 	return attributeParser.parseAttributes(this);
+	private SpecialHashtable parseAttributes(){
+	 	return (SpecialHashtable)(new AttributeParser()).parseAttributes(getText ());
 	}
 
 	/**
@@ -186,8 +184,23 @@ public class Tag extends AbstractNode
 	 * parameter not implemented yet
 	 * @param name of parameter
 	 */
-	public String getAttribute(String name){
-	    return (String)getAttributes().get(name.toUpperCase());
+	public String getAttribute(String name)
+    {
+        SpecialHashtable ht;
+        Object ret;
+        
+        ht = getAttributesEx();
+        ret = ht.getRaw(name.toUpperCase());
+        if (null != ret)
+        {
+            ret = ((String[])ret)[1];
+            if (Tag.NULLVALUE == ret)
+                ret = null;
+            else if (Tag.NOTHING == ret)
+                ret = "";
+        }
+
+        return ((String)ret);
 	}
 
 	/**
@@ -196,7 +209,7 @@ public class Tag extends AbstractNode
 	 * @param value
 	 */
 	public void setAttribute(String key, String value) {
-		attributes.put(key,value);
+		_attributes.put(key.toUpperCase (), new String[] {key, value});
 	}
 
 	/**
@@ -206,22 +219,42 @@ public class Tag extends AbstractNode
 	 * @deprecated use getAttribute instead
 	 */
 	public String getParameter(String name){
-		return (String)getAttributes().get(name.toUpperCase());
+		return ((String[])getAttributesEx().get(name.toUpperCase()))[1];
 	}
 	
 	/**
 	 * Gets the attributes in the tag.
-	 * @return Returns a Hashtable of attributes
+     * NOTE: Values of the extended hashtable are two element arrays of String,
+     * with the first element being the original name (not uppercased), 
+     * and the second element being the value.
+	 * @return Returns a special hashtable of attributes in two element String arrays.
 	 */
-	public Hashtable getAttributes() {
-		if (attributes == null) {
-	    	attributes = parseAttributes();
-	    }
-		return attributes;
+	public SpecialHashtable getAttributesEx() {
+		if (_attributes == null)
+	    	_attributes = parseAttributes();
+		return _attributes;
 	}
 
-	public String getTagName(){
-	    return (String)getAttributes().get(TAGNAME);
+	/**
+	 * Gets the attributes in the tag.
+	 * @return Returns a Hashtable of attributes
+	 */
+	public Hashtable getAttributes()
+    {
+        Hashtable ret;
+        
+        ret = new SpecialHashtable ();
+        for (Enumeration e = getAttributesEx ().keys(); e.hasMoreElements(); )
+        {
+			String key = (String)e.nextElement ();
+            ret.put (key, ((String[])getAttributesEx().getRaw(key))[1]);
+        }
+
+        return (ret);
+	}
+
+    public String getTagName(){
+	    return getParameter(TAGNAME);
 	}
 
 	/**
@@ -328,14 +361,33 @@ public class Tag extends AbstractNode
 	}
 
 	/**
-	 * Sets the parsed.
-	 * @param parsed The parsed to set
+	 * Sets the attributes.
+	 * @param attributes The attribute collection to set.
 	 */
-	public void setAttributes(Hashtable attributes) {
-		this.attributes = attributes;
+	public void setAttributes(Hashtable attributes)
+    {
+        SpecialHashtable att = new SpecialHashtable ();
+        for (Enumeration e = attributes.keys (); e.hasMoreElements (); )
+        {
+            String key = (String)e.nextElement ();
+			att.put (key, new String[] { key, (String)attributes.get (key)});
+        }
+		this._attributes = att;
 	}
 
 	/**
+	 * Sets the attributes.
+     * NOTE: Values of the extended hashtable are two element arrays of String,
+     * with the first element being the original name (not uppercased), 
+     * and the second element being the value.
+	 * @param attributes The attribute collection to set.
+	 */
+    public void setAttributesEx (SpecialHashtable attributes)
+    {
+        _attributes = attributes;
+    }
+
+    /**
 	 * Sets the nodeBegin.
 	 * @param nodeBegin The nodeBegin to set
 	 */
@@ -419,14 +471,15 @@ public class Tag extends AbstractNode
     {
 		StringBuffer ret;
 		String key;
-        String value;
+        String value[];
         String empty;
         
         ret = new StringBuffer ();
+        value = (String[])(getAttributesEx().getRaw (TAGNAME));
 		ret.append ("<");
-		ret.append (getTagName ());
+		ret.append (value[1]);
         empty = null;
-		for (Enumeration e = attributes.keys(); e.hasMoreElements(); )
+		for (Enumeration e = getAttributesEx ().keys(); e.hasMoreElements(); )
         {
 			key = (String)e.nextElement ();
 			if (!key.equals (TAGNAME))
@@ -436,15 +489,15 @@ public class Tag extends AbstractNode
                 else
                 {
                     ret.append (" ");
-                    ret.append (key);
-                    value = (String)(((SpecialHashtable)getAttributes()).getRaw (key.toUpperCase ()));
-                    if (Tag.NULLVALUE != value)
+                    value = (String[])(getAttributesEx().getRaw (key.toUpperCase ()));
+                    ret.append (value[0]);
+                    if (Tag.NULLVALUE != value[1])
                     {
                         ret.append ("=");
-                        if (!(Tag.NOTHING == value))
+                        if (!(Tag.NOTHING == value[1]))
                         {
                             ret.append ("\"");
-                            ret.append (value);
+                            ret.append (value[1]);
                             ret.append ("\"");
                         }
                         else
@@ -506,7 +559,7 @@ public class Tag extends AbstractNode
 	 * @deprecated This method is deprecated. Use getAttributes() instead.
 	 */
 	public Hashtable getParsed() {
-		return attributes;
+		return getAttributes ();
 	}
 
 	/**
@@ -518,8 +571,11 @@ public class Tag extends AbstractNode
 	 * really necessary
 	 * @return Hashtable
 	 */
-	public Hashtable redoParseAttributes() {
-		return parseAttributes();
+	public Hashtable redoParseAttributes()
+    {
+        _attributes = null;
+        getAttributesEx ();
+		return (getAttributes ());
 	}
 
 	public void accept(NodeVisitor visitor) {

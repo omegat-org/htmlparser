@@ -672,7 +672,7 @@ public class TagTest extends ParserTestCase
             temp = newNode.toHtml();
         }
         assertNotNull ("No nodes", temp);
-        assertEquals ("Incorrect HTML output: ",
+        assertStringEquals ("Incorrect HTML output: ",
             "<A HREF=\"http://www.google.com/webhp?hl=en\"></A>",
             temp);
     }

@@ -103,7 +103,7 @@ public class AttributeParser {
 	* </pre>
 	*
 	*/
-   public Hashtable parseAttributes(Tag tag) {
+   public Hashtable parseAttributes (String text) {
 		attributeTable = new SpecialHashtable();
 		part = null;
 		empty = null;
@@ -112,7 +112,7 @@ public class AttributeParser {
         element=null;
 		equal = false;
         delim=DELIMETERS;
-		tokenizer = new StringTokenizer(tag.getText(),delim,true);
+		tokenizer = new StringTokenizer(text,delim,true);
         while (true) {
             part=getNextPartUsing(delim);
             delim=DELIMETERS;
@@ -131,7 +131,7 @@ public class AttributeParser {
                 }
             }
         }
-        if (null == element) // handle no tag contents
+        if (null == element) // handle no contents
             putDataIntoTable(attributeTable,"",null,true);
         return attributeTable;
     }
@@ -258,11 +258,11 @@ public class AttributeParser {
         else if (value==null) value = ""; // Hashtable does not accept nulls
         if (isName) {
             // store tagname as tag.TAGNAME,tag
-            h.put(value,name.toUpperCase());
+            h.put(value,new String[] {value, name.toUpperCase()});
         }
         else {
             // store tag parameters as NAME, value
-            h.put(name.toUpperCase(),value);
+            h.put(name.toUpperCase(),new String[] {name, value });
         }
     }
 }

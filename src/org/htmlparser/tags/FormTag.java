@@ -141,7 +141,7 @@ public class FormTag extends CompositeTag
 	 * @param formURL The new FORM location
 	 */
 	public void setFormLocation(String formURL) {
-		attributes.put("ACTION",formURL);
+        setAttribute ("ACTION", formURL);
 		this.formURL = formURL;
 	}
 

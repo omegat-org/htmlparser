@@ -67,7 +67,7 @@ public class ImageTag extends Tag
 
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
-		attributes.put("SRC",imageURL);
+        setAttribute ("SRC", imageURL);
 	}
 
 	public void accept(NodeVisitor visitor) {

@@ -201,7 +201,7 @@ public abstract class TagScanner
 	public final Tag createScannedNode(Tag tag,String url,NodeReader reader,String currLine) throws ParserException {
 		Tag thisTag = scan(tag,url,reader,currLine);
 		thisTag.setThisScanner(this);
-		thisTag.setAttributes(tag.getAttributes());		
+		thisTag.setAttributesEx(tag.getAttributesEx());		
 		return thisTag;
 	}
 	
