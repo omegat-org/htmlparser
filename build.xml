@@ -74,7 +74,7 @@
     <echo message="**********************************"/>
 
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**" debug="on" />
+    <javac srcdir="${src}" destdir="${build}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" />
   </target>
 
   <!-- Create the distribution of htmlparser.jar -->
