@@ -12,6 +12,345 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20040104
+--------------------------------
+
+2004-01-03 22:23  derrickoswald
+
+	* build.xml, docs/bug.html, docs/contributors.html,
+	docs/index.html, docs/joinus.html, docs/mailinglists.html,
+	docs/main.html, docs/panel.html, docs/samples.html,
+	docs/support.html, docs/articles/index.html,
+	docs/articles/quest.html, docs/samples/index.html, bin/beanybaby,
+	bin/beanybaby.bat, bin/stringextractor, bin/stringextractor.bat,
+	src/org/htmlparser/Parser.java,
+	src/org/htmlparser/beans/LinkBean.java,
+	src/org/htmlparser/parserapplications/LinkExtractor.java,
+	src/org/htmlparser/parserapplications/SiteCapturer.java:
+
+	Web site revamp, phase 1.
+	Main and first level pages are refurbished. The wiki is still to do.
+	Fixed bug #865279 Documentation
+	The samples directory is now orphaned and no longer shipped.
+	
+2004-01-02 14:32  derrickoswald
+
+	* build.xml, src/org/htmlparser/Parser.java,
+	src/org/htmlparser/lexer/Cursor.java,
+	src/org/htmlparser/scanners/package.html:
+
+	Gey keyword substitution working.
+	In the future, could developers ensure source files are initially check in with keyword substitution (-kkv) turned on.
+	
+2004-01-02 11:24  derrickoswald
+
+	* build.xml, docs/docs/FrequentlyAskedQuestions.html,
+	docs/docs/ParsingXml.html, docs/docs/ReviewerInformation.html,
+	docs/docs/TextExtractingVisitor.html, docs/docs/WebCrawler.html,
+	docs/docs/index.html, src/org/htmlparser/AbstractNode.java,
+	src/org/htmlparser/Node.java, src/org/htmlparser/Parser.java,
+	src/org/htmlparser/RemarkNode.java,
+	src/org/htmlparser/StringNode.java,
+	src/org/htmlparser/StringNodeFactory.java,
+	src/org/htmlparser/package.html,
+	src/org/htmlparser/beans/BeanyBaby.java,
+	src/org/htmlparser/beans/HTMLLinkBean.java,
+	src/org/htmlparser/beans/HTMLTextBean.java,
+	src/org/htmlparser/beans/LinkBean.java,
+	src/org/htmlparser/beans/StringBean.java,
+	src/org/htmlparser/beans/package.html,
+	src/org/htmlparser/filters/package.html,
+	src/org/htmlparser/lexer/Cursor.java,
+	src/org/htmlparser/lexer/Lexer.java,
+	src/org/htmlparser/lexer/Page.java,
+	src/org/htmlparser/lexer/PageIndex.java,
+	src/org/htmlparser/lexer/Source.java,
+	src/org/htmlparser/lexer/Stream.java,
+	src/org/htmlparser/lexer/package.html,
+	src/org/htmlparser/lexer/nodes/Attribute.java,
+	src/org/htmlparser/lexer/nodes/PageAttribute.java,
+	src/org/htmlparser/lexer/nodes/RemarkNode.java,
+	src/org/htmlparser/lexer/nodes/StringNode.java,
+	src/org/htmlparser/lexer/nodes/TagNode.java,
+	src/org/htmlparser/lexer/nodes/package.html,
+	src/org/htmlparser/lexerapplications/tabby/package.html,
+	src/org/htmlparser/lexerapplications/thumbelina/package.html,
+	src/org/htmlparser/nodeDecorators/AbstractNodeDecorator.java,
+	src/org/htmlparser/nodeDecorators/DecodingNode.java,
+	src/org/htmlparser/nodeDecorators/EscapeCharacterRemovingNode.java,
+	src/org/htmlparser/nodeDecorators/NonBreakingSpaceConvertingNode.java,
+	src/org/htmlparser/parserapplications/StringExtractor.java,
+	src/org/htmlparser/parserapplications/package.html,
+	src/org/htmlparser/scanners/package.html,
+	src/org/htmlparser/tags/AppletTag.java,
+	src/org/htmlparser/tags/BaseHrefTag.java,
+	src/org/htmlparser/tags/BodyTag.java,
+	src/org/htmlparser/tags/Bullet.java,
+	src/org/htmlparser/tags/BulletList.java,
+	src/org/htmlparser/tags/CompositeTag.java,
+	src/org/htmlparser/tags/Div.java,
+	src/org/htmlparser/tags/DoctypeTag.java,
+	src/org/htmlparser/tags/FormTag.java,
+	src/org/htmlparser/tags/FrameSetTag.java,
+	src/org/htmlparser/tags/FrameTag.java,
+	src/org/htmlparser/tags/HeadTag.java,
+	src/org/htmlparser/tags/Html.java,
+	src/org/htmlparser/tags/ImageTag.java,
+	src/org/htmlparser/tags/InputTag.java,
+	src/org/htmlparser/tags/JspTag.java,
+	src/org/htmlparser/tags/LabelTag.java,
+	src/org/htmlparser/tags/LinkTag.java,
+	src/org/htmlparser/tags/MetaTag.java,
+	src/org/htmlparser/tags/OptionTag.java,
+	src/org/htmlparser/tags/ScriptTag.java,
+	src/org/htmlparser/tags/SelectTag.java,
+	src/org/htmlparser/tags/Span.java,
+	src/org/htmlparser/tags/StyleTag.java,
+	src/org/htmlparser/tags/TableColumn.java,
+	src/org/htmlparser/tags/TableRow.java,
+	src/org/htmlparser/tags/TableTag.java,
+	src/org/htmlparser/tags/Tag.java,
+	src/org/htmlparser/tags/TextareaTag.java,
+	src/org/htmlparser/tags/TitleTag.java,
+	src/org/htmlparser/tags/package.html,
+	src/org/htmlparser/tests/AllTests.java,
+	src/org/htmlparser/tests/AssertXmlEqualsTest.java,
+	src/org/htmlparser/tests/BadTagIdentifier.java,
+	src/org/htmlparser/tests/FunctionalTests.java,
+	src/org/htmlparser/tests/InstanceofPerformanceTest.java,
+	src/org/htmlparser/tests/LineNumberAssignedByNodeReaderTest.java,
+	src/org/htmlparser/tests/ParserTest.java,
+	src/org/htmlparser/tests/ParserTestCase.java,
+	src/org/htmlparser/tests/PerformanceTest.java,
+	src/org/htmlparser/tests/package.html,
+	src/org/htmlparser/tests/codeMetrics/LineCounter.java,
+	src/org/htmlparser/tests/lexerTests/AllTests.java,
+	src/org/htmlparser/tests/lexerTests/AttributeTests.java,
+	src/org/htmlparser/tests/lexerTests/LexerTests.java,
+	src/org/htmlparser/tests/lexerTests/PageIndexTests.java,
+	src/org/htmlparser/tests/lexerTests/PageTests.java,
+	src/org/htmlparser/tests/lexerTests/SourceTests.java,
+	src/org/htmlparser/tests/lexerTests/StreamTests.java,
+	src/org/htmlparser/tests/lexerTests/TagTests.java,
+	src/org/htmlparser/tests/nodeDecoratorTests/AllTests.java,
+	src/org/htmlparser/tests/nodeDecoratorTests/DecodingNodeTest.java,
+	src/org/htmlparser/tests/nodeDecoratorTests/EscapeCharacterRemovingNodeTest.java,
+	src/org/htmlparser/tests/nodeDecoratorTests/NonBreakingSpaceConvertingNodeTest.java,
+	src/org/htmlparser/tests/parserHelperTests/AllTests.java,
+	src/org/htmlparser/tests/parserHelperTests/CompositeTagScannerHelperTest.java,
+	src/org/htmlparser/tests/parserHelperTests/RemarkNodeParserTest.java,
+	src/org/htmlparser/tests/parserHelperTests/StringParserTest.java,
+	src/org/htmlparser/tests/scannersTests/AllTests.java,
+	src/org/htmlparser/tests/scannersTests/CompositeTagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/JspScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/ScriptScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/TagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/XmlEndTagScanningTest.java,
+	src/org/htmlparser/tests/scannersTests/package.html,
+	src/org/htmlparser/tests/tagTests/AllTests.java,
+	src/org/htmlparser/tests/tagTests/AppletTagTest.java,
+	src/org/htmlparser/tests/tagTests/BaseHrefTagTest.java,
+	src/org/htmlparser/tests/tagTests/BodyTagTest.java,
+	src/org/htmlparser/tests/tagTests/CompositeTagTest.java,
+	src/org/htmlparser/tests/tagTests/DoctypeTagTest.java,
+	src/org/htmlparser/tests/tagTests/EndTagTest.java,
+	src/org/htmlparser/tests/tagTests/FormTagTest.java,
+	src/org/htmlparser/tests/tagTests/FrameSetTagTest.java,
+	src/org/htmlparser/tests/tagTests/FrameTagTest.java,
+	src/org/htmlparser/tests/tagTests/ImageTagTest.java,
+	src/org/htmlparser/tests/tagTests/InputTagTest.java,
+	src/org/htmlparser/tests/tagTests/JspTagTest.java,
+	src/org/htmlparser/tests/tagTests/LinkTagTest.java,
+	src/org/htmlparser/tests/tagTests/MetaTagTest.java,
+	src/org/htmlparser/tests/tagTests/ObjectCollectionTest.java,
+	src/org/htmlparser/tests/tagTests/OptionTagTest.java,
+	src/org/htmlparser/tests/tagTests/ScriptTagTest.java,
+	src/org/htmlparser/tests/tagTests/SelectTagTest.java,
+	src/org/htmlparser/tests/tagTests/StyleTagTest.java,
+	src/org/htmlparser/tests/tagTests/TagTest.java,
+	src/org/htmlparser/tests/tagTests/TextareaTagTest.java,
+	src/org/htmlparser/tests/tagTests/TitleTagTest.java,
+	src/org/htmlparser/tests/tagTests/package.html,
+	src/org/htmlparser/tests/utilTests/AllTests.java,
+	src/org/htmlparser/tests/utilTests/BeanTest.java,
+	src/org/htmlparser/tests/utilTests/CharacterTranslationTest.java,
+	src/org/htmlparser/tests/utilTests/HTMLLinkProcessorTest.java,
+	src/org/htmlparser/tests/utilTests/HTMLParserUtilsTest.java,
+	src/org/htmlparser/tests/utilTests/NodeListTest.java,
+	src/org/htmlparser/tests/utilTests/SortTest.java,
+	src/org/htmlparser/tests/utilTests/package.html,
+	src/org/htmlparser/tests/visitorsTests/AllTests.java,
+	src/org/htmlparser/tests/visitorsTests/CompositeTagFindingVisitorTest.java,
+	src/org/htmlparser/tests/visitorsTests/HtmlPageTest.java,
+	src/org/htmlparser/tests/visitorsTests/LinkFindingVisitorTest.java,
+	src/org/htmlparser/tests/visitorsTests/NodeVisitorTest.java,
+	src/org/htmlparser/tests/visitorsTests/StringFindingVisitorTest.java,
+	src/org/htmlparser/tests/visitorsTests/TagFindingVisitorTest.java,
+	src/org/htmlparser/tests/visitorsTests/TextExtractingVisitorTest.java,
+	src/org/htmlparser/tests/visitorsTests/UrlModifyingVisitorTest.java,
+	src/org/htmlparser/util/ChainedException.java,
+	src/org/htmlparser/util/CommandLine.java,
+	src/org/htmlparser/util/DefaultParserFeedback.java,
+	src/org/htmlparser/util/FeedbackManager.java,
+	src/org/htmlparser/util/Generate.java,
+	src/org/htmlparser/util/IteratorImpl.java,
+	src/org/htmlparser/util/LinkProcessor.java,
+	src/org/htmlparser/util/NodeIterator.java,
+	src/org/htmlparser/util/NodeList.java,
+	src/org/htmlparser/util/ParserException.java,
+	src/org/htmlparser/util/ParserFeedback.java,
+	src/org/htmlparser/util/ParserUtils.java,
+	src/org/htmlparser/util/PeekingIterator.java,
+	src/org/htmlparser/util/SimpleNodeIterator.java,
+	src/org/htmlparser/util/SpecialHashtable.java,
+	src/org/htmlparser/util/Translate.java,
+	src/org/htmlparser/util/package.html,
+	src/org/htmlparser/util/sort/Ordered.java,
+	src/org/htmlparser/util/sort/Sort.java,
+	src/org/htmlparser/util/sort/Sortable.java,
+	src/org/htmlparser/util/sort/package.html,
+	src/org/htmlparser/visitors/HtmlPage.java,
+	src/org/htmlparser/visitors/LinkFindingVisitor.java,
+	src/org/htmlparser/visitors/NodeVisitor.java,
+	src/org/htmlparser/visitors/ObjectFindingVisitor.java,
+	src/org/htmlparser/visitors/StringFindingVisitor.java,
+	src/org/htmlparser/visitors/TagFindingVisitor.java,
+	src/org/htmlparser/visitors/TextExtractingVisitor.java,
+	src/org/htmlparser/visitors/UrlModifyingVisitor.java,
+	src/org/htmlparser/visitors/package.html:
+
+	Update the integration procedure to use a CVS tag,
+	rather than changing the version in every file header.
+	
+2004-01-02 00:01  derrickoswald
+
+	* src/org/htmlparser/tests/: ParserTest.java,
+	lexerTests/AttributeTests.java, lexerTests/LexerTests.java,
+	parserHelperTests/RemarkNodeParserTest.java,
+	scannersTests/ScriptScannerTest.java, tagTests/DoctypeTagTest.java,
+	tagTests/FormTagTest.java, tagTests/ImageTagTest.java,
+	tagTests/JspTagTest.java, tagTests/LinkTagTest.java:
+
+	Added testcases but was unable to reproduce the following bugs in the version 1.4 codebase:
+	839264 toHtml() parse error in Javascripts with "form" keyword
+	833592 DOCTYPE element is not parsed correctly
+	826764 ParserException occurs only when using setInputHTML() instea
+	825820 Words conjoined
+	825645 <input> not getting parsed inside table
+	813838 links not parsed correctly
+	and
+	#851882 zero length alt tag causes bug in ImageScanner
+	#832530 empty attribute causes parser to fail
+	#805598 attribute src in tag img sometimes not correctly parsed
+	(these 3 are all the same bug, duplicates of the following):
+	#753012 IMG SRC not parsed v1.3 & v1.4
+	#755929 Empty string attr. value causes attr parsing to be stopped
+	#778781 SRC-attribute suppression in IMG-tags
+	Also reviewed these test cases, again, with none reproducible in 1.4:
+	#788746 parser crashes on comments like <!-- foobar --!>
+	#772700 Jsp Tags are not parsed correctly when in quoted attributes.
+	
+2004-01-01 12:16  derrickoswald
+
+	* src/org/htmlparser/visitors/UrlModifyingVisitor.java:
+
+	Fix support request #824989 UrlModifyingVisitor taking out HTML comments.
+	Added remark node handling to preserve comments.
+	
+2004-01-01 11:54  derrickoswald
+
+	* src/org/htmlparser/tests/tagTests/FormTagTest.java:
+
+	Added test case for investigation of support request #772998 Cannot extract input tags.
+	Not reproducible.
+	
+2003-12-31 09:40  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	tests/lexerTests/LexerTests.java:
+
+	Fix bug #789439 Japanese page causes OutOfMemory Exception
+	Modified the lexer to skip over JIS escape sequences.
+	
+2003-12-30 23:03  derrickoswald
+
+	* src/org/htmlparser/tests/lexerTests/SourceTests.java:
+
+	Fix Source 'SameChars' test.
+	
+2003-12-30 21:50  derrickoswald
+
+	* docs/banner.html, docs/bar.gif, docs/docsindex.html,
+	docs/panel.html, docs/sample.html, src/doc-files/todo.html,
+	bin/crawler.bat, bin/linkextractor, bin/linkextractor.bat,
+	bin/ripper.bat, src/org/htmlparser/lexer/Stream.java,
+	src/org/htmlparser/parserapplications/LinkExtractor.java,
+	src/org/htmlparser/parserapplications/MailRipper.java,
+	src/org/htmlparser/parserapplications/Robot.java,
+	src/org/htmlparser/tests/lexerTests/StreamTests.java,
+	src/org/htmlparser/util/NodeList.java:
+
+	Add filter support to NodeList.
+	Rework LinkExtractor and remove MailRipper and Robot example programs.
+	Clean out docs directory.
+	
+2003-12-29 09:18  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java, tags/BaseHrefTag.java,
+	parserapplications/SiteCapturer.java, tags/FrameTag.java,
+	tests/tagTests/BaseHrefTagTest.java:
+
+	Add simplistic web site capture example application.
+	Demonstration of using custom tags in the NodeFactory.
+	Fixed various issues with URL rewriting.
+	
+2003-12-20 18:47  derrickoswald
+
+	* src/: doc-files/todo.html,
+	org/htmlparser/scanners/CompositeTagScanner.java,
+	org/htmlparser/scanners/JspScanner.java,
+	org/htmlparser/scanners/Scanner.java,
+	org/htmlparser/scanners/ScriptScanner.java,
+	org/htmlparser/scanners/TagScanner.java,
+	org/htmlparser/scanners/package.html,
+	org/htmlparser/tags/CompositeTag.java,
+	org/htmlparser/tests/scannersTests/CompositeTagScannerTest.java,
+	org/htmlparser/util/IteratorImpl.java,
+	org/htmlparser/util/NodeList.java,
+	org/htmlparser/util/PeekingIteratorImpl.java:
+
+	Reduce recursion on the JVM stack in CompositeTagScanner.
+	Pass a stack of open tags to the scanner.
+	Add smarter tag closing by walking up the stack on encountering an unopened end tag.
+	Avoids a problem with bad HTML such as that found at
+	http://scores.nba.com/games/20031029/scoreboard.html by Shaun Roach.
+	Added testInvalidNesting to CompositeTagScanner Test based on the above.
+	
+2003-12-15 21:29  derrickoswald
+
+	* build.xml, src/org/htmlparser/lexer/Page.java,
+	resources/HtmlTaglet.java, resources/stylesheet.css,
+	src/doc-files/building.html, src/doc-files/overview.html,
+	src/doc-files/todo.html,
+	src/org/htmlparser/lexerapplications/thumbelina/Picture.java,
+	src/org/htmlparser/lexerapplications/thumbelina/ThumbelinaFrame.java,
+	src/org/htmlparser/tags/CompositeTag.java:
+
+	Javadoc changes and additions. Stylesheet, overview, build instructions and todo list.
+	Added HTMLTaglet, an inline Javadoc taglet for embedding HTML into javadocs.
+	
+2003-12-08 08:13  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, Node.java, Parser.java,
+	PrototypicalNodeFactory.java, StringNodeFactory.java,
+	lexer/nodes/PageAttribute.java, scanners/CompositeTagScanner.java,
+	scanners/TagScanner.java, tags/DoctypeTag.java, tags/FormTag.java,
+	tags/FrameSetTag.java, tags/ImageTag.java,
+	tests/scannersTests/CompositeTagScannerTest.java:
+
+	Eliminate deprecation warnings.
+	Clean up javadoc warnings.
+
 Integration Build 1.4 - 20031207
 --------------------------------
 

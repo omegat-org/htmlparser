@@ -1,69 +1,97 @@
-HTMLParser Version 1.4 (Integration Build Dec 07, 2003)
+HTMLParser Version 1.4 (Integration Build Jan 04, 2004)
 *********************************************
 
-Q1. What are the contents of the distribution ? 
-Q2. Which part of the source code should I analyze to be able to use it in my project ? 
-Q3. How do I extend the capability of this library ? 
-
-*********************************************************
-Q1. What are the contents of the distribution ?
-
-A1. The distribution contains :
-    (i) binary jar files - htmlparser.jar and lexer.jar (in lib directory)
+Contents of the distribution
+----------------------------
+  (i) binary jar files - htmlparser.jar and lexer.jar (in lib directory)
     
-    (ii) source code - src.zip (in distribution directory)
-    	 Also contains necessary resources, and build file. Unzip this
-    	 and you should be all set to build the parser from its source.
-    	 You would need Jakarta Ant already installed to run the script.
+ (ii) source code - src.zip
+      Also contains necessary resources, and build file. Unzip this
+      and you should be all set to build the parser from its source.
+      You would need Jakarta Ant installed.
     	 
-    (iii) documentation - doc directory (includes javadoc)
+(iii) documentation - docs directory (includes javadoc)
+      Point your browser at index.html in the docs directory.
     
-    (iv) Executing scripts - There are three scripts (in the bin directory):
-         (a) runParser.bat  : Runs the html parser
-         (b) runCrawler.bat : Runs the robot crawler
-         (c) runRipper.bat  : Runs the mail ripper
-         (d) runLexer.bat   : Runs the low lever lexer
-         (e) lexer          : Runs the low lever lexer on linux/unix
-         All four batch files assume that java 1.2 (or upwards) is visible in your path.
+ (iv) executing scripts - bin directory
+      Batch files assume that java 1.2 (or upwards) is visible in your path.
 
-Issue the following command : 
-java -jar htmlparser.jar myURL (or runParser myURL)
+  (v) this file
 
-The following are legal examples of usage: 
-java -jar htmlparser.jar http://www.yahoo.com  (or runParser http://www.yahoo.com)
-java -jar htmlparser.jar http://www.google.com -l (or runParser http://www.google.com -l)
-java -jar htmlparser.jar c:\html\test.html (or runParser c:\html\test.html)
+Changes since Version 1.3
+-------------------------
+Decorators
+    The node decorator package has been added to provide support for the
+    delegate model.
+Lexer
+    A new lexer i/o subsystem has been added. This provides accurate line number
+    and character position data, tag and attribute names maintain their original
+    case, and attributes maintain their original order. Line numbers reported by
+    tags are now zero based, not one based. The node count for parsing goes up
+    in most cases because whitespace is strictly maintained, i.e. every
+    whitespace (i.e. newline) now counts as a StringNode too. Storage of
+    attributes is now in a Vector which means the element 0 Attribute is
+    actually the name of the tag, rather than having the $TAGNAME entry in a
+    HashTable. The htmllexer.jar is this new i/o subsystem broken out and made
+    JDK 1.1 compliant, the htmlparser.jar, which includes everything in
+    htmllexer.jar, is not necessarily intended to be used in JDK 1.1
+    environments. Some support for JIS escape sequences has been added.
+Tags
+    Zero arg tag constructors have been added. Attribute maintenance
+    (add/remove/edit) improved. There is no EndTag class any more. Just a
+    generic tag that responds true to isEndTag(). Improvements to form tag
+    handling, getting <input> and <textarea> tags nested within other tags.
+    Improvements to applet tag handling regarding parameters and codebases.
+Scanners
+    The concept of scanners has been completely reworked. Applications register
+    tags not scanners to express interest in parsing only some tags. The default
+    is now to parse all tags, which is equivalent to the old registerDOMTags(),
+    so some extra nesting of tags will need to be handled. CompositeTagScanner
+    logic has been improved to try and match unclosed open tags when an
+    unexpected end tag is encountered. This change also moved recursion off the
+    JDK stack, eliminating most StackOverflow exceptions. Also, a CompositeTag's
+    "startTag()" is "this", and the CompositeTagScanner just adds children.
+Filters
+    A new powerful filtering capability has been added, which makes extracting
+    specific tags very easy.
+Applications
+    New example applications Thumbelina and SiteCapturer.
 
-To see a list of options, simply type : 
-java -jar htmlparser.jar 
+Bug Fixes
+---------
+865279 Documentation
+851882 zero length alt tag causes bug in ImageScanner
+839264 toHtml() parse error in Javascripts with "form" keyword
+833592 DOCTYPE element is not parsed correctly
+832530 empty attribute causes parser to fail
+826764 ParserException occurs only when using setInputHTML() instea
+825820 Words conjoined
+825645 <input> not getting parsed inside table
+813838 links not parsed correctly
+805598 attribute src in tag img sometimes not correctly parsed
+801118 two " characters at the end of an attribute value problem
+798554 Applet Tag does not update codebase data
+798553 setInputHtml does not set text
+798552 Sample for node iterator incorrect
+789439 Japanese page causes OutOfMemory Exception
+788746 parser crashes on comments like <!-- foobar --!>
+786869 LinkExtractor Sample not working
+784767 irc://server/channel urls are HTTPLike?
+778781 SRC-attribute suppression in IMG-tags
+772700 Jsp Tags are not parsed correctly when in quoted attributes
+765413 typo
+761798 Error reading next element.
+757337 Standalone attributes should remain standalone
+755929 Empty string attr. value causes attr parsing to be stopped
+753012 IMG SRC not parsed v1.3 & v1.4
+753003 <IMG> within <A> missed when followed by <MAP>
+750117 StackOverFlow while Node-Iteration
+749295 Problem Parsing Table
+745566 StackOverflowError on select with too many unclosed options
+744610 getLink() Erroneous for Relative Links from Files on Windows
 
-and the switches allowed will be shown. 
-  
----------- *** ------------
-Q2. Which part of the source code should I analyze to be able to use it in my project ?
-
-Go through the javadoc of Parser.java - it contains all the examples to get you started.
-
-Also go through the package org.htmlparser.parserapplications. 
-The two applications here, Robot and MailRipper, have been expressly written for the purpose of demonstrating the usage of htmlparser.
-
----------- *** ------------
-
-Q3. How do I extend the capability of this library ?
-
-You need to extend the HTMLTagScanner in order to take advantage of existing 
-code to identify a generic tag. You could add further processing code based 
-on the tag contents. For more information on how to do this, examine the code 
-of the scanners in the com.kizna.html.scanners package. The scanners 
-basically use a Template Method+Factory Method approach. You need to 
-override the evaluate() - optional,scan() and getID() methods - compulsory, and register your 
-scanner to the parser before you begin parsing. 
-
-This process is simple, check the com.kizna.html.scanners package
-to see how the existing scanners work.
----------- *** ------------
-
-Acknowledgements :
+Acknowledgements
+----------------
 The following people have contributed important bug reports, feature ideas :
 [1] Kaarle Kaaila
 [2] Taras Bendik
@@ -90,14 +118,15 @@ The following people have contributed important bug reports, feature ideas :
 [23] Stephen Harrington
 [24] Derrick Oswald
 [25] Joshua Kerievsky
+[26] Stephen Nightingale
+[27] Donnla Nic Gearailt
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 
 You will be amazed at the speed of fixing. Open Source rocks!
 
 And please join the HTMLParser-User mailing list
-to get help on getting started. Join HTMLParser-Developer
-to become a developer on this project. Join HTMLParser-Announce to 
+to get help on getting started. Join HTMLParser-Announce to 
 be notified whenever a new release is out.
 
 All these mailing lists can be joined from http://htmlparser.sourceforge.net
