@@ -823,7 +823,7 @@ public class Translate
                                 case '9':
                                     if (0 == radix)
                                         radix = 10;
-                                    number = number * radix + ((int)character - (int)'0');
+                                    number = number * radix + (character - '0');
                                     break;
                                 case 'A':
                                 case 'B':
@@ -832,7 +832,7 @@ public class Translate
                                 case 'E':
                                 case 'F':
                                     if (16 == radix)
-                                        number = number * radix + ((int)character - (int)'A' + 10);
+                                        number = number * radix + (character - 'A' + 10);
                                     else
                                         done = true;
                                     break;
@@ -843,7 +843,7 @@ public class Translate
                                 case 'e':
                                 case 'f':
                                     if (16 == radix)
-                                        number = number * radix + ((int)character - (int)'a' + 10);
+                                        number = number * radix + (character - 'a' + 10);
                                     else
                                         done = true;
                                     break;
@@ -1076,7 +1076,6 @@ public class Translate
     {
         int length;
         char c;
-        int index;
         CharacterReference candidate;
         StringBuffer ret;
 

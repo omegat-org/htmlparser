@@ -179,12 +179,11 @@ public class LinkProcessor
      * @return <code>true</code> if the resource is a valid URL.
      */
     public static boolean isURL (String resourceLocn) {
-        URL url;
         boolean ret;
 
         try
         {
-            url = new URL (resourceLocn);
+            new URL (resourceLocn);
             ret = true;
         }
         catch (MalformedURLException murle)

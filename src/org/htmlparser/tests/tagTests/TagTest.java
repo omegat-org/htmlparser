@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.Hashtable;
 import org.htmlparser.Attribute;
 
 import org.htmlparser.Node;
@@ -290,7 +289,6 @@ public class TagTest extends ParserTestCase
         String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
         createParser(lin1);
         NodeIterator en = parser.elements();
-        Hashtable h;
         String a,nice;
 
         try {

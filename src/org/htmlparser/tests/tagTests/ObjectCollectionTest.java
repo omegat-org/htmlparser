@@ -33,7 +33,6 @@ import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.ParserTestCase;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 
@@ -112,7 +111,6 @@ public class ObjectCollectionTest extends ParserTestCase {
                 }));
         parseAndAssertNodeCount(1);
         TableTag tableTag = (TableTag)node[0];
-        NodeList nodeList = new NodeList();
         Node[] spans = ParserUtils.findTypeInNode (tableTag, Span.class);
         assertSpanContent(spans);
     }

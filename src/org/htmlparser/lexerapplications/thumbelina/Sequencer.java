@@ -223,14 +223,9 @@ public class Sequencer
      */
     public void add (final Image image, final URL url, final boolean background)
     {
-        int x;
-        int y;
-        Point p;
         Picture picture;
         int size;
 
-        x = image.getWidth (null);
-        y = image.getHeight (null);
         picture = new Picture ();
         picture.setImage (image);
         picture.setURL (url);
@@ -284,7 +279,6 @@ public class Sequencer
     {
         Picture picture;
         int size;
-        Point p;
 
         while (true)
         {
@@ -354,6 +348,9 @@ public class Sequencer
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.2  2004/07/31 16:42:30  derrickoswald
+ * Remove unused variables and other fixes exposed by turning on compiler warnings.
+ *
  * Revision 1.1  2003/09/21 18:20:56  derrickoswald
  * Thumbelina
  * Created a lexer GUI application to extract images behind thumbnails.

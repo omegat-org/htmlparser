@@ -75,7 +75,7 @@ public class InstanceofPerformanceTest {
         long start = System.currentTimeMillis();
         for (long i=0;i<numTimes;i++) {
             for (Enumeration e = formChildren.elements();e.hasMoreElements();) {
-                Node node = (Node)e.nextElement();
+                e.nextElement();
             }
         }
         long end = System.currentTimeMillis();
@@ -87,7 +87,7 @@ public class InstanceofPerformanceTest {
         long start = System.currentTimeMillis();
         for (long i=0;i<numTimes;i++) {
             for (SimpleNodeIterator e = formTag.children();e.hasMoreNodes();) {
-                Node node = e.nextNode();
+                e.nextNode();
             }
         }
         long end = System.currentTimeMillis();

@@ -25,8 +25,6 @@
 //
 
 package org.htmlparser.tests.lexerTests;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
@@ -78,7 +76,6 @@ public class TagTests extends ParserTestCase {
         "</style>" +
         "</head>" +
         "<body bgcolor=\"#FFFFFF\" text=\"#000000\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" link=\"#003399\" vlink=\"#003399\" alink=\"#003399\">";
-    private Map results;
     private int testProgress;
 
     public TagTests (String name) {
@@ -288,7 +285,6 @@ public class TagTests extends ParserTestCase {
                             TEST_HTML;
         ParsingThread parsingThread [] =
             new ParsingThread[100];
-        results = new HashMap();
         testProgress = 0;
         for (int i=0;i<parsingThread.length;i++) {
             if (i<parsingThread.length/2)
@@ -349,32 +345,33 @@ public class TagTests extends ParserTestCase {
     }
 
     class ParsingThread implements Runnable {
-        Parser parser;
-        int id;
-        LinkTag link1, link2;
-        boolean result;
-        int max;
+        Parser mParser;
+        int mId;
+        LinkTag mLink1;
+        LinkTag mLink2;
+        boolean mResult;
+        int mMax;
 
         ParsingThread(int id, String testHtml, int max) {
-            this.id = id;
-            this.max = max;
-            this.parser = Parser.createParser(testHtml, null);
+            mId = id;
+            mMax = max;
+            mParser = Parser.createParser(testHtml, null);
         }
 
         public void run() {
             try {
-                result = false;
-                Node linkTag [] = parser.extractAllNodesThatAre(LinkTag.class);
-                link1 = (LinkTag)linkTag[0];
-                link2 = (LinkTag)linkTag[1];
-                if (id<max/2) {
-                    if (link1.getLink().equals("/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html") &&
-                        link2.getLink().equals("http://normallink.com/sometext.html"))
-                        result = true;
+                mResult = false;
+                Node linkTag [] = mParser.extractAllNodesThatAre(LinkTag.class);
+                mLink1 = (LinkTag)linkTag[0];
+                mLink2 = (LinkTag)linkTag[1];
+                if (mId < mMax / 2) {
+                    if (mLink1.getLink().equals("/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html") &&
+                        mLink2.getLink().equals("http://normallink.com/sometext.html"))
+                        mResult = true;
                 } else {
-                    if (link1.getLink().equals("http://normallink.com/sometext.html") &&
-                        link2.getLink().equals("http://normallink.com/sometext.html"))
-                        result = true;
+                    if (mLink1.getLink().equals("http://normallink.com/sometext.html") &&
+                        mLink2.getLink().equals("http://normallink.com/sometext.html"))
+                        mResult = true;
                 }
             }
             catch (ParserException e) {
@@ -382,20 +379,20 @@ public class TagTests extends ParserTestCase {
                 e.printStackTrace();
             }
             finally {
-                testProgress += id;
+                testProgress += mId;
             }
         }
 
         public LinkTag getLink1() {
-            return link1;
+            return (mLink1);
         }
 
         public LinkTag getLink2() {
-            return link2;
+            return (mLink2);
         }
 
         public boolean passed() {
-            return result;
+            return (mResult);
         }
     }
 

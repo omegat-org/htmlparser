@@ -243,7 +243,7 @@ public class FormTagTest extends ParserTestCase {
         Remark [] remarkNode = new Remark[10];
         int i = 0;
         for (NodeIterator e=formTag.children();e.hasMoreNodes();) {
-            Node formNode = (Node)e.nextNode();
+            Node formNode = e.nextNode();
             if (formNode instanceof Remark) {
                 remarkNode[i++] = (Remark)formNode;
             }

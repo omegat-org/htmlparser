@@ -28,7 +28,6 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
@@ -40,17 +39,9 @@ public class ScriptTagTest extends ParserTestCase{
         System.setProperty ("org.htmlparser.tests.tagTests.ScriptTagTest", "ScriptTagTest");
     }
 
-    private ScriptScanner scriptScanner;
-
     public ScriptTagTest(String name)
     {
         super(name);
-    }
-
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-        scriptScanner = new ScriptScanner();
     }
 
     public void testCreation() throws ParserException

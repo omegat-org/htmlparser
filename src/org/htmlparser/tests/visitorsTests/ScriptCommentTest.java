@@ -69,11 +69,6 @@ public class ScriptCommentTest extends ParserTestCase {
         + "/* I can't handle single quotations. */"
         + "</script>";
 
-    private String failingHtml3 =
-        this.anotherFailingScriptTag
-        + "<HTML>"
-        + "</HTML>";
-
     public ScriptCommentTest(String name) {
         super(name);
     }

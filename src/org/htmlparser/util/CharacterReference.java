@@ -96,7 +96,7 @@ public class CharacterReference
         StringBuffer ret;
 
         ret = new StringBuffer (6 + 8 + 2); // max 8 in string
-        hex = Integer.toHexString ((int)getCharacter ());
+        hex = Integer.toHexString (getCharacter ());
         ret.append ("\\u");
         for (int i = hex.length (); i < 4; i++)
             ret.append ("0");

@@ -196,7 +196,7 @@ public class BeanTest extends ParserTestCase
             assertEquals (
                 "Nodes before and after serialization differ",
                 ((Node)vector.remove (0)).toHtml (),
-                ((Node)enumeration.nextNode ()).toHtml ());
+                enumeration.nextNode ().toHtml ());
     }
 
     public void testSerializableScanners ()
@@ -224,7 +224,7 @@ public class BeanTest extends ParserTestCase
             assertEquals (
                 "Nodes before and after serialization differ",
                 ((Node)vector.remove (0)).toHtml (),
-                ((Node)enumeration.nextNode ()).toHtml ());
+                enumeration.nextNode ().toHtml ());
     }
 
     public void testSerializableStringBean ()

@@ -68,7 +68,7 @@ public class TableColumn extends CompositeTag
      */
     public String[] getEnders ()
     {
-        return (mIds);
+        return (mEnders);
     }
 
     /**

@@ -385,8 +385,6 @@ public class PrototypicalNodeFactory
      */
     public Remark createRemarkNode (Page page, int start, int end)
     {
-        int first;
-        int last;
         Remark ret;
         
         try

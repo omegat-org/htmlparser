@@ -380,8 +380,6 @@ public class ThumbelinaFrame
      */
     public void restoreSize ()
     {
-        Toolkit tk;
-        Dimension dim;
         Preferences prefs;
         String size;
         Rectangle rectangle;
@@ -848,7 +846,6 @@ public class ThumbelinaFrame
     public void open ()
     {
         String result;
-        URL url;
 
         result = JOptionPane.showInputDialog (
             this,
@@ -992,9 +989,9 @@ public class ThumbelinaFrame
                 // remove google links, not just append (results[1]);
                 for (int i = 0; i < results[1].length; i++)
                 {
-                    String found = ((URL)results[1][i]).toExternalForm ();
+                    String found = results[1][i].toExternalForm ();
                     if (-1 == found.indexOf ("google"))
-                        getThumbelina ().append ((URL)results[1][i]);
+                        getThumbelina ().append (results[1][i]);
                 }
                 prefs.put (GOOGLEQUERY, query);
                 try
@@ -1060,8 +1057,7 @@ public class ThumbelinaFrame
     public static void main (final String[] args)
     {
         String url;
-        ThumbelinaFrame frame;
-        Thumbelina thumbelina;
+        ThumbelinaFrame thumbelina;
 
         System.setProperty ("sun.net.client.defaultReadTimeout", "7000");
         System.setProperty ("sun.net.client.defaultConnectTimeout", "7000");
@@ -1079,8 +1075,8 @@ public class ThumbelinaFrame
 
         try
         {
-            frame = new ThumbelinaFrame (url);
-            frame.setVisible (true);
+            thumbelina = new ThumbelinaFrame (url);
+            thumbelina.setVisible (true);
         }
         catch (MalformedURLException murle)
         {

@@ -58,7 +58,7 @@ public class UrlModifyingVisitorTest extends ParserTestCase {
     public void testUrlModificationWithVisitor() throws Exception {
         Parser parser = Parser.createParser(HTML_WITH_LINK, null);
         UrlModifyingVisitor visitor =
-            new UrlModifyingVisitor(parser, "localhost://");
+            new UrlModifyingVisitor("localhost://");
         parser.visitAllNodesWith(visitor);
         String result = visitor.getModifiedResult();
         assertStringEquals("Expected HTML",

@@ -27,7 +27,6 @@
 package org.htmlparser.visitors;
 
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 import org.htmlparser.Remark;
 import org.htmlparser.Text;
 import org.htmlparser.tags.CompositeTag;
@@ -38,11 +37,9 @@ import org.htmlparser.Tag;
 public class UrlModifyingVisitor extends NodeVisitor {
     private String linkPrefix;
     private StringBuffer modifiedResult;
-    private Parser parser;
 
-    public UrlModifyingVisitor(Parser parser, String linkPrefix) {
+    public UrlModifyingVisitor(String linkPrefix) {
         super(true,true);
-        this.parser = parser;
         this.linkPrefix =linkPrefix;
         modifiedResult = new StringBuffer();
     }

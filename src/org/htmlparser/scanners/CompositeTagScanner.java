@@ -188,7 +188,7 @@ public class CompositeTagScanner extends TagScanner
                                 // happened.
                                 Vector attributes = new Vector ();
                                 attributes.addElement (new Attribute (name, null));
-                                Tag opener = (Tag)lexer.getNodeFactory ().createTagNode (
+                                Tag opener = lexer.getNodeFactory ().createTagNode (
                                     lexer.getPage (), next.getStartPosition (), next.getEndPosition (),
                                     attributes);
 
@@ -324,7 +324,7 @@ public class CompositeTagScanner extends TagScanner
         name = "/" + tag.getRawTagName ();
         attributes = new Vector ();
         attributes.addElement (new Attribute (name, (String)null));
-        ret = (Tag)lexer.getNodeFactory ().createTagNode (
+        ret = lexer.getNodeFactory ().createTagNode (
                                     page, position, position, attributes);
         
         return (ret);

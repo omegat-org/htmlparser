@@ -115,7 +115,7 @@ public class StyleScanner extends CompositeTagScanner
             content = factory.createStringNode (lexer.getPage (), startpos, endpos);
             // build new end tag if required
             if (null == end)
-                end = (Tag)lexer.getNodeFactory ().createTagNode (
+                end = lexer.getNodeFactory ().createTagNode (
                     lexer.getPage (), endpos, endpos, new Vector ());
             ret = tag;
             ret.setEndTag (end);

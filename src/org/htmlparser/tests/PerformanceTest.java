@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests;
 
-import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
@@ -57,11 +56,9 @@ public class PerformanceTest {
         for (int i=0;i<=numTimes;i++) {
             // Create the parser object
             parser = new Parser(file,new DefaultParserFeedback());
-            Node node;
             long start=System.currentTimeMillis();
-            for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-                node = e.nextNode();
-            }
+            for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+                e.nextNode();
             long elapsedTime=System.currentTimeMillis()-start;
             if (i!=0)
             sumTimes += elapsedTime;
@@ -85,11 +82,9 @@ public class PerformanceTest {
         for (int i=0;i<=numTimes;i++) {
             // Create the parser object
             parser = new Parser(file,new DefaultParserFeedback());
-            Node node;
             long start=System.currentTimeMillis();
-            for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-                node = e.nextNode();
-            }
+            for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+                e.nextNode();
             long elapsedTime=System.currentTimeMillis()-start;
             if (i!=0)
             sumTimes += elapsedTime;

@@ -716,7 +716,7 @@ public class ParserUtils
             for (int j=0; j<links.size(); j++)
             {
                 CompositeTag beginTag = (CompositeTag)links.elementAt(j);
-                Tag endTag = (Tag)beginTag.getEndTag();
+                Tag endTag = beginTag.getEndTag();
 
                 // positions of begin and end tags
                 int beginTagBegin = beginTag.getStartPosition ();
@@ -841,7 +841,7 @@ public class ParserUtils
         for (int j=0; j<links.size(); j++)
         {
             CompositeTag beginTag = (CompositeTag)links.elementAt(j);
-            Tag endTag = (Tag)beginTag.getEndTag();
+            Tag endTag = beginTag.getEndTag();
 
             // positions of begin and end tags
             int beginTagBegin = beginTag.getStartPosition ();
@@ -945,7 +945,7 @@ public class ParserUtils
             for (int j=0; j<links.size(); j++)
             {
                 CompositeTag beginTag = (CompositeTag)links.elementAt(j);
-                Tag endTag = (Tag)beginTag.getEndTag();
+                Tag endTag = beginTag.getEndTag();
 
                 // positions of begin and end tags
                 int beginTagBegin = beginTag.getStartPosition ();
@@ -1045,7 +1045,7 @@ public class ParserUtils
         for (int j=0; j<links.size(); j++)
         {
             CompositeTag beginTag = (CompositeTag)links.elementAt(j);
-            Tag endTag = (Tag)beginTag.getEndTag();
+            Tag endTag = beginTag.getEndTag();
 
             // positions of begin and end tags
             int beginTagBegin = beginTag.getStartPosition ();
@@ -1121,13 +1121,13 @@ public class ParserUtils
             for (int j=0; j<links.size(); j++)
             {
                 CompositeTag jStartTag = (CompositeTag)links.elementAt(j);
-                Tag jEndTag = (Tag)jStartTag.getEndTag();
+                Tag jEndTag = jStartTag.getEndTag();
                 int jStartTagBegin = jStartTag.getStartPosition ();
                 int jEndTagEnd = jEndTag.getEndPosition ();
                 for (int k=0; k<links.size(); k++)
                 {
                     CompositeTag kStartTag = (CompositeTag)links.elementAt(k);
-                    Tag kEndTag = (Tag)kStartTag.getEndTag();
+                    Tag kEndTag = kStartTag.getEndTag();
                     int kStartTagBegin = kStartTag.getStartPosition ();
                     int kEndTagEnd = kEndTag.getEndPosition ();
                     if ((k!=j) && (kStartTagBegin>jStartTagBegin) && (kEndTagEnd<jEndTagEnd))
@@ -1161,13 +1161,13 @@ public class ParserUtils
             for (int j=0; j<links.size(); j++)
             {
                 CompositeTag jStartTag = (CompositeTag)links.elementAt(j);
-                Tag jEndTag = (Tag)jStartTag.getEndTag();
+                Tag jEndTag = jStartTag.getEndTag();
                 int jStartTagBegin = jStartTag.getStartPosition ();
                 int jEndTagEnd = jEndTag.getEndPosition ();
                 for (int k=0; k<links.size(); k++)
                 {
                     CompositeTag kStartTag = (CompositeTag)links.elementAt(k);
-                    Tag kEndTag = (Tag)kStartTag.getEndTag();
+                    Tag kEndTag = kStartTag.getEndTag();
                     int kStartTagBegin = kStartTag.getStartPosition ();
                     int kEndTagEnd = kEndTag.getEndPosition ();
                     if ((k!=j) && (kStartTagBegin>jStartTagBegin) && (kEndTagEnd<jEndTagEnd))

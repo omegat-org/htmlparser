@@ -124,8 +124,6 @@ public class Cursor
 
     public String toString ()
     {
-        int row;
-        int column;
         StringBuffer ret;
 
         ret = new StringBuffer (9 * 3 + 3); // three ints and delimiters

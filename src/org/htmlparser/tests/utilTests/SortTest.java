@@ -140,9 +140,9 @@ public class SortTest extends ParserTestCase
             File f = (File)o;
 
             ret = lastModified () - f.lastModified ();
-            if (ret < (long)Integer.MIN_VALUE)
+            if (ret < Integer.MIN_VALUE)
                 ret = Integer.MIN_VALUE;
-            if (ret > (long)Integer.MAX_VALUE)
+            if (ret > Integer.MAX_VALUE)
                 ret = Integer.MAX_VALUE;
 
             return ((int)ret);

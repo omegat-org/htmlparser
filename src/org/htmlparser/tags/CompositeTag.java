@@ -56,11 +56,11 @@ public class CompositeTag extends TagNode
     /**
      * The default scanner for non-composite tags.
      */
-    protected final static CompositeTagScanner mDefaultScanner = new CompositeTagScanner ();
+    protected final static CompositeTagScanner mDefaultCompositeScanner = new CompositeTagScanner ();
 
     public CompositeTag ()
     {
-        setThisScanner (mDefaultScanner);
+        setThisScanner (mDefaultCompositeScanner);
     }
     
     /**
@@ -173,7 +173,7 @@ public class CompositeTag extends TagNode
         Tag tag = null;
         boolean found = false;
         for (SimpleNodeIterator e = children();e.hasMoreNodes() && !found;) {
-            node = (Node)e.nextNode();
+            node = e.nextNode();
             if (node instanceof Tag)
             {
                 tag = (Tag)node;
@@ -431,7 +431,7 @@ public class CompositeTag extends TagNode
                 children = children ();
                 while (children.hasMoreNodes ())
                 {
-                    child = (Node)children.nextNode ();
+                    child = children.nextNode ();
                     child.accept (visitor);
                 }
             }

@@ -168,8 +168,6 @@ public class Page
      */
     public Page (String text, String charset)
     {
-        InputStream stream;
-
         if (null == text)
             throw new IllegalArgumentException ("text cannot be null");
         if (null == charset)

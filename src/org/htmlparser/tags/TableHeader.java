@@ -68,7 +68,7 @@ public class TableHeader extends CompositeTag
      */
     public String[] getEnders ()
     {
-        return (mIds);
+        return (mEnders);
     }
 
     /**

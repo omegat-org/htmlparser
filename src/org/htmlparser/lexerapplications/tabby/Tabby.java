@@ -102,7 +102,6 @@ public class Tabby
     protected void process (final File file)
     {
         File[] files;
-        File f;
 
         if (file.isDirectory ())
         {
@@ -296,6 +295,9 @@ public class Tabby
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.2  2004/07/31 16:42:34  derrickoswald
+ * Remove unused variables and other fixes exposed by turning on compiler warnings.
+ *
  * Revision 1.1  2003/09/10 03:38:26  derrickoswald
  * Add style checking target to ant build script:
  *     ant checkstyle

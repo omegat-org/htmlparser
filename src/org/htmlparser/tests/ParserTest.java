@@ -557,10 +557,9 @@ public class ParserTest extends ParserTestCase
     }
 
     public void testNullUrl() {
-        Parser parser;
         try
         {
-            parser = new Parser("http://none.existant.url.org", Parser.noFeedback);
+            new Parser("http://none.existant.url.org", Parser.noFeedback);
             assertTrue("Should have thrown an exception!",false);
         }
         catch (ParserException e)
@@ -833,7 +832,6 @@ public class ParserTest extends ParserTestCase
                 e.printStackTrace ();
                 nodes = new Node[0];
             }
-            int count = nodes.length;
             assertTrue ("node count", 3 == nodes.length);
         }
         catch (Exception e)

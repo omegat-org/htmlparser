@@ -249,7 +249,6 @@ public class SourceTests extends ParserTestCase
         String reference;
         Source source;
         char[] buffer;
-        int c;
         int length;
 
         part1 = "Now is the time ";
@@ -516,7 +515,6 @@ public class SourceTests extends ParserTestCase
         String reference;
         Source source;
         char[] buffer;
-        int c;
         int length;
 
         part1 = "Now is the time ";

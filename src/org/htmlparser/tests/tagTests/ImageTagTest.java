@@ -292,7 +292,7 @@ public class ImageTagTest extends ParserTestCase
         int i = 0;
         Node thisNode;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-            thisNode = (Node)e.nextNode();
+            thisNode = e.nextNode();
             if (thisNode instanceof ImageTag)
                 node[i++] = thisNode;
         }

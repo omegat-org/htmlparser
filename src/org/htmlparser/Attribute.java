@@ -684,10 +684,6 @@ public class Attribute
      */
     public String toString ()
     {
-        String name;
-        String assignment;
-        String value;
-        char quote;
         int length;
         StringBuffer ret;
 

@@ -47,24 +47,8 @@ public class CompositeTagScannerTest extends ParserTestCase {
         System.setProperty ("org.htmlparser.tests.scannersTests.CompositeTagScannerTest", "CompositeTagScannerTest");
     }
 
-    private CompositeTagScanner scanner;
-    private String url;
-
     public CompositeTagScannerTest(String name) {
         super(name);
-    }
-
-    protected void setUp() {
-        scanner =
-            new CompositeTagScanner() {
-                String [] arr = {
-                    "SOMETHING"
-                };
-                public String[] getID() {
-                    return arr;
-                }
-
-            };
     }
 
     private CustomTag parseCustomTag(int expectedNodeCount) throws ParserException {
@@ -605,14 +589,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
     public static class CustomScanner extends CompositeTagScanner {
         private static final String MATCH_NAME [] = { "CUSTOM" };
-        private boolean selfChildrenAllowed;
         public CustomScanner() {
-            this(true);
-        }
-
-        public CustomScanner(boolean selfChildrenAllowed) {
-//            super("", selfChildrenAllowed ? new String[] {} : MATCH_NAME);
-            this.selfChildrenAllowed = selfChildrenAllowed;
         }
 
         public String[] getID() {
@@ -622,15 +599,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
     public static class AnotherScanner extends CompositeTagScanner {
         private static final String MATCH_NAME [] = { "ANOTHER" };
-        private boolean acceptCustomTagsButDontAcceptCustomEndTags;
         public AnotherScanner() {
-//            super("", new String[] {"CUSTOM"});
-            acceptCustomTagsButDontAcceptCustomEndTags = false;
-        }
-
-        public AnotherScanner(boolean acceptCustomTagsButDontAcceptCustomEndTags) {
-//            super("", new String[] {}, new String[] {"CUSTOM"});
-            this.acceptCustomTagsButDontAcceptCustomEndTags = acceptCustomTagsButDontAcceptCustomEndTags;
         }
 
         public String[] getID() {
@@ -655,7 +624,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         /**
          * The default scanner for custom tags.
          */
-        protected final static CustomScanner mDefaultScanner = new CustomScanner ();
+        protected final static CustomScanner mCustomScanner = new CustomScanner ();
 
         public CustomTag ()
         {
@@ -668,7 +637,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
                 mEnders = new String[0];
             else
                 mEnders = mIds;
-            setThisScanner (mDefaultScanner);
+            setThisScanner (mCustomScanner);
         }
 
         /**
@@ -712,7 +681,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         /**
          * The default scanner for custom tags.
          */
-        protected final static AnotherScanner mDefaultScanner = new AnotherScanner ();
+        protected final static AnotherScanner mAnotherScanner = new AnotherScanner ();
 
         public AnotherTag (boolean acceptCustomTagsButDontAcceptCustomEndTags)
         {
@@ -726,7 +695,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
                 mEnders = new String[] {"CUSTOM"};
                 mEndTagEnders = new String[] {"CUSTOM"};
             }
-            setThisScanner (mDefaultScanner);
+            setThisScanner (mAnotherScanner);
         }
 
         /**

@@ -91,7 +91,6 @@ public class ScriptScanner
                 (language.equalsIgnoreCase ("JScript.Encode") ||
                  language.equalsIgnoreCase ("VBScript.Encode")))
             {
-                int start = lexer.getPosition ();
                 String code = ScriptDecoder.Decode (lexer.getPage (), lexer.getCursor ());
                 ((ScriptTag)tag).setScriptCode (code);
                 endpos = lexer.getPosition ();
@@ -132,7 +131,7 @@ public class ScriptScanner
             content = factory.createStringNode (lexer.getPage (), startpos, endpos);
             // build new end tag if required
             if (null == end)
-                end = (Tag)lexer.getNodeFactory ().createTagNode (
+                end = lexer.getNodeFactory ().createTagNode (
                     lexer.getPage (), endpos, endpos, new Vector ());
             ret = tag;
             ret.setEndTag (end);

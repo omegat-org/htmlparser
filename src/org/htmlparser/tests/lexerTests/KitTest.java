@@ -26,11 +26,9 @@
 package org.htmlparser.tests.lexerTests;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URL;
 import java.util.Vector;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
@@ -90,7 +88,7 @@ public class KitTest extends ParserCallback
         for (int i = 0; i < length; i++)
         {
             ch = s.charAt (i);
-            if (!Character.isWhitespace (ch) && !(160 == (int)ch))
+            if (!Character.isWhitespace (ch) && !(160 == ch))
                 ret.append (ch);
         }
 
@@ -129,7 +127,7 @@ public class KitTest extends ParserCallback
         sb = new StringBuffer (data.length);
         for (int i = 0; i < data.length; i++)
         {
-            if (160 == (int)data[i])
+            if (160 == data[i])
                 sb.append ("&nbsp;");
             else
                 sb.append (data[i]);
@@ -255,7 +253,6 @@ public class KitTest extends ParserCallback
      */
     public void handleStartTag (HTML.Tag t, MutableAttributeSet a, int pos)
     {
-        StringBuffer sb;
         String theirs;
         Node node;
         int match;
@@ -320,7 +317,6 @@ public class KitTest extends ParserCallback
      */
     public void handleEndTag (HTML.Tag t, int pos)
     {
-        StringBuffer sb;
         String theirs;
         Node node;
         int match;
@@ -386,7 +382,6 @@ public class KitTest extends ParserCallback
      */
     public void handleSimpleTag (HTML.Tag t, MutableAttributeSet a, int pos)
     {
-        StringBuffer sb;
         String theirs;
         Node node;
         int match;
@@ -578,7 +573,6 @@ public class KitTest extends ParserCallback
         MyKit kit;
         Parser parser;
 
-        Element[] elements;
 
         if (0 == args.length)
             link = "http://sourceforge.net/projects/htmlparser";
@@ -596,7 +590,7 @@ public class KitTest extends ParserCallback
         test = new KitTest (nodes);
         kit = test.getKit ();
         parser = kit.getParser ();
-        parser.parse ((Reader)lexer.getPage ().getSource (), (ParserCallback)test, true);
+        parser.parse (lexer.getPage ().getSource (), test, true);
     }
 }
 
@@ -604,6 +598,9 @@ public class KitTest extends ParserCallback
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.8  2004/07/31 16:42:31  derrickoswald
+ * Remove unused variables and other fixes exposed by turning on compiler warnings.
+ *
  * Revision 1.7  2004/05/24 16:18:31  derrickoswald
  * Part three of a multiphase refactoring.
  * The three node types are now fronted by interfaces (program to the interface paradigm)

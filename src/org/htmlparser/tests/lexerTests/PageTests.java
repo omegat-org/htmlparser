@@ -77,11 +77,9 @@ public class PageTests extends ParserTestCase
      */
     public void testNull () throws ParserException
     {
-        Page page;
-
         try
         {
-            page = new Page ((URLConnection)null);
+            new Page ((URLConnection)null);
             assertTrue ("null value in constructor", false);
         }
         catch (IllegalArgumentException iae)
@@ -91,7 +89,7 @@ public class PageTests extends ParserTestCase
 
         try
         {
-            page = new Page ((String)null);
+            new Page ((String)null);
             assertTrue ("null value in constructor", false);
         }
         catch (IllegalArgumentException iae)
@@ -107,11 +105,10 @@ public class PageTests extends ParserTestCase
     {
         String link;
         URL url;
-        Page page;
 
         link = "http://www.ibm.com/jp/";
         url = new URL (link);
-        page = new Page (url.openConnection ());
+        new Page (url.openConnection ());
     }
 
     /**
@@ -121,13 +118,12 @@ public class PageTests extends ParserTestCase
     {
         String link;
         URL url;
-        Page page;
 
         link = "http://www.bigbogosity.org/";
         url = new URL (link);
         try
         {
-            page = new Page (url.openConnection ());
+           new Page (url.openConnection ());
         }
         catch (ParserException pe)
         {

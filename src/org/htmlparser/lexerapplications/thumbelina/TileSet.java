@@ -102,7 +102,7 @@ public class TileSet
                     // or touches the existing picture somehow
                     splits = split (r, rover, false);
                     for (frags = splits.elements (); frags.hasMoreElements (); )
-                        regions.addElement ((Picture)frags.nextElement ());
+                        regions.addElement (frags.nextElement ());
                 }
                 else
                     // incoming covers existing... drop the existing picture
@@ -539,6 +539,9 @@ public class TileSet
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.2  2004/07/31 16:42:30  derrickoswald
+ * Remove unused variables and other fixes exposed by turning on compiler warnings.
+ *
  * Revision 1.1  2003/09/21 18:20:56  derrickoswald
  * Thumbelina
  * Created a lexer GUI application to extract images behind thumbnails.

@@ -68,7 +68,6 @@ public class IteratorImpl implements NodeIterator
     public Node nextNode () throws ParserException
     {
         Tag tag;
-        String name;
         Scanner scanner;
         NodeList stack;
         Node ret;

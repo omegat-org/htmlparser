@@ -203,7 +203,6 @@ public class NodeList implements Serializable {
      */
     public NodeList extractAllNodesThatMatch (NodeFilter filter, boolean recursive)
     {
-        String name;
         Node node;
         NodeList children;
         NodeList ret;
@@ -243,7 +242,6 @@ public class NodeList implements Serializable {
     {
         Node node;
         NodeList children;
-        NodeList ret;
 
         for (int i = 0; i < size; )
         {

@@ -179,8 +179,7 @@ public class TableTagTest extends ParserTestCase
             new Parser(
                 "http://www.sec.gov/Archives/edgar/data/30554/000089322002000287/w57038e10-k.htm"
             );
-        Node node;
         for (NodeIterator e = parser.elements(); e.hasMoreNodes(); )
-            node = e.nextNode();
+            e.nextNode();
     }
 }

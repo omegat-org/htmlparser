@@ -357,7 +357,6 @@ public class ParserTestCase extends TestCase {
             Attribute a = (Attribute)v.elementAt (i);
             if (a.isWhitespace ())
                 continue;
-            String actualValue = actualTag.getAttribute (a.getName ());
             String expectedValue = expectedTag.getAttribute (a.getName ());
             if (null == expectedValue)
                 fail("\nActual tag had extra attribute: " + a.getName () + displayMessage);

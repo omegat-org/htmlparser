@@ -28,7 +28,6 @@ package org.htmlparser.filters;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.util.NodeList;
 
 /**
  * This class accepts all tags that have a parent acceptable to another filter.
@@ -56,7 +55,6 @@ public class HasParentFilter implements NodeFilter
     public boolean accept (Node node)
     {
         Node parent;
-        NodeList children;
         boolean ret;
 
         ret = false;

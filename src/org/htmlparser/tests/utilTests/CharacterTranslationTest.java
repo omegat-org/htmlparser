@@ -155,7 +155,7 @@ public class CharacterTranslationTest
         /**
          * The working parser.
          */
-        protected Parser parser;
+        protected Parser mParser;
 
         protected String nl = System.getProperty ("line.separator", "\n");
         
@@ -168,7 +168,7 @@ public class CharacterTranslationTest
         public Generate ()
             throws ParserException
         {
-            parser = new Parser ("http://www.w3.org/TR/REC-html40/sgml/entities.html");
+            mParser = new Parser ("http://www.w3.org/TR/REC-html40/sgml/entities.html");
         }
 
         /**
@@ -520,7 +520,7 @@ public class CharacterTranslationTest
 
             // Run through an enumeration of html elements, and pick up
             // only those that are plain string.
-            for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
+            for (NodeIterator e = mParser.elements (); e.hasMoreNodes ();)
             {
                 node = e.nextNode ();
                 gather (node, buffer);

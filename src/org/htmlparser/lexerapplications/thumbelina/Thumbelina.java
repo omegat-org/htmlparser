@@ -56,6 +56,7 @@ import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -387,8 +388,6 @@ public class Thumbelina
         ArrayList list;
         URL url;
         String ref;
-        boolean found;
-        URL u;
 
         list = new ArrayList ();
         for (int i = 0; i < urls.length; i++)
@@ -486,9 +485,9 @@ public class Thumbelina
         mPicturePanelScroller.setViewportView (mPicturePanel);
         mPicturePanelScroller.setDoubleBuffered (false);
         mPicturePanelScroller.setHorizontalScrollBarPolicy (
-            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         mPicturePanelScroller.setVerticalScrollBarPolicy (
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         add (mMainArea, java.awt.BorderLayout.CENTER);
         mMainArea.setLeftComponent (mHistoryScroller);
@@ -1155,7 +1154,7 @@ public class Thumbelina
 
         source = (JSlider)event.getSource ();
         if (!source.getValueIsAdjusting ())
-            setSpeed ((int)source.getValue ());
+            setSpeed (source.getValue ());
     }
 
     //
@@ -1178,7 +1177,7 @@ public class Thumbelina
         source = (JList)event.getSource ();
         if (source == mHistory && !event.getValueIsAdjusting ())
         {
-            hrefs = (Object[])source.getSelectedValues ();
+            hrefs = source.getSelectedValues ();
             for (int i = 0; i < hrefs.length; i++)
             {
                 picture = mPicturePanel.find ("http://" + (String)hrefs[i]);
@@ -1453,6 +1452,9 @@ public class Thumbelina
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.6  2004/07/31 16:42:30  derrickoswald
+ * Remove unused variables and other fixes exposed by turning on compiler warnings.
+ *
  * Revision 1.5  2004/05/24 16:18:17  derrickoswald
  * Part three of a multiphase refactoring.
  * The three node types are now fronted by interfaces (program to the interface paradigm)

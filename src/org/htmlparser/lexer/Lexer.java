@@ -370,7 +370,6 @@ public class Lexer
         boolean done;
         char ch;
         char quote;
-        Node ret;
 
         done = false;
         quote = 0;
@@ -939,7 +938,6 @@ public class Lexer
         int state;
         Vector attributes;
         int code;
-        Node ret;
 
         done = false;
         state = 0;

@@ -412,7 +412,6 @@ public class TagNode
         Vector attributes;
         Attribute attribute;
         String value;
-        StringBuffer _value;
         Hashtable ret;
 
         ret = new SpecialHashtable ();

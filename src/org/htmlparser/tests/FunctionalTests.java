@@ -85,7 +85,7 @@ public class FunctionalTests extends ParserTestCase {
         int parserImgTagCount = 0;
         Node node;
         for (NodeIterator e= parser.elements();e.hasMoreNodes();) {
-            node = (Node)e.nextNode();
+            node = e.nextNode();
             if (node instanceof ImageTag) {
                 parserImgTagCount++;
             }

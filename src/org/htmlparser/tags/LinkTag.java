@@ -277,7 +277,7 @@ public class LinkTag extends CompositeTag
             int i = 0;
             for (SimpleNodeIterator e=children();e.hasMoreNodes();)
             {
-                node = (Node)e.nextNode();
+                node = e.nextNode();
                 sb.append("   "+(i++)+ " ");
                 sb.append(node.toString()+"\n");
             }
