@@ -51,7 +51,7 @@ public class HTMLStyleTag extends HTMLCompositeTag {
 	 * @return java.lang.String
 	 */
 	public java.lang.String getStyleCode() {
-		return getText();
+		return getChildrenHTML();
 	}
 	/**
 	 * Print the contents of the javascript node

@@ -30,100 +30,33 @@ package org.htmlparser.scanners;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
-import java.util.Vector;
-
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLStyleTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
-import org.htmlparser.util.HTMLParserException;
 /**
  * The HTMLStyleScanner scans identifies &lt;style&gt; code
  */
 
-public class HTMLStyleScanner extends HTMLTagScanner {
-	/**
-	 * HTMLScriptScanner constructor comment.
-	 */
+public class HTMLStyleScanner extends HTMLCompositeTagScanner {
 	public HTMLStyleScanner() {
-		super();
+		super("STYLE");
 	}
-	/**
-	 * HTMLScriptScanner constructor comment.
-	 * @param filter java.lang.String
-	 */
+
 	public HTMLStyleScanner(String filter) {
-		super(filter);
+		super(filter,"STYLE");
 	}
-		/** 
-		 * Scan the tag and extract the information related to this type. The url of the 
-		 * initiating scan has to be provided in case relative links are found. The initial 
-		 * url is then prepended to it to give an absolute link.
-		 * The HTMLReader is provided in order to do a lookahead operation. We assume that
-		 * the identification has already been performed using the evaluate() method.
-		 * @param tag HTML Tag to be scanned for identification
-		 * @param url The initiating url of the scan (Where the html page lies)
-		 * @param reader The reader object responsible for reading the html page
-		 * @param currentLine The current line (automatically provided by HTMLTag)
-		 */
-	public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws HTMLParserException
-	{
-		try {
-			// We know we have style stuff. 
-			// Parse on till the end tag </style> is found
-			String line;
-			HTMLTag startTag = tag;
-			HTMLTag endTag=null;
-			HTMLNode node = null;
-			boolean endStyleFound=false;
-			StringBuffer buff=new StringBuffer();
-			Vector childNodes = new Vector();
-			do {
-				node = reader.readElement();
-				if (node instanceof HTMLEndTag) {
-					endTag = (HTMLEndTag)node;
-					if (endTag.getText().toUpperCase().equals("STYLE")) {
-						endStyleFound = true;
-					}
-				} else {
-					buff.append(node.toHTML());
-					childNodes.addElement(node);
-				} 
-			}
-			while (!endStyleFound && node!=null);
-			if (node==null && !endStyleFound) {
-				throw new HTMLParserException("HTMLStyleScanner.scan() : Went into a potential infinite loop, could not create syle tag.\n"+
-				"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
-			}
-			HTMLStyleTag styleTag = new HTMLStyleTag(
-				new HTMLTagData(
-					tag.elementBegin(),
-					endTag.elementEnd(),
-					buff.toString(),
-					currentLine
-				),
-				new HTMLCompositeTagData(
-					startTag,
-					endTag,
-					childNodes
-				)
-			);
-			styleTag.setAttributes(tag.getAttributes());
-			return styleTag;
-		}
-		catch (Exception e) {
-			throw new HTMLParserException("HTMLStyleScanner.scan() : Error while scanning a style tag, currentLine = "+currentLine,e);
-		}
-	}
-	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
-	 */
+
 	public String [] getID() {
 		String [] ids = new String[1];
 		ids[0] = "STYLE";
 		return ids;
 	}
+	
+	protected HTMLTag createTag(
+		HTMLTagData tagData,
+		HTMLCompositeTagData compositeTagData) {
+		return new HTMLStyleTag(tagData,compositeTagData);
+	}
+
 }

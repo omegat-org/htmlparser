@@ -100,6 +100,6 @@ public class HTMLStyleScannerTest extends HTMLParserTestCase
 		HTMLStyleTag styleTag = (HTMLStyleTag)node[4];
 		String expectedCode = "<!--\r\n\r\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\r\n"+
 		"//\r\n-->";
-		assertEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
+		assertStringEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
 	}
 }

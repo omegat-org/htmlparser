@@ -36,24 +36,20 @@ import org.htmlparser.tags.data.HTMLTagData;
 
 public class HTMLSelectTagScanner extends HTMLCompositeTagScanner
 {
+	public static final String SELECT_STRING = "SELECT";
 	public HTMLSelectTagScanner()
 	{
-		super("SELECT");
+		super(SELECT_STRING);
 	}
 	
 	public HTMLSelectTagScanner(String filter)
 	{
-		super(filter,"SELECT");
+		super(filter,SELECT_STRING);
 	}
 	
-
-	
-	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
-	 */
 	public String [] getID() {
 		String [] ids = new String[1];
-		ids[0] = "SELECT";
+		ids[0] = SELECT_STRING;
 		return ids;
 	}
 
@@ -63,5 +59,4 @@ public class HTMLSelectTagScanner extends HTMLCompositeTagScanner
 		HTMLCompositeTagData compositeTagData) {
 		return new HTMLSelectTag(tagData,compositeTagData);
 	}
-
 }

@@ -145,4 +145,12 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 		}
 	}
 
+	public String getChildrenHTML() {
+		StringBuffer buff = new StringBuffer();
+		for (Enumeration e = children();e.hasMoreElements();) {
+			HTMLNode node = (HTMLNode)e.nextElement();
+			buff.append(node.toHTML());
+		}
+		return buff.toString();
+	}
 }
