@@ -305,6 +305,23 @@ HTML Parser Integration Release 1.4-20030824
     </jar>
   </target>
 
+  <!-- Create the Thumbelina jar -->
+  <target name="thumbelina" depends="jarlexer" description="create thumbelina.jar">
+    <javac compiler="javac1.4" srcdir="${src}" debug="on" classpath="src:${dist}/lib/htmllexer.jar">
+      <include name="org/htmlparser/lexerapplications/thumbelina/**/*.java"/>
+    </javac>
+    <jar jarfile="${dist}/lib/thumbelina.jar"
+      basedir="${src}"
+      defaultexcludes="no"
+      update="true">
+      <include name="org/htmlparser/lexerapplications/thumbelina/**/*.class"/>
+      <zipfileset src="${dist}/lib/htmllexer.jar" includes="**/*.class"/>
+      <manifest>
+        <attribute name="Main-Class" value="org.htmlparser.lexerapplications.thumbelina.Thumbelina"/>
+      </manifest>
+    </jar>
+  </target>
+  
   <!-- Run the unit tests -->
   <target name="test" depends="jar" description="run the JUnit tests">
     <echo message="**********************************"/>
