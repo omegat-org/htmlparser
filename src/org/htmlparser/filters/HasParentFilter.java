@@ -32,12 +32,12 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 
 /**
- * This class accepts all tags that have a parent acceptable to the filter.
+ * This class accepts all tags that have a parent acceptable to another filter.
  */
 public class HasParentFilter implements NodeFilter
 {
     /**
-     * The filter to apply to children.
+     * The filter to apply to the parent.
      */
     public NodeFilter mFilter;
 

@@ -948,6 +948,33 @@ public class Page
     }
 
     /**
+     * Put the text identified by the given limits into the given array at the specified offset.
+     * @param array The array of characters.
+     * @param offset The starting position in the array where characters are to be placed.
+     * @param start The starting position, zero based.
+     * @param end The ending position
+     * (exclusive, i.e. the character at the ending position is not included),
+     * zero based.
+     * @exception IllegalArgumentException If an attempt is made to get
+     * characters ahead of the current source offset (character position).
+     */
+    public void getText (char[] array, int offset, int start, int end)
+    {
+        int length;
+
+        if ((mSource.mOffset < start) || (mSource.mOffset < end))
+            throw new IllegalArgumentException ("attempt to extract future characters from source");
+        if (end < start)
+        {
+            length = end;
+            end = start;
+            start = length;
+        }
+        length = end - start;
+        System.arraycopy (mSource.mBuffer, start, array, offset, length);
+    }
+
+    /**
      * Get the text line the position of the cursor lies on.
      * @param cursor The position to calculate for.
      * @return The contents of the URL or file corresponding to the line number
