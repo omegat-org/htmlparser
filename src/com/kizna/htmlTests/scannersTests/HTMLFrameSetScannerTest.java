@@ -39,6 +39,7 @@ import java.io.StringReader;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
+import com.kizna.html.scanners.HTMLFrameScanner;
 import com.kizna.html.scanners.HTMLFrameSetScanner;
 import com.kizna.html.tags.HTMLFrameSetTag;
 import com.kizna.html.tags.HTMLFrameTag;
@@ -82,6 +83,7 @@ public class HTMLFrameSetScannerTest extends TestCase {
 		HTMLNode [] node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLFrameSetScanner(""));
+		parser.addScanner(new HTMLFrameScanner());
 		
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -99,8 +101,8 @@ public class HTMLFrameSetScannerTest extends TestCase {
 		// Now check the frames
 		HTMLFrameTag topFrame = frameSetTag.getFrame("topFrame");
 		HTMLFrameTag mainFrame = frameSetTag.getFrame("mainFrame");
-		assertNotNull(topFrame);
-		assertNotNull(mainFrame);
+		assertNotNull("Top Frame should not be null",topFrame);
+		assertNotNull("Main Frame should not be null",mainFrame);
 		assertEquals("Top Frame Name","topFrame",topFrame.getFrameName());
 		assertEquals("Top Frame Location","http://www.google.com/test/demo_bc_top.html",topFrame.getFrameLocation());
 		assertEquals("Main Frame Name","mainFrame",mainFrame.getFrameName());

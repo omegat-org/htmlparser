@@ -16,11 +16,6 @@ public class HTMLInputTagScanner extends HTMLTagScanner
 		super(pFilter);
 	}
 	
-	public boolean evaluate(String pTagString, HTMLTagScanner pPreviousOpenScanner)
-	{
-		return (HTMLParserUtils.evaluateTag(this,pTagString,"INPUT"));
-	}
-
 	public HTMLTag scan(HTMLTag pTag, String pUrl, HTMLReader pReader, String pCurrLine)
 			throws HTMLParserException
 	{
@@ -37,4 +32,12 @@ public class HTMLInputTagScanner extends HTMLTagScanner
 		}
 	}
 	
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "INPUT";
+		return ids;
+	}
 }

@@ -58,28 +58,17 @@ public class HTMLParserUtils
 		return lString.toString();
 	}
 	
-	public static Vector adjustScanners(HTMLReader pReader) 
+	public static Hashtable adjustScanners(HTMLReader pReader) 
 	{
-		Vector lScannerVector = new Vector();
-		for (Enumeration e=pReader.getParser().getScanners();e.hasMoreElements();) 
-		{
-			lScannerVector.addElement(e.nextElement());
-		}
-		
+		Hashtable tempScanners= new Hashtable();
+		tempScanners = pReader.getParser().getScanners();		
 		// Remove all existing scanners
 		pReader.getParser().flushScanners();
-		return lScannerVector;
+		return tempScanners;
 	}
-	
-	public static void restoreScanners(HTMLReader pReader, Vector pScannerVector)
+	public static void restoreScanners(HTMLReader pReader, Hashtable tempScanners)
 	{
 		// Flush the scanners
-		pReader.getParser().flushScanners();
-	
-		// Add all the original scanners back
-		for (Enumeration e = pScannerVector.elements();e.hasMoreElements();)
-		{
-			pReader.getParser().addScanner((HTMLTagScanner)e.nextElement());
-		}
-	}	
+		pReader.getParser().setScanners(tempScanners);
+	}
 }

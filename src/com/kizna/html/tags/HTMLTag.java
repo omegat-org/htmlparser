@@ -206,20 +206,41 @@ public class HTMLTag extends HTMLNode
 	public boolean isEndOfLineCharState() {
 		return endOfLineCharState;
 	}
-
+	public static String extractWord(String s) {
+		String word = "";
+		boolean parse=true;
+		for (int i=0;i<s.length() && parse==true;i++) {
+			char ch = s.charAt(i);
+			if (ch==' ' || ch=='\r' || ch=='\n' || ch=='=') parse = false; else word +=ch;
+		}
+		word = word.toUpperCase();
+		return word;
+	}
 	/**
 	 * Scan the tag to see using the registered scanners, and attempt identification.
 	 * @param url URL at which HTML page is located
 	 * @param reader The HTMLReader that is to be used for reading the url
 	 */
-	public HTMLNode scan(Enumeration scanners,String url,HTMLReader reader) throws HTMLParserException
+	public HTMLNode scan(Hashtable scanners,String url,HTMLReader reader) throws HTMLParserException
 	{
 		if (tagContents.length()==0) return this;
 		try {
 			boolean found=false;
 			HTMLNode retVal=null;
-			
-			for (Enumeration e=scanners;(e.hasMoreElements() && !found);)
+			// Find the first word in the scanners
+			String firstWord = extractWord(tagContents.toString());
+			// Now, get the scanner associated with this.
+			HTMLTagScanner scanner = (HTMLTagScanner)scanners.get(firstWord);
+			// Now do a deep check
+			if (scanner != null && scanner.evaluate(tagContents.toString(),reader.getPreviousOpenScanner()))
+			{
+				found=true;
+				reader.setPreviousOpenScanner(scanner);
+				retVal=scanner.createScannedNode(this,url,reader,tagLine);
+				reader.setPreviousOpenScanner(null);
+			}
+
+/*			for (Enumeration e=scanners;(e.hasMoreElements() && !found);)
 			{
 				HTMLTagScanner scanner = (HTMLTagScanner)e.nextElement();
 				if (scanner.evaluate(tagContents.toString(),reader.getPreviousOpenScanner()))
@@ -229,7 +250,8 @@ public class HTMLTag extends HTMLNode
 					retVal=scanner.createScannedNode(this,url,reader,tagLine);
 					reader.setPreviousOpenScanner(null);
 				}
-			}
+			}*/
+			
 			if (!found) return this;
 			else {   			
 			    return retVal;

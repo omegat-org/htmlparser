@@ -122,7 +122,7 @@ public class HTMLParser
 	 * Keeps track of whether the first reading has been performed.
 	 */
 	protected boolean readFlag = false;
-	private Vector scanners = new Vector();
+	private Hashtable scanners = new Hashtable();
 	
 	/**
 	 * Feedback object
@@ -189,7 +189,10 @@ public class HTMLParser
 	 * @param scanner HTMLTagScanner object (or derivative) to be added to the list of registered scanners
 	 */
 	public void addScanner(HTMLTagScanner scanner) {
-		scanners.addElement(scanner);
+		String ids[] = scanner.getID();
+		for (int i=0;i<ids.length;i++) {
+			scanners.put(ids[i],scanner);
+		}
 	}
 		private String checkEnding(String link)
 		{
@@ -268,7 +271,7 @@ public class HTMLParser
 	 * Flush the current scanners registered. The registered scanners list becomes empty with this call.
 	 */
 	public void flushScanners() {
-		scanners = new Vector();	
+		scanners = new Hashtable();	
 	}
 	/**
 	 * Get the number of scanners registered currently in the scanner.
@@ -281,8 +284,8 @@ public class HTMLParser
 	 * Get an enumeration of scanners registered currently in the parser
 	 * @return Enumeration of scanners currently registered in the parser
 	 */
-	public Enumeration getScanners() {
-		return scanners.elements();
+	public Hashtable getScanners() {
+		return scanners;
 	}
 	/*
 	 * The main program, which can be executed from the command line
@@ -453,14 +456,14 @@ public class HTMLParser
 	 * Removes a specified scanner object.
 	 * @param scanner HTMLTagScanner object to be removed from the list of registered scanners
 	 */
-	public boolean removeScanner(HTMLTagScanner scanner) {
-		return scanners.removeElement(scanner);
+	public void removeScanner(HTMLTagScanner scanner) {
+		scanners.remove(scanner);
 	}
 	/**
 	 * This method is to be used to change the set of scanners in the current parser.
 	 * @param newScanners Vector holding scanner objects to be used during the parsing process.
 	 */
-	public void setScanners(Vector newScanners) {
+	public void setScanners(Hashtable newScanners) {
 		scanners = newScanners;
 	}
 	

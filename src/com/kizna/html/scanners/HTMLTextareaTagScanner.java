@@ -19,11 +19,6 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 		super(pFilter);
 	}
 	
-	public boolean evaluate(String pTagString, HTMLTagScanner pPreviousOpenScanner)
-	{
-		return (HTMLParserUtils.evaluateTag(this,pTagString,"TEXTAREA"));
-	}
-
 	public HTMLTag scan(HTMLTag pTag, String pUrl, HTMLReader pReader, String pCurrLine)
 			throws HTMLParserException
 	{
@@ -35,7 +30,6 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 			StringBuffer lValue=new StringBuffer();
 			
 			// Remove all existing scanners, so as to parse only till the end tag
-			Vector lScannerVector = HTMLParserUtils.adjustScanners(pReader);	
 			HTMLNode lPrevNode=pTag;
 			do 
 			{
@@ -64,7 +58,6 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 			HTMLTextareaTag lTextareaTag = new HTMLTextareaTag(
 										0, lNode.elementEnd(), pTag.getText(), 
 										lValue.toString(), pCurrLine);
-			HTMLParserUtils.restoreScanners(pReader, lScannerVector);
 			return lTextareaTag;
 		}
 		catch (Exception e) 
@@ -75,4 +68,13 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 	
 	
 	
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "TEXTAREA";
+		return ids;
+	}
+
 }

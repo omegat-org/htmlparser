@@ -62,16 +62,6 @@ public class HTMLOptionTagScannerTest extends TestCase
 		}
 	}
 	
-	public void testEvaluate() 
-	{
-		boolean retVal = scanner.evaluate("OPTION",null);
-		assertEquals("Option evaluation - Upper Case",true,retVal);
-		retVal = scanner.evaluate("option",null);
-		assertEquals("Option evaluation - Lower Case",true,retVal);
-		retVal = scanner.evaluate("abcd",null);
-		assertEquals("Incorrect Case",false,retVal);
-	}
-	
 	public void testScan() throws HTMLParserException 
 	{
 		assertEquals("There should be 9 nodes identified",9,i);	

@@ -61,16 +61,6 @@ public class HTMLTextareaTagScannerTest extends TestCase
 		}
 	}
 	
-	public void testEvaluate() 
-	{
-		boolean retVal = scanner.evaluate("TEXTAREA",null);
-		assertEquals("Textarea evaluation - Upper Case",true,retVal);
-		retVal = scanner.evaluate("textarea",null);
-		assertEquals("Textarea evaluation - Lower Case",true,retVal);
-		retVal = scanner.evaluate("abcd",null);
-		assertEquals("Incorrect Case",false,retVal);
-	}
-	
 	public void testScan() throws HTMLParserException 
 	{
 		assertEquals("Number of nodes expected",5,i);		

@@ -49,83 +49,75 @@ import com.kizna.html.tags.HTMLDoctypeTag;
 public class HTMLDoctypeScanner extends HTMLTagScanner {
 	private java.lang.String language;
 	private java.lang.String type;
-/**
- * HTMLScriptScanner constructor comment.
- */
-public HTMLDoctypeScanner() {
-	super();
-}
-/**
- * HTMLScriptScanner constructor comment.
- * @param filter java.lang.String
- */
-public HTMLDoctypeScanner(String filter) {
-	super(filter);
-}
 	/**
-	 * Template Method, used to decide if this scanner can handle this tag type. If the
-	 * evaluation returns true, the calling side makes a call to scan().
-	 * @param s The complete text contents of the HTMLTag.
-	 * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-	 * scan has begun, and hence allows us to write scanners that can work with dirty html
+	 * HTMLScriptScanner constructor comment.
 	 */
-public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
-{
-	boolean retVal=false;
-	// Eat up leading blanks
-	s = absorbLeadingBlanks(s);
-	// Now, test for the occurence of the JSP/ASP tag
-	// If its a JSP tag, it will begin and end with %
-	if (s.toUpperCase().indexOf("!DOCTYPE")==0) retVal = true;
-	return retVal;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:30:03 AM)
- * @param tag com.kizna.html.HTMLTag
- */
-public void extractLanguage(HTMLTag tag) 
-{
-	language = tag.getParameter("LANGUAGE");
-}
-	/** 
-	 * Scan the tag and extract the information related to this type. The url of the 
-	 * initiating scan has to be provided in case relative links are found. The initial 
-	 * url is then prepended to it to give an absolute link.
-	 * The HTMLReader is provided in order to do a lookahead operation. We assume that
-	 * the identification has already been performed using the evaluate() method.
-	 * @param tag HTML Tag to be scanned for identification
-	 * @param url The initiating url of the scan (Where the html page lies)
-	 * @param reader The reader object responsible for reading the html page
-	 * @param currentLine The current line (automatically provided by HTMLTag)	 
+	public HTMLDoctypeScanner() {
+		super();
+	}
+	/**
+	 * HTMLScriptScanner constructor comment.
+	 * @param filter java.lang.String
 	 */
-public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws HTMLParserException
-{
-	try {
-		String tagContents = tag.getText();
-		// Cut from 9th char -- a space after !DOCTYPE _
-		tagContents=tagContents.substring(9,tagContents.length());
-		HTMLDoctypeTag docTypeTag = new HTMLDoctypeTag(tag.elementBegin(),tag.elementEnd(),tagContents,currentLine);
-		return docTypeTag;
+	public HTMLDoctypeScanner(String filter) {
+		super(filter);
 	}
-	catch (Exception e) {
-		throw new HTMLParserException("HTMLDoctypeScanner.scan() : Error in scanning doctype tag, current line = "+currentLine,e);
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 11:30:03 AM)
+	 * @param tag com.kizna.html.HTMLTag
+	 */
+	public void extractLanguage(HTMLTag tag) 
+	{
+		language = tag.getParameter("LANGUAGE");
 	}
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:55:32 AM)
- * @param newLanguage java.lang.String
- */
-public void setLanguage(java.lang.String newLanguage) {
-	language = newLanguage;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 12:20:57 PM)
- * @param newType java.lang.String
- */
-public void setType(java.lang.String newType) {
-	type = newType;
-}
+		/** 
+		 * Scan the tag and extract the information related to this type. The url of the 
+		 * initiating scan has to be provided in case relative links are found. The initial 
+		 * url is then prepended to it to give an absolute link.
+		 * The HTMLReader is provided in order to do a lookahead operation. We assume that
+		 * the identification has already been performed using the evaluate() method.
+		 * @param tag HTML Tag to be scanned for identification
+		 * @param url The initiating url of the scan (Where the html page lies)
+		 * @param reader The reader object responsible for reading the html page
+		 * @param currentLine The current line (automatically provided by HTMLTag)	 
+		 */
+	public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws HTMLParserException
+	{
+		try {
+			String tagContents = tag.getText();
+			// Cut from 9th char -- a space after !DOCTYPE _
+			tagContents=tagContents.substring(9,tagContents.length());
+			HTMLDoctypeTag docTypeTag = new HTMLDoctypeTag(tag.elementBegin(),tag.elementEnd(),tagContents,currentLine);
+			return docTypeTag;
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLDoctypeScanner.scan() : Error in scanning doctype tag, current line = "+currentLine,e);
+		}
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 11:55:32 AM)
+	 * @param newLanguage java.lang.String
+	 */
+	public void setLanguage(java.lang.String newLanguage) {
+		language = newLanguage;
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 12:20:57 PM)
+	 * @param newType java.lang.String
+	 */
+	public void setType(java.lang.String newType) {
+		type = newType;
+	}
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "!DOCTYPE";
+		return ids;
+	}
+
 }

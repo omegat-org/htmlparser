@@ -122,7 +122,7 @@ public class HTMLJspTagTest extends TestCase
 		assertEquals("Contents of the tag","jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/",htag.getText());
 	
 		// The third node should be an HTMLJspTag
-		assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof HTMLJspTag);
+		assertTrue("Node 3 should be an HTMLJspTag",node[2] instanceof HTMLJspTag);
 		HTMLJspTag tag2 = (HTMLJspTag)node[2];
 		String expected = "\r\n"+
 			"    org.apache.struts.util.BeanUtils.populate(transfer, request);\r\n"+

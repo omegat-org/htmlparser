@@ -17,11 +17,6 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 		super(pFilter);
 	}
 	
-	public boolean evaluate(String pTagString, HTMLTagScanner pPreviousOpenScanner)
-	{
-		return (HTMLParserUtils.evaluateTag(this,pTagString,"OPTION"));
-	}
-
 	public HTMLTag scan(HTMLTag pTag, String pUrl, HTMLReader pReader, String pCurrLine)
 			throws HTMLParserException
 	{
@@ -32,9 +27,9 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 			HTMLNode lPrevNode = pTag;
 			boolean endTagFound=false;
 			StringBuffer lText=new StringBuffer("");
-
 			// Remove all existing scanners, so as to parse only till the end tag
-			Vector lScannerVector = HTMLParserUtils.adjustScanners(pReader);	
+			Hashtable tempScanners = HTMLParserUtils.adjustScanners(pReader);	
+
 			do 
 			{
 				lNode = pReader.readElement();
@@ -66,8 +61,8 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 			HTMLOptionTag lOptionTag = new HTMLOptionTag(
 										0, lNode.elementEnd(), pTag.getText(), 
 										lText.toString(), pCurrLine);
-			HTMLParserUtils.restoreScanners(pReader, lScannerVector);
-			return lOptionTag;
+			HTMLParserUtils.restoreScanners(pReader, tempScanners);
+			return lOptionTag;										
 		}
 		catch (Exception e) 
 		{
@@ -77,4 +72,12 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 	
 	
 	
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "OPTION";
+		return ids;
+	}
 }

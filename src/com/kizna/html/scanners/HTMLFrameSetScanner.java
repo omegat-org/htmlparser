@@ -102,13 +102,7 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
 	{
 		try {
-			/* Remove all the existing scanners and register only the frame scanner. Proceed scanning till end
-			 * tag is found. Then register all the scanners back.
-			 */
-			// Store all the current scanners in tempScannerVector
-			Vector tempScannerVector = adjustScanners(reader);
 			Vector frameVector = new Vector();
-			// Scanners have been adjusted, begin processing till we recieve the end tag for the frame
 			boolean endFrameSetFound=false;
 			HTMLNode node;
 			int frameSetEnd=-1;
@@ -135,30 +129,19 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 				"Frame Vector contents : "+msg.toString());
 			}
 			HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector);
-			restoreScanners(reader, tempScannerVector);
 			return frameSetTag;		
 		}
 		catch (Exception e) {
 			throw new HTMLParserException("HTMLFrameSetScanner.scan() : Error while scanning Frameset tag, current line = "+currentLine,e);
 		}
 	}
-	public void restoreScanners(HTMLReader reader, Vector tempScannerVector) {
-		// Flush the scanners
-		reader.getParser().flushScanners();
-		// Add all the original scanners back
-		for (Enumeration e = tempScannerVector.elements();e.hasMoreElements();) {
-			reader.getParser().addScanner((HTMLTagScanner)e.nextElement());
-		}
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "FRAMESET";
+		return ids;
 	}
-	public Vector adjustScanners(HTMLReader reader) {
-		Vector tempScannerVector = new Vector();
-		for (Enumeration e=reader.getParser().getScanners();e.hasMoreElements();) {
-			tempScannerVector.addElement(e.nextElement());
-		}
-		// Remove all existing scanners
-		reader.getParser().flushScanners();
-		// Add only the frame scanner
-		reader.getParser().addScanner(new HTMLFrameScanner(""));
-		return tempScannerVector;
-	}
+
 }

@@ -75,39 +75,44 @@ public abstract class HTMLTagScanner
   {
     this.filter=filter;
   }
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:44:09 AM)
- * @return java.lang.String
- * @param c char
- */
-public String absorb(String s,char c) {
-  int index = s.indexOf(c);
-  if (index!=-1)	s=s.substring(index+1,s.length());
-  return s;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:15:02 AM)
- * @return java.lang.String
- */
-public static String absorbLeadingBlanks(String s) 
-{
-  String temp = new String(s);
-  while (temp.length()!=0 && temp.charAt(0)==' ')
-  {
-    temp = temp.substring(1,temp.length());
-  }
-  return temp;
-}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 11:44:09 AM)
+	 * @return java.lang.String
+	 * @param c char
+	 */
+	public String absorb(String s,char c) {
+	  int index = s.indexOf(c);
+	  if (index!=-1)	s=s.substring(index+1,s.length());
+	  return s;
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/18/2001 2:15:02 AM)
+	 * @return java.lang.String
+	 */
+	public static String absorbLeadingBlanks(String s) 
+	{
+	  String temp = new String(s);
+	  while (temp.length()!=0 && temp.charAt(0)==' ')
+	  {
+	    temp = temp.substring(1,temp.length());
+	  }
+	  return temp;
+	}
   /**
-   * Template Method, used to decide if this scanner can handle this tag type. If the
+   * This method is used to decide if this scanner can handle this tag type. If the
    * evaluation returns true, the calling side makes a call to scan().
+   * <strong>This method has to be implemented meaningfully only if a first-word match with 
+   * the scanner id does not imply a match (or extra processing needs to be done).
+   * Default returns true</strong>
    * @param s The complete text contents of the HTMLTag.
    * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
    * scan has begun, and hence allows us to write scanners that can work with dirty html
    */
-  public abstract boolean evaluate(String s,HTMLTagScanner previousOpenScanner);
+  public boolean evaluate(String s,HTMLTagScanner previousOpenScanner) {
+  	return true;
+  }
   public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) throws HTMLParserException{
 	try {	  
 	  String xmlData = "";
@@ -149,7 +154,7 @@ public static String absorbLeadingBlanks(String s)
 	catch (Exception e) {
 		throw new HTMLParserException("HTMLTagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
 	}
-}
+  }
   /**
    * Get the filter associated with this node.
    */
@@ -157,26 +162,26 @@ public static String absorbLeadingBlanks(String s)
   {
     return filter;
   }
-/**
- * Insert the method's description here.
- * Creation date: (10/24/2001 6:27:02 PM)
- */
-public static boolean isXMLTagFound(HTMLNode node, String tagName) {
-  boolean xmlTagFound=false;
-  if (node instanceof HTMLTag) {
-    HTMLTag tag = (HTMLTag)node;
-    if (tag.getText().toUpperCase().indexOf(tagName)==0) {
-      xmlTagFound=true;
-    }
-  }
-  return xmlTagFound;
-}
-  public final HTMLTag createScannedNode(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException {
-    HTMLTag thisTag = scan(tag,url,reader,currLine);
-    thisTag.setThisScanner(this);
-    thisTag.setParsed(tag.getParsed());		
-    return thisTag;
-  }
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (10/24/2001 6:27:02 PM)
+	 */
+	public static boolean isXMLTagFound(HTMLNode node, String tagName) {
+	  boolean xmlTagFound=false;
+	  if (node instanceof HTMLTag) {
+	    HTMLTag tag = (HTMLTag)node;
+	    if (tag.getText().toUpperCase().indexOf(tagName)==0) {
+	      xmlTagFound=true;
+	    }
+	  }
+	  return xmlTagFound;
+	}
+	public final HTMLTag createScannedNode(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException {
+		HTMLTag thisTag = scan(tag,url,reader,currLine);
+		thisTag.setThisScanner(this);
+		thisTag.setParsed(tag.getParsed());		
+		return thisTag;
+	}
   /** 
    * Scan the tag and extract the information related to this type. The url of the 
    * initiating scan has to be provided in case relative links are found. The initial 
@@ -213,6 +218,7 @@ public static boolean isXMLTagFound(HTMLNode node, String tagName) {
     newString.append(s);
     return newString.toString();
   }
+  public abstract String [] getID();
 
 
 }

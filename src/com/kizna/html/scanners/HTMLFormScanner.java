@@ -73,18 +73,6 @@ public class HTMLFormScanner extends HTMLTagScanner
 	{
 		super(filter);
 	}
-	/**
-	 * Template Method, used to decide if this scanner can handle the Image tag type. If
-	 * the evaluation returns true, the calling side makes a call to scan().
-	 * @param s The complete text contents of the HTMLTag.
-	 */
-	public boolean evaluate(String s, HTMLTagScanner previousOpenScanner)
-	{
-		// Eat up leading blanks
-		s = absorbLeadingBlanks(s);
-		if (s.toUpperCase().indexOf("FORM")==0)
-		return true; else return false;		
-	}
   /**
    * Extract the location of the image, given the string to be parsed, and the url
    * of the html page in which this tag exists.
@@ -177,6 +165,15 @@ public class HTMLFormScanner extends HTMLTagScanner
 		catch (Exception e) {
 			throw new HTMLParserException("HTMLFormScanner.scan() : Error while scanning the form tag, current line = "+currentLine,e);
 		}
+	}
+
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "FORM";
+		return ids;
 	}
 
 }

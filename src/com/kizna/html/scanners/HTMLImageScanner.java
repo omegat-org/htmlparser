@@ -76,20 +76,6 @@ public class HTMLImageScanner extends HTMLTagScanner
 		super(filter);
 		this.processor = processor;
 	}
-	/**
-	 * Template Method, used to decide if this scanner can handle the Image tag type. If 
-	 * the evaluation returns true, the calling side makes a call to scan().
-	 * @param s The complete text contents of the HTMLTag.
-	 * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-	 * scan has begun, and hence allows us to write scanners that can work with dirty html
-	 */
-	public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
-	{
-		// Eat up leading blanks
-		s = absorbLeadingBlanks(s);
-		if (s.toUpperCase().indexOf("IMG")==0)
-		return true; else return false;		
-	}
   /**
    * Extract the location of the image, given the string to be parsed, and the url
    * of the html page in which this tag exists.
@@ -158,4 +144,13 @@ public class HTMLImageScanner extends HTMLTagScanner
 			"specifically, tag being parsed was "+tag.getText()+",\n currentLine = "+currentLine,e);
 		}
 	}
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "IMG";
+		return ids;
+	}
+
 }

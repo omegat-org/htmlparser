@@ -65,15 +65,6 @@ public class HTMLBaseHREFScanner extends HTMLTagScanner {
 	}
 
 	/**
-	 * @see com.kizna.html.scanners.HTMLTagScanner#evaluate(String, HTMLTagScanner)
-	 */
-	public boolean evaluate(String s, HTMLTagScanner previousOpenScanner) {
-		s = absorbLeadingBlanks(s);
-		if (s.toUpperCase().indexOf("BASE")==0)
-		return true; else return false;
-	}
-
-	/**
 	 * @see com.kizna.html.scanners.HTMLTagScanner#scan(HTMLTag, String, HTMLReader, String)
 	 */
 	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine)	throws HTMLParserException {
@@ -93,4 +84,13 @@ public class HTMLBaseHREFScanner extends HTMLTagScanner {
          return baseUrl;
       }
    	}
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "BASE";
+		return ids;
+	}
+
 }

@@ -731,4 +731,18 @@ public void testToHTML() throws HTMLParserException {
 		assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
 	
 	}
+    public void testExtractWord() {
+    	String line = "Abc DEF GHHI";
+    	String word = HTMLTag.extractWord(line);
+    	assertEquals("Word expected","ABC",HTMLTag.extractWord(line));
+    	String line2= "%\n ";
+    	assertEquals("Word expected for line 2","%",HTMLTag.extractWord(line2));    	
+    	String line3 = "%\n%>";
+		assertEquals("Word expected for line 3","%",HTMLTag.extractWord(line3));    	    	
+    	String line4 = "%=abc%>";
+		assertEquals("Word expected for line 4","%",HTMLTag.extractWord(line4));    	    	
+		String line5 = "OPTION";
+		assertEquals("Word expected for line 5","OPTION",HTMLTag.extractWord(line5));    	    	
+		
+    }	
 }

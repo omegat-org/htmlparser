@@ -54,14 +54,6 @@ public class HTMLMetaTagScannerTest extends TestCase {
 	public HTMLMetaTagScannerTest(String arg0) {
 		super(arg0);
 	}
-	public void testEvaluate() 
-	{
-		HTMLMetaTagScanner scanner = new HTMLMetaTagScanner("-t");
-		boolean retVal = scanner.evaluate("   meta ",null);
-		assertEquals("Evaluation of META tag - True case",true,retVal);
-		retVal = scanner.evaluate("   me ta ",null);
-		assertEquals("Evaluation of META tag - False case",false,retVal);		
-	}
 	public void testScan() throws HTMLParserException {
 		String testHTML = new String(
 		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+

@@ -149,6 +149,10 @@ public class HTMLTagScannerTest extends junit.framework.TestCase
 		HTMLTagScanner scanner = new HTMLTagScanner() { 
 			public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) { return null;}
 			public boolean evaluate(String s,HTMLTagScanner previousOpenScanner) { return false; }
+			public String []getID() {
+				
+				return null;
+			}
 		};
 		String result = scanner.removeChars(test,'\n');
 		assertEquals("Removing Chars","helloworld\tqsdsds",result);
@@ -158,6 +162,10 @@ public class HTMLTagScannerTest extends junit.framework.TestCase
 		HTMLTagScanner scanner = new HTMLTagScanner() { 
 			public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) { return null;}
 			public boolean evaluate(String s,HTMLTagScanner previousOpenScanner) { return false; }
+			public String [] getID() {
+				return null;
+			}
+	
 		};
 		String result = scanner.removeChars(test,"\r\n");
 		assertEquals("Removing Chars","helloworld\tqsdsds",result);

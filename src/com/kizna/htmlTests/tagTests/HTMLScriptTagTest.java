@@ -88,21 +88,6 @@ public class HTMLScriptTagTest extends TestCase{
 	}
 	/**
 	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 11:22:24 AM)
-	 */
-	public void testEvaluate() 
-	{
-		boolean result = scriptScanner.evaluate("script language=\"JavaScript\"",null);
-		assertEquals("Script Tag Evaluation #1",new Boolean(true),new Boolean(result));
-		
-		result = scriptScanner.evaluate("SCRIPT TYPE=\"text/javascript\"",null);
-		assertEquals("Script Tag Evaluation #2",new Boolean(true),new Boolean(result));
-	
-		result = scriptScanner.evaluate("META content=\"KIZNA Corporation, offers one stop solution for wireless community and collaboration Web sites.\" name=description",null);
-		assertEquals("Script Tag Evaluation #3",new Boolean(false),new Boolean(result));	
-	}
-	/**
-	 * Insert the method's description here.
 	 * Creation date: (6/4/2001 11:51:06 AM)
 	 */
 	public void testExtractLanguage() 

@@ -52,16 +52,6 @@ public class HTMLInputTagScannerTest extends TestCase
 		}
 	}
 	
-	public void testEvaluate() 
-	{
-		boolean retVal = scanner.evaluate("INPUT",null);
-		assertEquals("Input evaluation - Upper Case",true,retVal);
-		retVal = scanner.evaluate("input",null);
-		assertEquals("Input evaluation - Lower Case",true,retVal);
-		retVal = scanner.evaluate("abcd",null);
-		assertEquals("Incorrect Case",false,retVal);
-	}
-	
 	public void testScan() throws HTMLParserException 
 	{
 		assertEquals("Number of nodes expected",1,i);		

@@ -20,19 +20,7 @@ public class HTMLMetaTagScanner extends HTMLTagScanner {
 	public HTMLMetaTagScanner(String filter) {
 		super(filter);
 	}
-	/*
-	 * @see HTMLTagScanner#evaluate(String)
-	 * @param s The complete text contents of the HTMLTag.
-	 * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-	 * scan has begun, and hence allows us to write scanners that can work with dirty html
-	 */
-	public boolean evaluate(String s,HTMLTagScanner previousOpenScanner){
-		s = absorbLeadingBlanks(s);
-		if (s.toUpperCase().indexOf("META")==0)
-		return true; else return false;
-	}
-
-	/*
+		/*
 	 * @see HTMLTagScanner#scan(HTMLTag, String, HTMLReader, String)
 	 */
 	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader, String currLine)
@@ -50,6 +38,15 @@ public class HTMLMetaTagScanner extends HTMLTagScanner {
 		catch (Exception e) {
 			throw new HTMLParserException("HTMLMetaTagScanner.scan() : Error while scanning meta tags, current line = "+currLine,e);
 		}
+	}
+
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "META";
+		return ids;
 	}
 
 }

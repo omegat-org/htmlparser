@@ -93,7 +93,7 @@ public class HTMLSelectTagTest extends TestCase
 		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);
 		HTMLSelectTag SelectTag;
 		SelectTag = (HTMLSelectTag) node[0];
-		assertEquals("HTML Raw String","SELECT TAG\n--------\nNAME : Nominees\n" +
+		HTMLTagTest.assertStringEquals("HTML Raw String","SELECT TAG\n--------\nNAME : Nominees\n" +
 								"OPTION TAG\n--------\nVALUE : Spouse\nTEXT : Spouse\n\n" +
 								"OPTION TAG\n--------\nVALUE : Father\nTEXT : \n\n" +
 								"OPTION TAG\n--------\nVALUE : Mother\nTEXT : Mother\r\n\n\n" +

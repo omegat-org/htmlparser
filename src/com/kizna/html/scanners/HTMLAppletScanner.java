@@ -51,70 +51,54 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 	private java.lang.String className;
 	private java.lang.String archive;
 	private java.lang.String codebase;
-/**
- * HTMLAppletScanner constructor comment.
- */
-public HTMLAppletScanner() {
-	super();
-}
-/**
- * HTMLAppletScanner constructor comment.
- * @param filter java.lang.String
- */
-public HTMLAppletScanner(String filter) {
-	super(filter);
-}
 	/**
-	 * Template Method, used to decide if this scanner can handle this tag type. If the
-	 * evaluation returns true, the calling side makes a call to scan().
-	 * @param s The complete text contents of the HTMLTag.
-	 * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-	 * scan has begun, and hence allows us to write scanners that can work with dirty html
+	 * HTMLAppletScanner constructor comment.
 	 */
-public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
-{
-	// Eat up leading blanks
-	s = absorbLeadingBlanks(s);
-		
-	if (s.toUpperCase().indexOf("APPLET")==0)
-	return true;
-	else return false;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:31:42 AM)
- * @param text java.lang.String
- */
-public void extractFields(HTMLTag tag) 
-{
-    className = tag.getParameter("CODE");
-    archive = tag.getParameter("ARCHIVE");
-    codebase = tag.getParameter("CODEBASE");
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:34:38 AM)
- * @return java.lang.String
- */
-public java.lang.String getArchive() {
-	return archive;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:33:08 AM)
- * @return java.lang.String
- */
-public java.lang.String getClassName() {
-	return className;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:34:53 AM)
- * @return java.lang.String
- */
-public java.lang.String getCodebase() {
-	return codebase;
-}
+	public HTMLAppletScanner() {
+		super();
+	}
+	/**
+	 * HTMLAppletScanner constructor comment.
+	 * @param filter java.lang.String
+	 */
+	public HTMLAppletScanner(String filter) {
+		super(filter);
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/18/2001 2:31:42 AM)
+	 * @param text java.lang.String
+	 */
+	public void extractFields(HTMLTag tag) 
+	{
+	    className = tag.getParameter("CODE");
+	    archive = tag.getParameter("ARCHIVE");
+	    codebase = tag.getParameter("CODEBASE");
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/18/2001 2:34:38 AM)
+	 * @return java.lang.String
+	 */
+	public java.lang.String getArchive() {
+		return archive;
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/18/2001 2:33:08 AM)
+	 * @return java.lang.String
+	 */
+	public java.lang.String getClassName() {
+		return className;
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/18/2001 2:34:53 AM)
+	 * @return java.lang.String
+	 */
+	public java.lang.String getCodebase() {
+		return codebase;
+	}
 	/** 
 	 * Scan the tag and extract the information related to this type. The url of the 
 	 * initiating scan has to be provided in case relative links are found. The initial 
@@ -125,84 +109,94 @@ public java.lang.String getCodebase() {
 	 * @param url The initiating url of the scan (Where the html page lies)
 	 * @param reader The reader object responsible for reading the html page
 	 */
-public HTMLTag scan(HTMLTag tag, String url, com.kizna.html.HTMLReader reader, String currLine) throws HTMLParserException
-{
-	try {
-		String tagContents = tag.getText();
-		// From the tagContents, get the class name, archive, codebase
-		extractFields(tag);
-	
-		String line;
-		HTMLEndTag endTag=null;
-		HTMLNode node = null;
-		boolean endScriptFound=false;
-		Vector buff=new Vector();
-		Vector misc=new Vector();
-		Hashtable table = new Hashtable();
-	
-		do {
-			node = reader.readElement();
-			if (node instanceof HTMLEndTag) {
-				endTag = (HTMLEndTag)node;
-				if (endTag.getText().toUpperCase().equals("APPLET")) 
-				{
-					endScriptFound = true; 
+	public HTMLTag scan(HTMLTag tag, String url, com.kizna.html.HTMLReader reader, String currLine) throws HTMLParserException
+	{
+		try {
+			String tagContents = tag.getText();
+			// From the tagContents, get the class name, archive, codebase
+			extractFields(tag);
+		
+			String line;
+			HTMLEndTag endTag=null;
+			HTMLNode node = null;
+			boolean endScriptFound=false;
+			Vector buff=new Vector();
+			Vector misc=new Vector();
+			Hashtable table = new Hashtable();
+		
+			do {
+				node = reader.readElement();
+				if (node instanceof HTMLEndTag) {
+					endTag = (HTMLEndTag)node;
+					if (endTag.getText().toUpperCase().equals("APPLET")) 
+					{
+						endScriptFound = true; 
+					}
+				}
+				else if (node instanceof HTMLTag) {
+					HTMLTag htag = (HTMLTag)node;
+					String paramName = htag.getParameter("NAME");
+					if (paramName!=null && paramName.length()!=0)
+					{
+						String paramValue = htag.getParameter("VALUE");
+						table.put(paramName,paramValue);
+					}
+					else
+					{
+						misc.addElement(htag);
+					}
 				}
 			}
-			else if (node instanceof HTMLTag) {
-				HTMLTag htag = (HTMLTag)node;
-				String paramName = htag.getParameter("NAME");
-				if (paramName!=null && paramName.length()!=0)
-				{
-					String paramValue = htag.getParameter("VALUE");
-					table.put(paramName,paramValue);
+			while (!endScriptFound && node!=null);
+			if (node==null && endScriptFound==false) {
+				StringBuffer msg = new StringBuffer();
+				for (Enumeration e = table.elements();e.hasMoreElements();) {
+					String key = (String)e.nextElement();
+					msg.append(key+"="+table.get(key)+"\n");
 				}
-				else
-				{
-					misc.addElement(htag);
-				}
-			}
+				throw new HTMLParserException("HTMLAppletScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
+				"Table contents : "+msg.toString());
+			}	
+			HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,misc);
+			return appTag;
 		}
-		while (!endScriptFound && node!=null);
-		if (node==null && endScriptFound==false) {
-			StringBuffer msg = new StringBuffer();
-			for (Enumeration e = table.elements();e.hasMoreElements();) {
-				String key = (String)e.nextElement();
-				msg.append(key+"="+table.get(key)+"\n");
-			}
-			throw new HTMLParserException("HTMLAppletScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
-			"Table contents : "+msg.toString());
-		}	
-		HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,misc);
-		return appTag;
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLAppletScannet.scan(): Error in scanning applet tag, current line = "+currLine,e);
+		}
+		
 	}
-	catch (Exception e) {
-		throw new HTMLParserException("HTMLAppletScannet.scan(): Error in scanning applet tag, current line = "+currLine,e);
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/18/2001 2:34:38 AM)
+	 * @param newArchive java.lang.String
+	 */
+	public void setArchive(java.lang.String newArchive) {
+		archive = newArchive;
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/18/2001 2:33:08 AM)
+	 * @param newClassName java.lang.String
+	 */
+	public void setClassName(java.lang.String newClassName) {
+		className = newClassName;
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/18/2001 2:34:53 AM)
+	 * @param newCodebase java.lang.String
+	 */
+	public void setCodebase(java.lang.String newCodebase) {
+		codebase = newCodebase;
 	}
 	
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:34:38 AM)
- * @param newArchive java.lang.String
- */
-public void setArchive(java.lang.String newArchive) {
-	archive = newArchive;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:33:08 AM)
- * @param newClassName java.lang.String
- */
-public void setClassName(java.lang.String newClassName) {
-	className = newClassName;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:34:53 AM)
- * @param newCodebase java.lang.String
- */
-public void setCodebase(java.lang.String newCodebase) {
-	codebase = newCodebase;
-}
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "APPLET";
+		return ids;
+	}
+
 }

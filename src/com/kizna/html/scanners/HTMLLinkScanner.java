@@ -282,4 +282,13 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	public HTMLImageScanner createImageScanner(String filter) {
 		return new HTMLImageScanner(filter,processor);
 	}
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "A";
+		return ids;
+	}
+
 }

@@ -35,6 +35,7 @@ package com.kizna.html.scanners;
 // HTML Parser Imports //
 /////////////////////////
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import com.kizna.html.tags.HTMLTag;
@@ -51,156 +52,135 @@ import com.kizna.html.tags.HTMLScriptTag;
 public class HTMLScriptScanner extends HTMLTagScanner {
 	private java.lang.String language;
 	private java.lang.String type;
-/**
- * HTMLScriptScanner constructor comment.
- */
-public HTMLScriptScanner() {
-	super();
-}
-/**
- * HTMLScriptScanner constructor comment.
- * @param filter java.lang.String
- */
-public HTMLScriptScanner(String filter) {
-	super(filter);
-}
 	/**
-	 * Template Method, used to decide if this scanner can handle this tag type. If the
-	 * evaluation returns true, the calling side makes a call to scan().
-	 * @param s The complete text contents of the HTMLTag.
-	 * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-	 * scan has begun, and hence allows us to write scanners that can work with dirty html
+	 * HTMLScriptScanner constructor comment.
 	 */
-public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
-{
-	boolean retVal=false;
-	// Eat up leading blanks
-	s = absorbLeadingBlanks(s);
-	// Now, test for the occurence of SCRIPT
-	if (s.toUpperCase().indexOf("SCRIPT")==0) retVal=true;
-	return retVal;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:30:03 AM)
- * @param tag com.kizna.html.HTMLTag
- */
-public void extractLanguage(HTMLTag tag) 
-{
-	language = tag.getParameter("LANGUAGE");
-	if (language==null) language="";
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 12:12:20 PM)
- */
-public void extractType(HTMLTag tag) 
-{
-	type = tag.getParameter("TYPE");
-	if (type==null) type="";
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:55:32 AM)
- * @return java.lang.String
- */
-public java.lang.String getLanguage() {
-	return language;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 12:20:57 PM)
- * @return java.lang.String
- */
-public java.lang.String getType() {
-	return type;
-}
-	/** 
-	 * Scan the tag and extract the information related to this type. The url of the 
-	 * initiating scan has to be provided in case relative links are found. The initial 
-	 * url is then prepended to it to give an absolute link.
-	 * The HTMLReader is provided in order to do a lookahead operation. We assume that
-	 * the identification has already been performed using the evaluate() method.
-	 * @param tag HTML Tag to be scanned for identification
-	 * @param url The initiating url of the scan (Where the html page lies)
-	 * @param reader The reader object responsible for reading the html page
-	 * @param currentLine The current line (automatically provided by HTMLTag)	 
+	public HTMLScriptScanner() {
+		super();
+	}
+	/**
+	 * HTMLScriptScanner constructor comment.
+	 * @param filter java.lang.String
 	 */
-public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws HTMLParserException
-{
-	try {
-		// We know we have script stuff. So first extract the information from the tag about the language
-		extractLanguage(tag);
-		extractType(tag);
-		HTMLEndTag endTag=null;
-		HTMLNode node = null;
-		boolean endScriptFound=false;
-		StringBuffer buff=new StringBuffer();
-		// Remove all existing scanners, so as to parse only till the end tag
-		Vector tempScannerVector = adjustScanners(reader);	
-		HTMLNode prevNode=tag;
-		do {
-			node = reader.readElement();
-			if (node instanceof HTMLEndTag) {
-				endTag = (HTMLEndTag)node;
-				if (endTag.getText().toUpperCase().equals("SCRIPT")) 
-				{
-					endScriptFound = true;
-					// Check if there was anything in front of endTag, and if so, add it to the code buffer
+	public HTMLScriptScanner(String filter) {
+		super(filter);
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 11:30:03 AM)
+	 * @param tag com.kizna.html.HTMLTag
+	 */
+	public void extractLanguage(HTMLTag tag) 
+	{
+		language = tag.getParameter("LANGUAGE");
+		if (language==null) language="";
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 12:12:20 PM)
+	 */
+	public void extractType(HTMLTag tag) 
+	{
+		type = tag.getParameter("TYPE");
+		if (type==null) type="";
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 11:55:32 AM)
+	 * @return java.lang.String
+	 */
+	public java.lang.String getLanguage() {
+		return language;
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 12:20:57 PM)
+	 * @return java.lang.String
+	 */
+	public java.lang.String getType() {
+		return type;
+	}
+		/** 
+		 * Scan the tag and extract the information related to this type. The url of the 
+		 * initiating scan has to be provided in case relative links are found. The initial 
+		 * url is then prepended to it to give an absolute link.
+		 * The HTMLReader is provided in order to do a lookahead operation. We assume that
+		 * the identification has already been performed using the evaluate() method.
+		 * @param tag HTML Tag to be scanned for identification
+		 * @param url The initiating url of the scan (Where the html page lies)
+		 * @param reader The reader object responsible for reading the html page
+		 * @param currentLine The current line (automatically provided by HTMLTag)	 
+		 */
+	public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws HTMLParserException
+	{
+		try {
+			// We know we have script stuff. So first extract the information from the tag about the language
+			extractLanguage(tag);
+			extractType(tag);
+			HTMLEndTag endTag=null;
+			HTMLNode node = null;
+			boolean endScriptFound=false;
+			StringBuffer buff=new StringBuffer();
+			// Remove all existing scanners, so as to parse only till the end tag
+			Hashtable tempScanners = reader.getParser().getScanners();
+			reader.getParser().flushScanners();
+			HTMLNode prevNode=tag;
+			do {
+				node = reader.readElement();
+				if (node instanceof HTMLEndTag) {
+					endTag = (HTMLEndTag)node;
+					if (endTag.getText().toUpperCase().equals("SCRIPT")) 
+					{
+						endScriptFound = true;
+						// Check if there was anything in front of endTag, and if so, add it to the code buffer
+					}
+				} else {
+					if (prevNode!=null) {
+						if (prevNode.elementEnd() > node.elementBegin()) buff.append(HTMLNode.getLineSeparator());
+					}
+					buff.append(node.toHTML());
+		
+					prevNode = node;
 				}
-			} else {
-				if (prevNode!=null) {
-					if (prevNode.elementEnd() > node.elementBegin()) buff.append(HTMLNode.getLineSeparator());
-				}
-				buff.append(node.toHTML());
-	
-				prevNode = node;
 			}
+			while (!endScriptFound && node!=null);
+			if (node==null && !endScriptFound) {
+				throw new HTMLParserException("HTMLScriptScanner.scan() : Went into a potential infinite loop, could not create script tag.\n"+
+				"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
+			}
+			HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
+			reader.getParser().setScanners(tempScanners);
+			return scriptTag; 
 		}
-		while (!endScriptFound && node!=null);
-		if (node==null && !endScriptFound) {
-			throw new HTMLParserException("HTMLScriptScanner.scan() : Went into a potential infinite loop, could not create script tag.\n"+
-			"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLScriptScanner.scan() : Error while scanning a script tag, currentLine = "+currentLine,e);
 		}
-		HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
-		restoreScanners(reader, tempScannerVector);
-		return scriptTag; 
 	}
-	catch (Exception e) {
-		throw new HTMLParserException("HTMLScriptScanner.scan() : Error while scanning a script tag, currentLine = "+currentLine,e);
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 11:55:32 AM)
+	 * @param newLanguage java.lang.String
+	 */
+	public void setLanguage(java.lang.String newLanguage) {
+		language = newLanguage;
 	}
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:55:32 AM)
- * @param newLanguage java.lang.String
- */
-public void setLanguage(java.lang.String newLanguage) {
-	language = newLanguage;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 12:20:57 PM)
- * @param newType java.lang.String
- */
-public void setType(java.lang.String newType) {
-	type = newType;
-}
-	public Vector adjustScanners(HTMLReader reader) {
-		Vector tempScannerVector = new Vector();
-		for (Enumeration e=reader.getParser().getScanners();e.hasMoreElements();) {
-			tempScannerVector.addElement(e.nextElement());
-		}
-		// Remove all existing scanners
-		reader.getParser().flushScanners();
-		return tempScannerVector;
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/4/2001 12:20:57 PM)
+	 * @param newType java.lang.String
+	 */
+	public void setType(java.lang.String newType) {
+		type = newType;
 	}
-	public void restoreScanners(HTMLReader reader, Vector tempScannerVector) {
-		// Flush the scanners
-		reader.getParser().flushScanners();
-		// Add all the original scanners back
-		for (Enumeration e = tempScannerVector.elements();e.hasMoreElements();) {
-			reader.getParser().addScanner((HTMLTagScanner)e.nextElement());
-		}
-	}	
+	
+
+	/**
+	 * @see com.kizna.html.scanners.HTMLTagScanner#getID()
+	 */
+	public String [] getID() {
+		String [] ids = new String[1];
+		ids[0] = "SCRIPT";
+		return ids;
+	}
+
 }

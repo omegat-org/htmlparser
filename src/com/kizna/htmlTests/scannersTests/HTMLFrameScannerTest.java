@@ -59,18 +59,6 @@ public class HTMLFrameScannerTest extends TestCase {
 	public HTMLFrameScannerTest(String name) {
 		super(name);
 	}
-	public void testEvaluate() {
-		String line1="frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\"";
-		String line2="FRAME name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\"";
-		String line3="Frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\"";
-		String line4="Frameset name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\"";
-
-		HTMLFrameScanner frameScanner = new HTMLFrameScanner("");
-		assertTrue("Line 1",frameScanner.evaluate(line1,null));
-		assertTrue("Line 2",frameScanner.evaluate(line2,null));
-		assertTrue("Line 3",frameScanner.evaluate(line3,null));		
-		assertTrue("Line 4 should not be a frame",!frameScanner.evaluate(line4,null));				
-	}
 	public void testScan() throws HTMLParserException {
 		String testHTML = new String(
 		"<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+ 

@@ -61,16 +61,6 @@ public class HTMLSelectTagScannerTest extends TestCase
 		}
 	}
 	
-	public void testEvaluate() 
-	{
-		boolean retVal = scanner.evaluate("Select",null);
-		assertEquals("Select evaluation - Upper Case",true,retVal);
-		retVal = scanner.evaluate("Select",null);
-		assertEquals("Select evaluation - Lower Case",true,retVal);
-		retVal = scanner.evaluate("abcd",null);
-		assertEquals("Incorrect Case",false,retVal);
-	}
-	
 	public void testScan() throws HTMLParserException 
 	{
 		assertEquals("Number of nodes expected",5,i);		

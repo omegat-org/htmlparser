@@ -39,6 +39,7 @@ import java.io.StringReader;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
+import com.kizna.html.scanners.HTMLFrameScanner;
 import com.kizna.html.scanners.HTMLFrameSetScanner;
 import com.kizna.html.tags.HTMLFrameSetTag;
 import com.kizna.html.util.DefaultHTMLParserFeedback;
@@ -69,6 +70,7 @@ public class HTMLFrameSetTagTest extends TestCase {
 		HTMLNode [] node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLFrameSetScanner(""));
+		parser.addScanner(new HTMLFrameScanner(""));
 		
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
