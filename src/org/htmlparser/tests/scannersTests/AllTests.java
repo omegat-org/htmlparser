@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030413 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030419 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
 // For any questions or suggestions, you can write to me at :
 // Email :somik@kizna.com
 // 
-// HTMLParser Library v1_3_20030413 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030419 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
