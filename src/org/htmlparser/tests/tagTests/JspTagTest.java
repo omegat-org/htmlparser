@@ -177,5 +177,4 @@ public class JspTagTest extends ParserTestCase
 		JspTag jspTag = (JspTag)node[0]; 
 		assertEquals("jsp toHTML()","<% for (i=0;i<j;i++);%>",jspTag.toHtml());
 	}	
-
 }

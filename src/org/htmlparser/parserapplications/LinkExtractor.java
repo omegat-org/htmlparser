@@ -33,7 +33,6 @@ package org.htmlparser.parserapplications;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -55,21 +54,18 @@ public class LinkExtractor {
 		
 	}
 	public void extractLinks() throws ParserException {
-		Node node;
-		LinkTag linkTag;
 		System.out.println("Parsing "+location+" for links...");
-		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
-			node = e.nextNode();	// Get the next HTML Node
-			if (node instanceof LinkTag) {
-				linkTag = (LinkTag)node; // Downcast to a Link Tag
-				
-				System.out.println(linkTag.toString()); // Print it
-				
-				// To extract only mail addresses, uncomment the following line
-				//if (linkTag.isMailLink()) System.out.println(linkTag.getLink());
-			}
+		Node [] links = parser.extractAllNodesThatAre(LinkTag.class);
+		for (int i = 0;i < links.length;i++) {
+			LinkTag linkTag = (LinkTag)links[i];
+			// Print it
+//			System.out.println(linkTag.toString()); 
+			System.out.println(linkTag.getLink());
+			// To extract only mail addresses, uncomment the following line
+//			if (linkTag.isMailLink()) System.out.println(linkTag.getLink());
 		}
 	}
+
 	public static void main(String[] args) {
 		if (args.length<0) {
 			System.err.println("Syntax Error : Please provide the location(URL or file) to parse");

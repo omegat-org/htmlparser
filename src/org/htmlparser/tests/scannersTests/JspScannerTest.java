@@ -28,6 +28,7 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import org.htmlparser.Parser;
 import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.tags.JspTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -56,5 +57,30 @@ public class JspScannerTest extends ParserTestCase {
 		assertTrue("Third should be an HTMLJspTag",node[2] instanceof JspTag);
 		JspTag tag = (JspTag)node[2];
 		assertEquals("tag contents","=object",tag.getText());
+	}
+	
+	/**
+	 * Testcase submitted by Johan Naudts, demonstrating bug
+	 * 717573, <b>NullPointerException when unclosed HTML tag 
+	 * inside JSP tag</b>
+	 * @throws ParserException
+	 */
+	public void testUnclosedTagInsideJsp() throws ParserException {
+		createParser(
+			"<%\n" +
+			"public String getHref(String value) \n" +
+			"{ \n" +
+			"int indexs = value.indexOf(\"<A HREF=\");\n" +
+			"int indexe = value.indexOf(\">\");\n" +
+			"if (indexs != -1) {\n" +
+			"return value.substring(indexs+9,indexe-2);\n" +
+			"}\n" +
+			"return value;\n" +
+			"}\n" +
+			"%>\n");
+		Parser.setLineSeparator("\r\n");
+		// Register the Jsp Scanner
+		parser.addScanner(new JspScanner("-j"));
+		parseAndAssertNodeCount(1);
 	}
 }

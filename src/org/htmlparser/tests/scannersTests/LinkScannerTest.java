@@ -542,4 +542,15 @@ public class LinkScannerTest extends ParserTestCase
 		LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
 		assertEquals("linkscanner filter",LinkTag.LINK_TAG_FILTER,linkScanner.getFilter());
 	}
+	
+	public void testTagSymbolsInLinkText() throws Exception {
+		createParser(
+			"<a href=\"/cataclysm/Langy-AnEmpireReborn-Ch2.shtml#story\"" +			"><< An Empire Reborn: Chapter 2 <<</a>"
+		);
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertType("node",LinkTag.class, node[0]);
+		LinkTag linkTag = (LinkTag)node[0];
+		assertEquals("link text","<< An Empire Reborn: Chapter 2 <<",linkTag.getLinkText());
+	}
 }
