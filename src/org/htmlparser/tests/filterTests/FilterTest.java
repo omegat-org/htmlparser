@@ -26,7 +26,9 @@
 
 package org.htmlparser.tests.filterTests;
 
+import org.htmlparser.Parser;
 import org.htmlparser.filters.AndFilter;
+import org.htmlparser.filters.CssSelectorNodeFilter;
 import org.htmlparser.filters.HasAttributeFilter;
 import org.htmlparser.filters.HasChildFilter;
 import org.htmlparser.filters.NodeClassFilter;
@@ -34,11 +36,14 @@ import org.htmlparser.filters.NotFilter;
 import org.htmlparser.filters.OrFilter;
 import org.htmlparser.filters.StringFilter;
 import org.htmlparser.filters.TagNameFilter;
+import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.nodes.StringNode;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
@@ -239,6 +244,32 @@ public class FilterTest extends ParserTestCase
         assertType ("should be LinkTag", LinkTag.class, list.elementAt (1));
         link = (LinkTag)list.elementAt (1);
         assertEquals ("attribute value", "three", link.getAttribute ("id"));
+    }
+
+    public void testEscape() throws Exception
+    {
+        assertEquals ("douchebag", CssSelectorNodeFilter.unescape ("doucheba\\g").toString ());
+    }
+
+    public void testSelectors() throws Exception
+    {
+        String html = "<html><head><title>sample title</title></head><body inserterr=\"true\" yomama=\"false\"><h3 id=\"heading\">big </invalid>heading</h3><ul id=\"things\"><li><br word=\"broken\"/>&gt;moocow<li><applet/>doohickey<li class=\"last\"><b class=\"item\">final<br>item</b></ul></body></html>";
+        Lexer l;
+        Parser p;
+        CssSelectorNodeFilter it;
+        NodeIterator i;
+        int count;
+
+        l = new Lexer (html);
+        p = new Parser (l);
+        it = new CssSelectorNodeFilter ("li + li");
+        count = 0;
+        for (i = p.extractAllNodesThatMatch (it).elements (); i.hasMoreNodes ();)
+        {
+            assertEquals ("tag name wrong", "LI", ((Tag)i.nextNode()).getTagName());
+            count++;
+        }
+        assertEquals ("wrong count", 2, count);
     }
 }
 
