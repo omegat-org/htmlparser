@@ -38,15 +38,9 @@ import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.HTMLStringNode;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.util.Translate;
 
 /**
  * Extract strings from a URL.
@@ -105,7 +99,7 @@ public class LinkBean extends Object implements Serializable
         vector = new Vector();
         for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();)
         {
-        	node = e.nextHTMLNode();
+        	node = e.nextNode();
             node.collectInto (vector, HTMLLinkTag.LINK_TAG_FILTER);
         }
         for (int i = 0; i < vector.size (); i++)

@@ -101,7 +101,7 @@ public class MailRipper {
 	  Vector mailAddresses = new Vector();
 	  for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	  {
-	    node = e.nextHTMLNode();
+	    node = e.nextNode();
 	    if (node instanceof HTMLLinkTag)
 	    {
 	      HTMLLinkTag linkTag = (HTMLLinkTag)node;

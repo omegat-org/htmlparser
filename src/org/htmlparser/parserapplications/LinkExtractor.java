@@ -59,7 +59,7 @@ public class LinkExtractor {
 		HTMLLinkTag linkTag;
 		System.out.println("Parsing "+location+" for links...");
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node = e.nextHTMLNode();	// Get the next HTML Node
+			node = e.nextNode();	// Get the next HTML Node
 			if (node instanceof HTMLLinkTag) {
 				linkTag = (HTMLLinkTag)node; // Downcast to a Link Tag
 				

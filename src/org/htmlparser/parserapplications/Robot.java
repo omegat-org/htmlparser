@@ -73,7 +73,7 @@ public class Robot {
 	  System.out.println(" crawlDepth = "+crawlDepth);
 	  for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	  {
-	    HTMLNode node = e.nextHTMLNode();
+	    HTMLNode node = e.nextNode();
 	    if (node instanceof HTMLLinkTag)
 	    {
 	      HTMLLinkTag linkTag = (HTMLLinkTag)node;

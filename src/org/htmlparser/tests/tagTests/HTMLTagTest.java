@@ -118,7 +118,7 @@ public class HTMLTagTest extends HTMLParserTestCase
         try {
 
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
 
                 tag = (HTMLTag)node;
                 h = tag.getAttributes();
@@ -152,7 +152,7 @@ public class HTMLTagTest extends HTMLParserTestCase
         try {
 
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
 
                 tag = (HTMLTag)node;
                 h = tag.getAttributes();
@@ -168,31 +168,31 @@ public class HTMLTagTest extends HTMLParserTestCase
             if (!(node instanceof HTMLLinkTag)) {
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreNodes()) {
-                    node = en.nextHTMLNode();
+                    node = en.nextNode();
                     snode = (HTMLStringNode)node;
                     assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
                 }
 
                 if (en.hasMoreNodes()) {
-                    node = en.nextHTMLNode();
+                    node = en.nextNode();
                     etag = (HTMLEndTag)node;
                     assertEquals("endtag of link",etag.getText(),"A");
                 }
             }
             // testing rest
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
 
                 tag = (HTMLTag)node;
                 assertEquals("following paragraph begins",tag.getText(),"p");
             }
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
                 snode = (HTMLStringNode)node;
                 assertEquals("paragraph contents",snode.getText(),"Paragraph");
             }
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
                 etag = (HTMLEndTag)node;
                 assertEquals("paragrapg endtag",etag.getText(),"p");
             }
@@ -223,7 +223,7 @@ public class HTMLTagTest extends HTMLParserTestCase
         try {
 
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
 
                 tag = (HTMLTag)node;
                 h = tag.getAttributes();
@@ -237,30 +237,30 @@ public class HTMLTagTest extends HTMLParserTestCase
                 assertEquals ("The second parameter value",nice,"Kaila");
             }
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
                 snode = (HTMLStringNode)node;
                 assertEquals("The text of the element",snode.getText(),"Kaarle's homepage");
             }
 
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
                 etag = (HTMLEndTag)node;
                 assertEquals("Endtag is G",etag.getText(),"G");
             }
             // testing rest
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
 
                 tag = (HTMLTag)node;
                 assertEquals("Follow up by p-tag",tag.getText(),"p");
             }
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
                 snode = (HTMLStringNode)node;
                 assertEquals("Verify the paragraph text",snode.getText(),"Paragraph");
             }
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
                 etag = (HTMLEndTag)node;
                 assertEquals("Still patragraph endtag",etag.getText(),"p");
             }
@@ -292,7 +292,7 @@ public class HTMLTagTest extends HTMLParserTestCase
         try {
 
             if (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
 
                 tag = (HTMLTag)node;
                 h = tag.getAttributes();
@@ -304,13 +304,13 @@ public class HTMLTagTest extends HTMLParserTestCase
             if (!(node instanceof HTMLLinkTag)) {
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreNodes()) {
-                    node = en.nextHTMLNode();
+                    node = en.nextNode();
                     snode = (HTMLStringNode)node;
                     assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
                 }
 
                 if (en.hasMoreNodes()) {
-                    node = en.nextHTMLNode();
+                    node = en.nextNode();
                     etag = (HTMLEndTag)node;
                     assertEquals("Still patragraph endtag",etag.getText(),"A");
                 }
@@ -396,7 +396,7 @@ public class HTMLTagTest extends HTMLParserTestCase
         String result="";
         try {
             while (en.hasMoreNodes()) {
-                node = en.nextHTMLNode();
+                node = en.nextNode();
                 result += node.toHTML();
             }
             String expected = "<A YOURPARAMETER=\"Kaarle\" MYPARAMETER=\"\" HREF=\"http://www.iki.fi/kaila\">Kaarle's homepage</A><P>Paragraph</P>";
@@ -423,7 +423,7 @@ public class HTMLTagTest extends HTMLParserTestCase
        String result="";
        try {
            while (en.hasMoreNodes()) {
-               node = en.nextHTMLNode();
+               node = en.nextNode();
                result = node.toHTML();
            }
            String expected = "<INPUT VALUE=\"foobar\" NAME=\"foo\" TYPE=\"text\"/>";

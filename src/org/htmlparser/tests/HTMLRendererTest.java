@@ -35,7 +35,7 @@ public class HTMLRendererTest extends HTMLParserTestCase {
 		StringBuffer html = new StringBuffer();
 		HTMLNode node;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node = e.nextHTMLNode();
+			node = e.nextNode();
 			html.append(node.toHTML(renderer));
 		}
 		String expectedHTML = 

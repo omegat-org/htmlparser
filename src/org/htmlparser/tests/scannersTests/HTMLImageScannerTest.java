@@ -168,7 +168,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		int i = 0;
 		HTMLNode thisNode;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			thisNode = (HTMLNode)e.nextHTMLNode();
+			thisNode = (HTMLNode)e.nextNode();
 			if (thisNode instanceof HTMLImageTag)
 			node[i++] = thisNode;
 		}	

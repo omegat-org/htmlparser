@@ -965,9 +965,9 @@ public class HTMLParser
 	public void parse(String filter) throws Exception
 	{
 		HTMLNode node;
-		for (HTMLEnumeration e=elements();e.hasMoreHTMLNodes();)
+		for (HTMLEnumeration e=elements();e.hasMoreNodes();)
 		{
-			node = e.nextHTMLNode();
+			node = e.nextNode();
 	  	  	if (node!=null)
 			{
 			 	if (filter==null)
@@ -1097,7 +1097,7 @@ public class HTMLParser
 	public void visitAllNodesWith(HTMLVisitor visitor) throws HTMLParserException {
 		HTMLNode node;
 		for (HTMLEnumeration e = elements();e.hasMoreNodes();) {
-			node = e.nextHTMLNode();
+			node = e.nextNode();
 			node.accept(visitor);
 		}
 	}

@@ -60,7 +60,7 @@ public class HTMLTagScannerTest extends HTMLParserTestCase
 		HTMLParser.setLineSeparator("\r\n");
 		HTMLEnumeration e = parser.elements(); 
 	
-		HTMLNode node = e.nextHTMLNode();
+		HTMLNode node = e.nextNode();
 		try {
 			String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",parser.getReader());
 			assertEquals("Result","Abhi\r\nSri\r\n",result);
@@ -75,7 +75,7 @@ public class HTMLTagScannerTest extends HTMLParserTestCase
 			"<MESSAGE>Test</MESSAGE>");
 		HTMLEnumeration e = parser.elements(); 
 	
-		HTMLNode node = (HTMLNode)e.nextHTMLNode();
+		HTMLNode node = (HTMLNode)e.nextNode();
 		try {
 			String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",parser.getReader());
 			assertEquals("Result","Test",result);
@@ -102,7 +102,7 @@ public class HTMLTagScannerTest extends HTMLParserTestCase
 		createParser("<OPTION value=\"#\">Select a destination</OPTION>");
 		HTMLNode node;
 		HTMLEnumeration e = parser.elements();
-		node = (HTMLNode)e.nextHTMLNode();
+		node = (HTMLNode)e.nextNode();
 		assertTrue("OPTION tag could not be identified",HTMLTagScanner.isXMLTagFound(node,"OPTION"));
 	}
 

@@ -35,18 +35,18 @@ public interface HTMLEnumeration {
      * Check if more nodes are available.
      * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
      */
-	public boolean hasMoreHTMLNodes() throws HTMLParserException;
-        
-    /**
-     * Check if more nodes are available.
-     * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
-     * @deprecated Use hasMoreHTMLNodes() instead.
-     */
 	public boolean hasMoreNodes() throws HTMLParserException;
     
     /**
      * Get the next node.
      * @return The next node in the HTML stream, or null if there are no more nodes.
      */
-	public HTMLNode nextHTMLNode() throws HTMLParserException;
+	public HTMLNode nextNode() throws HTMLParserException;
+	
+	/**
+	 * Get the next node.
+	 * @return The next node in the HTML stream, or null if there are no more nodes.
+	 * @deprecated Use nextNode() instead.
+	 */
+	public HTMLNode nextHTMLNode() throws HTMLParserException;	
 }

@@ -56,7 +56,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = e.nextHTMLNode();
+			node[i++] = e.nextNode();
 		}
 		assertEquals("There should be 1 node identified",1,i);
 		// Now try getting the elements again
@@ -88,7 +88,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = e.nextHTMLNode();
+			node[i++] = e.nextNode();
 		}
 		int cnt = i;
 		parser.getReader().reset();
@@ -96,7 +96,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[i++] = e.nextHTMLNode();
+			node[i++] = e.nextNode();
 		}
 		assertEquals("There should be "+cnt+" nodes identified (second call to parser.elements())",cnt,i);
 	}	
@@ -292,7 +292,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
         pass = false;
 		for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)
 		{
-            node = enumeration.nextHTMLNode ();
+            node = enumeration.nextNode ();
             if (node instanceof HTMLStringNode)
             {
                 string = (HTMLStringNode)node;
@@ -339,7 +339,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
             i = 0;
             for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)
             {
-                nodes[i] = enumeration.nextHTMLNode ();
+                nodes[i] = enumeration.nextNode ();
                 i++;
             }
             assertEquals("Expected nodes",12,i);
@@ -416,7 +416,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		HTMLNode node [] = new HTMLNode[30];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i] = e.nextHTMLNode();
+			node[i] = e.nextNode();
 			i++;
 			
 		}
@@ -446,7 +446,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		Vector collectionVector = new Vector();
 
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			HTMLNode node = e.nextHTMLNode();
+			HTMLNode node = e.nextNode();
 			node.collectInto(collectionVector,HTMLLinkTag.LINK_TAG_FILTER);
 		}
 		assertEquals("Size of collection vector should be 11",11,collectionVector.size());
@@ -503,7 +503,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		Vector collectionVector = new Vector();
 
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			HTMLNode node = e.nextHTMLNode();
+			HTMLNode node = e.nextNode();
 			node.collectInto(collectionVector,HTMLImageTag.IMAGE_TAG_FILTER);
 		}
 		assertEquals("Size of collection vector should be 5",5,collectionVector.size());

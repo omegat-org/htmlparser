@@ -63,7 +63,7 @@ public class PerformanceTest {
 			HTMLNode node;
 			long start=System.currentTimeMillis();
 			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-				node = e.nextHTMLNode();
+				node = e.nextNode();
 			}
 			long elapsedTime=System.currentTimeMillis()-start;
 			if (i!=0)
@@ -92,7 +92,7 @@ public class PerformanceTest {
 			HTMLNode node;
 			long start=System.currentTimeMillis();
 			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-				node = e.nextHTMLNode();
+				node = e.nextNode();
 			}
 			long elapsedTime=System.currentTimeMillis()-start;
 			if (i!=0)

@@ -155,7 +155,7 @@ public class StringExtractor
         preformatted = false;
         for (HTMLEnumeration e = parser.elements (); e.hasMoreNodes ();)
         {
-            node = e.nextHTMLNode ();
+            node = e.nextNode ();
             if (node instanceof HTMLStringNode)
             {
                 // node is a plain string

@@ -97,7 +97,7 @@ public class FunctionalTests extends TestCase {
 		int parserImgTagCount = 0;
 		HTMLNode node;
 		for (HTMLEnumeration e= parser.elements();e.hasMoreNodes();) {
-			node = (HTMLNode)e.nextHTMLNode();
+			node = (HTMLNode)e.nextNode();
 			if (node instanceof HTMLImageTag) {
 				parserImgTagCount++;				
 			}		

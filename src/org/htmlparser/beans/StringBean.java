@@ -207,7 +207,7 @@ public class StringBean implements Serializable
         preformatted = false;
         for (HTMLEnumeration e = mParser.elements (); e.hasMoreNodes ();)
         {
-            node = e.nextHTMLNode ();
+            node = e.nextNode ();
             if (node instanceof HTMLStringNode)
             {
                 // node is a plain string

@@ -28,17 +28,14 @@
 
 package org.htmlparser.beans;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+
 import javax.swing.JList;
 
 /**

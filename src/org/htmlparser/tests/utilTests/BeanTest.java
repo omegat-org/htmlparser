@@ -44,8 +44,6 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.beans.StringBean;
 import org.htmlparser.beans.LinkBean;
-import org.htmlparser.beans.HTMLTextBean;
-import org.htmlparser.beans.HTMLLinkBean;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
 
@@ -119,7 +117,7 @@ public class BeanTest extends TestCase
         enumeration = parser.elements ();
         vector = new Vector (50);
         while (enumeration.hasMoreNodes ())
-            vector.addElement (enumeration.nextHTMLNode ());
+            vector.addElement (enumeration.nextNode ());
 
         data = pickle (parser);
         parser = (HTMLParser)unpickle (data);
@@ -129,7 +127,7 @@ public class BeanTest extends TestCase
             assertEquals (
                 "Nodes before and after serialization differ",
                 ((HTMLNode)vector.remove (0)).toHTML (),
-                ((HTMLNode)enumeration.nextHTMLNode ()).toHTML ());
+                ((HTMLNode)enumeration.nextNode ()).toHTML ());
     }
     
     public void testSerializableScanners ()
@@ -148,7 +146,7 @@ public class BeanTest extends TestCase
         enumeration = parser.elements ();
         vector = new Vector (50);
         while (enumeration.hasMoreNodes ())
-            vector.addElement (enumeration.nextHTMLNode ());
+            vector.addElement (enumeration.nextNode ());
 
         data = pickle (parser);
         parser = (HTMLParser)unpickle (data);
@@ -158,7 +156,7 @@ public class BeanTest extends TestCase
             assertEquals (
                 "Nodes before and after serialization differ",
                 ((HTMLNode)vector.remove (0)).toHTML (),
-                ((HTMLNode)enumeration.nextHTMLNode ()).toHTML ());
+                ((HTMLNode)enumeration.nextNode ()).toHTML ());
     }
 
     public void testSerializableStringBean ()

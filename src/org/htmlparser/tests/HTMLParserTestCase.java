@@ -112,7 +112,7 @@ public class HTMLParserTestCase extends TestCase {
 		nodeCount = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
-			node[nodeCount++] = e.nextHTMLNode();
+			node[nodeCount++] = e.nextNode();
 		}	
 	}
 

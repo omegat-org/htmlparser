@@ -166,7 +166,7 @@ public class Generate
         // only those that are plain string.
         for (HTMLEnumeration e = parser.elements (); e.hasMoreNodes ();)
         {
-            node = e.nextHTMLNode ();
+            node = e.nextNode ();
             
             if (node instanceof HTMLStringNode)
             {
