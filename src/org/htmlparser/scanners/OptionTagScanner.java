@@ -43,7 +43,7 @@ public class OptionTagScanner extends CompositeTagScanner
     private static final String [] END_TAG_ENDERS = { "SELECT", "FORM", "BODY", "HTML" };
 
     public OptionTagScanner(String filter) {
-        super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS);
+        super(filter, ENDERS, END_TAG_ENDERS);
     }
 
     public String [] getID() {

@@ -53,7 +53,7 @@ public class BulletListScanner extends CompositeTagScanner
 
     public BulletListScanner(String filter, Parser parser)
     {
-        super(filter, MATCH_STRING, ENDERS);
+        super(filter, ENDERS);
         parser.addScanner(new BulletScanner("-bullet"));
     }
 

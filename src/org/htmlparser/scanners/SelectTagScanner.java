@@ -47,7 +47,7 @@ public class SelectTagScanner extends CompositeTagScanner
 
     public SelectTagScanner(String filter)
     {
-        super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS);
+        super(filter, ENDERS, END_TAG_ENDERS);
     }
 
     public String [] getID() {

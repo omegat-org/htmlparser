@@ -45,12 +45,11 @@ public class FrameSetScanner extends CompositeTagScanner
 
     public FrameSetScanner()
     {
-        super(MATCH_NAME);
     }
 
     public FrameSetScanner(String filter)
     {
-        super(filter,MATCH_NAME);
+        super(filter);
     }
 
     public String [] getID()

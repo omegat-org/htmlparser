@@ -43,17 +43,15 @@ public class TableColumnScanner extends CompositeTagScanner {
     }
 
     public TableColumnScanner(String filter) {
-        this(filter, MATCH_STRING, MATCH_STRING, new String[] {});
+        this(filter, MATCH_STRING, new String[] {});
     }
 
     public TableColumnScanner(
         String filter,
-        String[] nameOfTagToMatch,
         String [] tagEnders,
         String [] endTagEnders) {
         super(
             filter,
-            nameOfTagToMatch,
             tagEnders,
             endTagEnders);
     }

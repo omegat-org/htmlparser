@@ -53,17 +53,17 @@ public class CompositeTagScannerTest extends ParserTestCase {
     }
 
     protected void setUp() {
-        String [] arr = {
-            "SOMETHING"
-        };
         scanner =
-            new CompositeTagScanner(arr) {
+            new CompositeTagScanner() {
+                String [] arr = {
+                    "SOMETHING"
+                };
                 public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
                 {
                     return null;
                 }
                 public String[] getID() {
-                    return null;
+                    return arr;
                 }
 
             };
@@ -558,7 +558,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         }
 
         public CustomScanner(boolean selfChildrenAllowed) {
-            super("", MATCH_NAME, selfChildrenAllowed ? new String[] {} : MATCH_NAME);
+            super("", selfChildrenAllowed ? new String[] {} : MATCH_NAME);
         }
 
         public String[] getID() {
@@ -585,11 +585,11 @@ public class CompositeTagScannerTest extends ParserTestCase {
     public static class AnotherScanner extends CompositeTagScanner {
         private static final String MATCH_NAME [] = { "ANOTHER" };
         public AnotherScanner() {
-            super("", MATCH_NAME, new String[] {"CUSTOM"});
+            super("", new String[] {"CUSTOM"});
         }
 
         public AnotherScanner(boolean acceptCustomTagsButDontAcceptCustomEndTags) {
-            super("", MATCH_NAME, new String[] {}, new String[] {"CUSTOM"});
+            super("", new String[] {}, new String[] {"CUSTOM"});
         }
 
         public String[] getID() {

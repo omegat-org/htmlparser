@@ -43,7 +43,7 @@ public class SpanScanner extends CompositeTagScanner {
     }
 
     public SpanScanner(String filter) {
-        super(filter, MATCH_ID);
+        super(filter);
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException

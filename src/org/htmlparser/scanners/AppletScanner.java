@@ -44,11 +44,10 @@ public class AppletScanner extends CompositeTagScanner
     private static String [] MATCH_STRING = {"APPLET"};
 
     public AppletScanner() {
-        super(MATCH_STRING);
     }
 
     public AppletScanner(String filter) {
-        super(filter,MATCH_STRING);
+        super(filter);
     }
 
     public String [] getID() {

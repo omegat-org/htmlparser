@@ -53,7 +53,7 @@ public class BulletScanner extends CompositeTagScanner
 
     public BulletScanner(String filter)
     {
-        super(filter, MATCH_STRING, ENDERS, END_TAG_ENDERS);
+        super(filter, ENDERS, END_TAG_ENDERS);
     }
     
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException

@@ -46,7 +46,7 @@ public class HtmlScanner extends CompositeTagScanner {
     }
 
     public HtmlScanner(String filter) {
-        super(filter, MATCH_STRING);
+        super(filter);
     }
 
     public String[] getID() {

@@ -51,7 +51,7 @@ public class BodyScanner extends CompositeTagScanner
 
     public BodyScanner(String filter)
     {
-        super(filter,MATCH_NAME,MATCH_NAME,END_TAG_ENDERS);
+        super(filter,MATCH_NAME,END_TAG_ENDERS);
     }
 
     public String [] getID()

@@ -61,7 +61,7 @@ public class FormScanner extends CompositeTagScanner
      */
     public FormScanner(String filter, Parser parser)
     {
-        super(filter,MATCH_ID,formTagEnders);
+        super(filter,formTagEnders);
         parser.addScanner(new InputTagScanner("-i"));
         parser.addScanner(new TextareaTagScanner("-t"));
         parser.addScanner(new SelectTagScanner("-select"));

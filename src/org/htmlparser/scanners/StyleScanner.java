@@ -46,11 +46,10 @@ public class StyleScanner extends CompositeTagScanner {
     private static final String MATCH_NAME [] = {"STYLE"};
 
     public StyleScanner() {
-        super(MATCH_NAME);
     }
 
     public StyleScanner(String filter) {
-        super(filter,MATCH_NAME);
+        super(filter);
     }
 
     public String [] getID() {

@@ -66,7 +66,7 @@ public class LinkScanner extends CompositeTagScanner
      * Overriding the constructor to accept the filter
      */
     public LinkScanner(String filter) {
-        super(filter,MATCH_NAME,ENDERS,ENDTAG_ENDERS);
+        super(filter,ENDERS,ENDTAG_ENDERS);
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException

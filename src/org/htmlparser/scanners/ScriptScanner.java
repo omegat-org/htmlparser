@@ -51,15 +51,11 @@ public class ScriptScanner extends CompositeTagScanner {
     private static final String ENDERS [] = {"BODY", "HTML"};
 
     public ScriptScanner() {
-        super("",MATCH_NAME,ENDERS);
+        super("",ENDERS);
     }
 
     public ScriptScanner(String filter) {
-        super(filter,MATCH_NAME,ENDERS);
-    }
-
-    public ScriptScanner(String filter, String[] nameOfTagToMatch) {
-        super(filter,nameOfTagToMatch,ENDERS);
+        super(filter,ENDERS);
     }
 
     public String [] getID() {

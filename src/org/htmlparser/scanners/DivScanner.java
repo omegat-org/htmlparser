@@ -49,7 +49,7 @@ public class DivScanner extends CompositeTagScanner
 
     public DivScanner(String filter) 
     {
-        super(filter, MATCH_STRING);
+        super(filter);
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException

@@ -92,41 +92,38 @@ import org.htmlparser.util.ParserException;
  */
 public abstract class CompositeTagScanner extends TagScanner
 {
-    protected String [] nameOfTagToMatch;
     protected Set tagEnderSet;
     private Set endTagEnderSet;
     private boolean balance_quotes;
 
-    public CompositeTagScanner(String [] nameOfTagToMatch)
+    public CompositeTagScanner()
     {
-        this(nameOfTagToMatch,new String[] {});
+        this(new String[] {});
     }
 
-    public CompositeTagScanner(String [] nameOfTagToMatch, String [] tagEnders)
+    public CompositeTagScanner(String [] tagEnders)
     {
-        this("",nameOfTagToMatch,tagEnders);
+        this("",tagEnders);
     }
 
-    public CompositeTagScanner(String filter, String [] nameOfTagToMatch)
+    public CompositeTagScanner(String filter)
     {
-        this(filter,nameOfTagToMatch,new String [] {});
+        this(filter,new String [] {});
     }
 
     public CompositeTagScanner(
         String filter,
-        String [] nameOfTagToMatch,
         String [] tagEnders) 
     {
-        this(filter,nameOfTagToMatch,tagEnders,new String[] {});
+        this(filter,tagEnders,new String[] {});
     }
 
     public CompositeTagScanner(
         String filter,
-        String [] nameOfTagToMatch,
         String [] tagEnders,
         String [] endTagEnders)
     {
-        this(filter,nameOfTagToMatch,tagEnders,endTagEnders, false);
+        this(filter,tagEnders,endTagEnders, false);
     }
 
    /**
@@ -134,7 +131,6 @@ public abstract class CompositeTagScanner extends TagScanner
     * @param filter A string that is used to match which tags are to be allowed
     * to pass through. This can be useful when one wishes to dynamically filter
     * out all tags except one type which may be programmed later than the parser.
-    * @param nameOfTagToMatch The tag names recognized by this scanner.
     * @param tagEnders The non-endtag tag names which signal that no closing
     * end tag was found. For example, encountering &lt;FORM&gt; while
     * scanning a &lt;A&gt; link tag would mean that no &lt;/A&gt; was found
@@ -152,13 +148,11 @@ public abstract class CompositeTagScanner extends TagScanner
     */
     public CompositeTagScanner(
         String filter,
-        String [] nameOfTagToMatch,
         String [] tagEnders,
         String [] endTagEnders,
         boolean balance_quotes) 
     {
         super(filter);
-        this.nameOfTagToMatch = nameOfTagToMatch;
         this.balance_quotes = balance_quotes;
         this.tagEnderSet = new HashSet();
         for (int i=0;i<tagEnders.length;i++)

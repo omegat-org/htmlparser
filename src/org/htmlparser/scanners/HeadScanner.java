@@ -54,7 +54,7 @@ public class HeadScanner extends CompositeTagScanner
 
     public HeadScanner(String filter) 
     {
-        super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS);
+        super(filter,ENDERS,END_TAG_ENDERS);
     }
 
     public String [] getID() 

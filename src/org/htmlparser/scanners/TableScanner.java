@@ -47,7 +47,7 @@ public class TableScanner extends CompositeTagScanner {
     }
 
     public TableScanner(Parser parser,String filter) {
-        super(filter, MATCH_STRING, ENDERS, ENDTAG_ENDERS);
+        super(filter, ENDERS, ENDTAG_ENDERS);
         parser.addScanner(new TableRowScanner(parser));
     }
 
