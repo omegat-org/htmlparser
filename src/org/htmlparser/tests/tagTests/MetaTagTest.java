@@ -39,9 +39,9 @@ public class MetaTagTest extends ParserTestCase {
     }
 
     public void testToHTML() throws ParserException {
-        String description = "\"description\"";
-        String content = "\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\"";
-        String tag = "<META name=" + description + " content=" + content + ">";
+        String description = "description";
+        String content = "Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.";
+        String tag = "<META name=\"" + description + "\" content=\"" + content + "\">";
         createParser(
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
         "<html>\n"+

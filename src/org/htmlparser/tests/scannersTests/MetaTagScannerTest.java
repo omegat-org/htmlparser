@@ -41,9 +41,9 @@ public class MetaTagScannerTest extends ParserTestCase {
     }
 
     public void testScan() throws ParserException {
-        String description = "\"description\"";
-        String content = "\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\"";
-        String tag = "<META name=" + description + " content=" + content + ">";
+        String description = "description";
+        String content = "Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.";
+        String tag = "<META name=\"" + description + "\" content=\"" + content + "\">";
         createParser(
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
         "<html>\n"+
@@ -71,33 +71,33 @@ public class MetaTagScannerTest extends ParserTestCase {
         assertTrue("Node 18 should be META Tag",node[17] instanceof MetaTag);
 
         metaTag = (MetaTag) node[11];
-        assertEquals("Meta Tag 12 Name","\"keywords\"",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 12 Contents","\"SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns\"",metaTag.getMetaContent());
+        assertEquals("Meta Tag 12 Name","keywords",metaTag.getMetaTagName());
+        assertEquals("Meta Tag 12 Contents","SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns",metaTag.getMetaContent());
         assertNull("Meta Tag 12 Http-Equiv",metaTag.getHttpEquiv());
 
         metaTag = (MetaTag) node[13];
-        assertEquals("Meta Tag 14 Name","\"language\"",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 14 Contents","\"en\"",metaTag.getMetaContent());
+        assertEquals("Meta Tag 14 Name","language",metaTag.getMetaTagName());
+        assertEquals("Meta Tag 14 Contents","en",metaTag.getMetaContent());
         assertNull("Meta Tag 14 Http-Equiv",metaTag.getHttpEquiv());
 
         metaTag = (MetaTag) node[15];
-        assertEquals("Meta Tag 16 Name","\"owner\"",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 16 Contents","\"service@admin.spamcop.net\"",metaTag.getMetaContent());
+        assertEquals("Meta Tag 16 Name","owner",metaTag.getMetaTagName());
+        assertEquals("Meta Tag 16 Contents","service@admin.spamcop.net",metaTag.getMetaContent());
         assertNull("Meta Tag 16 Http-Equiv",metaTag.getHttpEquiv());
 
         metaTag = (MetaTag) node[17];
         assertNull("Meta Tag 18 Name",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 18 Contents","\"text/html; charset=ISO-8859-1\"",metaTag.getMetaContent());
-        assertEquals("Meta Tag 18 Http-Equiv","\"content-type\"",metaTag.getHttpEquiv());
+        assertEquals("Meta Tag 18 Contents","text/html; charset=ISO-8859-1",metaTag.getMetaContent());
+        assertEquals("Meta Tag 18 Http-Equiv","content-type",metaTag.getHttpEquiv());
 
         assertEquals("This Scanner",scanner,metaTag.getThisScanner());
     }
 
     public void testScanTagsInMeta() throws ParserException {
-        String description = "\"Description\"";
-        String content = "\"Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles\"";
+        String description = "Description";
+        String content = "Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles";
         createParser(
-        "<META NAME=" + description + "CONTENT=" + content + ">",
+        "<META NAME=\"" + description + "\" CONTENT=\"" + content + "\">",
         "http://www.google.com/test/index.html"
         );
         MetaTagScanner scanner = new MetaTagScanner("-t");
@@ -114,13 +114,13 @@ public class MetaTagScannerTest extends ParserTestCase {
      * @throws ParserException
      */
     public void testMetaTagBug() throws ParserException {
-        String equiv = "\"content-type\"";
-        String content = "\"text/html; charset=windows-1252\"";
+        String equiv = "content-type";
+        String content = "text/html; charset=windows-1252";
         createParser(
             "<html>" +
             "<head>" +
-            "<meta http-equiv=" + equiv +
-            " content=" + content + ">" +
+            "<meta http-equiv=\"" + equiv + "\" " +
+            "content=\"" + content + "\">" +
             "</head>" +
             "</html>"
         );
@@ -138,12 +138,12 @@ public class MetaTagScannerTest extends ParserTestCase {
      * @throws ParserException
      */
     public void testMetaTagWithOpenTagSymbol() throws ParserException {
-        String content = "\"a<b\"";
+        String content = "a<b";
         createParser(
             "<html>" +
             "<head>" +
             "<title>Parser Test 2</title>" +
-            "<meta name=\"foo\" content=" + content + ">" +
+            "<meta name=\"foo\" content=\"" + content + "\">" +
             "</head>" +
             "<body>" +
             "<a href=\"http://www.yahoo.com/\">Yahoo!</a><br>" +

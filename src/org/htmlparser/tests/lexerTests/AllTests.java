@@ -46,6 +46,8 @@ public class AllTests extends TestCase
         suite.addTestSuite (PageTests.class);
         suite.addTestSuite (PageIndexTests.class);
         suite.addTestSuite (LexerTests.class);
+        suite.addTestSuite (AttributeTests.class);
+        suite.addTestSuite (TagTests.class);
         return suite;
     }
 

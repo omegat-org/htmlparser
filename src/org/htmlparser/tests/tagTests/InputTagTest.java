@@ -67,7 +67,7 @@ public class InputTagTest extends ParserTestCase {
         assertTrue("Node 1 should be INPUT Tag",node[0] instanceof InputTag);
         InputTag InputTag;
         InputTag = (InputTag) node[0];
-        assertEquals("HTML Raw String","INPUT TAG\n--------\nNAME : \"Google\"\nTYPE : \"text\"\n",InputTag.toString());
+        assertEquals("HTML Raw String","INPUT TAG\n--------\nNAME : Google\nTYPE : text\n",InputTag.toString());
     }
 
     /**

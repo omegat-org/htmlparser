@@ -385,7 +385,7 @@ public class Lexer
 
     private void empty (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[2] + 1, bookmarks[2] + 1, (char)0));
+        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[2] + 1, -1, (char)0));
         //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), "", (char)0));
     }
 
@@ -499,7 +499,7 @@ public class Lexer
                         state = 1;
                     }
                     break;
-                case 1: // within attributre name
+                case 1: // within attribute name
                     if ((0 == ch) || ('>' == ch))
                     {
                         standalone (attributes, bookmarks);
@@ -529,6 +529,12 @@ public class Lexer
                     {
                         state = 5;
                         bookmarks[5] = bookmarks[3];
+                    }
+                    else if (Character.isWhitespace (ch))
+                    {
+                        empty (attributes, bookmarks);
+                        bookmarks[0] = bookmarks[3];
+                        state = 0;
                     }
                     else
                         state = 3;
@@ -576,8 +582,141 @@ public class Lexer
                     throw new IllegalStateException ("how the fuck did we get in state " + state);
             }
         }
-        
+
+        // OK, before constructing the node, fix up erroneous attributes
+        fixAttributes (attributes);
+
         return (makeTag (cursor, attributes));
+    }
+
+    /**
+     * Try to resolve bad attributes.
+     * Look for the following patterns and assume what they meant was the
+     * construct on the right:
+     * <p>Rule 1.
+     * <pre>
+     * att = -> att=
+     * </pre>
+     * An attribute named "=", converts a previous standalone attribute into
+     * an empty attribute.
+     * <p>Rule 2.
+     * <pre>
+     * att =value -> att=value
+     * </pre>
+     * An attribute name beginning with an equals sign, is the value of
+     * a previous standalone attribute.
+     * <p>Rule 3.
+     * <pre>
+     * att= "value" -> att="value"
+     * </pre>
+     * A quoted attribute name, is the value of a previous empty
+     * attribute.
+     * <p>Rule 4 and Rule 5.
+     * <pre>
+     * att="va"lue" -> att='va"lue'
+     * att='val'ue' -> att="val'ue"
+     * </pre>
+     * An attribute name ending in a quote is a second part of a
+     * similarly quoted value of a previous attribute. Note, this doesn't
+     * change the quote value but it should, or the contained quote should be
+     * removed.
+     * <p>Note:
+     * <pre>
+     * att = "value" -> att="value"
+     * </pre>
+     * A quoted attribute name, is the value of a previous standalone
+     * attribute separated by an attribute named "=" will be handled by
+     * sequential application of rule 1 and 3.
+     */
+    protected void fixAttributes (Vector attributes) throws ParserException
+    {
+        Attribute attribute;
+        Cursor cursor;
+        char ch1; // name starting character
+        char ch2; // name ending character
+        Attribute prev1; // attribute prior to the current
+        Attribute prev2; // attribute prior but one to the current
+        char quote;
+
+        cursor = new Cursor (getPage (), 0);
+        prev1 = null;
+        prev2 = null;
+        // leave the name alone & start with second attribute
+        for (int i = 2; i < attributes.size (); )
+        {
+            attribute = (Attribute)attributes.elementAt (i);
+            if (!attribute.isWhitespace ())
+            {
+                cursor.setPosition (attribute.getNameStartPosition ());
+                ch1 = attribute.getPage ().getCharacter (cursor);
+                cursor.setPosition (attribute.getNameEndPosition () - 1);
+                ch2 = attribute.getPage ().getCharacter (cursor);
+                if ('=' == ch1)
+                {   // possible rule 1 or 2
+                    // check for a previous standalone, both rules need it, also check prev1 as a sanity check
+                    if (null != prev2 && prev2.isStandAlone () && prev1.isWhitespace ())
+                    {
+                        if (1 == attribute.getNameEndPosition () - attribute.getNameStartPosition ())
+                        {   // rule 1, an isolated equals sign
+                            prev2.setValueStartPosition (attribute.getNameEndPosition ());
+                            attributes.removeElementAt (i); // current
+                            attributes.removeElementAt (i - 1); // whitespace
+                            prev1 = prev2;
+                            prev2 = null;
+                            i--;
+                            continue;
+                        }
+                        else
+                        {
+                            // rule 2, name starts with equals
+                            prev2.setValueStartPosition (attribute.getNameStartPosition () + 1); // past the equals sign
+                            prev2.setValueEndPosition (attribute.getNameEndPosition ());
+                            attributes.removeElementAt (i); // current
+                            attributes.removeElementAt (i - 1); // whitespace
+                            prev1 = prev2;
+                            prev2 = null;
+                            i--;
+                            continue;
+                        }
+                    }
+                }
+                else if ((('\'' == ch1) && ('\'' == ch2)) || (('"' == ch1) && ('"' == ch2)))
+                {   // possible rule 3
+                    // check for a previous empty, also check prev1 as a sanity check
+                    if (null != prev2 && prev2.isEmpty () && prev1.isWhitespace ())
+                    {   // TODO check that name has more than one character
+                        prev2.setValueStartPosition (attribute.getNameStartPosition () + 1);
+                        prev2.setValueEndPosition (attribute.getNameEndPosition () - 1);
+                        prev2.setQuote (ch1);
+                        attributes.removeElementAt (i); // current
+                        attributes.removeElementAt (i - 1); // whitespace
+                        prev1 = prev2;
+                        prev2 = null;
+                        i--;
+                        continue;
+                    }
+                }
+                else if (('\'' == ch2) || ('"' == ch2))
+                {   // possible rule 4 or 5
+                    // check for a previous valued attribute
+                    if (null != prev1 && prev1.isValued ())
+                    {   // check for a terminating quote of the same type
+                        cursor.setPosition (prev1.getValueEndPosition ());
+                        ch1 = prev1.getPage ().getCharacter (cursor); // crossing pages with cursor?
+                        if (ch1 == ch2)
+                        {
+                            prev1.setValueEndPosition (attribute.getNameEndPosition () - 1);
+                            attributes.removeElementAt (i); // current
+                            continue;
+                        }
+                    }
+                }
+            }
+            // shift and go on to next attribute
+            prev2 = prev1;
+            prev1 = attribute;
+            i++;
+        }
     }
 
     /**

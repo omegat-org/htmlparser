@@ -27,31 +27,26 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser;
-//////////////////
-// Java Imports //
-//////////////////
-import java.io.BufferedInputStream;
+
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
+
+import org.htmlparser.Node;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.lexer.nodes.TagNode;
-
-import org.htmlparser.parserHelper.ParserHelper;
+import org.htmlparser.nodeDecorators.DecodingNode;
+import org.htmlparser.nodeDecorators.EscapeCharacterRemovingNode;
+import org.htmlparser.nodeDecorators.NonBreakingSpaceConvertingNode;
 import org.htmlparser.scanners.AppletScanner;
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.scanners.BulletListScanner;
@@ -75,6 +70,7 @@ import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.IteratorImpl;
+import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -325,7 +321,7 @@ public class Parser
      */
     public Parser(String resourceLocn, ParserFeedback feedback) throws ParserException
     {
-        this (ParserHelper.openConnection (resourceLocn, feedback), feedback);
+        this (openConnection (resourceLocn, feedback), feedback);
     }
 
     /**
@@ -418,7 +414,7 @@ public class Parser
             ParserException
     {
         if ((null != url) && !"".equals (url))
-            setConnection (ParserHelper.openConnection (url, getFeedback ()));
+            setConnection (openConnection (url, getFeedback ()));
     }
 
     /**
@@ -519,16 +515,6 @@ public class Parser
         return feedback;
     }
 
-    public TagScanner getPreviousOpenScanner ()
-    {
-        return (mScanner);
-    }
-
-    public void setPreviousOpenScanner (TagScanner scanner)
-    {
-        mScanner = scanner;
-    }
-
     //
     // Public methods
     //
@@ -581,12 +567,6 @@ public class Parser
      * </pre>
      */
     public NodeIterator elements() throws ParserException
-    {
-        return (createIteratorImpl ());
-    }
-
-    public IteratorImpl createIteratorImpl()
-        throws ParserException
     {
         boolean remove_scanner;
         Node node;
@@ -782,6 +762,96 @@ public class Parser
     }
 
     /**
+     * Opens a connection using the given url.
+     * @param url The url to open.
+     * @param feedback The ibject to use for messages or <code>null</code>.
+     * @exception ParserException if an i/o exception occurs accessing the url.
+     */
+    public static URLConnection openConnection (URL url, ParserFeedback feedback)
+        throws
+            ParserException
+    {
+        URLConnection ret;
+
+        try
+        {
+            ret = url.openConnection ();
+        }
+        catch (IOException ioe)
+        {
+            String msg = "HTMLParser.openConnection() : Error in opening a connection to " + url.toExternalForm ();
+            ParserException ex = new ParserException (msg, ioe);
+            if (null != feedback)
+                feedback.error (msg, ex);
+            throw ex;
+        }
+
+        return (ret);
+    }
+
+    /**
+     * Opens a connection based on a given string.
+     * The string is either a file, in which case <code>file://localhost</code>
+     * is prepended to a canonical path derived from the string, or a url that
+     * begins with one of the known protocol strings, i.e. <code>http://</code>.
+     * Embedded spaces are silently converted to %20 sequences.
+     * @param string The name of a file or a url.
+     * @param feedback The object to use for messages or <code>null</code> for no feedback.
+     * @exception ParserException if the string is not a valid url or file.
+     */
+    public static URLConnection openConnection (String string, ParserFeedback feedback)
+        throws
+            ParserException
+    {
+        final String prefix = "file://localhost";
+        String resource;
+        URL url;
+        StringBuffer buffer;
+        URLConnection ret;
+
+        try
+        {
+            url = new URL (LinkProcessor.fixSpaces (string));
+            ret =  openConnection (url, feedback);
+        }
+        catch (MalformedURLException murle)
+        {   // try it as a file
+            try
+            {
+                File file = new File (string);
+                resource = file.getCanonicalPath ();
+                buffer = new StringBuffer (prefix.length () + resource.length ());
+                buffer.append (prefix);
+                if (!resource.startsWith ("/"))
+                    buffer.append ("/");
+                buffer.append (resource);
+                url = new URL (LinkProcessor.fixSpaces (buffer.toString ()));
+                ret = openConnection (url, feedback);
+                if (null != feedback)
+                    feedback.info (url.toExternalForm ());
+            }
+            catch (MalformedURLException murle2)
+            {
+                String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
+                ParserException ex = new ParserException (msg, murle2);
+                if (null != feedback)
+                    feedback.error (msg, ex);
+                throw ex;
+            }
+            catch (IOException ioe)
+            {
+                String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
+                ParserException ex = new ParserException (msg, ioe);
+                if (null != feedback)
+                    feedback.error (msg, ex);
+                throw ex;
+            }
+        }
+
+        return (ret);
+    }
+
+    /**
      * The main program, which can be executed from the command line
      */
     public static void main(String [] args)
@@ -916,7 +986,20 @@ public class Parser
      */
     public Node createStringNode (Lexer lexer, int start, int end)
     {
-        return (new StringNode (lexer.getPage (), start, end));
+        Node ret;
+        
+        ret = new StringNode (lexer.getPage (), start, end);
+        if (null != stringNodeFactory)
+        {
+            if (stringNodeFactory.shouldDecodeNodes ())
+                ret = new DecodingNode (ret);
+            if (stringNodeFactory.shouldRemoveEscapeCharacters ())
+                ret = new EscapeCharacterRemovingNode (ret);
+            if (stringNodeFactory.shouldConvertNonBreakingSpace ())
+                ret = new NonBreakingSpaceConvertingNode (ret);
+        }
+
+        return (ret);
     }
 
     /**
@@ -932,6 +1015,8 @@ public class Parser
 
     /**
      * Create a new tag node.
+     * This recurses into the created tag by calling the tag's scanner,
+     * if it is in the list of registered scanners.
      * @param lexer The lexer parsing this tag.
      * @param start The beginning position of the tag.
      * @param end The ending positiong of the tag.
@@ -952,17 +1037,17 @@ public class Parser
             // now recurse if there is a scanner for this type of tag
             name = ret.getTagName ();
             scanner = (TagScanner)scanners.get (name);
-            save = getPreviousOpenScanner ();
+            save = mScanner;
             if ((null != scanner) && scanner.evaluate (ret.getText (), save))
             {
-                setPreviousOpenScanner (scanner);
+                mScanner = scanner;
                 try
                 {
                     ret = scanner.createScannedNode (ret, lexer.getPage ().getUrl (), lexer);
                 }
                 finally
                 {
-                    setPreviousOpenScanner (save);
+                    mScanner = save;
                 }
             }
         }

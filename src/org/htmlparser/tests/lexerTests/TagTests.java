@@ -32,18 +32,19 @@
 // and delete these comments when you're done.
 // ----   NEEDS FIXING                          ----
 
-package org.htmlparser.tests.temporaryFailures;
+package org.htmlparser.tests.lexerTests;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class TagParserTest extends ParserTestCase {
+public class TagTests extends ParserTestCase {
     private static final String TEST_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" +
         "<!-- Server: sf-web2 -->" +
         "<html lang=\"en\">" +
@@ -82,7 +83,7 @@ public class TagParserTest extends ParserTestCase {
     private Map results;
     private int testProgress;
 
-    public TagParserTest(String name) {
+    public TagTests (String name) {
         super(name);
     }
 
@@ -97,7 +98,7 @@ public class TagParserTest extends ParserTestCase {
         assertStringEquals("alt","Marshall Field's",tag.getAttribute("ALT"));
         assertStringEquals(
             "html",
-            "<IMG BORDER=\"0\" ALT=\"Marshall Field's\" WIDTH=\"87\" SRC=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" HEIGHT=\"20\">",
+            testHtml,
             tag.toHtml()
         );
     }
@@ -133,11 +134,12 @@ public class TagParserTest extends ParserTestCase {
     }
 
     public void testTagWithSingleQuote() throws ParserException {
-        createParser("<tag att=\'a<b\'>");
+        String html = "<tag att=\'a<b\'>";
+        createParser(html);
         parseAndAssertNodeCount(1);
         assertType("should be Tag",Tag.class,node[0]);
         Tag tag = (Tag)node[0];
-        assertStringEquals("html","<TAG ATT=\"a<b\">",tag.toHtml());
+        assertStringEquals("html",html,tag.toHtml());
         assertStringEquals("attribute","a<b",tag.getAttribute("att"));
     }
 
@@ -146,15 +148,14 @@ public class TagParserTest extends ParserTestCase {
      * bug #725749 Parser does not handle < and > in multi-line attributes
      * submitted by Joe Robins (zorblak)
      */
-
     public void testMultiLine1 () throws ParserException
     {
-        createParser("<meta name=\"foo\" content=\"foo<bar>\">");
+        String html = "<meta name=\"foo\" content=\"foo<bar>\">";
+        createParser(html);
         parseAndAssertNodeCount (1);
-        assertType ("should be Tag", Tag.class, node[0]);
+        assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
-        String html = tag.toHtml ();
-        assertStringEquals ("html","<META CONTENT=\"foo<bar>\" NAME=\"foo\">", html);
+        assertStringEquals ("html",html, tag.toHtml ());
         String attribute1 = tag.getAttribute ("NAME");
         assertStringEquals ("attribute 1","foo", attribute1);
         String attribute2 = tag.getAttribute ("CONTENT");
@@ -163,12 +164,12 @@ public class TagParserTest extends ParserTestCase {
 
     public void testMultiLine2 () throws ParserException
     {
-        createParser("<meta name=\"foo\" content=\"foo<bar\">");
+        String html = "<meta name=\"foo\" content=\"foo<bar\">";
+        createParser(html);
         parseAndAssertNodeCount (1);
-        assertType ("should be Tag", Tag.class, node[0]);
+        assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
-        String html = tag.toHtml ();
-        assertStringEquals ("html","<META CONTENT=\"foo<bar\" NAME=\"foo\">", html);
+        assertStringEquals ("html",html, tag.toHtml ());
         String attribute1 = tag.getAttribute ("NAME");
         assertStringEquals ("attribute 1","foo", attribute1);
         String attribute2 = tag.getAttribute ("CONTENT");
@@ -177,12 +178,12 @@ public class TagParserTest extends ParserTestCase {
 
     public void testMultiLine3 () throws ParserException
     {
-        createParser("<meta name=\"foo\" content=\"foobar>\">");
+        String html = "<meta name=\"foo\" content=\"foobar>\">";
+        createParser(html);
         parseAndAssertNodeCount (1);
-        assertType ("should be Tag", Tag.class, node[0]);
+        assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
-        String html = tag.toHtml ();
-        assertStringEquals ("html","<META CONTENT=\"foobar>\" NAME=\"foo\">", html);
+        assertStringEquals ("html",html, tag.toHtml ());
         String attribute1 = tag.getAttribute ("NAME");
         assertStringEquals ("attribute 1","foo", attribute1);
         String attribute2 = tag.getAttribute ("CONTENT");
@@ -191,88 +192,76 @@ public class TagParserTest extends ParserTestCase {
 
     public void testMultiLine4 () throws ParserException
     {
-        createParser("<meta name=\"foo\" content=\"foo\nbar>\">");
+        String html = "<meta name=\"foo\" content=\"foo\nbar>\">";
+        createParser(html);
         parseAndAssertNodeCount (1);
-        assertType ("should be Tag", Tag.class, node[0]);
+        assertType ("should be MetaTag", MetaTag.class, node[0]);
         Tag tag = (Tag)node[0];
-        String html = tag.toHtml ();
-        assertStringEquals ("html","<META CONTENT=\"foo\r\nbar>\" NAME=\"foo\">", html);
+        assertStringEquals ("html",html, tag.toHtml ());
         String attribute1 = tag.getAttribute ("NAME");
         assertStringEquals ("attribute 1","foo", attribute1);
         String attribute2 = tag.getAttribute ("CONTENT");
-        assertStringEquals ("attribute 2","foo\r\nbar>", attribute2);
+        assertStringEquals ("attribute 2","foo\nbar>", attribute2);
     }
 
     /**
      * Test multiline tag like attribute.
      * See feature request #725749 Handle < and > in multi-line attributes.
-     * Only perform this test if it's version 1.4 or higher.
      */
     public void testMultiLine5 () throws ParserException
     {
         // <meta name="foo" content="<foo>
         // bar">
-        createParser("<meta name=\"foo\" content=\"<foo>\nbar\">");
-        if (1.4 <= Parser.getVersionNumber ())
-        {
-            parseAndAssertNodeCount (1);
-            assertType ("should be Tag", Tag.class, node[0]);
-            Tag tag = (Tag)node[0];
-            String html = tag.toHtml ();
-            assertStringEquals ("html","<META CONTENT=\"<foo>\r\nbar\" NAME=\"foo\">", html);
-            String attribute1 = tag.getAttribute ("NAME");
-            assertStringEquals ("attribute 1","foo", attribute1);
-            String attribute2 = tag.getAttribute ("CONTENT");
-            assertStringEquals ("attribute 2","<foo>\r\nbar", attribute2);
-        }
+        String html = "<meta name=\"foo\" content=\"<foo>\nbar\">";
+        createParser(html);
+        parseAndAssertNodeCount (1);
+        assertType ("should be MetaTag", MetaTag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        assertStringEquals ("html",html, tag.toHtml ());
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","<foo>\nbar", attribute2);
     }
 
     /**
      * Test multiline broken tag like attribute.
      * See feature request #725749 Handle < and > in multi-line attributes.
-     * Only perform this test if it's version 1.4 or higher.
      */
     public void testMultiLine6 () throws ParserException
     {
         // <meta name="foo" content="foo>
         // bar">
-        createParser("<meta name=\"foo\" content=\"foo>\nbar\">");
-        if (1.4 <= Parser.getVersionNumber ())
-        {
-            parseAndAssertNodeCount (1);
-            assertType ("should be Tag", Tag.class, node[0]);
-            Tag tag = (Tag)node[0];
-            String html = tag.toHtml ();
-            assertStringEquals ("html","<META CONTENT=\"foo>\r\nbar\" NAME=\"foo\">", html);
-            String attribute1 = tag.getAttribute ("NAME");
-            assertStringEquals ("attribute 1","foo", attribute1);
-            String attribute2 = tag.getAttribute ("CONTENT");
-            assertStringEquals ("attribute 2","foo>\r\nbar", attribute2);
-        }
+        String html = "<meta name=\"foo\" content=\"foo>\nbar\">";
+        createParser(html);
+        parseAndAssertNodeCount (1);
+        assertType ("should be MetaTag", MetaTag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        assertStringEquals ("html",html, tag.toHtml ());
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","foo>\nbar", attribute2);
     }
 
     /**
      * Test multiline split tag like attribute.
      * See feature request #725749 Handle < and > in multi-line attributes.
-     * Only perform this test if it's version 1.4 or higher.
      */
     public void testMultiLine7 () throws ParserException
     {
         // <meta name="foo" content="<foo
         // bar">
-        createParser("<meta name=\"foo\" content=\"<foo\nbar\"");
-        if (1.4 <= Parser.getVersionNumber ())
-        {
-            parseAndAssertNodeCount (1);
-            assertType ("should be Tag", Tag.class, node[0]);
-            Tag tag = (Tag)node[0];
-            String html = tag.toHtml ();
-            assertStringEquals ("html","<META CONTENT=\"<foo\r\nbar\" NAME=\"foo\">", html);
-            String attribute1 = tag.getAttribute ("NAME");
-            assertStringEquals ("attribute 1","foo", attribute1);
-            String attribute2 = tag.getAttribute ("CONTENT");
-            assertStringEquals ("attribute 2","<foo\r\nbar", attribute2);
-        }
+        String html = "<meta name=\"foo\" content=\"<foo\nbar\"";
+        createParser(html);
+        parseAndAssertNodeCount (1);
+        assertType ("should be MetaTag", MetaTag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        assertStringEquals ("html",html + ">", tag.toHtml ());
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","<foo\nbar", attribute2);
     }
 
     /**
@@ -282,76 +271,71 @@ public class TagParserTest extends ParserTestCase {
     /**
      * Test multiple threads running against the parser.
      * See feature request #736144 Handle multi-threaded operation.
-     * Only perform this test if it's version 1.4 or higher.
      */
     public void testThreadSafety() throws Exception
     {
         createParser("<html></html>");
-        if (1.4 <= Parser.getVersionNumber ())
-        {
-            String testHtml1 = "<a HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>" +
-                                TEST_HTML;
+        String testHtml1 = "<a HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>" +
+                            TEST_HTML;
 
-            String testHtml2 = "<a href=\"http://normallink.com/sometext.html\">" +
-                                TEST_HTML;
-            ParsingThread parsingThread [] =
-                new ParsingThread[100];
-            results = new HashMap();
-            testProgress = 0;
-            for (int i=0;i<parsingThread.length;i++) {
-                if (i<parsingThread.length/2)
+        String testHtml2 = "<a href=\"http://normallink.com/sometext.html\">" +
+                            TEST_HTML;
+        ParsingThread parsingThread [] =
+            new ParsingThread[100];
+        results = new HashMap();
+        testProgress = 0;
+        for (int i=0;i<parsingThread.length;i++) {
+            if (i<parsingThread.length/2)
+                parsingThread[i] =
+                    new ParsingThread(i,testHtml1,parsingThread.length);
+                else
                     parsingThread[i] =
-                        new ParsingThread(i,testHtml1,parsingThread.length);
-                    else
-                        parsingThread[i] =
-                            new ParsingThread(i,testHtml2,parsingThread.length);
+                        new ParsingThread(i,testHtml2,parsingThread.length);
 
-                Thread thread = new Thread(parsingThread[i]);
-                thread.start();
+            Thread thread = new Thread(parsingThread[i]);
+            thread.start();
+        }
+
+        int completionValue = computeCompletionValue(parsingThread.length);
+
+        do {
+            try {
+                Thread.sleep(500);
             }
-
-            int completionValue = computeCompletionValue(parsingThread.length);
-
-            do {
-                try {
-                    Thread.sleep(50);
-                }
-                catch (InterruptedException e) {
-                }
+            catch (InterruptedException e) {
             }
-            while (testProgress!=completionValue);
-            for (int i=0;i<parsingThread.length;i++) {
-                if (!parsingThread[i].passed()) {
-                    assertNotNull("Thread "+i+" link 1",parsingThread[i].getLink1());
+        }
+        while (testProgress!=completionValue);
+        for (int i=0;i<parsingThread.length;i++) {
+            if (!parsingThread[i].passed()) {
+                assertNotNull("Thread "+i+" link 1",parsingThread[i].getLink1());
+                assertNotNull("Thread "+i+" link 2",parsingThread[i].getLink2());
+                if (i<parsingThread.length/2) {
+                    assertStringEquals(
+                        "Thread "+i+", link 1:",
+                        "/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
+                        parsingThread[i].getLink1().getLink()
+                    );
+                    assertStringEquals(
+                        "Thread "+i+", link 2:",
+                        "http://normallink.com/sometext.html",
+                        parsingThread[i].getLink2().getLink()
+                    );
+                } else {
+                    assertStringEquals(
+                        "Thread "+i+", link 1:",
+                        "http://normallink.com/sometext.html",
+                        parsingThread[i].getLink1().getLink()
+                    );
                     assertNotNull("Thread "+i+" link 2",parsingThread[i].getLink2());
-                    if (i<parsingThread.length/2) {
-                        assertStringEquals(
-                            "Thread "+i+", link 1:",
-                            "/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
-                            parsingThread[i].getLink1().getLink()
-                        );
-                        assertStringEquals(
-                            "Thread "+i+", link 2:",
-                            "http://normallink.com/sometext.html",
-                            parsingThread[i].getLink2().getLink()
-                        );
-                    } else {
-                        assertStringEquals(
-                            "Thread "+i+", link 1:",
-                            "http://normallink.com/sometext.html",
-                            parsingThread[i].getLink1().getLink()
-                        );
-                        assertNotNull("Thread "+i+" link 2",parsingThread[i].getLink2());
-                        assertStringEquals(
-                            "Thread "+i+", link 2:",
-                            "/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
-                            parsingThread[i].getLink2().getLink()
-                        );
-                    }
+                    assertStringEquals(
+                        "Thread "+i+", link 2:",
+                        "/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
+                        parsingThread[i].getLink2().getLink()
+                    );
                 }
             }
         }
-
     }
 
     private int computeCompletionValue(int numThreads) {
@@ -368,7 +352,7 @@ public class TagParserTest extends ParserTestCase {
         ParsingThread(int id, String testHtml, int max) {
             this.id = id;
             this.max = max;
-            this.parser =
+            this.parser = 
                 Parser.createParser(testHtml);
             parser.registerScanners();
         }
@@ -437,4 +421,67 @@ public class TagParserTest extends ParserTestCase {
         assertStringEquals ("html","<INPUT DISABLED=>", html);
     }
 
+    /**
+     * Mainline for all suites of tests.
+     * @param args Command line arguments. The following options
+     * are understood:
+     * <pre>
+     * -text  -- use junit.textui.TestRunner
+     * -awt   -- use junit.awtui.TestRunner
+     * -swing -- use junit.swingui.TestRunner (default)
+     * </pre>
+     * All other options are passed on to the junit framework.
+     */
+    public static void main(String[] args)
+    {
+        String runner;
+        int i;
+        String arguments[];
+        Class cls;
+
+        System.out.println (System.getProperty ("testclass"));
+        runner = null;
+        for (i = 0; (i < args.length) && (null == runner); i++)
+        {
+            if (args[i].equalsIgnoreCase ("-text"))
+                runner = "junit.textui.TestRunner";
+            else if (args[i].equalsIgnoreCase ("-awt"))
+                runner = "junit.awtui.TestRunner";
+            else if (args[i].equalsIgnoreCase ("-swing"))
+                runner = "junit.swingui.TestRunner";
+        }
+        if (null != runner)
+        {
+            // remove it from the arguments
+            arguments = new String[args.length - 1];
+            System.arraycopy (args, 0, arguments, 0, i - 1);
+            System.arraycopy (args, i, arguments, i - 1, args.length - i);
+            args = arguments;
+        }
+        else
+            runner = "junit.swingui.TestRunner";
+
+        // append the test class
+        arguments = new String[args.length + 1];
+        System.arraycopy (args, 0, arguments, 0, args.length);
+        arguments[args.length] = "org.htmlparser.tests.lexerTests.TagTests";
+
+        // invoke main() of the test runner
+        try
+        {
+            cls = Class.forName (runner);
+            java.lang.reflect.Method method = cls.getDeclaredMethod (
+                "main", new Class[] { String[].class });
+            method.invoke (
+                null,
+                new Object[] { arguments });
+        }
+        catch (Throwable t)
+        {
+            System.err.println (
+                "cannot run unit test ("
+                + t.getMessage ()
+                + ")");
+        }
+    }
 }

@@ -212,7 +212,7 @@ public class Page
 
     /**
      * Deserialize the page.
-     * @see #writeObject
+     * For details see <code>writeObject()</code>.
      * @param in The object stream to decode.
      */
     private void readObject (ObjectInputStream in)
@@ -801,7 +801,7 @@ public class Page
 
     /**
      * Get the text line the position of the cursor lies on.
-     * @param cursor The position to calculate for.
+     * @param position The position to calculate for.
      * @return The contents of the URL or file corresponding to the line number
      * containg the cursor position.
      */

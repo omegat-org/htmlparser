@@ -36,20 +36,22 @@ import org.htmlparser.lexer.Page;
 
 /**
  * An attribute within a tag.
- * <p>If Name is null, it is whitepace and Value has the text.
- * <p>If Name is not null, and Value is null it's a standalone attribute.
- * <p>If Name is not null, and Value is "", and Quote is zero it's an empty attribute.
- * <p>If Name is not null, and Value is "", and Quote is ' it's an empty single quoted attribute.
- * <p>If Name is not null, and Value is "", and Quote is " it's an empty double quoted attribute.
- * <p>If Name is not null, and Value is something, and Quote is zero it's a naked attribute.
- * <p>If Name is not null, and Value is something, and Quote is ' it's a single quoted attribute.
- * <p>If Name is not null, and Value is something, and Quote is " it's a double quoted attribute.
- * <p>All other states are illegal.
+ * <br>If Name is null, it is whitepace and Value has the text.
+ * <br>If Name is not null, and Value is null it's a standalone attribute.
+ * <br>If Name is not null, and Value is "", and Quote is zero it's an empty attribute.
+ * <br>If Name is not null, and Value is "", and Quote is ' it's an empty single quoted attribute.
+ * <br>If Name is not null, and Value is "", and Quote is " it's an empty double quoted attribute.
+ * <br>If Name is not null, and Value is something, and Quote is zero it's a naked attribute.
+ * <br>If Name is not null, and Value is something, and Quote is ' it's a single quoted attribute.
+ * <br>If Name is not null, and Value is something, and Quote is " it's a double quoted attribute.
+ * <br>All other states are illegal.
  * <p>
  * The attribute can be 'lazy loaded' by providing the page and cursor offsets
- * into the page for the name and value. In this case if the starting offset is
- * less than zero, the element is null. This is done for speed, since if the name
- * and value are not been needed we can avoid the cost of creating the strings.
+ * into the page for the name and value. In this case if the starting offset of
+ * the name is less than zero, the name is null, and if the ending offset of the
+ * value is less than zero, the value is null.. This is done for speed, since
+ * if the name and value are not been needed we can avoid the cost and memory
+ * overhead of creating the strings.
  */
 public class Attribute
 {
@@ -175,7 +177,37 @@ public class Attribute
     {
         return (null == getName ());
     }
-        
+
+    /**
+     * Predicate to determine if this attribute has no equals sign (or value).
+     * @return <code>true</code> if this attribute is a standalone attribute.
+     * <code>false</code> if has an equals sign.
+     */
+    public boolean isStandAlone ()
+    {
+        return (-1 == mValueStart);
+    }
+
+    /**
+     * Predicate to determine if this attribute has an equals sign but no value.
+     * @return <code>true</code> if this attribute is an empty attribute.
+     * <code>false</code> if has an equals sign and a value.
+     */
+    public boolean isEmpty ()
+    {
+        return ((-1 != mValueStart) && (-1 == mValueEnd));
+    }
+
+    /**
+     * Predicate to determine if this attribute has a value.
+     * @return <code>true</code> if this attribute has a value.
+     * <code>false</code> if it is empty or standalone.
+     */
+    public boolean isValued ()
+    {
+        return ((-1 != mValueStart) && (-1 != mValueEnd));
+    }
+
     /**
      * Get the value of the attribute.
      * The part after the equals sign, or the text if it's just a whitepace 'attribute'.
@@ -186,7 +218,7 @@ public class Attribute
     public String getValue ()
     {
         if (null == mValue)
-            if (0 <= mValueStart)
+            if ((null != mPage) && (0 <= mValueEnd))
                 mValue = mPage.getText (mValueStart, mValueEnd);
         return (mValue);
     }
@@ -228,7 +260,7 @@ public class Attribute
 
         if (null == mValue)
         {
-            if (0 <= mValueStart)
+            if (0 <= mValueEnd)
             {
                 if (0 != (quote = getQuote ()))
                     buffer.append (quote);
@@ -258,6 +290,64 @@ public class Attribute
     }
 
     /**
+     * Set the quote surrounding the value of the attribute.
+     * @param quote The new quote value.
+     */
+    public void setQuote (char quote)
+    {
+        mQuote = quote;
+    }
+
+    public Page getPage ()
+    {
+        return (mPage);
+    }
+
+    public int getNameStartPosition ()
+    {
+        return (mNameStart);
+    }
+
+    public void setNameStartPosition (int start)
+    {
+        mNameStart = start;
+        mName = null;
+    }
+
+    public int getNameEndPosition ()
+    {
+        return (mNameEnd);
+    }
+
+    public void setNameEndPosition (int end)
+    {
+        mNameEnd = end;
+        mName = null;
+    }
+
+    public int getValueStartPosition ()
+    {
+        return (mValueStart);
+    }
+
+    public void setValueStartPosition (int start)
+    {
+        mValueStart = start;
+        mValue = null;
+    }
+
+    public int getValueEndPosition ()
+    {
+        return (mValueEnd);
+    }
+
+    public void setValueEndPosition (int end)
+    {
+        mValueEnd = end;
+        mValue = null;
+    }
+
+    /**
      * Get a text representation of this attribute.
      * Suitable for insertion into a start tag, the output is one of
      * the forms:
@@ -265,9 +355,9 @@ public class Attribute
      * <pre>
      * value
      * name
-     * name= value
-     * name= 'value'
-     * name= "value"
+     * name=value
+     * name='value'
+     * name="value"
      * </pre>
      * </code>
      * @param buffer The accumulator for placing the text into.
@@ -283,10 +373,12 @@ public class Attribute
         {
             buffer.append (name);
             if (0 <= mValueStart)
-            {
-                buffer.append ("=");
+                if (null == mPage)
+                    buffer.append ("=");
+                else
+                    mPage.getText (buffer, mNameEnd, mValueStart - (0 == getQuote () ? 0 : 1));
+            if (0 <= mValueEnd)
                 getRawValue (buffer);
-            }
         }
     }
 
@@ -316,7 +408,10 @@ public class Attribute
             length += name.length ();
             if (null != value)
             {
-                length += 1;
+                if (null == mPage)
+                    length += 1;
+                else
+                    length += mValueStart - (0 == getQuote () ? 1 : 0) - mNameEnd;
                 length += value.length ();
                 if (0 != getQuote ())
                     length += 2;

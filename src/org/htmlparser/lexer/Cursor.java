@@ -86,7 +86,7 @@ public class Cursor
 
     /**
      * Set the position of this cursor.
-     * @param The new cursor position.
+     * @param position The new cursor position.
      */
     public void setPosition (int position)
     {

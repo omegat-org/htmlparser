@@ -301,10 +301,7 @@ public class TagNode
 
     /**
      * Gets the attributes in the tag.
-     * NOTE: Values of the extended hashtable are two element arrays of String,
-     * with the first element being the original name (not uppercased),
-     * and the second element being the value.
-     * @return Returns a special hashtable of attributes in two element String arrays.
+     * @return Returns the list of {@link Attribute Attributes} in the tag.
      */
     public Vector getAttributesEx ()
     {
@@ -313,7 +310,16 @@ public class TagNode
 
     /**
      * Gets the attributes in the tag.
-     * @return Returns a Hashtable of attributes.
+     * This is not the preferred  method to get attributes, see {@link
+     * #getAttributesEx getAttributesEx} which returns a list of {@link
+     * Attribute} objects, which offer more information than the simple
+     * <code>String</code> objects available from this <code>Hashtable</code>.
+     * @return Returns a list of name/value pairs representing the attributes.
+     * These are not in order, the keys (names) are capitalized and the values
+     * are not quoted, even if they need to be. The table <em>will</em> return
+     * <code>null</code> if there was no value for an attribute (no equals
+     * sign or nothing to the right of the equals sign). A special entry with
+     * a key of SpecialHashtable.TAGNAME ("$<TAGNAME>$") holds the tag name.
      */
     public Hashtable getAttributes ()
     {
@@ -336,14 +342,9 @@ public class TagNode
                 attribute = (Attribute)attributes.elementAt (i);
                 if (!attribute.isWhitespace ())
                 {
-                    if (0 != attribute.getQuote ())
-                        value = attribute.getRawValue ();
-                    else
-                    {
-                        value = attribute.getValue ();
-                        if ((null != value) && value.equals (""))
-                            value = SpecialHashtable.NOTHING;
-                    }
+                    value = attribute.getValue ();
+                    if (attribute.isEmpty ())
+                        value = SpecialHashtable.NOTHING;
                     if (null == value)
                         value = SpecialHashtable.NULLVALUE;
                     ret.put (attribute.getName ().toUpperCase (), value);
@@ -688,7 +689,7 @@ public class TagNode
     /**
      * Set this tag to be an empty xml node, or not.
      * Adds or removes an ending slash on the tag.
-     * @param If true, ensures there is an ending slash in the node,
+     * @param emptyXmlTag If true, ensures there is an ending slash in the node,
      * i.e. &lt;tag/&gt;, otherwise removes it.
      */
     public void setEmptyXmlTag (boolean emptyXmlTag)

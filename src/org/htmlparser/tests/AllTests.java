@@ -112,6 +112,7 @@ public class AllTests extends junit.framework.TestCase
         sub.addTestSuite (FunctionalTests.class);
         sub.addTestSuite (LineNumberAssignedByNodeReaderTest.class);
         suite.addTest (sub);
+        suite.addTest (org.htmlparser.tests.lexerTests.AllTests.suite ());
         suite.addTest (org.htmlparser.tests.scannersTests.AllTests.suite ());
         suite.addTest (org.htmlparser.tests.utilTests.AllTests.suite ());
         suite.addTest (org.htmlparser.tests.tagTests.AllTests.suite ());

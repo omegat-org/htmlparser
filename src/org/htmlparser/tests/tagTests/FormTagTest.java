@@ -56,7 +56,7 @@ public class FormTagTest extends ParserTestCase {
         formTag.setFormLocation("http://www.yahoo.com/yahoo/do_not_login.jsp");
         String expected = 
             FormScannerTest.FORM_HTML.substring (0, FormScannerTest.FORM_HTML.indexOf ("\"do_login.php\""))
-            + "http://www.google.com/test/do_login.php"
+            + "http://www.yahoo.com/yahoo/do_not_login.jsp"
             + FormScannerTest.FORM_HTML.substring (FormScannerTest.FORM_HTML.indexOf ("\"do_login.php\"") + 14);
         assertStringEquals("Raw String",expected,formTag.toHtml());
     }

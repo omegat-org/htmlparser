@@ -126,15 +126,18 @@ public class ScriptScanner extends CompositeTagScanner {
                                 last.setEndPosition (node.elementEnd ());
                             else
                                 // TODO: need to remove this cast
-                                last = (StringNode)lexer.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                                last = (StringNode)factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
                         }
                     else if (node instanceof RemarkNode)
                     {
                         if (null != last)
                             last.setEndPosition (node.getEndPosition ());
                         else
+                        {
                             // TODO: need to remove this cast
-                            last = (StringNode)lexer.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                            // last = (StringNode)factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                            last = (StringNode)factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                        }
                     }
                     else // StringNode
                     {

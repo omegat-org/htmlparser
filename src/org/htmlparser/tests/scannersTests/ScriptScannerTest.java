@@ -74,8 +74,8 @@ public class ScriptScannerTest extends ParserTestCase
      */
     public void testScanBug() throws ParserException
     {
-        String src = "\"../js/DetermineBrowser.js\"";
-        createParser("<SCRIPT LANGUAGE=\"JavaScript\" SRC=" + src + "></SCRIPT>","http://www.google.com/test/index.html");
+        String src = "../js/DetermineBrowser.js";
+        createParser("<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"" + src + "\"></SCRIPT>","http://www.google.com/test/index.html");
         // Register the image scanner
         parser.addScanner(new ScriptScanner("-s"));
         parseAndAssertNodeCount(1);
