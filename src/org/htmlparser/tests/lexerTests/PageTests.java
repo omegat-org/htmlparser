@@ -36,6 +36,7 @@ import java.net.URLConnection;
 import junit.framework.TestCase;
 
 import org.htmlparser.lexer.Page;
+import org.htmlparser.util.ParserException;
 
 public class PageTests extends TestCase
 {
@@ -58,10 +59,7 @@ public class PageTests extends TestCase
     /**
      * Test initialization with a null value.
      */
-	public void testNull ()
-        throws
-            IOException,
-            UnsupportedEncodingException
+	public void testNull () throws ParserException
     {
         Page page;
 
@@ -79,10 +77,7 @@ public class PageTests extends TestCase
     /**
      * Test initialization with a real value.
      */
-	public void testURLConnection ()
-        throws
-            IOException,
-            UnsupportedEncodingException
+	public void testURLConnection () throws ParserException, IOException
     {
         String link;
         URL url;
@@ -91,5 +86,26 @@ public class PageTests extends TestCase
         link = "http://www.ibm.com/jp/";
         url = new URL (link);
         page = new Page (url.openConnection ());
+    }
+
+    /**
+     * Test initialization with non-existant URL.
+     */
+	public void testBadURLConnection () throws IOException
+    {
+        String link;
+        URL url;
+        Page page;
+
+        link = "http://www.bigbogosity.org/";
+        url = new URL (link);
+        try
+        {
+            page = new Page (url.openConnection ());
+        }
+        catch (ParserException pe)
+        {
+            // expected response
+        }
     }
 }

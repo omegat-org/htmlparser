@@ -44,7 +44,8 @@ public class AllTests extends TestCase
 		suite.addTestSuite (StreamTests.class);
 		suite.addTestSuite (SourceTests.class);
 		suite.addTestSuite (PageTests.class);
-		return suite; 
+        suite.addTestSuite (PageIndexTests.class);
+        return suite; 
 	}
 
     /**
