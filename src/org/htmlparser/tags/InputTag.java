@@ -26,8 +26,6 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.util.ParserUtils;
-
 /**
  * An input tag in a form.
  */
