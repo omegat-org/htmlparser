@@ -6,6 +6,7 @@ Integration Build 1.2 - 20021215
 [4] Changed encoding used from 8859_4 to 8859_1
 [5] HTMLRemarkNode returns string data in toPlainTextString() (This is a rollback)
 [6] Fixed bug 652746 - HTMLFormTag gets links correctly now
+[7] Fixed bug 653720 - HTMLNode uses sun specific class
 
 Integration Build 1.2 - 20021208
 --------------------------------
