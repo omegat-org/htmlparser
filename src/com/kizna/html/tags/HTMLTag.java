@@ -246,7 +246,7 @@ public class HTMLTag extends HTMLNode
 * not implemented yet
 * @author Kaarle Kaila 23.10.2001
 */
-	public String getTag(){
+	public String getTagName(){
 	    if (parsed == null) parsed=parseParameters();
 	    return (String)parsed.get(TAGNAME);
 	}
