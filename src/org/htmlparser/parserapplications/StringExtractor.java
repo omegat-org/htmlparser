@@ -28,24 +28,11 @@
 
 package org.htmlparser.parserapplications;
 
-import org.htmlparser.Node;
-import org.htmlparser.Parser;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
-import org.htmlparser.tags.EndTag;
-import org.htmlparser.tags.FormTag;
-import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
-import org.htmlparser.util.NodeIterator;
+import org.htmlparser.beans.StringBean;
 import org.htmlparser.util.ParserException;
-import org.htmlparser.util.Translate;
 
 public class StringExtractor
 {
-    
-    private static final String newline = System.getProperty ("line.separator");
-    private static final int newline_size = newline.length ();
-    
     private String resource;
 
     /**
@@ -58,83 +45,6 @@ public class StringExtractor
     }
     
     /**
-     * Add the given text collapsing whitespace.
-     * Use a little finite state machine:
-     * <pre>
-     * state 0: whitepace was last emitted character
-     * state 1: in whitespace
-     * state 2: in word
-     * A whitespace character moves us to state 1 and any other character
-     * moves us to state 2, except that state 0 stays in state 0 until
-     * a non-whitespace and going from whitespace to word we emit a space
-     * before the character:
-     *    input:     whitespace   other-character
-     * state\next
-     *    0               0             2
-     *    1               1        space then 2
-     *    2               1             2
-     * </pre>
-     * @param buffer The buffer to append to.
-     * @param string The string to append.
-     */
-    protected void collapse (StringBuffer buffer, String string)
-    {
-        int chars;
-        int length;
-        int state;
-        char character;
-        
-        chars = string.length ();
-        if (0 != chars)
-        {
-            length = buffer.length ();
-            state = (   (0 == length)
-            || (buffer.charAt (length - 1) == ' ')
-            || ((newline_size <= length) && buffer.substring (length - newline_size, length).equals (newline))) ? 0 : 1;
-            for (int i = 0; i < chars; i++)
-            {
-                character = string.charAt (i);
-                switch (character)
-                {
-                    // see HTML specification section 9.1 White space
-                    // http://www.w3.org/TR/html4/struct/text.html#h-9.1
-                    case '\u0020':
-                    case '\u0009':
-                    case '\u000C':
-                    case '\u200B':
-                    case '\r':
-                    case '\n':
-                        if (0 != state)
-                            state = 1;
-                        break;
-                    default:
-                        if (1 == state)
-                            buffer.append (' ');
-                        state = 2;
-                        buffer.append (character);
-                }
-            }
-        }
-        
-    }
-    
-    /**
-     * Appends a newline to the buffer if there isn't one there already.
-     * Except if the buffer is empty.
-     * @param buffer The buffer to append to.
-     */
-    protected void carriage_return (StringBuffer buffer)
-    {
-        int length;
-        
-        length = buffer.length ();
-        if (   (0 != length) // why bother appending newlines to the beginning of a buffer
-        && (   (newline_size <= length) // not enough chars to hold a newline
-        && (!buffer.substring (length - newline_size, length).equals (newline))))
-            buffer.append (newline);
-    }
-    
-    /**
      * Extract the text from a page.
      * @param links if <code>true</code> include hyperlinks in output.
      * @return The textual contents of the page.
@@ -143,72 +53,13 @@ public class StringExtractor
         throws
             ParserException
     {
-        Parser parser;
-        Node node;
-        Tag tag;
-        boolean preformatted;
-        StringBuffer results;
+        StringBean sb;
         
-        parser = new Parser (resource);
-        parser.registerScanners ();
-        results = new StringBuffer (4096);
-        preformatted = false;
-        for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
-        {
-            node = e.nextNode ();
-            if (node instanceof StringNode)
-            {
-                // node is a plain string
-                // cast it to an HTMLStringNode
-                StringNode string = (StringNode)node;
-                // retrieve the data from the object
-                if (preformatted)
-                    results.append (string.getText ());
-                else
-                    collapse (results, Translate.decode (string.getText ()));
-            }
-            else if (node instanceof LinkTag)
-            {
-                // node is a link
-                // cast it to an HTMLLinkTag
-                LinkTag link = (LinkTag)node;
-                // retrieve the data from the object
-                if (preformatted)
-                    results.append (link.getLinkText ());
-                else
-                    collapse (results, Translate.decode (link.getLinkText ()));
-                if (links)
-                {
-                    results.append ("<");
-                    results.append (link.getLink ());
-                    results.append (">");
-                }
-            }
-            else if (node instanceof FormTag)
-            {
-                FormTag form = (FormTag)node;
-                if (form.breaksFlow ()) // it does
-                    carriage_return (results);
-                if (preformatted)
-                    results.append (form.toPlainTextString ());
-                else
-                    collapse (results, Translate.decode (form.toPlainTextString ()));
-            }
-            else if (node instanceof RemarkNode)
-            {
-                // skip comments
-            }
-            else if (node instanceof Tag)
-            {
-                tag = (Tag)node;
-                if (tag.breaksFlow ())
-                    carriage_return (results);
-                if (tag.getText ().toUpperCase ().equals ("PRE"))
-                    preformatted = !(tag instanceof EndTag);
-            }
-        }
-        
-        return (results.toString ());
+        sb = new StringBean ();
+        sb.setLinks (links);
+        sb.setURL (resource);
+
+        return (sb.getStrings ());
     }
 
     /**
