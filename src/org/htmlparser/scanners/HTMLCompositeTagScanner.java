@@ -13,18 +13,18 @@ import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 
 public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
-	protected String nameOfTagToMatch;
+	protected String [] nameOfTagToMatch;
 	private boolean removeScanners;
 	private boolean stringNodeIgnoreMode;
 
-	public HTMLCompositeTagScanner(String nameOfTagToMatch) {
+	public HTMLCompositeTagScanner(String [] nameOfTagToMatch) {
 		this("",nameOfTagToMatch,false,false);
 	}
 
-	public HTMLCompositeTagScanner(String filter, String nameOfTagToMatch) {
+	public HTMLCompositeTagScanner(String filter, String [] nameOfTagToMatch) {
 		this(filter,nameOfTagToMatch,false,false);
 	}
-	public HTMLCompositeTagScanner(String filter, String nameOfTagToMatch, boolean removeScanners, boolean stringNodeIgnoreMode) {
+	public HTMLCompositeTagScanner(String filter, String [] nameOfTagToMatch, boolean removeScanners, boolean stringNodeIgnoreMode) {
 		this.nameOfTagToMatch = nameOfTagToMatch;
 		this.removeScanners = removeScanners;
 		this.stringNodeIgnoreMode = stringNodeIgnoreMode;
@@ -53,8 +53,10 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 				HTMLStringNode.setIgnoreStateMode(false);
 			if (node instanceof HTMLEndTag) {
 				endTag = (HTMLTag)node;
-				if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch)) 
-					endTagFound = true;
+				for (int i=0;i<nameOfTagToMatch.length && !endTagFound;i++) {
+					if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch[i])) 
+						endTagFound = true;
+				}
 			} 
 			if (!endTagFound){
 				childVector.addElement(node);

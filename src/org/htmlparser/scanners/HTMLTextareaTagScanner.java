@@ -35,20 +35,20 @@ import org.htmlparser.tags.data.HTMLTagData;
 
 public class HTMLTextareaTagScanner extends HTMLCompositeTagScanner
 {
+	private static final String MATCH_NAME [] = {"TEXTAREA"};
+
 	public HTMLTextareaTagScanner()
 	{
-		super("TEXTAREA");
+		super(MATCH_NAME);
 	}
 	
 	public HTMLTextareaTagScanner(String filter)
 	{
-		super(filter,"TEXTAREA");
+		super(filter,MATCH_NAME);
 	}
 
 	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "TEXTAREA";
-		return ids;
+		return MATCH_NAME;
 	}
 
 	protected HTMLTag createTag(

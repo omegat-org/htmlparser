@@ -38,20 +38,19 @@ import org.htmlparser.tags.data.HTMLTagData;
  * Scans title tags.
  */
 public class HTMLTitleScanner extends HTMLCompositeTagScanner {
+	private static final String MATCH_NAME [] = {"TITLE"};
 
 	public HTMLTitleScanner(String filter) {
-		super(filter,"TITLE");
+		super(filter,MATCH_NAME);
 	}
 
 	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "TITLE";
-		return ids;
+		return MATCH_NAME;
 	}
 	
 	public boolean evaluate(String tagNameBeingChecked, HTMLTagScanner previousOpenScanner) {
 		absorbLeadingBlanks(tagNameBeingChecked);
-		if (tagNameBeingChecked.equalsIgnoreCase(nameOfTagToMatch) && previousOpenScanner==null)
+		if (tagNameBeingChecked.equalsIgnoreCase(MATCH_NAME[0]) && previousOpenScanner==null)
 		return true; else return false;
 	} 
 

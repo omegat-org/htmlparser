@@ -39,18 +39,18 @@ import org.htmlparser.tags.data.HTMLTagData;
  */
 
 public class HTMLStyleScanner extends HTMLCompositeTagScanner {
+	private static final String MATCH_NAME [] = {"STYLE"};
+
 	public HTMLStyleScanner() {
-		super("STYLE");
+		super(MATCH_NAME);
 	}
 
 	public HTMLStyleScanner(String filter) {
-		super(filter,"STYLE");
+		super(filter,MATCH_NAME);
 	}
 
 	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "STYLE";
-		return ids;
+		return MATCH_NAME;
 	}
 	
 	protected HTMLTag createTag(

@@ -46,20 +46,20 @@ import org.htmlparser.tags.data.HTMLTagData;
  */
 public class HTMLFrameSetScanner extends HTMLCompositeTagScanner
 {
+	private static final String MATCH_NAME [] = {"FRAMESET"};
+	
 	public HTMLFrameSetScanner()
 	{
-		super("FRAMESET");
+		super(MATCH_NAME);
 	}
 
 	public HTMLFrameSetScanner(String filter)
 	{
-		super(filter,"FRAMESET");
+		super(filter,MATCH_NAME);
 	}
 
 	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "FRAMESET";
-		return ids;
+		return MATCH_NAME;
 	}
 
 	protected HTMLTag createTag(

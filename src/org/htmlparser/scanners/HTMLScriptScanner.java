@@ -39,18 +39,18 @@ import org.htmlparser.tags.data.HTMLTagData;
  */
 
 public class HTMLScriptScanner extends HTMLCompositeTagScanner {
+	private static final String MATCH_NAME [] = {"SCRIPT"};
+	
 	public HTMLScriptScanner() {
-		super("","SCRIPT",true,true);
+		super("",MATCH_NAME,true,true);
 	}
 
 	public HTMLScriptScanner(String filter) {
-		super(filter,"SCRIPT",true,true);
+		super(filter,MATCH_NAME,true,true);
 	}
 
 	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "SCRIPT";
-		return ids;
+		return MATCH_NAME;
 	}
 
 	protected HTMLTag createTag(
