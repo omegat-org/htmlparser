@@ -78,6 +78,8 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
 
   <!-- Package the release, creating the docs gzip also for uploading -->
   <target name="Package" depends="Release">
+    <zip zipfile="${dist}/src.zip"
+       basedir="${src}"/>
     <zip zipfile="${releaseDir}/htmlparser${versionString}.zip"
        basedir="${dist}"/>
     <tar tarfile="${releaseDir}/docs.tar" basedir="${dist}/docs"/>
