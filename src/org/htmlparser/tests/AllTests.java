@@ -35,30 +35,30 @@ import junit.framework.TestSuite;
  */
 public class AllTests extends junit.framework.TestCase 
 {
-/**
- * AllTests constructor comment.
- * @param name java.lang.String
- */
-public AllTests(String name) {
-	super(name);
-}
-public static void main(String[] args) {
-	new junit.awtui.TestRunner().start(new String[] {"org.htmlparser.tests.AllTests"});
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/17/2001 6:07:15 PM)
- * @return junit.framework.TestSuite
- */
-public static TestSuite suite() {
-	TestSuite suite = new TestSuite();
-	
-	suite.addTestSuite(HTMLStringNodeTest.class);
-	suite.addTestSuite(HTMLRemarkNodeTest.class);
-	suite.addTestSuite(HTMLParserTest.class);
-	suite.addTestSuite(org.htmlparser.tests.scannersTests.AllTests.class);
-	suite.addTestSuite(org.htmlparser.tests.utilTests.AllTests.class);
-	suite.addTestSuite(org.htmlparser.tests.tagTests.AllTests.class);
-	return suite;
-} 
+	/**
+	 * AllTests constructor comment.
+	 * @param name java.lang.String
+	 */
+	public AllTests(String name) {
+		super(name);
+	}
+	public static void main(String[] args) {
+		new junit.awtui.TestRunner().start(new String[] {"org.htmlparser.tests.AllTests"});
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/17/2001 6:07:15 PM)
+	 * @return junit.framework.TestSuite
+	 */
+	public static TestSuite suite() {
+		TestSuite suite = new TestSuite();
+		
+		suite.addTestSuite(HTMLStringNodeTest.class);
+		suite.addTestSuite(HTMLRemarkNodeTest.class);
+		suite.addTestSuite(HTMLParserTest.class);
+		suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());
+		suite.addTest(org.htmlparser.tests.utilTests.AllTests.suite());
+		suite.addTest(org.htmlparser.tests.tagTests.AllTests.suite());
+		return suite;
+	} 
 }
