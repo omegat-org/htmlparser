@@ -33,56 +33,26 @@ import junit.framework.*;
 import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.*;
 
-public class HTMLInputTagScannerTest extends TestCase 
+public class HTMLInputTagScannerTest extends HTMLParserTestCase 
 {
 	
 	private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");
 	private HTMLInputTagScanner scanner;
-	private HTMLNode[] node;
-	private int i;
 	
-	/**
-	 * Constructor for HTMLInputTagScannerTest.
-	 * @param arg0
-	 */
 	public HTMLInputTagScannerTest(String name) 
 	{
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(HTMLInputTagScannerTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {HTMLInputTagScannerTest.class.getName()});
-	}
-	
-	public void setUp() throws Exception
-	{
-		super.setUp();
-		scanner = new HTMLInputTagScanner("-i");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
-		scanner = new HTMLInputTagScanner("-i");
-		parser.addScanner(scanner);
-		
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-	}
-	
 	public void testScan() throws HTMLParserException 
 	{
-		assertEquals("Number of nodes expected",1,i);		
+		scanner = new HTMLInputTagScanner("-i");
+		createParser(testHTML,"http://www.google.com/test/index.html");
+		parser.addScanner(scanner);		
+		parseAndAssertNodeCount(1);
 	 	assertTrue(node[0] instanceof HTMLInputTag);
 	 	
 		// check the input node
