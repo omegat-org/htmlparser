@@ -8,10 +8,12 @@ Integration build 1.3 - 20030104
 [6] Added StringFindingVisitor + test code + new visitors packages
 [7] Fixed bug 659723, but HTMLStringNode is not thread-safe anymore.
 [8] JDK 1.2 compilability
-[9] Added HTMLCompositeTagScanner
-[10] Refactored HTMLSelectScanner to use HTMLCompositeTagScanner
-[11] Modified HTMLEnumeration interface (made less verbose)
-[12] Refactored HTMLStyleScnner to use HTMLCompositeTagScanner
+[9] Modified HTMLEnumeration interface (made less verbose)
+[10] Added HTMLCompositeTagScanner
+[11] Refactored following scanners to use HTMLCompositeTagScanner :
+	(i) HTMLStyleScnner 
+	(ii) HTMLSelectScanner 
+	(iii) HTMLFrameSetScanner
 
 Integration build 1.3 - 20021228
 --------------------------------
