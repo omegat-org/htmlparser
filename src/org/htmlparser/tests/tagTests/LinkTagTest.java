@@ -853,4 +853,22 @@ public class LinkTagTest extends ParserTestCase {
         LinkTag linkTag = (LinkTag)node[0];
         assertEquals ("plain text", "Cities", linkTag.toPlainTextString ());
     }
+
+    /**
+     * See bug #982175 False Positives on &reg; entity
+     */
+    public void testCharacterReferenceInLink() throws Exception
+    {
+        String html = "<a href=\"http://www.someplace.com/somepage.html?&region=us\">Search By Region</a>" +
+	        "<a href=\"http://www.someplace.com/somepage.html?&region=&destination=184\">Search by Destination</a>";
+        createParser (html);
+        parseAndAssertNodeCount (2);
+        assertType("node", LinkTag.class, node[0]);
+        LinkTag linkTag = (LinkTag)node[0];
+        assertEquals ("link", "http://www.someplace.com/somepage.html?&region=us", linkTag.getLink());
+        assertType("node", LinkTag.class, node[1]);
+        linkTag = (LinkTag)node[1];
+        assertEquals ("link", "http://www.someplace.com/somepage.html?&region=&destination=184", linkTag.getLink());
+    }
+    
 }

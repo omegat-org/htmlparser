@@ -241,7 +241,6 @@ public class NodeList implements Serializable {
      */
     public void keepAllNodesThatMatch (NodeFilter filter, boolean recursive)
     {
-        String name;
         Node node;
         NodeList children;
         NodeList ret;
