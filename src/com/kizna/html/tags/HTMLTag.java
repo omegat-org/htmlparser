@@ -45,7 +45,7 @@ public class HTMLTag extends HTMLNode
 	* not implemented yet
 	* added by Kaarle Kaila 23.10.2001
 	*/
-	private Hashtable parsed=null;
+	protected Hashtable parsed=null;
 	
 	/**
 	 * Scanner associated with this tag (useful for extraction of filtering data from a

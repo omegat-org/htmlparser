@@ -32,6 +32,8 @@
 
 package com.kizna.html.tags;
 
+import java.util.Enumeration;
+
 /**
  * A HTMLStyleTag represents a &lt;style&gt; tag
  */
@@ -72,7 +74,21 @@ public String toString()
 	 * @see HTMLNode#toRawString()
 	 */
 	public String toHTML() {
-		return "<STYLE>"+getStyleCode()+"</STYLE>";
+		StringBuffer retData = new StringBuffer();
+		retData.append("<STYLE");
+		String key,value;
+		if (parsed!=null)
+		for (Enumeration e =parsed.keys();e.hasMoreElements();) {
+			key = (String)e.nextElement();
+			if (key!=HTMLTag.TAGNAME) {
+				value = (String)parsed.get(key);
+				retData.append(" "+key+"=\""+value+"\"");
+			}
+		}
+		retData.append(">");
+		retData.append(getStyleCode());
+		retData.append("</STYLE>");
+		return retData.toString();
 	}
 
 }

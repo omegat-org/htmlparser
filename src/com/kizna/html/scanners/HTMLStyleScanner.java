@@ -112,6 +112,7 @@ public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLin
 			"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
 		}
 		HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine);
+		styleTag.setParsed(tag.getParsed());
 		return styleTag;
 	}
 	catch (Exception e) {

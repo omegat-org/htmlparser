@@ -71,6 +71,36 @@ public class HTMLStyleTagTest extends TestCase {
 		HTMLStyleTag styleTag = (HTMLStyleTag)node[0];
 		assertEquals("Raw String","<STYLE>a.h{background-color:#ffee99}</STYLE>",styleTag.toHTML());
 	}
+	/**
+	 * Reproducing a bug reported by Dhaval Udani relating to
+	 * style tag attributes being missed
+	 */
+	public void testToHTML_Attriubtes() throws HTMLParserException {
+		String testHTML = new String("<STYLE type=\"text/css\">\n"+
+		"<!--"+
+		"{something....something}"+
+		"-->"+
+		"</STYLE>");
+
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yle.fi/");
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		parser.setLineSeparator("\r\n");
+		HTMLNode [] node = new HTMLNode[10];
+		int i = 0;
+		parser.registerScanners();
+	 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+	 	assertEquals("Number of nodes expected",1,i);
+		assertTrue(node[0] instanceof HTMLStyleTag);
+		HTMLStyleTag styleTag = (HTMLStyleTag)node[0];
+		HTMLTagTest.assertStringEquals("Raw String","<STYLE TYPE=\"text/css\">"+
+		"<!--\r\n"+
+		"{something....something}\r\n"+
+		"-->"+
+		"</STYLE>",styleTag.toHTML());
+	}	
 	public static TestSuite suite() {
 		return new TestSuite(HTMLStyleTagTest.class);
 	}
