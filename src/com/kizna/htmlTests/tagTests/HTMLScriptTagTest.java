@@ -91,7 +91,7 @@ public void testExtractType()
 	scriptScanner.extractType(new HTMLTag(10,10,"SCRIPT TYPE=\"text/javascript\"",""));
 	assertEquals("text/javascript",scriptScanner.getType());	
 }
-	public void testToRawString() {
+	public void testToHTML() {
 		String testHTML = new String("<SCRIPT>document.write(d+\".com\")</SCRIPT>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
@@ -122,7 +122,7 @@ public void testExtractType()
 	* &lt;/script&gt; 
 	* check toRawString(). 
 	*/ 
-	public void testToRawStringBugWG() 
+	public void testToHTMLWG() 
 	{ 
 		StringBuffer sb1 = new StringBuffer(); 
 		sb1.append("<body><script language=\"javascript\">\r\n"); 

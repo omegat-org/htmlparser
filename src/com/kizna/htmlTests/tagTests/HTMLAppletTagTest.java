@@ -22,7 +22,7 @@ public class HTMLAppletTagTest extends TestCase {
 	public HTMLAppletTagTest(String name) {
 		super(name);
 	}
-	public void testToRawString() {
+	public void testToHTML() {
 		String [][]paramsData = {{"Param1","Value1"},{"Name","Somik"},{"Age","23"}};
 		Hashtable paramsMap = new Hashtable();
 		String testHTML = new String("<APPLET CODE=Myclass.class ARCHIVE=test.jar CODEBASE=www.kizna.com>\n");

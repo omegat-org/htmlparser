@@ -21,7 +21,7 @@ public class HTMLEndTagTest extends TestCase {
 	public HTMLEndTagTest(String name) {
 		super(name);
 	}
-	public void testToRawString() {
+	public void testToHTML() {
 		String testHTML = new String("<HTML></HTML>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");

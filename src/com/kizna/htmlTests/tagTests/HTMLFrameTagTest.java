@@ -22,7 +22,7 @@ public class HTMLFrameTagTest extends TestCase {
 	public HTMLFrameTagTest(String arg0) {
 		super(arg0);
 	}
-	public void testToRawString() {
+	public void testToHTML() {
 		String testHTML = new String(
 		"<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+ 
   			"<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"+

@@ -21,7 +21,7 @@ public class HTMLMetaTagTest extends TestCase {
 	public HTMLMetaTagTest(String name) {
 		super(name);
 	}
-	public void testToRawString() {
+	public void testToHTML() {
 		String testHTML = new String(
 		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
 		"<html>\n"+

@@ -21,7 +21,7 @@ public class HTMLStyleTagTest extends TestCase {
 	public HTMLStyleTagTest(String name) {
 		super(name);
 	}
-	public void testToRawString() {
+	public void testToHTML() {
 		String testHTML = new String("<style>a.h{background-color:#ffee99}</style>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yle.fi/");

@@ -23,7 +23,7 @@ public class HTMLDoctypeTagTest extends TestCase {
 	public HTMLDoctypeTagTest(String name) {
 		super(name);
 	}
-	public void testToRawString() {
+	public void testToHTML() {
 		String testHTML = new String(
 		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
 		"<HTML>\n"+

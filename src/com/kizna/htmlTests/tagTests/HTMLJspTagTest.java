@@ -151,7 +151,7 @@ public void testJspTag()
  * %&gt;
  * Creation date: (6/17/2001 4:01:06 PM)
  */
-public void testToRawString() 
+public void testToHTML() 
 {
 	String testHTML = new String(
 		"<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+

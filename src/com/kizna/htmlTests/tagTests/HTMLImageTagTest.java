@@ -171,7 +171,7 @@ public void testNullImageBug()
 	HTMLImageTag imageTag = (HTMLImageTag)node[0];
 	assertEquals("The image location","",imageTag.getImageLocation());
 }
-	public void testToRawString() {
+	public void testToHTML() {
 		String testHTML = new String("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/test/index.html");

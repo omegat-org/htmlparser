@@ -356,7 +356,7 @@ public void testToPlainTextString() {
 	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
 	assertEquals("Link Plain Text","hello",linkTag.toPlainTextString());	
 }
-	public void testToRawString() {
+	public void testToHTML() {
 		String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>\n"+
 			"<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font> <a \n"+
 			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+

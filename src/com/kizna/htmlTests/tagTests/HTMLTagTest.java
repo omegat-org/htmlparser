@@ -352,7 +352,7 @@ public void testNestedTags() {
 		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
 		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
     }
-public void testToRawString() {
+public void testToHTML() {
 	String testHTML = new String(
 		"<MYTAG abcd\n"+
 		"efgh\n"+
