@@ -132,4 +132,19 @@ public class NodeListTest extends ParserTestCase {
 			assertNotNull("node "+i+" should not be null",nodes[i]);
 	}
 	
+	public void testRemove() {
+		Node node1 = createHTMLNodeObject();
+		Node node2 = createHTMLNodeObject();
+		nodeList.add(node1);
+		nodeList.add(node2);
+		assertEquals("Vector Size",2,nodeList.size());
+		assertTrue("First Element",node1==nodeList.elementAt(0));
+		assertTrue("Second Element",node2==nodeList.elementAt(1));
+		nodeList.remove(1);
+		assertEquals("List Size",1,nodeList.size());
+		assertTrue("First Element",node1==nodeList.elementAt(0));
+		assertTrue("Second Element",null==nodeList.elementAt(1));
+		
+				
+	}
 }

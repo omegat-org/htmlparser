@@ -116,5 +116,10 @@ public class NodeList implements Serializable {
 		return buff.toString();
 	}
 	
+	public void remove(int index) {
+		System.arraycopy(nodeData, index+1, nodeData, index, size-index);		
+		size--;		
+	}
+	
 	
 }
