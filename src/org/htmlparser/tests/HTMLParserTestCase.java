@@ -48,7 +48,13 @@ public class HTMLParserTestCase extends TestCase {
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[numNodes];
 	}
-
+	protected void createParser(String inputHTML, String url) {
+		String testHTML = new String(inputHTML);
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),url);
+		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		node = new HTMLNode[20];
+	}
 	public void assertStringEquals(String message,String s1,String s2) {
 		for (int i=0;i<s1.length();i++) {
 			if (s1.charAt(i)!=s2.charAt(i)) {
