@@ -303,7 +303,7 @@ public Enumeration getScanners() {
 	{
 		try
 		{
-			if (resourceLocn.indexOf("http")!=-1 || resourceLocn.indexOf("www.")!=-1)
+			if (HTMLLinkProcessor.isURL(resourceLocn))
 			{ 
 				// Its a web address
 				resourceLocn=HTMLLinkProcessor.removeEscapeCharacters(resourceLocn);

@@ -41,67 +41,73 @@ import junit.framework.TestSuite;
  */
 public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 	private HTMLLinkProcessor linkProcessor;
-/**
- * HTMLExtractorTest constructor comment.
- * @param name java.lang.String
- */
-public HTMLLinkProcessorTest(String name) {
-	super(name);
-}
-/**
- * Insert the method's description here.
- * Creation date: (12/25/2001 12:50:03 PM)
- */
-protected void setUp() {
-	linkProcessor = new HTMLLinkProcessor();
-}
-/**
- * Insert the method's description here.
- * Creation date: (12/25/2001 12:49:09 PM)
- * @return junit.framework.TestSuite
- */
-public static TestSuite suite() {
-	TestSuite suite = new TestSuite(HTMLLinkProcessorTest.class);
-	return suite;
-}
-/**
- * Insert the method's description here.
- * Creation date: (12/25/2001 12:49:43 PM)
- */
-public void testRemoveFirstSlashIfFound() {
-	String testString= "/abcdefg";
-	String expected = "abcdefg";
-	String result = linkProcessor.removeFirstSlashIfFound(testString);
-	assertEquals("Ordinary Test",expected,result);
-
-	testString = null;
-	result = linkProcessor.removeFirstSlashIfFound(testString);
-	assertNull("Null test, result should be null",result);
-}
-/**
- * Insert the method's description here.
- * Creation date: (12/25/2001 12:49:43 PM)
- */
-public void testRemoveFirstSlashIfFound2() {
-	String testString= "";
-	String result = linkProcessor.removeFirstSlashIfFound(testString);
-	assertNull("Result should have been null",result);
-}
-
-/**
- * This testcase is based on a bug reported by Kimberly Berry
- * If a link contains a protocol other than http, it should not be considered relative.
- */
-public void testCheckIfLinkIsRelative() {
-	String link1 = "ftp://geocities.com/someplace/something.zip";
-	String link2 = "gopher://geocities.com/someplace/something.zip";
-	String link3 = "myprotocol://geocities.com/someplace/something.zip";
-	String link4 = "https://www.geocities.com/someplace/something.zip";
-	String url = "http://www.geocities.com";
-	HTMLLinkProcessor lp = new HTMLLinkProcessor();
-	assertEquals("Shouldnt be a relative link","ftp://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link1,url));
-	assertEquals("Shouldnt be a relative link","gopher://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link2,url));
-	assertEquals("Shouldnt be a relative link","myprotocol://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link3,url));
-	assertEquals("Shouldnt be a relative link","https://www.geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link4,url));		
-}
+	/**
+	 * HTMLExtractorTest constructor comment.
+	 * @param name java.lang.String
+	 */
+	public HTMLLinkProcessorTest(String name) {
+		super(name);
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (12/25/2001 12:50:03 PM)
+	 */
+	protected void setUp() {
+		linkProcessor = new HTMLLinkProcessor();
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (12/25/2001 12:49:09 PM)
+	 * @return junit.framework.TestSuite
+	 */
+	public static TestSuite suite() {
+		TestSuite suite = new TestSuite(HTMLLinkProcessorTest.class);
+		return suite;
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (12/25/2001 12:49:43 PM)
+	 */
+	public void testRemoveFirstSlashIfFound() {
+		String testString= "/abcdefg";
+		String expected = "abcdefg";
+		String result = linkProcessor.removeFirstSlashIfFound(testString);
+		assertEquals("Ordinary Test",expected,result);
+	
+		testString = null;
+		result = linkProcessor.removeFirstSlashIfFound(testString);
+		assertNull("Null test, result should be null",result);
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (12/25/2001 12:49:43 PM)
+	 */
+	public void testRemoveFirstSlashIfFound2() {
+		String testString= "";
+		String result = linkProcessor.removeFirstSlashIfFound(testString);
+		assertNull("Result should have been null",result);
+	}
+	
+	/**
+	 * This testcase is based on a bug reported by Kimberly Berry
+	 * If a link contains a protocol other than http, it should not be considered relative.
+	 */
+	public void testCheckIfLinkIsRelative() {
+		String link1 = "ftp://geocities.com/someplace/something.zip";
+		String link2 = "gopher://geocities.com/someplace/something.zip";
+		String link3 = "myprotocol://geocities.com/someplace/something.zip";
+		String link4 = "https://www.geocities.com/someplace/something.zip";
+		String url = "http://www.geocities.com";
+		HTMLLinkProcessor lp = new HTMLLinkProcessor();
+		assertEquals("Shouldnt be a relative link","ftp://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link1,url));
+		assertEquals("Shouldnt be a relative link","gopher://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link2,url));
+		assertEquals("Shouldnt be a relative link","myprotocol://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link3,url));
+		assertEquals("Shouldnt be a relative link","https://www.geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link4,url));		
+	}
+	public void testIsURL() {
+		String resourceLoc1 = "http://someurl.com";
+		String resourceLoc2 = "myfilehttp.dat";		
+		assertTrue("Should be a url",HTMLLinkProcessor.isURL(resourceLoc1));
+		assertTrue("Should not be a url",!HTMLLinkProcessor.isURL(resourceLoc2));		
+	}
 }
