@@ -49,13 +49,14 @@ public class HTMLTag extends HTMLNode
     * in parseParameters  (Kaarle Kaila 3.8.2001)
     */
     public final static String TAGNAME = "$<TAGNAME>$";    
-	public final static int TAG_BEFORE_PARSING_STATE=1;
-    public final static int TAG_BEGIN_PARSING_STATE=2;
-    public final static int TAG_FINISHED_PARSING_STATE=3;
-	public final static int TAG_ILLEGAL_STATE=4;
-	public final static int TAG_IGNORE_DATA_STATE=5;	    
-	public final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
-	private static boolean encounteredQuery=false;
+	private final static int TAG_BEFORE_PARSING_STATE=1;
+    private final static int TAG_BEGIN_PARSING_STATE=2;
+    private final static int TAG_FINISHED_PARSING_STATE=3;
+	private final static int TAG_ILLEGAL_STATE=4;
+	private final static int TAG_IGNORE_DATA_STATE=5;	    
+	private final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
+	private final static String EMPTY_STRING="";
+	
 	private static HTMLParameterParser paramParser = new HTMLParameterParser();
 	private static HTMLTagParser tagParser;
 	/**
@@ -79,40 +80,40 @@ public class HTMLTag extends HTMLNode
     /**
      * Set of tags that breaks the flow.
      */
-    protected static HashSet mBreakTags;
+    protected static HashSet breakTags;
     static
     {
-        mBreakTags = new HashSet (30);
-        mBreakTags.add ("BLOCKQUOTE");
-        mBreakTags.add ("BODY");
-        mBreakTags.add ("BR");
-        mBreakTags.add ("CENTER");
-        mBreakTags.add ("DD");
-        mBreakTags.add ("DIR");
-        mBreakTags.add ("DIV");
-        mBreakTags.add ("DL");
-        mBreakTags.add ("DT");
-        mBreakTags.add ("FORM");
-        mBreakTags.add ("H1");
-        mBreakTags.add ("H2");
-        mBreakTags.add ("H3");
-        mBreakTags.add ("H4");
-        mBreakTags.add ("H5");
-        mBreakTags.add ("H6");
-        mBreakTags.add ("HEAD");
-        mBreakTags.add ("HR");
-        mBreakTags.add ("HTML");
-        mBreakTags.add ("ISINDEX");
-        mBreakTags.add ("LI");
-        mBreakTags.add ("MENU");
-        mBreakTags.add ("NOFRAMES");
-        mBreakTags.add ("OL");
-        mBreakTags.add ("P");
-        mBreakTags.add ("PRE");
-        mBreakTags.add ("TD");
-        mBreakTags.add ("TH");
-        mBreakTags.add ("TITLE");
-        mBreakTags.add ("UL");
+        breakTags = new HashSet (30);
+        breakTags.add ("BLOCKQUOTE");
+        breakTags.add ("BODY");
+        breakTags.add ("BR");
+        breakTags.add ("CENTER");
+        breakTags.add ("DD");
+        breakTags.add ("DIR");
+        breakTags.add ("DIV");
+        breakTags.add ("DL");
+        breakTags.add ("DT");
+        breakTags.add ("FORM");
+        breakTags.add ("H1");
+        breakTags.add ("H2");
+        breakTags.add ("H3");
+        breakTags.add ("H4");
+        breakTags.add ("H5");
+        breakTags.add ("H6");
+        breakTags.add ("HEAD");
+        breakTags.add ("HR");
+        breakTags.add ("HTML");
+        breakTags.add ("ISINDEX");
+        breakTags.add ("LI");
+        breakTags.add ("MENU");
+        breakTags.add ("NOFRAMES");
+        breakTags.add ("OL");
+        breakTags.add ("P");
+        breakTags.add ("PRE");
+        breakTags.add ("TD");
+        breakTags.add ("TH");
+        breakTags.add ("TITLE");
+        breakTags.add ("UL");
     }
 
 	/**
@@ -273,6 +274,7 @@ public class HTMLTag extends HTMLNode
 	public void setTagBegin(int tagBegin) {
 		this.nodeBegin = tagBegin;
 	}
+	
 	/**
 	 * Sets the nodeEnd.
 	 * @param nodeEnd The nodeEnd to set
@@ -280,27 +282,30 @@ public class HTMLTag extends HTMLNode
 	public void setTagEnd(int tagEnd) {
 		this.nodeEnd = tagEnd;
 	}
-    /**
-    * Insert the method's description here.
-    * Creation date: (6/6/2001 12:09:38 PM)
-    * @param newTagLine java.lang.String
-    */
+    
     public void setTagLine(java.lang.String newTagLine) {
 	    tagLine = newTagLine;
     }
+	
 	public void setText(String text) {
 		tagContents = new StringBuffer(text);
 	}
-	/**
-	 * Set the scanner associated with this tag
-	 */
+	
 	public void setThisScanner(HTMLTagScanner scanner)
 	{
 		thisScanner = scanner;
 	}
+	
 	public String toPlainTextString() {
-		return "";
+		return EMPTY_STRING;
 	}
+	
+	/**
+	 * A call to a tag's toHTML() method will render it in HTML
+	 * Most tags that do not have children and inherit from HTMLTag,
+	 * do not need to override toHTML().
+	 * @see org.htmlparser.HTMLNode#toHTML()
+	 */
 	public String toHTML() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<");
@@ -321,7 +326,7 @@ public class HTMLTag extends HTMLNode
 		return sb.toString();	
 	}
 	
-	public boolean containsMoreThanOneKey() {
+	private boolean containsMoreThanOneKey() {
 		return attributes.keySet().size()>1;
 	}
 	
@@ -348,8 +353,16 @@ public class HTMLTag extends HTMLNode
      */
     public boolean breaksFlow ()
     {
-        return (mBreakTags.contains (getText ().toUpperCase ()));
+        return (breakTags.contains (getText ().toUpperCase ()));
     }
+    
+    /**
+     * This method verifies that the current tag matches the provided 
+     * filter. The match is based on the string object and not its contents,
+     * so ensure that you are using static final filter strings provided
+     * in the tag classes.
+     * @see org.htmlparser.HTMLNode#collectInto(Vector, String)
+     */
 	public void collectInto(Vector collectionVector, String filter) {
 		if (thisScanner!=null && thisScanner.getFilter()==filter) collectionVector.add(this);
 	}
@@ -363,6 +376,15 @@ public class HTMLTag extends HTMLNode
 		return attributes;
 	}
 
+	/**
+	 * Sometimes, a scanner may need to request a re-evaluation of the
+	 * attributes in a tag. This may happen when there is some correction
+	 * activity. An example of its usage can be found in HTMLImageTag.
+	 * <br>
+	 * <B>Note:<B> This is an intensive task, hence call only when 
+	 * really necessary
+	 * @return Hashtable
+	 */
 	public Hashtable redoParseAttributes() {
 		return parseAttributes();
 	}
