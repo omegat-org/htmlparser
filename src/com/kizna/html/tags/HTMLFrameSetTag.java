@@ -32,6 +32,9 @@
 
 package com.kizna.html.tags;
 
+import java.util.Enumeration;
+import java.util.Vector;
+
 /**
  * Identifies an frame tag
  */
@@ -41,24 +44,14 @@ public class HTMLFrameSetTag extends HTMLTag
 	 * The URL where the image is stored.
 	 */
 	protected String frameURL;
-   protected String frameName;
-	/**
-	 * Constructor creates an HTMLImageNode object, which stores the location
-	 * where the image is to be found.
-	 * @imageURL location of the image
-	 * @imageBegin Beginning position of the image tag
-	 * @imageEnd Ending position of the image tag
-	 */
-	public HTMLFrameSetTag(String frameURL,int frameBegin, int frameEnd,String tagLine)
+   	protected String frameName;
+   	protected Vector frames;
+	public HTMLFrameSetTag(int frameSetBegin, int frameSetEnd,String tagLine,Vector frames)
 	{
-		super(frameBegin,frameEnd,"",tagLine);
+		super(frameSetBegin,frameSetEnd,"",tagLine);
 		this.frameURL = frameURL;
-	}
-	public HTMLFrameSetTag(String frameURL, String frameName, int frameBegin, int frameEnd,String tagLine)
-	{
-		super(frameBegin,frameEnd,"",tagLine);
-		this.frameURL = frameURL;
-      this.frameName = frameName;
+      	this.frameName = frameName;
+      	this.frames = frames;
 	}
 	/**
 	 * Returns the location of the image
@@ -78,4 +71,31 @@ public class HTMLFrameSetTag extends HTMLTag
 	{
 		return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	/**
+	 * Returns the frames.
+	 * @return Vector
+	 */
+	public Vector getFrames() {
+		return frames;
+	}
+
+	public HTMLFrameTag getFrame(String frameName) {
+		boolean found = false;
+		HTMLFrameTag frameTag=null;
+		for (Enumeration e=frames.elements();e.hasMoreElements() && !found;) {
+			frameTag = (HTMLFrameTag)e.nextElement();
+			if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase())) found = true;
+		}
+		if (found)
+		return frameTag; else return null;
+	}
+	/**
+	 * Sets the frames.
+	 * @param frames The frames to set
+	 */
+	public void setFrames(Vector frames) {
+		this.frames = frames;
+	}
+
+
 }

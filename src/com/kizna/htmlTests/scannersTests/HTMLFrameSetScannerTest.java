@@ -7,7 +7,7 @@ import java.util.Enumeration;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
-import com.kizna.html.scanners.HTMLFrameScanner;
+import com.kizna.html.scanners.HTMLFrameSetScanner;
 import com.kizna.html.tags.HTMLFrameSetTag;
 import com.kizna.html.tags.HTMLFrameTag;
 
@@ -30,10 +30,10 @@ public class HTMLFrameSetScannerTest extends TestCase {
 		String line1="frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\"";
 		String line2="FRAMESET rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\"";
 		String line3="Frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\"";		
-		HTMLFrameScanner frameScanner = new HTMLFrameScanner("");
-		assertTrue("Line 1",frameScanner.evaluate(line1,null));
-		assertTrue("Line 2",frameScanner.evaluate(line2,null));
-		assertTrue("Line 3",frameScanner.evaluate(line3,null));		
+		HTMLFrameSetScanner frameSetScanner = new HTMLFrameSetScanner("");
+		assertTrue("Line 1",frameSetScanner.evaluate(line1,null));
+		assertTrue("Line 2",frameSetScanner.evaluate(line2,null));
+		assertTrue("Line 3",frameSetScanner.evaluate(line3,null));		
 	}
 	public void testScan() {
 		String testHTML = new String(
@@ -46,7 +46,7 @@ public class HTMLFrameSetScannerTest extends TestCase {
 		HTMLParser parser = new HTMLParser(reader);
 		HTMLNode [] node = new HTMLNode[20];
 
-		parser.addScanner(new HTMLFrameScanner(""));
+		parser.addScanner(new HTMLFrameSetScanner(""));
 		
 		int i = 0;
 		for (Enumeration e = parser.elements();e.hasMoreElements();)
@@ -55,10 +55,25 @@ public class HTMLFrameSetScannerTest extends TestCase {
 		}
 		assertEquals("There should be 1 nodes identified",1,i);	
 		assertTrue("Node 0 should be End Tag",node[0] instanceof HTMLFrameSetTag);
-		HTMLFrameTag frameTag = (HTMLFrameTag)node[0];
-		//assertEquals("FrameSet Rows","115,*",frameTag.getRows());
+		HTMLFrameSetTag frameSetTag = (HTMLFrameSetTag)node[0];
+		// Find the details of the frameset itself
+		assertEquals("Rows","115,*",frameSetTag.getParameter("rows"));
+		assertEquals("FrameBorder","NO",frameSetTag.getParameter("FrameBorder"));
+		assertEquals("FrameSpacing","0",frameSetTag.getParameter("FrameSpacing"));		
+		assertEquals("Border","0",frameSetTag.getParameter("Border"));
+		// Now check the frames
+		HTMLFrameTag topFrame = frameSetTag.getFrame("topFrame");
+		HTMLFrameTag mainFrame = frameSetTag.getFrame("mainFrame");
+		assertNotNull(topFrame);
+		assertNotNull(mainFrame);
+		assertEquals("Top Frame Name","topFrame",topFrame.getFrameName());
+		assertEquals("Top Frame Location","http://www.google.com/test/demo_bc_top.html",topFrame.getFrameLocation());
+		assertEquals("Main Frame Name","mainFrame",mainFrame.getFrameName());
+		assertEquals("Main Frame Location","http://www.kizna.com/web_e/",mainFrame.getFrameLocation());		
+		assertEquals("Scrolling in Main Frame","AUTO",mainFrame.getParameter("Scrolling"));
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLFrameSetScannerTest.class);
 	}
 }
+

@@ -82,31 +82,9 @@ public class HTMLImageScanner extends HTMLTagScanner
 	public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
 	{
 		// Eat up leading blanks
-		s = absorbLeadingBlanks(s);		
-		int state = 0;
-		s=s.toUpperCase();
-		for (int i=0;(i<s.length() && state<3);i++)
-		{
-			char ch = s.charAt(i);
-			if (ch=='I' && state==0) 
-			{
-				state=1; 
-				continue;
-			}
-			if (ch=='M' && state==1)
-			{
-				state=2;
-				continue;
-			}
-			if (ch=='G' && state==2)
-			{
-				state=3;
-				continue;
-			}
-			if (ch==' ') continue;
-			state=4;
-		}
-		if (state==3) return true; else return false;
+		s = absorbLeadingBlanks(s);
+		if (s.toUpperCase().indexOf("IMG")==0)
+		return true; else return false;		
 	}
   /**
    * Extract the location of the image, given the string to be parsed, and the url

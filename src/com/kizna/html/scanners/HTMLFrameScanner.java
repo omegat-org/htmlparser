@@ -50,7 +50,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 	{
 		// Eat up leading blanks
 		s = absorbLeadingBlanks(s);
-		if (s.toUpperCase().indexOf("FRAME")==0)
+		if (s.toUpperCase().indexOf("FRAME ")==0)
 		return true; else return false;			
 	}
   /**
@@ -72,14 +72,9 @@ public class HTMLFrameScanner extends HTMLTagScanner
 
 	public String extractFrameName(HTMLTag tag,String url)
 	{
-		Hashtable table = tag.parseParameters();
-      System.out.println("table has  "+table.toString());
-		String frameName =  (String)table.get("NAME");
-      //System.out.println("relativeLink for image is  "+relativeLink);
-		if (frameName==null) return ""; else
-		return (new HTMLLinkProcessor()).extract(frameName,url);
+		return tag.getParameter("NAME");
 	}
-
+	
 	/**
 	 * Scan the tag and extract the information related to the <IMG> tag. The url of the
 	 * initiating scan has to be provided in case relative links are found. The initial
@@ -101,11 +96,12 @@ public class HTMLFrameScanner extends HTMLTagScanner
 		// Extract the link
 		//link = extractImageLocn(tag.getText(),url);
 		frame = extractFrameLocn(tag,url);
-      frameName = extractFrameName(tag,url);
+	    frameName = extractFrameName(tag,url);
 		frameBegin = tag.elementBegin();
 		frameEnd = tag.elementEnd();
 		HTMLFrameTag frameTag = new HTMLFrameTag(frame, frameName, frameBegin,frameEnd,currentLine);
 		frameTag.setThisScanner(this);
+		frameTag.setParsed(tag.getParsed());
 		return frameTag;
 	}
 }

@@ -17,6 +17,7 @@ import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.tags.HTMLEndTag;
+import com.kizna.html.tags.HTMLFrameSetTag;
 import com.kizna.html.tags.HTMLFrameTag;
 import com.kizna.html.util.HTMLLinkProcessor;
 /**
@@ -53,32 +54,6 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 		if (s.toUpperCase().indexOf("FRAMESET")==0)
 		return true; else return false;			
 	}
-  /**
-   * Extract the location of the image, given the string to be parsed, and the url
-   * of the html page in which this tag exists.
-   * @param s String to be parsed
-   * @param url URL of web page being parsed
-   */
-	public String extractFrameLocn(HTMLTag tag,String url)
-	{
-		Hashtable table = tag.parseParameters();
-      System.out.println("table has  "+table.toString());
-		String relativeFrame =  (String)table.get("SRC");
-      //System.out.println("relativeLink for image is  "+relativeLink);
-		if (relativeFrame==null) return ""; else
-		return (new HTMLLinkProcessor()).extract(relativeFrame,url);
-	}
-
-
-	public String extractFrameName(HTMLTag tag,String url)
-	{
-		Hashtable table = tag.parseParameters();
-      System.out.println("table has  "+table.toString());
-		String frameName =  (String)table.get("NAME");
-      //System.out.println("relativeLink for image is  "+relativeLink);
-		if (frameName==null) return ""; else
-		return (new HTMLLinkProcessor()).extract(frameName,url);
-	}
 
 	/**
 	 * Scan the tag and extract the information related to the <IMG> tag. The url of the
@@ -93,19 +68,53 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 	 */
 	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
+		/* Remove all the existing scanners and register only the frame scanner. Proceed scanning till end
+		 * tag is found. Then register all the scanners back.
+		 */
+		// Store all the current scanners in tempScannerVector
+		Vector tempScannerVector = adjustScanners(reader);
+		Vector frameVector = new Vector();
+		// Scanners have been adjusted, begin processing till we recieve the end tag for the frame
+		boolean endFrameSetFound=false;
 		HTMLNode node;
-		String frame, frameName, linkText="";
-		int frameBegin, frameEnd;
-
-		// Yes, the tag is a link
-		// Extract the link
-		//link = extractImageLocn(tag.getText(),url);
-		frame = extractFrameLocn(tag,url);
-      frameName = extractFrameName(tag,url);
-		frameBegin = tag.elementBegin();
-		frameEnd = tag.elementEnd();
-		HTMLFrameTag frameTag = new HTMLFrameTag(frame, frameName, frameBegin,frameEnd,currentLine);
-		frameTag.setThisScanner(this);
-		return frameTag;
+		int frameSetEnd=-1;
+		do {
+			node = reader.readElement();
+			if (node instanceof HTMLEndTag) {
+				HTMLEndTag endTag = (HTMLEndTag)node;
+				if (endTag.getContents().toUpperCase().equals("FRAMESET")) {
+					endFrameSetFound = true;
+					frameSetEnd = endTag.elementEnd();
+				}
+			} else
+			if (node instanceof HTMLFrameTag) {
+				frameVector.addElement(node);
+			}
+		}
+		while(!endFrameSetFound);
+		HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,currentLine,frameVector);
+		frameSetTag.setThisScanner(this);
+		frameSetTag.setParsed(tag.getParsed());
+		restoreScanners(reader, tempScannerVector);
+		return frameSetTag;		
+	}
+	public void restoreScanners(HTMLReader reader, Vector tempScannerVector) {
+		// Flush the scanners
+		reader.getParser().flushScanners();
+		// Add all the original scanners back
+		for (Enumeration e = tempScannerVector.elements();e.hasMoreElements();) {
+			reader.getParser().addScanner((HTMLTagScanner)e.nextElement());
+		}
+	}
+	public Vector adjustScanners(HTMLReader reader) {
+		Vector tempScannerVector = new Vector();
+		for (Enumeration e=reader.getParser().getScanners();e.hasMoreElements();) {
+			tempScannerVector.addElement(e.nextElement());
+		}
+		// Remove all existing scanners
+		reader.getParser().flushScanners();
+		// Add only the frame scanner
+		reader.getParser().addScanner(new HTMLFrameScanner(""));
+		return tempScannerVector;
 	}
 }

@@ -29,11 +29,13 @@ public class HTMLFrameScannerTest extends TestCase {
 		String line1="frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\"";
 		String line2="FRAME name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\"";
 		String line3="Frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\"";
+		String line4="Frameset name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\"";
 
 		HTMLFrameScanner frameScanner = new HTMLFrameScanner("");
 		assertTrue("Line 1",frameScanner.evaluate(line1,null));
 		assertTrue("Line 2",frameScanner.evaluate(line2,null));
 		assertTrue("Line 3",frameScanner.evaluate(line3,null));		
+		assertTrue("Line 4 should not be a frame",!frameScanner.evaluate(line4,null));				
 	}
 	public void testScan() {
 		String testHTML = new String(
@@ -63,6 +65,8 @@ public class HTMLFrameScannerTest extends TestCase {
 		assertEquals("Frame 1 Name","topFrame",frameTag1.getFrameName());
 		assertEquals("Frame 2 Locn","http://www.kizna.com/web_e/",frameTag2.getFrameLocation());		
 		assertEquals("Frame 2 Name","mainFrame",frameTag2.getFrameName());
+		assertEquals("Frame 1 Scrolling","NO",frameTag1.getParameter("scrolling"));
+		assertEquals("Frame 1 Border","NO",frameTag1.getParameter("frameborder"));		
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLFrameScannerTest.class);

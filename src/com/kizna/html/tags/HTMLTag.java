@@ -221,17 +221,17 @@ public class HTMLTag extends HTMLNode
 */
 	
 	public String getParameter(String name){
-	    if (parsed == null) {
-			System.out.println("parsed was null, parsing params");
-	    	parsed = parseParameters();
-	    } 
-	    return (String)parsed.get(name.toUpperCase());
+	    return (String)getParsed().get(name.toUpperCase());
 	}
 	/**
 	 * Gets the parsed.
 	 * @return Returns a Hashtable
 	 */
 	public Hashtable getParsed() {
+		if (parsed == null) {
+			System.out.println("parsed was null, parsing params");
+	    	parsed = parseParameters();
+	    } 		
 		return parsed;
 	}
 	/**
