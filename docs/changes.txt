@@ -1,3 +1,18 @@
+
+*******************************************************************************
+* Developers                                                                  *
+*                                                                             *
+* Do not update this change log manually.                                     *
+* Instead, make your commit messages informative, and these will be harvested *
+* at integration time by the cvs2cl.pl script and added here.                 *
+* For details on this script see:                                             *
+*    http://www.red-bean.com/cvs2cl/                                          *
+*                                                                             *
+* For guidelines on what to put in commit messages see:                       *
+*    http://www.red-bean.com/cvs2cl/changelogs.html                           *
+*                                                                             *
+*******************************************************************************
+
 Integration Build 1.3 - 20030511
 --------------------------------
 [1] Nodelist modifications from Dhaval
