@@ -28,9 +28,8 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-import org.htmlparser.util.NodeList;
+import org.htmlparser.tags.data.*;
+import org.htmlparser.util.*;
 
 public class TableTag extends CompositeTag {
 	private NodeList rows;

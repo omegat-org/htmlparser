@@ -28,6 +28,7 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.*;
 import org.htmlparser.Node;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -141,7 +142,7 @@ public abstract class CompositeTag extends Tag {
 	 */
 
 	public NodeList searchFor(String searchString, boolean caseSensitive) {
-		NodeList foundVector = new NodeList();
+		NodeList foundList = new NodeList();
 		Node node;
 		if (!caseSensitive) searchString = searchString.toUpperCase();
 		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
@@ -149,10 +150,10 @@ public abstract class CompositeTag extends Tag {
 			String nodeTextString = node.toPlainTextString(); 
 			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
 			if (nodeTextString.indexOf(searchString)!=-1) {
-				foundVector.add(node);
+				foundList.add(node);
 			}	
 		}
-		return foundVector;
+		return foundList;
 	}
 
 	/**
@@ -195,6 +196,29 @@ public abstract class CompositeTag extends Tag {
 		for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
 			node = e.nextNode();
 			if (node.toPlainTextString().toUpperCase().indexOf(text.toUpperCase())!=-1) {
+				return loc;			
+			}
+			loc++;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Returns the node number of a child node given the node object.
+	 * This would typically be used in conjuction with digUpStringNode, 
+	 * after which the string node's parent can be used to find the 
+	 * string node's position. Faster than calling findPositionOf(text) 
+	 * again. Note that the position is at a linear level alone - there 
+	 * is no recursion in this method.
+	 * @param text
+	 * @return int
+	 */
+	public int findPositionOf(Node searchNode) {
+		Node node;
+		int loc = 0;
+		for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
+			node = e.nextNode();
+			if (node==searchNode) {
 				return loc;			
 			}
 			loc++;
@@ -260,6 +284,36 @@ public abstract class CompositeTag extends Tag {
 
 	public Tag getEndTag() {
 		return endTag;
+	}
+
+	/** 
+	 * Finds a string node, however embedded it might be, and returns
+	 * it. The string node will retain links to its parents, so 
+	 * further navigation is possible.
+	 * @param searchText
+	 * @return
+	 */
+	public StringNode [] digupStringNode(String searchText) {
+		NodeList nodeList = searchFor(searchText);
+		NodeList stringNodes = new NodeList();
+		for (int i=0;i<nodeList.size();i++) {
+			Node node = nodeList.elementAt(i);
+			if (node instanceof StringNode) {
+				stringNodes.add(node);
+			} else {
+				if (node instanceof CompositeTag) {
+					CompositeTag ctag = (CompositeTag)node;
+					StringNode [] nodes = ctag.digupStringNode(searchText);
+					for (int j=0;j<nodes.length;j++)
+						stringNodes.add(nodes[j]);					
+				}
+			}
+		}
+		StringNode [] stringNode = new StringNode[stringNodes.size()];
+		for (int i=0;i<stringNode.length;i++) {
+			stringNode[i] = (StringNode)stringNodes.elementAt(i);
+		}
+		return stringNode;
 	}
 
 

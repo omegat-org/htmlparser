@@ -59,6 +59,7 @@ public class AllTests extends junit.framework.TestCase
 		suite.addTestSuite(BaseHrefTagTest.class);
 		suite.addTestSuite(ObjectCollectionTest.class);
 		suite.addTestSuite(BodyTagTest.class);
+		suite.addTestSuite(CompositeTagTest.class);
 		return suite; 
 	}
 }
