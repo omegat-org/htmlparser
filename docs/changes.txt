@@ -12,6 +12,96 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.3 - 20030518
+--------------------------------
+
+2003-05-18 22:04  derrickoswald
+
+	* build.xml:
+
+	Reworked javadoc generation settings.
+	
+2003-05-18 10:31  derrickoswald
+
+	* src/org/htmlparser/: tags/LinkTag.java,
+	tests/tagTests/LinkTagTest.java:
+
+	Fixed bug #738504 MailLink != HTTPLink.
+	Added a testcase in LinkTagTest.
+	
+2003-05-18 09:50  derrickoswald
+
+	* src/org/htmlparser/: tags/CompositeTag.java,
+	util/SimpleNodeIterator.java:
+
+	Make SimpleNodeIterator extend NodeIterator and provide elements() method for CompositeTag.
+	As per request by Dhaval to rationalize (somewhat) the API.
+	
+2003-05-18 08:07  derrickoswald
+
+	* src/org/htmlparser/scanners/package.html,
+	src/org/htmlparser/tests/package.html,
+	src/org/htmlparser/util/package.html,
+	src/org/htmlparser/beans/BeanyBaby.java,
+	src/org/htmlparser/beans/HTMLLinkBean.java,
+	src/org/htmlparser/beans/HTMLTextBean.java,
+	src/org/htmlparser/beans/LinkBean.java,
+	src/org/htmlparser/beans/StringBean.java,
+	src/org/htmlparser/beans/package.html,
+	src/org/htmlparser/parserapplications/package.html,
+	src/org/htmlparser/tags/package.html,
+	src/org/htmlparser/tests/scannersTests/package.html,
+	src/org/htmlparser/tests/tagTests/package.html,
+	src/org/htmlparser/tests/utilTests/package.html,
+	src/org/htmlparser/visitors/ObjectFindingVisitor.java,
+	src/org/htmlparser/visitors/package.html, build.xml,
+	docs/changes.html, docs/changes.txt, docs/release.txt,
+	src/org/htmlparser/package.html,
+	src/org/htmlparser/tests/visitorsTests/AllTests.java:
+
+	Get all version tags up to date.
+	Modify build.xml to keep package.html files up to date.
+	
+2003-05-18 07:23  derrickoswald
+
+	* build.xml:
+
+	Eliminate the build directory.
+	
+2003-05-18 05:41  derrickoswald
+
+	* build.xml, cvs2cl.pl, src/org/htmlparser/Parser.java,
+	src/org/htmlparser/parserapplications/MailRipper.java,
+	src/org/htmlparser/parserapplications/Robot.java,
+	src/org/htmlparser/tests/parserHelperTests/AttributeParserTest.java
+	, src/org/htmlparser/tests/parserHelperTests/TagParserTest.java,
+	src/org/htmlparser/tests/scannersTests/TableScannerTest.java:
+
+	Provide for automatic changelog generation. A changeLog target was added to the build.xml file.
+	The static version stuff in Parser was reworked to allow picking out the previous integration date.
+	The getVersion() method was made static.
+	The getVersionNumber() method was added to clean up some uglies.
+	
+2003-05-17 08:12  derrickoswald
+
+	* src/org/htmlparser/: scanners/LinkScanner.java,
+	scanners/TagScanner.java, tags/Tag.java,
+	tests/tagTests/TagTest.java:
+
+	Fix tab handling on the suggestion of oyoaha (philippe blanc).
+	Rewrite some string handling methods to remove gross inefficiencies.
+	
+2003-05-16 07:38  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, scanners/BodyScanner.java,
+	scanners/HeadScanner.java, tags/HeadTag.java,
+	tests/scannersTests/AllTests.java,
+	tests/scannersTests/BodyScannerTest.java,
+	tests/scannersTests/HeadScannerTest.java:
+
+	From Dhaval: Created the HEAD tag-scanner pair and corrected the BodyScanner.
+	There were some mistakes after the redisgn that took place.
+
 Integration Build 1.3 - 20030511
 --------------------------------
 

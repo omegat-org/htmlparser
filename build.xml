@@ -110,8 +110,9 @@
     <echo message="**********************************"/>
     <echo message="*  Creating change log           *"/>
     <echo message="**********************************"/>
-    <echo message="./cvs2cl.pl --separate-header -l &quot;-d'&gt;${VERSION_DATE}'&quot;"/>
+    <echo message="./cvs2cl.pl --no-wrap --separate-header -l &quot;-d'&gt;${VERSION_DATE}'&quot;"/>
     <exec executable="./cvs2cl.pl">
+      <arg value="--no-wrap"/>
       <arg value="--separate-header"/>
       <arg value="-l"/>
       <arg value="-d'&gt;${VERSION_DATE}'"/>
@@ -278,7 +279,7 @@
 
     <mkdir dir="${dist}/sources/src"/>
     <copy todir="${dist}/sources/src">
-    	<fileset dir="${src}"/>
+    	<fileset dir="${src}" includes="**/*.java **/*.html **/*.gif **/*.form **/*.properties"/>
     </copy>
     <copy file="build.xml" todir="${dist}/sources"/>
 	<mkdir dir="${dist}/sources/resources"/>
