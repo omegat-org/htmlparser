@@ -26,6 +26,15 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.NodeFilter;
+import org.htmlparser.filters.AndFilter;
+import org.htmlparser.filters.IsEqualFilter;
+import org.htmlparser.filters.NodeClassFilter;
+import org.htmlparser.filters.HasParentFilter;
+import org.htmlparser.filters.NotFilter;
+import org.htmlparser.filters.OrFilter;
+import org.htmlparser.util.NodeList;
+
 /**
  * A table tag.
  */
@@ -67,18 +76,67 @@ public class TableTag extends CompositeTag
     }
 
     /**
+     * Get the row tags within this table.
+     * @return The rows directly contained by this table.
+     */
+    public TableRow[] getRows ()
+    {
+        NodeList kids;
+        NodeClassFilter cls;
+        HasParentFilter recursion;
+        NodeFilter filter;
+        TableRow[] ret;
+
+        kids = getChildren ();
+        if (null != kids)
+        {
+            cls = new NodeClassFilter (TableTag.class);
+            recursion = new HasParentFilter (null);
+            filter = new OrFilter (
+                        new AndFilter (
+                            cls, 
+                            new IsEqualFilter (this)),
+                        new AndFilter ( // recurse up the parent chain
+                            new NotFilter (cls), // but not past the first table
+                            recursion));
+            recursion.mFilter = filter;
+            kids = kids.extractAllNodesThatMatch (
+                // it's a row, and has this table as it's enclosing table
+                new AndFilter (
+                    new NodeClassFilter (TableRow.class),
+                    filter), true);
+            ret = new TableRow[kids.size ()];
+            kids.copyToNodeArray (ret);
+        }
+        else
+            ret = new TableRow[0];
+        
+        return (ret);
+    }
+
+    /**
      * Get the number of rows in this table.
      */
-    public int getRowCount()
+    public int getRowCount ()
     {
-        return (getChildren().searchFor(TableRow.class).size());
+        return (getRows ().length);
     }
 
     /**
      * Get the row at the given index.
      */
-    public TableRow getRow(int i) {
-        return (TableRow)(getChildren().searchFor(TableRow.class)).elementAt(i);
+    public TableRow getRow (int i)
+    {
+        TableRow[] rows;
+        TableRow ret;
+
+        rows = getRows ();
+        if (i < rows.length)
+            ret = rows[i];
+        else
+            ret = null;
+        
+        return (ret);
     }
 
     public String toString()

@@ -83,7 +83,9 @@ public class CompositeTag extends Tag
      */
     public Node getChild (int index)
     {
-        return (getChildren ().elementAt (index));
+        return (
+            (null == getChildren ()) ? null :
+            getChildren ().elementAt (index));
     }
 
     /**
@@ -92,7 +94,9 @@ public class CompositeTag extends Tag
      */
     public Node [] getChildrenAsNodeArray ()
     {
-        return (getChildren ().toNodeArray ());
+        return (
+            (null == getChildren ()) ? new Node[0] :
+            getChildren ().toNodeArray ());
     }
 
     /**
@@ -101,7 +105,8 @@ public class CompositeTag extends Tag
      */
     public void removeChild (int i)
     {
-        getChildren ().remove (i);
+        if (null != getChildren ())
+            getChildren ().remove (i);
     }
 
     /**
@@ -111,7 +116,9 @@ public class CompositeTag extends Tag
      */
     public SimpleNodeIterator elements()
     {
-        return (getChildren ().elements ());
+        return (
+            (null == getChildren ()) ? new NodeList ().elements () :
+            getChildren ().elements ());
     }
 
     public String toPlainTextString() {
@@ -211,13 +218,17 @@ public class CompositeTag extends Tag
      * Collect all objects that are of a certain type
      * Note that this will not check for parent types, and will not
      * recurse through child tags
-     * @param classType
-     * @return NodeList
+     * @param classType The class to search for.
+     * @param recursive If true, recursively search through the children.
+     * @return A list of children found.
      */
-    public NodeList searchFor(Class classType)
+    public NodeList searchFor (Class classType, boolean recursive)
     {
-        return (getChildren ().searchFor (classType));
+        return (
+            (null == getChildren ()) ? new NodeList () :
+            getChildren ().searchFor (classType, recursive));
     }
+
     /**
      * Searches for any node whose text representation contains the search
      * string. Collects all such nodes in a NodeList.
@@ -284,11 +295,14 @@ public class CompositeTag extends Tag
 
     /**
      * Get child at given index
-     * @param index
-     * @return Node
+     * @param index The index into the child node list.
+     * @return Node The child node at the given index or null if none.
      */
-    public Node childAt(int index) {
-        return (getChildren ().elementAt (index));
+    public Node childAt (int index)
+    {
+        return (
+            (null == getChildren ()) ? null :
+            getChildren ().elementAt (index));
     }
 
     /**

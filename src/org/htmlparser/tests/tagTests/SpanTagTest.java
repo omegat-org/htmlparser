@@ -66,7 +66,7 @@ public class SpanTagTest extends ParserTestCase
         parseAndAssertNodeCount(1);
         assertType("node",TableColumn.class,node[0]);
         TableColumn col = (TableColumn)node[0];
-        Node spans [] = col.searchFor(Span.class).toNodeArray();
+        Node spans [] = col.searchFor(Span.class, true).toNodeArray();
         assertEquals("number of spans found",2,spans.length);
         assertStringEquals(
             "span 1",

@@ -94,7 +94,7 @@ public class FormTag extends CompositeTag
      */
     public NodeList getFormInputs()
     {
-        return (getChildren().searchFor(InputTag.class, true));
+        return (searchFor (InputTag.class, true));
     }
 
     /**
@@ -103,7 +103,7 @@ public class FormTag extends CompositeTag
      */
     public NodeList getFormTextareas()
     {
-        return (getChildren().searchFor(TextareaTag.class, true));
+        return (searchFor (TextareaTag.class, true));
     }
 
     /**

@@ -63,7 +63,8 @@ public class BulletListTagTest extends ParserTestCase
 
         NodeList nestedBulletLists =
             ((CompositeTag)node[0]).searchFor(
-                BulletList.class
+                BulletList.class,
+                true
             );
         assertEquals(
             "bullets in first list",

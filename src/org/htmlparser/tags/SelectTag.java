@@ -87,7 +87,7 @@ public class SelectTag extends CompositeTag
         NodeList list;
         OptionTag[] ret;
         
-        list = getChildren ().searchFor (OptionTag.class, true);
+        list = searchFor (OptionTag.class, true);
         ret = new OptionTag[list.size()];
         list.copyToNodeArray (ret);
 

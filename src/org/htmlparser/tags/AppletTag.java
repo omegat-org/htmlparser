@@ -93,23 +93,24 @@ public class AppletTag extends CompositeTag
 
         ret = new Hashtable ();
         kids = getChildren ();
-        for (int i = 0; i < kids.size (); i++)
-        {
-            node = children.elementAt(i);
-            if (node instanceof Tag)
+        if (null != kids)
+            for (int i = 0; i < kids.size (); i++)
             {
-                tag = (Tag)node;
-                if (tag.getTagName().equals ("PARAM"))
+                node = children.elementAt(i);
+                if (node instanceof Tag)
                 {
-                    paramName = tag.getAttribute ("NAME");
-                    if (null != paramName && 0 != paramName.length ())
+                    tag = (Tag)node;
+                    if (tag.getTagName().equals ("PARAM"))
                     {
-                        paramValue = tag.getAttribute ("VALUE");
-                        ret.put (paramName,paramValue);
+                        paramName = tag.getAttribute ("NAME");
+                        if (null != paramName && 0 != paramName.length ())
+                        {
+                            paramValue = tag.getAttribute ("VALUE");
+                            ret.put (paramName,paramValue);
+                        }
                     }
                 }
             }
-        }
 
         return (ret);
     }
@@ -194,31 +195,34 @@ public class AppletTag extends CompositeTag
         StringNode string;
 
         kids = getChildren ();
-        // erase appletParams from kids
-        for (int i = 0; i < kids.size (); )
-        {
-            node = kids.elementAt (i);
-            if (node instanceof Tag)
-                if (((Tag)node).getTagName ().equals ("PARAM"))
-                {
-                    kids.remove (i);
-                    // remove whitespace too
-                    if (i < kids.size ())
+        if (null == kids)
+            kids = new NodeList ();
+        else
+            // erase appletParams from kids
+            for (int i = 0; i < kids.size (); )
+            {
+                node = kids.elementAt (i);
+                if (node instanceof Tag)
+                    if (((Tag)node).getTagName ().equals ("PARAM"))
                     {
-                        node = kids.elementAt (i);
-                        if (node instanceof StringNode)
+                        kids.remove (i);
+                        // remove whitespace too
+                        if (i < kids.size ())
                         {
-                            string = (StringNode)node;
-                            if (0 == string.getText ().trim ().length ())
-                                kids.remove (i);
-                        }   
+                            node = kids.elementAt (i);
+                            if (node instanceof StringNode)
+                            {
+                                string = (StringNode)node;
+                                if (0 == string.getText ().trim ().length ())
+                                    kids.remove (i);
+                            }   
+                        }
                     }
-                }
+                    else
+                        i++;
                 else
                     i++;
-            else
-                i++;
-        }
+            }
 
         // add newAppletParams to kids
         for (Enumeration e = newAppletParams.keys (); e.hasMoreElements (); )

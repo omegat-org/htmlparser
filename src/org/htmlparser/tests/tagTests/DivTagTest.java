@@ -51,7 +51,7 @@ public class DivTagTest extends ParserTestCase
         parseAndAssertNodeCount(1);
         assertType("node should be table",TableTag.class,node[0]);
         TableTag tableTag = (TableTag)node[0];
-        Div div = (Div)tableTag.searchFor(Div.class).toNodeArray()[0];
+        Div div = (Div)tableTag.searchFor(Div.class, true).toNodeArray()[0];
         assertEquals("div contents","some text",div.toPlainTextString());
     }
 

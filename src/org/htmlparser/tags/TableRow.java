@@ -26,6 +26,13 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.NodeFilter;
+import org.htmlparser.filters.AndFilter;
+import org.htmlparser.filters.IsEqualFilter;
+import org.htmlparser.filters.NodeClassFilter;
+import org.htmlparser.filters.HasParentFilter;
+import org.htmlparser.filters.NotFilter;
+import org.htmlparser.filters.OrFilter;
 import org.htmlparser.util.NodeList;
 
 /**
@@ -78,33 +85,97 @@ public class TableRow extends CompositeTag
     }
 
     /**
+     * Get the column tags within this row.
+     */
+    public TableColumn[] getColumns ()
+    {
+        NodeList kids;
+        NodeClassFilter cls;
+        HasParentFilter recursion;
+        NodeFilter filter;
+        TableColumn[] ret;
+
+        kids = getChildren ();
+        if (null != kids)
+        {
+            cls = new NodeClassFilter (TableRow.class);
+            recursion = new HasParentFilter (null);
+            filter = new OrFilter (
+                        new AndFilter (
+                            cls, 
+                            new IsEqualFilter (this)),
+                        new AndFilter ( // recurse up the parent chain
+                            new NotFilter (cls), // but not past the first row
+                            recursion));
+            recursion.mFilter = filter;
+            kids = kids.extractAllNodesThatMatch (
+                // it's a column, and has this row as it's enclosing row
+                new AndFilter (
+                    new NodeClassFilter (TableColumn.class),
+                    filter), true);
+            ret = new TableColumn[kids.size ()];
+            kids.copyToNodeArray (ret);
+        }
+        else
+            ret = new TableColumn[0];
+        
+        return (ret);
+    }
+
+    /**
      * Get the number of columns in this row.
      */
     public int getColumnCount ()
     {
-        return (
-            (null == getChildren ()) ? 0 :
-            getChildren ().searchFor (TableColumn.class).size ());
+        return (getColumns ().length);
     }
 
     /**
-     * Get the children (columns) of this row.
+     * Get the header of this table
+     * @return Table header tags contained in this row.
      */
-    public TableColumn [] getColumns ()
+    public TableHeader[] getHeaders ()
     {
-        NodeList list;
-        TableColumn [] ret;
+        NodeList kids;
+        NodeClassFilter cls;
+        HasParentFilter recursion;
+        NodeFilter filter;
+        TableHeader[] ret;
 
-        if (null != getChildren ())
+        kids = getChildren ();
+        if (null != kids)
         {
-            list = getChildren ().searchFor (TableColumn.class);
-            ret = new TableColumn[list.size ()];
-            list.copyToNodeArray (ret);
+            cls = new NodeClassFilter (TableRow.class);
+            recursion = new HasParentFilter (null);
+            filter = new OrFilter (
+                        new AndFilter (
+                            cls, 
+                            new IsEqualFilter (this)),
+                        new AndFilter ( // recurse up the parent chain
+                            new NotFilter (cls), // but not past the first row
+                            recursion));
+            recursion.mFilter = filter;
+            kids = kids.extractAllNodesThatMatch (
+                // it's a header, and has this row as it's enclosing row
+                new AndFilter (
+                    new NodeClassFilter (TableHeader.class),
+                    filter), true);
+            ret = new TableHeader[kids.size ()];
+            kids.copyToNodeArray (ret);
         }
         else
-            ret = new TableColumn[0];
-
+            ret = new TableHeader[0];
+        
         return (ret);
+    }
+
+    /**
+     * Get the number of headers in this row.
+     * @return The count of header tags in this row.
+     */
+    public int getHeaderCount ()
+    {
+        return (getHeaders ().length);
     }
 
     /**
@@ -114,37 +185,5 @@ public class TableRow extends CompositeTag
     public boolean hasHeader ()
     {
         return (0 != getHeaderCount ());
-    }
-
-    /**
-     * Get the number of headers in this row.
-     * @return The count of header tags in this row.
-     */
-    public int getHeaderCount ()
-    {
-        return (
-            (null == getChildren ()) ? 0 :
-            getChildren ().searchFor (TableHeader.class, false).size ());
-    }
-
-    /**
-     * Get the header of this table
-     * @return Table header tags contained in this row.
-     */
-    public TableHeader[] getHeader ()
-    {
-        NodeList list;
-        TableHeader [] ret;
-
-        if (null != getChildren ())
-        {
-            list = getChildren ().searchFor (TableHeader.class, false);
-            ret = new TableHeader[list.size ()];
-            list.copyToNodeArray (ret);
-        }
-        else
-            ret = new TableHeader[0];
-
-        return (ret);
     }
 }
