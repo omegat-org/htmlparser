@@ -311,6 +311,50 @@ public class Lexer
     }
 
     /**
+     * Advance the cursor through a JIS escape sequence.
+     * @param cursor A cursor positioned within the escape sequence.
+     */
+    protected void scanJIS (Cursor cursor)
+        throws
+            ParserException
+    {
+        boolean done;
+        char ch;
+        int state;
+
+        done = false;
+        state = 0;
+        while (!done)
+        {
+            ch = mPage.getCharacter (cursor);
+            if (0 == ch)
+                done = true;
+            else
+                switch (state)
+                {
+                    case 0:
+                        if (0x1b == ch) // escape
+                            state = 1;
+                        break;
+                    case 1:
+                        if ('(' == ch)
+                            state = 2;
+                        else
+                            state = 0;
+                        break;
+                    case 2:
+                        if ('J' == ch)
+                            done = true;
+                        else
+                            state = 0;
+                        break;
+                    default:
+                        throw new IllegalStateException ("how the fuck did we get in state " + state);
+                }
+        }
+    }
+
+    /**
      * Parse a string node.
      * Scan characters until "&lt;/", "&lt;%", "&lt;!" or &lt; followed by a
      * letter is encountered, or the input stream is exhausted, in which
@@ -324,9 +368,6 @@ public class Lexer
     {
         boolean done;
         char ch;
-        int length;
-        int begin;
-        int end;
         char quote;
         Node ret;
 
@@ -337,6 +378,27 @@ public class Lexer
             ch = mPage.getCharacter (cursor);
             if (0 == ch)
                 done = true;
+            else if (0x1b == ch) // escape
+            {
+                ch = mPage.getCharacter (cursor);
+                if (0 == ch)
+                    done = true;
+                else if ('$' == ch)
+                {
+                    ch = mPage.getCharacter (cursor);
+                    if (0 == ch)
+                        done = true;
+                    else if ('B' == ch)
+                        scanJIS (cursor);
+                    else
+                    {
+                        cursor.retreat ();
+                        cursor.retreat ();
+                    }
+                }
+                else
+                    cursor.retreat ();
+            }
             else if (quotesmart && (0 == quote) && (('\'' == ch) || ('"' == ch)))
                 quote = ch; // enter quoted state
             else if (quotesmart && (ch == quote))

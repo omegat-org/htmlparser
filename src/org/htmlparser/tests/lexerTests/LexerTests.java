@@ -37,6 +37,7 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
@@ -50,6 +51,8 @@ import org.htmlparser.lexer.nodes.StringNode;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class LexerTests extends ParserTestCase
@@ -591,6 +594,107 @@ public class LexerTests extends ParserTestCase
 //        LexerTests tests = new LexerTests ("hallow");
 //        tests.testSpeedStreamWithTags ();
 //    }
+
+    static final HashSet mAcceptable;
+    static
+    {
+        mAcceptable = new HashSet ();
+        mAcceptable.add ("A");
+        mAcceptable.add ("BODY");
+        mAcceptable.add ("BR");
+        mAcceptable.add ("CENTER");
+        mAcceptable.add ("FONT");
+        mAcceptable.add ("HEAD");
+        mAcceptable.add ("HR");
+        mAcceptable.add ("HTML");
+        mAcceptable.add ("IMG");
+        mAcceptable.add ("P");
+        mAcceptable.add ("TABLE");
+        mAcceptable.add ("TD");
+        mAcceptable.add ("TITLE");
+        mAcceptable.add ("TR");
+    }
+
+    /**
+     * Test case for bug #789439 Japanese page causes OutOfMemory Exception
+     * No exception is thrown in the current version of the parser,
+     * however, the problem is that ISO-2022-JP (aka JIS) encoding sometimes
+     * causes spurious tags.
+     * The root cause is characters bracketed by [esc]$B and [esc](J (contrary
+     * to what is indicated in then j_s_nightingale analysis of the problem) that
+     * sometimes have an angle bracket (&lt; or 0x3c) embedded in them. These
+     * are taken to be tags by the parser, instead of being considered strings.
+     * <p>
+     * The URL refrenced has an ISO-8859-1 encoding (the default), but
+     * Japanese characters intermixed on the page with English, using the JIS
+     * encoding. We detect failure by looking for weird tag names which were
+     * not correctly handled as string nodes.
+     * <p>
+     * Here is a partial dump of the page with escape sequences:
+     * <pre>
+     * 0002420 1b 24 42 3f 79 4a 42 25 47 25 38 25 2b 25 61 43
+     * 0002440 35 44 65 43 44 1b 28 4a 20 77 69 74 68 20 43 61
+     * ..
+     * 0002720 6c 22 3e 4a 53 6b 79 1b 24 42 42 50 31 7e 25 5a
+     * 0002740 21 3c 25 38 1b 28 4a 3c 2f 41 3e 3c 50 3e 0a 3c
+     * ..
+     * 0003060 20 69 1b 24 42 25 62 21 3c 25 49 42 50 31 7e 25
+     * 0003100 5a 21 3c 25 38 1b 28 4a 3c 2f 41 3e 3c 50 3e 0a
+     * ..
+     * 0003220 1b 24 42 25 2d 25 3f 25 5e 25 2f 25 69 24 4e 25
+     * 0003240 5b 21 3c 25 60 25 5a 21 3c 25 38 1b 28 4a 3c 2f
+     * ..
+     * 0003320 6e 65 31 2e 70 6c 22 3e 1b 24 42 3d 60 48 77 43
+     * 0003340 66 1b 28 4a 3c 2f 41 3e 3c 50 3e 0a 2d 2d 2d 2d
+     * ..
+     * 0004400 46 6f 72 75 6d 20 30 30 39 20 28 1b 24 42 3e 21
+     * 0004420 3c 6a 24 4b 31 4a 4a 21 44 2e 24 4a 24 49 1b 28
+     * 0004440 4a 29 3c 2f 41 3e 3c 49 4d 47 20 53 52 43 3d 22
+     * </pre>
+     * <p>
+     * The fix proposed by j_s_nightingale is implemented to swallow JIS
+     * escape sequences in the string parser.
+     * Apparently the fix won't help EUC-JP and Shift-JIS though, so this may
+     * still be a problem.
+     * It's theoretically possible that JIS encoding, or another one,
+     * could be used as attribute names or values within tags as well,
+     * but this is considered improbable and is therefore not handled in
+     * the tag parser state machine.
+     */
+    public void testJIS ()
+        throws ParserException
+    {
+        Parser parser;
+        NodeIterator iterator;
+        
+        parser = new Parser ("http://www.009.com/");
+        iterator = parser.elements ();
+        while (iterator.hasMoreNodes ())
+            checkTagNames (iterator.nextNode ());
+    }
+
+    /**
+     * Check the tag name for one of the ones expected on the page.
+     * Recursively check the children.
+     */
+    public void checkTagNames (Node node)
+    {
+        Tag tag;
+        String name;
+        NodeList children;
+        
+        if (node instanceof Tag)
+        {
+            tag = (Tag)node;
+            name = tag.getTagName ();
+            if (!mAcceptable.contains (name))
+                fail ("unrecognized tag name \"" + name + "\"");
+            children = tag.getChildren ();
+            if (null != children)
+                for (int i = 0; i < children.size (); i++)
+                    checkTagNames (children.elementAt (i));
+        }
+    }
 
 }
 
