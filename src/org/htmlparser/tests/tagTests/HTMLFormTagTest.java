@@ -28,9 +28,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLFormTag;
@@ -39,6 +36,7 @@ import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.tests.scannersTests.HTMLFormScannerTest;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.NodeList;
 
 public class HTMLFormTagTest extends HTMLParserTestCase {
 
@@ -78,16 +76,12 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
-		Vector nodeVector = formTag.searchFor("USER NAME");
-		assertEquals("Should have found nodes",1,nodeVector.size());
+		NodeList nodeList = formTag.searchFor("USER NAME");
+		assertEquals("Should have found nodes",1,nodeList.size());
 		
-		HTMLNode [] nodes = new HTMLNode[10];
-		int i = 0;
-		for (Enumeration e = nodeVector.elements();e.hasMoreElements();) {
-			nodes[i++] = (HTMLNode)e.nextElement();	
-		}
+		HTMLNode [] nodes = nodeList.toNodeArray();
 		
-		assertEquals("Number of nodes founs",1,i);
+		assertEquals("Number of nodes founs",1,nodes.length);
 		assertTrue("Should have found a string node",nodes[0] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)nodes[0];
 		assertEquals("Expected contents of string node","User Name",stringNode.getText());
@@ -100,11 +94,11 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
-		Vector nodeVector = formTag.searchFor("USER NAME",true);
-		assertEquals("Should have not found nodes",0,nodeVector.size());
+		NodeList nodeList = formTag.searchFor("USER NAME",true);
+		assertEquals("Should have not found nodes",0,nodeList.size());
 	
-		nodeVector = formTag.searchFor("User Name",true);
-		assertNotNull("Should have not found nodes",nodeVector);
+		nodeList = formTag.searchFor("User Name",true);
+		assertNotNull("Should have not found nodes",nodeList);
 	}
 
 	

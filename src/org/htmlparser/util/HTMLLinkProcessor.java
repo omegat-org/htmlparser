@@ -63,7 +63,6 @@ public class HTMLLinkProcessor
         throws
             HTMLParserException
     {
-        URL url; // constructed URL combining relative link and base
         String path; // path portion of constructed URL
         boolean modified; // true if path is modified by us
         boolean absolute; // true if link starts with "/"
@@ -80,35 +79,7 @@ public class HTMLLinkProcessor
                 ret = link;
             else
             {
-                url = new URL (new URL (base), link);
-                path = url.getFile ();
-                modified = false;
-                absolute = link.startsWith ("/");
-                if (!absolute)
-                {   // we prefer to fix incorrect relative links
-                    // this doesn't fix them all, just the ones at the start
-                    while (path.startsWith ("/."))
-                    {
-                        if (path.startsWith ("/../"))
-                        {
-                            path = path.substring (3);
-                            modified = true;
-                        }
-                        else if (path.startsWith ("/./"))
-                        {
-                            path = path.substring (2);
-                            modified = true;
-                        }
-                    }
-                }
-                // fix backslashes
-                while (-1 != (index = path.indexOf ("/\\")))
-                {
-                    path = path.substring (0, index + 1) + path.substring (index + 2);
-                    modified = true;
-                }
-                if (modified)
-                    url = new URL (url, path);
+				URL url = constructUrl(link, base);
                 ret = url.toExternalForm ();
             }
         }
@@ -119,6 +90,40 @@ public class HTMLLinkProcessor
         
         return (Translate.decode (ret));
     }
+
+	public URL constructUrl(String link, String base)
+		throws MalformedURLException {
+		String path;
+		boolean modified;
+		boolean absolute;
+		int index;
+		URL url; // constructed URL combining relative link and base
+		url = new URL (new URL (base), link);
+		path = url.getFile ();
+		modified = false;
+		absolute = link.startsWith ("/");
+		if (!absolute) {   // we prefer to fix incorrect relative links
+		    // this doesn't fix them all, just the ones at the start
+		    while (path.startsWith ("/.")) {
+		        if (path.startsWith ("/../")) {
+		            path = path.substring (3);
+		            modified = true;
+		        }
+		        else if (path.startsWith ("/./") || path.startsWith("/.")) {
+		            path = path.substring (2);
+		            modified = true;
+		        } else break;
+		    }
+		}
+		// fix backslashes
+		while (-1 != (index = path.indexOf ("/\\"))) {
+		    path = path.substring (0, index + 1) + path.substring (index + 2);
+		    modified = true;
+		}
+		if (modified)
+		    url = new URL (url, path);
+		return url;
+	}
 
     /**
      * Turn spaces into %20.

@@ -27,10 +27,12 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.utilTests;
+import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 
-public class HTMLLinkProcessorTest extends junit.framework.TestCase {
+public class HTMLLinkProcessorTest extends HTMLParserTestCase {
 	private HTMLLinkProcessor lp;
 
 	public HTMLLinkProcessorTest(String name) {
@@ -58,6 +60,19 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html",fixedURL);
 	}
 
+	/**
+	 * Reproduction of bug 673379 reported by Joe Robbins. Parser goes into
+	 * infinte loop if the link has no slashes.
+	 */
+	public void testLinkWithNoSlashes() throws Exception {
+		createParser("<A HREF=\".foo.txt\">Foo</A>","http://www.oygevalt.com");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue(node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		assertStringEquals("link","http://www.oygevalt.com/foo.txt",linkTag.getLink());
+		assertEquals("link","Foo",linkTag.getLinkText());
+	}
     //
     // Tests from Appendix C Examples of Resolving Relative URI References
     // RFC 2396 Uniform Resource Identifiers (URI): Generic Syntax
