@@ -2,7 +2,7 @@ Integration Build 1.2 - 20021031
 --------------------------------
 [1] Changed string creation to static strings in HTMLTagParser
 [2] HTMLLinkProcessor can handle urls beginning with file://
-[3]
+[3] All scanners get the feedback object initialized from HTMLParser
 
 Integration Build 1.2 - 20021016
 --------------------------------
