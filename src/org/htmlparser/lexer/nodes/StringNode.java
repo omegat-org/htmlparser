@@ -37,10 +37,24 @@ import org.htmlparser.util.ParserException;
  */
 public class StringNode extends AbstractNode
 {
-    public static final String STRING_FILTER = "-string";
+    /**
+     * The contents of the string node, or override text.
+     */
+    protected String mText;
 
     /**
-     * Constructor takes in the text string, beginning and ending posns.
+     * Constructor takes in the text string.
+     * @param text The string node text. For correct generation of HTML, this
+     * should not contain representations of tags (unless they are balanced).
+     */
+    public StringNode (String text)
+    {
+        super (null, 0, 0);
+        setText (text);
+    }
+
+    /**
+     * Constructor takes in the page and beginning and ending posns.
      * @param page The page this string is on.
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
@@ -48,6 +62,7 @@ public class StringNode extends AbstractNode
     public StringNode (Page page, int start, int end)
     {
         super (page, start, end);
+        mText = null;
     }
 
     /**
@@ -64,19 +79,9 @@ public class StringNode extends AbstractNode
      */
     public void setText (String text)
     {
-        mPage = new Page (text);
+        mText = text;
         nodeBegin = 0;
-        nodeEnd = text.length ();
-        // TODO: this really needs work
-        try
-        {
-            Cursor cursor = new Cursor (mPage, nodeBegin);
-            for (int i = nodeBegin; i < nodeEnd; i++)
-                mPage.getCharacter (cursor);
-        }
-        catch (ParserException pe)
-        {
-        }
+        nodeEnd = mText.length ();
     }
 
     public String toPlainTextString ()
@@ -86,7 +91,13 @@ public class StringNode extends AbstractNode
 
     public String toHtml ()
     {
-        return (mPage.getText (getStartPosition (), getEndPosition ()));
+        String ret;
+        
+        ret = mText;
+        if (null == ret)
+            ret = mPage.getText (getStartPosition (), getEndPosition ());
+
+        return (ret);
     }
 
     /**
@@ -108,18 +119,56 @@ public class StringNode extends AbstractNode
         startpos = getStartPosition ();
         endpos = getEndPosition ();
         ret = new StringBuffer (endpos - startpos + 20);
-        start = new Cursor (getPage (), startpos);
-        end = new Cursor (getPage (), endpos);
-        ret.append ("Txt (");
-        ret.append (start);
-        ret.append (",");
-        ret.append (end);
-        ret.append ("): ");
-        while (start.getPosition () < endpos)
+        if (null == mText)
         {
-            try
+            start = new Cursor (getPage (), startpos);
+            end = new Cursor (getPage (), endpos);
+            ret.append ("Txt (");
+            ret.append (start);
+            ret.append (",");
+            ret.append (end);
+            ret.append ("): ");
+            while (start.getPosition () < endpos)
             {
-                c = mPage.getCharacter (start);
+                try
+                {
+                    c = mPage.getCharacter (start);
+                    switch (c)
+                    {
+                        case '\t':
+                            ret.append ("\\t");
+                            break;
+                        case '\n':
+                            ret.append ("\\n");
+                            break;
+                        case '\r':
+                            ret.append ("\\r");
+                            break;
+                        default:
+                            ret.append (c);
+                    }
+                }
+                catch (ParserException pe)
+                {
+                    // not really expected, but we're only doing toString, so ignore
+                }
+                if (77 <= ret.length ())
+                {
+                    ret.append ("...");
+                    break;
+                }
+            }
+        }
+        else
+        {
+            ret.append ("Txt (");
+            ret.append (startpos);
+            ret.append (",");
+            ret.append (endpos);
+            ret.append ("): ");
+            while (startpos < endpos)
+            {
+                c = mText.charAt (startpos);
                 switch (c)
                 {
                     case '\t':
@@ -134,15 +183,12 @@ public class StringNode extends AbstractNode
                     default:
                         ret.append (c);
                 }
-            }
-            catch (ParserException pe)
-            {
-                // not really expected, but we'return only doing toString, so ignore
-            }
-            if (77 <= ret.length ())
-            {
-                ret.append ("...");
-                break;
+                if (77 <= ret.length ())
+                {
+                    ret.append ("...");
+                    break;
+                }
+                startpos++;
             }
         }
 

@@ -36,8 +36,6 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class LinkTag extends CompositeTag
 {
-    public static final String LINK_TAG_FILTER="-l";
-
     /**
      * The set of names handled by this tag.
      */

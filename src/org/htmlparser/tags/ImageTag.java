@@ -38,8 +38,6 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class ImageTag extends Tag
 {
-    public static final String IMAGE_TAG_FILTER="-i";
-
     /**
      * The set of names handled by this tag.
      */

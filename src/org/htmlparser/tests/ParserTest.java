@@ -41,6 +41,7 @@ import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.filters.TagNameFilter;
@@ -882,5 +883,76 @@ public class ParserTest extends ParserTestCase
         {
             Locale.setDefault (original);
         }
+    }
+    
+    /**
+     * See bug #900128 RemarkNode.setText() does not set Text
+     */
+    public void testSetStringText () throws Exception
+    {
+        String text;
+        String html;
+        String newtext;
+        String newhtml;
+        Node txt;
+
+        text = "This is just text.";
+        html = "<body>" + text + "</body>";
+        newtext = "This is different text.";
+        newhtml = "<body>" + newtext + "</body>";
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertStringEquals ("html wrong", html, node[0].toHtml ());
+        assertTrue ("wrong number of children", 1 == node[0].getChildren ().size ());
+        assertTrue ("string node expected", node[0].getChildren ().elementAt (0) instanceof StringNode);
+        txt = node[0].getChildren ().elementAt (0);
+        assertStringEquals ("string html wrong", text, txt.toHtml ());
+        assertStringEquals ("string contents wrong", text, txt.getText ());
+        assertTrue ("toString wrong", txt.toString ().endsWith (text));
+        txt.setText (newtext);
+        assertStringEquals ("html wrong", newhtml, node[0].toHtml ());
+        assertStringEquals ("new string html wrong", newtext, txt.toHtml ());
+        assertStringEquals ("new string contents wrong", newtext, txt.getText ());
+        assertTrue ("toString wrong", txt.toString ().endsWith (newtext));
+    }
+
+    /**
+     * See bug #900128 RemarkNode.setText() does not set Text
+     */
+    public void testSetRemarkText () throws Exception
+    {
+        String text;
+        String remark;
+        String html;
+        String newtext;
+        String newremark;
+        String newhtml;
+        Node rem;
+
+        text = " This is a remark. ";
+        remark = "<!--" + text + "-->";
+        html = "<body>" + remark + "</body>";
+        newtext = " This is a different remark. ";
+        newremark = "<!--" + newtext + "-->";
+        newhtml = "<body>" + newremark + "</body>";
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertStringEquals ("html wrong", html, node[0].toHtml ());
+        assertTrue ("wrong number of children", 1 == node[0].getChildren ().size ());
+        assertTrue ("remark node expected", node[0].getChildren ().elementAt (0) instanceof RemarkNode);
+        rem = node[0].getChildren ().elementAt (0);
+        assertStringEquals ("remark html wrong", remark, rem.toHtml ());
+        assertStringEquals ("remark contents wrong", text, rem.getText ());
+        assertTrue ("toString wrong", rem.toString ().endsWith (text));
+        rem.setText (newtext);
+        assertStringEquals ("html wrong", newhtml, node[0].toHtml ());
+        assertStringEquals ("new remark html wrong", newremark, rem.toHtml ());
+        assertStringEquals ("new remark contents wrong", newtext, rem.getText ());
+        assertTrue ("toString wrong", rem.toString ().endsWith (newtext));
+        rem.setText (newremark);
+        assertStringEquals ("html wrong", newhtml, node[0].toHtml ());
+        assertStringEquals ("new remark html wrong", newremark, rem.toHtml ());
+        assertStringEquals ("new remark contents wrong", newtext, rem.getText ());
+        assertTrue ("toString wrong", rem.toString ().endsWith (newtext));
     }
 }
