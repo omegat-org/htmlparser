@@ -33,20 +33,20 @@ import org.htmlparser.util.*;
 
 public class HTMLOptionTag extends HTMLTag
 {
-	private String mText;
+	private String text;
 	
 	public HTMLOptionTag(HTMLTagData tagData, String text)
 	{
 		super(tagData);
-		this.mText = text;
+		this.text = text;
 	}
 	
 	public java.lang.String getText() {
-		return mText;
+		return text;
 	}
 
 	public void setText(java.lang.String newText) {
-		mText = newText;
+		text = newText;
 	}
 
 	public String toHTML()
@@ -55,8 +55,8 @@ public class HTMLOptionTag extends HTMLTag
 		
 		StringBuffer lOptionTag = new StringBuffer(lHTMLString);
 
-		if (mText != null)
-			lOptionTag.append(mText);
+		if (text != null)
+			lOptionTag.append(text);
 		
 		lOptionTag.append("</OPTION>");
 		
@@ -66,7 +66,7 @@ public class HTMLOptionTag extends HTMLTag
 	public String toString() 
 	{
 		StringBuffer lString = new StringBuffer(HTMLParserUtils.toString(this));
-		lString.append("TEXT : ").append(mText).append("\n");
+		lString.append("TEXT : ").append(text).append("\n");
 		
 		return lString.toString();
 	}
