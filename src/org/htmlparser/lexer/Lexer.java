@@ -33,6 +33,7 @@
 package org.htmlparser.lexer;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -58,6 +59,7 @@ import org.htmlparser.util.ParserException;
  */
 public class Lexer
     implements
+        Serializable,
         NodeFactory
 {
     /**
@@ -74,6 +76,16 @@ public class Lexer
      * The factory for new nodes.
      */
     protected NodeFactory mFactory;
+
+    /**
+     * Creates a new instance of a Lexer.
+     */
+    public Lexer ()
+    {
+        setPage (new Page (""));
+        setCursor (new Cursor (getPage (), 0));
+        setNodeFactory (this);
+    }
 
     /**
      * Creates a new instance of a Lexer.

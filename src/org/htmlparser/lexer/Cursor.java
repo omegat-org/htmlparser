@@ -32,13 +32,18 @@
 
 package org.htmlparser.lexer;
 
+import java.io.Serializable;
 import org.htmlparser.util.sort.Ordered;
 
 /**
  * A bookmark in a page.
  * This class remembers the page it came from and its position within the page.
  */
-public class Cursor implements Ordered, Cloneable
+public class Cursor
+    implements
+        Serializable,
+        Ordered,
+        Cloneable
 {
     /**
      * This cursor's position.

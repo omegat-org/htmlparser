@@ -28,10 +28,14 @@
 
 package org.htmlparser.lexer;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -45,7 +49,11 @@ import java.io.UnsupportedEncodingException;
  * <li>the character set may be changed, which resets the input stream</li>
  *
  */
-public class Source extends Reader
+public class Source
+    extends
+        Reader
+    implements
+        Serializable
 {
     /**
      * An initial buffer size.
@@ -60,7 +68,7 @@ public class Source extends Reader
     /**
      * The stream of bytes.
      */
-    protected InputStream mStream;
+    protected transient InputStream mStream;
 
     /**
      * The character set in use.
@@ -70,7 +78,7 @@ public class Source extends Reader
     /**
      * The converter from bytes to characters.
      */
-    protected InputStreamReader mReader;
+    protected transient InputStreamReader mReader;
 
     /**
      * The characters read so far.
@@ -140,6 +148,41 @@ public class Source extends Reader
         mLevel = 0;
         mOffset = 0;
         mMark = -1;
+    }
+
+    //
+    // Serialization support
+    //
+
+    private void writeObject (ObjectOutputStream out)
+        throws
+            IOException
+    {
+        int offset;
+        char[] buffer;
+
+        if (null != mStream)
+        {
+            // remember the offset, drain the input stream, restore the offset
+            offset = mOffset;
+            buffer = new char[4096];
+            while (-1 != read (buffer))
+                ;
+            mOffset = offset;
+        }
+        
+        out.defaultWriteObject ();
+    }
+
+    private void readObject (ObjectInputStream in)
+        throws
+            IOException,
+            ClassNotFoundException
+    {
+        in.defaultReadObject ();
+        if (null != mBuffer) // buffer is null when destroy's been called
+            // pretend we're open, mStream goes null when exhausted
+            mStream = new ByteArrayInputStream (new byte[0]);
     }
 
     /**
@@ -420,6 +463,15 @@ public class Source extends Reader
         mLevel = 0;
         mOffset = 0;
         mMark = -1;
+    }
+
+    /**
+     * Get the position (in characters).
+     * @return The number of characters that have been read.
+     */
+    public int offset ()
+    {
+        return (mOffset);
     }
 
     /**

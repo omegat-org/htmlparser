@@ -188,7 +188,7 @@ public class Parser
     /**
      * The html lexer associated with this parser.
      */
-    protected transient Lexer mLexer;
+    protected Lexer mLexer;
 
     /**
      * The list of scanners to apply at the top level.
@@ -368,34 +368,6 @@ public class Parser
     public Parser (URLConnection connection) throws ParserException
     {
         this (connection, stdout);
-    }
-
-    //
-    // Serialization support
-    //
-
-    private void writeObject (ObjectOutputStream out)
-        throws
-            IOException
-    {
-        out.defaultWriteObject ();
-    }
-
-    private void readObject (ObjectInputStream in)
-        throws
-            IOException,
-            ClassNotFoundException
-    {
-        in.defaultReadObject ();
-        try
-        {
-            // reopen the connection and create a lexer which are transient fields
-            setURL (getURL ());
-        }
-        catch (ParserException hpe)
-        {
-            throw new IOException (hpe.toString ());
-        }
     }
 
     //

@@ -34,6 +34,7 @@ package org.htmlparser.lexer;
 
 import java.io.*;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.*;
 import java.net.*;
 
@@ -45,6 +46,8 @@ import org.htmlparser.util.*;
  * separators (actually the first character position on the next line).
  */
 public class Page
+    implements
+        Serializable
 {
     /**
      * The default charset.
@@ -74,7 +77,7 @@ public class Page
     /**
      * The connection this page is coming from or <code>null</code>.
      */
-    protected URLConnection mConnection;
+    protected transient URLConnection mConnection;
 
     /**
      * Messages for page not there (404).
@@ -92,6 +95,14 @@ public class Page
         "Many people have visited that page. Today, you are not one of the lucky ones.",
         "Cutting the wind with a knife. Bookmarking a URL. Both are ephemeral.",
     };
+
+    /**
+     * Construct an empty page reading.
+     */
+    public Page ()
+    {
+        this ("");
+    }
 
     /**
      * Construct a page reading from a URL connection.
@@ -153,6 +164,95 @@ public class Page
         mUrl = null;
     }
 
+    //
+    // Serialization support
+    //
+
+    private void writeObject (ObjectOutputStream out)
+        throws
+            IOException
+    {
+        String href;
+        Source source;
+        PageIndex index;
+
+        // two cases, reading from a URL and not
+        if (null != getConnection ())
+        {
+            out.writeBoolean (true);
+            out.writeInt (mSource.offset ()); // need to preread this much
+            href = getUrl ();
+            out.writeObject (href);
+            setUrl (getConnection ().getURL ().toExternalForm ());
+            source = getSource ();
+            mSource = null; // don't serialize the source if we can avoid it
+            index = mIndex;
+            mIndex = null; // will get recreated; valid for the new page anyway?
+            out.defaultWriteObject ();
+            mSource = source;
+            mIndex = index;
+        }
+        else
+        {
+            out.writeBoolean (false);
+            href = getUrl ();
+            out.writeObject (href);
+            setUrl (null); // don't try and read a bogus URL
+            out.defaultWriteObject ();
+            setUrl (href);
+        }
+    }
+
+    private void readObject (ObjectInputStream in)
+        throws
+            IOException,
+            ClassNotFoundException
+    {
+        boolean fromurl;
+        int offset;
+        String href;
+        URL url;
+        Cursor cursor;
+
+        fromurl = in.readBoolean ();
+        if (fromurl)
+        {
+            offset = in.readInt ();
+            href = (String)in.readObject ();
+            in.defaultReadObject ();
+            // open the URL
+            if (null != getUrl ())
+            {
+                url = new URL (getUrl ());
+                try
+                {
+                    setConnection (url.openConnection ());
+                }
+                catch (ParserException pe)
+                {
+                    throw new IOException (pe.getMessage ());
+                }
+            }
+            cursor = new Cursor (this, 0);
+            for (int i = 0; i < offset; i++)
+                try
+                {
+                    getCharacter (cursor);
+                }
+                catch (ParserException pe)
+                {
+                    throw new IOException (pe.getMessage ());
+                }
+            setUrl (href);
+        }
+        else
+        {
+            href = (String)in.readObject ();
+            in.defaultReadObject ();
+            setUrl (href);
+        }
+    }
+
     /**
      * Reset the page by resetting the source of characters.
      */
@@ -188,7 +288,6 @@ public class Page
         String charset;
         
 
-        mUrl = null;
         mConnection = connection;
         try
         {
@@ -231,6 +330,7 @@ public class Page
         {
             throw new ParserException (ioe.getMessage (), ioe);
         }
+        mUrl = connection.getURL ().toExternalForm ();
         mIndex = new PageIndex (this);
     }
 
@@ -240,14 +340,6 @@ public class Page
      */
     public String getUrl ()
     {
-        URLConnection connection;
-        if (null == mUrl)
-        {
-            connection = getConnection ();
-            if (null != connection)
-                mUrl = connection.getURL ().toExternalForm ();
-        }
-        
         return (mUrl);
     }
 

@@ -45,6 +45,8 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.beans.LinkBean;
 import org.htmlparser.beans.StringBean;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tests.*;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -107,7 +109,7 @@ public class BeanTest extends ParserTestCase
         try
         {
             out = new PrintWriter (new FileWriter (file));
-            out.println (html);
+            out.print (html);
             out.close ();
             bean.setURL (file.getAbsolutePath ());
             string = bean.getStrings ();
@@ -124,7 +126,35 @@ public class BeanTest extends ParserTestCase
         assertStringEquals ("stringbean text differs", text, string);
     }
 
-    public void testZeroArgConstructor ()
+    public void testZeroArgPageConstructor ()
+        throws
+            IOException,
+            ClassNotFoundException,
+            ParserException
+    {
+        Page page;
+        byte[] data;
+
+        page = new Page ();
+        data = pickle (page);
+        page = (Page)unpickle (data);
+    }
+
+    public void testZeroArgLexerConstructor ()
+        throws
+            IOException,
+            ClassNotFoundException,
+            ParserException
+    {
+        Lexer lexer;
+        byte[] data;
+
+        lexer = new Lexer ();
+        data = pickle (lexer);
+        lexer = (Lexer)unpickle (data);
+    }
+
+    public void testZeroArgParserConstructor ()
         throws
             IOException,
             ClassNotFoundException,

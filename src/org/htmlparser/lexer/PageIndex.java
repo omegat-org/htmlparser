@@ -32,6 +32,7 @@
 
 package org.htmlparser.lexer;
 
+import java.io.Serializable;
 import org.htmlparser.util.sort.Ordered;
 import org.htmlparser.util.sort.Sort;
 import org.htmlparser.util.sort.Sortable;
@@ -45,7 +46,10 @@ import org.htmlparser.util.sort.Sortable;
  * This class provides similar functionality to a Vector but
  * does not incur the overhead of an <code>Integer</code> object per element.
  */
-public class PageIndex implements Sortable
+public class PageIndex
+    implements
+        Serializable,
+        Sortable
 {
     /**
      * Increment for allocations.
