@@ -3,6 +3,8 @@ Integration Build 1.2 - 20021018
 [1] Fixed bug 621117 - JSP tags not recognized if within string node
 [2] Fixed bug 617228 - Links with > symbol in query strings were not
 being recognized.
+[3] build.xml completely automatic - no manual changes needed before running
+[4] build.xml included in release package, inside src.zip
 
 Integration Build 1.2 - 20021002
 --------------------------------
