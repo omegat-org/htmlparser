@@ -172,7 +172,41 @@ public class HTMLTag extends HTMLNode
 			if (c!='"')
 			absorbedText.append(c);
 		}
-		tag.setText(absorbedText.toString());
+		// Go into the next stage.
+		StringBuffer result = insertInvertedCommasCorrectly(absorbedText);
+		tag.setText(result.toString());
+	}
+	public static StringBuffer insertInvertedCommasCorrectly(StringBuffer absorbedText) {
+		String delim=" ";
+		StringTokenizer tok = new StringTokenizer(absorbedText.toString(),delim,true);
+		String token;
+		StringBuffer result = new StringBuffer();
+		result.append(tok.nextToken()+' '); // Skip the first one
+		String nextToken=null,prevToken=null;
+		boolean startMapping=false;
+		boolean started=false;
+		for (;tok.hasMoreTokens();) {
+			token  = tok.nextToken();
+			if (startMapping) {
+				if (!started) {
+					result.append('"');
+					started=true;
+				} 
+			}
+			if (token.equals("=")) {
+				if (!startMapping) 
+				startMapping=true; else {
+					// Completed one value mapping
+					startMapping=false;
+					result.append(prevToken);
+					result.append('"');
+					result.append(token);
+				}
+			}
+			//result.append(token);
+			prevToken = token;
+		}
+		return result;
 	}
   /**
 	 * Returns the beginning position of the string.
