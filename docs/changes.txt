@@ -13,6 +13,9 @@ as nodes, i.e. "this text<> has angles" used to return three nodes now returns o
 [9] Removed deprecated method nextHTMLNode() from NodeIterator
 [10] Removed unused vector in FormScanner
 [11] Added getChildren() to CompositeTag
+[12] Added BulletListScanner
+[13] Modified CompositeTagScanner scanning mechanism, to allow for 
+	end tag lists
 
 Integration Build 1.3 - 20030420
 --------------------------------
