@@ -89,6 +89,11 @@ public class HTMLTitleScannerTest extends TestCase {
 		assertEquals("Title","Yahoo!",titleTag.getTitle());
 		assertEquals("Title Scanner",titleScanner,titleTag.getThisScanner());
 	}
+	/**
+	 * Testcase to reproduce a bug reported by Cedric Rosa,
+	 * on not ending the title tag correctly, we would get 
+	 * null pointer exceptions..
+	 */
 	public void testIncompleteTitle() {
 		String testHTML = new String(
 		"<TITLE>SISTEMA TERRA, VOL. VI , No. 1-3, December 1997</TITLE\n"+
@@ -105,6 +110,8 @@ public class HTMLTitleScannerTest extends TestCase {
 		}
 	 	assertEquals("Number of nodes expected",2,i);		
 	 	assertTrue("First Node is a title tag",node[0] instanceof HTMLTitleTag);
+	 	HTMLTitleTag titleTag = (HTMLTitleTag)node[0];
+	 	assertEquals("Title","SISTEMA TERRA, VOL. VI , No. 1-3, December 1997",titleTag.getTitle());
 	
 	}
 }
