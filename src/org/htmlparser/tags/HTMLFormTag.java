@@ -250,13 +250,26 @@ public class HTMLFormTag extends HTMLTag
 		else
 			return null;
 	}
-
+	
+	/** 
+	 * Case insensitive search
+	 * @param searchString
+	 * @return Vector
+	 */
 	public Vector searchFor(String searchString) {
+		return searchFor(searchString, false);
+	}
+	
+	
+	public Vector searchFor(String searchString, boolean caseSensitive) {
 		Vector foundVector = new Vector();
 		HTMLNode node;
+		if (!caseSensitive) searchString = searchString.toUpperCase();
 		for (Enumeration e = allNodesVector.elements();e.hasMoreElements();) {
 			node = (HTMLNode)e.nextElement();
-			if (node.toPlainTextString().toUpperCase().indexOf(searchString.toUpperCase())!=-1) {
+			String nodeTextString = node.toPlainTextString(); 
+			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
+			if (nodeTextString.indexOf(searchString)!=-1) {
 				foundVector.addElement(node);
 			}	
 		}

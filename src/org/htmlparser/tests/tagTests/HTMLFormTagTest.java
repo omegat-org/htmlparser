@@ -88,8 +88,8 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
-		Vector nodeVector = formTag.searchFor("User Name");
-		assertNotNull("Should have found nodes",nodeVector);
+		Vector nodeVector = formTag.searchFor("USER NAME");
+		assertEquals("Should have found nodes",1,nodeVector.size());
 		
 		HTMLNode [] nodes = new HTMLNode[10];
 		int i = 0;
@@ -101,6 +101,20 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 		assertTrue("Should have found a string node",nodes[0] instanceof HTMLStringNode);
 		HTMLStringNode stringNode = (HTMLStringNode)nodes[0];
 		assertEquals("Expected contents of string node","User Name",stringNode.getText());
+	}
+
+	public void testSearchForCaseSensitive() throws HTMLParserException {
+		createParser(HTMLFormScannerTest.FORM_HTML);
+
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
+		HTMLFormTag formTag = (HTMLFormTag)node[0];
+		Vector nodeVector = formTag.searchFor("USER NAME",true);
+		assertEquals("Should have not found nodes",0,nodeVector.size());
+	
+		nodeVector = formTag.searchFor("User Name",true);
+		assertNotNull("Should have not found nodes",nodeVector);
 	}
 
 	

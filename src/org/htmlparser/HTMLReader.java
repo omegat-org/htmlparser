@@ -33,7 +33,6 @@ package org.htmlparser;
 // Java Imports //
 //////////////////
 import java.io.*;
-import java.util.*;
 
 /////////////////////////
 // HTML Parser Imports //
