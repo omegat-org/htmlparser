@@ -1,4 +1,4 @@
-HTMLParser Version 1.4 (Integration Build Jul 27, 2003)
+HTMLParser Version 1.4 (Integration Build Aug 24, 2003)
 *********************************************
 
 Q1. What are the contents of the distribution ? 
@@ -9,7 +9,7 @@ Q3. How do I extend the capability of this library ?
 Q1. What are the contents of the distribution ?
 
 A1. The distribution contains :
-    (i) binary jar file - htmlparser.jar (in lib directory)
+    (i) binary jar files - htmlparser.jar and lexer.jar (in lib directory)
     
     (ii) source code - src.zip (in distribution directory)
     	 Also contains necessary resources, and build file. Unzip this
@@ -21,8 +21,10 @@ A1. The distribution contains :
     (iv) Executing scripts - There are three scripts (in the bin directory):
          (a) runParser.bat  : Runs the html parser
          (b) runCrawler.bat : Runs the robot crawler
-         (c) runRipper.bat  : Runs the mail ripper   
-         All three batch files assume that java 1.2 (or upwards) is visible in your path.
+         (c) runRipper.bat  : Runs the mail ripper
+         (d) runLexer.bat   : Runs the low lever lexer
+         (e) lexer          : Runs the low lever lexer on linux/unix
+         All four batch files assume that java 1.2 (or upwards) is visible in your path.
 
 Issue the following command : 
 java -jar htmlparser.jar myURL (or runParser myURL)

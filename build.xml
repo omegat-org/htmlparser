@@ -388,6 +388,7 @@ HTML Parser Integration Release 1.4-20030824
      <mkdir dir="${dist}/bin"/>   
      <copy todir="${dist}/bin" >
         <fileset dir="${resources}" includes="*.bat"/>
+        <fileset dir="${resources}" includes="lexer"/>
      </copy>
   </target>
 

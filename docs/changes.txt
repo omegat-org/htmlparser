@@ -12,6 +12,265 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20030824
+--------------------------------
+
+2003-08-24 17:07  derrickoswald
+
+	* build.xml:
+
+	Update groups list.
+	
+2003-08-24 16:49  derrickoswald
+
+	* src/org/htmlparser/: StringNode.java, scanners/TagScanner.java,
+	tags/AppletTag.java, tags/CompositeTag.java, tags/DoctypeTag.java,
+	tags/EndTag.java, tags/JspTag.java, tags/ScriptTag.java,
+	tags/StyleTag.java, tags/Tag.java:
+
+	Cure javadoc warnings about invalid parameters and broken links, take two.
+	
+2003-08-24 16:30  derrickoswald
+
+	* src/org/htmlparser/beans/StringBean.java:
+
+	Fix extra carriage returns in text output.
+	
+2003-08-24 15:40  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, Node.java, Parser.java,
+	RemarkNode.java, beans/HTMLLinkBean.java, beans/HTMLTextBean.java,
+	beans/LinkBean.java, beans/StringBean.java,
+	parserHelper/AttributeParser.java, scanners/FormScanner.java,
+	scanners/FrameScanner.java, scanners/ImageScanner.java,
+	tags/Tag.java:
+
+	Cure javadoc warnings about invalid parameters and broken links.
+	
+2003-08-24 14:54  somik
+
+	* src/org/htmlparser/visitors/CompositeTagFindingVisitor.java:
+
+	removed unused class
+	
+2003-08-24 14:53  somik
+
+	* src/org/htmlparser/util/ParserUtils.java:
+
+	removed dead code
+	
+2003-08-24 14:50  somik
+
+	* src/org/htmlparser/util/: Generate.java, IteratorImpl.java,
+	LinkProcessor.java:
+
+	removed unused local variables
+	
+2003-08-24 14:47  somik
+
+	* src/org/htmlparser/tests/utilTests/: BeanTest.java,
+	NodeListTest.java:
+
+	removed unused imports
+	
+2003-08-24 14:46  somik
+
+	* src/org/htmlparser/tests/: tagTests/TagTest.java,
+	temporaryFailures/AttributeParserTest.java,
+	utilTests/HTMLLinkProcessorTest.java:
+
+	removed unused local variables
+	
+2003-08-24 14:44  somik
+
+	* src/org/htmlparser/tests/scannersTests/TableScannerTest.java:
+
+	reformatted
+	
+2003-08-24 14:44  derrickoswald
+
+	* build.xml, docs/docs/BlockFeedback.html,
+	docs/docs/CollectingParameter.html,
+	docs/docs/CompositePattern.html,
+	docs/docs/CustomTagExtraction.html, docs/docs/EmailExtraction.html,
+	docs/docs/EnableFeedback.html, docs/docs/ExternalIterators.html,
+	docs/docs/FactoryMethod.html, docs/docs/FeedbackMechanism.html,
+	docs/docs/FirstName.html, docs/docs/FrequentlyAskedQuestions.html,
+	docs/docs/FullName.html, docs/docs/ImageExtraction.html,
+	docs/docs/InternalIterators.html, docs/docs/IteratorPattern.html,
+	docs/docs/JavaBeans.html, docs/docs/LastName.html,
+	docs/docs/LinkExtraction.html, docs/docs/ParserDesign.html,
+	docs/docs/ParsingXml.html, docs/docs/PatternStories.html,
+	docs/docs/PostOperation.html, docs/docs/ReverseHtml.html,
+	docs/docs/SamplePrograms.html, docs/docs/SearchingForData.html,
+	docs/docs/SomikRaha.html, docs/docs/StrategyPattern.html,
+	docs/docs/StringExtraction.html, docs/docs/TagFindingVisitor.html,
+	docs/docs/TagScanner.html, docs/docs/TemplateMethod.html,
+	docs/docs/TestDrivenDevelopment.html,
+	docs/docs/TextExtractingVisitor.html,
+	docs/docs/UnitTestingPdf.html, docs/docs/UnitTestingXsl.html,
+	docs/docs/UsingCookiesWithParser.html,
+	docs/docs/VisitorPattern.html, docs/docs/WebCrawler.html,
+	docs/docs/WebRipper.html, docs/docs/WritingYourOwnScanners.html,
+	docs/docs/index.html:
+
+	update Wiki image
+	
+2003-08-24 14:43  somik
+
+	* src/org/htmlparser/tests/scannersTests/ScriptScannerTest.java:
+
+	removed unused assertion
+	
+2003-08-24 14:42  somik
+
+	* src/org/htmlparser/tests/scannersTests/: HeadScannerTest.java,
+	ImageScannerTest.java, TagScannerTest.java:
+
+	removed unused local variables
+	
+2003-08-24 14:39  somik
+
+	* src/org/htmlparser/tests/: ParserTest.java, ParserTestCase.java,
+	utilTests/BeanTest.java,
+	scannersTests/CompositeTagScannerTest.java:
+
+	removed unused local variables
+	
+2003-08-24 14:35  somik
+
+	* src/org/htmlparser/tests/BadTagIdentifier.java:
+
+	improved identify()
+	
+2003-08-24 14:34  somik
+
+	* src/org/htmlparser/scanners/FrameScanner.java:
+
+	reformatted
+	
+2003-08-24 14:32  somik
+
+	* src/org/htmlparser/: lexer/nodes/TagNode.java,
+	scanners/TagScanner.java:
+
+	removed unused local variables
+	
+2003-08-24 14:31  somik
+
+	* src/org/htmlparser/lexer/Page.java:
+
+	removed unused imports and variables
+	
+2003-08-24 14:30  somik
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	nodeDecorators/AbstractNodeDecorator.java:
+
+	removed unused imports
+	
+2003-08-24 14:30  somik
+
+	* src/org/htmlparser/beans/: LinkBean.java, StringBean.java:
+
+	removed unused private variables
+	
+2003-08-24 14:28  somik
+
+	* src/: fit/Attributes.java, org/htmlparser/Parser.java:
+
+	updated fit test
+	
+2003-08-23 13:14  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, Node.java,
+	RemarkNode.java, StringNode.java, lexer/Lexer.java,
+	lexer/Page.java, lexer/nodes/RemarkNode.java,
+	lexer/nodes/StringNode.java, lexer/nodes/TagNode.java,
+	nodeDecorators/AbstractNodeDecorator.java,
+	parserHelper/SpecialHashtable.java, tags/CompositeTag.java,
+	tags/LinkTag.java, tags/SelectTag.java, tags/Tag.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/tagTests/CompositeTagTest.java,
+	tests/utilTests/NodeListTest.java,
+	tests/visitorsTests/AllTests.java, util/ChainedException.java,
+	util/NodeList.java:
+
+	Sixth drop for new i/o subsystem.
+	Isolated htmllexer.jar file and made it compileable and runnable on JDK 1.1 systems.
+	The build.xml file now has four new targets for separate compiling and jaring of the lexer and parser.
+	Significantly refactored the existing Node interface and AbstractNode class to achieve isolation.
+	They now support get/setChildren(), rather than CompositeTag.
+	Various scanners that were directly accessing the childTags node list were affected.
+	The get/setParent is now a generic Node rather than a CompositeTag.
+	The visitor accept() signature was changed to Object to avoid dragging in visitors code.
+	This was *not* changed on classes derived from Tag, although it could be.
+	ChainedException now uses/returns a Vector.
+	Removed the cruft from lexer nodes where possible.
+	
+2003-08-22 21:33  derrickoswald
+
+	* build.xml, src/org/htmlparser/lexer/Lexer.java,
+	src/org/htmlparser/lexer/Page.java,
+	src/org/htmlparser/lexer/nodes/Attribute.java,
+	resources/Manifest.mf, resources/lexer, resources/runLexer.bat,
+	src/ExceptionMessages_en_US.properties,
+	src/ExceptionMessages_ja_JP.properties, src/Manifest.mf:
+
+	Fifth drop for new i/o subsystem.
+	There is now a mainline for the lexer.
+	Try:
+	    java -jar htmllexer.jar http://whatever
+	or the integration build has a new lexer execution script:
+	    bin/lexer http://whatever
+	
+2003-08-20 21:52  derrickoswald
+
+	* src/org/htmlparser/: lexer/Cursor.java, lexer/Lexer.java,
+	lexer/Page.java, lexer/PageIndex.java, lexer/Source.java,
+	lexer/nodes/Attribute.java, lexer/nodes/TagNode.java,
+	tests/lexerTests/AllTests.java, tests/lexerTests/KitTest.java,
+	tests/lexerTests/LexerTests.java:
+
+	Fourth drop for new i/o subsystem.
+	
+2003-08-17 12:09  derrickoswald
+
+	* src/org/htmlparser/: lexer/Cursor.java, lexer/Lexer.java,
+	lexer/Page.java, lexer/PageIndex.java, lexer/Source.java,
+	lexer/package.html, tests/lexerTests/AllTests.java,
+	tests/lexerTests/KitTest.java, tests/lexerTests/LexerTests.java,
+	tests/lexerTests/PageIndexTests.java,
+	tests/lexerTests/PageTests.java, tests/lexerTests/SourceTests.java,
+	lexer/nodes/AbstractNode.java, lexer/nodes/Attribute.java,
+	lexer/nodes/RemarkNode.java, lexer/nodes/StringNode.java,
+	lexer/nodes/TagNode.java, lexer/nodes/package.html:
+
+	Third drop for new i/o subsystem.
+	
+2003-08-15 16:51  derrickoswald
+
+	* src/org/htmlparser/: parserHelper/AttributeParser.java,
+	scanners/TagScanner.java, tags/FormTag.java, tags/ImageTag.java,
+	tags/LinkTag.java, tags/Tag.java, tests/ParserTestCase.java,
+	tests/scannersTests/ScriptScannerTest.java,
+	tests/tagTests/InputTagTest.java, tests/tagTests/TagTest.java,
+	tests/temporaryFailures/AttributeParserTest.java:
+
+	Case maintaining toHtml() output for tag attributes.
+	With these changes, the output of toHtml() now reflects the upper/lower case values
+	of the input for the contents of tags, i.e. attribute names maintain their original case.
+	They're still out of order from how they are parsed, but this is a first step.
+	Rather than adjust all the test cases right now, the ParserTestCase assertSameString()
+	method now checks a global flag to see if case matters when comparing strings.
+	As of this drop it ignores case when comparing HTML output. This will soon change.
+	
+2003-08-10 23:53  derrickoswald
+
+	* build.xml:
+
+	Move libs to correct level in distribution zip.
+
 Integration Build 1.4 - 20030810
 --------------------------------
 
