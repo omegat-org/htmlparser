@@ -33,10 +33,10 @@ import junit.framework.*;
 import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.*;
 
-
-public class HTMLTextareaTagScannerTest extends TestCase 
+public class HTMLTextareaTagScannerTest extends HTMLParserTestCase
 {
 	
 	private String testHTML = new String(
@@ -49,49 +49,19 @@ public class HTMLTextareaTagScannerTest extends TestCase
 									"refused to intimidate the Tamilians\n</TEXTAREA>"
 									);
 	private HTMLTextareaTagScanner scanner;
-	private HTMLNode[] node;
-	private int i;
 	
-	/**
-	 * Constructor for HTMLInputTagScannerTest.
-	 * @param arg0
-	 */
 	public HTMLTextareaTagScannerTest(String name) 
 	{
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(HTMLTextareaTagScannerTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {HTMLTextareaTagScannerTest.class.getName()});
-	}
-	
-	public void setUp() throws Exception
-	{
-		super.setUp();
-		scanner = new HTMLTextareaTagScanner("-i");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
-		scanner = new HTMLTextareaTagScanner("-ta");
-		parser.addScanner(scanner);
-		
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-	}
-	
 	public void testScan() throws HTMLParserException 
 	{
-		assertEquals("Number of nodes expected",5,i);		
+		scanner = new HTMLTextareaTagScanner("-i");
+		createParser(testHTML);
+		scanner = new HTMLTextareaTagScanner("-ta");
+		parser.addScanner(scanner);
+		parseAndAssertNodeCount(5);
 	 	assertTrue(node[0] instanceof HTMLTextareaTag);
 	 	assertTrue(node[1] instanceof HTMLTextareaTag);
 	 	assertTrue(node[2] instanceof HTMLTextareaTag);
@@ -99,7 +69,7 @@ public class HTMLTextareaTagScannerTest extends TestCase
 	 	assertTrue(node[4] instanceof HTMLTextareaTag);
 	 	
 		// check the Textarea node
-		for(int j=0;j<i;j++)
+		for(int j=0;j<nodeCount;j++)
 		{
 			HTMLTextareaTag TextareaTag = (HTMLTextareaTag) node[j];
 			assertEquals("Textarea Scanner",scanner,TextareaTag.getThisScanner());

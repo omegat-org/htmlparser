@@ -33,10 +33,11 @@ import junit.framework.*;
 import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.*;
 
 
-public class HTMLSelectTagScannerTest extends TestCase 
+public class HTMLSelectTagScannerTest extends HTMLParserTestCase 
 {
 	
 	private String testHTML = new String(
@@ -49,49 +50,21 @@ public class HTMLSelectTagScannerTest extends TestCase
 									"refused to intimidate the Tamilians\n</Select>"
 									);
 	private HTMLSelectTagScanner scanner;
-	private HTMLNode[] node;
-	private int i;
-	
-	/**
-	 * Constructor for HTMLInputTagScannerTest.
-	 * @param arg0
-	 */
+
 	public HTMLSelectTagScannerTest(String name) 
 	{
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(HTMLSelectTagScannerTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {HTMLSelectTagScannerTest.class.getName()});
-	}
-	
-	public void setUp() throws Exception
-	{
-		super.setUp();
-		scanner = new HTMLSelectTagScanner("-i");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
-		scanner = new HTMLSelectTagScanner("-ta");
-		parser.addScanner(scanner);
-		
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-	}
-	
 	public void testScan() throws HTMLParserException 
 	{
-		assertEquals("Number of nodes expected",5,i);		
+		
+		scanner = new HTMLSelectTagScanner("-i");
+		createParser(testHTML,"http://www.google.com/test/index.html");
+		scanner = new HTMLSelectTagScanner("-ta");
+		parser.addScanner(scanner);
+	
+		parseAndAssertNodeCount(5);
 	 	assertTrue(node[0] instanceof HTMLSelectTag);
 	 	assertTrue(node[1] instanceof HTMLSelectTag);
 	 	assertTrue(node[2] instanceof HTMLSelectTag);
@@ -99,7 +72,7 @@ public class HTMLSelectTagScannerTest extends TestCase
 	 	assertTrue(node[4] instanceof HTMLSelectTag);
 	 	
 		// check the Select node
-		for(int j=0;j<i;j++)
+		for(int j=0;j<nodeCount;j++)
 		{
 			HTMLSelectTag SelectTag = (HTMLSelectTag) node[j];
 			assertEquals("Select Scanner",scanner,SelectTag.getThisScanner());
