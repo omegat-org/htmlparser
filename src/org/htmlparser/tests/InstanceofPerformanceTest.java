@@ -58,7 +58,8 @@ public class InstanceofPerformanceTest {
     public void setUp() throws Exception {
         Parser parser =
             Parser.createParser(
-                FORM_HTML
+                FORM_HTML,
+                null
             );
         NodeIterator e = parser.elements();
         Node node = e.nextNode();

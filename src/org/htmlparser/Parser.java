@@ -26,9 +26,11 @@
 
 package org.htmlparser;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -791,18 +793,37 @@ public class Parser
 
     /**
      * Creates the parser on an input string.
-     * @param inputHTML
-     * @return Parser
+     * Uses the character set encoding to create a stream of bytes that is
+     * fed into the parser as if it had come off the wire.
+     * @param html The string containing HTML.
+     * @param charset Character set encoding to use when converting the
+     * <code>html</code> to a stream of bytes. If charset is <code>null</code>
+     * the default character set is used.
+     * @return A parser with the <code>html</code> string as input.
      */
-    public static Parser createParser(String inputHTML)
+    public static Parser createParser (String html, String charset)
     {
-        Lexer lexer;
+        ByteArrayInputStream stream;
         Parser ret;
 
-        if (null == inputHTML)
+        if (null == html)
             throw new IllegalArgumentException ("html cannot be null");
-        lexer = new Lexer (new Page (inputHTML));
-        ret = new Parser (lexer);
+        if (null == charset)
+            charset = Page.DEFAULT_CHARSET;
+        try
+        {
+            stream = new ByteArrayInputStream (html.getBytes (charset));
+            ret = new Parser (new Lexer (new Page (stream, charset)));
+        }
+        catch (UnsupportedEncodingException uee)
+        {
+            String msg;
+            
+            msg = uee.getMessage ();
+            if (null == msg)
+                msg = "unsupported encoding (" + charset + ") exception";
+            ret = new Parser (new Lexer (new Page (msg)));
+        }
 
         return (ret);
     }

@@ -232,8 +232,8 @@ public class ParserTestCase extends TestCase {
         expected = removeEscapeCharacters(expected);
         actual   = removeEscapeCharacters(actual);
 
-        Parser expectedParser = Parser.createParser(expected);
-        Parser resultParser   = Parser.createParser(actual);
+        Parser expectedParser = Parser.createParser(expected, null);
+        Parser resultParser   = Parser.createParser(actual, null);
 
         NodeIterator expectedIterator = expectedParser.elements();
         NodeIterator actualIterator =  resultParser.elements();

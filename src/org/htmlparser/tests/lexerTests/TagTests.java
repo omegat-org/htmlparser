@@ -358,7 +358,7 @@ public class TagTests extends ParserTestCase {
         ParsingThread(int id, String testHtml, int max) {
             this.id = id;
             this.max = max;
-            this.parser = Parser.createParser(testHtml);
+            this.parser = Parser.createParser(testHtml, null);
         }
 
         public void run() {
