@@ -39,7 +39,42 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
 public class TagParserTest extends ParserTestCase {
-	private static final String TEST_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" +		"<!-- Server: sf-web2 -->" +		"<html lang=\"en\">" +		"  <head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://sourceforge.net/cssdef.php\">" +		"	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" +		"    <TITLE>SourceForge.net: Modify: 711073 - HTMLTagParser not threadsafe as a static variable in Tag</TITLE>" +		"	<SCRIPT language=\"JavaScript\" type=\"text/javascript\">" +		"	<!--" +		"	function help_window(helpurl) {" +		"		HelpWin = window.open( 'http://sourceforge.net' + helpurl,'HelpWindow','scrollbars=yes,resizable=yes,toolbar=no,height=400,width=400');" +		"	}" +		"	// -->" +		"	</SCRIPT>" +		"		<link rel=\"SHORTCUT ICON\" href=\"/images/favicon.ico\">" +		"<!-- This is temp javascript for the jump button. If we could actually have a jump script on the server side that would be ideal -->" +		"<script language=\"JavaScript\" type=\"text/javascript\">" +		"<!--" +		"	function jump(targ,selObj,restore){ //v3.0" +		"	if (selObj.options[selObj.selectedIndex].value) " +		"		eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");" +		"	if (restore) selObj.selectedIndex=0;" +		"	}" +		"	//-->" +		"</script>" +		"<a href=\"http://normallink.com/sometext.html\">" +		"<style type=\"text/css\">" +		"<!--" +		"A:link { text-decoration:none }" +		"A:visited { text-decoration:none }" +		"A:active { text-decoration:none }" +		"A:hover { text-decoration:underline; color:#0066FF; }" +		"-->" +		"</style>" +		"</head>" +		"<body bgcolor=\"#FFFFFF\" text=\"#000000\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" link=\"#003399\" vlink=\"#003399\" alink=\"#003399\">";	private Map results;
+	private static final String TEST_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" +
+		"<!-- Server: sf-web2 -->" +
+		"<html lang=\"en\">" +
+		"  <head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://sourceforge.net/cssdef.php\">" +
+		"	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" +
+		"    <TITLE>SourceForge.net: Modify: 711073 - HTMLTagParser not threadsafe as a static variable in Tag</TITLE>" +
+		"	<SCRIPT language=\"JavaScript\" type=\"text/javascript\">" +
+		"	<!--" +
+		"	function help_window(helpurl) {" +
+		"		HelpWin = window.open( 'http://sourceforge.net' + helpurl,'HelpWindow','scrollbars=yes,resizable=yes,toolbar=no,height=400,width=400');" +
+		"	}" +
+		"	// -->" +
+		"	</SCRIPT>" +
+		"		<link rel=\"SHORTCUT ICON\" href=\"/images/favicon.ico\">" +
+		"<!-- This is temp javascript for the jump button. If we could actually have a jump script on the server side that would be ideal -->" +
+		"<script language=\"JavaScript\" type=\"text/javascript\">" +
+		"<!--" +
+		"	function jump(targ,selObj,restore){ //v3.0" +
+		"	if (selObj.options[selObj.selectedIndex].value) " +
+		"		eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");" +
+		"	if (restore) selObj.selectedIndex=0;" +
+		"	}" +
+		"	//-->" +
+		"</script>" +
+		"<a href=\"http://normallink.com/sometext.html\">" +
+		"<style type=\"text/css\">" +
+		"<!--" +
+		"A:link { text-decoration:none }" +
+		"A:visited { text-decoration:none }" +
+		"A:active { text-decoration:none }" +
+		"A:hover { text-decoration:underline; color:#0066FF; }" +
+		"-->" +
+		"</style>" +
+		"</head>" +
+		"<body bgcolor=\"#FFFFFF\" text=\"#000000\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" link=\"#003399\" vlink=\"#003399\" alink=\"#003399\">";
+	private Map results;
 	private int testProgress;
 	
 	public TagParserTest(String name) {
@@ -99,8 +134,128 @@ public class TagParserTest extends ParserTestCase {
 		Tag tag = (Tag)node[0];
 		assertStringEquals("html","<TAG ATT=\"a<b\">",tag.toHtml());
 		assertStringEquals("attribute","a<b",tag.getAttribute("att"));
-	}	
-	
+    }
+
+    /**
+     * The following multi line test cases are from
+     * bug #725749 Parser does not handle < and > in multi-line attributes
+     * submitted by Joe Robins (zorblak)
+     */
+
+    public void testMultiLine1 () throws ParserException
+    {
+        createParser("<meta name=\"foo\" content=\"foo<bar>\">");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<META CONTENT=\"foo<bar>\" NAME=\"foo\">", html);
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","foo<bar>", attribute2);
+    }
+
+    public void testMultiLine2 () throws ParserException
+    {
+        createParser("<meta name=\"foo\" content=\"foo<bar\">");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<META CONTENT=\"foo<bar\" NAME=\"foo\">", html);
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","foo<bar", attribute2);
+    }
+
+    public void testMultiLine3 () throws ParserException
+    {
+        createParser("<meta name=\"foo\" content=\"foobar>\">");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<META CONTENT=\"foobar>\" NAME=\"foo\">", html);
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","foobar>", attribute2);
+    }
+
+    public void testMultiLine4 () throws ParserException
+    {
+        createParser("<meta name=\"foo\" content=\"foo\nbar>\">");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<META CONTENT=\"foo\r\nbar>\" NAME=\"foo\">", html);
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","foo\r\nbar>", attribute2);
+    }
+
+/*
+<meta name="foo" content="<foo>
+bar">
+ */
+    public void testMultiLine5 () throws ParserException
+    {
+        createParser("<meta name=\"foo\" content=\"<foo>\nbar\">");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<META CONTENT=\"<foo>\r\nbar\" NAME=\"foo\">", html);
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","<foo>\r\nbar", attribute2);
+    }
+
+/*
+<meta name="foo" content="foo>
+bar">
+*/
+    public void testMultiLine6 () throws ParserException
+    {
+        createParser("<meta name=\"foo\" content=\"foo>\nbar\">");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<META CONTENT=\"foo>\r\nbar\" NAME=\"foo\">", html);
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","foo>\r\nbar", attribute2);
+    }
+
+/*
+<meta name="foo" content="<foo
+bar">
+*/
+    public void testMultiLine7 () throws ParserException
+    {
+        createParser("<meta name=\"foo\" content=\"<foo\nbar\"");
+        parseAndAssertNodeCount (1);
+        assertType ("should be Tag", Tag.class, node[0]);
+        Tag tag = (Tag)node[0];
+        String html = tag.toHtml ();
+        assertStringEquals ("html","<META CONTENT=\"<foo\r\nbar\" NAME=\"foo\">", html);
+        String attribute1 = tag.getAttribute ("NAME");
+        assertStringEquals ("attribute 1","foo", attribute1);
+        String attribute2 = tag.getAttribute ("CONTENT");
+        assertStringEquals ("attribute 2","<foo\r\nbar", attribute2);
+    }
+
+    /**
+     * End of multi line test cases.
+     */
+
 	public void testThreadSafety() throws Exception {
 		
 		String testHtml1 = "<a HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>" +
