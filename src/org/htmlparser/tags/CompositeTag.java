@@ -325,6 +325,8 @@ public abstract class CompositeTag extends Tag {
         SimpleNodeIterator children;
         Node child;
 
+        if (visitor.shouldRecurseSelf ())
+            visitor.visitTag (this);
         if (visitor.shouldRecurseChildren ())
         {
             if (null != getChildren ())
@@ -339,8 +341,6 @@ public abstract class CompositeTag extends Tag {
             if (null != getEndTag ())
                 getEndTag ().accept (visitor);
         }
-        if (visitor.shouldRecurseSelf ())
-            visitor.visitTag (this);
     }
 
     public int getChildCount() {

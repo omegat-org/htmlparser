@@ -370,6 +370,6 @@ public class BeanyBaby
     {
         BeanyBaby bb = new BeanyBaby ();
         bb.show ();
-        bb.setURL ("http://www.netbeans.org");
+        bb.setURL ("http://www.slashdot.org");
     }
 }

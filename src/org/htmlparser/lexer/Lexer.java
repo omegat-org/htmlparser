@@ -78,13 +78,20 @@ public class Lexer
     protected NodeFactory mFactory;
 
     /**
+     * Line number to trigger on.
+     * This is tested on each <code>nextNode()</code> call, as an aid to debugging.
+     * Alter this value and set a breakpoint on the line after the test.
+     * Remember, these line numbers are zero based, while most editors are one based.
+     * @see #nextNode
+     */ 
+    static protected int mDebugLineTrigger = -1;
+
+    /**
      * Creates a new instance of a Lexer.
      */
     public Lexer ()
     {
-        setPage (new Page (""));
-        setCursor (new Cursor (getPage (), 0));
-        setNodeFactory (this);
+        this (new Page (""));
     }
 
     /**
@@ -246,6 +253,14 @@ public class Lexer
         char ch;
         Node ret;
 
+        // debugging suppport
+        if (-1 != mDebugLineTrigger)
+        {
+            Page page = getPage ();
+            int lineno = page.row (mCursor);
+            if (mDebugLineTrigger < lineno)
+                mDebugLineTrigger = lineno + 1; // trigger on subsequent lines too
+        }
         probe = mCursor.dup ();
         ch = mPage.getCharacter (probe);
         switch (ch)

@@ -29,10 +29,13 @@
 // This class was contributed by Joshua Kerievsky
 
 package org.htmlparser.visitors;
+
+import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.scanners.LinkScanner;
+import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
@@ -64,15 +67,24 @@ public class UrlModifyingVisitor extends NodeVisitor {
     }
 
     public void visitTag(Tag tag)
-    {
-        if (null == tag.getParent ())
+    {   // process only those nodes that won't be processed by an end tag,
+        // nodes without parents or parents without an end tag, since
+        // the complete processing of all children should happen before
+        // we turn this node back into html text
+        if (null == tag.getParent ()
+            && (!(tag instanceof CompositeTag) || null == ((CompositeTag)tag).getEndTag ()))
             modifiedResult.append(tag.toHtml());
     }
 
     public void visitEndTag(Tag tag)
     {
-        if (null == tag.getParent ())
+        Node parent;
+        
+        parent = tag.getParent ();
+        if (null == parent)
             modifiedResult.append(tag.toHtml());
+        else
+            modifiedResult.append(parent.toHtml());
     }
 
     public String getModifiedResult() {

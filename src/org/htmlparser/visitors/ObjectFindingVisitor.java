@@ -36,28 +36,25 @@ import org.htmlparser.util.NodeList;
 
 public class ObjectFindingVisitor extends NodeVisitor {
     private Class classTypeToFind;
-    private int count = 0;
     private NodeList tags;
 
     public ObjectFindingVisitor(Class classTypeToFind) {
-        this(classTypeToFind,false);
+        this(classTypeToFind,true);
     }
 
     public ObjectFindingVisitor(Class classTypeToFind,boolean recurse) {
-        super(recurse);
+        super(recurse, true);
         this.classTypeToFind = classTypeToFind;
         this.tags = new NodeList();
     }
 
     public int getCount() {
-        return count;
+        return (tags.size ());
     }
 
     public void visitTag(Tag tag) {
-        if (tag.getClass().getName().equals(classTypeToFind.getName())) {
-            count++;
+        if (tag.getClass().equals(classTypeToFind))
             tags.add(tag);
-        }
     }
 
     public Node[] getTags() {

@@ -161,7 +161,7 @@ public class StringBean extends NodeVisitor implements Serializable
      */
     public StringBean ()
     {
-        super (true, false);
+        super (true, true);
         mPropertySupport = new PropertyChangeSupport (this);
         mParser = new Parser ();
         mStrings = null;
@@ -623,9 +623,9 @@ public class StringBean extends NodeVisitor implements Serializable
         String name;
 
         name = tag.getTagName ();
-        if (name.equalsIgnoreCase ("/PRE"))
+        if (name.equalsIgnoreCase ("PRE"))
             mIsPre = false;
-        else if (name.equalsIgnoreCase ("/SCRIPT"))
+        else if (name.equalsIgnoreCase ("SCRIPT"))
             mIsScript = false;
     }
 

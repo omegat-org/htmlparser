@@ -1075,7 +1075,14 @@ public class Thumbelina
                         mVisited.size () - 1, mVisited.size ());
                     urls = getImageLinks (link);
                     fetch (urls[0]);
-                    append (filter (urls[1]));
+                    //append (filter (urls[1]));
+                    synchronized (mEnqueuers)
+                    {
+                        Enqueuer enqueuer = new Enqueuer (urls[1]);
+                        enqueuer.setPriority (Thread.MIN_PRIORITY);
+                        mEnqueuers.add (enqueuer);
+                        enqueuer.start ();
+                    }
                     setCurrentURL (null);
                 }
                 if (!mActive)
@@ -1091,6 +1098,26 @@ public class Thumbelina
         }
     }
 
+    static ArrayList mEnqueuers = new ArrayList ();
+    
+    class Enqueuer extends Thread
+    {
+        URL[] mList;
+
+        public Enqueuer (URL[] list)
+        {
+            mList = list;
+        }
+
+        public void run ()
+        {
+            append (filter (mList));
+            synchronized (mEnqueuers)
+            {
+                mEnqueuers.remove (this);
+            }
+        }
+    }
     //
     // ItemListener interface
     //
@@ -1426,6 +1453,15 @@ public class Thumbelina
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.3  2003/11/04 01:25:02  derrickoswald
+ * Made visiting order the same order as on the page.
+ * The 'shouldRecurseSelf' boolean of NodeVisitor could probably
+ * be removed since it doesn't make much sense any more.
+ * Fixed StringBean, which was still looking for end tags with names starting with
+ * a slash, i.e. "/SCRIPT", silly beany.
+ * Added some debugging support to the lexer, you can easily base a breakpoint on
+ * line number.
+ *
  * Revision 1.2  2003/10/26 16:44:01  derrickoswald
  * Get thumbelina working again. The tag.getName() method doesn't include the / of end tags.
  *

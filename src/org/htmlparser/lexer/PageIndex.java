@@ -197,7 +197,10 @@ public class PageIndex
      */
     public int elementAt (int index)
     {
-        return (mIndices[index]);
+        if (index >= mCount) // negative index is handled by array.. below
+            throw new IndexOutOfBoundsException ("index " + index + " beyond current limit");
+        else
+            return (mIndices[index]);
     }
 
     /**
@@ -352,6 +355,7 @@ public class PageIndex
      * Returns the last index of the Sortable.
      * @return The index of the last element.
      * If this were an array object this would be (object.length - 1).
+     * For an empty index this will return -1.
      */
     public int last ()
     {

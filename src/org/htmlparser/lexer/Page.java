@@ -803,21 +803,30 @@ public class Page
     public String getLine (Cursor cursor)
     {
         int line;
+        int size;
         int start;
         int end;
 
         line = row (cursor);
-        start = mIndex.elementAt (line);
-        line++;
-        end = mIndex.last ();
-        if (end <= line)
-            end = mIndex.elementAt (end);
-        else
+        size = mIndex.size ();
+        if (line < size)
+        {
+            start = mIndex.elementAt (line);
+            line++;
+            if (line <= size)
+                end = mIndex.elementAt (line);
+            else
+                end = mSource.mOffset;
+        }
+        else // current line
+        {
+            start = mIndex.elementAt (line - 1);
             end = mSource.mOffset;
+        }
+        
+            
         return (getText (start,  end));
     }
-
-// todo refactor into common code method:
 
     /**
      * Get the text line the position of the cursor lies on.
@@ -827,19 +836,34 @@ public class Page
      */
     public String getLine (int position)
     {
-        int line;
+        return (getLine (new Cursor (this, position)));
+    }
+    
+    /**
+     * Display some of this page as a string.
+     * @return The last few characters the source read in.
+     */
+    public String toString ()
+    {
+        StringBuffer buffer;
         int start;
-        int end;
+        String ret;
 
-        line = row (position);
-        start = mIndex.elementAt (line);
-        line++;
-        end = mIndex.last ();
-        if (end <= line)
-            end = mIndex.elementAt (end);
+        if (mSource.mOffset > 0)
+        {
+            buffer = new StringBuffer (43);
+            start = mSource.mOffset - 40;
+            if (0 > start)
+                start = 0;
+            else
+                buffer.append ("...");
+            getText (buffer, start, mSource.mOffset);
+            ret = buffer.toString ();
+        }
         else
-            end = mSource.mOffset;
-        return (getText (start,  end));
+            ret = super.toString ();
+        
+        return (ret);
     }
 }
 
