@@ -5,6 +5,7 @@ Integration Build 1.2 - 20021215
 [3] Fixed bug 652263 - HTMLParser and null feedback
 [4] Changed encoding used from 8859_4 to 8859_1
 [5] HTMLRemarkNode returns string data in toPlainTextString() (This is a rollback)
+[6] Fixed bug 652746 - HTMLFormTag gets links correctly now
 
 Integration Build 1.2 - 20021208
 --------------------------------
