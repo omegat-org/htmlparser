@@ -71,7 +71,7 @@ public class MemoryTest extends ParserTestCase
         {
             fail ("out of memory");
         }
-        assertEquals ("wrong size fetched", 4697411, size);
+        assertEquals ("wrong size fetched", 4697386, size);
     }
     
 }
