@@ -53,22 +53,23 @@ public class ScriptTagTest extends ParserTestCase{
     }
 
     public void testCreation() {
-        StringNode stringNode =
-            new StringNode(new StringBuffer("Script Code"),0,0);
-        NodeList childVector = new NodeList();
-        childVector.add(stringNode);
-        ScriptTag scriptTag =
-        new ScriptTag(
-            new TagData(0,10,"Tag Contents","tagline"),
-            new CompositeTagData(null,null,childVector)
-        );
-
-        assertNotNull("Script Tag object creation",scriptTag);
-        assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
-        assertEquals("Script Tag End",10,scriptTag.elementEnd());
-        assertEquals("Script Tag Contents","Tag Contents",scriptTag.getText());
-        assertEquals("Script Tag Code","Script Code",scriptTag.getScriptCode());
-        assertEquals("Script Tag Line","tagline",scriptTag.getTagLine());
+        fail ("not implemented");
+//        StringNode stringNode =
+//            new StringNode(new StringBuffer("Script Code"),0,0);
+//        NodeList childVector = new NodeList();
+//        childVector.add(stringNode);
+//        ScriptTag scriptTag =
+//        new ScriptTag(
+//            new TagData(0,10,"Tag Contents","tagline"),
+//            new CompositeTagData(null,null,childVector)
+//        );
+//
+//        assertNotNull("Script Tag object creation",scriptTag);
+//        assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
+//        assertEquals("Script Tag End",10,scriptTag.elementEnd());
+//        assertEquals("Script Tag Contents","Tag Contents",scriptTag.getText());
+//        assertEquals("Script Tag Code","Script Code",scriptTag.getScriptCode());
+//        assertEquals("Script Tag Line","tagline",scriptTag.getTagLine());
     }
 
 

@@ -357,7 +357,13 @@ public class TagNode extends AbstractNode
      */
     public String getTagName ()
     {
-        return (getAttribute (TAGNAME).toUpperCase ());
+        String ret;
+
+        ret = getAttribute (TAGNAME).toUpperCase ();
+        if (ret.startsWith ("/")) // end tag
+            ret = ret.substring (1);
+
+        return (ret);
     }
 
     /**
@@ -482,15 +488,9 @@ public class TagNode extends AbstractNode
 
     public void setText (String text)
     {
-        try
-        {
-            mPage = new Page (text);
-            nodeBegin = 0;
-            nodeEnd = text.length ();
-        }
-        catch (ParserException pe)
-        {
-        }
+        mPage = new Page (text);
+        nodeBegin = 0;
+        nodeEnd = text.length ();
     }
 
     public String toPlainTextString ()
@@ -535,18 +535,17 @@ public class TagNode extends AbstractNode
      */
     public String toString ()
     {
-        String tag;
+        String type;
         Cursor start;
         Cursor end;
 
-        tag = getTagName ();
-        if (tag.startsWith ("/"))
-            tag = "End";
+        if (isEndTag ())
+            type = "End";
         else
-            tag = "Tag";
+            type = "Tag";
         start = new Cursor (getPage (), elementBegin ());
         end = new Cursor (getPage (), elementEnd ());
-        return (tag + " (" + start.toString () + "," + end.toString () + "): " + getText ());
+        return (type + " (" + start.toString () + "," + end.toString () + "): " + getText ());
     }
 
     /**
@@ -556,7 +555,7 @@ public class TagNode extends AbstractNode
      */
     public boolean breaksFlow ()
     {
-        return (breakTags.containsKey (getText ().toUpperCase ()));
+        return (breakTags.containsKey (getTagName ().toUpperCase ()));
     }
 
     /**
@@ -578,22 +577,6 @@ public class TagNode extends AbstractNode
     public Hashtable getParsed ()
     {
         return getAttributes ();
-    }
-
-    /**
-     * Sometimes, a scanner may need to request a re-evaluation of the
-     * attributes in a tag. This may happen when there is some correction
-     * activity. An example of its usage can be found in ImageTag.
-     * <br>
-     * <B>Note:<B> This is an intensive task, hence call only when
-     * really necessary
-     * @return Hashtable
-     */
-    public Hashtable redoParseAttributes ()
-    {
-        mAttributes = null;
-        getAttributesEx ();
-        return (getAttributes ());
     }
 
     public void accept (Object visitor)
@@ -620,4 +603,8 @@ public class TagNode extends AbstractNode
         this.emptyXmlTag = emptyXmlTag;
     }
 
+    public boolean isEndTag ()
+    {
+        return ('/' == getAttribute (TAGNAME).toUpperCase ().charAt (0));
+    }
 }

@@ -36,7 +36,6 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 
@@ -185,12 +184,6 @@ public class Generate
             else if (node instanceof Tag)
             {
                 String contents = ((Tag)node).getText ();
-                if (contents.equals ("BR") || contents.equals ("P"))
-                    buffer.append (nl);
-            }
-            else if (node instanceof EndTag)
-            {
-                String contents = ((EndTag)node).getText ();
                 if (contents.equals ("BR") || contents.equals ("P"))
                     buffer.append (nl);
             }

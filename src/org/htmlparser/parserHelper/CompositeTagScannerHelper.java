@@ -28,11 +28,14 @@
 
 package org.htmlparser.parserHelper;
 
+import java.util.Vector;
 import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
+import org.htmlparser.lexer.Cursor;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.tags.CompositeTag;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -42,9 +45,7 @@ import org.htmlparser.util.ParserException;
 public class CompositeTagScannerHelper {
     private CompositeTagScanner scanner;
     private Tag tag;
-    private String url;
-    private NodeReader reader;
-    private String currLine;
+    private Lexer mLexer;
     private Tag endTag;
     private NodeList nodeList;
     private boolean endTagFound;
@@ -55,16 +56,12 @@ public class CompositeTagScannerHelper {
     public CompositeTagScannerHelper(
         CompositeTagScanner scanner,
         Tag tag,
-        String url,
-        NodeReader reader,
-        String currLine,
+        Lexer lexer,
         boolean balance_quotes) {
 
         this.scanner = scanner;
         this.tag = tag;
-        this.url = url;
-        this.reader = reader;
-        this.currLine = currLine;
+        mLexer = lexer;
         this.endTag = null;
         this.nodeList = new NodeList();
         this.endTagFound = false;
@@ -72,7 +69,7 @@ public class CompositeTagScannerHelper {
     }
 
     public Tag scan() throws ParserException {
-        this.startingLineNumber = reader.getLastLineNumber();
+        startingLineNumber = mLexer.getCurrentLineNumber ();
         if (shouldCreateEndTagAndExit()) {
             return createEndTagAndRepositionReader();
         }
@@ -82,9 +79,9 @@ public class CompositeTagScannerHelper {
         doEmptyXmlTagCheckOn(currentNode);
         if (!endTagFound) {
             do {
-                currentNode = reader.readElement(balance_quotes);
-                if (currentNode==null) continue;
-                currLine = reader.getCurrentLine();
+                currentNode = mLexer.nextNode (); // balance_quotes ?
+                if (currentNode==null)
+                    continue;
                 if (currentNode instanceof Tag)
                     doForceCorrectionCheckOn((Tag)currentNode);
 
@@ -94,11 +91,10 @@ public class CompositeTagScannerHelper {
             }
             while (currentNode!=null && !endTagFound);
         }
-        if (endTag==null) {
-            createCorrectionEndTagBefore(reader.getLastReadPosition()+1);
-        }
+        if (endTag==null)
+            createCorrectionEndTagBefore (mLexer.getCursor ().getPosition ());
 
-        this.endingLineNumber = reader.getLastLineNumber();
+        endingLineNumber = mLexer.getCurrentLineNumber ();
         return createTag();
     }
 
@@ -107,56 +103,55 @@ public class CompositeTagScannerHelper {
     }
 
     private Tag createEndTagAndRepositionReader() {
-        createCorrectionEndTagBefore(tag.elementBegin());
-        reader.setPosInLine(tag.elementBegin());
-        reader.setDontReadNextLine(true);
+        createCorrectionEndTagBefore (tag.elementBegin ());
+        mLexer.setPosition (tag.elementBegin ());
         return endTag;
     }
 
-    private void createCorrectionEndTagBefore(int pos) {
-        String endTagName = tag.getTagName();
-        int endTagBegin = pos ;
-        int endTagEnd = endTagBegin + endTagName.length() + 2;
-        endTag = new EndTag(
-            new TagData(
-                endTagBegin,
-                endTagEnd,
+    private void createCorrectionEndTagBefore(int position)
+    {
+        String endTagName = "/" + tag.getTagName();
+        Vector attributes = new Vector ();
+        attributes.addElement (new Attribute (endTagName, (String)null, (char)0));
+        TagData data = new TagData(
                 endTagName,
-                currLine
-            )
-        );
+                position,
+                attributes,
+                mLexer.getPage ().getUrl (),
+                false);
+        endTag = new Tag (data);
     }
 
     private void createCorrectionEndTagBefore(Tag possibleEndTagCauser) {
-        String endTagName = tag.getTagName();
+        String endTagName = "/" + tag.getTagName();
         int endTagBegin = possibleEndTagCauser.elementBegin();
         int endTagEnd = endTagBegin + endTagName.length() + 2;
         possibleEndTagCauser.setTagBegin(endTagEnd+1);
-        reader.addNextParsedNode(possibleEndTagCauser);
-        endTag = new EndTag(
-            new TagData(
-                endTagBegin,
-                endTagEnd,
+        Vector attributes = new Vector ();
+        attributes.addElement (new Attribute (endTagName, (String)null, (char)0));
+        TagData data = new TagData(
                 endTagName,
-                currLine
-            )
-        );
+                endTagBegin,
+                attributes,
+                mLexer.getPage ().getUrl (),
+                false);
+
+        endTag = new Tag(data);
     }
 
-    private Tag createTag() throws ParserException {
-        CompositeTag newTag =
-            (CompositeTag)
-            scanner.createTag(
-            new TagData(
-                tag.elementBegin(),
-                endTag.elementEnd(),
-                startingLineNumber,
-                endingLineNumber,
-                tag.getText(),
-                currLine,
-                url,
-                tag.isEmptyXmlTag()
-            ),
+    private Tag createTag() throws ParserException
+    {
+        TagData data;
+        
+        data =  new TagData(
+            mLexer.getPage (),
+            tag.elementBegin(),
+            endTag.elementEnd(),
+            tag.getAttributesEx (),
+            mLexer.getPage ().getUrl (),
+            tag.isEmptyXmlTag ());
+
+        CompositeTag newTag = (CompositeTag)scanner.createTag (data,
             new CompositeTagData(
                 tag,endTag,nodeList
             )
@@ -168,21 +163,30 @@ public class CompositeTagScannerHelper {
         return newTag;
     }
 
-    private void doChildAndEndTagCheckOn(Node currentNode) {
-        if (currentNode instanceof EndTag) {
-            EndTag possibleEndTag = (EndTag)currentNode;
-            if (isExpectedEndTag(possibleEndTag)) {
-                endTagFound = true;
-                endTag = possibleEndTag;
-                return;
+    private void doChildAndEndTagCheckOn(Node currentNode)
+    {
+        Tag tag;
+
+        if (currentNode instanceof Tag)
+        {
+            tag = (Tag)currentNode;
+            if (tag.isEndTag ())
+            {
+                if (isExpectedEndTag (tag))
+                {
+                    endTagFound = true;
+                    endTag =tag;
+                    return;
+                }
             }
         }
         nodeList.add(currentNode);
         scanner.childNodeEncountered(currentNode);
     }
 
-    private boolean isExpectedEndTag(EndTag possibleEndTag) {
-        return possibleEndTag.getTagName().equals(tag.getTagName());
+    private boolean isExpectedEndTag (TagNode possibleEndTag)
+    {
+        return (possibleEndTag.getTagName().equals (tag.getTagName ()));
     }
 
     private void doEmptyXmlTagCheckOn(Node currentNode) {
@@ -211,7 +215,7 @@ public class CompositeTagScannerHelper {
 
     private boolean isSelfChildTagRecievedIncorrectly(Tag possibleEndTag) {
         return (
-            !(possibleEndTag instanceof EndTag) &&
+            !(possibleEndTag.isEndTag ()) &&
             !scanner.isAllowSelfChildren() &&
             possibleEndTag.getTagName().equals(tag.getTagName())
         );

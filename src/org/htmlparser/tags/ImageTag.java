@@ -28,6 +28,7 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.visitors.NodeVisitor;
 

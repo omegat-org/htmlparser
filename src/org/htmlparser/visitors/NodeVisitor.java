@@ -30,10 +30,9 @@ package org.htmlparser.visitors;
 
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 
 public abstract class NodeVisitor {
@@ -65,10 +64,6 @@ public abstract class NodeVisitor {
     }
 
     public void visitImageTag(ImageTag imageTag) {
-    }
-
-    public void visitEndTag(EndTag endTag) {
-
     }
 
     public void visitTitleTag(TitleTag titleTag) {

@@ -31,6 +31,7 @@ package org.htmlparser.scanners;
 // HTML Parser Imports //
 /////////////////////////
 import org.htmlparser.*;
+import org.htmlparser.lexer.Lexer;
 import org.htmlparser.parserHelper.*;
 import org.htmlparser.tags.*;
 import org.htmlparser.tags.data.*;
@@ -66,11 +67,11 @@ public class ScriptScanner extends CompositeTagScanner {
         return new ScriptTag(tagData,compositeTagData);
     }
 
-    public Tag scan(Tag tag, String url, NodeReader nodeReader, String currLine)
+    public Tag scan (Tag tag, Lexer lexer)
         throws ParserException {
         try {
             ScriptScannerHelper helper =
-                new ScriptScannerHelper(tag,url,nodeReader,currLine, this);
+                new ScriptScannerHelper(tag, lexer, this);
             return helper.scan();
 
         }

@@ -285,74 +285,79 @@ public class LinkTagTest extends ParserTestCase {
     }
 
     public void testTypeHttps() throws ParserException{
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("https://www.someurl.com","","",false,false)
-        );
-        assertTrue("This is a https link",linkTag.isHTTPSLink());
+        fail ("not implemented");
+//        LinkTag linkTag =
+//        new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("https://www.someurl.com","","",false,false)
+//        );
+//        assertTrue("This is a https link",linkTag.isHTTPSLink());
     }
 
     public void testTypeFtp() throws ParserException{
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("ftp://www.someurl.com","","",false,false)
-        );
-        assertTrue("This is an ftp link",linkTag.isFTPLink());
+        fail ("not implemented");
+//        LinkTag linkTag =
+//        new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("ftp://www.someurl.com","","",false,false)
+//        );
+//        assertTrue("This is an ftp link",linkTag.isFTPLink());
     }
 
     public void testTypeJavaScript() throws ParserException {
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("javascript://www.someurl.com","","",false,true)
-        );
-        assertTrue("This is a javascript link",linkTag.isJavascriptLink());
+        fail ("not implemented");
+//        LinkTag linkTag =
+//        new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("javascript://www.someurl.com","","",false,true)
+//        );
+//        assertTrue("This is a javascript link",linkTag.isJavascriptLink());
     }
 
     public void testTypeHttpLink() throws ParserException {
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("http://www.someurl.com","","",false,false)
-        );
-        assertTrue("This is a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-        linkTag =
-        new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("somePage.html","","",false,false)
-        );
-        assertTrue("This relative link is alsp a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-        linkTag =
-        new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("ftp://somePage.html","","",false,false)
-        );
-        assertTrue("This is not a http link : "+linkTag.getLink(),!linkTag.isHTTPLink());
+        fail ("not implemented");
+//        LinkTag linkTag =
+//        new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("http://www.someurl.com","","",false,false)
+//        );
+//        assertTrue("This is a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
+//        linkTag =
+//        new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("somePage.html","","",false,false)
+//        );
+//        assertTrue("This relative link is alsp a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
+//        linkTag =
+//        new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("ftp://somePage.html","","",false,false)
+//        );
+//        assertTrue("This is not a http link : "+linkTag.getLink(),!linkTag.isHTTPLink());
     }
 
     public void testTypeHttpLikeLink() throws ParserException {
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("http://","","",false,false)
-        );
-        assertTrue("This is a http link",linkTag.isHTTPLikeLink());
-        LinkTag linkTag2 =
-        new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("https://www.someurl.com","","",false,false)
-        );
-        assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
+        fail ("not implemented");
+//        LinkTag linkTag =
+//        new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("http://","","",false,false)
+//        );
+//        assertTrue("This is a http link",linkTag.isHTTPLikeLink());
+//        LinkTag linkTag2 =
+//        new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("https://www.someurl.com","","",false,false)
+//        );
+//        assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
     }
 
     /**
@@ -378,13 +383,14 @@ public class LinkTagTest extends ParserTestCase {
      */
     public void testIrcIsNotAHTTPLink () throws ParserException
     {
-        LinkTag link;
-
-        link = new LinkTag(
-            new TagData(0,0,"",""),
-            new CompositeTagData(null,null,null),
-            new LinkData("irc://server/channel","","",false,false)
-        );
-        assertTrue("This is not a http link", !link.isHTTPLikeLink ());
+        fail ("not implemented");
+//        LinkTag link;
+//
+//        link = new LinkTag(
+//            new TagData(0,0,"",""),
+//            new CompositeTagData(null,null,null),
+//            new LinkData("irc://server/channel","","",false,false)
+//        );
+//        assertTrue("This is not a http link", !link.isHTTPLikeLink ());
     }
 }

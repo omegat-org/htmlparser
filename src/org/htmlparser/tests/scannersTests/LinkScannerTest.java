@@ -34,7 +34,6 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.LinkScanner;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
@@ -157,11 +156,12 @@ public class LinkScannerTest extends ParserTestCase
      */
     public void testExtractLinkInvertedCommasBug() throws ParserException
     {
-        String tagContents = "a href=r/anorth/top.html";
-        Tag tag = new Tag(new TagData(0,0,tagContents,""));
-        String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
-        LinkScanner scanner = new LinkScanner("-l");
-        assertEquals("Extracted Link","r/anorth/top.html",scanner.extractLink(tag,url));
+        fail ("not implemented");
+//        String tagContents = "a href=r/anorth/top.html";
+//        Tag tag = new Tag(new TagData(0,0,tagContents,""));
+//        String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
+//        LinkScanner scanner = new LinkScanner("-l");
+//        assertEquals("Extracted Link","r/anorth/top.html",scanner.extractLink(tag,url));
     }
 
     /**
@@ -280,19 +280,21 @@ public class LinkScannerTest extends ParserTestCase
     }
 
     public void testReplaceFaultyTagWithEndTag() throws ParserException {
-        String currentLine = "<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>";
-        Tag tag = new Tag(new TagData(85,87,"a",currentLine));
-        LinkScanner linkScanner = new LinkScanner();
-        String newLine = linkScanner.replaceFaultyTagWithEndTag(tag,currentLine);
-        assertEquals("Expected replacement","<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us</A></p>",newLine);
+        fail ("not implemented");
+//        String currentLine = "<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>";
+//        Tag tag = new Tag(new TagData(85,87,"a",currentLine));
+//        LinkScanner linkScanner = new LinkScanner();
+//        String newLine = linkScanner.replaceFaultyTagWithEndTag(tag,currentLine);
+//        assertEquals("Expected replacement","<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us</A></p>",newLine);
     }
 
     public void testInsertEndTagBeforeTag() throws ParserException {
-        String currentLine = "<a href=s/7509><b>Yahoo! Movies</b></a>";
-        Tag tag = new Tag(new TagData(0,14,"a href=s/7509",currentLine));
-        LinkScanner linkScanner = new LinkScanner();
-        String newLine = linkScanner.insertEndTagBeforeNode(tag,currentLine);
-        assertEquals("Expected insertion","</A><a href=s/7509><b>Yahoo! Movies</b></a>",newLine);
+        fail ("not implemented");
+//        String currentLine = "<a href=s/7509><b>Yahoo! Movies</b></a>";
+//        Tag tag = new Tag(new TagData(0,14,"a href=s/7509",currentLine));
+//        LinkScanner linkScanner = new LinkScanner();
+//        String newLine = linkScanner.insertEndTagBeforeNode(tag,currentLine);
+//        assertEquals("Expected insertion","</A><a href=s/7509><b>Yahoo! Movies</b></a>",newLine);
     }
 
     /**
@@ -312,9 +314,10 @@ public class LinkScannerTest extends ParserTestCase
         assertTrue("Node 1 should be a string node",node[1] instanceof StringNode);
         StringNode stringNode = (StringNode)node[1];
         assertEquals("StringNode Contents","Revision",stringNode.getText());
-        assertTrue("Node 2 should be a string node",node[2] instanceof EndTag);
-        EndTag endTag = (EndTag)node[2];
-        assertEquals("End Tag Contents","a",endTag.getText());
+        assertTrue("Node 2 should be an end tag",node[2] instanceof Tag);
+        tag = (Tag)node[2];
+        assertTrue("Node 2 should be an end tag",tag.isEndTag ());
+        assertEquals("End Tag Contents","a",tag.getText());
     }
 
     /**
@@ -373,12 +376,14 @@ public class LinkScannerTest extends ParserTestCase
         assertTrue("Third contained node should be Tag",containedNodes[2] instanceof Tag);
         Tag tag2 = (Tag)containedNodes[2];
         assertEquals("Tag Contents","b",tag2.getText());
-        assertTrue("Fourth contained node should be HTMLEndTag",containedNodes[3] instanceof EndTag);
-        EndTag endTag1 = (EndTag)containedNodes[3];
-        assertEquals("Fourth Tag contents","b",endTag1.getText());
-        assertTrue("Fifth contained node should be HTMLEndTag",containedNodes[4] instanceof EndTag);
-        EndTag endTag2 = (EndTag)containedNodes[4];
-        assertEquals("Fifth Tag contents","font",endTag2.getText());
+        assertTrue("Fourth contained node should be a Tag",containedNodes[3] instanceof Tag);
+        Tag tag = (Tag)containedNodes[3];
+        assertTrue("Fourth contained node should be an EndTag",tag.isEndTag ());
+        assertEquals("Fourth Tag contents","b",tag.getText());
+        assertTrue("Fifth contained node should be a Tag",containedNodes[4] instanceof Tag);
+        tag = (Tag)containedNodes[4];
+        assertTrue("Fifth contained node should be an EndTag",tag.isEndTag ());
+        assertEquals("Fifth Tag contents","font",tag.getText());
 
     }
 

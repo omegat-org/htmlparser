@@ -32,15 +32,20 @@
 
 package org.htmlparser.lexer;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Vector;
 
-import org.htmlparser.*;
-import org.htmlparser.lexer.nodes.*;
+import org.htmlparser.Node;
+import org.htmlparser.lexer.nodes.AbstractNode;
+import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.lexer.nodes.RemarkNode;
 import org.htmlparser.lexer.nodes.StringNode;
-import org.htmlparser.util.*;
+import org.htmlparser.lexer.nodes.TagNode;
+import org.htmlparser.util.ParserException;
 
 /**
  * This class parses the HTML stream into nodes.
@@ -52,6 +57,8 @@ import org.htmlparser.util.*;
  * the stream is exhausted, and <code>null</code> is returned.
  */
 public class Lexer
+    implements
+        NodeFactory
 {
     /**
      * The page lexemes are retrieved from.
@@ -64,20 +71,26 @@ public class Lexer
     protected Cursor mCursor;
 
     /**
+     * The factory for new nodes.
+     */
+    protected NodeFactory mFactory;
+
+    /**
      * Creates a new instance of a Lexer.
      * @param page The page with HTML text.
      */
     public Lexer (Page page)
     {
-        mPage = page;
-        mCursor = new Cursor (page, 0);
+        setPage (page);
+        setCursor (new Cursor (page, 0));
+        setNodeFactory (this);
     }
 
     /**
      * Creates a new instance of a Lexer.
      * @param text The text to parse.
      */
-    public Lexer (String text) throws ParserException
+    public Lexer (String text)
     {
         this (new Page (text));
     }
@@ -92,12 +105,105 @@ public class Lexer
     }
 
     /**
+     * Reset the lexer to start parsing from the beginning again.
+     * The underlying components are reset such that the next call to
+     * <code>nextNode()</code> will return the first lexeme on the page.
+     */
+    public void reset ()
+    {
+        getPage ().reset ();
+        setCursor (new Cursor (getPage (), 0));
+    }
+
+    /**
      * Get the page this lexer is working on.
      * @return The page that nodes are being read from.
      */
     public Page getPage ()
     {
         return (mPage);
+    }
+
+    /**
+     * Set the page this lexer is working on.
+     * @return The page that nodes will be read from.
+     */
+    public void setPage (Page page)
+    {
+        if (null == page)
+            throw new IllegalArgumentException ("page cannot be null");
+        // todo: sanity checks
+        mPage = page;
+    }
+
+    /**
+     * Get the current scanning position.
+     * @return The lexer's cursor position.
+     */
+    public Cursor getCursor ()
+    {
+        return (mCursor);
+    }
+
+    /**
+     * Set the current scanning position.
+     * @param cursor The lexer's new cursor position.
+     */
+    public void setCursor (Cursor cursor)
+    {
+        if (null == cursor)
+            throw new IllegalArgumentException ("cursor cannot be null");
+        // todo: sanity checks
+        mCursor = cursor;
+    }
+
+    /**
+     * Get the current node factory.
+     * @return The lexer's node factory.
+     */
+    public NodeFactory getNodeFactory ()
+    {
+        return (mFactory);
+    }
+
+    /**
+     * Get the current node factory.
+     * @return The lexer's cursor position.
+     */
+    public void setNodeFactory (NodeFactory factory)
+    {
+        if (null == factory)
+            throw new IllegalArgumentException ("node factory cannot be null");
+        mFactory = factory;
+    }
+
+    public int getPosition ()
+    {
+        return (getCursor ().getPosition ());
+    }
+
+    public void setPosition (int position)
+    {
+        // todo: sanity checks
+        getCursor ().setPosition (position);
+    }
+
+    /**
+     * Get the current line number.
+     * @return The line number the lexer's working on.
+     */
+    public int getCurrentLineNumber ()
+    {
+        return (getPage ().row (getCursor ()));
+    }
+
+    /**
+     * Get the current line.
+     * @return The string the lexer's working on.
+     */
+    public String getCurrentLine ()
+    {
+        return (getPage ().getLine (getCursor ()));
     }
 
     /**
@@ -124,22 +230,34 @@ public class Lexer
             case '<':
                 ch = mPage.getCharacter (probe);
                 if (0 == ch)
-                    ret = parseString ();
+                    ret = makeString (probe);
                 else if ('/' == ch || '%' == ch || Character.isLetter (ch))
-                    ret = parseTag ();
+                {
+                    probe.retreat ();
+                    ret = parseTag (probe);
+                }
                 else if ('!' == ch)
                 {
                     ch = mPage.getCharacter (probe);
-                    if ('-' == ch)
-                        ret = parseRemark ();
+                    if (0 == ch)
+                        ret = makeString (probe);
                     else
-                        ret = parseTag ();
+                    {
+                        probe.retreat (); // remark and tag need this character
+                        if ('-' == ch)
+                            ret = parseRemark (probe);
+                        else
+                        {
+                            probe.retreat (); // tag needs the previous one too
+                            ret = parseTag (probe);
+                        }
+                    }
                 }
                 else
-                    ret = parseString ();
+                    ret = parseString (probe);
                 break;
             default:
-                ret = parseString ();
+                ret = parseString (probe);
                 break;
         }
 
@@ -152,19 +270,17 @@ public class Lexer
      * letter is encountered, or the input stream is exhausted, in which
      * case <code>null</code> is returned.
      */
-    protected Node parseString ()
+    protected Node parseString (Cursor cursor)
         throws
             ParserException
     {
-        Cursor cursor;
         boolean done;
         char ch;
         int length;
         int begin;
         int end;
-        StringNode ret;
+        Node ret;
 
-        cursor = mCursor.dup ();
         done = false;
         while (!done)
         {
@@ -190,17 +306,33 @@ public class Lexer
                 }
             }
         }
+
+        return (makeString (cursor));
+    }
+
+    /**
+     * Create a string node based on the current cursor and the one provided.
+     */
+    protected Node makeString (Cursor cursor)
+        throws
+            ParserException
+    {
+        int length;
+        int begin;
+        int end;
+        Node ret;
+
         begin = mCursor.getPosition ();
         end = cursor.getPosition ();
         length = end - begin;
         if (0 != length)
         {   // got some characters
-            ret = new StringNode (mPage, begin, end);
             mCursor = cursor;
+            ret = getNodeFactory ().createStringNode (this, begin, end);
         }
         else
             ret = null;
-
+        
         return (ret);
     }
 
@@ -299,24 +431,16 @@ public class Lexer
      * one slot for each whitespace or attribute/value pair.
      * The first slot is for attribute name (kind of like a standalone attribute).
      */
-    protected Node parseTag ()
+    protected Node parseTag (Cursor cursor)
         throws
             ParserException
     {
-        Cursor cursor;
         boolean done;
         char ch;
         int state;
         int[] bookmarks;
         Vector attributes;
-        int length;
-        TagNode ret;
 
-        cursor = mCursor.dup ();
-        // sanity check
-        ch = mPage.getCharacter (cursor);
-        if ('<' != ch)
-            return (parseString ());
         done = false;
         attributes = new Vector ();
         state = 0;
@@ -417,14 +541,32 @@ public class Lexer
                     throw new IllegalStateException ("how the fuck did we get in state " + state);
             }
         }
-        length = cursor.getPosition () - mCursor.getPosition ();
+        
+        return (makeTag (cursor, attributes));
+    }
+
+    /**
+     * Create a tag node based on the current cursor and the one provided.
+     */
+    protected Node makeTag (Cursor cursor, Vector attributes)
+        throws
+            ParserException
+    {
+        int length;
+        int begin;
+        int end;
+        Node ret;
+
+        begin = mCursor.getPosition ();
+        end = cursor.getPosition ();
+        length = end - begin;
         if (0 != length)
         {   // return tag based on second character, '/', '%', Letter (ch), '!'
             if (2 > length)
                 // this is an error
-                return (parseString ());
-            ret = new TagNode (mPage, mCursor.getPosition (), cursor.getPosition (), attributes);
+                return (makeString (cursor));
             mCursor = cursor;
+            ret = getNodeFactory ().createTagNode (this, begin, end, attributes);
         }
         else
             ret = null;
@@ -470,25 +612,14 @@ public class Lexer
      * in the remark text.
      * We allow terminators like --!&gt; even though this isn't part of the spec.
      */
-    protected Node parseRemark ()
+    protected Node parseRemark (Cursor cursor)
         throws
             ParserException
     {
-        Cursor cursor;
         boolean done;
         char ch;
         int state;
-        int length;
-        RemarkNode ret;
 
-        cursor = mCursor.dup ();
-        // sanity check
-        ch = mPage.getCharacter (cursor);
-        if ('<' != ch)
-            return (parseString ());
-        ch = mPage.getCharacter (cursor);
-        if ('!' != ch)
-            return (parseString ());
         done = false;
         state = 0;
         while (!done)
@@ -500,17 +631,19 @@ public class Lexer
                     if ('-' == ch)
                         state = 1;
                     else
-                        return (parseString ());
+                        return (parseString (cursor));
                     break;
                 case 1: // prior to the second open delimiter
                     if ('-' == ch)
                         state = 2;
                     else
-                        return (parseString ());
+                        return (parseString (cursor));
                     break;
                 case 2: // prior to the first closing delimiter
                     if ('-' == ch)
                         state = 3;
+                    else if (0 == ch)
+                        return (parseString (cursor)); // no terminator
                     break;
                 case 3: // prior to the second closing delimiter
                     if ('-' == ch)
@@ -532,25 +665,85 @@ public class Lexer
                     throw new IllegalStateException ("how the fuck did we get in state " + state);
             }
         }
-        length = cursor.getPosition () - mCursor.getPosition ();
+
+        return (makeRemark (cursor));
+    }
+
+    /**
+     * Create a remark node based on the current cursor and the one provided.
+     */
+    protected Node makeRemark (Cursor cursor)
+        throws
+            ParserException
+    {
+        int length;
+        int begin;
+        int end;
+        Node ret;
+
+        begin = mCursor.getPosition ();
+        end = cursor.getPosition ();
+        length = end - begin;
         if (0 != length)
         {   // return tag based on second character, '/', '%', Letter (ch), '!'
             if (2 > length)
                 // this is an error
-                return (parseString ());
-            ret = new RemarkNode (mPage, mCursor.getPosition (), cursor.getPosition ());
+                return (makeString (cursor));
             mCursor = cursor;
+            ret = getNodeFactory ().createRemarkNode (this, begin, end);
         }
         else
             ret = null;
-
+        
         return (ret);
+    }
+
+    //
+    // NodeFactory interface
+    //
+
+    /**
+     * Create a new string node.
+     * @param lexer The lexer parsing this string.
+     * @param start The beginning position of the string.
+     * @param end The ending positiong of the string.
+     */
+    public Node createStringNode (Lexer lexer, int start, int end)
+    {
+        return (new StringNode (lexer.getPage (), start, end));
+    }
+
+    /**
+     * Create a new remark node.
+     * @param lexer The lexer parsing this remark.
+     * @param start The beginning position of the remark.
+     * @param end The ending positiong of the remark.
+     */
+    public Node createRemarkNode (Lexer lexer, int start, int end)
+    {
+        return (new RemarkNode (lexer.getPage (), start, end));
+    }
+
+    /**
+     * Create a new tag node.
+     * @param lexer The lexer parsing this tag.
+     * @param start The beginning position of the tag.
+     * @param end The ending positiong of the tag.
+     * @param attributes The attributes contained in this tag.
+     */
+    public Node createTagNode (Lexer lexer, int start, int end, Vector attributes)
+    {
+        return (new TagNode (lexer.getPage (), start, end, attributes));
     }
 
     /**
      * Mainline for command line operation
      */
-    public static void main (String[] args) throws IOException, ParserException
+    public static void main (String[] args)
+        throws
+            MalformedURLException,
+            IOException,
+            ParserException
     {
         URL url;
         Lexer lexer;

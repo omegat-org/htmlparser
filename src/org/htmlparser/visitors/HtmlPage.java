@@ -33,7 +33,6 @@ import org.htmlparser.Parser;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.TableScanner;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
@@ -62,15 +61,25 @@ public class HtmlPage extends NodeVisitor {
         this.title = title;
     }
 
-    public void visitTag(Tag tag) {
-        addTagToBodyIfApplicable(tag);
-
-        if (isTable(tag)) {
-            tables.add(tag);
-        }
-        else {
+    public void visitTag(Tag tag)
+    {
+        if (tag.isEndTag ())
+        {
             if (isBodyTag(tag))
-                bodyTagBegin = true;
+                bodyTagBegin = false;
+            addTagToBodyIfApplicable(tag);
+        }
+        else
+        {
+            addTagToBodyIfApplicable(tag);
+
+            if (isTable(tag)) {
+                tables.add(tag);
+            }
+            else {
+                if (isBodyTag(tag))
+                    bodyTagBegin = true;
+            }
         }
     }
 
@@ -81,12 +90,6 @@ public class HtmlPage extends NodeVisitor {
     private void addTagToBodyIfApplicable(Node node) {
         if (bodyTagBegin)
             nodesInBody.add(node);
-    }
-
-    public void visitEndTag(EndTag endTag) {
-        if (isBodyTag(endTag))
-            bodyTagBegin = false;
-        addTagToBodyIfApplicable(endTag);
     }
 
     public void visitRemarkNode(RemarkNode remarkNode) {

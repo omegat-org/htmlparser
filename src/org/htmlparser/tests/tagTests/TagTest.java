@@ -34,7 +34,6 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.tags.Div;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
@@ -136,7 +135,7 @@ public class TagTest extends ParserTestCase
      */
     public void testParseParameterA() throws ParserException {
         Tag tag;
-        EndTag etag;
+        Tag etag;
         StringNode snode;
         Node node=null;
         String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
@@ -171,7 +170,7 @@ public class TagTest extends ParserTestCase
 
                 if (en.hasMoreNodes()) {
                     node = en.nextNode();
-                    etag = (EndTag)node;
+                    etag = (Tag)node;
                     assertEquals("endtag of link",etag.getText(),"A");
                 }
             }
@@ -189,7 +188,7 @@ public class TagTest extends ParserTestCase
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                etag = (EndTag)node;
+                etag = (Tag)node;
                 assertEquals("paragrapg endtag",etag.getText(),"p");
             }
 
@@ -206,7 +205,7 @@ public class TagTest extends ParserTestCase
      */
     public void testParseParameterG() throws ParserException{
         Tag tag;
-        EndTag etag;
+        Tag etag;
         StringNode snode;
         Node node=null;
         String lin1 = "<G href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaila\">Kaarle's homepage</G><p>Paragraph</p>";
@@ -239,7 +238,7 @@ public class TagTest extends ParserTestCase
 
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                etag = (EndTag)node;
+                etag = (Tag)node;
                 assertEquals("Endtag is G",etag.getText(),"G");
             }
             // testing rest
@@ -256,7 +255,7 @@ public class TagTest extends ParserTestCase
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                etag = (EndTag)node;
+                etag = (Tag)node;
                 assertEquals("Still patragraph endtag",etag.getText(),"p");
             }
 
@@ -274,7 +273,7 @@ public class TagTest extends ParserTestCase
     */
     public void testParseParameterSpace() throws ParserException{
         Tag tag;
-        EndTag etag;
+        Tag etag;
         StringNode snode;
         Node node=null;
         String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
@@ -305,7 +304,7 @@ public class TagTest extends ParserTestCase
 
                 if (en.hasMoreNodes()) {
                     node = en.nextNode();
-                    etag = (EndTag)node;
+                    etag = (Tag)node;
                     assertEquals("Still patragraph endtag",etag.getText(),"A");
                 }
             }
@@ -582,27 +581,29 @@ public class TagTest extends ParserTestCase
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
     }
     public void testIgnoreState() throws ParserException {
-        String testHTML = "<A \n"+
-        "HREF=\"/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
-        createParser(testHTML);
-        Node node = Tag.find(parser.getReader(),testHTML,0);
-        assertTrue("Node should be a tag",node instanceof Tag);
-        Tag tag = (Tag)node;
-        String href = tag.getAttribute("HREF");
-        assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
+        fail ("not implemented");
+//        String testHTML = "<A \n"+
+//        "HREF=\"/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
+//        createParser(testHTML);
+//        Node node = Tag.find(parser.getReader(),testHTML,0);
+//        assertTrue("Node should be a tag",node instanceof Tag);
+//        Tag tag = (Tag)node;
+//        String href = tag.getAttribute("HREF");
+//        assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
 
     }
     public void testExtractWord() {
-        String line = "Abc DEF GHHI";
-        assertEquals("Word expected","ABC",Tag.extractWord(line));
-        String line2= "%\n ";
-        assertEquals("Word expected for line 2","%",Tag.extractWord(line2));
-        String line3 = "%\n%>";
-        assertEquals("Word expected for line 3","%",Tag.extractWord(line3));
-        String line4 = "%=abc%>";
-        assertEquals("Word expected for line 4","%",Tag.extractWord(line4));
-        String line5 = "OPTION";
-        assertEquals("Word expected for line 5","OPTION",Tag.extractWord(line5));
+        fail ("not implemented");
+//        String line = "Abc DEF GHHI";
+//        assertEquals("Word expected","ABC",Tag.extractWord(line));
+//        String line2= "%\n ";
+//        assertEquals("Word expected for line 2","%",Tag.extractWord(line2));
+//        String line3 = "%\n%>";
+//        assertEquals("Word expected for line 3","%",Tag.extractWord(line3));
+//        String line4 = "%=abc%>";
+//        assertEquals("Word expected for line 4","%",Tag.extractWord(line4));
+//        String line5 = "OPTION";
+//        assertEquals("Word expected for line 5","OPTION",Tag.extractWord(line5));
     }
 
     /**

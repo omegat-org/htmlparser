@@ -32,7 +32,6 @@ package org.htmlparser.visitors;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.LinkScanner;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
@@ -65,16 +64,16 @@ public class UrlModifyingVisitor extends NodeVisitor {
         modifiedResult.append(imageTag.toHtml());
     }
 
-    public void visitEndTag(EndTag endTag) {
-        modifiedResult.append(endTag.toHtml());
-    }
-
     public void visitStringNode(StringNode stringNode) {
         modifiedResult.append(stringNode.toHtml());
     }
 
-    public void visitTag(Tag tag) {
-        modifiedResult.append(tag.toHtml());
+    public void visitTag(Tag tag)
+    {
+        if (tag.isEndTag ())
+            modifiedResult.append(tag.toHtml());
+        else
+            modifiedResult.append(tag.toHtml());
     }
 
     public String getModifiedResult() {

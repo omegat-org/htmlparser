@@ -30,6 +30,7 @@ package org.htmlparser.tags;
 
 import org.htmlparser.*;
 import org.htmlparser.AbstractNode;
+import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
@@ -37,12 +38,24 @@ import org.htmlparser.util.SimpleNodeIterator;
 import org.htmlparser.visitors.NodeVisitor;
 
 public abstract class CompositeTag extends Tag {
-    protected Tag startTag, endTag;
+    protected TagNode startTag;
+    protected TagNode endTag;
 
     public CompositeTag(TagData tagData, CompositeTagData compositeTagData) {
         super(tagData);
-        this.startTag  = compositeTagData.getStartTag();
-        this.endTag    = compositeTagData.getEndTag();
+
+        // from Tag(TagData)
+//        super(tagData.getTagBegin(),tagData.getTagEnd());
+//        this.startLine = tagData.getStartLine();
+//        this.tagContents = new StringBuffer();
+//        this.tagContents.append(tagData.getTagContents());
+//        this.tagLine = tagData.getTagLine();
+//        this.tagLines = new String[] {tagData.getTagLine()};
+//        this.emptyXmlTag = tagData.isEmptyXmlTag();
+
+        
+        startTag  = compositeTagData.getStartTag();
+        endTag    = compositeTagData.getEndTag();
         setChildren (compositeTagData.getChildren());
     }
 
@@ -148,10 +161,11 @@ public abstract class CompositeTag extends Tag {
         boolean found = false;
         for (SimpleNodeIterator e = children();e.hasMoreNodes() && !found;) {
             node = (Node)e.nextNode();
-            if (node instanceof Tag) {
+            if (node instanceof TagNode) {
                 tag = (Tag)node;
                 String nameAttribute = tag.getAttribute("NAME");
-                if (nameAttribute!=null && nameAttribute.equals(name)) found=true;
+                if (nameAttribute!=null && nameAttribute.equals(name))
+                    found=true;
             }
         }
         if (found)
@@ -270,19 +284,27 @@ public abstract class CompositeTag extends Tag {
         return (getChildren ().elementAt (index));
     }
 
-    public void collectInto(NodeList collectionList, String filter) {
-        super.collectInto(collectionList, filter);
+    public void collectInto (NodeList collectionList, String filter)
+    {
         Node node;
-        for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
-            node = e.nextNode();
-            node.collectInto(collectionList,filter);
+
+        super.collectInto (collectionList, filter);
+        for (SimpleNodeIterator e = children(); e.hasMoreNodes ();)
+        {
+            node = e.nextNode ();
+            node.collectInto (collectionList, filter);
         }
     }
 
-    public void collectInto(NodeList collectionList, Class nodeType) {
-        super.collectInto(collectionList,nodeType);
-        for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
-            e.nextNode().collectInto(collectionList,nodeType);
+    public void collectInto (NodeList collectionList, Class nodeType)
+    {
+        Node node;
+
+        super.collectInto (collectionList,nodeType);
+        for (SimpleNodeIterator e = children(); e.hasMoreNodes (); )
+        {
+            node = e.nextNode ();
+            node.collectInto (collectionList, nodeType);
         }
     }
 
@@ -293,6 +315,16 @@ public abstract class CompositeTag extends Tag {
             buff.append(node.toHtml());
         }
         return buff.toString();
+    }
+
+    /**
+     * Handle a visitor.
+     * <em>NOTE: This currently defers to accept(NodeVisitor), but eventually
+     * subclasses of Node should be overriding accept(Object) directly.</em>
+     * @param visitor The <code>NodeVisitor</code> object.
+     */
+    public void accept(Object visitor) {
+        accept ((NodeVisitor)visitor);
     }
 
     public void accept(NodeVisitor visitor) {
@@ -313,11 +345,11 @@ public abstract class CompositeTag extends Tag {
         return (getChildren ().size ());
     }
 
-    public Tag getStartTag() {
+    public TagNode getStartTag() {
         return startTag;
     }
 
-    public Tag getEndTag() {
+    public TagNode getEndTag() {
         return endTag;
     }
 

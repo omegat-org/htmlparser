@@ -66,15 +66,9 @@ public class StringNode extends AbstractNode
      */
     public void setText (String text)
     {
-        try
-        {
-            mPage = new Page (text);
-            nodeBegin = 0;
-            nodeEnd = text.length ();
-        }
-        catch (ParserException pe)
-        {
-        }
+        mPage = new Page (text);
+        nodeBegin = 0;
+        nodeEnd = text.length ();
     }
 
     public String toPlainTextString ()

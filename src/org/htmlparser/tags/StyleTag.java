@@ -61,7 +61,7 @@ public class StyleTag extends CompositeTag {
         sb.append("\n");
         sb.append("Code\n");
         sb.append("****\n");
-        sb.append(tagContents+"\n");
+        sb.append(getTagContents ()+"\n");
         return sb.toString();
     }
 }

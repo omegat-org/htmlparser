@@ -50,9 +50,9 @@ public class DoctypeTag extends Tag
      */
     public String toString()
     {
-        return "Doctype Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        return "Doctype Tag : "+getTagContents()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
     }
     public String toHtml() {
-        return "<!DOCTYPE "+tagContents+">";
+        return "<!DOCTYPE "+getTagContents()+">";
     }
 }

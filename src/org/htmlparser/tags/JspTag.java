@@ -46,7 +46,7 @@ public class JspTag extends Tag
     }
 
     public String toHtml() {
-        return "<%"+tagContents+"%>";
+        return "<%"+getTagContents()+"%>";
     }
 
     /**
@@ -54,6 +54,6 @@ public class JspTag extends Tag
      */
     public String toString()
     {
-        return "JSP/ASP Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        return "JSP/ASP Tag : "+getTagContents()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
     }
 }

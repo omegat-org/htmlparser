@@ -58,7 +58,7 @@ public class DoctypeScanner extends TagScanner {
         throws ParserException {
         String tagContents = tag.getText();
         tagContents=tagContents.substring(9,tagContents.length());
-        tagData.setTagContents(tagContents);
+        tagData.setTagContents (tagContents, tag.getAttributesEx (), "" /*url*/, false /*xml_end_tag*/);
         return new DoctypeTag(tagData);
     }
 

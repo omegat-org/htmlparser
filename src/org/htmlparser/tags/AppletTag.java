@@ -189,8 +189,9 @@ public class AppletTag extends CompositeTag
             paramName = (String)e.nextElement ();
             paramValue = (String)newAppletParams.get (paramName);
             s = "PARAM VALUE=\"" + paramValue + "\" NAME=\"" + paramName + "\"";
-            tagData = new TagData (0, 0, 0, 0, s, s, "", false); // what, no URL?
-            kids.add (new Tag (tagData));
+            throw new IllegalStateException ("not implemented");
+//            tagData = new TagData (0, 0, 0, 0, s, s, "", false); // what, no URL?
+//            kids.add (new Tag (tagData));
         }
 
         //set kids as new children

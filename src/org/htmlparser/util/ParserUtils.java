@@ -33,7 +33,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.Tag;
 
 public class ParserUtils {
@@ -56,17 +56,17 @@ public class ParserUtils {
         return lString.toString();
     }
 
-    public static Map adjustScanners(NodeReader reader) {
+    public static Map adjustScanners(Parser parser) {
         Map tempScanners = new Hashtable();
-        tempScanners = reader.getParser().getScanners();
+        tempScanners = parser.getScanners();
         // Remove all existing scanners
-        reader.getParser().flushScanners();
+        parser.flushScanners();
         return tempScanners;
     }
 
-    public static void restoreScanners(NodeReader reader, Map tempScanners) {
+    public static void restoreScanners(Parser parser, Map tempScanners) {
         // Flush the scanners
-        reader.getParser().setScanners(tempScanners);
+        parser.setScanners(tempScanners);
     }
 
     public static String removeChars(String s, char occur) {

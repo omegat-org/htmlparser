@@ -48,7 +48,6 @@ import org.htmlparser.util.ParserUtils;
 public class ImageScanner extends TagScanner
 {
     public static final String IMAGE_SCANNER_ID = "IMG";
-    private Hashtable table;
     private LinkProcessor processor;
     /**
      * Overriding the default constructor
@@ -72,34 +71,37 @@ public class ImageScanner extends TagScanner
    * @param tag The tag with the 'SRC' attribute.
    * @param url URL of web page being parsed.
    */
-    public String extractImageLocn(Tag tag,String url) throws ParserException
+    public String extractImageLocn (Tag tag,String url) throws ParserException
     {
-        String relativeLink=null;
-        try {
-            table = tag.getAttributes();
-            relativeLink =  (String)table.get("SRC");
-            if (relativeLink!=null) {
-                relativeLink = ParserUtils.removeChars(relativeLink,'\n');
-                relativeLink = ParserUtils.removeChars(relativeLink,'\r');
-            }
-            if (relativeLink==null || relativeLink.length()==0) {
-                // try fix
-                String tagText = tag.getText().toUpperCase();
-                int indexSrc = tagText.indexOf("SRC");
-                if (indexSrc != -1) {
-                    // There is a missing equals.
-                    tag.setText(tag.getText().substring(0,indexSrc+3)+"="+tag.getText().substring(indexSrc+3,tag.getText().length()));
-                    table = tag.redoParseAttributes();
-                    relativeLink = (String) table.get("SRC");
+        String ret;
+        Hashtable table;
 
-                }
+        ret = "";
+        try
+        {
+            table = tag.getAttributes ();
+            ret =  (String)table.get ("SRC");
+            if (null != ret)
+            {
+                ret = ParserUtils.removeChars (ret, '\n');
+                ret = ParserUtils.removeChars (ret, '\r');
+                ret = processor.extract (ret, url);
             }
-            if (relativeLink==null) return ""; else
-            return processor.extract(relativeLink,url);
+            else
+                ret = "";
         }
-        catch (Exception e) {
-            throw new ParserException("HTMLImageScanner.extractImageLocn() : Error in extracting image location, relativeLink = "+relativeLink+", url = "+url,e);
+        catch (Exception e)
+        {
+            throw new ParserException (
+                "ImageScanner.extractImageLocn() : "
+                    + "Error in extracting image location, relativeLink = "
+                    + ret
+                    + ", url = "
+                    + url,
+                e);
         }
+        
+        return (ret);
     }
 
     public String [] getID() {

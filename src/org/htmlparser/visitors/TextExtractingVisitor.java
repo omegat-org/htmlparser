@@ -29,7 +29,6 @@
 package org.htmlparser.visitors;
 
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.Translate;
@@ -75,14 +74,18 @@ public class TextExtractingVisitor extends NodeVisitor {
         return text.replace('\u00a0',' ');
     }
 
-    public void visitEndTag(EndTag endTag) {
-        if (isPreTag(endTag))
-            preTagBeingProcessed = false;
-    }
-
-    public void visitTag(Tag tag) {
-        if (isPreTag(tag))
-            preTagBeingProcessed = true;
+    public void visitTag(Tag tag)
+    {
+        if (tag.isEndTag ())
+        {
+            if (isPreTag(tag))
+                preTagBeingProcessed = false;
+        }
+        else
+        {
+            if (isPreTag(tag))
+                preTagBeingProcessed = true;
+        }
     }
 
     private boolean isPreTag(Tag tag) {

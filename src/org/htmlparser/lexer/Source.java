@@ -63,6 +63,11 @@ public class Source extends Reader
     protected InputStream mStream;
 
     /**
+     * The character set in use.
+     */
+    protected String mEncoding;
+
+    /**
      * The converter from bytes to characters.
      */
     protected InputStreamReader mReader;
@@ -122,13 +127,37 @@ public class Source extends Reader
             stream = new Stream (null);
         mStream = stream;
         if (null == charset)
+        {
             mReader = new InputStreamReader (stream);
+            mEncoding = mReader.getEncoding ();
+        }
         else
+        {
+            mEncoding = charset;
             mReader = new InputStreamReader (stream, charset);
+        }
         mBuffer = new char[buffer_size];
         mLevel = 0;
         mOffset = 0;
         mMark = -1;
+    }
+
+    /**
+     * Get the input stream being used.
+     * @return The current input stream.
+     */
+    public InputStream getStream ()
+    {
+        return (mStream);
+    }
+
+    /**
+     * Get the encoding being used to convert characters.
+     * @return The current encoding.
+     */
+    public String getEncoding ()
+    {
+        return (mEncoding);
     }
 
     /**
@@ -278,21 +307,14 @@ public class Source extends Reader
     }
 
     /**
-     * Reset the stream.  If the stream has been marked, then attempt to
-     * reposition it at the mark.  If the stream has not been marked, then
-     * attempt to reset it in some way appropriate to the particular stream,
-     * for example by repositioning it to its starting point.  Not all
-     * character-input streams support the reset() operation, and some support
-     * reset() without supporting mark().
-     * @exception  IOException  If the stream has not been marked,
-     * or if the mark has been invalidated,
-     * or if the stream does not support reset(),
-     * or if some other I/O error occurs
+     * Reset the source.
+     * Repositions the read point to begin at zero.
+     * @exception IllegalStateException If the source has been closed.
      */
-    public void reset () throws IOException
+    public void reset ()
     {
         if (null == mStream) // mStream goes null on close()
-            throw new IOException ("reader is closed");
+            throw new IllegalStateException ("source is closed");
         if (-1 != mMark)
             mOffset = mMark;
         else

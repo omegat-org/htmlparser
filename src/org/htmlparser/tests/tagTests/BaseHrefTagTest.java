@@ -40,8 +40,9 @@ public class BaseHrefTagTest extends ParserTestCase {
     }
 
     public void testConstruction() {
-        BaseHrefTag baseRefTag = new BaseHrefTag(new TagData(0,0,"",""),"http://www.abc.com");
-        assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
+        fail ("not implemented");
+//        BaseHrefTag baseRefTag = new BaseHrefTag(new TagData(0,0,"",""),"http://www.abc.com");
+//        assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
     }
 
     public void testNotHREFBaseTag() throws ParserException {

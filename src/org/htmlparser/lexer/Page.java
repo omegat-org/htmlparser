@@ -33,6 +33,7 @@
 package org.htmlparser.lexer;
 
 import java.io.*;
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.net.*;
 
@@ -54,6 +55,13 @@ public class Page
     public static final String DEFAULT_CHARSET = "ISO-8859-1";
 
     /**
+     * The URL this page is coming from.
+     * Cached value of <code>getConnection().toExternalForm()</code> or
+     * <code>setUrl()</code>.
+     */
+    protected String mUrl;
+
+    /**
      * The source of characters.
      */
     protected Source mSource;
@@ -62,11 +70,16 @@ public class Page
      * Character positions of the first character in each line.
      */
     protected PageIndex mIndex;
+    
+    /**
+     * The connection this page is coming from or <code>null</code>.
+     */
+    protected URLConnection mConnection;
 
     /**
      * Messages for page not there (404).
      */
-    static private String[] mFourOhFour =
+    static private final String[] mFourOhFour =
     {
         "The web site you seek cannot be located, but countless more exist",
         "You step in the stream, but the water has moved on. This page is not here.",
@@ -95,28 +108,7 @@ public class Page
     {
         if (null == connection)
             throw new IllegalArgumentException ("connection cannot be null");
-        try
-        {
-            connection.connect ();
-        }
-        catch (UnknownHostException uhe)
-        {
-            int message = (int)(Math.random () * mFourOhFour.length);
-            throw new ParserException (mFourOhFour[message], uhe);
-        }
-        catch (IOException ioe)
-        {
-            throw new ParserException (ioe.getMessage (), ioe);
-        }
-        try
-        {
-            mSource = new Source (new Stream (connection.getInputStream ()), getCharacterSet (connection));
-        }
-        catch (IOException ioe)
-        {
-            throw new ParserException (ioe.getMessage (), ioe);
-        }
-        mIndex = new PageIndex (this);
+        setConnection (connection);
     }
 
     /**
@@ -136,9 +128,11 @@ public class Page
             charset = DEFAULT_CHARSET;
         mSource = new Source (stream, charset);
         mIndex = new PageIndex (this);
+        mConnection = null;
+        mUrl = null;
     }
 
-    public Page (String text) throws ParserException
+    public Page (String text)
     {
         InputStream stream;
 
@@ -152,8 +146,120 @@ public class Page
         }
         catch (UnsupportedEncodingException uee)
         {
-            throw new ParserException ("problem making a page", uee);
+            // this is unlikely, so we cover it up with a runtime exception
+            throw new IllegalStateException (uee.getMessage ());
         }
+        mConnection = null;
+        mUrl = null;
+    }
+
+    /**
+     * Reset the page by resetting the source of characters.
+     */
+    public void reset ()
+    {
+        getSource ().reset ();
+        mIndex = new PageIndex (this); // todo: is this really necessary?
+    }
+
+    /**
+     * Get the connection, if any.
+     * @return The connection object for this page, or null if this page
+     * is built from a stream or a string.
+     */
+    public URLConnection getConnection ()
+    {
+        return (mConnection);
+    }
+
+    /**
+     * Set the URLConnection to be used by this page.
+     * @param connection The connection to use.
+     * It will be connected by this method.
+     * @exception ParserException If the <code>connect()</code> method fails,
+     * or an I/O error occurs opening the input stream or the character set
+     * designated in the HTTP header is unsupported.
+     */
+    public void setConnection (URLConnection connection)
+        throws
+            ParserException
+    {
+        Stream stream;
+        String charset;
+        
+
+        mUrl = null;
+        mConnection = connection;
+        try
+        {
+            getConnection ().connect ();
+        }
+        catch (UnknownHostException uhe)
+        {
+            int message = (int)(Math.random () * mFourOhFour.length);
+            throw new ParserException (mFourOhFour[message], uhe);
+        }
+        catch (IOException ioe)
+        {
+            throw new ParserException (ioe.getMessage (), ioe);
+        }
+        charset = getCharacterSet ();
+        try
+        {
+            stream = new Stream (getConnection ().getInputStream ());
+            try
+            {
+                mSource = new Source (stream, charset);
+            }
+            catch (UnsupportedEncodingException uee)
+            {
+                StringBuffer msg;
+                String message;
+
+                msg = new StringBuffer (1024);
+                msg.append (getConnection ().getURL ().toExternalForm ());
+                msg.append (" has an encoding (");
+                msg.append (charset);
+                msg.append (") which is not supported, using ");
+                msg.append (DEFAULT_CHARSET);
+                System.out.println (msg.toString ());
+                charset = DEFAULT_CHARSET;
+                mSource = new Source (stream, charset);
+            }
+        }
+        catch (IOException ioe)
+        {
+            throw new ParserException (ioe.getMessage (), ioe);
+        }
+        mIndex = new PageIndex (this);
+    }
+
+    /**
+     * Get the URL for this page.
+     * @return The url for the connection, or <code>null</code> if there is none.
+     */
+    public String getUrl ()
+    {
+        URLConnection connection;
+        if (null == mUrl)
+        {
+            connection = getConnection ();
+            if (null != connection)
+                mUrl = connection.getURL ().toExternalForm ();
+        }
+        
+        return (mUrl);
+    }
+
+    /**
+     * Set the URL for this page.
+     * This doesn't affect the contents of the page, just the interpretation
+     * of relative links from this point forward.
+     * @param url The new URL.
+     */
+    public void setUrl (String url)
+    {
+        mUrl = url;
     }
 
     /**
@@ -259,20 +365,23 @@ public class Page
 
     /**
      * Try and extract the character set from the HTTP header.
-     * @param connection The connection with the charset info.
      * @return The character set name to use for this HTML page.
      */
-    protected String getCharacterSet (URLConnection connection)
+    public String getCharacterSet ()
     {
         final String CONTENT_TYPE_STRING = "Content-Type";
-
+        URLConnection connection;
         String string;
         String ret;
 
         ret = DEFAULT_CHARSET;
-        string = connection.getHeaderField (CONTENT_TYPE_STRING);
-        if (null != string)
-            ret = getCharset (string);
+        connection = getConnection ();
+        if (null != connection)
+        {
+            string = connection.getHeaderField (CONTENT_TYPE_STRING);
+            if (null != string)
+                ret = getCharset (string);
+        }
 
         return (ret);
     }
@@ -301,7 +410,7 @@ public class Page
      * @see #findCharset
      * @see #DEFAULT_CHARSET
      */
-    protected String getCharset (String content)
+    public String getCharset (String content)
     {
         final String CHARSET_STRING = "charset";
         int index;
@@ -407,6 +516,84 @@ public class Page
     }
 
     /**
+     * Get the current encoding being used.
+     * @return The encoding used to convert characters.
+     */
+    public String getEncoding ()
+    {
+        return (mSource.getEncoding ());
+    }
+
+    /**
+     * Try and extract the character set from the HTTP header.
+     * @param connection The connection with the charset info.
+     * @return The character set name to use for this HTML page.
+     */
+    public void setEncoding (String character_set)
+        throws
+            ParserException
+    {
+        InputStream stream;
+        
+        stream = getSource ().getStream ();
+        try
+        {
+            stream.reset ();
+            mIndex = new PageIndex (this);
+            mSource = new Source (stream, character_set);
+        }
+        catch (IOException ioe)
+        {
+            throw new ParserException (ioe.getMessage (), ioe);
+        }
+        
+// code from Parser:
+
+//     /* If there is no connection (getConnection() returns null) it simply sets
+//     * the character set name stored in the parser (Note: the lexer object
+//     * which must have been set in the constructor or by <code>setLexer()</code>,
+//     * may or may not be using this character set).
+////     * Otherwise (getConnection() doesn't return null) it does this by reopening the
+////     * input stream of the connection and creating a reader that uses this
+////     * character set. In this case, this method sets two of the fields in the
+////     * parser object; <code>character_set</code> and <code>reader</code>.
+////     * It does not adjust <code>resourceLocn</code>, <code>url_conn</code>,
+////     * <code>scanners</code> or <code>feedback</code>. The two fields are set
+////     * atomicly by this method, either they are both set or none of them is set.
+////     * Trying to set the encoding to null or an empty string is a noop.
+////     * @exception ParserException If the opening of the reader
+//     */
+//        String chs;
+//        BufferedInputStream in;
+//
+//        if ((null != encoding) && !"".equals (encoding))
+//            if (null == getConnection ())
+//                character_set = encoding;
+//            else
+//            {
+//                chs = getEncoding ();
+//                in = input;
+//                try
+//                {
+//                    character_set = encoding;
+//                    if (null != getLexer ())
+//                        getLexer ().getPage ().setCharset (encoding);
+//                }
+//                catch (IOException ioe)
+//                {
+//                    String msg = "setEncoding() : Error in opening a connection to " + getConnection ().getURL ().toExternalForm ();
+//                    ParserException ex = new ParserException (msg, ioe);
+//                    feedback.error (msg, ex);
+//                    character_set = chs;
+//                    input = in;
+//                    throw ex;
+//                }
+//            }
+//    }
+//
+    }
+
+    /**
      * Get the line number for a cursor.
      * @param cursor The character offset into the page.
      * @return The line number the character is in.
@@ -417,6 +604,16 @@ public class Page
     }
 
     /**
+     * Get the line number for a cursor.
+     * @param position The character offset into the page.
+     * @return The line number the character is in.
+     */
+    public int row (int position)
+    {
+        return (mIndex.row (position));
+    }
+
+    /**
      * Get the column number for a cursor.
      * @param cursor The character offset into the page.
      * @return The character offset into the line this cursor is on.
@@ -424,6 +621,16 @@ public class Page
     public int column (Cursor cursor)
     {
         return (mIndex.column (cursor));
+    }
+
+    /**
+     * Get the column number for a cursor.
+     * @param position The character offset into the page.
+     * @return The character offset into the line this cursor is on.
+     */
+    public int column (int position)
+    {
+        return (mIndex.column (position));
     }
 
     /**
@@ -493,4 +700,159 @@ public class Page
     {
         getText (buffer, 0, mSource.mOffset);
     }
+
+    /**
+     * Get the text line the position of the cursor lies on.
+     * @param cursor The position to calculate for.
+     * @return The contents of the URL or file corresponding to the line number
+     * containg the cursor position.
+     */
+    public String getLine (Cursor cursor)
+    {
+        int line;
+        int start;
+        int end;
+
+        line = row (cursor);
+        start = mIndex.elementAt (line);
+        line++;
+        end = mIndex.last ();
+        if (end <= line)
+            end = mIndex.elementAt (end);
+        else
+            end = mSource.mOffset;
+        return (getText (start,  end));
+    }
+
+// todo refactor into common code method:
+
+    /**
+     * Get the text line the position of the cursor lies on.
+     * @param cursor The position to calculate for.
+     * @return The contents of the URL or file corresponding to the line number
+     * containg the cursor position.
+     */
+    public String getLine (int position)
+    {
+        int line;
+        int start;
+        int end;
+
+        line = row (position);
+        start = mIndex.elementAt (line);
+        line++;
+        end = mIndex.last ();
+        if (end <= line)
+            end = mIndex.elementAt (end);
+        else
+            end = mSource.mOffset;
+        return (getText (start,  end));
+    }
 }
+
+//    /**
+//     * The default charset.
+//     * This should be <code>ISO-8859-1</code>,
+//     * see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
+//     * Another alias is "8859_1".
+//     */
+//    protected static final String DEFAULT_CHARSET = "ISO-8859-1";
+//
+//    /**
+//     *  Trigger for charset detection.
+//     */
+//    protected static final String CHARSET_STRING = "charset";
+//
+//
+//    /**
+//     * Try and extract the character set from the HTTP header.
+//     * @param connection The connection with the charset info.
+//     * @return The character set name to use for this HTML page.
+//     */
+//    protected String getCharacterSet (URLConnection connection)
+//    {
+//        final String field = "Content-Type";
+//
+//        String string;
+//        String ret;
+//
+//        ret = DEFAULT_CHARSET;
+//        string = connection.getHeaderField (field);
+//        if (null != string)
+//            ret = getCharset (string);
+//
+//        return (ret);
+//    }
+//
+//    /**
+//     * Get a CharacterSet name corresponding to a charset parameter.
+//     * @param content A text line of the form:
+//     * <pre>
+//     * text/html; charset=Shift_JIS
+//     * </pre>
+//     * which is applicable both to the HTTP header field Content-Type and
+//     * the meta tag http-equiv="Content-Type".
+//     * Note this method also handles non-compliant quoted charset directives such as:
+//     * <pre>
+//     * text/html; charset="UTF-8"
+//     * </pre>
+//     * and
+//     * <pre>
+//     * text/html; charset='UTF-8'
+//     * </pre>
+//     * @return The character set name to use when reading the input stream.
+//     * For JDKs that have the Charset class this is qualified by passing
+//     * the name to findCharset() to render it into canonical form.
+//     * If the charset parameter is not found in the given string, the default
+//     * character set is returned.
+//     * @see ParserHelper#findCharset
+//     * @see #DEFAULT_CHARSET
+//     */
+//    protected String getCharset(String content)
+//    {
+//        int index;
+//        String ret;
+//
+//        ret = DEFAULT_CHARSET;
+//        if (null != content)
+//        {
+//            index = content.indexOf(CHARSET_STRING);
+//
+//            if (index != -1)
+//            {
+//                content = content.substring(index + CHARSET_STRING.length()).trim();
+//                if (content.startsWith("="))
+//                {
+//                    content = content.substring(1).trim();
+//                    index = content.indexOf(";");
+//                    if (index != -1)
+//                        content = content.substring(0, index);
+//
+//                    //remove any double quotes from around charset string
+//                    if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
+//                        content = content.substring (1, content.length () - 1);
+//
+//                    //remove any single quote from around charset string
+//                    if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
+//                        content = content.substring (1, content.length () - 1);
+//
+//                    ret = ParserHelper.findCharset(content, ret);
+//                    // Charset names are not case-sensitive;
+//                    // that is, case is always ignored when comparing charset names.
+//                    if (!ret.equalsIgnoreCase(content))
+//                    {
+//                        feedback.info (
+//                            "detected charset \""
+//                            + content
+//                            + "\", using \""
+//                            + ret
+//                            + "\"");
+//                    }
+//                }
+//            }
+//        }
+//
+//        return (ret);
+//    }
+//
+

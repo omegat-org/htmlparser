@@ -35,7 +35,6 @@ import java.net.URLConnection;
 
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.ParserException;
@@ -599,35 +598,32 @@ public class StringBean extends NodeVisitor implements Serializable
     }
 
     /**
-     * Possibly resets the state of the PRE and SCRIPT flags.
-     * @param end The end tag.
-     */
-    public void visitEndTag (EndTag end)
-    {
-        String name;
-
-        name = end.getTagName ();
-        if (name.equalsIgnoreCase ("PRE"))
-            mIsPre = false;
-        else if (name.equalsIgnoreCase ("SCRIPT"))
-            mIsScript = false;
-    }
-
-    /**
      * Appends a newline to the output if the tag breaks flow, and
      * possibly sets the state of the PRE and SCRIPT flags.
+     * Possibly resets the state of the PRE and SCRIPT flags if it's
+     * an end tag.
      */
     public void visitTag (Tag tag)
     {
         String name;
 
         name = tag.getTagName ();
-        if (name.equalsIgnoreCase ("PRE"))
-            mIsPre = true;
-        else if (name.equalsIgnoreCase ("SCRIPT"))
-            mIsScript = true;
-        if (tag.breaksFlow ())
-            carriage_return ();
+        if (tag.isEndTag ())
+        {
+            if (name.equalsIgnoreCase ("/PRE"))
+                mIsPre = false;
+            else if (name.equalsIgnoreCase ("/SCRIPT"))
+                mIsScript = false;
+        }
+        else
+        {
+            if (name.equalsIgnoreCase ("PRE"))
+                mIsPre = true;
+            else if (name.equalsIgnoreCase ("SCRIPT"))
+                mIsScript = true;
+            if (tag.breaksFlow ())
+                carriage_return ();
+        }
     }
 
     /**

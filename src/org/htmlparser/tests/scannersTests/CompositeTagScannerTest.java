@@ -32,7 +32,6 @@ import org.htmlparser.Node;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.tags.CompositeTag;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -448,7 +447,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
             "<CUSTOM>something</CUSTOM>",
             customTag.toHtml()
         );
-        EndTag endTag = (EndTag)node[2];
+        Tag endTag = (Tag)node[2];
         assertStringEquals(
             "first custom tag html",
             "</CUSTOM>",
@@ -495,7 +494,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertNotNull("first child parent should not be null",parent);
         assertSame("parent and custom tag should be the same",customTag,parent);
 
-        EndTag endTag = (EndTag)node[2];
+        Tag endTag = (Tag)node[2];
         assertStringEquals(
             "first custom tag html",
             "</CUSTOM>",

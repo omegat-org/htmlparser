@@ -29,7 +29,7 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
@@ -45,17 +45,22 @@ public class EndTagTest extends ParserTestCase {
         parser.registerScanners();
         parseAndAssertNodeCount(2);
         // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLEndTag",node[1] instanceof EndTag);
-        EndTag endTag = (EndTag)node[1];
+        assertTrue("Node should be a Tag",node[1] instanceof Tag);
+        Tag endTag = (Tag)node[1];
+        assertTrue("Node should be an end Tag",endTag.isEndTag ());
         assertEquals("Raw String","</HTML>",endTag.toHtml());
     }
 
-    public void testEndTagFind() {
+    public void testEndTagFind() throws ParserException {
         String testHtml =
-            "<SCRIPT>document.write(d+\".com\")</SCRIPT>";
+            "<SCRIPT>document.write(d+\".com\")</SCRIPT><BR>";
+        createParser(testHtml);
         int pos = testHtml.indexOf("</SCRIPT>");
-        EndTag endTag = (EndTag)EndTag.find(testHtml,pos);
-        assertEquals("endtag element begin",32,endTag.elementBegin());
-        assertEquals("endtag element end",40,endTag.elementEnd());
+        parseAndAssertNodeCount(4);
+        assertTrue("Node should be a Tag",node[1] instanceof Tag);
+        Tag endTag = (Tag)node[1];
+        assertTrue("Node should be an end Tag",endTag.isEndTag ());
+        assertEquals("endtag element begin",pos,endTag.elementBegin());
+        assertEquals("endtag element end",pos+9,endTag.elementEnd());
     }
 }

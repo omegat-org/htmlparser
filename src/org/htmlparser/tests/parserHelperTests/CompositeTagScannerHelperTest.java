@@ -46,25 +46,27 @@ public class CompositeTagScannerHelperTest extends ParserTestCase {
     }
 
     protected void setUp() {
-        helper =
-            new CompositeTagScannerHelper(null,null,null,null,null,false);
+//        helper =
+//            new CompositeTagScannerHelper(null,null,null,null,null,false);
     }
 
     public void testIsXmlEndTagForRealXml() {
-        Tag tag = new Tag(
-            new TagData(
-                0,0,"something/",""
-            )
-        );
-        assertTrue("should be an xml end tag",helper.isXmlEndTag(tag));
+        fail ("not implemented");
+//        Tag tag = new Tag(
+//            new TagData(
+//                0,0,"something/",""
+//            )
+//        );
+//        assertTrue("should be an xml end tag",helper.isXmlEndTag(tag));
     }
 
     public void testIsXmlEndTagForFalseMatches() {
-        Tag tag = new Tag(
-            new TagData(
-                0,0,"a href=http://someurl.com/",""
-            )
-        );
-        assertFalse("should not be an xml end tag",helper.isXmlEndTag(tag));
+        fail ("not implemented");
+//        Tag tag = new Tag(
+//            new TagData(
+//                0,0,"a href=http://someurl.com/",""
+//            )
+//        );
+//        assertFalse("should not be an xml end tag",helper.isXmlEndTag(tag));
     }
 }

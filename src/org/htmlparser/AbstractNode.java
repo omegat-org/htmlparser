@@ -155,10 +155,10 @@ public abstract class AbstractNode implements Node, Serializable {
      * Thus, collectionList will hold all the link nodes, irrespective of how
      * deep the links are embedded.
      */
-    public void collectInto(NodeList collectionList, Class nodeType) {
-        if (nodeType.getName().equals(this.getClass().getName())) {
+    public void collectInto(NodeList collectionList, Class nodeType)
+    {
+        if (nodeType.getName().equals(this.getClass().getName()))
             collectionList.add(this);
-        }
     }
 
     /**

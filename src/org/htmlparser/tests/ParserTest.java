@@ -40,6 +40,8 @@ import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.ImageTag;
@@ -88,7 +90,6 @@ public class ParserTest extends ParserTestCase {
         catch (Exception e ){
             throw new ParserException("You must be offline! This test needs you to be connected to the internet.",e);
         }
-        parser.getReader().mark(5000);
 
         Node [] node = new AbstractNode[500];
         int i = 0;
@@ -97,7 +98,7 @@ public class ParserTest extends ParserTestCase {
             node[i++] = e.nextNode();
         }
         int cnt = i;
-        parser.getReader().reset();
+        parser.reset ();
         // Now try getting the elements again
         i = 0;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
@@ -348,7 +349,7 @@ public class ParserTest extends ParserTestCase {
                 nodes[i] = enumeration.nextNode ();
                 i++;
             }
-            assertEquals("Expected nodes",12,i);
+            assertEquals("Expected nodes",20,i);
         }
         catch (Exception e)
         {
@@ -420,7 +421,7 @@ public class ParserTest extends ParserTestCase {
         nodes = new AbstractNode[30];
         for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
             nodes[i++] = e.nextNode();
-        assertEquals ("Expected nodes", 14, i);
+        assertEquals ("Expected nodes", 23, i);
     }
 
     /**
@@ -475,6 +476,7 @@ public class ParserTest extends ParserTestCase {
     {
         URL url;
         URLConnection connection;
+        Page page;
         Parser parser;
         String idiots = "http://users.aol.com/geinster/rej.htm";
 
@@ -484,27 +486,28 @@ public class ParserTest extends ParserTestCase {
             connection = url.openConnection ();
             // this little subclass just gets around normal JDK 1.4 processing
             // that filters out bogus character sets
-            parser = new Parser ()
+            page = new Page ("")
             {
-                protected String getCharset(String content)
+                public String getCharset(String content)
                 {
+                    final String CHARSET_STRING = "charset";
                     int index;
                     String ret;
 
                     ret = DEFAULT_CHARSET;
                     if (null != content)
                     {
-                        index = content.indexOf(CHARSET_STRING);
+                        index = content.indexOf (CHARSET_STRING);
 
                         if (index != -1)
                         {
-                            content = content.substring(index + CHARSET_STRING.length()).trim();
-                            if (content.startsWith("="))
+                            content = content.substring (index + CHARSET_STRING.length ()).trim ();
+                            if (content.startsWith ("="))
                             {
-                                content = content.substring(1).trim();
-                                index = content.indexOf(";");
+                                content = content.substring (1).trim ();
+                                index = content.indexOf (";");
                                 if (index != -1)
-                                    content = content.substring(0, index);
+                                    content = content.substring (0, index);
 
                                 //remove any double quotes from around charset string
                                 if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
@@ -522,7 +525,8 @@ public class ParserTest extends ParserTestCase {
                     return (ret);
                 }
             };
-            parser.setConnection (connection);
+            page.setConnection (connection);
+            parser = new Parser (new Lexer (page));
             // must be the default
             assertTrue ("Wrong encoding", parser.getEncoding ().equals ("ISO-8859-1"));
             for (NodeIterator e = parser.elements();e.hasMoreNodes();)
@@ -537,11 +541,13 @@ public class ParserTest extends ParserTestCase {
 
     public void testNullUrl() {
         Parser parser;
-        try {
-            parser = new Parser("http://someoneexisting.com", Parser.noFeedback);
+        try
+        {
+            parser = new Parser("http://none.existant.url.org", Parser.noFeedback);
             assertTrue("Should have thrown an exception!",false);
         }
-        catch (ParserException e) {
+        catch (ParserException e)
+        {
 
         }
     }
@@ -558,8 +564,9 @@ public class ParserTest extends ParserTestCase {
             i++;
 
         }
-        assertEquals("Expected nodes",12,i);
+        assertEquals("Expected nodes",20,i);
     }
+
     public void testLinkCollection() throws ParserException {
         createParser(
         "<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"><title>Google</title><style><!--\n"+
@@ -618,7 +625,8 @@ public class ParserTest extends ParserTestCase {
             Node node = e.nextNode();
             node.collectInto(collectionList,LinkTag.class);
         }
-        assertEquals("Size of collection vector should be 11",11,collectionList.size());
+        // NOTE: the link within the script is also found... this may be debatable
+        assertEquals("Size of collection vector should be 12",12,collectionList.size());
         // All items in collection vector should be links
         for (SimpleNodeIterator e = collectionList.elements();e.hasMoreNodes();) {
             Node node = e.nextNode();
@@ -731,13 +739,13 @@ public class ParserTest extends ParserTestCase {
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
         {
             Node node = e.nextNode();
-            if (7 == i)
+            if (10 == i)
             {
                 assertTrue ("not a tag", node instanceof Tag);
                 assertTrue ("ALT attribute incorrect", ((Tag)node).getAttribute ("ALT").equals ("f's b"));
             }
             i++;
         }
-        assertEquals("Expected nodes",16,i);
+        assertEquals("Expected nodes",21,i);
     }
 }

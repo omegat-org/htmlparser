@@ -31,20 +31,18 @@ package org.htmlparser.util;
 import java.util.Vector;
 
 import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
+import org.htmlparser.lexer.Lexer;
 
 public class IteratorImpl implements PeekingIterator
 {
-    NodeReader reader;
+    Lexer mLexer;
     Vector preRead;
-    String resourceLocn;
     ParserFeedback feedback;
 
-    public IteratorImpl (NodeReader rd, String resource, ParserFeedback fb)
+    public IteratorImpl (Lexer lexer, ParserFeedback fb)
     {
-        reader = rd;
+        mLexer = lexer;
         preRead = new Vector (25);
-        resourceLocn = resource;
         feedback = fb;
     }
 
@@ -52,21 +50,21 @@ public class IteratorImpl implements PeekingIterator
     {
         Node ret;
 
-        if (null == reader)
+        if (null == mLexer)
             ret = null;
         else
             try
             {
-                ret = reader.readElement();
+                ret = mLexer.nextNode ();
                 if (null != ret)
                     preRead.addElement (ret);
             }
             catch (Exception e) {
                 StringBuffer msgBuffer = new StringBuffer();
                 msgBuffer.append("Unexpected Exception occurred while reading ");
-                msgBuffer.append(resourceLocn);
+                msgBuffer.append(mLexer.getPage ().getUrl ());
                 msgBuffer.append(", in nextHTMLNode");
-                reader.appendLineDetails(msgBuffer);
+//                reader.appendLineDetails(msgBuffer);
                 ParserException ex = new ParserException(msgBuffer.toString(),e);
                 feedback.error(msgBuffer.toString(),ex);
                 throw ex;
@@ -82,7 +80,7 @@ public class IteratorImpl implements PeekingIterator
     public boolean hasMoreNodes() throws ParserException {
         boolean ret;
 
-        if (null == reader)
+        if (null == mLexer)
             ret = false;
         else if (0 != preRead.size ())
             ret = true;

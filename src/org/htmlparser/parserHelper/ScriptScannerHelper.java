@@ -28,6 +28,7 @@
 package org.htmlparser.parserHelper;
 
 import org.htmlparser.*;
+import org.htmlparser.lexer.Lexer;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
 import org.htmlparser.tags.data.*;
@@ -37,21 +38,22 @@ import org.htmlparser.util.*;
 
 public class ScriptScannerHelper {
 
+    private Lexer mLexer;
     private int endTagLoc;
     private Tag endTag;
     private Tag startTag;
     private int startingPos;
     private boolean sameLine;
     private boolean endTagFound;
-    private NodeReader reader;
     private StringBuffer scriptContents;
     private ScriptScanner scriptScanner;
     private Tag tag;
     private String url;
     private String currLine;
 
-    public ScriptScannerHelper(Tag tag, String url, NodeReader nodeReader, String currLine, ScriptScanner scriptScanner) {
-        this.reader = nodeReader;
+    public ScriptScannerHelper(Tag tag, Lexer lexer, ScriptScanner scriptScanner)
+    {
+        mLexer = lexer;
         this.scriptScanner = scriptScanner;
         this.tag = tag;
         this.url = url;
@@ -59,7 +61,7 @@ public class ScriptScannerHelper {
     }
 
     public Tag scan() throws ParserException {
-        int startLine = reader.getLastLineNumber();
+        int startLine = mLexer.getCurrentLineNumber ();
         startTag = tag;
         extractScriptTagFrom(currLine);
         if (isScriptEndTagNotFound()) {
@@ -68,18 +70,21 @@ public class ScriptScannerHelper {
         return createScriptTagUsing(url, currLine, startLine);
     }
 
-    private Tag createScriptTagUsing(String url, String currLine, int startLine) {
+    private Tag createScriptTagUsing(String url, String currLine, int startLine)
+    {
+        TagData data;
+        
+        data =  new TagData(
+            mLexer.getPage (),
+            startTag.elementBegin(),
+            endTag.elementEnd(),
+            startTag.getAttributesEx (),
+            mLexer.getPage ().getUrl (),
+            startTag.isEmptyXmlTag ());
+
         return scriptScanner.createTag(
-            new TagData(
-                startTag.elementBegin(),
-                endTag.elementEnd(),
-                startLine,
-                reader.getLastLineNumber(),
-                startTag.getText(),
-                currLine,
-                url,
-                false
-            ), new CompositeTagData(
+            data,
+            new CompositeTagData(
                 startTag,endTag,createChildrenNodeList()
             )
         );
@@ -99,17 +104,16 @@ public class ScriptScannerHelper {
 
     private void createScriptEndTag(Tag tag, String currLine) {
         // If end tag doesn't exist, create one
-        String endTagName = tag.getTagName();
-        int endTagBegin = reader.getLastReadPosition()+1 ;
-        int endTagEnd = endTagBegin + endTagName.length() + 2;
-        endTag = new EndTag(
+        String endTagName = "/" + tag.getTagName();
+        int endTagBegin = mLexer.getPosition ();
+        endTag = new Tag(
             new TagData(
-                endTagBegin,
-                endTagEnd,
                 endTagName,
-                currLine
-            )
-        );
+                endTagBegin,
+                null,
+                mLexer.getPage ().getUrl (),
+                false)
+            );
     }
 
     private boolean isScriptEndTagNotFound() {
@@ -117,24 +121,25 @@ public class ScriptScannerHelper {
     }
 
     private void extractScriptTagFrom(String currLine) throws ParserException {
-        String line = null;
-        scriptContents = new StringBuffer();
-        endTagFound = false;
-
-        endTag = null;
-        line = currLine;
-        sameLine = true;
-        startingPos = startTag.elementEnd();
-        do {
-            doExtractionOfScriptContentsFrom(line);
-            if (!endTagFound) {
-                line = reader.getNextLine();
-                startingPos = 0;
-            }
-            if (sameLine)
-                sameLine = false;
-        }
-        while (line!=null && !endTagFound);
+        throw new IllegalStateException ("not implemented");
+//        String line = null;
+//        scriptContents = new StringBuffer();
+//        endTagFound = false;
+//
+//        endTag = null;
+//        line = currLine;
+//        sameLine = true;
+//        startingPos = startTag.elementEnd();
+//        do {
+//            doExtractionOfScriptContentsFrom(line);
+//            if (!endTagFound) {
+//                line = reader.getNextLine();
+//                startingPos = 0;
+//            }
+//            if (sameLine)
+//                sameLine = false;
+//        }
+//        while (line!=null && !endTagFound);
     }
 
     private void doExtractionOfScriptContentsFrom(String line) throws ParserException {
@@ -162,21 +167,22 @@ public class ScriptScannerHelper {
     }
 
     private void extractEndTagFrom(String line) throws ParserException {
-        endTagFound = true;
-        endTag = (EndTag)EndTag.find(line,endTagLoc);
-        if (sameLine)
-            scriptContents.append(
-                getCodeBetweenStartAndEndTags(
-                    line,
-                    startTag,
-                    endTagLoc)
-            );
-        else {
-            scriptContents.append(Parser.getLineSeparator());
-            scriptContents.append(line.substring(0,endTagLoc));
-        }
-
-        reader.setPosInLine(endTag.elementEnd());
+        throw new IllegalStateException ("not implemented");
+//        endTagFound = true;
+//        endTag = (EndTag)EndTag.find(line,endTagLoc);
+//        if (sameLine)
+//            scriptContents.append(
+//                getCodeBetweenStartAndEndTags(
+//                    line,
+//                    startTag,
+//                    endTagLoc)
+//            );
+//        else {
+//            scriptContents.append(Parser.getLineSeparator());
+//            scriptContents.append(line.substring(0,endTagLoc));
+//        }
+//
+//        mLexer.setPosition (endTag.elementEnd ());
     }
 
     private void findStartingAndEndingLocations(String line) {

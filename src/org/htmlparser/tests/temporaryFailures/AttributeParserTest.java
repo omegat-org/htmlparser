@@ -37,13 +37,11 @@ package org.htmlparser.tests.temporaryFailures;
 import java.util.Hashtable;
 
 import org.htmlparser.Parser;
-import org.htmlparser.parserHelper.AttributeParser;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 
 public class AttributeParserTest extends ParserTestCase {
-    private AttributeParser parser;
     private Tag tag;
     private Hashtable table;
 
@@ -52,13 +50,14 @@ public class AttributeParserTest extends ParserTestCase {
     }
 
     protected void setUp() {
-        parser = new AttributeParser();
+        //parser = new AttributeParser();
+        fail ("needs to be reworked");
     }
 
     public void getParameterTableFor(String tagContents) {
-        tag = new Tag(new TagData(0,0,tagContents,""));
-        table = parser.parseAttributes(tag.getText ());
-
+        fail ("needs to be reworked");
+//        tag = new Tag(new TagData(0,0,tagContents,""));
+//        table = parser.parseAttributes(tag.getText ());
     }
 
     public void testParseParameters() {

@@ -56,9 +56,10 @@ public class JspScanner extends TagScanner {
     }
 
     protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException {
-        String tagContents = tagData.getTagContents();
-        tagData.setTagContents(tagContents.substring(1,tagContents.length()-1));
+        throws ParserException
+    {
+        tagData.setTagBegin (tagData.getTagBegin () + 1);
+        tagData.setTagEnd (tagData.getTagEnd () - 1);
         return new JspTag(tagData);
     }
 

@@ -31,7 +31,6 @@
 package org.htmlparser.visitors;
 
 import org.htmlparser.Node;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 
@@ -67,7 +66,18 @@ public class TagFindingVisitor extends NodeVisitor {
         return count[index];
     }
 
-    public void visitTag(Tag tag) {
+    public void visitTag(Tag tag)
+    {
+        if (tag.isEndTag ())
+        {
+            if (!endTagCheck) return;
+            for (int i=0;i<tagsToBeFound.length;i++)
+                if (tag.getTagName().substring (1).equalsIgnoreCase(tagsToBeFound[i]))
+                {
+                    endTagCount[i]++;
+                    endTags[i].add(tag);
+                }
+        }
         for (int i=0;i<tagsToBeFound.length;i++)
             if (tag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
                 count[i]++;
@@ -77,15 +87,6 @@ public class TagFindingVisitor extends NodeVisitor {
 
     public Node [] getTags(int index) {
         return tags[index].toNodeArray();
-    }
-
-    public void visitEndTag(EndTag endTag) {
-        if (!endTagCheck) return;
-        for (int i=0;i<tagsToBeFound.length;i++)
-            if (endTag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
-                endTagCount[i]++;
-                endTags[i].add(endTag);
-            }
     }
 
     public int getEndTagCount(int index) {

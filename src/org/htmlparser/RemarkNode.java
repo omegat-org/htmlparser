@@ -29,60 +29,63 @@
 
 package org.htmlparser;
 
+import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * The remark tag is identified and represented by this class.
  */
-public class RemarkNode extends AbstractNode
+public class RemarkNode
+    extends
+        org.htmlparser.lexer.nodes.RemarkNode
 {
     public final static String REMARK_NODE_FILTER="-r";
 
-    /**
-     * Tag contents will have the contents of the comment tag.
-     */
-    String tagContents;
-    /**
-     * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
-     * and the tag contents.
-     * @param nodeBegin beginning position of the tag
-     * @param nodeEnd ending position of the tag
-     * @param tagContents contents of the remark tag
-     */
-    public RemarkNode(int nodeBegin, int nodeEnd, String tagContents)
-    {
-        super(nodeBegin,nodeEnd);
-        this.tagContents = tagContents;
-    }
+//    /**
+//     * Tag contents will have the contents of the comment tag.
+//     */
+//    String tagContents;
+//
+//    /**
+//     * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
+//     * and the tag contents.
+//     * @param nodeBegin beginning position of the tag
+//     * @param nodeEnd ending position of the tag
+//     * @param tagContents contents of the remark tag
+//     */
+//    public RemarkNode(int nodeBegin, int nodeEnd, String tagContents)
+//    {
+//        super(nodeBegin,nodeEnd);
+//        this.tagContents = tagContents;
+//    }
 
     /**
-     * Returns the text contents of the comment tag.
+     * Constructor takes in the text string, beginning and ending posns.
+     * @param page The page this string is on.
+     * @param start The beginning position of the string.
+     * @param end The ending positiong of the string.
      */
-    public String getText()
+    public RemarkNode (Page page, int start, int end)
     {
-        return tagContents;
+        super (page, start, end);
     }
-    public String toPlainTextString() {
-        return tagContents;
-    }
-    public String toHtml() {
-        return "<!--"+tagContents+"-->";
-    }
+
     /**
      * Print the contents of the remark tag.
      */
     public String toString()
     {
-        return "Comment Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+"\n";
+        return "Comment Tag : "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+"\n";
     }
 
     public void collectInto(NodeList collectionList, String filter) {
         if (filter==REMARK_NODE_FILTER) collectionList.add(this);
     }
 
-    public void accept(Object visitor) {
-        ((NodeVisitor)visitor).visitRemarkNode(this);
+    public void accept(Object visitor)
+    {
+        ((NodeVisitor)visitor).visitRemarkNode (this);
     }
 
 }

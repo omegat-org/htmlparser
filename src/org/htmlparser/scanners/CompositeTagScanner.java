@@ -32,9 +32,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
+import org.htmlparser.lexer.Lexer;
 import org.htmlparser.parserHelper.CompositeTagScannerHelper;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -176,9 +175,9 @@ public abstract class CompositeTagScanner extends TagScanner {
             endTagEnderSet.add(endTagEnders[i]);
     }
 
-    public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
+    public Tag scan (Tag tag, String url, Lexer lexer) throws ParserException {
         CompositeTagScannerHelper helper =
-            new CompositeTagScannerHelper(this,tag,url,reader,currLine,balance_quotes);
+            new CompositeTagScannerHelper(this, tag, lexer, balance_quotes);
         return helper.scan();
     }
 
@@ -198,14 +197,29 @@ public abstract class CompositeTagScanner extends TagScanner {
     }
 
     /**
+     * For composite tags this shouldn't be used and hence throws an exception.
+     * @param tagData
+     * @param tag
+     * @param url
+     * @return Tag
+     * @throws ParserException
+     */
+    protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException
+    {
+        throw new IllegalStateException ("composite tags shouldn't be using this");
+    }
+
+    /**
      * You must override this method to create the tag of your choice upon successful parsing. Data required
      * for construction of your tag can be found within tagData and compositeTagData
      */
     public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
 
     public final boolean isTagToBeEndedFor(Tag tag) {
-        boolean isEndTag = tag instanceof EndTag;
+        boolean isEndTag = tag.isEndTag ();
         String tagName = tag.getTagName();
+        if (isEndTag)
+            tagName = tagName.substring (1);
         if (
                 ( isEndTag && endTagEnderSet.contains(tagName)) ||
                 (!isEndTag &&    tagEnderSet.contains(tagName))

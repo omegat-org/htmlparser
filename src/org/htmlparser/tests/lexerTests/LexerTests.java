@@ -41,7 +41,6 @@ import java.net.URLConnection;
 import junit.framework.TestCase;
 
 import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
 import org.htmlparser.Parser;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
@@ -302,286 +301,286 @@ public class LexerTests extends TestCase
                 fail ("character differs at position " + i + ", expected <" + ref[i] + "> but was <" + test[i] + ">");
     }
 
-    /**
-     * Test the relative speed reading from a string parsing tags too.
-     */
-    public void testSpeedStringWithoutTags () throws ParserException, IOException
-    {
-        final String link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
-        URL url;
-        URLConnection connection;
-        Source source;
-        StringBuffer buffer;
-        int i;
-        String html;
-
-        long old_total;
-        long new_total;
-        long begin;
-        long end;
-        StringReader reader;
-        NodeReader nodes;
-        Parser parser;
-        int nodecount;
-        Node node;
-        int charcount;
-
-        url = new URL (link);
-        connection = url.openConnection ();
-        connection.connect ();
-        source = new Source (new Stream (connection.getInputStream ()));
-        buffer = new StringBuffer (350000);
-        while (-1 != (i = source.read ()))
-            buffer.append ((char)i);
-        source.close ();
-        html = buffer.toString ();
-        old_total = 0;
-        new_total = 0;
-        for (i = 0; i < 5; i++)
-        {
-            System.gc ();
-            begin = System.currentTimeMillis ();
-            Lexer lexer = new Lexer (html);
-            nodecount = 0;
-            while (null != (node = lexer.nextNode ()))
-                nodecount++;
-            end = System.currentTimeMillis ();
-            System.out.println ("     lexer: " + (end - begin) + " msec, " + nodecount + " nodes");
-            if (0 != i) // the first timing is way different
-                new_total += (end - begin);
-
-            System.gc ();
-            begin = System.currentTimeMillis ();
-            reader = new StringReader (html);
-            nodes =  new NodeReader (new BufferedReader (reader), 350000);
-            parser = new Parser (nodes, null);
-            nodecount = 0;
-            while (null != (node = nodes.readElement ()))
-                nodecount++;
-            end = System.currentTimeMillis ();
-            System.out.println ("old reader: " + (end - begin) + " msec, " + nodecount + " nodes");
-            if (0 != i) // the first timing is way different
-                old_total += (end - begin);
-        }
-        assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
-        System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
-    }
-
-    /**
-     * Test the relative speed reading from a string parsing tags too.
-     */
-    public void testSpeedStringWithTags () throws ParserException, IOException
-    {
-        final String link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
-        URL url;
-        URLConnection connection;
-        Source source;
-        StringBuffer buffer;
-        int i;
-        String html;
-
-        long old_total;
-        long new_total;
-        long begin;
-        long end;
-        StringReader reader;
-        NodeReader nodes;
-        Parser parser;
-        int nodecount;
-        Node node;
-        int charcount;
-
-        url = new URL (link);
-        connection = url.openConnection ();
-        connection.connect ();
-        source = new Source (new Stream (connection.getInputStream ()));
-        buffer = new StringBuffer (350000);
-        while (-1 != (i = source.read ()))
-            buffer.append ((char)i);
-        source.close ();
-        html = buffer.toString ();
-        old_total = 0;
-        new_total = 0;
-        for (i = 0; i < 5; i++)
-        {
-            System.gc ();
-            begin = System.currentTimeMillis ();
-            Lexer lexer = new Lexer (html);
-            nodecount = 0;
-            while (null != (node = lexer.nextNode ()))
-            {
-                nodecount++;
-                if (node instanceof TagNode)
-                    ((TagNode)node).getAttributes ();
-            }
-            end = System.currentTimeMillis ();
-            System.out.println ("     lexer: " + (end - begin) + " msec, " + nodecount + " nodes");
-            if (0 != i) // the first timing is way different
-                new_total += (end - begin);
-
-            System.gc ();
-            begin = System.currentTimeMillis ();
-            reader = new StringReader (html);
-            nodes =  new NodeReader (new BufferedReader (reader), 350000);
-            parser = new Parser (nodes, null);
-            nodecount = 0;
-            while (null != (node = nodes.readElement ()))
-            {
-                nodecount++;
-                if (node instanceof Tag)
-                    ((Tag)node).getAttributes ();
-            }
-            end = System.currentTimeMillis ();
-            System.out.println ("old reader: " + (end - begin) + " msec, " + nodecount + " nodes");
-            if (0 != i) // the first timing is way different
-                old_total += (end - begin);
-        }
-        assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
-        System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
-    }
-
-    public void testSpeedStreamWithoutTags () throws ParserException, IOException
-    {
-        final String link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
-        URL url;
-        URLConnection connection;
-        Source source;
-        StringBuffer buffer;
-        int i;
-        String html;
-        InputStream stream;
-
-        long old_total;
-        long new_total;
-        long begin;
-        long end;
-        InputStreamReader reader;
-        NodeReader nodes;
-        Parser parser;
-        int nodecount;
-        Node node;
-        int charcount;
-
-        url = new URL (link);
-        connection = url.openConnection ();
-        connection.connect ();
-        source = new Source (new Stream (connection.getInputStream ()));
-        buffer = new StringBuffer (350000);
-        while (-1 != (i = source.read ()))
-            buffer.append ((char)i);
-        source.close ();
-        html = buffer.toString ();
-        old_total = 0;
-        new_total = 0;
-
-        for (i = 0; i < 5; i++)
-        {
-
-            System.gc ();
-            begin = System.currentTimeMillis ();
-            stream = new ByteArrayInputStream (html.getBytes (Page.DEFAULT_CHARSET));
-            Lexer lexer = new Lexer (new Page (stream, Page.DEFAULT_CHARSET));
-            nodecount = 0;
-            while (null != (node = lexer.nextNode ()))
-                nodecount++;
-            end = System.currentTimeMillis ();
-            System.out.println ("     lexer: " + (end - begin) + " msec, " + nodecount + " nodes");
-            if (0 != i) // the first timing is way different
-                new_total += (end - begin);
-
-            System.gc ();
-            begin = System.currentTimeMillis ();
-            stream = new ByteArrayInputStream (html.getBytes (Page.DEFAULT_CHARSET));
-            reader = new InputStreamReader (stream);
-            nodes =  new NodeReader (reader, 350000);
-            parser = new Parser (nodes, null);
-            nodecount = 0;
-            while (null != (node = nodes.readElement ()))
-                nodecount++;
-            end = System.currentTimeMillis ();
-            System.out.println ("old reader: " + (end - begin) + " msec, " + nodecount + " nodes");
-            if (0 != i) // the first timing is way different
-                old_total += (end - begin);
-
-        }
-        assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
-        System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
-    }
-
-    public void testSpeedStreamWithTags () throws ParserException, IOException
-    {
-        final String link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
-        URL url;
-        URLConnection connection;
-        Source source;
-        StringBuffer buffer;
-        int i;
-        String html;
-        InputStream stream;
-
-        long old_total;
-        long new_total;
-        long begin;
-        long end;
-        InputStreamReader reader;
-        NodeReader nodes;
-        Parser parser;
-        int nodecount;
-        Node node;
-        int charcount;
-
-        url = new URL (link);
-        connection = url.openConnection ();
-        connection.connect ();
-        source = new Source (new Stream (connection.getInputStream ()));
-        buffer = new StringBuffer (350000);
-        while (-1 != (i = source.read ()))
-            buffer.append ((char)i);
-        source.close ();
-        html = buffer.toString ();
-        old_total = 0;
-        new_total = 0;
-
-        for (i = 0; i < 5; i++)
-        {
-
-            System.gc ();
-            begin = System.currentTimeMillis ();
-            stream = new ByteArrayInputStream (html.getBytes (Page.DEFAULT_CHARSET));
-            Lexer lexer = new Lexer (new Page (stream, Page.DEFAULT_CHARSET));
-            nodecount = 0;
-            while (null != (node = lexer.nextNode ()))
-            {
-                nodecount++;
-                if (node instanceof TagNode)
-                    ((TagNode)node).getAttributes ();
-            }
-            end = System.currentTimeMillis ();
-            System.out.println ("     lexer: " + (end - begin) + " msec, " + nodecount + " nodes");
-            if (0 != i) // the first timing is way different
-                new_total += (end - begin);
-
-            System.gc ();
-            begin = System.currentTimeMillis ();
-            stream = new ByteArrayInputStream (html.getBytes (Page.DEFAULT_CHARSET));
-            reader = new InputStreamReader (stream);
-            nodes =  new NodeReader (reader, 350000);
-            parser = new Parser (nodes, null);
-            nodecount = 0;
-            while (null != (node = nodes.readElement ()))
-            {
-                nodecount++;
-                if (node instanceof Tag)
-                    ((Tag)node).getAttributes ();
-            }
-            end = System.currentTimeMillis ();
-            System.out.println ("old reader: " + (end - begin) + " msec, " + nodecount + " nodes");
-            if (0 != i) // the first timing is way different
-                old_total += (end - begin);
-        }
-        assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
-        System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
-    }
+//    /**
+//     * Test the relative speed reading from a string parsing tags too.
+//     */
+//    public void testSpeedStringWithoutTags () throws ParserException, IOException
+//    {
+//        final String link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
+//        URL url;
+//        URLConnection connection;
+//        Source source;
+//        StringBuffer buffer;
+//        int i;
+//        String html;
+//
+//        long old_total;
+//        long new_total;
+//        long begin;
+//        long end;
+//        StringReader reader;
+//        NodeReader nodes;
+//        Parser parser;
+//        int nodecount;
+//        Node node;
+//        int charcount;
+//
+//        url = new URL (link);
+//        connection = url.openConnection ();
+//        connection.connect ();
+//        source = new Source (new Stream (connection.getInputStream ()));
+//        buffer = new StringBuffer (350000);
+//        while (-1 != (i = source.read ()))
+//            buffer.append ((char)i);
+//        source.close ();
+//        html = buffer.toString ();
+//        old_total = 0;
+//        new_total = 0;
+//        for (i = 0; i < 5; i++)
+//        {
+//            System.gc ();
+//            begin = System.currentTimeMillis ();
+//            Lexer lexer = new Lexer (html);
+//            nodecount = 0;
+//            while (null != (node = lexer.nextNode ()))
+//                nodecount++;
+//            end = System.currentTimeMillis ();
+//            System.out.println ("     lexer: " + (end - begin) + " msec, " + nodecount + " nodes");
+//            if (0 != i) // the first timing is way different
+//                new_total += (end - begin);
+//
+//            System.gc ();
+//            begin = System.currentTimeMillis ();
+//            reader = new StringReader (html);
+//            nodes =  new NodeReader (new BufferedReader (reader), 350000);
+//            parser = new Parser (nodes, null);
+//            nodecount = 0;
+//            while (null != (node = nodes.readElement ()))
+//                nodecount++;
+//            end = System.currentTimeMillis ();
+//            System.out.println ("old reader: " + (end - begin) + " msec, " + nodecount + " nodes");
+//            if (0 != i) // the first timing is way different
+//                old_total += (end - begin);
+//        }
+//        assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
+//        System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
+//    }
+//
+//    /**
+//     * Test the relative speed reading from a string parsing tags too.
+//     */
+//    public void testSpeedStringWithTags () throws ParserException, IOException
+//    {
+//        final String link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
+//        URL url;
+//        URLConnection connection;
+//        Source source;
+//        StringBuffer buffer;
+//        int i;
+//        String html;
+//
+//        long old_total;
+//        long new_total;
+//        long begin;
+//        long end;
+//        StringReader reader;
+//        NodeReader nodes;
+//        Parser parser;
+//        int nodecount;
+//        Node node;
+//        int charcount;
+//
+//        url = new URL (link);
+//        connection = url.openConnection ();
+//        connection.connect ();
+//        source = new Source (new Stream (connection.getInputStream ()));
+//        buffer = new StringBuffer (350000);
+//        while (-1 != (i = source.read ()))
+//            buffer.append ((char)i);
+//        source.close ();
+//        html = buffer.toString ();
+//        old_total = 0;
+//        new_total = 0;
+//        for (i = 0; i < 5; i++)
+//        {
+//            System.gc ();
+//            begin = System.currentTimeMillis ();
+//            Lexer lexer = new Lexer (html);
+//            nodecount = 0;
+//            while (null != (node = lexer.nextNode ()))
+//            {
+//                nodecount++;
+//                if (node instanceof TagNode)
+//                    ((TagNode)node).getAttributes ();
+//            }
+//            end = System.currentTimeMillis ();
+//            System.out.println ("     lexer: " + (end - begin) + " msec, " + nodecount + " nodes");
+//            if (0 != i) // the first timing is way different
+//                new_total += (end - begin);
+//
+//            System.gc ();
+//            begin = System.currentTimeMillis ();
+//            reader = new StringReader (html);
+//            nodes =  new NodeReader (new BufferedReader (reader), 350000);
+//            parser = new Parser (nodes, null);
+//            nodecount = 0;
+//            while (null != (node = nodes.readElement ()))
+//            {
+//                nodecount++;
+//                if (node instanceof Tag)
+//                    ((Tag)node).getAttributes ();
+//            }
+//            end = System.currentTimeMillis ();
+//            System.out.println ("old reader: " + (end - begin) + " msec, " + nodecount + " nodes");
+//            if (0 != i) // the first timing is way different
+//                old_total += (end - begin);
+//        }
+//        assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
+//        System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
+//    }
+//
+//    public void testSpeedStreamWithoutTags () throws ParserException, IOException
+//    {
+//        final String link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
+//        URL url;
+//        URLConnection connection;
+//        Source source;
+//        StringBuffer buffer;
+//        int i;
+//        String html;
+//        InputStream stream;
+//
+//        long old_total;
+//        long new_total;
+//        long begin;
+//        long end;
+//        InputStreamReader reader;
+//        NodeReader nodes;
+//        Parser parser;
+//        int nodecount;
+//        Node node;
+//        int charcount;
+//
+//        url = new URL (link);
+//        connection = url.openConnection ();
+//        connection.connect ();
+//        source = new Source (new Stream (connection.getInputStream ()));
+//        buffer = new StringBuffer (350000);
+//        while (-1 != (i = source.read ()))
+//            buffer.append ((char)i);
+//        source.close ();
+//        html = buffer.toString ();
+//        old_total = 0;
+//        new_total = 0;
+//
+//        for (i = 0; i < 5; i++)
+//        {
+//
+//            System.gc ();
+//            begin = System.currentTimeMillis ();
+//            stream = new ByteArrayInputStream (html.getBytes (Page.DEFAULT_CHARSET));
+//            Lexer lexer = new Lexer (new Page (stream, Page.DEFAULT_CHARSET));
+//            nodecount = 0;
+//            while (null != (node = lexer.nextNode ()))
+//                nodecount++;
+//            end = System.currentTimeMillis ();
+//            System.out.println ("     lexer: " + (end - begin) + " msec, " + nodecount + " nodes");
+//            if (0 != i) // the first timing is way different
+//                new_total += (end - begin);
+//
+//            System.gc ();
+//            begin = System.currentTimeMillis ();
+//            stream = new ByteArrayInputStream (html.getBytes (Page.DEFAULT_CHARSET));
+//            reader = new InputStreamReader (stream);
+//            nodes =  new NodeReader (reader, 350000);
+//            parser = new Parser (nodes, null);
+//            nodecount = 0;
+//            while (null != (node = nodes.readElement ()))
+//                nodecount++;
+//            end = System.currentTimeMillis ();
+//            System.out.println ("old reader: " + (end - begin) + " msec, " + nodecount + " nodes");
+//            if (0 != i) // the first timing is way different
+//                old_total += (end - begin);
+//
+//        }
+//        assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
+//        System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
+//    }
+//
+//    public void testSpeedStreamWithTags () throws ParserException, IOException
+//    {
+//        final String link = "http://htmlparser.sourceforge.net/javadoc_1_3/index-all.html";
+//        URL url;
+//        URLConnection connection;
+//        Source source;
+//        StringBuffer buffer;
+//        int i;
+//        String html;
+//        InputStream stream;
+//
+//        long old_total;
+//        long new_total;
+//        long begin;
+//        long end;
+//        InputStreamReader reader;
+//        NodeReader nodes;
+//        Parser parser;
+//        int nodecount;
+//        Node node;
+//        int charcount;
+//
+//        url = new URL (link);
+//        connection = url.openConnection ();
+//        connection.connect ();
+//        source = new Source (new Stream (connection.getInputStream ()));
+//        buffer = new StringBuffer (350000);
+//        while (-1 != (i = source.read ()))
+//            buffer.append ((char)i);
+//        source.close ();
+//        html = buffer.toString ();
+//        old_total = 0;
+//        new_total = 0;
+//
+//        for (i = 0; i < 5; i++)
+//        {
+//
+//            System.gc ();
+//            begin = System.currentTimeMillis ();
+//            stream = new ByteArrayInputStream (html.getBytes (Page.DEFAULT_CHARSET));
+//            Lexer lexer = new Lexer (new Page (stream, Page.DEFAULT_CHARSET));
+//            nodecount = 0;
+//            while (null != (node = lexer.nextNode ()))
+//            {
+//                nodecount++;
+//                if (node instanceof TagNode)
+//                    ((TagNode)node).getAttributes ();
+//            }
+//            end = System.currentTimeMillis ();
+//            System.out.println ("     lexer: " + (end - begin) + " msec, " + nodecount + " nodes");
+//            if (0 != i) // the first timing is way different
+//                new_total += (end - begin);
+//
+//            System.gc ();
+//            begin = System.currentTimeMillis ();
+//            stream = new ByteArrayInputStream (html.getBytes (Page.DEFAULT_CHARSET));
+//            reader = new InputStreamReader (stream);
+//            nodes =  new NodeReader (reader, 350000);
+//            parser = new Parser (nodes, null);
+//            nodecount = 0;
+//            while (null != (node = nodes.readElement ()))
+//            {
+//                nodecount++;
+//                if (node instanceof Tag)
+//                    ((Tag)node).getAttributes ();
+//            }
+//            end = System.currentTimeMillis ();
+//            System.out.println ("old reader: " + (end - begin) + " msec, " + nodecount + " nodes");
+//            if (0 != i) // the first timing is way different
+//                old_total += (end - begin);
+//        }
+//        assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
+//        System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
+//    }
 
 //    public static void main (String[] args) throws ParserException, IOException
 //    {

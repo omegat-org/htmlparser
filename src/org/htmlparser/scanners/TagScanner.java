@@ -33,12 +33,13 @@ package org.htmlparser.scanners;
 import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Vector;
 
 import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
+import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.EndTag;
+import org.htmlparser.lexer.Lexer;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
@@ -140,48 +141,49 @@ public abstract class TagScanner
   public boolean evaluate(String tagContents,TagScanner previousOpenScanner) {
     return true;
   }
-  public static String extractXMLData(Node node, String tagName, NodeReader reader) throws ParserException{
-    try {
-      String xmlData = "";
-
-      boolean xmlTagFound = isXMLTagFound(node, tagName);
-      if (xmlTagFound) {
-        try{
-          do {
-            node = reader.readElement();
-            if (node!=null) {
-              if (node instanceof StringNode) {
-                StringNode stringNode = (StringNode)node;
-                if (xmlData.length()>0) xmlData+=" ";
-            xmlData += stringNode.getText();
-          } else if (!(node instanceof org.htmlparser.tags.EndTag))
-            xmlTagFound = false;
-        }
-      }
-      while (node instanceof StringNode);
-
-    }
-
-    catch (Exception e) {
-        throw new ParserException("HTMLTagScanner.extractXMLData() : error while trying to find xml tag",e);
-        }
-      }
-      if (xmlTagFound) {
-          if (node!=null) {
-            if (node instanceof org.htmlparser.tags.EndTag) {
-              org.htmlparser.tags.EndTag endTag = (org.htmlparser.tags.EndTag)node;
-              if (!endTag.getText().equals(tagName)) xmlTagFound = false;
-            }
-
-          }
-
-      }
-      if (xmlTagFound) return xmlData; else return null;
-    }
-    catch (Exception e) {
-        throw new ParserException("HTMLTagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
-        }
-      }
+  
+//  public static String extractXMLData(Node node, String tagName, NodeReader reader) throws ParserException{
+//    try {
+//      String xmlData = "";
+//
+//      boolean xmlTagFound = isXMLTagFound(node, tagName);
+//      if (xmlTagFound) {
+//        try{
+//          do {
+//            node = reader.readElement();
+//            if (node!=null) {
+//              if (node instanceof StringNode) {
+//                StringNode stringNode = (StringNode)node;
+//                if (xmlData.length()>0) xmlData+=" ";
+//            xmlData += stringNode.getText();
+//          } else if (!(node instanceof org.htmlparser.tags.EndTag))
+//            xmlTagFound = false;
+//        }
+//      }
+//      while (node instanceof StringNode);
+//
+//    }
+//
+//    catch (Exception e) {
+//        throw new ParserException("HTMLTagScanner.extractXMLData() : error while trying to find xml tag",e);
+//        }
+//      }
+//      if (xmlTagFound) {
+//          if (node!=null) {
+//            if (node instanceof org.htmlparser.tags.EndTag) {
+//              org.htmlparser.tags.EndTag endTag = (org.htmlparser.tags.EndTag)node;
+//              if (!endTag.getText().equals(tagName)) xmlTagFound = false;
+//            }
+//
+//          }
+//
+//      }
+//      if (xmlTagFound) return xmlData; else return null;
+//    }
+//    catch (Exception e) {
+//        throw new ParserException("HTMLTagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
+//        }
+//      }
 
     public String getFilter() {
         return filter;
@@ -198,8 +200,8 @@ public abstract class TagScanner
         return xmlTagFound;
     }
 
-    public final Tag createScannedNode(Tag tag,String url,NodeReader reader,String currLine) throws ParserException {
-        Tag thisTag = scan(tag,url,reader,currLine);
+    public final Tag createScannedNode(Tag tag,String url,Lexer lexer) throws ParserException {
+        Tag thisTag = scan(tag,url,lexer);
         thisTag.setThisScanner(this);
         thisTag.setAttributesEx(tag.getAttributesEx());
         return thisTag;
@@ -215,13 +217,16 @@ public abstract class TagScanner
      * @param url The initiating url of the scan (Where the html page lies)
      * @param reader The reader object responsible for reading the html page
      */
-    public Tag scan(Tag tag,String url,NodeReader reader,String currLine) throws ParserException {
-        return createTag(new TagData(
+    public Tag scan(Tag tag,String url,Lexer lexer) throws ParserException
+    {
+        TagData data;
+        
+        data = new TagData(
+            lexer.getPage (),
             tag.elementBegin(),
             tag.elementEnd(),
-            tag.getText(),
-            currLine
-        ), tag, url);
+            new Vector ());
+        return (createTag(data, tag, url));
     }
 
     public String removeChars(String s,String occur)  {
@@ -245,19 +250,21 @@ public abstract class TagScanner
         this.feedback = feedback;
     }
 
-    public static Map adjustScanners(NodeReader reader)
+    public static Map adjustScanners(Parser parser)
     {
-        Map tempScanners= new Hashtable();
-        tempScanners = reader.getParser().getScanners();
+        Map ret;
+
+        ret = parser.getScanners();
         // Remove all existing scanners
-        reader.getParser().flushScanners();
-        return tempScanners;
+        parser.flushScanners();
+
+        return (ret);
     }
 
-    public static void restoreScanners(NodeReader pReader, Hashtable tempScanners)
+    public static void restoreScanners(Parser parser, Hashtable tempScanners)
     {
         // Flush the scanners
-        pReader.getParser().setScanners(tempScanners);
+        parser.setScanners(tempScanners);
     }
 
     /**
@@ -278,24 +285,21 @@ public abstract class TagScanner
      * @return Tag
      * @throws ParserException
      */
-    protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
-        return null;
-    }
+    protected abstract Tag createTag(TagData tagData, Tag tag, String url) throws ParserException; 
 
-
-    protected Tag getReplacedEndTag(Tag tag, NodeReader reader, String currentLine) {
-        // Replace tag - it was a <A> tag - replace with </a>
-        String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
-        reader.changeLine(newLine);
-        return new EndTag(
-            new TagData(
-                tag.elementBegin(),
-                tag.elementBegin()+3,
-                tag.getTagName(),
-                currentLine
-            )
-        );
-    }
+//    protected Tag getReplacedEndTag(Tag tag, NodeReader reader, String currentLine) {
+//        // Replace tag - it was a <A> tag - replace with </a>
+//        String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
+//        reader.changeLine(newLine);
+//        return new EndTag(
+//            new TagData(
+//                tag.elementBegin(),
+//                tag.elementBegin()+3,
+//                tag.getTagName(),
+//                currentLine
+//            )
+//        );
+//    }
 
     public String replaceFaultyTagWithEndTag(Tag tag, String currentLine) {
         String newLine = currentLine.substring(0,tag.elementBegin());
@@ -305,19 +309,19 @@ public abstract class TagScanner
         return newLine;
     }
 
-    protected Tag getInsertedEndTag(Tag tag, NodeReader reader, String currentLine) {
-        // Insert end tag
-        String newLine = insertEndTagBeforeNode(tag, currentLine);
-        reader.changeLine(newLine);
-        return new EndTag(
-            new TagData(
-                tag.elementBegin(),
-                tag.elementBegin()+3,
-                tag.getTagName(),
-                currentLine
-            )
-        );
-    }
+//    protected Tag getInsertedEndTag(Tag tag, String currentLine) {
+//        // Insert end tag
+//        String newLine = insertEndTagBeforeNode(tag, currentLine);
+//        reader.changeLine(newLine);
+//        return new EndTag(
+//            new TagData(
+//                tag.elementBegin(),
+//                tag.elementBegin()+3,
+//                tag.getTagName(),
+//                currentLine
+//            )
+//        );
+//    }
 
 
 }

@@ -80,6 +80,15 @@ public class Cursor implements Ordered, Cloneable
     }
 
     /**
+     * Set the position of this cursor.
+     * @param The new cursor position.
+     */
+    public void setPosition (int position)
+    {
+        mPosition = position;
+    }
+
+    /**
      * Move the cursor position ahead one character.
      */
     public void advance ()

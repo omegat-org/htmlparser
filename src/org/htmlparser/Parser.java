@@ -43,9 +43,15 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Vector;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
+import org.htmlparser.lexer.nodes.NodeFactory;
+import org.htmlparser.lexer.nodes.TagNode;
 
 import org.htmlparser.parserHelper.ParserHelper;
-import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.AppletScanner;
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.scanners.BulletListScanner;
@@ -63,7 +69,6 @@ import org.htmlparser.scanners.StyleScanner;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.scanners.TitleScanner;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
@@ -133,7 +138,8 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class Parser
     implements
-        Serializable
+        Serializable,
+        NodeFactory
 {
     // Please don't change the formatting of the version variables below.
     // This is done so as to facilitate ant script processing.
@@ -169,20 +175,6 @@ public class Parser
     // End of formatting
 
     /**
-     * The default charset.
-     * This should be <code>ISO-8859-1</code>,
-     * see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
-     * Another alias is "8859_1".
-     */
-    protected static final String DEFAULT_CHARSET = "ISO-8859-1";
-
-    /**
-     *  Trigger for charset detection.
-     */
-    protected static final String CHARSET_STRING = "charset";
-
-
-    /**
      * This object is used by the StringParser to create new StringNodes at runtime, based on
      * use configurations of the factory
      */
@@ -194,34 +186,19 @@ public class Parser
     protected ParserFeedback feedback;
 
     /**
-     * The URL or filename to be parsed.
+     * The html lexer associated with this parser.
      */
-    protected String resourceLocn;
-
-    /**
-     * The html reader associated with this parser.
-     */
-    protected transient NodeReader reader;
+    protected transient Lexer mLexer;
 
     /**
      * The list of scanners to apply at the top level.
      */
-    private Map scanners;
-
+    protected Map scanners;
+    
     /**
-     * The encoding being used to decode the connection input stream.
+     * The current scanner when recursing into a tag.
      */
-    protected String character_set;
-
-    /**
-     * The source for HTML.
-     */
-    protected transient URLConnection url_conn;
-
-    /**
-     * The bytes extracted from the source.
-     */
-    protected transient BufferedInputStream input;
+    protected TagScanner mScanner;
 
     /**
      * Variable to store lineSeparator.
@@ -284,20 +261,15 @@ public class Parser
     /**
      * Zero argument constructor.
      * The parser is in a safe but useless state.
-     * Set the reader or connection using setReader() or setConnection().
-     * @see #setReader(NodeReader)
+     * Set the lexer or connection using setLexer() or setConnection().
+     * @see #setLexer(Lexer)
      * @see #setConnection(URLConnection)
      */
     public Parser ()
     {
         setFeedback (null);
         setScanners (null);
-        resourceLocn = null;
-        reader = null;
-        character_set = DEFAULT_CHARSET;
-        url_conn = null;
-        input = null;
-        Tag.setTagParser (new TagParser (getFeedback ()));
+        setLexer (new Lexer (new Page ("")));
     }
 
     /**
@@ -319,17 +291,11 @@ public class Parser
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
      */
-    public Parser(NodeReader rd, ParserFeedback fb)
+    public Parser(Lexer lexer, ParserFeedback fb)
     {
         setFeedback (fb);
         setScanners (null);
-        resourceLocn = null;
-        reader = null;
-        character_set = DEFAULT_CHARSET;
-        url_conn = null;
-        input = null;
-        setReader (rd);
-        Tag.setTagParser(new TagParser(feedback));
+        setLexer (lexer);
     }
 
     /**
@@ -344,12 +310,6 @@ public class Parser
     {
         setFeedback (fb);
         setScanners (null);
-        resourceLocn = null;
-        reader = null;
-        character_set = DEFAULT_CHARSET;
-        url_conn = null;
-        input = null;
-        Tag.setTagParser (new TagParser (feedback));
         setConnection (connection);
     }
 
@@ -379,7 +339,7 @@ public class Parser
     }
 
     /**
-     * This constructor is present to enable users to plugin their own readers.
+     * This constructor is present to enable users to plugin their own lexers.
      * A DefaultHTMLParserFeedback object is used for feedback. It can also be used with readers of the user's choice
      * streaming data into the parser.<p/>
      * <B>Important:</B> If you are using this constructor, and you would like to use the parser
@@ -393,9 +353,9 @@ public class Parser
      * </li>
      * @param reader The source for HTML to be parsed.
      */
-    public Parser(NodeReader reader)
+    public Parser (Lexer lexer)
     {
-        this (reader, stdout);
+        this (lexer, stdout);
     }
 
     /**
@@ -418,10 +378,6 @@ public class Parser
         throws
             IOException
     {
-        if ((null == getConnection ()) || /*redundant*/(null == getURL ()))
-            if (null != getReader ());
-//  commented out by Somik - why are we not allowed to serialize parsers without url
-//                throw new IOException ("can only serialize parsers with a URL");
         out.defaultWriteObject ();
     }
 
@@ -433,7 +389,7 @@ public class Parser
         in.defaultReadObject ();
         try
         {
-            // reopen the connection and create a reader which are transient fields
+            // reopen the connection and create a lexer which are transient fields
             setURL (getURL ());
         }
         catch (ParserException hpe)
@@ -448,53 +404,22 @@ public class Parser
 
     /**
      * Set the connection for this parser.
-     * This method sets four of the fields in the parser object;
-     * <code>resourceLocn</code>, <code>url_conn</code>, <code>character_set</code>
-     * and <code>reader</code>. It does not adjust the <code>scanners</code> list
-     * or <code>feedback</code> object. The four fields are set atomicly by
-     * this method, either they are all set or none of them is set. Trying to
+     * This method creates a new <code>Lexer</code> reading from the connection.
+     * It does not adjust the <code>scanners</code> list
+     * or <code>feedback</code> object. Trying to
      * set the connection to null is a noop.
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
      * @exception ParserException if the character set specified in the
      * HTTP header is not supported, or an i/o exception occurs creating the
-     * reader.
+     * lexer.
      */
     public void setConnection (URLConnection connection)
         throws
             ParserException
     {
-        String res;
-        NodeReader rd;
-        String chs;
-        URLConnection con;
-
         if (null != connection)
-        {
-            res = getURL ();
-            rd = getReader ();
-            chs = getEncoding ();
-            con = getConnection ();
-            try
-            {
-                resourceLocn = connection.getURL ().toExternalForm ();
-                url_conn = connection;
-                url_conn.connect ();
-                character_set = getCharacterSet (url_conn);
-                createReader ();
-            }
-            catch (IOException ioe)
-            {
-                String msg = "setConnection() : Error in opening a connection to " + connection.getURL ().toExternalForm ();
-                ParserException ex = new ParserException (msg, ioe);
-                feedback.error (msg, ex);
-                resourceLocn = res;
-                url_conn = con;
-                character_set = chs;
-                reader = rd;
-                throw ex;
-            }
-        }
+            setLexer (new Lexer (connection));
     }
 
     /**
@@ -505,15 +430,14 @@ public class Parser
      */
     public URLConnection getConnection ()
     {
-        return (url_conn);
+        return (getLexer ().getPage ().getConnection ());
     }
 
     /**
      * Set the URL for this parser.
-     * This method sets four of the fields in the parser object;
-     * <code>resourceLocn</code>, <code>url_conn</code>, <code>character_set</code>
-     * and <code>reader</code>. It does not adjust the <code>scanners</code> list
-     * or <code>feedback</code> object.Trying to set the url to null or an
+     * This method creates a new Lexer reading from the given URL.
+     * It does not adjust the <code>scanners</code> list
+     * or <code>feedback</code> object. Trying to set the url to null or an
      * empty string is a noop.
      * @see #setConnection(URLConnection)
      */
@@ -532,100 +456,53 @@ public class Parser
      */
     public String getURL ()
     {
-        return (resourceLocn);
+        return (getLexer ().getPage ().getUrl ());
     }
 
     /**
-     * Set the encoding for this parser.
-     * If there is no connection (getConnection() returns null) it simply sets
-     * the character set name stored in the parser (Note: the reader object
-     * which must have been set in the constructor or by <code>setReader()</code>,
-     * may or may not be using this character set).
-     * Otherwise (getConnection() doesn't return null) it does this by reopening the
-     * input stream of the connection and creating a reader that uses this
-     * character set. In this case, this method sets two of the fields in the
-     * parser object; <code>character_set</code> and <code>reader</code>.
-     * It does not adjust <code>resourceLocn</code>, <code>url_conn</code>,
-     * <code>scanners</code> or <code>feedback</code>. The two fields are set
-     * atomicly by this method, either they are both set or none of them is set.
-     * Trying to set the encoding to null or an empty string is a noop.
-     * @exception ParserException If the opening of the reader
+     * Set the encoding for the page this parser is reading from.
+     * @param The new character set to use.
      */
     public void setEncoding (String encoding)
         throws
             ParserException
     {
-        String chs;
-        NodeReader rd;
-        BufferedInputStream in;
-
-        if ((null != encoding) && !"".equals (encoding))
-            if (null == getConnection ())
-                character_set = encoding;
-            else
-            {
-                rd = getReader ();
-                chs = getEncoding ();
-                in = input;
-                try
-                {
-                    character_set = encoding;
-                    recreateReader ();
-                }
-                catch (IOException ioe)
-                {
-                    String msg = "setEncoding() : Error in opening a connection to " + getConnection ().getURL ().toExternalForm ();
-                    ParserException ex = new ParserException (msg, ioe);
-                    feedback.error (msg, ex);
-                    character_set = chs;
-                    reader = rd;
-                    input = in;
-                    throw ex;
-                }
-            }
+        getLexer ().getPage ().setEncoding (encoding);
     }
-
+        
     /**
-     * The current encoding.
-     * This item is et from the HTTP header but may be overridden by meta
+     * Get the encoding for the page this parser is reading from.
+     * This item is set from the HTTP header but may be overridden by meta
      * tags in the head, so this may change after the head has been parsed.
      */
     public String getEncoding ()
     {
-        return (character_set);
+        return (getLexer ().getPage ().getEncoding ());
     }
 
     /**
-     * Set the reader for this parser.
-     * This method sets four of the fields in the parser object;
-     * <code>resourceLocn</code>, <code>url_conn</code>, <code>character_set</code>
-     * and <code>reader</code>. It does not adjust the <code>scanners</code> list
-     * or <code>feedback</code> object. The <code>url_conn</code> is set to
-     * null since this cannot be determined from the reader. The
-     * <code>character_set</code> is set to the default character set since
-     * this cannot be determined from the reader.
-     * Trying to set the reader to <code>null</code> is a noop.
-     * @param rd The reader object to use. This reader will be bound to this
-     * parser after this call.
+     * Set the lexer for this parser.
+     * TIt does not adjust the <code>scanners</code> list
+     * or <code>feedback</code> object.
+     * Trying to set the lexer to <code>null</code> is a noop.
+     * @param lexer The lexer object to use.
      */
-    public void setReader (NodeReader rd)
+    public void setLexer (Lexer lexer)
     {
-        if (null != rd)
+        if (null != lexer)
         {
-            resourceLocn = rd.getURL ();
-            reader = rd;
-            character_set = DEFAULT_CHARSET;
-            url_conn = null;
-            reader.setParser(this);
+            mLexer = lexer;
+            mLexer.setNodeFactory (this);
         }
     }
 
     /**
      * Returns the reader associated with the parser
-     * @return NodeReader
+     * @return The current lexer.
      */
-    public NodeReader getReader() {
-        return reader;
+    public Lexer getLexer ()
+    {
+        return (mLexer);
     }
 
     /**
@@ -670,192 +547,27 @@ public class Parser
         return feedback;
     }
 
-    //
-    // Internal methods
-    //
-
-    /**
-     * Open a stream reader on the <code>InputStream</code>.
-     * Revise the character set to it's default value if an
-     * <code>UnsupportedEncodingException</code> is thrown.
-     * @exception UnsupportedEncodingException in the unlikely event that
-     * the default character set is not supported on this platform.
-     */
-    protected InputStreamReader createInputStreamReader ()
-        throws
-            UnsupportedEncodingException
+    public TagScanner getPreviousOpenScanner ()
     {
-        InputStreamReader ret;
-
-        try
-        {
-            ret = new InputStreamReader (input, character_set);
-        }
-        catch (UnsupportedEncodingException uee)
-        {
-            StringBuffer msg;
-            String message;
-
-            msg = new StringBuffer (1024);
-            msg.append (url_conn.getURL ().toExternalForm ());
-            msg.append (" has an encoding (");
-            msg.append (character_set);
-            msg.append (") which is not supported, using ");
-            msg.append (DEFAULT_CHARSET);
-            message = msg.toString ();
-            feedback.warning (message);
-            character_set = DEFAULT_CHARSET;
-            ret = new InputStreamReader (input, character_set);
-        }
-
-        return (ret);
+        return (mScanner);
     }
 
-    /**
-     * Create a new reader for the URLConnection object.
-     * The current character set is used to transform the input stream
-     * into a character reader.
-     * @exception IOException if there is a problem constructing the reader.
-     * @see #createInputStreamReader()
-     * @see #getEncoding()
-     */
-    protected void createReader ()
-        throws
-            IOException
+    public void setPreviousOpenScanner (TagScanner scanner)
     {
-        InputStream stream;
-        InputStreamReader in;
-
-        stream = url_conn.getInputStream ();
-        input = new BufferedInputStream (stream);
-        input.mark (Integer.MAX_VALUE);
-        in = createInputStreamReader ();
-        reader = new NodeReader (in, resourceLocn);
-        reader.setParser (this);
-    }
-
-    /**
-     * Create a new reader for the URLConnection object but reuse the input stream.
-     * The current character set is used to transform the input stream
-     * into a character reader. Defaults to <code>createReader()</code> if
-     * there is no existing input stream.
-     * @exception IOException if there is a problem constructing the reader.
-     * @see #createReader()
-     * @see #createInputStreamReader()
-     * @see #getEncoding()
-     */
-    protected void recreateReader ()
-        throws
-            IOException
-    {
-        InputStreamReader in;
-
-        if (null == input)
-            createReader ();
-        else
-        {
-            input.reset ();
-            input.mark (Integer.MAX_VALUE);
-            in = createInputStreamReader ();
-            reader = new NodeReader (in, resourceLocn);
-            reader.setParser (this);
-        }
-    }
-
-    /**
-     * Try and extract the character set from the HTTP header.
-     * @param connection The connection with the charset info.
-     * @return The character set name to use for this HTML page.
-     */
-    protected String getCharacterSet (URLConnection connection)
-    {
-        final String field = "Content-Type";
-
-        String string;
-        String ret;
-
-        ret = DEFAULT_CHARSET;
-        string = connection.getHeaderField (field);
-        if (null != string)
-            ret = getCharset (string);
-
-        return (ret);
-    }
-
-    /**
-     * Get a CharacterSet name corresponding to a charset parameter.
-     * @param content A text line of the form:
-     * <pre>
-     * text/html; charset=Shift_JIS
-     * </pre>
-     * which is applicable both to the HTTP header field Content-Type and
-     * the meta tag http-equiv="Content-Type".
-     * Note this method also handles non-compliant quoted charset directives such as:
-     * <pre>
-     * text/html; charset="UTF-8"
-     * </pre>
-     * and
-     * <pre>
-     * text/html; charset='UTF-8'
-     * </pre>
-     * @return The character set name to use when reading the input stream.
-     * For JDKs that have the Charset class this is qualified by passing
-     * the name to findCharset() to render it into canonical form.
-     * If the charset parameter is not found in the given string, the default
-     * character set is returned.
-     * @see ParserHelper#findCharset
-     * @see #DEFAULT_CHARSET
-     */
-    protected String getCharset(String content)
-    {
-        int index;
-        String ret;
-
-        ret = DEFAULT_CHARSET;
-        if (null != content)
-        {
-            index = content.indexOf(CHARSET_STRING);
-
-            if (index != -1)
-            {
-                content = content.substring(index + CHARSET_STRING.length()).trim();
-                if (content.startsWith("="))
-                {
-                    content = content.substring(1).trim();
-                    index = content.indexOf(";");
-                    if (index != -1)
-                        content = content.substring(0, index);
-
-                    //remove any double quotes from around charset string
-                    if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
-                        content = content.substring (1, content.length () - 1);
-
-                    //remove any single quote from around charset string
-                    if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
-                        content = content.substring (1, content.length () - 1);
-
-                    ret = ParserHelper.findCharset(content, ret);
-                    // Charset names are not case-sensitive;
-                    // that is, case is always ignored when comparing charset names.
-                    if (!ret.equalsIgnoreCase(content))
-                    {
-                        feedback.info (
-                            "detected charset \""
-                            + content
-                            + "\", using \""
-                            + ret
-                            + "\"");
-                    }
-                }
-            }
-        }
-
-        return (ret);
+        mScanner = scanner;
     }
 
     //
     // Public methods
     //
+
+    /**
+     * Reset the parser to start from the beginning again.
+     */
+    public void reset ()
+    {
+        getLexer ().reset ();
+    }
 
     /**
      * Add a new Tag Scanner.
@@ -898,81 +610,70 @@ public class Parser
      */
     public NodeIterator elements() throws ParserException
     {
-        boolean remove_scanner = false;
-        IteratorImpl ret;
-
-        ret = new IteratorImpl (reader, resourceLocn, feedback);
-        ret = createIteratorImpl(remove_scanner, ret);
-
-        return (ret);
+        return (createIteratorImpl ());
     }
 
-    public IteratorImpl createIteratorImpl(
-        boolean remove_scanner,
-        IteratorImpl ret)
-        throws ParserException {
+    public IteratorImpl createIteratorImpl()
+        throws ParserException
+    {
+        boolean remove_scanner;
         Node node;
+        TagNode tag;
         MetaTag meta;
         String httpEquiv;
         String charset;
-        EndTag end;
-          if (null != url_conn)
-                try
-                {
-                    if (null == scanners.get ("-m"))
-                    {
-                        addScanner (new MetaTagScanner ("-m"));
-                        remove_scanner = true;
-                    }
+        String original;
+        IteratorImpl ret;
 
-                    /* pre-read up to </HEAD> looking for charset directive */
-                    while (null != (node = ret.peek ()))
-                    {
-                        if (node instanceof MetaTag)
-                        {   // check for charset on Content-Type
-                            meta = (MetaTag)node;
-                            httpEquiv = meta.getAttribute ("HTTP-EQUIV");
-                            if ("Content-Type".equalsIgnoreCase (httpEquiv))
-                            {
-                                charset = getCharset (meta.getAttribute ("CONTENT"));
-                                if (!charset.equalsIgnoreCase (character_set))
-                                {   // oops, different character set, restart
-                                    character_set = charset;
-                                    recreateReader ();
-                                    ret = new IteratorImpl (reader, resourceLocn, feedback);
-                                }
-                                // once we see the Content-Type meta tag we're finished the pre-read
-                                break;
-                            }
-                        }
-                        else if (node instanceof EndTag)
+        ret = new IteratorImpl (getLexer (), feedback);
+        original = getLexer ().getPage ().getEncoding ();
+        remove_scanner = false;
+        try
+        {
+            if (null == scanners.get ("-m"))
+            {
+                addScanner (new MetaTagScanner ("-m"));
+                remove_scanner = true;
+            }
+
+            /* pre-read up to </HEAD> looking for charset directive */
+            while (null != (node = ret.peek ()))
+            {
+                if (node instanceof TagNode)
+                {
+                    tag = (TagNode)node;
+                    if (tag instanceof MetaTag)
+                    {   // check for charset on Content-Type
+                        meta = (MetaTag)node;
+                        httpEquiv = meta.getAttribute ("HTTP-EQUIV");
+                        if ("Content-Type".equalsIgnoreCase (httpEquiv))
                         {
-                            end = (EndTag)node;
-                            if (end.getTagName ().equalsIgnoreCase ("HEAD"))
-                                // or, once we see the </HEAD> tag we're finished the pre-read
-                                break;
+                            charset = getLexer ().getPage ().getCharset (meta.getAttribute ("CONTENT"));
+                            if (!charset.equalsIgnoreCase (original))
+                            {   // oops, different character set, restart
+                                getLexer ().getPage ().setEncoding (charset);
+                                getLexer ().setPosition (0);
+                                ret = new IteratorImpl (getLexer (), feedback);
+                            }
+                            // once we see the Content-Type meta tag we're finished the pre-read
+                            break;
                         }
                     }
+                    else if (tag.isEndTag ())
+                    {
+                        if (tag.getTagName ().equalsIgnoreCase ("HEAD"))
+                            // or, once we see the </HEAD> tag we're finished the pre-read
+                            break;
+                    }
                 }
-                catch (UnsupportedEncodingException uee)
-                {
-                    String msg = "elements() : The content of " + url_conn.getURL ().toExternalForm () + " has an encoding which is not supported";
-                    ParserException ex = new ParserException (msg, uee);
-                    feedback.error (msg, ex);
-                    throw ex;
-                }
-                catch (IOException ioe)
-                {
-                    String msg = "elements() : Error in opening a connection to " + url_conn.getURL ().toExternalForm ();
-                    ParserException ex = new ParserException (msg, ioe);
-                    feedback.error (msg, ex);
-                    throw ex;
-                }
-                finally
-                {
-                    if (remove_scanner)
-                        scanners.remove ("-m");
-                }
+            }
+        }
+        finally
+        {
+            if (remove_scanner)
+                scanners.remove ("-m");
+        }
+
         return ret;
     }
 
@@ -1005,19 +706,21 @@ public class Parser
             if (node!=null)
             {
                 if (filter==null)
-                System.out.println(node.toString());
+                    System.out.println(node.toString());
                 else
                 {
                     // There is a filter. Find if the associated filter of this node
                     // matches the specified filter
-                    if (!(node instanceof Tag)) continue;
+                    if (!(node instanceof Tag))
+                        continue;
                     Tag tag=(Tag)node;
                     TagScanner scanner = tag.getThisScanner();
                     if (scanner==null)
                         continue;
 
                     String tagFilter = scanner.getFilter();
-                    if (tagFilter==null) continue;
+                    if (tagFilter==null)
+                        continue;
                     if (tagFilter.equals(filter))
                         System.out.println(node.toString());
                 }
@@ -1170,9 +873,13 @@ public class Parser
      * @param inputHTML the input HTML that is to be parsed.
      */
     public void setInputHTML (String inputHTML)
+        throws
+            ParserException
     {
+        if (null == inputHTML)
+            throw new IllegalArgumentException ("html cannot be null");
         if (!"".equals (inputHTML))
-            reader = new NodeReader (new StringReader (inputHTML), "");
+            setLexer (new Lexer (new Page (inputHTML)));
     }
 
     public Node [] extractAllNodesThatAre(Class nodeType) throws ParserException {
@@ -1188,10 +895,17 @@ public class Parser
      * @param inputHTML
      * @return Parser
      */
-    public static Parser createParser(String inputHTML) {
-        NodeReader reader =
-            new NodeReader(new StringReader(inputHTML),"");
-        return new Parser(reader);
+    public static Parser createParser(String inputHTML)
+    {
+        Lexer lexer;
+        Parser ret;
+
+        if (null == inputHTML)
+            throw new IllegalArgumentException ("html cannot be null");
+        lexer = new Lexer (new Page (inputHTML));
+        ret = new Parser (lexer);
+
+        return (ret);
     }
 
     public static Parser createLinkRecognizingParser(String inputHTML) {
@@ -1215,5 +929,71 @@ public class Parser
 
     public void setStringNodeFactory(StringNodeFactory stringNodeFactory) {
         this.stringNodeFactory = stringNodeFactory;
+    }
+    
+    //
+    // NodeFactory interface
+    //
+
+    /**
+     * Create a new string node.
+     * @param lexer The lexer parsing this string.
+     * @param start The beginning position of the string.
+     * @param end The ending positiong of the string.
+     */
+    public Node createStringNode (Lexer lexer, int start, int end)
+    {
+        return (new StringNode (lexer.getPage (), start, end));
+    }
+
+    /**
+     * Create a new remark node.
+     * @param lexer The lexer parsing this remark.
+     * @param start The beginning position of the remark.
+     * @param end The ending positiong of the remark.
+     */
+    public Node createRemarkNode (Lexer lexer, int start, int end)
+    {
+        return (new RemarkNode (lexer.getPage (), start, end));
+    }
+
+    /**
+     * Create a new tag node.
+     * @param lexer The lexer parsing this tag.
+     * @param start The beginning position of the tag.
+     * @param end The ending positiong of the tag.
+     * @param attributes The attributes contained in this tag.
+     */
+    public Node createTagNode (Lexer lexer, int start, int end, Vector attributes)
+        throws
+            ParserException
+    {
+        String name;
+        TagScanner save;
+        TagScanner scanner;
+        Tag ret;
+        
+        ret = new Tag (lexer.getPage (), start, end, attributes);
+        if (!ret.isEndTag ())
+        {
+            // now recurse if there is a scanner for this type of tag
+            name = ret.getTagName ();
+            scanner = (TagScanner)scanners.get (name);
+            save = getPreviousOpenScanner ();
+            if ((null != scanner) && scanner.evaluate (ret.getText (), save))
+            {
+                setPreviousOpenScanner (scanner);
+                try
+                {
+                    ret = scanner.createScannedNode (ret, lexer.getPage ().getUrl (), lexer);
+                }
+                finally
+                {
+                    setPreviousOpenScanner (save);
+                }
+            }
+        }
+  
+        return (ret);
     }
 }

@@ -29,8 +29,8 @@
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.scanners.MetaTagScanner;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.MetaTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
@@ -55,7 +55,7 @@ public class MetaTagScannerTest extends ParserTestCase {
         parser.addScanner(scanner);
 
         parseAndAssertNodeCount(11);
-        assertTrue("Node 5 should be End Tag",node[5] instanceof EndTag);
+        assertTrue("Node 5 should be End Tag",node[5] instanceof Tag && ((Tag)node[5]).isEndTag ());
         assertTrue("Node 6 should be META Tag",node[6] instanceof MetaTag);
         MetaTag metaTag;
         metaTag = (MetaTag) node[6];

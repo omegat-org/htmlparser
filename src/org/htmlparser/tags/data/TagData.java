@@ -28,53 +28,101 @@
 
 package org.htmlparser.tags.data;
 
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
+
 public class TagData {
+    private Page mPage;
     private int tagBegin;
     private int tagEnd;
-    private int startLine;
-    private int endLine;
-    private String tagContents;
-    private String tagLine;
+    private Vector mAttributes;
     private String urlBeingParsed;
     private boolean isXmlEndTag;
 
-    public TagData(int tagBegin, int tagEnd, String tagContents,String tagLine) {
-        this(tagBegin, tagEnd, 0, 0, tagContents, tagLine, "", false);
+    public TagData(Page page, int tagBegin, int tagEnd, Vector attributes) {
+        this(page, tagBegin, tagEnd, attributes, "", false);
     }
 
-    public TagData(int tagBegin, int tagEnd, String tagContents,String tagLine, String urlBeingParsed) {
-        this(tagBegin, tagEnd, 0, 0, tagContents, tagLine, urlBeingParsed, false);
+    public TagData(Page page, int tagBegin, int tagEnd, Vector attributes, String urlBeingParsed) {
+        this(page, tagBegin, tagEnd, attributes, urlBeingParsed, false);
     }
 
-    public TagData(int tagBegin, int tagEnd, int startLine, int endLine, String tagContents,String tagLine, String urlBeingParsed, boolean isXmlEndTag) {
+    public TagData(Page page, int tagBegin, int tagEnd, Vector attributes, String urlBeingParsed, boolean isXmlEndTag) {
+        mPage = page;
         this.tagBegin = tagBegin;
         this.tagEnd   = tagEnd;
-        this.startLine = startLine;
-        this.endLine = endLine;
-        this.tagContents = tagContents;
-        this.tagLine = tagLine;
+        mAttributes = attributes;
         this.urlBeingParsed = urlBeingParsed;
         this.isXmlEndTag = isXmlEndTag;
     }
 
+    /**
+     * Create a virtual tag.
+     * Not on the page but virtually injected at the given position.
+     */
+    public TagData(String name, int tagBegin, Vector attributes, String urlBeingParsed, boolean isXmlEndTag)
+    {
+        this (
+            null,
+            tagBegin,
+            tagBegin + name.length () + 2 + (isXmlEndTag ? 1 : 0),
+            attributes,
+            urlBeingParsed,
+            isXmlEndTag);
+        // todo: add attribute sizes
+    }
+    
     public int getTagBegin() {
         return tagBegin;
     }
 
-    public String getTagContents() {
-        return tagContents;
+    public void setTagBegin(int begin) {
+        tagBegin = begin;
     }
 
     public int getTagEnd() {
         return tagEnd;
     }
 
-    public String getTagLine() {
-        return tagLine;
+    public void setTagEnd(int end) {
+        tagEnd = end;
     }
 
-    public void setTagContents(String tagContents) {
-        this.tagContents = tagContents;
+    public String getTagContents()
+    {
+        String ret;
+
+        if (null != mPage)
+            ret = mPage.getText (getTagBegin(), getTagEnd());
+        else
+            ret = "";
+            
+        return (ret);
+    }
+
+    /**
+     * @deprecated A tag may span more than one line. 
+     */
+    public String getTagLine()
+    {
+        String ret;
+
+        if (null != mPage)
+            ret = mPage.getLine (getTagBegin ());
+        else
+            ret = "";
+            
+        return (ret);
+    }
+
+    public void setTagContents (String tagContents, Vector attributes, String url, boolean xml_end_tag)
+    {
+        mPage = new Page (tagContents);
+        tagBegin = 0;
+        tagEnd = tagContents.length ();
+        mAttributes = attributes;
+        urlBeingParsed = url;
+        isXmlEndTag = xml_end_tag;
     }
 
     public String getUrlBeingParsed() {
@@ -94,8 +142,16 @@ public class TagData {
      * will only be valid for tags created with the
      * <code>CompositeTagScanner</code> or a subclass of it.
      */
-    public int getStartLine() {
-        return startLine;
+    public int getStartLine ()
+    {
+        int ret;
+
+        if (null != mPage)
+            ret = mPage.row (getTagBegin ());
+        else
+            ret = -1;
+            
+        return (ret);
     }
 
     /**
@@ -103,8 +159,25 @@ public class TagData {
      * will only be valid for tags created with the
      * <code>CompositeTagScanner</code> or a subclass of it.
      */
-    public int getEndLine() {
-        return endLine;
+    public int getEndLine()
+    {
+        int ret;
+
+        if (null != mPage)
+            ret = mPage.row (getTagEnd ());
+        else
+            ret = -1;
+            
+        return (ret);
     }
 
+    public Page getPage ()
+    {
+        return (mPage);
+    }
+
+    public Vector getAttributes ()
+    {
+        return (mAttributes);
+    }
 }

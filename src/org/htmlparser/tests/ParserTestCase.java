@@ -36,9 +36,10 @@ import junit.framework.TestCase;
 
 import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
@@ -53,7 +54,7 @@ public class ParserTestCase extends TestCase {
     protected Parser parser;
     protected Node node [];
     protected int nodeCount;
-    protected NodeReader reader;
+    protected Lexer mLexer;
 
     public ParserTestCase(String name) {
         super(name);
@@ -66,34 +67,29 @@ public class ParserTestCase extends TestCase {
     }
 
     protected void createParser(String inputHTML) {
-        String testHTML = new String(inputHTML);
-        StringReader sr = new StringReader(testHTML);
-        reader =  new NodeReader(new BufferedReader(sr),5000);
-        parser = new Parser(reader,new DefaultParserFeedback());
+        mLexer =  new Lexer (new Page (inputHTML));
+        parser = new Parser(mLexer, new DefaultParserFeedback());
         node = new AbstractNode[40];
     }
 
-    protected void createParser(String inputHTML,int numNodes) {
-        String testHTML = new String(inputHTML);
-        StringReader sr = new StringReader(testHTML);
-        reader =  new NodeReader(new BufferedReader(sr),5000);
-        parser = new Parser(reader,new DefaultParserFeedback());
+    protected void createParser(String inputHTML,int numNodes)
+    {
+        Lexer lexer = new Lexer (inputHTML);
+        parser = new Parser (lexer, new DefaultParserFeedback());
         node = new AbstractNode[numNodes];
     }
 
     protected void createParser(String inputHTML, String url) {
-        String testHTML = new String(inputHTML);
-        StringReader sr = new StringReader(testHTML);
-        reader =  new NodeReader(new BufferedReader(sr),url);
-        parser = new Parser(reader,new DefaultParserFeedback());
+        Lexer lexer = new Lexer (inputHTML);
+        lexer.getPage ().setUrl (url);
+        parser = new Parser (lexer, new DefaultParserFeedback());
         node = new AbstractNode[40];
     }
 
     protected void createParser(String inputHTML, String url,int numNodes) {
-        String testHTML = new String(inputHTML);
-        StringReader sr = new StringReader(testHTML);
-        reader =  new NodeReader(new BufferedReader(sr),url);
-        parser = new Parser(reader,new DefaultParserFeedback());
+        Lexer lexer = new Lexer (inputHTML);
+        lexer.getPage ().setUrl (url);
+        parser = new Parser (lexer, new DefaultParserFeedback());
         node = new AbstractNode[numNodes];
     }
 
@@ -294,14 +290,15 @@ public class ParserTestCase extends TestCase {
         if (node instanceof Tag) {
             Tag tag = (Tag)node;
             if (tag.isEmptyXmlTag()) {
+// oh crap...
                 // Add end tag
-                String currLine = parser.getReader().getCurrentLine();
-                int pos = parser.getReader().getLastReadPosition();
-                currLine =
-                    currLine.substring(0,pos+1)+
-                    "</"+tag.getTagName()+">"+
-                    currLine.substring(pos+1,currLine.length());
-                parser.getReader().changeLine(currLine);
+//                String currLine = parser.getReader().getCurrentLine();
+//                int pos = parser.getReader().getLastReadPosition();
+//                currLine =
+//                    currLine.substring(0,pos+1)+
+//                    "</"+tag.getTagName()+">"+
+//                    currLine.substring(pos+1,currLine.length());
+//                parser.getReader().changeLine(currLine);
             }
         }
     }

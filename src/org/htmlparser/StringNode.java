@@ -29,21 +29,24 @@
 
 package org.htmlparser;
 
+import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * Normal text in the html document is identified and represented by this class.
  */
-public class StringNode extends AbstractNode
+public class StringNode
+    extends
+        org.htmlparser.lexer.nodes.StringNode
 {
     public static final String STRING_FILTER="-string";
 
-    /**
-     * The text of the string.
-     */
-    protected StringBuffer textBuffer;
-
+//    /**
+//     * The text of the string.
+//     */
+//    protected StringBuffer textBuffer;
+//
     /**
      * Constructor takes in the text string, beginning and ending posns.
      * @param text The contents of the string line
@@ -52,31 +55,18 @@ public class StringNode extends AbstractNode
      */
     public StringNode (StringBuffer text, int textBegin,int textEnd)
     {
-        super(textBegin,textEnd);
-        this.textBuffer = text;
+        super(new Page (text.toString ()), textBegin,textEnd);
     }
 
     /**
-     * Returns the text of the string line
+     * Constructor takes in the text string, beginning and ending posns.
+     * @param page The page this string is on.
+     * @param start The beginning position of the string.
+     * @param end The ending positiong of the string.
      */
-    public String getText() {
-        return textBuffer.toString();
-    }
-    /**
-     * Sets the string contents of the node.
-     * @param text The new text for the node.
-     */
-    public void setText(String text)
+    public StringNode (Page page, int start, int end)
     {
-        textBuffer = new StringBuffer (text);
-    }
-
-    public String toPlainTextString() {
-        return textBuffer.toString();
-    }
-
-    public String toHtml() {
-        return textBuffer.toString();
+        super (page, start, end);
     }
 
     public String toString() {
@@ -87,7 +77,8 @@ public class StringNode extends AbstractNode
         if (filter==STRING_FILTER) collectionList.add(this);
     }
 
-    public void accept(Object visitor) {
-        ((NodeVisitor)visitor).visitStringNode(this);
+    public void accept(Object visitor)
+    {
+        ((NodeVisitor)visitor).visitStringNode (this);
     }
 }
