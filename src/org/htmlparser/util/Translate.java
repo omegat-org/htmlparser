@@ -431,30 +431,42 @@ public class Translate
         int length;
         Character item;
         char ret;
+
         ret = 0;
+
         length = string.length ();
-        if ('&' == string.charAt (0))
+        if (0 < length)
         {
-            string = string.substring (1);
-            length--;
-        }
-        if (';' == string.charAt (length - 1))
-            string = string.substring (0, --length);
-        if ('#' == string.charAt (0))
-            try
+            if ('&' == string.charAt (0))
             {
-                ret = (char)Integer.parseInt (string.substring (1));
+                string = string.substring (1);
+                length--;
             }
-            catch (NumberFormatException nfe)
+            if (0 < length)
             {
-                /* failed conversion, return 0 */
+                if (';' == string.charAt (length - 1))
+                    string = string.substring (0, --length);
+                if (0 < length)
+                {
+                    if ('#' == string.charAt (0))
+                        try
+                        {
+                            ret = (char)Integer.parseInt (string.substring (1));
+                        }
+                        catch (NumberFormatException nfe)
+                        {
+                            /* failed conversion, return 0 */
+                        }
+                    else
+                    {
+                        item = (Character)refChar.get (string);
+                        if (null != item)
+                            ret = item.charValue ();
+                    }
+                }
             }
-        else
-        {
-            item = (Character)refChar.get (string);
-            if (null != item)
-                ret = item.charValue ();
         }
+
         return (ret);
     }
 
