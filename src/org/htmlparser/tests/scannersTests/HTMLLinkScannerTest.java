@@ -155,6 +155,19 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		assertEquals("Extracted Link","r/anorth/top.html",scanner.extractLink(tag,url));
 	}
 
+    /**
+	 * This is the reproduction of a bug which produces multiple text copies.
+	 */
+	public void testExtractLinkInvertedCommasBug2() throws HTMLParserException
+	{
+        createParser("<a href=\"http://cbc.ca/artsCanada/stories/greatnorth271202\" class=\"lgblacku\">Vancouver schools plan 'Great Northern Way'</a>");
+		parser.addScanner(new HTMLLinkScanner("-l"));
+		parseAndAssertNodeCount(1);
+		assertTrue("The node should be a link tag",node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+        assertEquals("Extracted Text","Vancouver schools plan 'Great Northern Way'", linkTag.getLinkText ());
+	}
+
 	/**
 	 * Bug pointed out by Sam Joseph (sam@neurogrid.net)
 	 * Links with spaces in them will get their spaces absorbed
