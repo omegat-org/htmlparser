@@ -40,6 +40,7 @@ import org.htmlparser.Parser;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.SpecialHashtable;
 
 public class AttributeParserTest extends ParserTestCase {
     private Tag tag;
@@ -95,7 +96,7 @@ public class AttributeParserTest extends ParserTestCase {
 
     public void testValueMissing() {
         getParameterTableFor("INPUT type=\"checkbox\" name=\"Authorize\" value=\"Y\" checked");
-        assertEquals("Name of Tag","INPUT",table.get(Tag.TAGNAME));
+        assertEquals("Name of Tag","INPUT",table.get(SpecialHashtable.TAGNAME));
         assertEquals("Type","checkbox",table.get("TYPE"));
         assertEquals("Name","Authorize",table.get("NAME"));
         assertEquals("Value","Y",table.get("VALUE"));
@@ -115,13 +116,13 @@ public class AttributeParserTest extends ParserTestCase {
         String key1 = "NAME";
         String value1 = (String)table.get(key1);
         assertEquals("Expected value 1", "Remarks",value1);
-        String key2 = Tag.TAGNAME;
+        String key2 = SpecialHashtable.TAGNAME;
         assertEquals("Expected Value 2","TEXTAREA",table.get(key2));
     }
 
     public void testNullTag(){
         getParameterTableFor("INPUT type=");
-        assertEquals("Name of Tag","INPUT",table.get(Tag.TAGNAME));
+        assertEquals("Name of Tag","INPUT",table.get(SpecialHashtable.TAGNAME));
         assertEquals("Type","",table.get("TYPE"));
     }
 
@@ -148,7 +149,7 @@ public class AttributeParserTest extends ParserTestCase {
         assertStringEquals(
             "tag name",
             "A",
-            (String)table.get(Tag.TAGNAME)
+            (String)table.get(SpecialHashtable.TAGNAME)
         );
     }
 
@@ -163,7 +164,7 @@ public class AttributeParserTest extends ParserTestCase {
      **/
     public void testEmptyTag () {
         getParameterTableFor("");
-        assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
+        assertNotNull ("No Tag.TAGNAME",table.get(SpecialHashtable.TAGNAME));
     }
 
     /**
@@ -195,7 +196,7 @@ public class AttributeParserTest extends ParserTestCase {
         if (1.4 <= Parser.getVersionNumber ())
         {
             getParameterTableFor("body onLoad=defaultStatus=''");
-            String name = (String)table.get(Tag.TAGNAME);
+            String name = (String)table.get(SpecialHashtable.TAGNAME);
             assertNotNull ("No Tag.TAGNAME", name);
             assertStringEquals("tag name parsed incorrectly", "BODY", name);
             String value = (String)table.get ("ONLOAD");

@@ -47,6 +47,7 @@ import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
+import org.htmlparser.util.SpecialHashtable;
 
 public class ParserTestCase extends TestCase {
 
@@ -324,7 +325,7 @@ public class ParserTestCase extends TestCase {
                 expectedTag.getAttribute(key);
             String actualValue =
                 actualTag.getAttribute(key);
-            if (key==Tag.TAGNAME) {
+            if (key==SpecialHashtable.TAGNAME) {
                 expectedValue = ParserUtils.removeChars(expectedValue,'/');
                 actualValue = ParserUtils.removeChars(actualValue,'/');
                 assertStringEquals(displayMessage+"\ntag name",actualValue,expectedValue);
@@ -350,7 +351,7 @@ public class ParserTestCase extends TestCase {
                 expectedTag.getAttribute(key);
             String actualValue =
                 actualTag.getAttribute(key);
-            if (key==Tag.TAGNAME) {
+            if (key==SpecialHashtable.TAGNAME) {
                 expectedValue = ParserUtils.removeChars(expectedValue,'/');
                 actualValue = ParserUtils.removeChars(actualValue,'/');
                 assertStringEquals(displayMessage+"\ntag name",expectedValue,actualValue);

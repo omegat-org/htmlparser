@@ -147,11 +147,21 @@ public class Attribute
     public String getName ()
     {
         if (null == mName)
-            if (0 <= mNameStart)
+            if ((null != mPage) && (0 <= mNameStart))
                 mName = mPage.getText (mNameStart, mNameEnd);
         return (mName);
     }
 
+    /**
+     * Predicate to determine if this attribute is whitespace.
+     * @return <code>true</code> if this attribute is whitespace,
+     * <code>false</code> if it is a real attribute.
+     */
+    public boolean isWhitespace ()
+    {
+        return (null == getName ());
+    }
+        
     /**
      * Get the value of the attribute.
      * The part after the equals sign, or the text if it's just a whitepace 'attribute'.

@@ -39,6 +39,7 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.SpecialHashtable;
 
 public class TagTest extends ParserTestCase
 {
@@ -53,12 +54,15 @@ public class TagTest extends ParserTestCase
      * The above line is incorrectly parsed in that, the BODY tag is not identified.
      */
     public void testBodyTagBug1() throws ParserException {
-        createParser("<BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\nvLink=#551a8b>");
+        String body = "BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc "
+            + "onload=setfocus() text=#000000\nvLink=#551a8b";
+        createParser("<" + body + ">");
         parseAndAssertNodeCount(1);
         // The node should be an Tag
         assertTrue("Node should be a Tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
-        assertEquals("Contents of the tag","BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\r\nvLink=#551a8b",tag.getText());
+        String text = tag.getText();
+        assertEquals("Contents of the tag",body,text);
     }
 
     /**
@@ -70,17 +74,18 @@ public class TagTest extends ParserTestCase
      * Creation date: (6/17/2001 5:27:42 PM)
      */
     public void testLargeTagBug() throws ParserException {
-        createParser(
-            "<MYTAG abcd\n"+
+        String mytag = "MYTAG abcd\n"+
             "efgh\n"+
             "ijkl\n"+
-            "mnop>"
+            "mnop";
+        createParser(
+            "<" + mytag + ">"
         );
         parseAndAssertNodeCount(1);
         // The node should be an Tag
         assertTrue("Node should be a Tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
-        assertEquals("Contents of the tag","MYTAG abcd\r\nefgh\r\nijkl\r\nmnop",tag.getText());
+        assertEquals("Contents of the tag",mytag,tag.getText());
 
 
     }
@@ -151,7 +156,7 @@ public class TagTest extends ParserTestCase
 
                 tag = (Tag)node;
                 h = tag.getAttributes();
-                a = (String)h.get(Tag.TAGNAME);
+                a = (String)h.get(SpecialHashtable.TAGNAME);
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
                 nice = (String)h.get("YOURPARAMETER");
@@ -221,7 +226,7 @@ public class TagTest extends ParserTestCase
 
                 tag = (Tag)node;
                 h = tag.getAttributes();
-                a = (String)h.get(Tag.TAGNAME);
+                a = (String)h.get(SpecialHashtable.TAGNAME);
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
                 nice = (String)h.get("YOURPARAMETER");
@@ -289,7 +294,7 @@ public class TagTest extends ParserTestCase
 
                 tag = (Tag)node;
                 h = tag.getAttributes();
-                a = (String)h.get(Tag.TAGNAME);
+                a = (String)h.get(SpecialHashtable.TAGNAME);
                 nice = (String)h.get("YOURPARAMETER");
                 assertEquals ("Link tag (A)",a,"A");
                 assertEquals ("yourParameter value","Kaarle",nice);
@@ -353,25 +358,25 @@ public class TagTest extends ParserTestCase
     }
 
     public void testToHTML() throws ParserException {
-        String testHTML = new String(
-            "<MYTAG abcd\n"+
+        String tag1 = "<MYTAG abcd\n"+
             "efgh\n"+
             "ijkl\n"+
-            "mnop>\n"+
+            "mnop>";
+        String testHTML = tag1 +
+            "\n"+
             "<TITLE>Hello</TITLE>\n"+
-            "<A HREF=\"Hello.html\">Hey</A>"
-        );
+            "<A HREF=\"Hello.html\">Hey</A>";
         createParser(testHTML);
-        parseAndAssertNodeCount(7);
+        parseAndAssertNodeCount(9);
         // The node should be an Tag
         assertTrue("1st Node should be a Tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
-        assertStringEquals("toHTML()","<MYTAG EFGH ABCD MNOP IJKL>",tag.toHtml());
-        assertTrue("2nd Node should be a Tag",node[1] instanceof Tag);
-        assertTrue("5th Node should be a Tag",node[4] instanceof Tag);
-        tag = (Tag)node[1];
+        assertStringEquals("toHTML()",tag1,tag.toHtml());
+        assertTrue("3rd Node should be a Tag",node[2] instanceof Tag);
+        assertTrue("5th Node should be a Tag",node[6] instanceof Tag);
+        tag = (Tag)node[2];
         assertEquals("Raw String of the tag","<TITLE>",tag.toHtml());
-        tag = (Tag)node[4];
+        tag = (Tag)node[6];
         assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toHtml());
     }
 
@@ -675,7 +680,7 @@ public class TagTest extends ParserTestCase
         assertEquals("Initial text should be","TABLE BORDER=0",tag.getText ());
 
         Hashtable tempHash = tag.getAttributes ();
-        tempHash.put ("BORDER","1");
+        tempHash.put ("BORDER","\"1\"");
         tag.setAttributes (tempHash);
 
         String s = tag.toHtml ();

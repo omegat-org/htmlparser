@@ -26,7 +26,7 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
-package org.htmlparser.parserHelper;
+package org.htmlparser.util;
 
 import java.util.Hashtable;
 
@@ -41,7 +41,23 @@ import java.util.Hashtable;
 public class SpecialHashtable extends Hashtable
 {
     /**
-     * Constructs a new, empty hashtable with a default initial capacity (11) and load factor, which is 0.75.
+     * Special key for the tag name.
+     */
+    public final static String TAGNAME = "$<TAGNAME>$";
+
+    /**
+     * Special value for a null attribute value.
+     */
+    public final static String NULLVALUE = "$<NULL>$";
+
+    /**
+     * Special value for an empty attribute value.
+     */
+    public final static String NOTHING = "$<NOTHING>$";
+
+    /**
+     * Constructs a new, empty hashtable with a default initial capacity (11)
+     * and load factor, which is 0.75.
      */
     public SpecialHashtable ()
     {
@@ -49,7 +65,8 @@ public class SpecialHashtable extends Hashtable
     }
 
     /**
-     * Constructs a new, empty hashtable with the specified initial capacity and default load factor, which is 0.75.
+     * Constructs a new, empty hashtable with the specified initial capacity
+     * and default load factor, which is 0.75.
      */
     public SpecialHashtable (int initialCapacity)
     {
@@ -57,7 +74,8 @@ public class SpecialHashtable extends Hashtable
     }
 
     /**
-     * Constructs a new, empty hashtable with the specified initial capacity and the specified load factor.
+     * Constructs a new, empty hashtable with the specified initial capacity
+     * and the specified load factor.
      */
     public SpecialHashtable (int initialCapacity, float loadFactor)
     {
@@ -67,22 +85,25 @@ public class SpecialHashtable extends Hashtable
     /**
      * Returns the value to which the specified key is mapped in this hashtable.
      * This is translated to provide backwards compatibility.
+     * @return The translated value of the attribute. <em>This will be
+     * <code>null</code> if the attribute is a stand-alone attribute.</em>
      */
     public Object get (Object key)
     {
         Object ret;
 
         ret = getRaw (key);
-        if ("$<NULL>$" == ret)
+        if (NULLVALUE == ret)
             ret = null;
-        else if ("$<NOTHING>$" == ret)
+        else if (NOTHING == ret)
             ret = "";
 
         return (ret);
     }
 
     /**
-     * Returns the raw value to which the specified key is mapped in this hashtable.
+     * Returns the raw (untranslated) value to which the specified key is
+     * mapped in this hashtable.
      */
     public Object getRaw (Object key)
     {

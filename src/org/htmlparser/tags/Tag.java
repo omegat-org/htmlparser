@@ -37,11 +37,11 @@ import java.util.Vector;
 import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.TagNode;
-import org.htmlparser.parserHelper.SpecialHashtable;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.SpecialHashtable;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**

@@ -39,7 +39,7 @@ import org.htmlparser.tags.Tag;
 public class ParserUtils {
 
     public static String toString(Tag tag) {
-        String tagName = tag.getAttribute(Tag.TAGNAME);
+        String tagName = tag.getRawTagName ();
         Hashtable attrs = tag.getAttributes();
 
         StringBuffer lString = new StringBuffer(tagName);
@@ -49,7 +49,7 @@ public class ParserUtils {
         for (Enumeration e = attrs.keys(); e.hasMoreElements();) {
             String key = (String) e.nextElement();
             String value = (String) attrs.get(key);
-            if (!key.equalsIgnoreCase(Tag.TAGNAME) && value.length() > 0)
+            if (!key.equalsIgnoreCase(SpecialHashtable.TAGNAME) && value.length() > 0)
                 lString.append(key).append(" : ").append(value).append("\n");
         }
 

@@ -31,39 +31,28 @@ package org.htmlparser.lexer.nodes;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-import org.htmlparser.lexer.Cursor;
 
+import org.htmlparser.lexer.Cursor;
+import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.parserHelper.SpecialHashtable;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.SpecialHashtable;
 import org.htmlparser.util.Translate;
 
 /**
- * TagNode represents a generic tag. This class allows users to register specific
- * tag scanners, which can identify links, or image references. This tag asks the
- * scanners to run over the text, and identify. It can be used to dynamically
- * configure a parser.
- * @author Kaarle Kaila 23.10.2001
+ * TagNode represents a generic tag.
+ * 
  */
-public class TagNode extends AbstractNode
+public class TagNode
+    extends
+        AbstractNode
 {
-    public static final String TYPE = "TAG";
-    /**
-     * Constant used as value for the value of the tag name
-     * in parseParameters  (Kaarle Kaila 3.8.2001)
-     */
-    public final static String TAGNAME = "$<TAGNAME>$";
-    public final static String EMPTYTAG = "$<EMPTYTAG>$";
-    public final static String NULLVALUE = "$<NULL>$";
-    public final static String NOTHING = "$<NOTHING>$";
-    private final static String EMPTY_STRING="";
-
-    private boolean emptyXmlTag = false;
+    private boolean emptyXmlTag;
 
     /**
      * The tag attributes.
-     * Objects of type Attribute.
+     * Objects of type {@link Attribute}.
      */
     protected Vector mAttributes;
 
@@ -107,6 +96,14 @@ public class TagNode extends AbstractNode
     }
 
     /**
+     * Create an empty tag.
+     */
+    public TagNode ()
+    {
+        this (null, -1, -1, new Vector ());
+    }
+
+    /**
      * Create a tag with the location and attributes provided
      * @param page The page this tag was read from.
      * @param start The starting offset of this node within the page.
@@ -118,15 +115,7 @@ public class TagNode extends AbstractNode
     {
         super (page, start, end);
         mAttributes = attributes;
-    }
-
-    /**
-     * Create an empty tag.
-     */
-    public TagNode ()
-    {
-        super (null, -1, -1);
-        mAttributes = new Vector ();
+        emptyXmlTag = false;
     }
 
     /**
@@ -137,30 +126,18 @@ public class TagNode extends AbstractNode
      */
     public String getAttribute (String name)
     {
-        Vector attributes;
-        int size;
         Attribute attribute;
-        String string;
         String ret;
 
         ret = null;
 
-        attributes = getAttributesEx ();
-        if (name.equalsIgnoreCase (TAGNAME))
-            ret = ((Attribute)attributes.elementAt (0)).getName ();
+        if (name.equalsIgnoreCase (SpecialHashtable.TAGNAME))
+            ret = ((Attribute)getAttributesEx ().elementAt (0)).getName ();
         else
         {
-            size = attributes.size ();
-            for (int i = 1; i < size; i++)
-            {
-                attribute = (Attribute)attributes.elementAt (i);
-                string = attribute.getName ();
-                if ((null != string) && name.equalsIgnoreCase (string))
-                {
-                    ret = attribute.getValue ();
-                    i = size; // exit fast
-                }
-            }
+            attribute = getAttributeEx (name);
+            if (null != attribute)
+                ret = attribute.getValue ();
         }
 
         return (ret);
@@ -242,6 +219,38 @@ public class TagNode extends AbstractNode
     }
 
     /**
+     * Returns the attribute with the given name.
+     * @param name Name of attribute, case insensitive.
+     * @return The attribute or null if it does
+     * not exist.
+     */
+    public Attribute getAttributeEx (String name)
+    {
+        Vector attributes;
+        int size;
+        Attribute attribute;
+        String string;
+        Attribute ret;
+
+        ret = null;
+
+        attributes = getAttributesEx ();
+        size = attributes.size ();
+        for (int i = 0; i < size; i++)
+        {
+            attribute = (Attribute)attributes.elementAt (i);
+            string = attribute.getName ();
+            if ((null != string) && name.equalsIgnoreCase (string))
+            {
+                ret = attribute;
+                i = size; // exit fast
+            }
+        }
+
+        return (ret);
+    }
+
+    /**
      * Set an attribute.
      * This replaces an attribute of the same name.
      * To set the zeroth attribute (the tag name), use setTagName().
@@ -251,13 +260,15 @@ public class TagNode extends AbstractNode
     {
         boolean replaced;
         Vector attributes;
+        int length;
         String name;
         Attribute test;
         String test_name;
 
         replaced = false;
         attributes = getAttributesEx ();
-        if (0 < attributes.size ())
+        length =  attributes.size ();
+        if (0 < length)
         {
             name = attribute.getName ();
             for (int i = 1; i < attributes.size (); i++)
@@ -273,7 +284,12 @@ public class TagNode extends AbstractNode
             }
         }
         if (!replaced)
+        {
+            // add whitespace between attributes
+            if (!((Attribute)attributes.elementAt (length - 1)).isWhitespace ())
+                attributes.addElement (new Attribute ((String)null, " ", (char)0));
             attributes.addElement (attribute);
+        }
     }
 
     /**
@@ -295,7 +311,7 @@ public class TagNode extends AbstractNode
      */
     public Vector getAttributesEx ()
     {
-        return mAttributes;
+        return (mAttributes);
     }
 
     /**
@@ -316,12 +332,12 @@ public class TagNode extends AbstractNode
         {
             // special handling for the node name
             attribute = (Attribute)attributes.elementAt (0);
-            ret.put (TAGNAME, attribute.getName ().toUpperCase ());
+            ret.put (SpecialHashtable.TAGNAME, attribute.getName ().toUpperCase ());
             // the rest
             for (int i = 1; i < attributes.size (); i++)
             {
                 attribute = (Attribute)attributes.elementAt (i);
-                if (null != attribute.getName ())
+                if (!attribute.isWhitespace ())
                 {
                     if (0 != attribute.getQuote ())
                         value = attribute.getRawValue ();
@@ -329,16 +345,16 @@ public class TagNode extends AbstractNode
                     {
                         value = attribute.getValue ();
                         if ((null != value) && value.equals (""))
-                            value = NOTHING;
+                            value = SpecialHashtable.NOTHING;
                     }
                     if (null == value)
-                        value = NULLVALUE;
+                        value = SpecialHashtable.NULLVALUE;
                     ret.put (attribute.getName ().toUpperCase (), value);
                 }
             }
         }
         else
-            ret.put (TAGNAME, "");
+            ret.put (SpecialHashtable.TAGNAME, "");
 
         return (ret);
     }
@@ -347,21 +363,50 @@ public class TagNode extends AbstractNode
      * Return the name of this tag.
      * <p>
      * <em>
-     * Note: This value is converted to uppercase.
-     * To get at the original case version of the tag name use:
-     * <pre>
-     * getAttribute (TagNode.TAGNAME);
-     * </pre>
+     * Note: This value is converted to uppercase and does not
+     * begin with "/" if it is an end tag.
+     * To get at the original text of the tag name use
+     * {@link #getRawTagName getRawTagName()}.
      * </em>
      * @return The tag name.
      */
     public String getTagName ()
     {
+        Vector attributes;
         String ret;
 
-        ret = getAttribute (TAGNAME).toUpperCase ();
-        if (ret.startsWith ("/")) // end tag
-            ret = ret.substring (1);
+        ret = null;
+        
+        attributes = getAttributesEx ();
+        if (0 != attributes.size ())
+        {
+            ret = getRawTagName ();
+            if (null != ret)
+            {
+                ret = ret.toUpperCase ();
+                if (ret.startsWith ("/"))
+                    ret = ret.substring (1);
+            }
+        }
+
+        return (ret);
+    }
+
+    /**
+     * Return the name of this tag.
+     * @return The tag name or null if this tag contains nothing or only
+     * whitespace.
+     */
+    public String getRawTagName ()
+    {
+        Vector attributes;
+        String ret;
+
+        ret = null;
+        
+        attributes = getAttributesEx ();
+        if (0 != attributes.size ())
+            ret = ((Attribute)attributes.elementAt (0)).getName ();
 
         return (ret);
     }
@@ -400,7 +445,13 @@ public class TagNode extends AbstractNode
      */
     public String getText ()
     {
-        return (mPage.getText (elementBegin () + 1, elementEnd () - 1));
+        String ret;
+        
+        //ret = mPage.getText (elementBegin () + 1, elementEnd () - 1);
+        ret = toHtml ();
+        ret = ret.substring (1, ret.length () - 1);
+        
+        return (ret);
     }
 
     /**
@@ -432,8 +483,19 @@ public class TagNode extends AbstractNode
             }
             else
                 quote = (char)0;
-            attribute = new Attribute (key, value, quote);
-            att.addElement (attribute);
+            if (key.equals (SpecialHashtable.TAGNAME))
+            {
+                attribute = new Attribute (value, null, quote);
+                att.insertElementAt (attribute, 0);
+            }
+            else
+            {
+                // add whitespace between attributes
+                attribute = new Attribute ((String)null, " ", (char)0);
+                att.addElement (attribute);
+                attribute = new Attribute (key, value, quote);
+                att.addElement (attribute);
+            }
         }
         this.mAttributes = att;
     }
@@ -488,14 +550,32 @@ public class TagNode extends AbstractNode
 
     public void setText (String text)
     {
-        mPage = new Page (text);
-        nodeBegin = 0;
-        nodeEnd = text.length ();
+        Lexer lexer;
+        TagNode output;
+        
+        lexer = new Lexer (text);
+        try
+        {
+            output = (TagNode)lexer.nextNode ();
+            mPage = output.getPage ();
+            nodeBegin = output.elementBegin ();
+            nodeEnd = output.elementEnd ();
+            mAttributes = output.getAttributesEx ();
+        }
+        catch (ParserException pe)
+        {
+            throw new IllegalArgumentException (pe.getMessage ());
+        }
     }
 
+    /**
+     * Get the plain text from this node.
+     * @return An empty string (tag contents do not display in a browser).
+     * If you want this tags HTML equivalent, use {@link #toHtml toHtml()}.
+     */
     public String toPlainTextString ()
     {
-        return (EMPTY_STRING);
+        return ("");
     }
 
     /**
@@ -583,11 +663,6 @@ public class TagNode extends AbstractNode
     {
     }
 
-    public String getType ()
-    {
-        return TYPE;
-    }
-
     /**
      * Is this an empty xml tag of the form<br>
      * &lt;tag/&gt;
@@ -603,8 +678,16 @@ public class TagNode extends AbstractNode
         this.emptyXmlTag = emptyXmlTag;
     }
 
+    /**
+     * Predicate to determine if this tag is an end tag (i.e. &lt;/HTML&gt;).
+     * @return <code>true</code> if this tag is an end tag.
+     */
     public boolean isEndTag ()
     {
-        return ('/' == getAttribute (TAGNAME).toUpperCase ().charAt (0));
+        String raw;
+        
+        raw = getRawTagName ();
+
+        return ((null == raw) ? false : ('/' == raw.charAt (0)));
     }
 }
