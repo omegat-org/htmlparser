@@ -212,7 +212,6 @@ public abstract class CompositeTag extends HTMLTag {
 		}
 		endTag.accept(visitor);
 	}
-	
 
 	public void acceptWithoutRecursing(HTMLVisitor visitor) {
 		visitor.visitTag(this);

@@ -1105,14 +1105,6 @@ public class HTMLParser
 		}
 	}
 	
-	public void visitNonRecursiveAllNodesWith(HTMLVisitor visitor) 
-	throws HTMLParserException {
-		HTMLNode node;
-		for (HTMLEnumeration e = elements();e.hasMoreNodes();) {
-			node = e.nextNode();
-			node.acceptWithoutRecursing(visitor);
-		}
-	}	
 	/** Initializes the parser with the given input HTML String.
 	 * @param inputHTML the input HTML that is to be parsed.
 	 */

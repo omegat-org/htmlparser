@@ -179,9 +179,6 @@ public abstract class HTMLNode
 	}
 
 	public abstract void accept(HTMLVisitor visitor);
-	public void acceptWithoutRecursing(HTMLVisitor visitor) {
-		accept(visitor);
-	}
 	
 	public String getType() {
 		return TYPE;
