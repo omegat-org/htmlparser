@@ -86,7 +86,7 @@ public class LinkTag extends CompositeTag
 	 * <pre>
 	 * Node node;
 	 * Vector imageCollectionVector = new Vector();
-	 * for (HTMLEnumeration e = parser.elements();e.hasMoreNode();) {
+	 * for (NodeIterator e = parser.elements();e.hasMoreNode();) {
 	 * 		node = e.nextHTMLNode();
 	 * 		node.collectInto(imageCollectionVector,HTMLImageTag.IMAGE_FILTER);
 	 * }

@@ -126,7 +126,7 @@ public abstract class Node
 	 * NodeList collectionList = new NodeList(); 
 	 * Node node; 
 	 * String filter = LinkTag.LINK_TAG_FILTER; 
-	 * for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+	 * for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
 	 * 		node = e.nextNode();
 	 * 		node.collectInto (collectionVector, filter); 
 	 * }
@@ -160,7 +160,7 @@ public abstract class Node
 	 * <pre>
 	 * NodeList collectionList = new NodeList(); 
 	 * Node node; 
-	 * for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+	 * for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
 	 * 		node = e.nextNode();
 	 * 		node.collectInto (collectionVector, LinkTag.class);
 	 * }

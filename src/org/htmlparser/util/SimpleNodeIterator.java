@@ -31,7 +31,7 @@ package org.htmlparser.util;
 import org.htmlparser.Node;
 
 /**
- * The HTMLSimpleEnumeration interface is similar to HTMLEnumeration,
+ * The HTMLSimpleEnumeration interface is similar to NodeIterator,
  * except that it does not throw exceptions. This interface is useful
  * when using HTMLVector, to enumerate through its elements in a simple
  * manner, without needing to do class casts for Node.

@@ -873,7 +873,7 @@ public class Parser
 	 * <pre>
 	 * Parser parser = new Parser("http://www.yahoo.com");
 	 * parser.registerScanners();
-	 * for (HTMLEnumeration e = parser.elements();e.hasMoreElements();) {
+	 * for (NodeIterator e = parser.elements();e.hasMoreElements();) {
 	 *    Node node = e.nextHTMLNode();
 	 *    if (node instanceof StringNode) {
 	 *      // Downcasting to StringNode
