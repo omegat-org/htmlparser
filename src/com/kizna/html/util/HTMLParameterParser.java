@@ -84,8 +84,10 @@ public class HTMLParameterParser {
             else {
                 if (nextPart != null) {
                     if (name == null) {
-                        name = nextPart;
-                        waitingForEqual=true;
+                        if (!nextPart.substring(0,1).equals(" ")) {
+                            name = nextPart;
+                            waitingForEqual=true;
+                        }
                     }
                     else {
                         if (waitingForEqual){
