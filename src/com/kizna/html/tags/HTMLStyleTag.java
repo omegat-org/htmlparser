@@ -67,4 +67,12 @@ public String toString()
 	sb.append(tagContents+"\n");
 	return sb.toString();
 }
+
+	/**
+	 * @see HTMLNode#toRawString()
+	 */
+	public String toRawString() {
+		return "<STYLE>"+getStyleCode()+"</STYLE>";
+	}
+
 }

@@ -110,11 +110,15 @@ public void testScanBug() {
 	HTMLParser parser = new HTMLParser(reader);
 	HTMLNode [] node = new HTMLNode[20];
 	int i = 0;
-	parser.addScanner(new HTMLStyleScanner("-s"));
+//	parser.addScanner(new HTMLStyleScanner("-s"));
+	parser.registerScanners();
  	for (Enumeration e = parser.elements();e.hasMoreElements();) {
 		node[i++] = (HTMLNode)e.nextElement();
 	}
- 	assertEquals("Number of nodes expected",9,i);
+ 	assertEquals("Number of nodes expected",7,i);
+ 	assertTrue("Second last node should be a style tag",node[5] instanceof HTMLStyleTag);
+ 	HTMLStyleTag styleTag = (HTMLStyleTag)node[5];
+	assertEquals("Style Code","a.h{background-color:#ffee99}",styleTag.getStyleCode());
 }
 /**
  * This is a bug reported by Kaarle Kaaila. 
@@ -154,14 +158,15 @@ String testHTML = new String("<html><head><META HTTP-EQUIV=\"content-type\" CONT
 	HTMLParser parser = new HTMLParser(reader);
 	HTMLNode [] node = new HTMLNode[10];
 	int i = 0;
-	parser.addScanner(new HTMLStyleScanner("-s"));
+	parser.registerScanners();
  	for (Enumeration e = parser.elements();e.hasMoreElements();) {
 		node[i++] = (HTMLNode)e.nextElement();
 	}
- 	assertEquals("Number of nodes expected",7,i);
-	assertTrue(node[6] instanceof HTMLStyleTag);
-	HTMLStyleTag styleTag = (HTMLStyleTag)node[6];
-	assertEquals("<!--\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\n"+
-	"//-->",styleTag.getStyleCode());
+ 	assertEquals("Number of nodes expected",5,i);
+	assertTrue(node[4] instanceof HTMLStyleTag);
+	HTMLStyleTag styleTag = (HTMLStyleTag)node[4];
+	String expectedCode = "<!--\n\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\n"+
+	"//\n-->";
+	assertEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
 }
 }

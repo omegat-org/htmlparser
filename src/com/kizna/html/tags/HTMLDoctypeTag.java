@@ -70,10 +70,7 @@ public class HTMLDoctypeTag extends HTMLTag
 	{
 		return "Doctype Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
-	/**
-	 * Returns the raw HTML string
-	 */
 	public String toRawString() {
-		return "";
+		return "<!DOCTYPE "+tagContents+">";
 	}
-}
+	}

@@ -155,6 +155,7 @@ public class HTMLRemarkNode extends HTMLNode
 			{
 				// We need to continue parsing to the next line
 				input = reader.getNextLine();
+				tagContents.append("\n");
 				inputLen = input.length();
 				i=-1;
 			}		

@@ -388,6 +388,7 @@ public void registerScanners() {
 	addScanner(new HTMLAppletScanner("-a"));
 	addScanner(new HTMLMetaTagScanner("-m"));
 	addScanner(new HTMLTitleScanner("-t"));
+	addScanner(new HTMLDoctypeScanner("-d"));
 }
 /**
  * Removes a specified scanner object.

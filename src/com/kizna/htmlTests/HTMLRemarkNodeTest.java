@@ -83,7 +83,7 @@ public void testRemarkNodeBug()
 	// The sixth node should be a HTMLRemarkNode 
 	assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 	remarkNode = (HTMLRemarkNode)node[5];
-	assertEquals("Text of the remarkNode #6","   Whats gonna happen now ?",remarkNode.getText());
+	assertEquals("Text of the remarkNode #6","\n   Whats gonna happen now ?\n",remarkNode.getText());
 }
 /**
  * Insert the method's description here.
@@ -117,7 +117,7 @@ public void testToPlainTextString() {
 	// The sixth node should be a HTMLRemarkNode 
 	assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 	remarkNode = (HTMLRemarkNode)node[5];
-	assertEquals("Plain Text of the remarkNode #6","   Whats gonna happen now ?",remarkNode.getText());	
+	assertEquals("Plain Text of the remarkNode #6","\n   Whats gonna happen now ?\n",remarkNode.getText());	
 	
 }
 	public void testToRawString() {
@@ -148,6 +148,6 @@ public void testToPlainTextString() {
 		// The sixth node should be a HTMLRemarkNode 
 		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 		remarkNode = (HTMLRemarkNode)node[5];
-		assertEquals("Raw String of the remarkNode #6","<!--\n   Whats gonna happen now ?\n-->",remarkNode.toRawString());			
+		assertEquals("Raw String of the remarkNode #6","<!--\n\n   Whats gonna happen now ?\n\n-->",remarkNode.toRawString());			
 	}
 }

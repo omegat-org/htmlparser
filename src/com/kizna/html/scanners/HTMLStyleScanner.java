@@ -37,6 +37,7 @@ package com.kizna.html.scanners;
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLReader;
+import com.kizna.html.HTMLStringNode;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLStyleTag;
 /**
@@ -94,11 +95,7 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 	boolean endStyleFound=false;
 	StringBuffer buff=new StringBuffer();
 	// Add the stuff after style to the current list of contents
-	int currLoc = currentLine.toUpperCase().indexOf("<STYLE>");
-	currLoc += "<STYLE>".length();
-	line = currentLine.substring(currLoc,currentLine.length());
-	boolean newLine = false;
-	do
+	/*do
 	{
 		if (line!=null)
 		{
@@ -137,7 +134,18 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 		}
 
 	}
-	while (!endStyleFound && line!=null);
+	while (!endStyleFound && line!=null);*/
+
+	do {
+		node = reader.readElement();
+		if (node instanceof HTMLEndTag) {
+			endTag = (HTMLEndTag)node;
+			if (endTag.getContents().toUpperCase().equals("STYLE")) {
+				endStyleFound = true;
+			}
+		} else buff.append(node.toRawString());
+	}
+	while (!endStyleFound);
 	HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine);
 	styleTag.setThisScanner(this);
 	return styleTag;
