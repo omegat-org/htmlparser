@@ -30,7 +30,6 @@
 package org.htmlparser;
 
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.Translate;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
@@ -38,11 +37,6 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class StringNode extends AbstractNode
 {
-	/**
-	 * boolean to tell whether decoding of this node should happen or not. 
-	 */	
-	private boolean shouldDecode = false;;
-	
 	public static final String STRING_FILTER="-string";
 	
 	/**
@@ -62,18 +56,19 @@ public class StringNode extends AbstractNode
 		this.textBuffer = textBuffer;
 		
 	}
-	
-	public StringNode(StringBuffer textBuffer, int textBegin, int textEnd,
-						boolean shouldDecode) {
-		this(textBuffer, textBegin, textEnd);
-		this.shouldDecode = shouldDecode;					
+
+	public static Node createStringNode(
+		StringBuffer textBuffer, int textBegin, int textEnd, boolean shouldDecode) {
+		if (shouldDecode)
+			return new DecodingNode(new StringNode(textBuffer, textBegin, textEnd));								  	
+		return new StringNode(textBuffer, textBegin, textEnd);
 	}
+	
 
 	/**
 	 * Returns the text of the string line
 	 */
-	public String getText()
-	{
+	public String getText() {
 		return textBuffer.toString();
 	}
     /**
@@ -86,23 +81,17 @@ public class StringNode extends AbstractNode
 	}
 	
 	public String toPlainTextString() {
-		return nodeContents();
+		return textBuffer.toString();
 	}
 	
 	public String toHtml() {
-		return nodeContents();
-	}
-
-	private String nodeContents() {
-		String result = textBuffer.toString();
-		if (shouldDecode)
-			result = Translate.decode(result);
-		return result;
+		return textBuffer.toString();
 	}
 	
 	public String toString() {
 		return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	
 	public void collectInto(NodeList collectionList, String filter) {
 		if (filter==STRING_FILTER) collectionList.add(this);
 	}
@@ -110,5 +99,4 @@ public class StringNode extends AbstractNode
 	public void accept(NodeVisitor visitor) {
 		visitor.visitStringNode(this);
 	}
-
 }

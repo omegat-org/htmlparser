@@ -189,5 +189,20 @@ public abstract class AbstractNode implements Node, Serializable {
 	public void setParent(CompositeTag tag) {
 		parent = tag;
 	}
+	
+	/**
+	 * Returns the text of the string line
+	 */
+	public String getText() {
+		return null;
+	}
+	
+	/**
+	 * Sets the string contents of the node.
+	 * @param The new text for the node.
+	 */
+	public void setText(String text) {
+
+	}
 
 }

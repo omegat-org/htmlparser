@@ -17,17 +17,17 @@ public class DecodingNodeTest extends ParserTestCase {
 		NodeIterator nodes = parser.elements();
 		
 		while (nodes.hasMoreNodes()) 
-			decodedContent.append(nodes.nextNode().toHtml());			
+			decodedContent.append(nodes.nextNode().toPlainTextString());			
 
 		return decodedContent.toString();
 	}
 
 	public void testAmpersand() throws Exception {
 		String ENCODED_WORKSHOP_TITLE =
-			"<H1>The Testing &amp; Refactoring Workshop</H1>";
+			"The Testing &amp; Refactoring Workshop";
 			
 		String DECODED_WORKSHOP_TITLE =
-			"<H1>The Testing & Refactoring Workshop</H1>";
+			"The Testing & Refactoring Workshop";
 
 		assertEquals(
 			"ampersand in string",

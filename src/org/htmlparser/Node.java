@@ -112,5 +112,15 @@ public interface Node {
 	 * @param tag
 	 */
 	public abstract void setParent(CompositeTag tag);
-		
+	
+	/**
+	 * Returns the text of the string line
+	 */
+	public String getText();		
+	
+	/**
+	 * Sets the string contents of the node.
+	 * @param The new text for the node.
+	 */
+	public void setText(String text);		
 }

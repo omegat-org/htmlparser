@@ -469,6 +469,10 @@ public class Translate
 
         return (ret);
     }
+    
+    public static String decode (StringBuffer stringBuffer) {
+    	return decode(stringBuffer.toString());
+    }
 
     /**
      * Decode a string containing references.
