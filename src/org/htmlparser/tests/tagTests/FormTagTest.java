@@ -111,7 +111,7 @@ public class FormTagTest extends ParserTestCase {
 		FormTag formTag = (FormTag)node[0];
 
 		Tag tag= formTag.searchByName("passwd");
-		assertNotNull("Should have found the password node",node);
-		assertTrue("Should be an input tag",tag instanceof InputTag);
+		assertNotNull("Should have found the password node",tag);
+		assertType("tag found",InputTag.class,tag);
 	}	
 }

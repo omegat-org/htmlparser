@@ -127,4 +127,14 @@ public class NodeList implements Serializable {
 			text.append(nodeData[i].toPlainTextString());
 		return text.toString();
 	}
+	
+	public NodeList searchFor(Class classType) {
+		NodeList foundList = new NodeList();
+		Node node;
+		for (int i=0;i<size;i++) {
+			if (nodeData[i].getClass().getName().equals(classType.getName())) 
+				foundList.add(nodeData[i]);
+		}
+		return foundList;
+	}	
 }

@@ -533,7 +533,6 @@ public class TagTest extends ParserTestCase
 	public void testAttributesReconstruction() throws ParserException {
 		String testHTML = "<TEXTAREA name=\"JohnDoe\" ></TEXTAREA>";
 		createParser(testHTML);
-		parser.registerScanners();
 		parseAndAssertNodeCount(2);
 		assertTrue("First node should be an HTMLtag",node[0] instanceof Tag);
 		Tag htmlTag = (Tag)node[0];

@@ -103,9 +103,9 @@ public class FormScannerTest extends ParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof FormTag);
 		FormTag formTag = (FormTag)node[0];
-		assertEquals("Method",FormTag.POST,formTag.getFormMethod());
-		assertEquals("Location","http://www.google.com/test/do_login.php",formTag.getFormLocation());
-		assertEquals("Name","login_form",formTag.getFormName());		
+		assertStringEquals("Method",FormTag.POST,formTag.getFormMethod());
+		assertStringEquals("Location","http://www.google.com/test/do_login.php",formTag.getFormLocation());
+		assertStringEquals("Name","login_form",formTag.getFormName());		
 		InputTag nameTag = formTag.getInputTag("name");
 		InputTag passwdTag = formTag.getInputTag("passwd");
 		InputTag submitTag = formTag.getInputTag("submit");
@@ -127,7 +127,7 @@ public class FormScannerTest extends ParserTestCase {
 		assertStringEquals("toHTML",EXPECTED_FORM_HTML,formTag.toHtml());
 	}
 	
-	public void testScanFormWithNoEnding() {
+	public void testScanFormWithNoEnding() throws Exception {
 		createParser(
 		"<TABLE>\n"+
 		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
@@ -144,12 +144,7 @@ public class FormScannerTest extends ParserTestCase {
 		
 		parser.addScanner(new FormScanner(""));
 		
-		try {
-			parseAndAssertNodeCount(1);
-			assertTrue("Should have thrown an HTMLParserException",false);
-		}
-		catch (ParserException e) {
-		}
+		parseAndAssertNodeCount(2);
 	}
 	/** 
 	 * Bug reported by Pavan Podila - forms with links are not being parsed

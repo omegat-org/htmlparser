@@ -31,22 +31,15 @@ package org.htmlparser.scanners;
 //////////////////
 // Java Imports //
 //////////////////
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 
-import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.FormTag;
-import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.FormData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.LinkProcessor;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -61,6 +54,8 @@ public class FormScanner extends CompositeTagScanner
 	public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";	
 	private Vector textAreaVector;
 	private boolean linkScannerAlreadyOpen=false;
+	private static final String [] formTagEnders = {"FORM"
+	};
  	/**
 	 * HTMLFormScanner constructor comment.
 	 */
@@ -132,101 +127,9 @@ public class FormScanner extends CompositeTagScanner
 				)
 			);
 		}
-		try {
-			Node node;
-			Tag startFormTag = tag;
-			Tag endFormTag = null;
-	      	Vector inputVector = new Vector(), 
-	      	textAreaVector = new Vector();
-	      	NodeList nodeVector = new NodeList();
-			
-			String link,name="",method="GET";
-			int linkBegin=-1, formEnd=-1;
-	
-			link = extractFormLocn(tag,url);
-			tag.getAttributes().put("ACTION",link);
-	    	name = extractFormName(tag);
-		    method = extractFormMethod(tag);
-			linkBegin = tag.elementBegin();
-		    boolean endFlag = false;
-			//nodeVector.addElement(tag);
-			
-			// The following two lines added by Somik Raha, to fix a bug - so as to allow 
-			// links inside form tags to be scanned.
-			LinkScanner linkScanner = (LinkScanner)reader.getParser().getScanner(LinkScanner.LINK_SCANNER_ID);
-			ImageScanner imageScanner = (ImageScanner)reader.getParser().getScanner(ImageScanner.IMAGE_SCANNER_ID);
-			// End of modification
-			
-			Hashtable oldScanners = adjustScanners(reader);
-			reader.getParser().addScanner(new InputTagScanner(""));
-			reader.getParser().addScanner(new SelectTagScanner(""));
-			reader.getParser().addScanner(new OptionTagScanner(""));
-			reader.getParser().addScanner(new TextareaTagScanner(""));
-			
-			// Following two lines added by Somik Raha, to fix the links in forms bug
-			reader.getParser().addScanner(linkScanner);
-			reader.getParser().addScanner(imageScanner);
-			// End of modification
-			boolean dontPutTag=false;
-		    do
-			{
-				node = reader.readElement();
-				if (node instanceof EndTag)
-				{
-					EndTag endTag = (EndTag)node;
-					if (endTag.getText().toUpperCase().equals("FORM")) {
-						endFlag=true;
-						formEnd = endTag.elementEnd();
-						dontPutTag = true;
-						endFormTag = endTag;
-					}
-				}
-				else 
-				if (node instanceof InputTag) {
-					inputVector.addElement(node);
-				} else 
-				if (node instanceof TextareaTag) {
-					textAreaVector.addElement(node);
-				}
-				if (!dontPutTag) nodeVector.add(node);
-			}
-			while (endFlag==false && node!=null);
-			restoreScanners(reader,oldScanners);
-			
-			if (node==null && endFlag==false) {
-				StringBuffer msg = new StringBuffer();
-				for (Enumeration e = inputVector.elements();e.hasMoreElements();) {
-					msg.append((Node)e.nextElement()+"\n");
-				}
-				throw new ParserException("HTMLFormScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
-				"Input Vector contents : "+msg.toString());
-			}		
-			FormTag formTag = new FormTag(
-				new TagData(
-					linkBegin,
-					formEnd,
-					"",
-					currentLine
-				),
-				new CompositeTagData(
-					startFormTag,
-					endFormTag,
-					nodeVector
-				),
-				new FormData(
-					link,
-					name,
-					method,
-					inputVector,
-					textAreaVector
-				)
-			);
-			return formTag;
-		}
-		catch (Exception e) {
-			throw new ParserException("HTMLFormScanner.scan() : Error while scanning the form tag, current line = "+currentLine,e);
-		}
+		return super.scan(tag,url,reader,currentLine);
 	}
+
 
 	/**
 	 * @see org.htmlparser.scanners.TagScanner#getID()
@@ -257,7 +160,19 @@ public class FormScanner extends CompositeTagScanner
 
 	protected Tag createTag(TagData tagData, CompositeTagData compositeTagData)
 		throws ParserException {
-		return null;
+		String formUrl = extractFormLocn(compositeTagData.getStartTag(),tagData.getUrlBeingParsed());
+		compositeTagData.getStartTag().setAttribute("ACTION",formUrl);
+		return new FormTag(tagData, compositeTagData);
+	}
+
+	protected boolean isTagToBeEndedFor(String tmp) {
+		boolean match=false;
+		for (int i=0;i<formTagEnders.length && !match;i++) {
+			if (tmp.toUpperCase().indexOf(formTagEnders[i])==0)
+				match = true;
+			
+		}	
+		return match;
 	}
 
 }

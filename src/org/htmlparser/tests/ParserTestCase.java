@@ -7,8 +7,8 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 import org.htmlparser.NodeReader;
+import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.FormTag;
@@ -137,7 +137,12 @@ public class ParserTestCase extends TestCase {
 	}
 
 	public void assertNodeCount(int nodeCountExpected) {
-		assertEquals("Number of nodes parsed",nodeCountExpected,nodeCount);
+		StringBuffer msg = new StringBuffer();
+		for (int i=0;i<nodeCount;i++) {
+			msg.append(node[i].getClass().getName());
+			msg.append("-->\n").append(node[i].toHtml()).append("\n");
+		}
+		assertEquals("Number of nodes parsed didnt match, nodes found were :\n"+msg.toString(),nodeCountExpected,nodeCount);
 	}
 
 	public void parseAndAssertNodeCount(int nodeCountExpected) throws ParserException {
@@ -310,7 +315,7 @@ public class ParserTestCase extends TestCase {
 				message+" should have been of type\n"+
 				expectedTypeName+
 				" but was of type \n"+
-				actualTypeName
+				actualTypeName+"\n and is :"+((Node)object).toHtml()
 			);
 		} 
 	}

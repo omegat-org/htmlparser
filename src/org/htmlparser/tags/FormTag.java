@@ -29,12 +29,10 @@
 
 package org.htmlparser.tags;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.FormData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.SimpleNodeIterator;
 
 /**
  * @author ili
@@ -54,9 +52,8 @@ public class FormTag extends CompositeTag
 	protected String formURL;
    	protected String formName;
    	protected String formMethod;
-   	protected Vector formInputVector;
-
-	private Vector textAreaVector;
+   	protected NodeList formInputList;
+	private NodeList textAreaList;
    	
 	/**
 	 * Constructor takes in tagData, compositeTagData, formTagData
@@ -64,22 +61,22 @@ public class FormTag extends CompositeTag
 	 * @param compositeTagData
 	 * @param formTagData
 	 */
-	public FormTag(TagData tagData, CompositeTagData compositeTagData, FormData formData)
+	public FormTag(TagData tagData, CompositeTagData compositeTagData)
 	{
 		super(tagData,compositeTagData);
-		this.formURL = formData.getFormURL();
-	    this.formName = formData.getFormName();
-      	this.formMethod = formData.getFormMethod();
-      	this.formInputVector = formData.getFormInputVector();
-      	this.textAreaVector = formData.getTextAreaVector();
+		
+		this.formURL = compositeTagData.getStartTag().getAttribute("ACTION");
+	    this.formName = compositeTagData.getStartTag().getAttribute("NAME");
+      	this.formMethod = compositeTagData.getStartTag().getAttribute("METHOD");
+      	this.formInputList = compositeTagData.getChildren().searchFor(InputTag.class);
+      	this.textAreaList = compositeTagData.getChildren().searchFor(TextareaTag.class);
 	}
 	
 	/**
 	 * @return Vector Input elements in the form
 	 */
-	public Vector getFormInputs()
-	{
-		return formInputVector;
+	public NodeList getFormInputs() {
+		return formInputList;
 	}
 	
 	/**
@@ -110,8 +107,8 @@ public class FormTag extends CompositeTag
 	public InputTag getInputTag(String name) {
 		InputTag inputTag=null;
 		boolean found=false;
-		for (Enumeration e = formInputVector.elements();e.hasMoreElements() && !found;) {
-			inputTag = (InputTag)e.nextElement();
+		for (SimpleNodeIterator e = formInputList.elements();e.hasMoreNodes() && !found;) {
+			inputTag = (InputTag)e.nextNode();
 			String inputTagName = inputTag.getAttribute("NAME");
 			if (inputTagName!=null && inputTagName.equalsIgnoreCase(name)) {
 				found=true;
@@ -152,8 +149,8 @@ public class FormTag extends CompositeTag
 	public TextareaTag getTextAreaTag(String name) {
 		TextareaTag textareaTag=null;
 		boolean found = false;
-		for (Enumeration e=textAreaVector.elements();e.hasMoreElements() && !found;) {
-			textareaTag = (TextareaTag)e.nextElement();
+		for (SimpleNodeIterator e=textAreaList.elements();e.hasMoreNodes() && !found;) {
+			textareaTag = (TextareaTag)e.nextNode();
 			String textAreaName = textareaTag.getAttribute("NAME");
 			if (textAreaName!=null && textAreaName.equals(name)) {
 				found = true;

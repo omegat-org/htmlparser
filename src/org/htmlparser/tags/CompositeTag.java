@@ -161,14 +161,7 @@ public abstract class CompositeTag extends Tag {
 	 * @return NodeList
 	 */
 	public NodeList searchFor(Class classType) {
-		NodeList foundVector = new NodeList();
-		Node node;
-		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
-			node = e.nextNode();
-			if (node.getClass().getName().equals(classType.getName())) 
-				foundVector.add(node);
-		}
-		return foundVector;
+		return childTags.searchFor(classType);
 	}
 	/** 
 	 * Searches for any node whose text representation contains the search
