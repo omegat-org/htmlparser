@@ -55,8 +55,12 @@ public abstract class CompositeTag extends Tag {
 		return childTags.elementAt(index);	
 	}
 	
-	public Node [] getChildList() {
+	public Node [] getChildrenAsNodeArray() {
 		return childTags.toNodeArray();
+	}
+	
+	public NodeList getChildren() {
+		return childTags;
 	}
 	
 	public String toPlainTextString() {
