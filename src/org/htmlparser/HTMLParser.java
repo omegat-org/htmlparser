@@ -38,11 +38,14 @@ import java.util.*;
 // HTML Parser Imports //
 /////////////////////////
 import org.htmlparser.scanners.*;
+import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tags.HTMLMetaTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
+import org.htmlparser.util.HTMLEnumerationImpl;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserFeedback;
@@ -111,6 +114,14 @@ public class HTMLParser
 	;
 	// End of formatting
 
+    /**
+     * The default charset.
+     * This should be <code>ISO-8859-1</code>,
+     * see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
+     * Another alias is "8859_1".
+     */
+    protected static final String DEFAULT_CHARSET = "ISO-8859-1";
+
 	/**
 	 * Feedback object.
 	 */
@@ -130,7 +141,17 @@ public class HTMLParser
      * The list of scanners to apply at the top level.
      */
 	private Hashtable scanners;
-	
+
+    /**
+     * The encoding being used to decode the connection input stream.
+     */
+    protected String character_set;
+
+    /**
+     * The source for HTML.
+     */
+    protected URLConnection url_conn;
+
     /**
      * A quiet message sink.
      * Use this for no feedback.
@@ -254,6 +275,8 @@ public class HTMLParser
         resourceLocn = rd.getURL ();
 		reader = rd;
         scanners = new Hashtable();
+        character_set = "";
+        url_conn = null;
 		HTMLTag.setTagParser(new HTMLTagParser(feedback));
 		reader.setParser(this);
 	}
@@ -269,16 +292,22 @@ public class HTMLParser
             HTMLParserException
     {
         feedback = (null == fb) ? nul : fb;
+        HTMLTag.setTagParser (new HTMLTagParser (feedback));
         resourceLocn = connection.getURL ().toExternalForm ();
+        scanners = new Hashtable();
         try
         {
-            connection.connect ();
-            // the default charset should be iso-8859-1,
-            // see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
-            reader = new HTMLReader (new BufferedReader (new InputStreamReader (connection.getInputStream (), "8859_1")), resourceLocn);
-            reader.setParser (this);
-            HTMLTag.setTagParser(new HTMLTagParser(feedback));
-            scanners = new Hashtable();
+            url_conn = connection;
+            url_conn.connect ();
+            character_set = getCharacterSet (url_conn);
+            createReader ();
+        }
+        catch (UnsupportedEncodingException uee)
+        {
+            String msg = "HTMLParser() : The content of " + connection.getURL ().toExternalForm () + " has an encoding which is not supported";
+            HTMLParserException ex = new HTMLParserException (msg, uee);
+            feedback.error (msg, ex);
+            throw ex;
         }
         catch (IOException ioe)
         {
@@ -346,6 +375,169 @@ public class HTMLParser
         this (connection, stdout);
     }
 
+    /**
+     * Create a new reader for the URLConnection object.
+     * The current character set is used to transform the input stream
+     * into a character reader.
+     * @exception UnsupportedEncodingException if the current character set 
+     * is not supported on this platform.
+     * @exception IOException if there is a problem constructing the reader.
+     * @see #getEncoding()
+     */
+    protected void createReader ()
+        throws
+            UnsupportedEncodingException,
+            IOException
+    {
+        InputStream stream;
+        InputStreamReader in;
+        
+        stream = url_conn.getInputStream ();
+        in = new InputStreamReader (stream, character_set);
+        reader = new HTMLReader (new BufferedReader (in), resourceLocn);
+        reader.setParser (this);
+    }
+
+//    /**
+//     * Dump the HTTP header contents.
+//     */
+//    protected void dumpHeader ()
+//    {
+//        java.util.Map map = url_conn.getHeaderFields ();
+//        for (Iterator iterator = map.keySet ().iterator (); iterator.hasNext (); )
+//        {
+//            String key = (String)iterator.next ();
+//            feedback.info (key + "=" + map.get (key));
+//        }
+//    }
+
+    /**
+     * Lookup a character set name.
+     * <em>Vacuous for JVM's without <code>java.nio.charset</code>.</em>
+     * This uses reflection so the code will still run under prior JDK's but
+     * in that case the default is always returned.
+     * @param name The name to look up. One of the aliases for a character set.
+     * @param _default The name to return if the lookup fails.
+     */
+    protected String findCharset (String name, String _default)
+    {
+        String ret;
+        
+        ret = _default;
+        
+        try
+        {
+            Class cls;
+            java.lang.reflect.Method method;
+            Object object;
+            
+            cls = Class.forName ("java.nio.charset.Charset");
+            method = cls.getMethod ("forName", new Class[] { String.class });
+            object = method.invoke (null, new Object[] { name });
+            method = cls.getMethod ("name", new Class[] { });
+            object = method.invoke (object, new Object[] { });
+            ret = (String)object;
+        }
+        catch (Exception e)
+        {
+            // aside from the usual reflection exceptions
+            // this could also throw
+            // java.nio.charset.IllegalCharsetNameException
+            // and java.nio.charset.UnsupportedCharsetException
+            // but do nothing, the default is already returned
+        }
+        
+        return (ret);
+    }
+    
+    /**
+     * Try and extract the character set from the HTTP header.
+     * @param connection The connection with the charset info.
+     * @return The character set name to use for this HTML page.
+     */
+    protected String getCharacterSet (URLConnection connection)
+    {
+        final String field = "Content-Type";
+
+        String string;
+        String ret;
+        
+        ret = DEFAULT_CHARSET;
+        string = connection.getHeaderField (field);
+        if (null != string)
+            ret = getCharset (string);
+
+        return (ret);
+    }
+
+    /**
+     * Get a CharacterSet name corresponding to a charset parameter.
+     * @param content A text line of the form:
+     * <pre>
+     * text/html; charset=Shift_JIS
+     * </pre>
+     * which is applicable both to the HTTP header field Content-Type and
+     * the meta tag http-equiv="Content-Type".
+     * @return The character set name to use when reading the input stream.
+     * For JDKs that have the Charset class this is qualified by passing
+     * the name to findCharset() to render it into canonical form.
+     * If the charset parameter is not found in the given string, the default
+     * character set is returned.
+     * @see #findCharset(String,String)
+     * @see #DEFAULT_CHARSET
+     */
+    protected String getCharset (String content)
+    {
+        final String parameter = "charset";
+
+        int index;
+        String string;
+        String ret;
+        
+        ret = DEFAULT_CHARSET;
+        if (null != content)
+            if (-1 != (index = content.indexOf (parameter)))
+            {
+                content = content.substring (index + parameter.length ()).trim ();
+                if (content.startsWith ("="))
+                {
+                    content = content.substring (1).trim ();
+                    if (-1 != (index = content.indexOf (";")))
+                        content = content.substring (0, index);
+                    ret = findCharset (content, ret);
+                    if (!ret.equals (content))
+                        feedback.info (
+                            "detected charset \""
+                            + content
+                            + "\", using \""
+                            + ret
+                            + "\"");
+                }
+            }
+        
+        return (ret);
+    }
+
+    /**
+     * Return the current URL being parsed.
+     * @return The url passed into the constructor or the file name
+     * passed to the constructor modified to be a URL.
+     */
+    public String getURL ()
+    {
+        return (resourceLocn);
+    }
+
+    /**
+     * The current encoding.
+     * This item is et from the HTTP header but may be overridden by meta
+     * tags in the head, so this may change after the head has been parsed.
+     */
+    public String getEncoding ()
+    {
+        return (character_set);
+    }
+
 	/**
 	 * Add a new Tag Scanner.
 	 * In typical situations where you require a no-frills parser, use the registerScanners() method to add the most
@@ -385,67 +577,79 @@ public class HTMLParser
 	 * }
 	 * </pre>
 	 */
-	public HTMLEnumeration elements()
-	{
-		return new HTMLEnumeration()
-		{
-            /**
-             * The last read HTML node.
-             */
-            protected HTMLNode node;
+	public HTMLEnumeration elements() throws HTMLParserException
+    {
+        boolean remove_scanner;
+        HTMLNode node;
+        HTMLMetaTag meta;
+        String httpEquiv;
+        String charset;
+        boolean restart;
+        HTMLEndTag end;
+        HTMLEnumerationImpl ret;
 
-            /**
-             * Keeps track of whether the first reading has been performed.
-             */
-            protected boolean readFlag = false;
+        remove_scanner = false;
+        restart = false;
+        ret = new HTMLEnumerationImpl (reader, resourceLocn, feedback);
+        if (null != url_conn)
+            try
+            {
+                if (null == scanners.get ("-m"))
+                {
+                    addScanner (new HTMLMetaTagScanner ("-m"));
+                    remove_scanner = true;
+                }
 
-			public boolean hasMoreNodes() throws HTMLParserException
-			{
-				if (reader==null) return false;
-				try
-				{
-					node = reader.readElement();
-					readFlag=true;
-				    if (node==null) {
-				   		// Parser has completed. 
-				   		// Re-initialize
-				   		return false;
-					}
-					else
-						return true;
-				}
-				catch (Exception e) {
-					StringBuffer msgBuffer = new StringBuffer();
-					msgBuffer.append("Unexpected Exception occurred in HTMLParser.hasMoreNodes()");
-					msgBuffer.append(resourceLocn);
-					msgBuffer.append(", in nextHTMLNode");
-					reader.appendLineDetails(msgBuffer);
-					HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
-					feedback.error(msgBuffer.toString(),ex);
-					throw ex;
-				}
+                /* pre-read up to </HEAD> looking for charset directive */
+                while (null != (node = ret.peek ()))
+                {
+                    if (node instanceof HTMLMetaTag)
+                    {   // check for charset on Content-Type
+                        meta = (HTMLMetaTag)node;
+                        httpEquiv = meta.getParameter ("HTTP-EQUIV");
+                        if ("Content-Type".equalsIgnoreCase (httpEquiv))
+                        {
+                            charset = getCharset (meta.getParameter ("CONTENT"));
+                            if (!charset.equalsIgnoreCase (character_set))
+                            {   // oops, different character set, restart
+                                character_set = charset;
+                                createReader ();
+                                ret = new HTMLEnumerationImpl (reader, resourceLocn, feedback);
+                            }
+                            // once we see the Content-Type meta tag we're finished the pre-read
+                            break;
+                        }
+                    }
+                    else if (node instanceof HTMLEndTag)
+                    {
+                        end = (HTMLEndTag)node;
+                        if (end.getTagName ().equalsIgnoreCase ("HEAD"))
+                            // or, once we see the </HEAD> tag we're finished the pre-read
+                            break;
+                    }
+                }
+            }
+            catch (UnsupportedEncodingException uee)
+            {
+                String msg = "elements() : The content of " + url_conn.getURL ().toExternalForm () + " has an encoding which is not supported";
+                HTMLParserException ex = new HTMLParserException (msg, uee);
+                feedback.error (msg, ex);
+                throw ex;
+            }
+            catch (IOException ioe)
+            {
+                String msg = "elements() : Error in opening a connection to " + url_conn.getURL ().toExternalForm ();
+                HTMLParserException ex = new HTMLParserException (msg, ioe);
+                feedback.error (msg, ex);
+                throw ex;
+            }
+            finally
+            {
+                if (remove_scanner)
+                    scanners.remove ("-m");
+            }
 
-			}
-			public HTMLNode nextHTMLNode() throws HTMLParserException
-			{
-				try
-				{
-					if (!readFlag) node = reader.readElement();
-					return node;
-				}
-				catch (Exception e) {
-					StringBuffer msgBuffer = new StringBuffer();
-					msgBuffer.append("Unexpected Exception occurred while reading ");
-					msgBuffer.append(resourceLocn);
-					msgBuffer.append(", in nextHTMLNode");
-					reader.appendLineDetails(msgBuffer);
-					HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
-					feedback.error(msgBuffer.toString(),ex);
-					throw ex;
-				}
-			}
-
-		};
+        return (ret);
 	}
 	
 	/**
@@ -510,12 +714,9 @@ public class HTMLParser
 			System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
 			System.exit(-1);
 		}
-		if (args[0].indexOf("http")!=-1 || args[0].indexOf("www.")!=-1)
-			System.out.println("Parsing website "+args[0]);
-		else	
-		System.out.println("Parsing file "+args[0]+"...");
 		try {
-			HTMLParser parser = new HTMLParser(args[0],new DefaultHTMLParserFeedback());
+			HTMLParser parser = new HTMLParser(args[0]);
+            System.out.println("Parsing " + parser.getURL ());
 			parser.registerScanners();
 			try {
 				if (args.length==2)
