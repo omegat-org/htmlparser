@@ -37,7 +37,6 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class StringNode extends Node
 {
-	public static final String TYPE="STRING_NODE";
 	public static final String STRING_FILTER="-string";
 	/**
 	 * The text of the string.
@@ -80,10 +79,6 @@ public class StringNode extends Node
 
 	public void accept(NodeVisitor visitor) {
 		visitor.visitStringNode(this);
-	}
-
-	public String getType() {
-		return TYPE;
 	}
 
 }
