@@ -50,6 +50,7 @@ import org.htmlparser.util.HTMLEnumerationImpl;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserFeedback;
+
 import org.htmlparser.visitors.HTMLVisitor;
 
 /**
@@ -311,7 +312,7 @@ public class HTMLParser
         setFeedback (fb);
         setScanners (null);
         setReader (rd);
-		HTMLTag.setTagParser(new TagParser(feedback));
+		HTMLTag.setTagParser(new HTMLTagParser(feedback));
 	}
 	
     /**
