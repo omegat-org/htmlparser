@@ -1,33 +1,70 @@
 <project name="HTMLParser" default="dist" basedir=".">
 
   <!-- set global properties for this build -->
-  <property name="src" value="."/>
+  <property name="src" value="src"/>
   <property name="build" value="build"/>
-  <property name="dist"  value="release"/>
-
+  <property name="version" value="1.1"/>
+  <property name="docs" value="docs"/>
+  <property name="dist"  value="release/htmlparser${version}"/>
   <target name="init">
-    <!-- Create the time stamp -->
-    <tstamp/>
+
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
   </target>
-
+	
   <target name="compile" depends="init">
     <!-- Compile the java code from ${src} into ${build} -->
     <javac srcdir="${src}/com/kizna/html" destdir="${build}"/>
   </target>
 
-  <target name="dist" depends="compile">
+  <!-- Create the distribution of htmlparser.jar -->
+  <target name="Create HTMLParser.jar" depends="compile">
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
 
-    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/htmlparser-${DSTAMP}.jar" basedir="${build}" manifest="${src}/Manifest.mf" />
+    <!-- Put everything in ${build} into the htmlparser.jar file -->
+    <jar jarfile="${dist}/lib/htmlparser.jar" basedir="${build}" manifest="${src}/Manifest.mf" />
+  </target>
+
+  <!-- Create the javadoc for the project -->
+  <target name="javadoc" depends="init,CopyDoc">
+    <!-- Create the javadoc directory -->
+    <mkdir dir="${dist}/docs/javadoc"/>
+
+    <javadoc packagenames="com.kizna.html.*"
+           sourcepath="${src}"
+           defaultexcludes="yes"
+           destdir="${dist}/docs/javadoc"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="HTMLParser ${version}">
+      <doctitle><![CDATA[<h1>HTMLParser ${version}</h1>]]></doctitle>
+      <header><![CDATA[<A HREF="http://htmlparser.sourceforge.net" target="_top">HTML Parser Home Page</A>]]></header>
+      <bottom><![CDATA[HTMLParser is an open source library released under LGPL. <BR> If you want to be notified when a new released of HTML Parser is out, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-announce">HTMLParser Announcement List</A>.<BR>
+If you have questions about the usage of the parser, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-user">HTMLParser User List</A>. 
+<BR>
+If you want to join as a developer, please sign up on the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-developer">HTMLParser Developer List</A>.<BR> All three lists can be joined from the <A HREF="http://htmlparser.sourceforge.net/mailinglists.html">HTMLParser Mailing Lists Page.</A>  ]]></bottom>
+      <footer>(c) Dec 31, 2000 Somik Raha</footer>
+      <group title="HTMLParser Main Package" packages="com.kizna.html"/>
+      <group title="HTMLParser Tags" packages="com.kizna.html.tags"/>
+      <group title="HTMLParser Scanners" packages="com.kizna.html.scanners"/>
+      <group title="HTMLParser Utility Packages (of developer interest only)" packages="com.kizna.html.util"/>
+    </javadoc>         
+  </target>
+
+  <!-- Copy the design documentation and release notes into the doc director -->
+  <target name="CopyDoc">
+    <copy todir="${dist}/docs">
+    <fileset dir="${docs}"/>
+    </copy> 
+  </target>
+
+  <target name="Release" depends="Create HTMLParser.jar,javadoc">
   </target>
 
   <target name="clean">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
-    <delete dir="${dist}"/>
   </target>
 </project>
