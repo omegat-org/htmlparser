@@ -391,7 +391,7 @@ public void registerScanners() {
 	addScanner(new HTMLMetaTagScanner("-m"));
 	addScanner(new HTMLTitleScanner("-T"));
 	addScanner(new HTMLDoctypeScanner("-d"));
-	addScanner(new HTMLFormScanner("-f"));
+	//addScanner(new HTMLFormScanner("-f"));
 	addScanner(new HTMLFrameSetScanner("-r"));	
 }
 /**

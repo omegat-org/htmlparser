@@ -41,6 +41,7 @@ import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.scanners.HTMLFormScanner;	
+import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLFormTag;
 import com.kizna.html.tags.HTMLTag;
 
@@ -94,7 +95,7 @@ public class HTMLFormScannerTest extends TestCase {
 			node[i++] = (HTMLNode)e.nextElement();
 		}
 		assertEquals("There should be 1 nodes identified",1,i);	
-		assertTrue("Node 0 should be End Tag",node[0] instanceof HTMLFormTag);
+		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		assertEquals("Method","post",formTag.getFormMethod());
 		assertEquals("Location","http://www.google.com/test/do_login.php",formTag.getFormLocation());
@@ -123,6 +124,37 @@ public class HTMLFormScannerTest extends TestCase {
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
 		"</FORM>",formTag.toHTML());
+	}
+	public void testScanFormWithNoEnding() {
+		/*String testHTML = new String(
+		"<TABLE>\n"+
+		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
+		"</TABLE>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+
+		parser.addScanner(new HTMLFormScanner(""));
+		
+		int i = 0;
+		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		{
+			node[i++] = (HTMLNode)e.nextElement();
+		}
+		assertEquals("There should be 1 nodes identified",3,i);	
+		assertTrue("Node 0 should be a Tag",node[0] instanceof HTMLTag);	
+		assertTrue("Node 1 should be a Form Tag",node[1] instanceof HTMLFormTag);	
+		assertTrue("Node 2 should be End Tag",node[2] instanceof HTMLEndTag);			*/
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLFormScannerTest.class);

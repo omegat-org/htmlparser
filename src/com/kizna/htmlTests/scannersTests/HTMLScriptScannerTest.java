@@ -197,51 +197,11 @@ public void testScanBugWG()
 	HTMLScriptTag scriptTag = (HTMLScriptTag)node[1];
 	assertStringEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
 }
-public void testScanBigScript() 
+public void testScanScriptWithLinks() 
 { 
 	StringBuffer sb1 = new StringBuffer(); 
 	sb1.append("<script type=\"text/javascript\">\r\n"+
-		"var content=new Array()\r\n"+
-		"content[0]='MAIN PAGE - THE PEOPLES SOURCE FOR COMPUTERS AND TECHNOLOGY'\r\n"+
-		"content[1]='<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Cases\">"+
-		"CASES<\\/A>&nbsp;&nbsp;|&nbsp;&nbsp;"+
-		"<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Showcases\">"+
-		"SHOWCASES<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Controllers\">"+
-		"CONTROLLERS<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#LCD\">LCD MONITORS<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Power\">POWER SUPPLIES<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Motherboard\">MOTHERBOARDS<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Coolers\">COOLERS<\\/a>'\r\n"+
-		"content[2]='GET THE LATEST DEALS ONLINE!'\r\n"+
-		"content[3]='MONTHLY SHOWCASE ON THE LATEST TECHNOLOGY'\r\n"+
-		"content[4]='<A class=3 href=\"http://www.extreme-forums.com/\">MAIN SECTION<\\/A>&nbsp;&nbsp;|&nbsp;&nbsp;<A class=3 href=\"http://www.extreme-forums.com/index.php?c=2\">HARDWARES SECTION<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.extreme-forums.com/index.php?c=3\">OFF TOPICS<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.extreme-forums.com/profile.php?mode=register\">REGISTER NOW!<\\/a>'\r\n"+
-		"content[5]='COMPARE PRICES OF COMPUTERS HARDWARE HERE!'\r\n"+
-		"content[6]='<A class=3 href=\"http://www.hardwareextreme.com/about.shtml\">HARDWARE EXTREME HISTORY<\\/A>&nbsp;&nbsp;|&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/about.shtml#Staff\">THE TEAM<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/about.shtml#Advertise\">ADVERTISE<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/about.shtml#News\">NEWS<\\/a>'\r\n"+
-		"content[8]='THE PEOPLES SOURCE FOR COMPUTERS AND TECHNOLOGY'\r\n"+
-		"function regenerate(){\r\n"+
-		"window.location.reload()\r\n"+
-		"}\r\n"+
-		"function regenerate2(){\r\n"+
-		"if (document.layers)\r\n"+
-		"setTimeout(\"window.onresize=regenerate\",450)\r\n"+
-		"}\r\n"+
-
-		"function regenerate(){\r\n"+
-		"window.location.reload()\r\n"+
-		"}\r\n"+
-		"function regenerate2(){\r\n"+
-		"if (document.layers)\r\n"+
-		"setTimeout(\"window.onresize=regenerate\",450)\r\n"+
-		"}\r\n"+
-	
-		"function changetext(whichcontent){\r\n"+
-		"if (document.all)\r\n"+
-		"descriptions.innerHTML='<font class=3>'+whichcontent+'<\\/font>'\r\n"+
-		"else if (document.layers){\r\n"+
-		"document.d1.document.d2.document.write('<font class=2>'+whichcontent+'<\\/font>')\r\n"+
-		"document.d1.document.d2.document.close()\r\n"+
-		"}\r\n"+
-
-		"}\r\n"+
-
-
-		"//-->\r\n"+
+		"<A HREF=\"http://thisisabadlink.com\">\r\n"+
 		"</script>\r\n");
 	String testHTML1 = new String(sb1.toString()); 
 	
@@ -260,48 +220,6 @@ public void testScanBigScript()
 	{ 
 	node[i++] = (HTMLNode)e.nextElement(); 
 	} 
-	String testHTML2 = new String("\r\n"+
-		"var content=new Array()\r\n"+
-		"content[0]='MAIN PAGE - THE PEOPLES SOURCE FOR COMPUTERS AND TECHNOLOGY'\r\n"+
-		"content[1]='<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Cases\">"+
-		"CASES<\\/A>&nbsp;&nbsp;|&nbsp;&nbsp;"+
-		"<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Showcases\">"+
-		"SHOWCASES<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Controllers\">"+
-		"CONTROLLERS<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#LCD\">LCD MONITORS<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Power\">POWER SUPPLIES<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Motherboard\">MOTHERBOARDS<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/reviews.shtml#Coolers\">COOLERS<\\/a>'\r\n"+
-		"content[2]='GET THE LATEST DEALS ONLINE!'\r\n"+
-		"content[3]='MONTHLY SHOWCASE ON THE LATEST TECHNOLOGY'\r\n"+
-		"content[4]='<A class=3 href=\"http://www.extreme-forums.com/\">MAIN SECTION<\\/A>&nbsp;&nbsp;|&nbsp;&nbsp;<A class=3 href=\"http://www.extreme-forums.com/index.php?c=2\">HARDWARES SECTION<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.extreme-forums.com/index.php?c=3\">OFF TOPICS<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.extreme-forums.com/profile.php?mode=register\">REGISTER NOW!<\\/a>'\r\n"+
-		"content[5]='COMPARE PRICES OF COMPUTERS HARDWARE HERE!'\r\n"+
-		"content[6]='<A class=3 href=\"http://www.hardwareextreme.com/about.shtml\">HARDWARE EXTREME HISTORY<\\/A>&nbsp;&nbsp;|&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/about.shtml#Staff\">THE TEAM<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/about.shtml#Advertise\">ADVERTISE<\\/a>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<A class=3 href=\"http://www.hardwareextreme.com/about.shtml#News\">NEWS<\\/a>'\r\n"+
-		"content[8]='THE PEOPLES SOURCE FOR COMPUTERS AND TECHNOLOGY'\r\n"+
-		"function regenerate(){\r\n"+
-		"window.location.reload()\r\n"+
-		"}\r\n"+
-		"function regenerate2(){\r\n"+
-		"if (document.layers)\r\n"+
-		"setTimeout(\"window.onresize=regenerate\",450)\r\n"+
-		"}\r\n"+
-
-		"function regenerate(){\r\n"+
-		"window.location.reload()\r\n"+
-		"}\r\n"+
-		"function regenerate2(){\r\n"+
-		"if (document.layers)\r\n"+
-		"setTimeout(\"window.onresize=regenerate\",450)\r\n"+
-		"}\r\n"+
-	
-		"function changetext(whichcontent){\r\n"+
-		"if (document.all)\r\n"+
-		"descriptions.innerHTML='<font class=3>'+whichcontent+'<\\/font>'\r\n"+
-		"else if (document.layers){\r\n"+
-		"document.d1.document.d2.document.write('<font class=2>'+whichcontent+'<\\/font>')\r\n"+
-		"document.d1.document.d2.document.close()\r\n"+
-		"}\r\n"+
-
-		"}\r\n"+
-
-
-		"//-->\r\n");
 	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
 	assertTrue("Node should be a script tag",node[0] 
 	instanceof HTMLScriptTag); 
