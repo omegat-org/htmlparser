@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030112 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030202 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -46,7 +46,6 @@ import java.net.URLConnection;
 import java.util.Hashtable;
 
 import org.htmlparser.parserHelper.TagParser;
-import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.scanners.HTMLAppletScanner;
 import org.htmlparser.scanners.HTMLDoctypeScanner;
 import org.htmlparser.scanners.HTMLFormScanner;
@@ -58,8 +57,6 @@ import org.htmlparser.scanners.HTMLScriptScanner;
 import org.htmlparser.scanners.HTMLStyleScanner;
 import org.htmlparser.scanners.HTMLTagScanner;
 import org.htmlparser.scanners.HTMLTitleScanner;
-import org.htmlparser.scanners.SpanScanner;
-import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
@@ -135,7 +132,7 @@ public class HTMLParser
 	// Please don't change the formatting of the VERSION_STRING
 	// below. This is done so as to facilitate the ant script
 	public final static java.lang.String 
-	VERSION_STRING="1.3 (Integration Build Jan 12, 2003)"
+	VERSION_STRING="1.3 (Integration Build Feb 02, 2003)"
 	;
 	// End of formatting
 
@@ -1057,9 +1054,9 @@ public class HTMLParser
 		addScanner(new HTMLFormScanner("-f"));
 		addScanner(new HTMLFrameSetScanner("-r"));	
 		addScanner(linkScanner.createBaseHREFScanner("-b"));
-		addScanner(new SpanScanner("-p"));
-		addScanner(new DivScanner("-div"));
-		addScanner(new TableScanner(this));
+	//	addScanner(new SpanScanner("-p"));
+	//	addScanner(new DivScanner("-div"));
+	//	addScanner(new TableScanner(this));
 	}
 	
 	/**
