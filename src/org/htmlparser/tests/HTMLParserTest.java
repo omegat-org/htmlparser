@@ -77,7 +77,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		catch (Exception e ){
 			throw new HTMLParserException("You must be offline! This test needs you to be connected to the internet.",e);
 		}
-		HTMLNode [] node = new HTMLNode[200];
+		HTMLNode [] node = new HTMLNode[500];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
