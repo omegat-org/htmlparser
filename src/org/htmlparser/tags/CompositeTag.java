@@ -183,6 +183,35 @@ public abstract class CompositeTag extends HTMLTag {
 		return searchFor(searchString, false);
 	}
 
+	/**
+	 * Returns the node number of the string node containing the 
+	 * given text. This can be useful to index into the composite tag
+	 * and get other children.
+	 * @param text
+	 * @return int
+	 */
+	public int findPositionOf(String text) {
+		HTMLNode node;
+		int loc = 0;
+		for (SimpleEnumeration e=children();e.hasMoreNodes();) {
+			node = e.nextNode();
+			if (node.toPlainTextString().toUpperCase().indexOf(text.toUpperCase())!=-1) {
+				return loc;			
+			}
+			loc++;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Get child at given index
+	 * @param index
+	 * @return HTMLNode
+	 */
+	public HTMLNode childAt(int index) {
+		return childTags.elementAt(index);
+	}
+	
 	public void collectInto(NodeList collectionList, String filter) {
 		super.collectInto(collectionList, filter);
 		HTMLNode node;

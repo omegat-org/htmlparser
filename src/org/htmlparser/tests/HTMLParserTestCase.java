@@ -11,6 +11,8 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLFormTag;
+import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
@@ -273,5 +275,12 @@ public class HTMLParserTestCase extends TestCase {
 				actualTypeName
 			);
 		} 
+	}
+
+	protected void assertHiddenIDTagPresent(HTMLFormTag formTag, String name, String inputTagValue) {
+	    HTMLInputTag inputTag = formTag.getInputTag(name);
+	    assertNotNull("Hidden Tag "+name+" should have been there", inputTag);
+	    assertEquals("Hidden Tag Contents", inputTagValue, inputTag.getAttribute("VALUE"));
+	    assertEquals("Hidden Tag Type", "hidden", inputTag.getAttribute("TYPE"));
 	}	
 }
