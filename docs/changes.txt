@@ -1,4 +1,4 @@
-Integration Build 1.2 - 20020804
+Integration Build 1.2 - 20020813
 --------------------------------
 [1] Fixed bug 590703 - Empty values dont get parsed 
 [2] Fixed bug 591435 - Missing values cause keys to be missed
@@ -6,6 +6,9 @@ Integration Build 1.2 - 20020804
 [4] Fixed bug in HTMLTitleScanner, allowing certain malformed title tags to be parsed
 [5] Modified HTMLReader - now accepts Reader instead of BufferedReader
 [6] HTMLParser constructor now throws HTMLParserException.
+[7] Fixed bug 592355 - Empty tags throw exceptions from some scanners. Now, if the 
+tag is empty, it is not passed down to scanners. Also, fixed the related issue in 
+HTMLStringNode, causing empty tags to be treated as tags and not strings.
 
 Integration Build 1.2 - 20020804
 --------------------------------
