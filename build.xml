@@ -266,6 +266,7 @@ HTML Parser Integration Release 1.4-20030824
       <include name="org/htmlparser/util/NodeList*.class"/>
       <include name="org/htmlparser/util/NodeIterator.class"/>
       <include name="org/htmlparser/util/SimpleNodeIterator.class"/>
+      <include name="org/htmlparser/util/SpecialHashtable.class"/>
       <include name="org/htmlparser/util/sort/**/*.class"/>
       <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
       <manifest>
