@@ -80,6 +80,7 @@ The following people have contributed important bug reports, feature ideas :
 [31] Anthony Labarre
 [32] Alberto Nacher
 [33] Rogers George
+[34] Jon Gillette
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 
