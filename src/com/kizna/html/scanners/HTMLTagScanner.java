@@ -107,30 +107,6 @@ public static String absorbLeadingBlanks(String s)
 	 * scan has begun, and hence allows us to write scanners that can work with dirty html
 	 */
 	public abstract boolean evaluate(String s,HTMLTagScanner previousOpenScanner);
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:30:03 AM)
- * @param tag com.kizna.html.HTMLTag
- */
-public String extractField(HTMLTag tag,String field) 
-{
-    String s = tag.getText();
-    int fieldPos = s.toUpperCase().indexOf(field);
-    if (fieldPos == -1) {
-        return "";
-    }
-    int loc = fieldPos + field.length();
-    s = s.substring(loc, s.length());
-    s = absorb(s, '=');
-    s = absorb(s, '"');
-    int n = s.indexOf('"');
-    // If n is -1, it means that there are no inverted commas, so we use space as a delimiter
-    if (n==-1) n=s.indexOf(' ');
-    // If n is still -1, it means that the string has ended, so we go till the end of the string
-    if (n!=-1)
-    s = s.substring(0, n);
-	return s;
-}
 public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) {
 	
 	String xmlData = "";
@@ -208,4 +184,27 @@ public static boolean isXMLTagFound(HTMLNode node, String tagName) {
 		return newString.toString();
 	}
 
-}
+/**
+ * Insert the method's description here.
+ * Creation date: (6/4/2001 11:30:03 AM)
+ * @param tag com.kizna.html.HTMLTag
+ */
+public String extractField(HTMLTag tag,String field) 
+{
+    String s = tag.getText();
+    int fieldPos = s.toUpperCase().indexOf(field);
+    if (fieldPos == -1) {
+        return "";
+    }
+    int loc = fieldPos + field.length();
+    s = s.substring(loc, s.length());
+    s = absorb(s, '=');
+    s = absorb(s, '"');
+    int n = s.indexOf('"');
+    // If n is -1, it means that there are no inverted commas, so we use space as a delimiter
+    if (n==-1) n=s.indexOf(' ');
+    // If n is still -1, it means that the string has ended, so we go till the end of the string
+    if (n!=-1)
+    s = s.substring(0, n);
+	return s;
+}}

@@ -86,9 +86,9 @@ public boolean evaluate(String s,HTMLTagScanner previousOpenScanner)
  */
 public void extractFields(HTMLTag tag) 
 {
-    className = extractField(tag, "CODE");
-    archive = extractField(tag, "ARCHIVE");
-    codebase = extractField(tag, "CODEBASE");
+    className = tag.getParameter("CODE");
+    archive = tag.getParameter("ARCHIVE");
+    codebase = tag.getParameter("CODEBASE");
 }
 /**
  * Insert the method's description here.
@@ -136,6 +136,7 @@ public com.kizna.html.HTMLNode scan(HTMLTag tag, String url, com.kizna.html.HTML
 	boolean endScriptFound=false;
 	Vector buff=new Vector();
 	Vector misc=new Vector();
+	Hashtable table = new Hashtable();
 
 	do {
 		node = reader.readElement();
@@ -146,32 +147,22 @@ public com.kizna.html.HTMLNode scan(HTMLTag tag, String url, com.kizna.html.HTML
 				endScriptFound = true; 
 			}
 		}
-		else if (node!=null) buff.addElement(node);
-	}
-	while (!endScriptFound);
-	// buff may contain applet parameters.
-	Hashtable table = new Hashtable();
-	if (buff!=null)
-	{
-		for (Enumeration e = buff.elements();e.hasMoreElements();)
-		{
-			HTMLNode hnode = (HTMLNode)e.nextElement();
-			if (hnode instanceof HTMLTag)
+		else if (node instanceof HTMLTag) {
+			HTMLTag htag = (HTMLTag)node;
+			String paramName = htag.getParameter("NAME");
+			if (paramName!=null && paramName.length()!=0)
 			{
-				HTMLTag htag = (HTMLTag)hnode;
-				String paramName = extractField(htag,"NAME");
-				if (paramName!=null && paramName.length()!=0)
-				{
-					String paramValue = extractField(htag,"VALUE");
-					table.put(paramName,paramValue);
-				}
-				else
-				{
-					misc.addElement(htag);
-				}
-			} 
+				String paramValue = htag.getParameter("VALUE");
+				table.put(paramName,paramValue);
+			}
+			else
+			{
+				misc.addElement(htag);
+			}
 		}
 	}
+	while (!endScriptFound);
+	
 	HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,misc);
 	appTag.setThisScanner(this);
 	return appTag;
