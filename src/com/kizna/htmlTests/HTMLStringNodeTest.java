@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020707 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020721 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -203,5 +203,24 @@ public void testToRawString() {
 	assertTrue("Eighth Node identified must be a string node",node[7] instanceof HTMLStringNode);
 	stringNode = (HTMLStringNode)node[7];
 	assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHTML());
+}
+public void testEmptyLines() {
+	String testHTML = new String(
+	"David Nirenberg (Center for Advanced Study in the Behavorial Sciences, Stanford).<br>\n"+
+	"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \n"+
+	"<br>"
+	);
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[20];
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 4 nodes identified",new Integer(4),new Integer(i));
+	assertTrue("Third Node identified must be a string node",node[2] instanceof HTMLStringNode);
+		
 }
 }

@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020707 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020721 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -119,6 +119,9 @@ public class HTMLStringNode extends HTMLNode
 			{
 				textBuffer.append(input.charAt(i));
 			}				
+			// Patch by Cedric Rosa
+			if (state==0 && i==input.length()-1)
+			   state=1;
 			if (state==1 && i==input.length()-1)
 			{
 				input = reader.getNextLine();
