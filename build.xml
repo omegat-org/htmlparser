@@ -295,17 +295,21 @@
     <delete dir="${dist}/sources"/>
   </target>
 
-  <!-- Perform the htmlparser integration -->
-  <target name="htmlparser" depends="Package" description="same as Package plus cleanup">
-    <echo message="**********************************"/>
-    <echo message="*  Cleaning up and finishing.... *"/>
-    <echo message="**********************************"/>
+	<target name="clean" description="cleanup">
+		<echo message="**********************************"/>
+		<echo message="*  Cleaning up and finishing.... *"/>
+		<echo message="**********************************"/>
 
-    <!-- delete the release directory -->
-    <delete dir="${releaseDir}"/> 
-    <!-- delete the classes -->
-    <delete>
-      <fileset dir="${src}" includes="**/*.class"/>
-    </delete>
+		<!-- delete the release directory -->
+		<delete dir="${releaseDir}"/> 
+		<!-- delete the classes -->
+		<delete>
+			<fileset dir="${src}" includes="**/*.class"/>
+		</delete>
+	</target>
+	
+  <!-- Perform the htmlparser integration -->
+  <target name="htmlparser" depends="Package,clean" description="same as Package plus cleanup">
   </target>
+	
 </project>
