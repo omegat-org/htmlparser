@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021109 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021120 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -106,6 +106,17 @@ public class HTMLParserTest extends TestCase {
 		}
 		assertEquals("There should be "+cnt+" nodes identified (second call to parser.elements())",cnt,i);
 	}	
+	
+	public void testNullUrl() {
+		HTMLParser parser;
+		try {
+			parser = new HTMLParser("");
+			assertTrue("Should have thrown an exception!",false);
+		}
+		catch (HTMLParserException e) {
+			
+		}
+	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLParserTest.class);
 	}
