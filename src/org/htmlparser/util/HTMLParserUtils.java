@@ -31,6 +31,7 @@ package org.htmlparser.util;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.scanners.HTMLTagScanner;
 import org.htmlparser.tags.HTMLTag;
@@ -121,6 +122,30 @@ public class HTMLParserUtils
 		while (plainText.indexOf(' ')==0) 
 			plainText=plainText.substring(1);
 		return plainText;
+	}
+
+	public static String removeTrailingBlanks(String text) {
+		char ch = ' ' ;
+		while (ch==' '){
+			ch = text.charAt(text.length()-1);
+			if (ch==' ') 
+				text = text.substring(0,text.length()-1);				
+		}
+		return text;
+	}
+
+	/**
+	 * Search given node and pick up any objects of given type, return
+	 * HTMLNode array.
+	 * @param node
+	 * @param type
+	 * @return HTMLNode[]
+	 */
+	public static HTMLNode[] findTypeInNode(HTMLNode node, Class type) {
+		NodeList nodeList = new NodeList();
+		node.collectInto(nodeList,type);
+		HTMLNode spans [] = nodeList.toNodeArray();
+		return spans;
 	}	
 	
 }
