@@ -116,7 +116,7 @@ public class ScriptScannerTest extends ParserTestCase
 		parseAndAssertNodeCount(2);
 		
 		StringBuffer sb2 = new StringBuffer();
-		sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
+		sb2.append("\r\nif(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
 		sb2.append(" document.write ('xxx');\r\n"); 
 		sb2.append("else\r\n"); 
 		sb2.append(" document.write ('yyy');\r\n"); 
@@ -171,7 +171,7 @@ public class ScriptScannerTest extends ParserTestCase
 		// Check the data in the applet tag 
 		ScriptTag scriptTag = (ScriptTag)node[0];
 		String scriptCode = scriptTag.getScriptCode();	  
-		String expectedCode = "<!--\r\n"+
+		String expectedCode = "\r\n<!--\r\n"+
 						  "  function validateForm()\r\n"+
 						  "  {\r\n"+
 						  "     var i = 10;\r\n"+
@@ -179,7 +179,7 @@ public class ScriptScannerTest extends ParserTestCase
 						  "     i = i - 1 ; \r\n"+
 						  "     return true;\r\n"+
 						  "  }\r\n"+
-						  "// -->";
+						  "// -->\r\n";
 		assertStringEquals("Expected Code",expectedCode,scriptCode);
 	}
 	
@@ -560,14 +560,20 @@ public class ScriptScannerTest extends ParserTestCase
 	
 	
 	public void testScanScriptWithTagsInComment() throws ParserException {
-		String javascript = "// This is javascript with <li> tag in the comment\n";
+		String javascript = "// This is javascript with <li> tag in the comment";
 		createParser("<script>\n"+ javascript + "\n</script>");
 		parser.registerScanners();
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof ScriptTag); 
 		ScriptTag scriptTag = (ScriptTag)node[0];
 		String scriptCode = scriptTag.getScriptCode();
-		assertStringEquals("Expected Code",javascript,scriptCode);
+		String expectedCode = 
+			wrapLineSeperatorAround(javascript);
+		assertStringEquals("Expected Code",expectedCode,scriptCode);
+	}
+
+	private String wrapLineSeperatorAround(String javascript) {
+		return Parser.getLineSeparator()+javascript+Parser.getLineSeparator();
 	}
 	
 	public void testScanScriptWithJavascriptLineEndings() throws ParserException {
@@ -575,12 +581,16 @@ public class ScriptScannerTest extends ParserTestCase
 			"var s = \"This is a string \\\n" +
 			"that spans multiple lines;";
 		createParser("<script>\n"+ javascript + "\n</script>");
+		Parser.setLineSeparator("\n");
 		parser.registerScanners();
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof ScriptTag); 
 		ScriptTag scriptTag = (ScriptTag)node[0];
 		String scriptCode = scriptTag.getScriptCode();
-		assertStringEquals("Expected Code",javascript,scriptCode);
+		
+		String expectedCode =
+			wrapLineSeperatorAround(javascript);
+		assertStringEquals("Expected Code",expectedCode,scriptCode);
 	}
 	
 	
@@ -592,7 +602,9 @@ public class ScriptScannerTest extends ParserTestCase
 		assertTrue("Node should be a script tag",node[0] instanceof ScriptTag); 
 		ScriptTag scriptTag = (ScriptTag)node[0];
 		String scriptCode = scriptTag.getScriptCode();
-		assertStringEquals("Expected Code",javascript,scriptCode);
+		String expectedCode = 
+			wrapLineSeperatorAround(javascript);
+		assertStringEquals("Expected Code",expectedCode,scriptCode);
 	}
 	
 	

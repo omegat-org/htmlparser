@@ -167,8 +167,7 @@ public class AttributeParserTest extends ParserTestCase {
      * See also feature request #725376 Handle script in attributes.
      * Only perform this test if it's version 1.4 or higher.
      */
-    public void testJspWithinAttributes()
-    {
+    public void testJspWithinAttributes() {
         Parser parser;
         
         parser = new Parser ();
@@ -190,8 +189,7 @@ public class AttributeParserTest extends ParserTestCase {
      * See feature request #725376 Handle script in attributes.
      * Only perform this test if it's version 1.4 or higher.
      */
-    public void testScriptedTag ()
-    {
+    public void testScriptedTag () {
         Parser parser;
         
         parser = new Parser ();
