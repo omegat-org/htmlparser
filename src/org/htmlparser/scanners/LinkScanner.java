@@ -356,13 +356,14 @@ public class LinkScanner extends TagScanner
 				else if (node!=null) nodeVector.addElement(node);
 			}
 			while (endFlag==false && node!=null);
+			if (node==null)  {
+				// Add an end link tag
+				endTag = new EndTag(new TagData(0,3,"A","</A>"));
+				node = endTag;
+			}
 			if (node instanceof EndTag)
 			{
-				if (node==null)  {
-					// Add an end link tag
-					endTag = new EndTag(new TagData(0,3,"A","</A>"));
-					node = endTag;
-				}
+				
 				previousOpenLinkScanner = null;
 				return createLinkTag(currentLine, node, mailLink, javascriptLink,  link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
 			}

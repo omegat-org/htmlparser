@@ -65,11 +65,7 @@ public class HtmlPage extends NodeVisitor {
 	public void visitTag(Tag tag) {
 		addTagToBodyIfApplicable(tag);
 			
-		if (isTitle(tag)) {
-			TitleTag titleTag = (TitleTag)tag;
-			title = titleTag.getTitle();
-		} 
-		else if (isTable(tag)) {
+		if (isTable(tag)) {
 			tables.add(tag);
 		}
 		else {
@@ -121,5 +117,9 @@ public class HtmlPage extends NodeVisitor {
 	}
 
 
+
+	public void visitTitleTag(TitleTag titleTag) {
+		title = titleTag.getTitle();
+	}
 
 }
