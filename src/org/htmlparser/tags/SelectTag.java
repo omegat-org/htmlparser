@@ -28,21 +28,21 @@
 
 package org.htmlparser.tags;
 
-import java.util.List;
 
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserUtils;
 
 public class SelectTag extends CompositeTag
 {
 	private OptionTag[] optionTags=null;
-	private List optionTagList;
+	private NodeList optionTagList;
 	
 	public SelectTag(
 		TagData tagData, 
 		CompositeTagData compositeTagData,
-		List optionTagList)
+		NodeList optionTagList)
 	{
 		super(tagData,compositeTagData);
 		this.optionTagList = optionTagList;
@@ -53,7 +53,7 @@ public class SelectTag extends CompositeTag
 		if (optionTags==null) {
 			optionTags = new OptionTag[optionTagList.size()];
 			for (int i=0;i<optionTagList.size();i++) {
-				optionTags[i] = (OptionTag)optionTagList.get(i);	
+				optionTags[i] = (OptionTag)optionTagList.elementAt(i);	
 			}
 		}
 		return optionTags;

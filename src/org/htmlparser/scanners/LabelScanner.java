@@ -39,6 +39,10 @@ import org.htmlparser.tags.data.TagData;
 public class LabelScanner extends CompositeTagScanner {
 	private static final String MATCH_NAME [] = {"LABEL"};
 
+	public LabelScanner() {
+		this("");
+	}
+	
 	public LabelScanner(String filter) {
 		super(filter,MATCH_NAME);
 	}

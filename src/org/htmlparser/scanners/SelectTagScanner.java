@@ -28,8 +28,6 @@
 
 package org.htmlparser.scanners;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.htmlparser.Node;
 import org.htmlparser.tags.OptionTag;
@@ -37,12 +35,13 @@ import org.htmlparser.tags.SelectTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 
 
 public class SelectTagScanner extends CompositeTagScanner
 {
 	private static final String MATCH_NAME [] = {"SELECT"};
-	private List optionTags;
+	private NodeList optionTags;
 		
 	public SelectTagScanner()
 	{
@@ -71,7 +70,7 @@ public class SelectTagScanner extends CompositeTagScanner
 	}
 
 	public void beforeScanningStarts() {
-		optionTags = new ArrayList();
+		optionTags = new NodeList();
 	}
 
 }
