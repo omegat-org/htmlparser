@@ -47,7 +47,6 @@ public class HTMLParameterParser {
     private final char singleQuote = '\'';
 
 
-    private StringTokenizer token;
         
         
 	/**
@@ -101,9 +100,9 @@ public class HTMLParameterParser {
         element=null;
         boolean waitingForEqual=false;
         
-        token = new StringTokenizer(tag.getText(),delim,true);
+        StringTokenizer tokenizer = new StringTokenizer(tag.getText(),delim,true);
         while (true) {
-            nextPart=getNextPart();
+            nextPart=getNextPart(tokenizer);
             
             if (element==null && nextPart != null && !nextPart.equals("=")){
                 element = nextPart;
@@ -149,14 +148,14 @@ public class HTMLParameterParser {
         return h;
     }
     
-    private String getNextPart(){
+    private String getNextPart(StringTokenizer tokenizer){
         String tokenAccumulator=null;
         boolean isDoubleQuote=false;
         boolean isSingleQuote=false;        
         boolean isDataReady=false;
         String currentToken;
-        while (isDataReady == false && token.hasMoreTokens()) {
-            currentToken = token.nextToken();
+        while (isDataReady == false && tokenizer.hasMoreTokens()) {
+            currentToken = tokenizer.nextToken();
             //
             // First let's combine tokens that are inside "" or ''
             //
@@ -185,8 +184,6 @@ public class HTMLParameterParser {
                 
                 if (delim.indexOf(tokenAccumulator)>=0) {
                     if (tokenAccumulator.equals("=")){
-//System.out.println("k4b|"+tokenAccumulator+"|"+isDataReady);            
-                        
                         isDataReady=true;
                     }
                 }
