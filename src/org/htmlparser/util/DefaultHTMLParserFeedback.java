@@ -38,22 +38,97 @@ package org.htmlparser.util;
 **/
 
 public class DefaultHTMLParserFeedback
-  implements HTMLParserFeedback
+    implements
+        HTMLParserFeedback
 {
-  public void info(String message)
-  {
-    System.out.println("INFO: " + message);
-  }
+    /**
+     * Constructor argument for a quiet feedback.
+     */
+    public static String QUIET = "Quiet";
 
-  public void warning(String message)
-  {
-    System.out.println("WARNING: " + message);
-  }
+    /**
+     * Constructor argument for a normal feedback.
+     */
+    public static String NORMAL = "Normal";
 
-  public void error(String message, HTMLParserException e)
-  {
-    System.out.println("ERROR: " + message);
-    e.printStackTrace();
-  }
+    /**
+     * Constructor argument for a debugging feedback.
+     */
+    public static String DEBUG = "Debug";
+
+    /**
+     * Verbosity level.
+     * Corresponds to constructor arguments:
+     * <pre>
+     *   DEBUG = 2;
+     *   NORMAL = 1;
+     *   QUIET = 0;
+     * </pre>
+     */
+    protected int mLevel;
+
+    /**
+     * Construct a feedback object of the given type.
+     * @param mode The type of feedback:
+     * <pre>
+     *   DEBUG - verbose debugging with stack traces
+     *   NORMAL - normal messages
+     *   QUIET - no messages
+     * </pre>
+     */
+    public DefaultHTMLParserFeedback (String mode)
+    {
+        if (mode.equals (DEBUG))
+            mLevel = 2;
+        else if (mode.equals (NORMAL))
+            mLevel = 1;
+        else if (mode.equals (QUIET))
+            mLevel = 0;
+        else
+            throw new IllegalArgumentException ("illegal mode (" + mode + "), must be one of: QUIET, NORMAL, DEBUG");
+    }
+
+    /**
+     * Construct a NORMAL feedback object.
+     */
+    public DefaultHTMLParserFeedback ()
+    {
+        this (NORMAL);
+    }
+
+    /**
+     * Print an info message.
+     * @param message The message to print.
+     */
+    public void info (String message)
+    {
+        if (!(0 == mLevel))
+            System.out.println ("INFO: " + message);
+    }
+    
+    /**
+     * Print an warning message.
+     * @param message The message to print.
+     */
+    public void warning (String message)
+    {
+        if (!(0 == mLevel))
+            System.out.println ("WARNING: " + message);
+    }
+    
+    /**
+     * Print an error message.
+     * @param message The message to print.
+     * @param exception The exception for stack tracing.
+     */
+    public void error (String message, HTMLParserException exception)
+    {
+        if (!(0 == mLevel))
+        {
+            System.out.println ("ERROR: " + message);
+            if (2 == mLevel && (null != exception))
+                exception.printStackTrace (System.out);
+        }
+    }
 }
 
