@@ -28,27 +28,17 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.tests.scannersTests.HTMLFormScannerTest;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.scanners.HTMLFormScanner;
-import org.htmlparser.util.HTMLEnumeration;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLFormTagTest extends HTMLParserTestCase {
 

@@ -28,18 +28,12 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.*;
-import java.io.*;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.HTMLParser;
+import org.htmlparser.scanners.HTMLScriptScanner;
+import org.htmlparser.tags.HTMLScriptTag;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.scanners.*;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLScriptTagTest extends HTMLParserTestCase{
 	private HTMLScriptScanner scriptScanner;
@@ -121,7 +115,7 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 		String testHTML1 = new String(sb1.toString()); 
 		
 		createParser(testHTML1); 
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		// Register the image scanner 
 		parser.addScanner(new HTMLScriptScanner("-s")); 
 		

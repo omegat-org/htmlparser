@@ -30,20 +30,14 @@ package org.htmlparser.scanners;
 //////////////////
 // Java Imports //
 //////////////////
-import java.io.IOException;
 import java.util.Hashtable;
 
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLStringNode;
-import org.htmlparser.util.*;
+import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.HTMLParserFeedback;
 /**
  * HTMLTagScanner is an abstract superclass which is subclassed to create specific 
  * scanners, that operate on a tag's strings, identify it, and can extract data from it.

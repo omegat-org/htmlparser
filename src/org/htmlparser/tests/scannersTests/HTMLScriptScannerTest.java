@@ -28,20 +28,13 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.io.BufferedReader;
 import java.util.Hashtable;
-import org.htmlparser.tags.HTMLScriptTag;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
 
-import java.util.Enumeration;
-import org.htmlparser.*;
-import java.io.StringReader;
+import org.htmlparser.HTMLParser;
 import org.htmlparser.scanners.HTMLScriptScanner;
-import junit.framework.TestSuite;
+import org.htmlparser.tags.HTMLScriptTag;
+import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLScriptScannerTest extends HTMLParserTestCase 
 {
@@ -113,7 +106,7 @@ public class HTMLScriptScannerTest extends HTMLParserTestCase
 		String testHTML1 = new String(sb1.toString()); 
 		
 		createParser(testHTML1,"http://www.google.com/test/index.html"); 
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		// Register the image scanner 
 		parser.addScanner(new HTMLScriptScanner("-s")); 
 		

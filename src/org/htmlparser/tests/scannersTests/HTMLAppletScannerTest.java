@@ -27,20 +27,13 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.scannersTests;
-import java.io.BufferedReader;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.io.StringReader;
 
+import org.htmlparser.scanners.HTMLAppletScanner;
 import org.htmlparser.tags.HTMLAppletTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.*;
-import org.htmlparser.scanners.HTMLAppletScanner;
-
-import junit.framework.TestSuite;
 
 public class HTMLAppletScannerTest extends HTMLParserTestCase
 {

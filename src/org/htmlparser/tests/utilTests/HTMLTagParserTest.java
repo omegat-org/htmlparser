@@ -29,13 +29,9 @@
 package org.htmlparser.tests.utilTests;
 
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLTagParser;
-import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.tests.tagTests.HTMLTagTest;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLTagParserTest extends HTMLParserTestCase {
 	private HTMLTagParser tagParser;
@@ -58,7 +54,7 @@ public class HTMLTagParserTest extends HTMLParserTestCase {
 
 	public void testPruneSpaces() {
 		String test = "  fdfdf dfdf   ";
-		assertEquals("Expected Pruned string","fdfdf dfdf",tagParser.pruneSpaces(test));
+		assertEquals("Expected Pruned string","fdfdf dfdf",HTMLTagParser.pruneSpaces(test));
 	}   
 
 	protected void setUp() {

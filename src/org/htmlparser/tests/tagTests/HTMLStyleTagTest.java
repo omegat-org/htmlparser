@@ -28,20 +28,10 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
-
-import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLStyleTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLStyleTagTest extends HTMLParserTestCase {
 
@@ -69,7 +59,7 @@ public class HTMLStyleTagTest extends HTMLParserTestCase {
 		"-->"+
 		"</STYLE>");
 
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		parser.registerScanners();
 	 	parseAndAssertNodeCount(1);
 		assertTrue(node[0] instanceof HTMLStyleTag);

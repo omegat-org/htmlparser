@@ -28,20 +28,9 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.scanners.HTMLJspScanner;
 import org.htmlparser.tags.HTMLJspTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
 
 public class HTMLJspScannerTest extends HTMLParserTestCase {

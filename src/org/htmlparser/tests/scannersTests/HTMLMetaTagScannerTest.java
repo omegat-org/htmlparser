@@ -28,17 +28,11 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import java.io.*;
-import java.util.*;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.scanners.HTMLMetaTagScanner;
+import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLMetaTag;
+import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLMetaTagScannerTest extends HTMLParserTestCase {
 

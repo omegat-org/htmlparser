@@ -30,13 +30,12 @@ package org.htmlparser.scanners;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLStyleTag;
+import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.util.HTMLParserException;
 /**
  * The HTMLStyleScanner scans identifies &lt;style&gt; code
  */

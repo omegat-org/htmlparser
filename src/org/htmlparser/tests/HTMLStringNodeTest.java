@@ -28,22 +28,12 @@
 
 
 package org.htmlparser.tests;
-import java.io.BufferedReader;
-import org.htmlparser.scanners.HTMLLinkScanner;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
-
-
-import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
-import java.io.StringReader;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.htmlparser.scanners.HTMLLinkScanner;
+import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLStringNodeTest extends HTMLParserTestCase {
 
@@ -81,7 +71,7 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 		
 		createParser("view these documents, you must have <A href='http://www.adobe.com'>Adobe \n"+
 			"Acrobat Reader</A> installed on your computer.");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		parseAndAssertNodeCount(3);
 		// The first node should be a HTMLStringNode-  with the text - view these documents, you must have 

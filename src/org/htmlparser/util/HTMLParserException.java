@@ -35,8 +35,6 @@ package org.htmlparser.util;
  * @author Claude Duguay
  **/
 
-import java.io.*;
-import java.util.*;
 
 public class HTMLParserException
   extends ChainedException

@@ -32,12 +32,10 @@ package org.htmlparser.scanners;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
+import org.htmlparser.HTMLReader;
+import org.htmlparser.tags.HTMLJspTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLJspTag;
 /**
  * The HTMLScriptScanner scans identifies javascript code
  */

@@ -3,21 +3,14 @@ package org.htmlparser.tests;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
+import junit.framework.TestCase;
+
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.HTMLStringNode;
-import org.htmlparser.scanners.HTMLLinkScanner;
-import org.htmlparser.tags.HTMLImageTag;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLParserTestCase extends TestCase {
 	protected HTMLParser parser;

@@ -27,11 +27,8 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.utilTests;
-import java.util.Vector;
-
-import org.htmlparser.util.*;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.htmlparser.util.HTMLLinkProcessor;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 	private HTMLLinkProcessor lp;
@@ -56,7 +53,7 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 
 	public void testFixSpaces() {
 		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
-		String fixedURL = lp.fixSpaces(url);
+		String fixedURL = HTMLLinkProcessor.fixSpaces(url);
 		int index = fixedURL.indexOf(" ");
 		assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html",fixedURL);
 	}

@@ -32,19 +32,15 @@ package org.htmlparser.scanners;
 //////////////////
 // Java Imports //
 //////////////////
-import java.util.*;
-import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Vector;
 
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
-import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.HTMLStringNode;
-import org.htmlparser.HTMLParser;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 /**

@@ -28,19 +28,16 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.BufferedReader;
 import java.util.Hashtable;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
+
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLStringNode;
+import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.scanners.*;
-
-import java.io.StringReader;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLTagTest extends HTMLParserTestCase 
 {
@@ -159,7 +156,7 @@ public class HTMLTagTest extends HTMLParserTestCase
                 
                 tag = (HTMLTag)node;     
                 h = tag.getParsed();
-                a = (String)h.get(tag.TAGNAME);                
+                a = (String)h.get(HTMLTag.TAGNAME);                
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
                 nice = (String)h.get("YOURPARAMETER");
@@ -230,7 +227,7 @@ public class HTMLTagTest extends HTMLParserTestCase
                 
                 tag = (HTMLTag)node;     
                 h = tag.getParsed();
-                a = (String)h.get(tag.TAGNAME);                
+                a = (String)h.get(HTMLTag.TAGNAME);                
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
                 nice = (String)h.get("YOURPARAMETER");
@@ -299,7 +296,7 @@ public class HTMLTagTest extends HTMLParserTestCase
                 
                 tag = (HTMLTag)node;     
                 h = tag.parseParameters();
-                a = (String)h.get(tag.TAGNAME);                
+                a = (String)h.get(HTMLTag.TAGNAME);                
                 nice = (String)h.get("YOURPARAMETER");
                 assertEquals ("Link tag (A)",a,"A");
                 assertEquals ("yourParameter value","Kaarle",nice);

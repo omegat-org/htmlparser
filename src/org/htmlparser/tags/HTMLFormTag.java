@@ -30,7 +30,6 @@
 package org.htmlparser.tags;
 
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;

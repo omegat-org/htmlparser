@@ -1,15 +1,11 @@
 package org.htmlparser.tests;
 
-import java.util.Enumeration;
-
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLRenderer;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-
-import junit.framework.TestCase;
 
 public class HTMLRendererTest extends HTMLParserTestCase {
 

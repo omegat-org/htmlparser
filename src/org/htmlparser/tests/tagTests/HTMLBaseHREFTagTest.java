@@ -28,15 +28,9 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.StringReader;
-
 import org.htmlparser.tags.HTMLBaseHREFTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
-
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLBaseHREFTagTest extends HTMLParserTestCase {
 

@@ -27,18 +27,12 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.tagTests;
-import java.io.BufferedReader;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.HTMLParser;
+import org.htmlparser.scanners.HTMLJspScanner;
+import org.htmlparser.tags.HTMLJspTag;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.scanners.*;
-
-import java.io.StringReader;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLJspTagTest extends HTMLParserTestCase
 {
@@ -79,7 +73,7 @@ public class HTMLJspTagTest extends HTMLParserTestCase
 			"        if(transfer.validate(request))\n"+
 			"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
 			"%>\n");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		// Register the Jsp Scanner
 		parser.addScanner(new HTMLJspScanner("-j"));	
 		parseAndAssertNodeCount(5);
@@ -141,7 +135,7 @@ public class HTMLJspTagTest extends HTMLParserTestCase
 			"        if(transfer.validate(request))\n"+
 			"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
 			"%>\n");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		// Register the Jsp Scanner
 		parser.addScanner(new HTMLJspScanner("-j"));	
 		parseAndAssertNodeCount(5);

@@ -31,6 +31,7 @@ package org.htmlparser.tests.scannersTests;
 import java.util.Enumeration;
 
 import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.HTMLLinkScanner;
 import org.htmlparser.tags.HTMLEndTag;
@@ -178,7 +179,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		createParser("<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font> <a \n"+
 		"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
 		"nical.html\"> Journalism 3.0</a> by Rajesh Jain");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		parseAndAssertNodeCount(8);
 		assertTrue("Seventh node should be a link tag",node[6] instanceof HTMLLinkTag);

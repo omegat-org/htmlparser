@@ -34,7 +34,6 @@ import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLParameterParser;
 
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLParameterParserTest extends TestCase {
 	private HTMLParameterParser parser;

@@ -28,22 +28,24 @@
 
 package org.htmlparser.tests;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
+
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.scanners.HTMLImageScanner;
 import org.htmlparser.tags.HTMLImageTag;
+import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class FunctionalTests extends TestCase {
 

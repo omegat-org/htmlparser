@@ -31,14 +31,10 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.*;
-import org.htmlparser.*;
-import org.htmlparser.scanners.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.scanners.HTMLOptionTagScanner;
+import org.htmlparser.tags.HTMLOptionTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.*;
-
-import junit.framework.*;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLOptionTagTest extends HTMLParserTestCase 
 {

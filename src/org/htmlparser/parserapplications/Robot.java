@@ -27,13 +27,12 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.parserapplications;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLParser;
+import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-
-import org.htmlparser.scanners.*;
 /**
  * The Robot Crawler application will crawl through urls recursively, based on a depth value.
  */

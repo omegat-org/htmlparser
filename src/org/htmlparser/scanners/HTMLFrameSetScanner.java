@@ -35,20 +35,13 @@ package org.htmlparser.scanners;
 //////////////////
 import java.util.Enumeration;
 import java.util.Vector;
-import java.io.IOException;
-import java.util.Hashtable;
 
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
-import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLParser;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLFrameSetTag;
 import org.htmlparser.tags.HTMLFrameTag;
-import org.htmlparser.util.HTMLLinkProcessor;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLParserException;
 /**
  * Scans for the Frame Tag. This is a subclass of HTMLTagScanner, and is called using a

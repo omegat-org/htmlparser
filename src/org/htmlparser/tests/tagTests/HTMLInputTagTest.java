@@ -31,13 +31,10 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.*;
-import junit.framework.*;
-import org.htmlparser.*;
-import org.htmlparser.scanners.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.scanners.HTMLInputTagScanner;
+import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.*;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLInputTagTest extends HTMLParserTestCase {
 	private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");

@@ -28,10 +28,8 @@
 
 package org.htmlparser.scanners;
 
-import java.io.IOException;
 import java.util.Hashtable;
 
-import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLMetaTag;
 import org.htmlparser.tags.HTMLTag;

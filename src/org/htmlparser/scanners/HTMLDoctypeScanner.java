@@ -30,13 +30,10 @@ package org.htmlparser.scanners;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
+import org.htmlparser.HTMLReader;
+import org.htmlparser.tags.HTMLDoctypeTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLDoctypeTag;
 
 /**
  * The HTMLDoctypeScanner identifies Doctype tags

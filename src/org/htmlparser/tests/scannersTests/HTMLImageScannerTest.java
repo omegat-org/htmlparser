@@ -27,22 +27,18 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.scannersTests;
-import java.io.BufferedReader;
-import java.util.Hashtable;
 import java.util.Enumeration;
-import java.io.StringReader;
 
-import org.htmlparser.*;
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLParser;
+import org.htmlparser.scanners.HTMLImageScanner;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.scanners.HTMLImageScanner;
-import junit.framework.TestSuite;
 
 public class HTMLImageScannerTest extends HTMLParserTestCase
 {
@@ -147,7 +143,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 	public void testImageWithNewLineChars() throws HTMLParserException
 	{
 		createParser("<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">","http://www.yahoo.com/ghi");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		parseAndAssertNodeCount(1);

@@ -29,24 +29,11 @@
 
 package org.htmlparser.tests;
 
-import org.htmlparser.scanners.HTMLLinkScanner;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
-
-
-import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
-
-import java.io.BufferedReader;
-import java.io.StringReader;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLRemarkNodeTest extends HTMLParserTestCase 
 {
@@ -81,7 +68,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 			"-->\n"+
 			"<TEST>\n"+
 			"</TEST>\n");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
@@ -104,7 +91,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 			"-->\n"+
 			"<TEST>\n"+
 			"</TEST>\n");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
@@ -128,7 +115,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 			"-->\n"+
 			"<TEST>\n"+
 			"</TEST>\n");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
@@ -163,7 +150,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		createParser("<!--\n"+
 		"\n"+
 		"-->");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
@@ -195,7 +182,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		createParser("<!-- \n"+
 		"<A>\n"+
 		"bcd -->");
-		parser.setLineSeparator("\n");
+		HTMLParser.setLineSeparator("\n");
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
@@ -216,7 +203,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		"-\n"+
 		"-\n"+
 		"ssd -->");
-		parser.setLineSeparator("\n");
+		HTMLParser.setLineSeparator("\n");
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLTag but was "+node[0],node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
@@ -224,7 +211,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		"-\n"+
 		"-\n"+
 		"ssd --",tag.getText());
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 	}
 	
 	/**

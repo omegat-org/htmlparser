@@ -28,7 +28,6 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.HTMLNode; 
 /**
  * The JSP/ASP tags like &lt;%...%&gt; can be identified by this class.
  */

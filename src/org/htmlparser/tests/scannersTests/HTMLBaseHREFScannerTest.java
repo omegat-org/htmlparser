@@ -28,23 +28,12 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
-
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.scanners.HTMLBaseHREFScanner;
 import org.htmlparser.scanners.HTMLLinkScanner;
 import org.htmlparser.scanners.HTMLTitleScanner;
 import org.htmlparser.tags.HTMLBaseHREFTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLBaseHREFScannerTest extends HTMLParserTestCase {
 

@@ -28,11 +28,18 @@
 
 package org.htmlparser.scanners;
 
-import java.io.*;
-import java.util.*;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.util.*;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLStringNode;
+import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLOptionTag;
+import org.htmlparser.tags.HTMLSelectTag;
+import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.HTMLParserUtils;
 
 
 public class HTMLSelectTagScanner extends HTMLTagScanner

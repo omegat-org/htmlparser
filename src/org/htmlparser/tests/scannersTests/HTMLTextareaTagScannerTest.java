@@ -28,13 +28,10 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.io.*;
-import junit.framework.*;
-import org.htmlparser.*;
-import org.htmlparser.scanners.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.scanners.HTMLTextareaTagScanner;
+import org.htmlparser.tags.HTMLTextareaTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.*;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLTextareaTagScannerTest extends HTMLParserTestCase
 {

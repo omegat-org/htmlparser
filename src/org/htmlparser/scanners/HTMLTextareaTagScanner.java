@@ -29,10 +29,12 @@
 
 package org.htmlparser.scanners;
 
-import java.util.*;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.util.*;
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLReader;
+import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.HTMLTextareaTag;
+import org.htmlparser.util.HTMLParserException;
 
 
 

@@ -28,18 +28,14 @@
 
 
 package org.htmlparser.scanners;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
-import org.htmlparser.*;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.HTMLEndTag;
+
+import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.HTMLAppletTag;
+import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLParserException;
 /**
  * Used to scan for applet tags.

@@ -27,19 +27,10 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.scannersTests;
-import java.io.BufferedReader;
-import java.util.Hashtable;
-import org.htmlparser.tags.HTMLStyleTag;
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
-
-import org.htmlparser.*;
-import java.io.StringReader;
 import org.htmlparser.scanners.HTMLStyleScanner;
-import junit.framework.TestSuite;
+import org.htmlparser.tags.HTMLStyleTag;
+import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLStyleScannerTest extends HTMLParserTestCase
 {

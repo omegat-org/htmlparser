@@ -27,20 +27,12 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.scannersTests;
-import java.io.*;
-import java.util.Enumeration;
-
-import javax.swing.border.TitledBorder;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import org.htmlparser.scanners.*;
+import org.htmlparser.scanners.HTMLMetaTagScanner;
+import org.htmlparser.scanners.HTMLStyleScanner;
+import org.htmlparser.scanners.HTMLTitleScanner;
 import org.htmlparser.tags.HTMLTitleTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.*;
 
 public class HTMLTitleScannerTest extends HTMLParserTestCase {
 

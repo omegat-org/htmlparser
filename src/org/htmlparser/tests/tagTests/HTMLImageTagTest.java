@@ -28,19 +28,11 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.BufferedReader;
-import java.util.Enumeration;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.scanners.HTMLImageScanner;
+import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.scanners.*;
-import java.io.StringReader;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLImageTagTest extends HTMLParserTestCase 
 {

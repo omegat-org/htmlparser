@@ -29,7 +29,6 @@
 package org.htmlparser.tags;
 
 import java.util.*;
-import java.io.IOException;
 import org.htmlparser.scanners.HTMLTagScanner;
 import org.htmlparser.util.HTMLParameterParser;
 import org.htmlparser.util.HTMLParserException;

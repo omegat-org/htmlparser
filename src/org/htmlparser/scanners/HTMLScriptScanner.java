@@ -30,17 +30,14 @@ package org.htmlparser.scanners;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 
-import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLStringNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLScriptTag;
+import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.util.HTMLParserException;
 /**
  * The HTMLScriptScanner identifies javascript code
  */

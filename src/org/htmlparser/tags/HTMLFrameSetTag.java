@@ -47,8 +47,7 @@ public class HTMLFrameSetTag extends HTMLTag
 	public HTMLFrameSetTag(int frameSetBegin, int frameSetEnd,String frameSetContents,String tagLine,Vector frames)
 	{
 		super(frameSetBegin,frameSetEnd,frameSetContents,tagLine);
-		this.frameURL = frameURL;
-      	this.frameName = frameName;
+
       	this.frames = frames;
 	}
 	/**

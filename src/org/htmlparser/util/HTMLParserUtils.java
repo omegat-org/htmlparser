@@ -28,17 +28,19 @@
 
 package org.htmlparser.util;
 
-import java.util.*;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.scanners.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import org.htmlparser.HTMLReader;
+import org.htmlparser.scanners.HTMLTagScanner;
+import org.htmlparser.tags.HTMLTag;
 
 public class HTMLParserUtils
 {
 	public static boolean evaluateTag(HTMLTagScanner pTagScanner, 
 										String pTagString, String pTagName)
 	{
-		pTagString = pTagScanner.absorbLeadingBlanks(pTagString);
+		pTagString = HTMLTagScanner.absorbLeadingBlanks(pTagString);
 		if (pTagString.toUpperCase().indexOf(pTagName)==0)
 			return true; 
 		else 

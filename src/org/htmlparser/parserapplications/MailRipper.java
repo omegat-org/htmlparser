@@ -28,15 +28,15 @@
 
 
 package org.htmlparser.parserapplications;
-import org.htmlparser.scanners.*;
-import org.htmlparser.tags.*;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLParser;
+import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-
-import java.util.Enumeration;
-import java.util.Vector;
-import org.htmlparser.*;
 
 
 /**

@@ -29,7 +29,6 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.HTMLNode; 
 /**
  * The HTML Document Declaration Tag can identify &lt;!DOCTYPE&gt; tags
  */

@@ -28,19 +28,12 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.BufferedReader;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLNode;
+import org.htmlparser.scanners.HTMLMetaTagScanner;
+import org.htmlparser.scanners.HTMLStyleScanner;
+import org.htmlparser.scanners.HTMLTitleScanner;
 import org.htmlparser.tags.HTMLTitleTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.scanners.*;
-import java.io.StringReader;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLTitleTagTest extends HTMLParserTestCase {
 	private HTMLTitleTag titleTag;

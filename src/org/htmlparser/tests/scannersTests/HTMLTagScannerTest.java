@@ -28,19 +28,14 @@
 
 
 package org.htmlparser.tests.scannersTests;
-import java.util.Enumeration;
-import java.io.*;
-import org.htmlparser.scanners.HTMLTagScanner;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLParser;
+import org.htmlparser.HTMLReader;
+import org.htmlparser.scanners.HTMLTagScanner;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLParser;
 
 public class HTMLTagScannerTest extends HTMLParserTestCase
 {
@@ -62,7 +57,7 @@ public class HTMLTagScannerTest extends HTMLParserTestCase
 			"Abhi\n"+
 			"Sri\n"+
 			"</MESSAGE>"); 
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		HTMLEnumeration e = parser.elements(); 
 	
 		HTMLNode node = e.nextHTMLNode();

@@ -29,16 +29,15 @@
 
 package org.htmlparser.scanners;
 
-import java.io.IOException;
 import java.util.Vector;
 
-import org.htmlparser.HTMLStringNode;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLTitleTag;
-import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLStringNode;
+import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.HTMLTitleTag;
+import org.htmlparser.util.HTMLParserException;
 
 /**
  * Scans title tags.

@@ -28,10 +28,8 @@
 
 package org.htmlparser.util;
 
-import java.net.URL;
 import java.net.MalformedURLException;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.net.URL;
 
 /**
  * Processor class for links, is present basically as a utility class.

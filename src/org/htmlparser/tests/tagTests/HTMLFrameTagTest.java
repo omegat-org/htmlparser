@@ -28,21 +28,10 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
-
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.scanners.HTMLFrameScanner;
 import org.htmlparser.tags.HTMLFrameTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLFrameTagTest extends HTMLParserTestCase {
 
