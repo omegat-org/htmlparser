@@ -1,4 +1,4 @@
-HTMLParser Integration Release 1.3 - 20030223
+HTMLParser Integration Release 1.3 - 20030302
 *********************************************
 
 Q1. What are the contents of the distribution ? 
@@ -40,9 +40,9 @@ and the switches allowed will be shown.
 ---------- *** ------------
 Q2. Which part of the source code should I analyze to be able to use it in my project ?
 
-Go through the javadoc of HTMLParser.java - it contains all the examples to get you started.
+Go through the javadoc of Parser.java - it contains all the examples to get you started.
 
-Also go through the package com.kizna.parserapplications. 
+Also go through the package org.htmlparser.parserapplications. 
 The two applications here, Robot and MailRipper, have been expressly written for the purpose of demonstrating the usage of htmlparser.
 
 ---------- *** ------------

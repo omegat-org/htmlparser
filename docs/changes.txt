@@ -1,8 +1,9 @@
-Integration build 1.3 - 20030230
+Integration build 1.3 - 20030302
 --------------------------------
 [1] Fixed bug in LinkScanner
 [2] Cleaned up StringNode interface
 [3] Cleaned up RemarkNode interface
+[4] Refactored Parser, created ParserHelper
 
 Integration build 1.3 - 20030223
 --------------------------------
