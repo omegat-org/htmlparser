@@ -69,4 +69,25 @@ public class HTMLInputTagTest extends HTMLParserTestCase {
 		assertEquals("HTML Raw String","INPUT TAG\n--------\nNAME : Google\nTYPE : text\n",InputTag.toString());
 	}
 	
+	/**
+	 * Reproduction of bug report 663038
+	 * @throws HTMLParserException
+	 */
+	public void testToHTML2() throws HTMLParserException
+	{
+		String testHTML = new String("<INPUT type=\"checkbox\" "
+			+"name=\"cbCheck\" checked>");
+		createParser(testHTML);
+		parser.addScanner(new HTMLInputTagScanner("-i"));
+
+		parseAndAssertNodeCount(1);
+		assertTrue("Node 1 should be INPUT Tag", 
+			node[0] instanceof HTMLInputTag);
+		HTMLInputTag InputTag;
+		InputTag = (HTMLInputTag) node[0];
+		assertStringEquals("HTML String", 
+			"<INPUT CHECKED=\"\" NAME=\"cbCheck\" TYPE=\"checkbox\">",
+			InputTag.toHTML());
+	}
+	
 }
