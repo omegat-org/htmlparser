@@ -99,7 +99,10 @@ public class HTMLImageScanner extends HTMLTagScanner
 		try {
 			table = tag.parseParameters();
 			relativeLink =  (String)table.get("SRC");
-			if (relativeLink!=null) relativeLink = removeChars(relativeLink,HTMLNode.getLineSeparator());
+			if (relativeLink!=null) {
+				relativeLink = removeChars(relativeLink,'\n');
+				relativeLink = removeChars(relativeLink,'\r');
+			}
 			if (relativeLink==null || relativeLink.length()==0) {
 				// try fix
 				String tagText = tag.getText().toUpperCase();

@@ -79,7 +79,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		}
 		
 		if (s.length()<5) retVal = false; else
-		if ((ch=='a' || ch=='A') && (s.charAt(1)==' ' || s.charAt(1)=='\n')) retVal = true; else retVal = false;
+		if ((ch=='a' || ch=='A') && (s.charAt(1)==' ' || s.charAt(1)=='\n' || s.charAt(1)=='\r')) retVal = true; else retVal = false;
 
 		if (retVal)
 		{
@@ -99,7 +99,10 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		try {
 			Hashtable table = tag.parseParameters();
 			String relativeLink =  (String)table.get("HREF");
-			if (relativeLink!=null) relativeLink = removeChars(relativeLink,HTMLNode.getLineSeparator());
+			if (relativeLink!=null) { 
+				relativeLink = removeChars(relativeLink,'\n');
+				relativeLink = removeChars(relativeLink,'\r');
+			}
 			return (new HTMLLinkProcessor()).extract(relativeLink,url);
 		}
 		catch (Exception e) {
