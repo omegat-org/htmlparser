@@ -71,12 +71,12 @@ public class SelectTagTest extends ParserTestCase
 	public void testToHTML() throws ParserException 
 	{
 		assertStringEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
-									"<OPTION VALUE=\"Spouse\">Spouse</OPTION>\r\n"+
+									"<OPTION VALUE=\"Spouse\">Spouse</OPTION>"+
 									"<OPTION VALUE=\"Father\"></OPTION>\r\n"+
 									"<OPTION VALUE=\"Mother\">Mother\r\n</OPTION>" +
-									"<OPTION VALUE=\"Son\">Son\r\n</OPTION>\r\n"+
-									"<OPTION VALUE=\"Daughter\">Daughter\r\n</OPTION>"+
-									"<OPTION VALUE=\"Nephew\">Nephew</OPTION>\r\n"+
+									"<OPTION VALUE=\"Son\">\r\nSon\r\n</OPTION>"+
+									"<OPTION VALUE=\"Daughter\">\r\nDaughter\r\n</OPTION>"+
+									"<OPTION VALUE=\"Nephew\">\r\nNephew</OPTION>\r\n"+
 									"<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>"+
 									"</SELECT>",
 									selectTag.toHtml());
@@ -89,13 +89,13 @@ public class SelectTagTest extends ParserTestCase
 		SelectTag selectTag;
 		selectTag = (SelectTag) node[0];
 		assertStringEquals("HTML Raw String","SELECT TAG\n--------\nNAME : Nominees\n" +
-								"OPTION TAG\n--------\nVALUE : Spouse\nTEXT : Spouse\n\n" +
-								"OPTION TAG\n--------\nVALUE : Father\nTEXT : \n\n" +
-								"OPTION TAG\n--------\nVALUE : Mother\nTEXT : Mother\r\n\n\n" +
-								"OPTION TAG\n--------\nVALUE : Son\nTEXT : Son\r\n\n\n" +
-								"OPTION TAG\n--------\nVALUE : Daughter\nTEXT : Daughter\r\n\n\n" +
-								"OPTION TAG\n--------\nVALUE : Nephew\nTEXT : Nephew\n\n" +
-								"OPTION TAG\n--------\nVALUE : Niece\nTEXT : Niece\r\n\n\n",
+								"OPTION VALUE: Spouse TEXT: Spouse\n\n" +
+								"OPTION VALUE: Father TEXT: \n\n" +
+								"OPTION VALUE: Mother TEXT: Mother\r\n\n\n" +
+								"OPTION VALUE: Son TEXT: Son\r\n\n\n" +
+								"OPTION VALUE: Daughter TEXT: Daughter\r\n\n\n" +
+								"OPTION VALUE: Nephew TEXT: Nephew\n\n" +
+								"OPTION VALUE: Niece TEXT: Niece\r\n\n\n",
 							selectTag.toString());
 	}
 

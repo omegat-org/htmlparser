@@ -56,6 +56,19 @@ public class NodeList implements Serializable {
 		nodeData[size++]=node;
 	}
 
+    /**
+     * Insert the given node at the head of the list.
+     * @param node The new first element.
+     */
+	public void prepend(Node node)
+    {
+		if (size==capacity) 
+			adjustVectorCapacity();
+        System.arraycopy (nodeData, 0, nodeData, 1, size);
+        size++;
+		nodeData[0]=node;
+	}
+
 	private void adjustVectorCapacity() {
 		capacity += capacityIncrement;
 		capacityIncrement *= 2;

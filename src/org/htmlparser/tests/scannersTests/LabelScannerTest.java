@@ -154,12 +154,12 @@ public class LabelScannerTest extends ParserTestCase {
 		parser.addScanner(labelScanner);
 		parseAndAssertNodeCount(13);
 		
-		for(int j=0;j<nodeCount;j++)
-		{
-			//assertTrue("Node " + j + " should be Label Tag",node[j] instanceof LabelTag);
-			System.out.println(node[j].getClass().getName());
-			System.out.println(node[j].toHtml());
-		}
+//		for(int j=0;j<nodeCount;j++)
+//		{
+//			//assertTrue("Node " + j + " should be Label Tag",node[j] instanceof LabelTag);
+//			System.out.println(node[j].getClass().getName());
+//			System.out.println(node[j].toHtml());
+//		}
 		
 		LabelTag LabelTag;
 		LabelTag = (LabelTag) node[0];
@@ -187,7 +187,7 @@ public class LabelScannerTest extends ParserTestCase {
 		LabelTag = (LabelTag) node[11];
 		assertStringEquals("HTML String","<LABEL VALUE=\"AOL\"><SPAN>AOL</SPAN></LABEL>",LabelTag.toHtml());
 		LabelTag = (LabelTag) node[12];
-		assertStringEquals("HTML String","<LABEL value=\"Time Warner\">Time <B>Warner <SPAN>AOL </SPAN>Inc.</B>",LabelTag.toHtml());
+		assertStringEquals("HTML String","<LABEL VALUE=\"Time Warner\">Time <B>Warner <SPAN>AOL </SPAN>Inc.</B></LABEL>",LabelTag.toHtml());
 	}	
 	
 	public static TestSuite suite() {

@@ -36,14 +36,15 @@ import org.htmlparser.tags.data.TagData;
 public class OptionTagScanner extends CompositeTagScanner
 {
 	private static final String MATCH_NAME [] = {"OPTION"};
-	private static final String [] ENDERS = { "SELECT" };
+	private static final String [] ENDERS = { };
+    private static final String [] END_TAG_ENDERS = { "SELECT", "BODY", "HTML" };
 
 	public OptionTagScanner() {
-		super(MATCH_NAME, ENDERS, false);
+		super(MATCH_NAME[0], ENDERS, END_TAG_ENDERS, false);
 	}
 	
 	public OptionTagScanner(String filter) {
-		super(filter, MATCH_NAME, ENDERS, false);
+		super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
 	}
 
 	public String [] getID() {

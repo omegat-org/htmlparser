@@ -273,9 +273,11 @@ public class Tag extends Node
 				)
 			{
 				found=true;
+                TagScanner save;
+                save = reader.getPreviousOpenScanner ();
 				reader.setPreviousOpenScanner(scanner);
 				retVal=scanner.createScannedNode(this,url,reader,tagLine);
-				reader.setPreviousOpenScanner(null);
+				reader.setPreviousOpenScanner(save);
 			}
 
 			if (!found) return this;

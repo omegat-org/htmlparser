@@ -384,9 +384,15 @@ public class NodeReader extends BufferedReader
 	public StringParser getStringParser() {
 		return stringParser;
 	}
-	
+
+    /**
+     * Adds the given node on the front of an internal list of pre-parsed nodes.
+     * Used in recursive calls where downstream nodes have been recognized in
+     * order to parse the current node.
+     * @param nextParsedNode The node that will be returned next by the reader.
+     */
 	public void addNextParsedNode(Node nextParsedNode) {
-		this.nextParsedNode.add(nextParsedNode);		
+		this.nextParsedNode.prepend(nextParsedNode);		
 	}
 	
 	public boolean isDontReadNextLine() {
