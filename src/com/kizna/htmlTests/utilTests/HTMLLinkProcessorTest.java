@@ -107,8 +107,12 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 	public void testIsURL() {
 		String resourceLoc1 = "http://someurl.com";
 		String resourceLoc2 = "myfilehttp.dat";		
-		assertTrue("Should be a url",HTMLLinkProcessor.isURL(resourceLoc1));
-		assertTrue("Should not be a url",!HTMLLinkProcessor.isURL(resourceLoc2));		
+		assertTrue(resourceLoc1+" should be a url",HTMLLinkProcessor.isURL(resourceLoc1));
+		assertTrue(resourceLoc2+" should not be a url",!HTMLLinkProcessor.isURL(resourceLoc2));	
+		
+		String resourceLoc3 = "file://localhost/D:/java/jdk1.3/docs/api/overview-summary.html";
+		assertTrue(resourceLoc3+" should be a url",HTMLLinkProcessor.isURL(resourceLoc3));
+		
 	}
 	/**
 	 * This testcase is based on a bug reported by Kamen.

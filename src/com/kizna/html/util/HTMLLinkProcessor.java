@@ -221,7 +221,7 @@ public class HTMLLinkProcessor {
 		return link;
 	}
 	public static boolean isURL(String resourceLocn) {
-		return resourceLocn.indexOf("http")==0 || resourceLocn.indexOf("www.")==0;
+		return resourceLocn.indexOf("http")==0 || resourceLocn.indexOf("www.")==0 || resourceLocn.indexOf("file://")==0;
 	}	
 	/**
 	 * Returns the baseUrl.
