@@ -39,13 +39,13 @@ import com.kizna.html.scanners.*;
  * The Robot Crawler application will crawl through urls recursively, based on a depth value.
  */
 public class Robot {
-	private com.kizna.html.HTMLParser parser;
+  private com.kizna.html.HTMLParser parser;
 /**
  * Robot crawler - Provide the starting url 
  */
 public Robot(String resourceLocation) {
-	parser = new HTMLParser(resourceLocation);
-	parser.registerScanners();
+  parser = new HTMLParser(resourceLocation);
+  parser.registerScanners();
 }
 /**
  * Crawl using a given crawl depth.
@@ -53,7 +53,7 @@ public Robot(String resourceLocation) {
  */
 public void crawl(int crawlDepth) 
 {
-	crawl(parser,crawlDepth);
+  crawl(parser,crawlDepth);
 }
 /**
  * Crawl using a given parser object, and a given crawl depth.
@@ -61,33 +61,33 @@ public void crawl(int crawlDepth)
  * @param crawlDepth Depth of crawling
  */
 public void crawl(HTMLParser parser,int crawlDepth) {
-	System.out.println(" crawlDepth = "+crawlDepth);
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
-	{
-		HTMLNode node = (HTMLNode)e.nextElement();
-		if (node instanceof HTMLLinkTag)
-		{
-			HTMLLinkTag linkTag = (HTMLLinkTag)node;
-			{
-				if (!linkTag.isMailLink())
-				{
-					if (linkTag.getLink().toUpperCase().indexOf("HTM")!=-1 || 
-						linkTag.getLink().toUpperCase().indexOf("COM")!=-1 ||
-						linkTag.getLink().toUpperCase().indexOf("ORG")!=-1)
-					{
-						if (crawlDepth>0)
-						{
-							HTMLParser newParser = new HTMLParser(linkTag.getLink());
-							newParser.registerScanners();
-							System.out.print("Crawling to "+linkTag.getLink());
-							crawl(newParser,crawlDepth-1);
-						}
-						else System.out.println(linkTag.getLink());
-					}
-				}
-			}
-		}
-	}
+  System.out.println(" crawlDepth = "+crawlDepth);
+  for (Enumeration e = parser.elements();e.hasMoreElements();)
+  {
+    HTMLNode node = (HTMLNode)e.nextElement();
+    if (node instanceof HTMLLinkTag)
+    {
+      HTMLLinkTag linkTag = (HTMLLinkTag)node;
+      {
+        if (!linkTag.isMailLink())
+        {
+          if (linkTag.getLink().toUpperCase().indexOf("HTM")!=-1 || 
+            linkTag.getLink().toUpperCase().indexOf("COM")!=-1 ||
+            linkTag.getLink().toUpperCase().indexOf("ORG")!=-1)
+          {
+            if (crawlDepth>0)
+            {
+              HTMLParser newParser = new HTMLParser(linkTag.getLink());
+              newParser.registerScanners();
+              System.out.print("Crawling to "+linkTag.getLink());
+              crawl(newParser,crawlDepth-1);
+            }
+            else System.out.println(linkTag.getLink());
+          }
+        }
+      }
+    }
+  }
 }
 /**
  * Insert the method's description here.
@@ -96,33 +96,33 @@ public void crawl(HTMLParser parser,int crawlDepth) {
  */
 public static void main(String[] args) 
 {
-	System.out.println("Robot Crawler v"+HTMLParser.VERSION_STRING);
-	if (args.length<2 || args[0].equals("-help"))
-	{
-		System.out.println();
-		System.out.println("Syntax : java -classpath htmlparser.jar com.kizna.parserapplications.Robot <resourceLocn/website> <depth>");
-		System.out.println();
-		System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path ");
-		System.out.println("                  if not in current directory)");
-		System.out.println("   <depth> No of links to be followed from each link");
-		System.out.println("   -help This screen");
-		System.out.println();
-		System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
-		System.out.println();
-		System.out.println("Example : java -classpath htmlparser.jar com.kizna.parserapplications.Robot http://www.google.com 3");
-		System.out.println();
-		System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
-		System.exit(-1);
-	}	
-	String resourceLocation="";
-	int crawlDepth = 1;
-	if (args.length!=0) resourceLocation = args[0];
-	if (args.length==2) crawlDepth=Integer.valueOf(args[1]).intValue();
-	
-		
-	Robot robot = new Robot(resourceLocation);	
-	System.out.println("Crawling Site "+resourceLocation);
-	robot.crawl(crawlDepth);
-		
+  System.out.println("Robot Crawler v"+HTMLParser.VERSION_STRING);
+  if (args.length<2 || args[0].equals("-help"))
+  {
+    System.out.println();
+    System.out.println("Syntax : java -classpath htmlparser.jar com.kizna.parserapplications.Robot <resourceLocn/website> <depth>");
+    System.out.println();
+    System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path ");
+    System.out.println("                  if not in current directory)");
+    System.out.println("   <depth> No of links to be followed from each link");
+    System.out.println("   -help This screen");
+    System.out.println();
+    System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
+    System.out.println();
+    System.out.println("Example : java -classpath htmlparser.jar com.kizna.parserapplications.Robot http://www.google.com 3");
+    System.out.println();
+    System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
+    System.exit(-1);
+  }	
+  String resourceLocation="";
+  int crawlDepth = 1;
+  if (args.length!=0) resourceLocation = args[0];
+  if (args.length==2) crawlDepth=Integer.valueOf(args[1]).intValue();
+  
+    
+  Robot robot = new Robot(resourceLocation);	
+  System.out.println("Crawling Site "+resourceLocation);
+  robot.crawl(crawlDepth);
+    
 }
 }

@@ -43,59 +43,59 @@ import com.kizna.html.*;
  * Pass a web site (or html file on your local disk) as an argument.
  */
 public class MailRipper {
-	private com.kizna.html.HTMLParser parser;
+  private com.kizna.html.HTMLParser parser;
 /**
  * MailRipper c'tor takes the url to be ripped
  * @param resourceLocation url to be ripped
  */
 public MailRipper(String resourceLocation) {
-	parser = new HTMLParser(resourceLocation);
-	parser.registerScanners();
+  parser = new HTMLParser(resourceLocation);
+  parser.registerScanners();
 }
 public static void main(String[] args) {
-	System.out.println("Mail Ripper v"+HTMLParser.VERSION_STRING);
-	if (args.length<1 || args[0].equals("-help"))
-	{
-		System.out.println();
-		System.out.println("Syntax : java -classpath htmlparser.jar com.kizna.parserapplications.MailRipper <resourceLocn/website>");
-		System.out.println();
-		System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path ");
-		System.out.println("                  if not in current directory)");
-		System.out.println("   -help This screen");
-		System.out.println();
-		System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
-		System.out.println();
-		System.out.println("Example : java -classpath htmlparser.jar com.kizna.parserapplications.MailRipper http://htmlparser.sourceforge.net");
-		System.out.println();
-		System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
-		System.exit(-1);
-	}		
-	String resourceLocation = "http://htmlparser.sourceforge.net";
-	if (args.length!=0) resourceLocation = args[0];
+  System.out.println("Mail Ripper v"+HTMLParser.VERSION_STRING);
+  if (args.length<1 || args[0].equals("-help"))
+  {
+    System.out.println();
+    System.out.println("Syntax : java -classpath htmlparser.jar com.kizna.parserapplications.MailRipper <resourceLocn/website>");
+    System.out.println();
+    System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path ");
+    System.out.println("                  if not in current directory)");
+    System.out.println("   -help This screen");
+    System.out.println();
+    System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
+    System.out.println();
+    System.out.println("Example : java -classpath htmlparser.jar com.kizna.parserapplications.MailRipper http://htmlparser.sourceforge.net");
+    System.out.println();
+    System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
+    System.exit(-1);
+  }		
+  String resourceLocation = "http://htmlparser.sourceforge.net";
+  if (args.length!=0) resourceLocation = args[0];
 
-	MailRipper ripper = new MailRipper(resourceLocation);	
-	System.out.println("Ripping Site "+resourceLocation);
-	for (Enumeration e=ripper.rip();e.hasMoreElements();) {
-		HTMLLinkTag tag = (HTMLLinkTag)e.nextElement();
-		System.out.println("Ripped mail address : "+tag.getLink());
-	}
+  MailRipper ripper = new MailRipper(resourceLocation);	
+  System.out.println("Ripping Site "+resourceLocation);
+  for (Enumeration e=ripper.rip();e.hasMoreElements();) {
+    HTMLLinkTag tag = (HTMLLinkTag)e.nextElement();
+    System.out.println("Ripped mail address : "+tag.getLink());
+  }
 }
 /**
  * Rip all mail addresses from the given url, and return an enumeration of such mail addresses.
  * @return Enumeration of mail addresses (a vector of HTMLLinkTag)
  */
 public Enumeration rip() {
-	HTMLNode node;
-	Vector mailAddresses = new Vector();
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
-	{
-		node = (HTMLNode)e.nextElement();
-		if (node instanceof HTMLLinkTag)
-		{
-			HTMLLinkTag linkTag = (HTMLLinkTag)node;
-			if (linkTag.isMailLink()) mailAddresses.addElement(linkTag);
-		}
-	}
-	return mailAddresses.elements();	
+  HTMLNode node;
+  Vector mailAddresses = new Vector();
+  for (Enumeration e = parser.elements();e.hasMoreElements();)
+  {
+    node = (HTMLNode)e.nextElement();
+    if (node instanceof HTMLLinkTag)
+    {
+      HTMLLinkTag linkTag = (HTMLLinkTag)node;
+      if (linkTag.isMailLink()) mailAddresses.addElement(linkTag);
+    }
+  }
+  return mailAddresses.elements();	
 }
 }
