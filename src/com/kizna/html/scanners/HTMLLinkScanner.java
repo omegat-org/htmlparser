@@ -247,8 +247,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 				previousOpenLinkScanner = null;
 				return createLinkTag(currentLine, node, mailLink, link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
 			}
-			
-			return null;
+			throw new HTMLParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
 		}
 		catch (Exception e) {
 			throw new HTMLParserException("HTMLLinkScanner.scan() : Error while scanning a link tag, current line = "+currentLine,e);

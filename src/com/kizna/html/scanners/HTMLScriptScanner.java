@@ -157,7 +157,11 @@ public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLin
 				prevNode = node;
 			}
 		}
-		while (!endScriptFound);
+		while (!endScriptFound && node!=null);
+		if (node==null && !endScriptFound) {
+			throw new HTMLParserException("HTMLScriptScanner.scan() : Went into a potential infinite loop, could not create script tag.\n"+
+			"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
+		}
 		HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
 		restoreScanners(reader, tempScannerVector);
 		return scriptTag; 

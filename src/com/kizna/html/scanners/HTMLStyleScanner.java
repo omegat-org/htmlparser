@@ -106,7 +106,11 @@ public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLin
 				}
 			} else buff.append(node.toHTML());
 		}
-		while (!endStyleFound);
+		while (!endStyleFound && node!=null);
+		if (node==null && !endStyleFound) {
+			throw new HTMLParserException("HTMLStyleScanner.scan() : Went into a potential infinite loop, could not create syle tag.\n"+
+			"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
+		}
 		HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine);
 		return styleTag;
 	}

@@ -162,7 +162,15 @@ public class HTMLFormScanner extends HTMLTagScanner
 				}
 				nodeVector.addElement(node);
 			}
-			while (endFlag==false);
+			while (endFlag==false && node!=null);
+			if (node==null && endFlag==false) {
+				StringBuffer msg = new StringBuffer();
+				for (Enumeration e = inputVector.elements();e.hasMoreElements();) {
+					msg.append((HTMLNode)e.nextElement()+"\n");
+				}
+				throw new HTMLParserException("HTMLFormScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
+				"Input Vector contents : "+msg.toString());
+			}		
 			HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,nodeVector);
 			return formTag;
 		}

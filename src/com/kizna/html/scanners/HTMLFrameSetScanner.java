@@ -125,7 +125,15 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 					frameVector.addElement(node);
 				}
 			}
-			while(!endFrameSetFound);
+			while(!endFrameSetFound && node!=null);
+			if (node==null && endFrameSetFound== false) {
+				StringBuffer msg = new StringBuffer();
+				for (Enumeration e = frameVector.elements();e.hasMoreElements();) {
+					msg.append((HTMLNode)e.nextElement()+"\n");
+				}
+				throw new HTMLParserException("HTMLFrameSetScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
+				"Frame Vector contents : "+msg.toString());
+			}
 			HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector);
 			restoreScanners(reader, tempScannerVector);
 			return frameSetTag;		

@@ -163,8 +163,16 @@ public HTMLTag scan(HTMLTag tag, String url, com.kizna.html.HTMLReader reader, S
 				}
 			}
 		}
-		while (!endScriptFound);
-		
+		while (!endScriptFound && node!=null);
+		if (node==null && endScriptFound==false) {
+			StringBuffer msg = new StringBuffer();
+			for (Enumeration e = table.elements();e.hasMoreElements();) {
+				String key = (String)e.nextElement();
+				msg.append(key+"="+table.get(key)+"\n");
+			}
+			throw new HTMLParserException("HTMLAppletScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
+			"Table contents : "+msg.toString());
+		}	
 		HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,misc);
 		return appTag;
 	}

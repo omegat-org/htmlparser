@@ -65,6 +65,9 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 				} 
 			}
 			while (endFlag==false && node!=null);
+			if (node==null && !endFlag) {
+				throw new HTMLParserException("HTMLTitleScanner.scan(): Error while scanning title tag, went into a potential infinite loop, currentLine = "+currLine+", title so far = "+title);
+			}
 			HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,tag.getText(),tag.getTagLine());
 			return titleTag;		
 		}
