@@ -26,6 +26,10 @@
 
 package org.htmlparser.tests.utilTests;
 
+import org.htmlparser.NodeFilter;
+import org.htmlparser.Parser;
+import org.htmlparser.filters.*;
+import org.htmlparser.tags.*;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserUtils;
 
@@ -47,5 +51,351 @@ public class HTMLParserUtilsTest extends ParserTestCase {
             "Hello World",
             ParserUtils.removeTrailingBlanks(text)
         );
+    }
+    
+    public void testButCharsMethods() {
+        String[] tmpSplitButChars = ParserUtils.splitButChars("<DIV>  +12.5, +3.4 </DIV>", "+.1234567890");
+        assertStringEquals(
+            "modified text",
+            "+12.5*+3.4",
+            new String(tmpSplitButChars[0] + '*' + tmpSplitButChars[1])
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimButChars("<DIV>  +12.5 </DIV>", "+.1234567890")
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimButChars("<DIV>  +1 2 . 5 </DIV>", "+.1234567890")
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimButCharsBeginEnd("<DIV>  +12.5 </DIV>", "+.1234567890")
+        );
+        assertStringEquals(
+            "modified text",
+            "+1 2 . 5",
+            ParserUtils.trimButCharsBeginEnd("<DIV>  +1 2 . 5 </DIV>", "+.1234567890")
+        );
+    }
+    
+    public void testButDigitsMethods() {
+        String[] tmpSplitButDigits = ParserUtils.splitButDigits("<DIV>  +12.5, +3.4 </DIV>", "+.");
+        assertStringEquals(
+            "modified text",
+            "+12.5*+3.4",
+            new String(tmpSplitButDigits[0] + '*' + tmpSplitButDigits[1])
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimButDigits("<DIV>  +12.5 </DIV>", "+.")
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimButDigits("<DIV>  +1 2 . 5 </DIV>", "+.")
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimButDigitsBeginEnd("<DIV>  +12.5 </DIV>", "+.")
+        );
+        assertStringEquals(
+            "modified text",
+            "+1 2 . 5",
+            ParserUtils.trimButDigitsBeginEnd("<DIV>  +1 2 . 5 </DIV>", "+.")
+        );
+    }
+    
+    public void testCharsMethods() {
+        String[] tmpSplitChars = ParserUtils.splitChars("<DIV>  +12.5, +3.4 </DIV>", " <>DIV/,");
+        assertStringEquals(
+            "modified text",
+            "+12.5*+3.4",
+            new String(tmpSplitChars[0] + '*' + tmpSplitChars[1])
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimChars("<DIV>  +12.5 </DIV>", "<>DIV/ ")
+        );
+        assertStringEquals(
+            "modified text",
+            "Trimallchars",
+            ParserUtils.trimChars("<DIV>  Trim all chars   </DIV>", "<>DIV/ ")
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimCharsBeginEnd("<DIV>  +12.5 </DIV>", "<>DIV/ ")
+        );
+        assertStringEquals(
+            "modified text",
+            "Trim all spaces but not the ones inside the string",
+            ParserUtils.trimCharsBeginEnd("<DIV>  Trim all spaces but not the ones inside the string </DIV>", "<>DIV/ ")
+        );
+    }
+    
+    public void testSpacesMethods() {
+        String[] tmpSplitSpaces = ParserUtils.splitSpaces("<DIV>  +12.5, +3.4 </DIV>", "<>DIV/,");
+        assertStringEquals(
+            "modified text",
+            "+12.5*+3.4",
+            new String(tmpSplitSpaces[0] + '*' + tmpSplitSpaces[1])
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimSpaces("<DIV>  +12.5 </DIV>", "<>DIV/")
+        );
+        assertStringEquals(
+            "modified text",
+            "Trimallspaces",
+            ParserUtils.trimSpaces("<DIV>  Trim all spaces  </DIV>", "<>DIV/")
+        );
+        assertStringEquals(
+            "modified text",
+            "+12.5",
+            ParserUtils.trimSpacesBeginEnd("<DIV>  +12.5 </DIV>", "<>DIV/")
+        );
+        assertStringEquals(
+            "modified text",
+            "Trim all spaces but not the ones inside the string",
+            ParserUtils.trimSpacesBeginEnd("<DIV>  Trim all spaces but not the ones inside the string </DIV>", "<>DIV/")
+        );
+    }
+    
+    public void testTagsMethods() {
+        try
+        {
+            String[] tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"});
+            assertStringEquals(
+                "modified text",
+                "Begin * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"}, false, false);
+            assertStringEquals(
+                "modified text",
+                "Begin *<DIV>  +12.5 </DIV>* ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1] + '*' + tmpSplitTags[2])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"}, true, false);
+            assertStringEquals(
+                "modified text",
+                "Begin *  +12.5 * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1] + '*' + tmpSplitTags[2])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"}, false, true);
+            assertStringEquals(
+                "modified text",
+                "Begin * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"})
+            );
+            assertStringEquals(
+                "modified text",
+                "<DIV>  +12.5 </DIV> ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"}, false, false)
+            );
+            assertStringEquals(
+                "modified text",
+                "  +12.5  ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"}, true, false)
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"}, false, true)
+            );
+        }
+        catch (Exception e)
+        {
+            assertStringEquals(
+                "modified text",
+                "error msg",
+                e.getMessage()
+            );
+        }
+    }
+    
+    public void testTagsFilterMethods() {
+        try
+        {
+            NodeFilter filter = new TagNameFilter ("DIV");
+            String[] tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter);
+            assertStringEquals(
+                "modified text",
+                "Begin * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, false);
+            assertStringEquals(
+                "modified text",
+                "Begin *<DIV>  +12.5 </DIV>* ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1] + '*' + tmpSplitTags[2])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, true, false);
+            assertStringEquals(
+                "modified text",
+                "Begin *  +12.5 * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1] + '*' + tmpSplitTags[2])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, true);
+            assertStringEquals(
+                "modified text",
+                "Begin * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter)
+            );
+            assertStringEquals(
+                "modified text",
+                "<DIV>  +12.5 </DIV> ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, false)
+            );
+            assertStringEquals(
+                "modified text",
+                "  +12.5  ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, true, false)
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, true)
+            );
+        }
+        catch (Exception e)
+        {
+            assertStringEquals(
+                "modified text",
+                "error msg",
+                e.getMessage()
+            );
+        }
+    }
+    
+    public void testTagsClassMethods() {
+        try
+        {
+            NodeFilter filter = new NodeClassFilter (Div.class);
+            String[] tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter);
+            assertStringEquals(
+                "modified text",
+                "Begin * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, false);
+            assertStringEquals(
+                "modified text",
+                "Begin *<DIV>  +12.5 </DIV>* ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1] + '*' + tmpSplitTags[2])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, true, false);
+            assertStringEquals(
+                "modified text",
+                "Begin *  +12.5 * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1] + '*' + tmpSplitTags[2])
+            );
+            tmpSplitTags = ParserUtils.splitTags("Begin <DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, true);
+            assertStringEquals(
+                "modified text",
+                "Begin * ALL OK",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter)
+            );
+            assertStringEquals(
+                "modified text",
+                "<DIV>  +12.5 </DIV> ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, false)
+            );
+            assertStringEquals(
+                "modified text",
+                "  +12.5  ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, true, false)
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, true)
+            );
+        }
+        catch (Exception e)
+        {
+            assertStringEquals(
+                "modified text",
+                "error msg",
+                e.getMessage()
+            );
+        }
+    }
+    
+    public void testTagsComplexMethods() {
+        try
+        {
+            NodeFilter filterLink = new NodeClassFilter (LinkTag.class);
+            NodeFilter filterDiv = new NodeClassFilter (Div.class);
+            OrFilter filterLinkDiv = new OrFilter (filterLink, filterDiv);
+            NodeFilter filterTable = new NodeClassFilter (TableColumn.class);
+            OrFilter filter = new OrFilter (filterLinkDiv, filterTable);
+            String[] tmpSplitTags = ParserUtils.splitTags("OutsideLeft<A>AInside</A><DIV><DIV>DivInside</DIV></DIV><TD>TableColoumnInside</TD>OutsideRight", filter);
+            assertStringEquals(
+                "modified text",
+                "OutsideLeft*OutsideRight",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            tmpSplitTags = ParserUtils.splitTags("OutsideLeft<A>AInside</A><DIV><DIV>DivInside</DIV></DIV><TD>TableColoumnInside</TD>OutsideRight", filter, false, false);
+            assertStringEquals(
+                "modified text",
+                "OutsideLeft*AInside*<DIV>DivInside</DIV>*TableColoumnInside*OutsideRight",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1] + '*' + tmpSplitTags[2] + '*' + tmpSplitTags[3] + '*' + tmpSplitTags[4])
+            );
+            tmpSplitTags = ParserUtils.splitTags("OutsideLeft<A>AInside</A><DIV><DIV>DivInside</DIV></DIV><TD>TableColoumnInside</TD>OutsideRight", filter, true, false);
+            assertStringEquals(
+                "modified text",
+                "OutsideLeft*AInside*DivInside*TableColoumnInside*OutsideRight",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1] + '*' + tmpSplitTags[2] + '*' + tmpSplitTags[3] + '*' + tmpSplitTags[4])
+            );
+            tmpSplitTags = ParserUtils.splitTags("OutsideLeft<A>AInside</A><DIV><DIV>DivInside</DIV></DIV><TD>TableColoumnInside</TD>OutsideRight", filter, false, true);
+            assertStringEquals(
+                "modified text",
+                "OutsideLeft*OutsideRight",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            tmpSplitTags = ParserUtils.splitTags("OutsideLeft<A>AInside<DIV><DIV>DivInside</DIV></DIV></A><TD>TableColoumnInside</TD>OutsideRight", new String[] {"DIV", "TD", "A"});
+            assertStringEquals(
+                "modified text",
+                "OutsideLeft*OutsideRight",
+                new String(tmpSplitTags[0] + '*' + tmpSplitTags[1])
+            );
+            assertStringEquals(
+                "modified text",
+                "OutsideLeftOutsideRight",
+                ParserUtils.trimTags("OutsideLeft<A>AInside<DIV><DIV>DivInside</DIV></DIV></A><TD>TableColoumnInside</TD>OutsideRight", new String[] {"DIV", "TD", "A"})
+            );
+        }
+        catch (Exception e)
+        {
+            assertStringEquals(
+                "modified text",
+                "error msg",
+                e.getMessage()
+            );
+        }
     }
 }
