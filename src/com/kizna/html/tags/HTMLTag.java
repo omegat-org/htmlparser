@@ -134,10 +134,14 @@ public class HTMLTag implements HTMLNode
 		return null;	
 	}
 	public static int incrementCounter(HTMLReader reader, int state, int i, HTMLTag tag) {
+		String nextLine = null;
 		if ((state==TAG_BEGIN_PARSING_STATE || state == TAG_IGNORE_DATA_STATE) && i==tag.getTagLine().length()-1)
 		{
+			// The while loop below is a bug fix contributed by
+			// Annette Doyle - see testcase HTMLImageScannerTest.testImageTagOnMultipleLines()
+			while ((nextLine = reader.getNextLine()).length() == 0);
 			// We need to continue parsing to the next line
-			tag.setTagLine(reader.getNextLine());
+			tag.setTagLine(nextLine);
 			// convert the end of line to a space
 			// The following line masked by Somik Raha, 15 Apr 2002, to fix space bug in links
 			tag.append('\n');

@@ -301,10 +301,10 @@ public void testImageTagsFromYahooWithAllScannersRegistered()
  * This is the reproduction of a bug reported
  * by Annette Doyle
  */
-public void testImageTagOnThreeLines() {
-	String testHTML = "<td rowspan=3><img height=49 \n"+
-      "alt=\"Central Intelligence Agency, Director of Central Intelligence\" \n"+
-      "src=\"graphics/images_home2/cia_banners_template3_01.gif\" \n"+
+public void testImageTagOnMultipleLines() {
+	String testHTML = "  <td rowspan=3><img height=49 \n\n"+
+      "alt=\"Central Intelligence Agency, Director of Central Intelligence\" \n\n"+
+      "src=\"graphics/images_home2/cia_banners_template3_01.gif\" \n\n"+
       "width=241></td>"; 
 
 	StringReader sr = new StringReader(testHTML); 
