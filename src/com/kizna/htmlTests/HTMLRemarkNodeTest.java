@@ -116,4 +116,40 @@ public void testRemarkNodeBug()
 	remarkNode = (HTMLRemarkNode)node[5];
 	assertEquals("Text of the remarkNode #6","   Whats gonna happen now ?",remarkNode.getText());
 }
+
+/**
+ * Insert the method's description here.
+ * Creation date: (5/6/2002 11:29:51 PM)
+ */
+public void testToPlainTextString() {
+	String testHTML = new String(
+		"<!-- saved from url=(0022)http://internet.e-mail -->\n"+
+		"<HTML>\n"+
+		"<HEAD><META name=\"title\" content=\"Training Introduction\">\n"+
+		"<META name=\"subject\" content=\"\">\n"+
+		"<!--\n"+
+		"   Whats gonna happen now ?\n"+
+		"-->\n"+
+		"<TEST>\n"+
+		"</TEST>\n");
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[20];
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 8 nodes identified",new Integer(8),new Integer(i));
+	// The first node should be a HTMLRemarkNode
+	assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
+	HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+	assertEquals("Plain Text of the remarkNode #1"," saved from url=(0022)http://internet.e-mail ",remarkNode.toPlainTextString());	
+	// The sixth node should be a HTMLRemarkNode 
+	assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
+	remarkNode = (HTMLRemarkNode)node[5];
+	assertEquals("Plain Text of the remarkNode #6","   Whats gonna happen now ?",remarkNode.getText());	
+	
+}
 }

@@ -63,6 +63,7 @@ public static TestSuite suite() {
 	suite.addTest(HTMLStringNodeTest.suite());
 	suite.addTest(HTMLTagTest.suite());
 	suite.addTest(HTMLRemarkNodeTest.suite());
+	suite.addTest(HTMLTitleTagTest.suite());
 	suite.addTest(com.kizna.htmlTests.scannersTests.AllTests.suite());
 	suite.addTest(com.kizna.htmlTests.utilTests.HTMLLinkProcessorTest.suite());
 	return suite;

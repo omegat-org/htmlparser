@@ -373,4 +373,24 @@ public void testNullTagBug()
 	assertEquals("The link location","",linkTag.getLink());
 	assertEquals("The link text","Something",linkTag.getLinkText());
 }
+
+public void testToPlainTextString() {
+	String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>");
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[10];
+	// Register the image scanner
+	parser.addScanner(new HTMLLinkScanner("-l"));
+		
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
+	assertTrue("Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
+	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+	assertEquals("Link Plain Text","hello",linkTag.toPlainTextString());	
+}
 }

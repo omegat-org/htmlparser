@@ -1,8 +1,5 @@
-/*
- * (c) Copyright 2001 MyCorporation.
- * All Rights Reserved.
- */
 package com.kizna.html.tags;
+
 /**
  * A Meta Tag
  */
@@ -16,31 +13,24 @@ public class HTMLMetaTag extends HTMLTag {
 		this.metaTagName = metaTagName;
 		this.metaTagContents = metaTagContents;
 	}
-
-	public void setHttpEquiv(String httpEquiv) {
-		this.httpEquiv = httpEquiv;
-	}
-
 	public String getHttpEquiv() {
 		return httpEquiv;
 	}
-
-	public void setMetaTagContents(String metaTagContents) {
-		this.metaTagContents = metaTagContents;
-	}
-
 	public String getMetaTagContents() {
 		return metaTagContents;
 	}
-
-	public void setMetaTagName(String metaTagName) {
-		this.metaTagName = metaTagName;
-	}
-
 	public String getMetaTagName() {
 		return metaTagName;
 	}
-
+	public void setHttpEquiv(String httpEquiv) {
+		this.httpEquiv = httpEquiv;
+	}
+	public void setMetaTagContents(String metaTagContents) {
+		this.metaTagContents = metaTagContents;
+	}
+	public void setMetaTagName(String metaTagName) {
+		this.metaTagName = metaTagName;
+	}
 	public String toString() {
 		return "META TAG\n"+
 				"--------\n"+

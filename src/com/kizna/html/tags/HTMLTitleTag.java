@@ -1,7 +1,3 @@
-/*
- * (c) Copyright 2001 MyCorporation.
- * All Rights Reserved.
- */
 package com.kizna.html.tags;
 
 /**
@@ -20,7 +16,6 @@ public class HTMLTitleTag extends HTMLTag {
 		super(tagBegin, tagEnd, tagContents, tagLine);
 		this.title = title;
 	}
-
 	/**
 	 * Gets the title.
 	 * @return Returns a String
@@ -28,7 +23,6 @@ public class HTMLTitleTag extends HTMLTag {
 	public String getTitle() {
 		return title;
 	}
-
 	/**
 	 * Sets the title.
 	 * @param title The title to set
@@ -36,7 +30,10 @@ public class HTMLTitleTag extends HTMLTag {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	public String toPlainTextString() {
+		return title;
+	}
 	public String toString() {
-		return "TITLE : "+title;
+		return "TITLE: "+title;
 	}
 }

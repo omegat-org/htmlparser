@@ -52,7 +52,6 @@ public class HTMLFormTag extends HTMLTag
 		super(formBegin,formEnd,"",tagLine);
 		this.formURL = formURL;
 	}
-
 	public HTMLFormTag(String formURL,String formName, String formMethod, int formBegin, int formEnd,
                       String tagLine, Vector formInputVector)
 	{
@@ -62,27 +61,10 @@ public class HTMLFormTag extends HTMLTag
       this.formMethod = formMethod;
       this.formInputVector = formInputVector;
 	}
-
-   public void setFormName(String formName)
-   {
-      this.formName = formName;
-   }
-
-	public void setFormLocation(String formUrl)
+	public Vector getFormInputs()
 	{
-		this.formURL = formURL;
+		return formInputVector;
 	}
-
-	public void setFormMethod(String formMethod)
-	{
-		this.formMethod = formMethod;
-	}
-
-	public void setFormInputs(Vector formInputVector)
-	{
-		this.formInputVector = formInputVector;
-	}
-
 	/**
 	 * Returns the location of the image
 	 */
@@ -90,12 +72,6 @@ public class HTMLFormTag extends HTMLTag
 	{
 		return formURL;
 	}
-
-	public String getFormName()
-	{
-		return formName;
-	}
-
 	public String getFormMethod()
 	{
       if(formMethod==null)
@@ -105,12 +81,26 @@ public class HTMLFormTag extends HTMLTag
       //System.out.println("formMethod   "+formMethod);
 		return formMethod;
 	}
-
-	public Vector getFormInputs()
+	public String getFormName()
 	{
-		return formInputVector;
+		return formName;
 	}
-
+	public void setFormInputs(Vector formInputVector)
+	{
+		this.formInputVector = formInputVector;
+	}
+	public void setFormLocation(String formUrl)
+	{
+		this.formURL = formURL;
+	}
+	public void setFormMethod(String formMethod)
+	{
+		this.formMethod = formMethod;
+	}
+   public void setFormName(String formName)
+   {
+      this.formName = formName;
+   }
 	/**
 	 * Print the contents of the HTMLFormTag
 	 */

@@ -155,4 +155,28 @@ public void testTagCharsInStringNode() {
 	assertEquals("[> ASGARD <]",linkTag.getLinkText());
 	assertEquals("http://asgard.ch",linkTag.getLink());
 }
+
+/**
+ * Insert the method's description here.
+ * Creation date: (5/6/2002 11:25:26 PM)
+ */
+public void testToPlainTextString() {
+	String testHTML = new String("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[20];
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 10 nodes identified",new Integer(10),new Integer(i));
+	assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
+	HTMLStringNode stringNode = (HTMLStringNode)node[3];
+	assertEquals("First String Node","This is the Title",stringNode.toPlainTextString());
+	assertTrue("Eighth Node identified must be a string node",node[7] instanceof HTMLStringNode);
+	stringNode = (HTMLStringNode)node[7];
+	assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toPlainTextString());
+}
 }

@@ -49,14 +49,12 @@ public class HTMLFrameTag extends HTMLTag
 		super(frameBegin,frameEnd,"",tagLine);
 		this.frameURL = frameURL;
 	}
-
 	public HTMLFrameTag(String frameURL, String frameName, int frameBegin, int frameEnd,String tagLine)
 	{
 		super(frameBegin,frameEnd,"",tagLine);
 		this.frameURL = frameURL;
       this.frameName = frameName;
 	}
-
 	/**
 	 * Returns the location of the image
 	 */
@@ -64,12 +62,10 @@ public class HTMLFrameTag extends HTMLTag
 	{
 		return frameURL;
 	}
-
 	public String getFrameName()
 	{
 		return frameName;
 	}
-
 	/**
 	 * Print the contents of the HTMLImageNode
 	 */

@@ -104,6 +104,9 @@ public class HTMLEndTag extends HTMLNode
 	{
 		return tagContents;
 	}
+	public String toPlainTextString() {
+		return "";
+	}
 public String toString() {
 	return "EndTag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 }

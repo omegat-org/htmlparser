@@ -141,6 +141,9 @@ public class HTMLRemarkNode extends HTMLNode
 	{
 		return tagContents;
 	}
+	public String toPlainTextString() {
+		return tagContents;
+	}
 	/**
 	 * Print the contents of the remark tag.
 	 */
