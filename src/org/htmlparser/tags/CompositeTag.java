@@ -94,6 +94,11 @@ public abstract class CompositeTag extends HTMLTag {
 		return sb.toString();
 	}
 
+	/**
+	 * Searches all children who for a name attribute. Returns first match.
+	 * @param name Attribute to match in tag
+	 * @return HTMLTag Tag matching the name attribute
+	 */
 	public HTMLTag searchByName(String name) {
 		HTMLNode node;
 		HTMLTag tag=null;
@@ -112,8 +117,23 @@ public abstract class CompositeTag extends HTMLTag {
 			return null;
 	}
 
-	public Vector searchFor(String searchString, boolean caseSensitive) {
-		Vector foundVector = new Vector();
+	/** 
+	 * Searches for any node whose text representation contains the search
+	 * string. Collects all such nodes in a NodeList.
+	 * e.g. if you wish to find any textareas in a form tag containing "hello
+	 * world", the code would be :
+	 * <code>
+	 *  NodeList nodeList = formTag.searchFor("Hello World");
+	 * </code>
+	 * @param searchString search criterion
+	 * @param caseSensitivie specify whether this search should be case
+	 * sensitive
+	 * @return NodeList Collection of nodes whose string contents or
+	 * representation have the searchString in them
+	 */
+
+	public NodeList searchFor(String searchString, boolean caseSensitive) {
+		NodeList foundVector = new NodeList();
 		HTMLNode node;
 		if (!caseSensitive) searchString = searchString.toUpperCase();
 		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
@@ -121,18 +141,26 @@ public abstract class CompositeTag extends HTMLTag {
 			String nodeTextString = node.toPlainTextString(); 
 			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
 			if (nodeTextString.indexOf(searchString)!=-1) {
-				foundVector.addElement(node);
+				foundVector.add(node);
 			}	
 		}
 		return foundVector;
 	}
 
 	/** 
-	 * Case insensitive search
-	 * @param searchString
-	 * @return Vector
+	 * Searches for any node whose text representation contains the search
+	 * string. Collects all such nodes in a NodeList.
+	 * e.g. if you wish to find any textareas in a form tag containing "hello
+	 * world", the code would be :
+	 * <code>
+	 *  NodeList nodeList = formTag.searchFor("Hello World");
+	 * </code>
+	 * This search is <b>case-insensitive</b>.
+	 * @param searchString search criterion
+	 * @return NodeList Collection of nodes whose string contents or
+	 * representation have the searchString in them
 	 */
-	public Vector searchFor(String searchString) {
+	public NodeList searchFor(String searchString) {
 		return searchFor(searchString, false);
 	}
 

@@ -2,7 +2,9 @@ package org.htmlparser.tests;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
+import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.HTMLLinkScanner;
+import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.HTMLEnumeration;
 
@@ -22,6 +24,8 @@ public class InstanceofPerformanceTest {
 		long start = System.currentTimeMillis();
 		for (long i=0;i<numTimes;i++)
 			if (node instanceof HTMLTag) {}
+			else if (node instanceof HTMLEndTag) {}
+			else if (node instanceof HTMLStringNode) {}
 		long end = System.currentTimeMillis();
 		time[index] = end-start;
 	}
@@ -30,21 +34,23 @@ public class InstanceofPerformanceTest {
 		System.out.println("doGetTypeTest("+index+")");
 		long start = System.currentTimeMillis();
 		for (long i=0;i<numTimes;i++)
-			if (node.getType()==HTMLTag.TYPE) {}
+			if (node.getType()==HTMLTag.TYPE) {} 
+			else if (node.getType()==HTMLEndTag.TYPE) {}
+			else if (node.getType()==HTMLStringNode.TYPE) {}
 		long end = System.currentTimeMillis();
 		time[index] = end-start;
 	}
 
 	public void perform() {
-		int numTimes = 100;
+		int numTimes = 50;
 		long time1[] = new long[numTimes], 
 		time2[] = new long[numTimes];
 		
 		for (int i=0;i<numTimes;i++)
-			doInstanceofTest(time1,i,i*100000);
+			doInstanceofTest(time1,i,i*10000000);
 		
 		for (int i=0;i<numTimes;i++)
-			doGetTypeTest(time2,i,i*100000);
+			doGetTypeTest(time2,i,i*10000000);
 		
 		print(time1,time2);
 	}
