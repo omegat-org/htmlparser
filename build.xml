@@ -8,7 +8,7 @@
   <property name="previousVersion" value="1.1"/>
   <property name="docs" value="docs"/>
   <property name="resources" value="resources"/>
-  <property name="dist"  value="release/htmlparser${version}"/>
+  <property name="dist"  value="release/htmlparser${versionString}"/>
   <property name="releaseDir" value="release"/>
   <property name="finalLoc" value="distribution"/>
 
@@ -54,7 +54,7 @@
            windowtitle="HTMLParser ${version}">
       <doctitle><![CDATA[<h1>HTMLParser ${version}</h1>]]></doctitle>
       <header><![CDATA[<A HREF="http://htmlparser.sourceforge.net" target="_top">HTML Parser Home Page</A>]]></header>
-      <bottom><![CDATA[HTMLParser is an open source library released under LGPL. <BR> If you want to be notified when a new released of HTML Parser is out, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-announce">HTMLParser Announcement List</A>.<BR>
+      <bottom><![CDATA[HTMLParser is an open source library released under LGPL. <BR> If you want to be notified when a new release of HTML Parser is out, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-announce">HTMLParser Announcement List</A>.<BR>
 If you have questions about the usage of the parser, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-user">HTMLParser User List</A>. 
 <BR>
 If you want to join as a developer, please sign up on the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-developer">HTMLParser Developer List</A>.<BR> All three lists can be joined from the <A HREF="http://htmlparser.sourceforge.net/mailinglists.html">HTMLParser Mailing Lists Page.</A>  ]]></bottom>
@@ -89,7 +89,7 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   <target name="Package" depends="Release">
     <zip zipfile="${dist}/src.zip"
        basedir="${src}"/>
-    <zip zipfile="${finalLoc}/htmlparser${versionString}.zip"
+    <zip zipfile="${finalLoc}/htmlparser${version}.zip"
        basedir="${releaseDir}"/>
     <tar tarfile="${finalLoc}/docs.tar" basedir="${dist}/docs"/>
     <gzip zipfile="${finalLoc}/docs.tar.gz" src="${finalLoc}/docs.tar"/>
