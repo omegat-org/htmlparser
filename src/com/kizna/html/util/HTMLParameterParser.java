@@ -73,7 +73,6 @@ public class HTMLParameterParser {
         element=null;
         boolean waitingForEqual=false;
         
-//System.out.println("k0:|"+tag.getText()+"|");
         token = new StringTokenizer(tag.getText(),delim,true);
         while (true) {
             nextPart=getNextPart();
@@ -117,7 +116,6 @@ public class HTMLParameterParser {
                 }                
             }
         }
-//System.out.println("h:"+h.toString());        
         return h;
     }
     
@@ -153,10 +151,7 @@ public class HTMLParameterParser {
                 continue;                
             } else tokenAccumulator = currentToken;
             
-//System.out.println("k4|"+tokenAccumulator+"|"+currentToken+"|"+isDataReady);            
             if (tokenAccumulator.equals(currentToken)) {            
-//System.out.println("k4a|"+tokenAccumulator+"|"+isDataReady);            
-                
                 
                 if (delim.indexOf(tokenAccumulator)>=0) {
                     if (tokenAccumulator.equals("=")){
@@ -167,15 +162,12 @@ public class HTMLParameterParser {
                 }
                 else {
                     
-//System.out.println("k4c|"+tokenAccumulator+"|"+currentToken+"|"+isDataReady);            
-                    
                     isDataReady=true;
                 }                
             }      
             else isDataReady=true;
 
         }
-System.out.println("k5|"+tokenAccumulator+"|"+isDataReady);
         return tokenAccumulator;                
     }
     
@@ -183,7 +175,6 @@ System.out.println("k5|"+tokenAccumulator+"|"+isDataReady);
     private void putDataIntoTable(Hashtable h,String name,String value,boolean isName) {
         if (isName && value == null) value=HTMLTag.TAGNAME;
         else if (value==null) value = ""; // Hashtable does not accept nulls
- //System.out.println("k1|"+name+"|"+value+"|");
         if (isName) {
             // store tagname as tag.TAGNAME,tag                        
             h.put(value,name.toUpperCase());  
