@@ -26,8 +26,6 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.Hashtable;
 
 import org.htmlparser.Node;

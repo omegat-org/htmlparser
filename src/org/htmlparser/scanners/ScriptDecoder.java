@@ -26,9 +26,6 @@
 
 package org.htmlparser.scanners;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.ParserException;

@@ -29,7 +29,6 @@ package org.htmlparser.tags;
 import org.htmlparser.Node;
 import org.htmlparser.util.ParserUtils;
 import org.htmlparser.util.SimpleNodeIterator;
-import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * Identifies a link tag.

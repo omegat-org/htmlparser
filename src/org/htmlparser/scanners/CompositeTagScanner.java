@@ -33,7 +33,6 @@ import org.htmlparser.Node;
 import org.htmlparser.Tag;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.nodes.TagNode;
 import org.htmlparser.scanners.Scanner;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;

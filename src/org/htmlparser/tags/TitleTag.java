@@ -26,8 +26,6 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.visitors.NodeVisitor;
-
 /**
  * A title tag.
  */

@@ -29,7 +29,6 @@ package org.htmlparser.nodes;
 import org.htmlparser.Remark;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 

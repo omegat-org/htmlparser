@@ -26,15 +26,12 @@
 
 package org.htmlparser.filters;
 
-import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Tag;
-import org.htmlparser.lexer.Lexer;
-import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 
 /**

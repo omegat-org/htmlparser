@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.Parser;
 import org.htmlparser.Text;
 import org.htmlparser.tags.HeadTag;
 import org.htmlparser.tags.Html;

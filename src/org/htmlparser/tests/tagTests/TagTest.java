@@ -41,7 +41,6 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
-import org.htmlparser.util.SpecialHashtable;
 
 public class TagTest extends ParserTestCase
 {

@@ -34,7 +34,6 @@ import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Remark;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
-import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.scanners.ScriptDecoder;
 import org.htmlparser.tags.ScriptTag;

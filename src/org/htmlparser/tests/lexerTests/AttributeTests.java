@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.lexerTests;
 
-import java.util.Hashtable;
 import java.util.Vector;
 import org.htmlparser.Node;
 
@@ -40,7 +39,6 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
-import org.htmlparser.util.SpecialHashtable;
 
 public class AttributeTests extends ParserTestCase
 {

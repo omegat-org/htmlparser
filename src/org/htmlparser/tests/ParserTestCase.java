@@ -27,7 +27,6 @@
 package org.htmlparser.tests;
 
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -47,7 +46,6 @@ import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
-import org.htmlparser.util.SpecialHashtable;
 
 public class ParserTestCase extends TestCase {
 

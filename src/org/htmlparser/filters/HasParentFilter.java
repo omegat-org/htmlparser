@@ -28,7 +28,6 @@ package org.htmlparser.filters;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.Tag;
 import org.htmlparser.util.NodeList;
 
 /**

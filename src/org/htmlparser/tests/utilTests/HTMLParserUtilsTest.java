@@ -27,7 +27,6 @@
 package org.htmlparser.tests.utilTests;
 
 import org.htmlparser.NodeFilter;
-import org.htmlparser.Parser;
 import org.htmlparser.filters.*;
 import org.htmlparser.tags.*;
 import org.htmlparser.tests.ParserTestCase;

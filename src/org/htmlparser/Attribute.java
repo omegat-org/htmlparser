@@ -27,8 +27,6 @@
 package org.htmlparser;
 
 import java.io.Serializable;
-import org.htmlparser.lexer.Page;
-import org.htmlparser.util.Translate;
 
 /**
  * An attribute within a tag.

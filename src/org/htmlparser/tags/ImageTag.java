@@ -32,7 +32,6 @@ import java.util.Vector;
 import org.htmlparser.Attribute;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.ParserUtils;
-import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * Identifies an image tag.

@@ -33,7 +33,6 @@ import org.htmlparser.NodeFactory;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Remark;
 import org.htmlparser.Text;
-import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.Tag;
 import org.htmlparser.util.NodeList;

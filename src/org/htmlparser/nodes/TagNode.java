@@ -40,7 +40,6 @@ import org.htmlparser.scanners.Scanner;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SpecialHashtable;
-import org.htmlparser.util.Translate;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
