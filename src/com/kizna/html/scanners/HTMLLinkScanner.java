@@ -231,7 +231,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 							reader.changeLine(newLine);
 							endFlag = true;
 							node = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A",newLine);
-						}
+						} else nodeVector.addElement(node);
 					}
 				} 
 				else if (node!=null) nodeVector.addElement(node);

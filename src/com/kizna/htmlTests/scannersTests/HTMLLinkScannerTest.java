@@ -141,7 +141,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		// Verify the link data
 		assertEquals("Link Text","",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></A>",linkTag.toHTML());
+		assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img></A>",linkTag.toHTML());
 		// Verify the tags in between
 		assertTrue("Second node should be an end tag",node[1] instanceof HTMLEndTag);
 		assertTrue("Third node should be an HTMLTag",node[2] instanceof HTMLTag);		
@@ -187,7 +187,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		// Verify the link data
 		assertEquals("Link Text","This is a test\r\n",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>This is a test\r\n</A>",linkTag.toHTML());
+		assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img>This is a test\r\n</A>",linkTag.toHTML());
 	}
 	
 	/**
@@ -437,4 +437,51 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
 		assertNotNull(linkTag.toString());
 	}	
+	public void testLinkDataContents() throws HTMLParserException {
+		String testHTML = "<a href=\"http://transfer.go.com/cgi/atransfer.pl?goto=http://www.signs.movies.com&name=114332&srvc=nws&context=283&guid=4AD5723D-C802-4310-A388-0B24E1A79689\" target=\"_new\"><img src=\"http://ad.abcnews.com/ad/sponsors/buena_vista_pictures/bvpi-ban0003.gif\" width=468 height=60 border=\"0\" alt=\"See Signs in Theaters 8-2 - Starring Mel Gibson\" align=><font face=\"verdana,arial,helvetica\" SIZE=\"1\"><b></b></font></a>";
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://transfer.go.com");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[10];
+		// Register the image scanner
+		parser.addScanner(new HTMLLinkScanner("-l"));
+		parser.addScanner(new HTMLImageScanner("-i"));
+				
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		{
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		assertTrue("Node 0 should be a link tag",node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		assertEquals("Link URL","http://transfer.go.com/cgi/atransfer.pl?goto=http://www.signs.movies.com&name=114332&srvc=nws&context=283&guid=4AD5723D-C802-4310-A388-0B24E1A79689",linkTag.getLink());
+		assertEquals("Link Text","",linkTag.getLinkText());
+		HTMLNode [] containedNodes = new HTMLNode[10];
+		i=0;
+		for (Enumeration e = linkTag.linkData();e.hasMoreElements();) {
+			containedNodes[i++] = (HTMLNode)e.nextElement();
+		}
+		assertEquals("There should be 5 contained nodes in the link tag",5,i);
+		assertTrue("First contained node should be an image tag",containedNodes[0] instanceof HTMLImageTag);
+		HTMLImageTag imageTag = (HTMLImageTag)containedNodes[0];
+		assertEquals("Image Location","http://ad.abcnews.com/ad/sponsors/buena_vista_pictures/bvpi-ban0003.gif",imageTag.getImageLocation());
+		assertEquals("Image Height","60",imageTag.getParameter("HEIGHT"));
+		assertEquals("Image Width","468",imageTag.getParameter("WIDTH"));
+		assertEquals("Image Border","0",imageTag.getParameter("BORDER"));
+		assertEquals("Image Alt","See Signs in Theaters 8-2 - Starring Mel Gibson",imageTag.getParameter("ALT"));
+		assertTrue("Second contained node should be HTMLTag",containedNodes[1] instanceof HTMLTag);
+		HTMLTag tag1 = (HTMLTag)containedNodes[1];
+		assertEquals("Tag Contents","font face=\"verdana,arial,helvetica\" SIZE=\"1\"",tag1.getText());
+		assertTrue("Third contained node should be HTMLTag",containedNodes[2] instanceof HTMLTag);
+		HTMLTag tag2 = (HTMLTag)containedNodes[2];
+		assertEquals("Tag Contents","b",tag2.getText());
+		assertTrue("Fourth contained node should be HTMLEndTag",containedNodes[3] instanceof HTMLEndTag);		
+		HTMLEndTag endTag1 = (HTMLEndTag)containedNodes[3];
+		assertEquals("Fourth Tag contents","b",endTag1.getText());
+		assertTrue("Fifth contained node should be HTMLEndTag",containedNodes[4] instanceof HTMLEndTag);		
+		HTMLEndTag endTag2 = (HTMLEndTag)containedNodes[4];
+		assertEquals("Fifth Tag contents","font",endTag2.getText());
+		
+	}
 }
