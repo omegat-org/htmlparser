@@ -224,10 +224,10 @@ HTML Parser Integration Release 1.5-20040522
     </javac>
   </target>
 
-    <!-- Create the distribution of htmlparser.jar and htmllexer.jar -->
+    <!-- Create the htmlparser.jar and htmllexer.jar -->
   <target name="jar" depends="jarlexer,jarparser" description="create htmlparser.jar and htmllexer.jar"/>
 
-  <!-- Create the distribution of htmllexer.jar -->
+  <!-- Create htmllexer.jar -->
   <target name="jarlexer" depends="compilelexer" description="create htmllexer.jar">
     <mkdir dir="${lib}"/>
     <jar jarfile="${lib}/htmllexer.jar"
@@ -256,7 +256,7 @@ HTML Parser Integration Release 1.5-20040522
 
   </target>
 
-  <!-- Create the distribution of htmlparser.jar -->
+  <!-- Create htmlparser.jar -->
   <target name="jarparser" depends="compileparser" description="create htmlparser.jar">
     <mkdir dir="${lib}"/>
     <jar jarfile="${lib}/htmlparser.jar"
@@ -286,7 +286,7 @@ HTML Parser Integration Release 1.5-20040522
 
   <!-- Create the Thumbelina jar -->
   <target name="thumbelina" depends="JDK1.4,jarlexer" description="create thumbelina.jar" if="JDK1.4">
-    <!-- Create the distribution directory -->
+    <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
     <javac compiler="javac1.4" srcdir="${src}" debug="on" classpath="src:${lib}/htmllexer.jar">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.java"/>
@@ -363,15 +363,25 @@ HTML Parser Integration Release 1.5-20040522
       <group title="Utility" packages="org.htmlparser.util,org.htmlparser.util.sort"/>
       <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
     </javadoc>
-    <copy file="resources/inherit.gif" tofile="${docs}/javadoc/resources/inherit.gif" overwrite="true"/>
+    <copy file="${resources}/inherit.gif" tofile="${docs}/javadoc/resources/inherit.gif" overwrite="true"/>
     <delete file="${resources}/HtmlTaglet.class"/>
   </target>
 
   <target name="release" depends="jar,thumbelina,javadoc" description="prepare the release files">
   </target>
 
-  <!-- Package the release -->
-  <target name="package" depends="release,sources"
+  <!-- Prepare the sources zip, allowing folks to build the code -->
+  <target name="sources" description="create the source zip">
+    <zip destfile="src.zip" defaultexcludes="no">
+      <zipfileset dir="${src}" prefix="${src}" includes="**/*.java **/*.html **/*.gif **/*.form **/*.properties"/>
+      <zipfileset dir="." includes="build.xml"/>
+      <zipfileset dir="${resources}" prefix="${resources}" excludes="cvs2cl.pl"/>
+      <zipfileset dir="${resources}" prefix="${resources}" includes="cvs2cl.pl" filemode="755"/>
+    </zip>
+  </target>
+
+  <!-- Perform the htmlparser integration -->
+  <target name="htmlparser" depends="release,sources"
     description="glom the release and source files into the distribution zip file">
     <mkdir dir="${distribution}"/>
     <zip zipfile="${distribution}/htmlparser${versionTag}.zip">
@@ -383,19 +393,11 @@ HTML Parser Integration Release 1.5-20040522
       <zipfileset dir="." prefix="htmlparser${versionQualifier}/" includes="src.zip"/>
       <!-- Copy the release notes as readme.txt in the base release directory -->
       <zipfileset dir="${docs}" includes="release.txt" fullpath="htmlparser${versionQualifier}/readme.txt"/>
+      <!-- Copy the LGPL license.txt to the base release directory -->
+      <zipfileset dir="${resources}" includes="license.txt" fullpath="htmlparser${versionQualifier}/license.txt"/>
     </zip>
   </target>
   
-  <!-- Prepare the sources zip, allowing folks to build the code -->
-  <target name="sources" description="create the source zip">
-    <zip destfile="src.zip" defaultexcludes="no">
-      <zipfileset dir="${src}" prefix="${src}" includes="**/*.java **/*.html **/*.gif **/*.form **/*.properties"/>
-      <zipfileset dir="." includes="build.xml"/>
-      <zipfileset dir="${resources}" prefix="${resources}" excludes="cvs2cl.pl"/>
-      <zipfileset dir="${resources}" prefix="${resources}" includes="cvs2cl.pl" filemode="755"/>
-    </zip>
-  </target>
-
   <target name="clean" description="cleanup">
     <!-- delete the src.zip, classes and javadocs leave the jars -->
     <delete>
@@ -403,10 +405,6 @@ HTML Parser Integration Release 1.5-20040522
       <fileset dir="${src}" includes="**/*.class"/>
     </delete>
     <delete dir="${docs}/javadoc/"/>
-  </target>
-	
-  <!-- Perform the htmlparser integration -->
-  <target name="htmlparser" depends="package,clean" description="same as package plus cleanup">
   </target>
 	
 </project>

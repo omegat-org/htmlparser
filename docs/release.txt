@@ -3,20 +3,26 @@ HTMLParser Version 1.5 (Integration Build May 22, 2004)
 
 Contents of the distribution
 ----------------------------
-  (i) binary jar files - htmlparser.jar and lexer.jar (in lib directory)
-    
+  (i) jar files - lib directory
+      HTML Parser jars: htmlparser.jar, lexer.jar and thumbelina.jar.
+      Also thirdparty jar files checkstyle-all-3.1.jar, commons-logging.jar,
+      fit.jar and junit.jar.
+
  (ii) source code - src.zip
       Also contains necessary resources, and build file. Unzip this
       and you should be all set to build the parser from its source.
       You would need Jakarta Ant installed.
     	 
-(iii) documentation - docs directory (includes javadoc)
+(iii) documentation - docs directory (includes javadocs)
       Point your browser at index.html in the docs directory.
     
  (iv) executing scripts - bin directory
-      Batch files assume that java 1.2 (or upwards) is visible in your path.
+      Batch/script files assume that Java is visible in your path.
+      Most require Java 1.2 (or upwards), except for lexer.
 
-  (v) this file
+  (v) license.txt (GNU Lesser General Public License)
+
+ (vi) this file, release.txt
 
 Changes since Version 1.4
 -------------------------
