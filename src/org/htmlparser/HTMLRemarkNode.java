@@ -85,6 +85,7 @@ public class HTMLRemarkNode extends HTMLNode
 	}
 
 	public void accept(HTMLVisitor visitor) {
+		visitor.visitRemarkNode(this);
 	}
 
 	public String getType() {

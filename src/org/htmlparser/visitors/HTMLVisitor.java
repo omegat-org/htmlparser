@@ -1,5 +1,6 @@
 package org.htmlparser.visitors;
 
+import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
@@ -21,6 +22,10 @@ public abstract class HTMLVisitor {
 	}
 	
 	public void visitEndTag(HTMLEndTag endTag) {
+		
+	}
+	
+	public void visitRemarkNode(HTMLRemarkNode remarkNode) {
 		
 	}
 }
