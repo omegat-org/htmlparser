@@ -32,7 +32,6 @@ package org.htmlparser.tags;
 import java.util.Enumeration;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLRenderer;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLLinkTagData;
 import org.htmlparser.tags.data.HTMLTagData;
@@ -209,17 +208,6 @@ public class HTMLLinkTag extends HTMLCompositeTag
 		javascriptLink = newJavascriptLink;
 	}
 
-	public String getChildContentsAndEndTagWith(HTMLRenderer renderer) {
-		StringBuffer sb = new StringBuffer();
-		HTMLNode node;
-		for (Enumeration e = children();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
-			sb.append(node.toHTML(renderer));
-		}
-		sb.append("</A>");
-		return sb.toString();
-	}	
-	
 	/**
 	 * Print the contents of this Link Node
 	 */
@@ -246,9 +234,6 @@ public class HTMLLinkTag extends HTMLCompositeTag
 		sb.append("  "+"*** END of LinkData ***\n");
 		return sb.toString();
 	}
-	public String toHTML(HTMLRenderer renderer) {
-		return renderer.renderLinksToHTML(this);
-	}
 
 	public void setLink(String link) {
 		this.link = link;
@@ -266,6 +251,7 @@ public class HTMLLinkTag extends HTMLCompositeTag
 	
 	public void accept(HTMLVisitor visitor) {
 		visitor.visitLinkTag(this);
+		super.accept(visitor);
 	}
 
 }
