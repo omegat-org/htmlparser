@@ -17,7 +17,8 @@ public class CompositeTagScannerTest extends ParserTestCase {
 	}
 
 	protected void setUp() {
-		String [] arr = { "SOMETHING"
+		String [] arr = { 
+			"SOMETHING"
 		};
 		scanner = 
 			new CompositeTagScanner(arr) {
@@ -49,6 +50,40 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertFalse("should not be an xml end tag",scanner.isXmlEndTag(tag));
 	}
 	
+	public void testEmptyCompositeTag() throws ParserException {
+		createParser(
+			"<Custom/>"
+		);
+		parser.addScanner(new CustomScanner());
+		parseAndAssertNodeCount(1);
+		assertType("node",CustomTag.class,node[0]);
+		CustomTag customTag = (CustomTag)node[0];
+		int x = customTag.getChildCount();
+		assertEquals("child count",0,customTag.getChildCount());
+		assertTrue("custom tag should be xml end tag",customTag.isEmptyXmlTag());
+		assertEquals("starting loc",0,customTag.getStartTag().elementBegin());
+		assertEquals("ending loc",8,customTag.getStartTag().elementEnd());
+		assertEquals("starting line position",0,customTag.tagData.getStartLine());
+		assertEquals("ending line position",0,customTag.tagData.getEndLine());
+	}
+	
+	public void testEmptyCompositeTagAnotherStyle() throws ParserException {
+		createParser(
+			"<Custom></Custom>"
+		);
+		parser.addScanner(new CustomScanner());
+		parseAndAssertNodeCount(1);
+		assertType("node",CustomTag.class,node[0]);
+		CustomTag customTag = (CustomTag)node[0];
+		int x = customTag.getChildCount();
+		assertEquals("child count",0,customTag.getChildCount());
+		assertTrue("custom tag should be xml end tag",customTag.isEmptyXmlTag());
+		assertEquals("starting loc",0,customTag.getStartTag().elementBegin());
+		assertEquals("ending loc",8,customTag.getStartTag().elementEnd());
+		assertEquals("starting line position",0,customTag.tagData.getStartLine());
+		assertEquals("ending line position",0,customTag.tagData.getEndLine());
+	}
+	
 	public void testXmlTypeCompositeTags() throws ParserException {
 		createParser(
 			"<Custom>" +
@@ -67,9 +102,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertType("first child",AnotherTag.class,node);
 		node = customTag.childAt(1);
 		assertType("second child",CustomTag.class,node);
-	}
-	
-
+	}	
 	
 	public static class CustomScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "CUSTOM" };
@@ -103,6 +136,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			this.tagData = tagData;
 		}
 	}
+	
 	public static class AnotherTag extends CompositeTag {
 		public AnotherTag(TagData tagData, CompositeTagData compositeTagData) {
 			super(tagData,compositeTagData);

@@ -248,6 +248,16 @@ public abstract class CompositeTag extends Tag {
 			visitor.visitTag(this);
 	}
 
+	public int getChildCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public Tag getStartTag() {
+		// TODO Auto-generated method stub
+		return startTag;
+	}
+
 
 
 }
