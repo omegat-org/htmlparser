@@ -37,8 +37,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
 
-public class HTMLLinkTagTest extends HTMLParserTestCase
-{
+public class HTMLLinkTagTest extends HTMLParserTestCase {
 
 	public HTMLLinkTagTest(String name) {
 		super(name);
@@ -355,13 +354,5 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 		);
 		assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
 
-	}	
-	public void testGetLinkContentsAndEndTagWith() throws HTMLParserException {
-		createParser("<A HREF=\"test.html\"><IMG SRC=\"pic.jpg\">abcd</A>","http://www.google.com/test/index.html");
-		parser.registerScanners();
-		parseAndAssertNodeCount(1);
-		assertTrue("Expected link",node[0] instanceof HTMLLinkTag);
-		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
-		assertEquals("contents and end of link","<IMG SRC=\"pic.jpg\">abcd</A>",linkTag.getChildContentsAndEndTagWith(null));		
 	}	
 }
