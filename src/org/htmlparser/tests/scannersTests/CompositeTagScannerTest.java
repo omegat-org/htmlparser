@@ -51,7 +51,11 @@ public class CompositeTagScannerTest extends ParserTestCase {
 	
 	public void testXmlTypeCompositeTags() throws ParserException {
 		createParser(
-			"<Custom>" +				"<Another name=\"subtag\"/>" +			"</Custom>" +			"<Custom/>"
+			"<Custom>" +
+				"<Another name=\"subtag\"/>" +
+				"<Custom />" +
+			"</Custom>" +
+			"<Custom/>"
 		);
 		parser.addScanner(new CustomScanner());
 		parser.addScanner(new AnotherScanner());
@@ -60,35 +64,43 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertType("second node",CustomTag.class,node[1]);
 		CustomTag customTag = (CustomTag)node[0];
 		Node node = customTag.childAt(0);
-		assertType("child",AnotherTag.class,node);
+		assertType("first child",AnotherTag.class,node);
+		node = customTag.childAt(1);
+		assertType("second child",CustomTag.class,node);
 	}
 	
 	private static class CustomScanner extends CompositeTagScanner {
-	  private static final String MATCH_NAME [] = { "CUSTOM" };
-	  public CustomScanner() { super("", MATCH_NAME); }
-	  public String[] getID() { return MATCH_NAME; }
-	  protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
-		return new CustomTag(tagData, compositeTagData);
-	  }
+		private static final String MATCH_NAME [] = { "CUSTOM" };
+		public CustomScanner() { super("", MATCH_NAME); }
+		public String[] getID() { return MATCH_NAME; }
+		protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+			return new CustomTag(tagData, compositeTagData);
+		}
+		protected boolean isBrokenTag() {
+			return false;
+		}
 	}
 	private static class AnotherScanner extends CompositeTagScanner {
-	  private static final String MATCH_NAME [] = { "ANOTHER" };
-	  public AnotherScanner() { super("", MATCH_NAME); }
-	  public String[] getID() { return MATCH_NAME; }
-	  protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
-		return new AnotherTag(tagData, compositeTagData);
-	  }
+		private static final String MATCH_NAME [] = { "ANOTHER" };
+		public AnotherScanner() { super("", MATCH_NAME); }
+		public String[] getID() { return MATCH_NAME; }
+		protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+			return new AnotherTag(tagData, compositeTagData);
+		}
+		protected boolean isBrokenTag() {
+			return false;
+		}
 	}
 
 	// Custom Tags
 	private static class CustomTag extends CompositeTag {
-	  public CustomTag(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData,compositeTagData);
-	  }
+		public CustomTag(TagData tagData, CompositeTagData compositeTagData) {
+			super(tagData,compositeTagData);
+		}
 	}
 	private static class AnotherTag extends CompositeTag {
-	  public AnotherTag(TagData tagData, CompositeTagData compositeTagData) {
-		super(tagData,compositeTagData);
-	  }
+		public AnotherTag(TagData tagData, CompositeTagData compositeTagData) {
+			super(tagData,compositeTagData);
+		}
 	}	
 }
