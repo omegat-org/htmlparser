@@ -120,7 +120,7 @@ public class HTMLParser
 	 */
 	protected boolean readFlag = false;
 	private Vector scanners = new Vector();
-	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Jul 28, 2002)";
+	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Aug 04, 2002)";
 /**
  * This constructor enables the construction of test cases, with readers
  * associated with test string buffers. 
