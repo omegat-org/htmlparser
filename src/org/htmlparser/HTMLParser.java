@@ -41,7 +41,6 @@ import org.htmlparser.scanners.*;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.ChainedException;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.NullHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
@@ -154,7 +153,7 @@ public class HTMLParser
 	{
 		this.reader = reader;
         if (null == feedback)
-            this.feedback = new NullHTMLParserFeedback ();
+            this.feedback = new DefaultHTMLParserFeedback (DefaultHTMLParserFeedback.QUIET);
         else
             this.feedback = feedback;
 		HTMLTag.setTagParser(new HTMLTagParser(feedback));		
@@ -186,7 +185,7 @@ public class HTMLParser
 		try {
 			this.resourceLocn = resourceLocn;
             if (null == feedback)
-                this.feedback = new NullHTMLParserFeedback ();
+                this.feedback = new DefaultHTMLParserFeedback (DefaultHTMLParserFeedback.QUIET);
             else
     			this.feedback = feedback;
 			HTMLTag.setTagParser(new HTMLTagParser(feedback));
