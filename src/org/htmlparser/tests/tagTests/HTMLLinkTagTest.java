@@ -31,6 +31,8 @@ package org.htmlparser.tests.tagTests;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.scanners.HTMLLinkScanner;
 import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
 
@@ -283,34 +285,73 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 	}
 
 	public void testTypeHttps() throws HTMLParserException{
-		HTMLLinkTag linkTag = new HTMLLinkTag("https://www.someurl.com","",0,0,"","",null,false,false,"","",null,null);
+		HTMLLinkTag linkTag = 
+		new HTMLLinkTag(
+			new HTMLTagData(0,0,"",""),
+			new HTMLCompositeTagData(null,null,null),
+			"https://www.someurl.com","","",false,false,""
+		);
 		assertTrue("This is a https link",linkTag.isHTTPSLink());
 	}
 
 	public void testTypeFtp() throws HTMLParserException{
-		HTMLLinkTag linkTag = new HTMLLinkTag("ftp://www.someurl.com","",0,0,"","",null,false,false,"","",null,null);
+		HTMLLinkTag linkTag = 
+		new HTMLLinkTag(
+			new HTMLTagData(0,0,"",""),
+			new HTMLCompositeTagData(null,null,null),
+			"ftp://www.someurl.com","","",false,false,""
+		);
 		assertTrue("This is an ftp link",linkTag.isFTPLink());
 	}	
 
 	public void testTypeJavaScript() throws HTMLParserException {
-		HTMLLinkTag linkTag = new HTMLLinkTag("javascript://","",0,0,"","",null,false,true,"","",null,null);
+		HTMLLinkTag linkTag = 
+		new HTMLLinkTag(
+			new HTMLTagData(0,0,"",""),
+			new HTMLCompositeTagData(null,null,null),
+			"javascript://www.someurl.com","","",false,true,""
+		);
 		assertTrue("This is a javascript link",linkTag.isJavascriptLink());
 	}
 
 	public void testTypeHttpLink() throws HTMLParserException {
-		HTMLLinkTag linkTag = new HTMLLinkTag("http://","",0,0,"","",null,false,false,"","",null,null);
+		HTMLLinkTag linkTag = 
+		new HTMLLinkTag(
+			new HTMLTagData(0,0,"",""),
+			new HTMLCompositeTagData(null,null,null),
+			"http://","","",false,false,""
+		);
 		assertTrue("This is a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-		linkTag = new HTMLLinkTag("somePage.html","",0,0,"","",null,false,false,"","",null,null);
+		linkTag = 
+		new HTMLLinkTag(
+			new HTMLTagData(0,0,"",""),
+			new HTMLCompositeTagData(null,null,null),
+			"somePage.html","","",false,false,""
+		);
 		assertTrue("This relative link is alsp a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-		linkTag = new HTMLLinkTag("ftp://somePage.html","",0,0,"","",null,false,false,"","",null,null);
+		linkTag = 
+		new HTMLLinkTag(
+			new HTMLTagData(0,0,"",""),
+			new HTMLCompositeTagData(null,null,null),
+			"ftp://somePage.html","","",false,false,""
+		);
 		assertTrue("This is not a http link : "+linkTag.getLink(),!linkTag.isHTTPLink());
-		
 	}	
 
 	public void testTypeHttpLikeLink() throws HTMLParserException {
-		HTMLLinkTag linkTag = new HTMLLinkTag("http://","",0,0,"","",null,false,false,"","",null,null);
+		HTMLLinkTag linkTag = 
+		new HTMLLinkTag(
+			new HTMLTagData(0,0,"",""),
+			new HTMLCompositeTagData(null,null,null),
+			"http://","","",false,false,""
+		);
 		assertTrue("This is a http link",linkTag.isHTTPLikeLink());
-		HTMLLinkTag linkTag2 = new HTMLLinkTag("https://www.someurl.com","",0,0,"","",null,false,false,"","",null,null);
+		HTMLLinkTag linkTag2 = 
+		new HTMLLinkTag(
+			new HTMLTagData(0,0,"",""),
+			new HTMLCompositeTagData(null,null,null),
+			"https://www.someurl.com","","",false,false,""
+		);
 		assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
 
 	}	

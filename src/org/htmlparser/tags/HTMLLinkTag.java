@@ -30,6 +30,9 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.*;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
+
 import java.util.Enumeration;
 import java.util.Vector;
 /**
@@ -97,9 +100,9 @@ public class HTMLLinkTag extends HTMLCompositeTag
 	 * @accessKey The accessKey element of the link tag (valid for Compact HTML - IMODE devices)
 	 * @see linkData()
 	 */
-	public HTMLLinkTag(String link,String linkText,int linkBegin, int linkEnd, String accessKey,String currentLine,Vector nodeVector,boolean mailLink,boolean javascriptLink,String tagContents,String linkContents,
-	HTMLTag startTag, HTMLTag endTag) {
-		super(linkBegin,linkEnd,tagContents,currentLine,nodeVector,startTag,endTag);  // Kaarle Kaila 23.10.2001
+	public HTMLLinkTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData,String link,String linkText,String accessKey,boolean mailLink,
+	boolean javascriptLink, String linkContents) {
+		super(tagData,compositeTagData);  
 		this.link = link;
 		this.linkText = linkText;
 		this.accessKey = accessKey;

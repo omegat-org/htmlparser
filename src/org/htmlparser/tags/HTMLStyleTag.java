@@ -28,7 +28,8 @@
 
 package org.htmlparser.tags;
 
-import java.util.Vector;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 
 /**
  * A HTMLStyleTag represents a &lt;style&gt; tag
@@ -42,8 +43,8 @@ public class HTMLStyleTag extends HTMLCompositeTag {
 	 * @param styleCode The style code b/w the tags
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public HTMLStyleTag(int tagBegin, int tagEnd, String styleCode,String tagLine,Vector childNodes,HTMLTag startTag, HTMLTag endTag) {
-		super(tagBegin,tagEnd,styleCode,tagLine,childNodes,startTag,endTag);
+	public HTMLStyleTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData) {
+		super(tagData,compositeTagData);
 	}
 	/**
 	 * Get the javascript code in this tag

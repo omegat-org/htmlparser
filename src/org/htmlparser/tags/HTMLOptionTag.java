@@ -28,17 +28,17 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.tags.data.*;
 import org.htmlparser.util.*;
 
 public class HTMLOptionTag extends HTMLTag
 {
 	private String mText;
 	
-	public HTMLOptionTag(int pTagBegin, int pTagEnd, String pTagContents, 
-							String pText, String pTagLine)
+	public HTMLOptionTag(HTMLTagData tagData, String text)
 	{
-		super(pTagBegin,pTagEnd,pTagContents,pTagLine);
-		this.mText = pText;
+		super(tagData);
+		this.mText = text;
 	}
 	
 	public java.lang.String getText() {

@@ -33,6 +33,7 @@ package org.htmlparser.scanners;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLDoctypeTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 
 /**
@@ -81,7 +82,15 @@ public class HTMLDoctypeScanner extends HTMLTagScanner {
 			String tagContents = tag.getText();
 			// Cut from 9th char -- a space after !DOCTYPE _
 			tagContents=tagContents.substring(9,tagContents.length());
-			HTMLDoctypeTag docTypeTag = new HTMLDoctypeTag(tag.elementBegin(),tag.elementEnd(),tagContents,currentLine);
+			HTMLDoctypeTag docTypeTag = 
+			new HTMLDoctypeTag(
+				new HTMLTagData(
+					tag.elementBegin(),
+					tag.elementEnd(),
+					tagContents,
+					currentLine
+				)
+			);
 			return docTypeTag;
 		}
 		catch (Exception e) {

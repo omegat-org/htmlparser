@@ -28,18 +28,17 @@
 
 package org.htmlparser.tags;
 
-import java.util.Vector;
-
-import org.htmlparser.util.*;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.util.HTMLParserUtils;
 
 public class HTMLTextareaTag extends HTMLCompositeTag
 {
 	private String value;
 	
-	public HTMLTextareaTag(int tagBegin, int tagEnd, String tagContents, 
-							String value, String tagLine,Vector childNodeVector,HTMLTag startTag, HTMLTag endTag)
+	public HTMLTextareaTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData, String value)
 	{
-		super(tagBegin,tagEnd,tagContents,tagLine,childNodeVector,startTag,endTag);
+		super(tagData,compositeTagData);
 		this.value = value;
 	}
 	

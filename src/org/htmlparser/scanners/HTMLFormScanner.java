@@ -42,6 +42,8 @@ import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTextareaTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 
@@ -118,7 +120,14 @@ public class HTMLFormScanner extends HTMLTagScanner
 		if (linkScannerAlreadyOpen) {
 			String newLine = insertEndTagBeforeNode(tag, currentLine);
 			reader.changeLine(newLine);
-			return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
+			return new HTMLEndTag(
+				new HTMLTagData(
+					tag.elementBegin(),
+					tag.elementBegin()+3,
+					"A",
+					currentLine
+				)
+			);
 		}
 		try {
 			HTMLNode node;
@@ -128,7 +137,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 	      	nodeVector = new Vector();
 			
 			String link,name="",method="GET";
-			int linkBegin=-1, linkEnd=-1;
+			int linkBegin=-1, formEnd=-1;
 	
 			link = extractFormLocn(tag,url);
 			tag.getAttributes().put("ACTION",link);
@@ -163,7 +172,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 					HTMLEndTag endTag = (HTMLEndTag)node;
 					if (endTag.getText().toUpperCase().equals("FORM")) {
 						endFlag=true;
-						linkEnd = endTag.elementEnd();
+						formEnd = endTag.elementEnd();
 						dontPutTag = true;
 						endFormTag = endTag;
 					}
@@ -188,7 +197,20 @@ public class HTMLFormScanner extends HTMLTagScanner
 				throw new HTMLParserException("HTMLFormScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
 				"Input Vector contents : "+msg.toString());
 			}		
-			HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,textAreaVector,nodeVector,startFormTag,endFormTag);
+			HTMLFormTag formTag = new HTMLFormTag(
+				new HTMLTagData(
+					linkBegin,
+					formEnd,
+					"",
+					currentLine
+				),
+				new HTMLCompositeTagData(
+					startFormTag,
+					endFormTag,
+					nodeVector
+				),
+				link,name,method,inputVector,textAreaVector
+			);
 			return formTag;
 		}
 		catch (Exception e) {

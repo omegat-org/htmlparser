@@ -4,22 +4,18 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
-
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 
 public abstract class HTMLCompositeTag extends HTMLTag {
 	private HTMLTag startTag, endTag;
 	private Vector childTags; 
 
-	public HTMLCompositeTag(
-		int tagBegin,
-		int tagEnd,
-		String tagContents,
-		String tagLine,
-		Vector childTags,HTMLTag startTag, HTMLTag endTag) {
-		super(tagBegin, tagEnd, tagContents, tagLine);
-		this.childTags = childTags;
-		this.startTag  = startTag;
-		this.endTag    = endTag;
+	public HTMLCompositeTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
+		super(tagData);
+		this.childTags = compositeTagData.getChildren();
+		this.startTag  = compositeTagData.getStartTag();
+		this.endTag    = compositeTagData.getEndTag();
 	}
 	
 	public Enumeration children() {

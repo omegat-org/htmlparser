@@ -29,6 +29,8 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.tags.data.HTMLTagData;
+
 /**
  * The HTML Document Declaration Tag can identify &lt;!DOCTYPE&gt; tags
  */
@@ -41,9 +43,9 @@ public class HTMLDoctypeTag extends HTMLTag
 	 * @param nodeEnd ending position of the tag
 	 * @param tagContents contents of the remark tag
 	 */
-	public HTMLDoctypeTag(int tagBegin, int tagEnd, String tagContents,String tagLine)
+	public HTMLDoctypeTag(HTMLTagData tagData)
 	{
-		super(tagBegin,tagEnd,tagContents,tagLine);
+		super(tagData);
 	}
 	/**
 	 * Print the contents of the remark tag.

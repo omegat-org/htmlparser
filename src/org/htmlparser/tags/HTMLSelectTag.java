@@ -29,6 +29,8 @@
 package org.htmlparser.tags;
 
 import java.util.*;
+
+import org.htmlparser.tags.data.*;
 import org.htmlparser.util.*;
 
 public class HTMLSelectTag extends HTMLCompositeTag
@@ -36,10 +38,9 @@ public class HTMLSelectTag extends HTMLCompositeTag
 	//This vector consists of all the option tags under the select tag
 	private Vector optionTags;
 	
-	public HTMLSelectTag(int tagBegin, int tagEnd, String tagContents, 
-							Vector optionTags, String tagLine,HTMLTag beginTag, HTMLTag endTag)
+	public HTMLSelectTag(HTMLTagData tagData, Vector optionTags,HTMLTag beginTag, HTMLTag endTag)
 	{
-		super(tagBegin,tagEnd,tagContents,tagLine,optionTags,beginTag,endTag);
+		super(tagData,new HTMLCompositeTagData(beginTag,endTag,optionTags));
 		this.optionTags = optionTags;
 	}
 	

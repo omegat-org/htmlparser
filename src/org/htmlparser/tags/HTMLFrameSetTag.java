@@ -31,6 +31,9 @@ package org.htmlparser.tags;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
+
 /**
  * Identifies an frame tag
  */
@@ -42,30 +45,29 @@ public class HTMLFrameSetTag extends HTMLCompositeTag
 	protected String frameURL;
    	protected String frameName;
    	protected Vector frames;
-	public HTMLFrameSetTag(int frameSetBegin, int frameSetEnd,String frameSetContents,String tagLine,Vector frames,HTMLTag startTag, HTMLTag endTag)
-	{
-		super(frameSetBegin,frameSetEnd,frameSetContents,tagLine,frames,startTag,endTag);
-
-      	this.frames = frames;
+	public HTMLFrameSetTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData) {
+		super(tagData,compositeTagData);
+      	this.frames = compositeTagData.getChildren();
 	}
+	
 	/**
-	 * Returns the location of the image
+	 * Returns the location of the frame
 	 */
-	public String getFrameLocation()
-	{
+	public String getFrameLocation() {
 		return frameURL;
 	}
-	public String getFrameName()
-	{
+	
+	public String getFrameName() {
 		return frameName;
 	}
+	
 	/**
 	 * Print the contents of the HTMLImageNode
 	 */
-	public String toString()
-	{
+	public String toString() {
 		return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	
 	/**
 	 * Returns the frames.
 	 * @return Vector

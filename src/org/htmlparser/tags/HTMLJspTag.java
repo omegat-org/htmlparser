@@ -28,6 +28,8 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.tags.data.HTMLTagData;
+
 /**
  * The JSP/ASP tags like &lt;%...%&gt; can be identified by this class.
  */
@@ -40,9 +42,9 @@ public class HTMLJspTag extends HTMLTag
 	 * @param nodeEnd ending position of the tag
 	 * @param tagContents contents of the remark tag
 	 */
-	public HTMLJspTag(int tagBegin, int tagEnd, String tagContents, String tagLine)
+	public HTMLJspTag(HTMLTagData tagData)
 	{
-		super(tagBegin,tagEnd,tagContents,tagLine);
+		super(tagData);
 	}
 	public String toHTML() {
 		return "<%"+tagContents+"%>";

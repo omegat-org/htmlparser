@@ -30,6 +30,9 @@ package org.htmlparser.tags;
 
 import java.util.Vector;
 
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
+
 /**
  * A Title Tag
  */
@@ -44,10 +47,10 @@ public class HTMLTitleTag extends HTMLCompositeTag {
 	 * @param tagContents
 	 * @param tagLine
 	 */
-	public HTMLTitleTag(int tagBegin,int tagEnd,String title,Vector titleTagChildren, String tagContents,String tagLine,HTMLTag startTag, HTMLTag endTag) {
-		super(tagBegin, tagEnd, tagContents, tagLine,titleTagChildren,startTag, endTag);
+	public HTMLTitleTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData, String title) {
+		super(tagData,compositeTagData);
 		this.title = title;
-		this.titleTagChildren = titleTagChildren;
+		this.titleTagChildren = compositeTagData.getChildren();
 	}
 	
 	/**

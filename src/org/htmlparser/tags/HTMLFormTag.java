@@ -33,6 +33,8 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 
 /**
  * Represents a FORM tag.
@@ -58,11 +60,10 @@ public class HTMLFormTag extends HTMLCompositeTag
    	 * @param formInputVector The vector of INPUT elements
    	 * @param allNodesVector The vector of all elements in the FORM
    	 */
-	public HTMLFormTag(String formURL,String formName, String formMethod, int formBegin, int formEnd,
-                      String tagLine, Vector formInputVector, Vector textAreaVector, Vector allNodesVector,
-                      HTMLTag startTag, HTMLTag endTag)
+	public HTMLFormTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData, String formURL, String formName, String formMethod,
+                      Vector formInputVector, Vector textAreaVector)
 	{
-		super(formBegin,formEnd,"",tagLine,allNodesVector,startTag, endTag);
+		super(tagData,compositeTagData);
 		this.formURL = formURL;
 	    this.formName = formName;
       	this.formMethod = formMethod;

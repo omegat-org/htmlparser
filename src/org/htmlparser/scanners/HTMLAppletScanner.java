@@ -36,6 +36,8 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.HTMLAppletTag;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 /**
  * Used to scan for applet tags.
@@ -135,7 +137,22 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 				throw new HTMLParserException("HTMLAppletScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
 				"Table contents : "+msg.toString());
 			}	
-			HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,childrenVector,startTag,endTag);
+			HTMLAppletTag appTag = new HTMLAppletTag(
+				new HTMLTagData(
+					node.elementBegin(),
+					node.elementEnd(),
+					tag.getText(),
+					currLine
+				),
+				new HTMLCompositeTagData(
+					startTag,
+					endTag,
+					childrenVector
+				),
+				className,
+				archive,
+				codebase,
+				table);
 			return appTag;
 		}
 		catch (Exception e) {

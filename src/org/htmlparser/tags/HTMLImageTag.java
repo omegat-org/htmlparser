@@ -29,6 +29,7 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.HTMLRenderer;
+import org.htmlparser.tags.data.HTMLTagData;
 
 /**
  * Identifies an image tag 
@@ -47,9 +48,9 @@ public class HTMLImageTag extends HTMLTag
 	 * @imageBegin Beginning position of the image tag
 	 * @imageEnd Ending position of the image tag
 	 */
-	public HTMLImageTag(String imageURL,int imageBegin, int imageEnd,String tagLine,String tagContents)
+	public HTMLImageTag(HTMLTagData tagData,String imageURL)
 	{
-		super(imageBegin,imageEnd,tagContents,tagLine);
+		super(tagData);
 		this.imageURL = imageURL;
 	}
 	/**

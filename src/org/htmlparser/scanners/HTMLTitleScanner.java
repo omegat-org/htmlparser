@@ -37,6 +37,8 @@ import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTitleTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 
 /**
@@ -96,7 +98,20 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 			if (node==null && !endFlag) {
 				throw new HTMLParserException("HTMLTitleScanner.scan(): Error while scanning title tag, went into a potential infinite loop, currentLine = "+currLine+", title so far = "+title);
 			}
-			HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,titleTagChildren,tag.getText(),tag.getTagLine(),startTag, endTag);
+			HTMLTitleTag titleTag = new HTMLTitleTag(
+				new HTMLTagData(
+					tag.elementBegin(),
+					endTag.elementEnd(),
+					tag.getText(),
+					tag.getTagLine()
+				),
+				new HTMLCompositeTagData(
+					startTag,
+					endTag,
+					titleTagChildren
+				), 
+				title
+			);
 			return titleTag;		
 		}
 		catch (Exception e) {

@@ -29,6 +29,7 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.tags.HTMLBaseHREFTag;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
 
@@ -39,7 +40,7 @@ public class HTMLBaseHREFTagTest extends HTMLParserTestCase {
 	}
 	
 	public void testConstruction() {
-		HTMLBaseHREFTag baseRefTag = new HTMLBaseHREFTag(0,0,"","http://www.abc.com","");
+		HTMLBaseHREFTag baseRefTag = new HTMLBaseHREFTag(new HTMLTagData(0,0,"",""),"http://www.abc.com");
 		assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
 	}
 	

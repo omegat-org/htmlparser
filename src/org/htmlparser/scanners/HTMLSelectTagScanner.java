@@ -38,6 +38,7 @@ import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLOptionTag;
 import org.htmlparser.tags.HTMLSelectTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserUtils;
 
@@ -54,53 +55,53 @@ public class HTMLSelectTagScanner extends HTMLTagScanner
 		super(pFilter);
 	}
 	
-	public HTMLTag scan(HTMLTag tag, String pUrl, HTMLReader pReader, String pCurrLine)
+	public HTMLTag scan(HTMLTag tag, String pUrl, HTMLReader reader, String currLine)
 			throws HTMLParserException
 	{
 		try
 		{
 			HTMLTag startTag = tag;
 			HTMLEndTag endTag=null;
-			HTMLNode lNode = null;
+			HTMLNode node = null;
 			boolean endTagFound=false;
-			Vector lOptionTags=new Vector();
+			Vector optionTags=new Vector();
 			// Remove all existing scanners, so as to parse only till the end tag
-			Hashtable tempScanners = HTMLParserUtils.adjustScanners(pReader);	
+			Hashtable tempScanners = HTMLParserUtils.adjustScanners(reader);	
 
 			//However we need to activate Option tag scanner since select will 
 			//have multiple option tags.
-			pReader.getParser().addScanner(new HTMLOptionTagScanner());
+			reader.getParser().addScanner(new HTMLOptionTagScanner());
 			do 
 			{
-				lNode = pReader.readElement();
-				if (lNode instanceof HTMLEndTag)
+				node = reader.readElement();
+				if (node instanceof HTMLEndTag)
 				{
-					endTag = (HTMLEndTag)lNode;
+					endTag = (HTMLEndTag)node;
 					if (endTag.getText().toUpperCase().equals("SELECT")) 
 					{
 						endTagFound = true;
 					}
 				}
-				else if (lNode instanceof HTMLOptionTag)
+				else if (node instanceof HTMLOptionTag)
 				{
-					lOptionTags.add((HTMLOptionTag)lNode);
+					optionTags.add((HTMLOptionTag)node);
 				}
 				else
 				{
-					if (!(lNode instanceof HTMLStringNode))
-						throw new HTMLParserException("Error occurred scanning select tag. Undefined tag : " + lNode.toHTML());
+					if (!(node instanceof HTMLStringNode))
+						throw new HTMLParserException("Error occurred scanning select tag. Undefined tag : " + node.toHTML());
 				}
 			}
 			while (!endTagFound);
-			HTMLSelectTag lSelectTag = new HTMLSelectTag(
-										0, lNode.elementEnd(), tag.getText(), 
-										lOptionTags, pCurrLine,startTag,endTag);
-			HTMLParserUtils.restoreScanners(pReader, tempScanners);
-			return lSelectTag;
+			HTMLSelectTag selectTag = new HTMLSelectTag(new HTMLTagData(
+										0, node.elementEnd(), tag.getText(), 
+										currLine), optionTags,startTag,endTag);
+			HTMLParserUtils.restoreScanners(reader, tempScanners);
+			return selectTag;
 		}
 		catch (Exception e) 
 		{
-			throw new HTMLParserException("HTMLSelectTagScanner.scan() : Error while scanning select tags, current line = "+pCurrLine,e);
+			throw new HTMLParserException("HTMLSelectTagScanner.scan() : Error while scanning select tags, current line = "+currLine,e);
 		}
 	}
 	

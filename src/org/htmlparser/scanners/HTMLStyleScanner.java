@@ -37,6 +37,8 @@ import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLStyleTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 /**
  * The HTMLStyleScanner scans identifies &lt;style&gt; code
@@ -96,7 +98,19 @@ public class HTMLStyleScanner extends HTMLTagScanner {
 				throw new HTMLParserException("HTMLStyleScanner.scan() : Went into a potential infinite loop, could not create syle tag.\n"+
 				"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
 			}
-			HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine,childNodes,startTag,endTag);
+			HTMLStyleTag styleTag = new HTMLStyleTag(
+				new HTMLTagData(
+					tag.elementBegin(),
+					endTag.elementEnd(),
+					buff.toString(),
+					currentLine
+				),
+				new HTMLCompositeTagData(
+					startTag,
+					endTag,
+					childNodes
+				)
+			);
 			styleTag.setAttributes(tag.getAttributes());
 			return styleTag;
 		}

@@ -39,6 +39,7 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLFrameTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 /**
@@ -116,7 +117,16 @@ public class HTMLFrameScanner extends HTMLTagScanner
 		    frameName = extractFrameName(tag,url);
 			frameBegin = tag.elementBegin();
 			frameEnd = tag.elementEnd();
-			HTMLFrameTag frameTag = new HTMLFrameTag(frame, frameName, tag.getText(), frameBegin,frameEnd,currentLine);
+			HTMLFrameTag frameTag = new HTMLFrameTag(
+				new HTMLTagData(
+					frameBegin, 
+					frameEnd, 
+					tag.getText(),
+					currentLine
+				), 
+				frame,
+				frameName
+			);
 			return frameTag;
 		}
 		catch (Exception e) {

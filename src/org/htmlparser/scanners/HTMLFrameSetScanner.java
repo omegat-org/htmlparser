@@ -42,6 +42,8 @@ import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLFrameSetTag;
 import org.htmlparser.tags.HTMLFrameTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 
 /**
@@ -122,7 +124,19 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 				throw new HTMLParserException("HTMLFrameSetScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
 				"Frame Vector contents : "+msg.toString());
 			}
-			HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector,startTag,endTag);
+			HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(
+				new HTMLTagData(
+					tag.elementBegin(),
+					frameSetEnd,
+					tag.getText(),
+					currentLine
+				),
+				new HTMLCompositeTagData(
+					startTag,
+					endTag,
+					frameVector
+				)
+			);
 			return frameSetTag;		
 		}
 		catch (Exception e) {

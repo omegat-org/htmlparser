@@ -38,6 +38,8 @@ import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLScriptTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 /**
  * The HTMLScriptScanner identifies javascript code
@@ -144,7 +146,20 @@ public class HTMLScriptScanner extends HTMLTagScanner {
 				throw new HTMLParserException("HTMLScriptScanner.scan() : Went into a potential infinite loop, could not create script tag.\n"+
 				"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
 			}
-			HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine,childNodes,startTag,endTag);
+			HTMLScriptTag scriptTag = new HTMLScriptTag(
+				new HTMLTagData(
+					0,
+					node.elementEnd(),
+					tag.getText(),
+					currentLine
+				),
+				new HTMLCompositeTagData(
+					startTag,
+					endTag,
+					childNodes
+				),
+				buff.toString(),language,type
+			);
 			reader.getParser().setScanners(tempScanners);
 			return scriptTag; 
 		}

@@ -31,6 +31,7 @@ package org.htmlparser.scanners;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLBaseHREFTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 
@@ -70,7 +71,7 @@ public class HTMLBaseHREFScanner extends HTMLTagScanner {
 	      	absoluteBaseUrl = removeLastSlash(baseUrl.trim());
     	  	processor.setBaseUrl(absoluteBaseUrl);
 		} 
-		return new HTMLBaseHREFTag(tag.elementBegin(),tag.elementEnd(),tag.getText(),absoluteBaseUrl,currLine);
+		return new HTMLBaseHREFTag(new HTMLTagData(tag.elementBegin(),tag.elementEnd(),tag.getText(),currLine),absoluteBaseUrl);
 	}
 	public String removeLastSlash(String baseUrl)
    	{

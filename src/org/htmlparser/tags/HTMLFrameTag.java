@@ -28,6 +28,8 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.tags.data.HTMLTagData;
+
 /**
  * Identifies an frame tag
  */
@@ -38,8 +40,8 @@ public class HTMLFrameTag extends HTMLTag
 	 */
 	protected String frameURL;
     protected String frameName;
-	public HTMLFrameTag(String frameURL, String frameName, String frameContents,int frameBegin, int frameEnd,String tagLine) {
-		super(frameBegin,frameEnd,frameContents,tagLine);
+	public HTMLFrameTag(HTMLTagData tagData, String frameURL,String frameName) {
+		super(tagData);
 		this.frameURL = frameURL;
       this.frameName = frameName;
 	}

@@ -31,6 +31,7 @@ package org.htmlparser.tags;
 import java.util.*;
 
 import org.htmlparser.scanners.HTMLTagScanner;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParameterParser;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLTagParser;
@@ -117,18 +118,16 @@ public class HTMLTag extends HTMLNode
     }
 
 	/**
-	 * Set the HTMLTag with the beginning posn, ending posn and tag contents
-	 * @param nodeBegin Beginning position of the tag
-	 * @param nodeEnd Ending positiong of the tag
-	 * @param tagContents The contents of the tag
-	 * @param tagLine The current line being parsed, where the tag was found
+	 * Set the HTMLTag with the beginning posn, ending posn and tag contents (in
+	 * a tagData object.
+	 * @param tagData The data for this tag
 	 */
-	public HTMLTag(int tagBegin, int tagEnd, String tagContents, String tagLine)
+	public HTMLTag(HTMLTagData tagData)
 	{
-		super(tagBegin,tagEnd);
+		super(tagData.getTagBegin(),tagData.getTagEnd());
 		this.tagContents = new StringBuffer();
-		this.tagContents.append(tagContents);
-		this.tagLine = tagLine;
+		this.tagContents.append(tagData.getTagContents());
+		this.tagLine = tagData.getTagLine();
 	}
 	
 	public void append(char ch) {

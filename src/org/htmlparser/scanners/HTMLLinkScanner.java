@@ -41,6 +41,8 @@ import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 /**
@@ -78,7 +80,20 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		// HTMLLinkNode Constructor got one extra parameter 
 		// Kaarle Kaila 23.10.2001
 		linkEnd = node.elementEnd();
-		HTMLLinkTag linkTag = new HTMLLinkTag(link,linkText,linkBegin,linkEnd,accessKey,currentLine,nodeVector,mailLink,javascriptLink,tagContents,linkContents,startTag,endTag);
+		HTMLLinkTag linkTag = new HTMLLinkTag(
+			new HTMLTagData(
+				linkBegin,
+				linkEnd,
+				tagContents,
+				currentLine
+			),
+			new HTMLCompositeTagData(
+				startTag,
+				endTag,
+				nodeVector
+			),
+			link,linkText,accessKey,mailLink,javascriptLink,linkContents
+		);
 		linkTag.setThisScanner(this);
 		return linkTag;
 	}
@@ -222,14 +237,28 @@ public class HTMLLinkScanner extends HTMLTagScanner
 					// Replace tag - it was a <A> tag - replace with </a>
 					String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
 					reader.changeLine(newLine);
-					return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
+					return new HTMLEndTag(
+						new HTMLTagData(
+							tag.elementBegin(),
+							tag.elementBegin()+3,
+							"A",
+							currentLine
+						)
+					);
 				}
 				 else 
 				{
 					// Insert end tag
 					String newLine = insertEndTagBeforeNode(tag, currentLine);
 					reader.changeLine(newLine);
-					return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
+					return new HTMLEndTag(
+						new HTMLTagData(
+							tag.elementBegin(),
+							tag.elementBegin()+3,
+							"A",
+							currentLine
+						)		
+					);
 				}
 			}
 			previousOpenLinkScanner = this;
@@ -304,7 +333,14 @@ public class HTMLLinkScanner extends HTMLTagScanner
 							String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
 							reader.changeLine(newLine);
 							endFlag = true;
-							endTag = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A",newLine);
+							endTag = new HTMLEndTag(
+								new HTMLTagData(
+									node.elementBegin(),
+									node.elementBegin()+3,
+									"A",
+									newLine
+								)
+							);
 							node = endTag;
 						} else nodeVector.addElement(node);
 					}
@@ -316,7 +352,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			{
 				if (node==null)  {
 					// Add an end link tag
-					endTag = new HTMLEndTag(0,3,"A","</A>");
+					endTag = new HTMLEndTag(new HTMLTagData(0,3,"A","</A>"));
 					node = endTag;
 				}
 				previousOpenLinkScanner = null;

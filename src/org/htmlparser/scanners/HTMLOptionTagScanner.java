@@ -31,6 +31,7 @@ package org.htmlparser.scanners;
 import java.util.*;
 import org.htmlparser.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tags.data.*;
 import org.htmlparser.util.*;
 
 public class HTMLOptionTagScanner extends HTMLTagScanner
@@ -45,56 +46,60 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 		super(pFilter);
 	}
 	
-	public HTMLTag scan(HTMLTag pTag, String pUrl, HTMLReader pReader, String pCurrLine)
+	public HTMLTag scan(HTMLTag tag, String pUrl, HTMLReader reader, String currLine)
 			throws HTMLParserException
 	{
 		try
 		{
-			HTMLEndTag lEndTag=null;
-			HTMLNode lNode = null;
-			HTMLNode lPrevNode = pTag;
+			HTMLEndTag endTag=null;
+			HTMLNode node = null;
+			HTMLNode prevNode = tag;
 			boolean endTagFound=false;
-			StringBuffer lText=new StringBuffer("");
+			StringBuffer text=new StringBuffer("");
 			// Remove all existing scanners, so as to parse only till the end tag
-			Hashtable tempScanners = HTMLParserUtils.adjustScanners(pReader);	
+			Hashtable tempScanners = HTMLParserUtils.adjustScanners(reader);	
 
 			do 
 			{
-				lNode = pReader.readElement();
-				if (lNode instanceof HTMLEndTag)
+				node = reader.readElement();
+				if (node instanceof HTMLEndTag)
 				{
-					lEndTag = (HTMLEndTag)lNode;
-					String lEndTagString = lEndTag.getText().toUpperCase();
+					endTag = (HTMLEndTag)node;
+					String lEndTagString = endTag.getText().toUpperCase();
 					if (lEndTagString.equals("OPTION") || lEndTagString.equals("SELECT")) 
 					{
 						endTagFound = true;
 						if (lEndTagString.equals("SELECT"))
 						{
-							lNode = lPrevNode;
+							node = prevNode;
 						}
 					}
 				}
-				else if (lNode instanceof HTMLStringNode)
+				else if (node instanceof HTMLStringNode)
 				{
-					lText.append(lNode.toHTML());
+					text.append(node.toHTML());
 				}
 				else 
 				{
 					endTagFound = true;
-					lNode = lPrevNode;
+					node = prevNode;
 				}
-				lPrevNode = lNode;
+				prevNode = node;
 			}
 			while (!endTagFound);
-			HTMLOptionTag lOptionTag = new HTMLOptionTag(
-										0, lNode.elementEnd(), pTag.getText(), 
-										lText.toString(), pCurrLine);
-			HTMLParserUtils.restoreScanners(pReader, tempScanners);
+			HTMLOptionTag lOptionTag = 
+			new HTMLOptionTag(
+				new HTMLTagData(
+					0, node.elementEnd(), tag.getText(),currLine
+				), 
+				text.toString()
+			);
+			HTMLParserUtils.restoreScanners(reader, tempScanners);
 			return lOptionTag;										
 		}
 		catch (Exception e) 
 		{
-			throw new HTMLParserException("HTMLOptionTagScanner.scan() : Error while scanning option tags, current line = "+pCurrLine,e);
+			throw new HTMLParserException("HTMLOptionTagScanner.scan() : Error while scanning option tags, current line = "+currLine,e);
 		}
 	}
 	

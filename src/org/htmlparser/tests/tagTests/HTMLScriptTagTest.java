@@ -32,6 +32,8 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.scanners.HTMLScriptScanner;
 import org.htmlparser.tags.HTMLScriptTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
 
@@ -50,7 +52,12 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 	}
 
 	public void testCreation() {
-		HTMLScriptTag scriptTag = new HTMLScriptTag(0,10,"Tag Contents","Script Code","english","text","tagline",null,null,null);
+		HTMLScriptTag scriptTag = 
+		new HTMLScriptTag(
+			new HTMLTagData(0,10,"Tag Contents","tagline"),
+			new HTMLCompositeTagData(null,null,null),
+			"Script Code","english","text"
+		);
 		assertNotNull("Script Tag object creation",scriptTag);
 		assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
 		assertEquals("Script Tag End",10,scriptTag.elementEnd());
@@ -63,20 +70,20 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 
 	public void testExtractLanguage() 
 	{
-		scriptScanner.extractLanguage(new HTMLTag(10,10,"script language=\"JavaScript\"",""));
+		scriptScanner.extractLanguage(new HTMLTag(new HTMLTagData(10,10,"script language=\"JavaScript\"","")));
 		assertEquals("JavaScript",scriptScanner.getLanguage());
 	
-		scriptScanner.extractLanguage(new HTMLTag(10,10,"SCRIPT TYPE=\"text/javascript\"",""));
+		scriptScanner.extractLanguage(new HTMLTag(new HTMLTagData(10,10,"SCRIPT TYPE=\"text/javascript\"","")));
 		assertEquals("",scriptScanner.getLanguage());
 		
 	}
 
 	public void testExtractType() 
 	{
-		scriptScanner.extractType(new HTMLTag(10,10,"script language=\"JavaScript\"",""));
+		scriptScanner.extractType(new HTMLTag(new HTMLTagData(10,10,"script language=\"JavaScript\"","")));
 		assertEquals("",scriptScanner.getType());
 	
-		scriptScanner.extractType(new HTMLTag(10,10,"SCRIPT TYPE=\"text/javascript\"",""));
+		scriptScanner.extractType(new HTMLTag(new HTMLTagData(10,10,"SCRIPT TYPE=\"text/javascript\"","")));
 		assertEquals("text/javascript",scriptScanner.getType());	
 	}
 

@@ -30,6 +30,7 @@ package org.htmlparser.scanners;
 
 import org.htmlparser.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tags.data.*;
 import org.htmlparser.util.*;
 
 public class HTMLInputTagScanner extends HTMLTagScanner
@@ -49,9 +50,15 @@ public class HTMLInputTagScanner extends HTMLTagScanner
 	{
 		try
 		{
-			HTMLInputTag lInputTag = new HTMLInputTag(
-										pTag.elementBegin(),pTag.elementEnd(),
-										pTag.getText(), pCurrLine);
+			HTMLInputTag lInputTag = 
+			new HTMLInputTag(
+				new HTMLTagData(
+					pTag.elementBegin(),
+					pTag.elementEnd(),
+					pTag.getText(), 
+					pCurrLine
+				)
+			);
 			return lInputTag;
 		}
 		catch (Exception e) 

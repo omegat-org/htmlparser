@@ -33,6 +33,7 @@ import java.util.StringTokenizer;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.*;
 
 /**
  * @author Somik Raha
@@ -61,7 +62,7 @@ public class HTMLTagParser {
 		StringBuffer tagContents = new StringBuffer();
 		i=position;
 		char ch;
-		HTMLTag tag = new HTMLTag(0,0,"",input);
+		HTMLTag tag = new HTMLTag(new HTMLTagData(0,0,"",input));
 		encounteredQuery = false;
 		while (i<tag.getTagLine().length()&& state!=TAG_FINISHED_PARSING_STATE && state!=TAG_ILLEGAL_STATE)
 		{

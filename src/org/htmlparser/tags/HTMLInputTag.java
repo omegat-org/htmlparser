@@ -28,18 +28,16 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.tags.data.*;
 import org.htmlparser.util.*;
 
 public class HTMLInputTag extends HTMLTag
 {
-	public HTMLInputTag(int pTagBegin, int pTagEnd, 
-						String pTagContents, String pTagLine)
-	{
-		super(pTagBegin,pTagEnd,pTagContents,pTagLine);
+	public HTMLInputTag(HTMLTagData tagData) {
+		super(tagData);
 	}
 		
-	public String toString() 
-	{
+	public String toString() {
 		return (HTMLParserUtils.toString(this));
 	}
 }

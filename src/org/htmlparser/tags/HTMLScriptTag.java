@@ -28,7 +28,8 @@
 
 package org.htmlparser.tags;
 
-import java.util.Vector;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 
 /**
  * A HTMLScriptTag represents a JavaScript node
@@ -48,9 +49,9 @@ public class HTMLScriptTag extends HTMLCompositeTag {
 	 * @param type The type parameter
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public HTMLScriptTag(int tagBegin, int tagEnd, String tagContents, String scriptCode,String language,String type,String tagLine,Vector childNodes,HTMLTag startTag, HTMLTag endTag) 
+	public HTMLScriptTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData,String scriptCode,String language, String type) 
 	{
-		super(tagBegin,tagEnd,tagContents,tagLine,childNodes,startTag,endTag);
+		super(tagData,compositeTagData);
 		this.scriptCode = scriptCode;
 		this.language = language; 
 		this.type = type;

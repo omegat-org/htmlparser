@@ -30,7 +30,9 @@ package org.htmlparser.tags;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
+
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 /**
  * HTMLAppletTag represents an &lt;Applet&gt; tag
  */
@@ -48,9 +50,9 @@ public class HTMLAppletTag extends HTMLCompositeTag
 	 * @param tagContents java.lang.String
 	 * @param tagLine java.lang.String
 	 */
-	public HTMLAppletTag(int tagBegin, int tagEnd, String tagContents, String tagLine, String appletClass,String archive,String codeBase,Hashtable appletParams,Vector childNodeVector,HTMLTag startTag, HTMLTag endTag) 
+	public HTMLAppletTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData,String appletClass,String archive,String codeBase, Hashtable appletParams) 
 	{
-		super(tagBegin, tagEnd, tagContents, tagLine, childNodeVector,startTag, endTag);
+		super(tagData,compositeTagData);
 		this.appletClass = appletClass;
 		this.codeBase = codeBase;
 		this.archive = archive;

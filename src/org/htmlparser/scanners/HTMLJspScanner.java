@@ -35,6 +35,7 @@ package org.htmlparser.scanners;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLJspTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 /**
  * The HTMLScriptScanner scans identifies javascript code
@@ -99,7 +100,14 @@ public class HTMLJspScanner extends HTMLTagScanner {
 			// Find the JSP Tag - basically remove the first and last character
 			String tagContents = tag.getText();
 			tagContents=tagContents.substring(1,tagContents.length()-1);
-			HTMLJspTag jspTag = new HTMLJspTag(tag.elementBegin(),tag.elementEnd(),tagContents,currentLine);
+			HTMLJspTag jspTag = new HTMLJspTag(
+				new HTMLTagData(
+					tag.elementBegin(),
+					tag.elementEnd(),
+					tagContents,
+					currentLine
+				)
+			);
 			return jspTag;
 		}
 		catch (Exception e) {

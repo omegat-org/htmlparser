@@ -28,6 +28,8 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.tags.data.HTMLTagData;
+
 /**
  * A Meta Tag
  */
@@ -35,8 +37,8 @@ public class HTMLMetaTag extends HTMLTag {
 	private String metaTagName;
 	private String metaTagContents;
 	private String httpEquiv;
-	public HTMLMetaTag(int tagBegin, int tagEnd, String tagContents, String httpEquiv, String metaTagName, String metaTagContents,String tagLine) {
-		super(tagBegin,tagEnd,tagContents,tagLine);
+	public HTMLMetaTag(HTMLTagData tagData, String httpEquiv, String metaTagName,String metaTagContents) {
+		super(tagData);
 		this.httpEquiv = httpEquiv;
 		this.metaTagName = metaTagName;
 		this.metaTagContents = metaTagContents;

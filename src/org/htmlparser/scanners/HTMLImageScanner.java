@@ -37,6 +37,7 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 /**
@@ -126,7 +127,15 @@ public class HTMLImageScanner extends HTMLTagScanner
 			link = extractImageLocn(tag,url);
 			linkBegin = tag.elementBegin();
 			linkEnd = tag.elementEnd();
-			HTMLImageTag imageTag = new HTMLImageTag(link,linkBegin,linkEnd,currentLine,tag.getText());		
+			HTMLImageTag imageTag = new HTMLImageTag(
+				new HTMLTagData(
+					linkBegin,
+					linkEnd,
+					tag.getText(),
+					currentLine
+				),
+				link
+			);		
 			return imageTag;
 		}
 		catch (Exception e) {

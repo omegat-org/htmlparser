@@ -36,6 +36,8 @@ import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTextareaTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserException;
 
 
@@ -89,9 +91,12 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 				}
 			}
 			while (!endTagFound);
-			HTMLTextareaTag textareaTag = new HTMLTextareaTag(
-										0, node.elementEnd(), tag.getText(), 
-										value.toString(), currLine,childVector,startTag,endTag);
+			HTMLTextareaTag textareaTag = 
+			new HTMLTextareaTag(
+				new HTMLTagData(0, node.elementEnd(), tag.getText(), currLine),
+				new HTMLCompositeTagData(startTag,endTag,childVector),
+				value.toString()
+			);
 			return textareaTag;
 		}
 		catch (Exception e) 
