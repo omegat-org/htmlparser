@@ -146,9 +146,6 @@ public class ScriptScannerTest extends ParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] 
 		instanceof ScriptTag); 
-		// Check the data in the applet tag 
-		ScriptTag scriptTag = (ScriptTag)node[0];
-		//assertStringEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
 	}
 	
 	public void testScanScriptWithComments() throws ParserException {
