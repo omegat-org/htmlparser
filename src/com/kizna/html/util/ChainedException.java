@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020623 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020707 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -66,7 +66,7 @@ import java.io.*;
 import java.util.*;
 
 public class ChainedException
-  extends RuntimeException
+  extends Exception
 {
   protected Throwable throwable;
 

@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020630 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020707 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -129,7 +129,7 @@ public static String extractXMLData(HTMLNode node, String tagName, HTMLReader re
       while (node instanceof HTMLStringNode);
       
     }
-    catch (HTMLParserException e) { throw e;}
+
     catch (IOException e) {
     	throw new HTMLParserException("extractXMLData() threw an IOException while trying to read the next element");
     }

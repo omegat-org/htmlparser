@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020630 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020707 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ public class HTMLStringNode extends HTMLNode
 	/**
 	 * The text of the string.
    */	
-	protected String text;
+	protected StringBuffer textBuffer;
   /** 
 	 * The beginning position of the tag in the line
 	 */	
@@ -55,9 +55,9 @@ public class HTMLStringNode extends HTMLNode
 	 * @param textBegin The beginning position of the string
 	 * @param textEnd The ending positiong of the string
 	 */
-	public HTMLStringNode(String text,int textBegin,int textEnd)
+	public HTMLStringNode(StringBuffer textBuffer,int textBegin,int textEnd)
 	{
-		this.text = text;
+		this.textBuffer = textBuffer;
 		this.textBegin = textBegin;
 		this.textEnd = textEnd;
 	}
@@ -83,7 +83,7 @@ public class HTMLStringNode extends HTMLNode
 	 */		
 	public static HTMLNode find(HTMLReader reader,String input,int position)
 	{
-		String text = "";
+		StringBuffer textBuffer = new StringBuffer();
 		int state = 0;
 		int textBegin=position;
 		int textEnd=position;
@@ -110,11 +110,11 @@ public class HTMLStringNode extends HTMLNode
 			if (state==0)
 			{
 				if (input.charAt(i)!=' ') state=1;
-				else text+=input.charAt(i);
+				else textBuffer.append(input.charAt(i));
 			}
 			if (state==1)
 			{
-				text+=input.charAt(i);
+				textBuffer.append(input.charAt(i));
 			}				
 			if (state==1 && i==input.length()-1)
 			{
@@ -125,7 +125,7 @@ public class HTMLStringNode extends HTMLNode
 					state =2;
 					
 				} else {
-					text+="\r\n";
+					textBuffer.append("\r\n");
 					inputLen = input.length();
 					i=-1;
 					textBegin=-1;
@@ -133,7 +133,7 @@ public class HTMLStringNode extends HTMLNode
 
 			}
 		}
-		if (textBegin<=textEnd) return new HTMLStringNode(text,textBegin,textEnd);
+		if (textBegin<=textEnd) return new HTMLStringNode(textBuffer,textBegin,textEnd);
 		else return null;
 	}
 	/**
@@ -141,15 +141,15 @@ public class HTMLStringNode extends HTMLNode
 	 */
 	public String getText()
 	{
-		return text;
+		return textBuffer.toString();
 	}
 	public String toPlainTextString() {
-		return text;
+		return textBuffer.toString();
 	}
 	public String toHTML() {
-		return text;
+		return textBuffer.toString();
 	}
-public String toString() {
-	return "Text = "+text+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-}
+	public String toString() {
+		return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+	}
 }

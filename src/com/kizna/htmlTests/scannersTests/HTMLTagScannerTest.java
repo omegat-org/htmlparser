@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020630 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020707 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -38,6 +38,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.HTMLParser;
 /**
@@ -86,9 +87,13 @@ public void testExtractXMLData() {
 	Enumeration e = parser.elements(); 
 
 	HTMLNode node = (HTMLNode)e.nextElement();
-	
-	String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
-	assertEquals("Result","Abhi\r\nSri\r\n",result);
+	try {
+		String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
+		assertEquals("Result","Abhi\r\nSri\r\n",result);
+	}
+	catch (HTMLParserException ex) {
+		assertTrue(e.toString(),false);
+	}		
 }
 public void testExtractXMLDataSingle() {
 	String testHTML = new String(
@@ -99,9 +104,13 @@ public void testExtractXMLDataSingle() {
 	Enumeration e = parser.elements(); 
 
 	HTMLNode node = (HTMLNode)e.nextElement();
-	
-	String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
-	assertEquals("Result","Test",result);
+	try {
+		String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
+		assertEquals("Result","Test",result);
+	}
+	catch (HTMLParserException ex) {
+		assertTrue(e.toString(),false);
+	}
 }
 /**
  * Insert the method's description here.
