@@ -44,7 +44,7 @@ import org.htmlparser.util.ParserException;
 public class HeadScanner extends CompositeTagScanner
 {
     private static final String MATCH_NAME [] = {"HEAD"};
-    private static final String ENDERS [] = {"BODY"};
+    private static final String ENDERS [] = {"HEAD","BODY"};
     private static final String END_TAG_ENDERS [] = {"HTML"};
 
     public HeadScanner() 
@@ -54,7 +54,7 @@ public class HeadScanner extends CompositeTagScanner
 
     public HeadScanner(String filter) 
     {
-        super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS,false);
+        super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS);
     }
 
     public String [] getID() 

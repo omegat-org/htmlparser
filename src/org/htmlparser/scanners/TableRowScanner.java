@@ -45,7 +45,7 @@ public class TableRowScanner extends CompositeTagScanner {
     }
 
     public TableRowScanner(String filter,Parser parser) {
-        this(filter, parser, MATCH_STRING, new String[] {}, new String[] {}, false);
+        this(filter, parser, MATCH_STRING, MATCH_STRING, new String[] {});
     }
 
     public TableRowScanner(
@@ -53,15 +53,12 @@ public class TableRowScanner extends CompositeTagScanner {
         Parser parser,
         String[] nameOfTagToMatch,
         String [] tagEnders,
-        String [] endTagEnders,
-        boolean allowSelfChildren) {
+        String [] endTagEnders) {
         super(
             filter,
             nameOfTagToMatch,
             tagEnders,
-            endTagEnders,
-            allowSelfChildren
-        );
+            endTagEnders);
         parser.addScanner(new TableColumnScanner());
     }
 

@@ -47,9 +47,8 @@ public class TableScanner extends CompositeTagScanner {
     }
 
     public TableScanner(Parser parser,String filter) {
-        super(filter, MATCH_STRING, ENDERS, ENDTAG_ENDERS, true);
+        super(filter, MATCH_STRING, ENDERS, ENDTAG_ENDERS);
         parser.addScanner(new TableRowScanner(parser));
-
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException

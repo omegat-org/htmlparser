@@ -53,7 +53,7 @@ public class LinkScanner extends CompositeTagScanner
     private static final String MATCH_NAME [] = {"A"};
     public static final String LINK_SCANNER_ID = "A";
     public LinkProcessor processor;
-    private final static String ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
+    private final static String ENDERS [] = { "A","TD","TR","FORM","LI","BODY", "HTML" };
     private final static String ENDTAG_ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
 
     /**
@@ -67,7 +67,7 @@ public class LinkScanner extends CompositeTagScanner
      * Overriding the constructor to accept the filter
      */
     public LinkScanner(String filter) {
-        super(filter,MATCH_NAME,ENDERS,ENDTAG_ENDERS, false);
+        super(filter,MATCH_NAME,ENDERS,ENDTAG_ENDERS);
         processor = new LinkProcessor();
     }
 

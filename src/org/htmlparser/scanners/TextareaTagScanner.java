@@ -44,7 +44,7 @@ public class TextareaTagScanner extends CompositeTagScanner
 
     public TextareaTagScanner(String filter)
     {
-        super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
+        super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS);
     }
 
     public String [] getID() {

@@ -43,22 +43,19 @@ public class TableColumnScanner extends CompositeTagScanner {
     }
 
     public TableColumnScanner(String filter) {
-        this(filter, MATCH_STRING, new String[] {}, new String[] {}, false);
+        this(filter, MATCH_STRING, MATCH_STRING, new String[] {});
     }
 
     public TableColumnScanner(
         String filter,
         String[] nameOfTagToMatch,
         String [] tagEnders,
-        String [] endTagEnders,
-        boolean allowSelfChildren) {
+        String [] endTagEnders) {
         super(
             filter,
             nameOfTagToMatch,
             tagEnders,
-            endTagEnders,
-            allowSelfChildren
-        );
+            endTagEnders);
     }
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
     {

@@ -46,7 +46,7 @@ public class FormScanner extends CompositeTagScanner
     private static final String [] MATCH_ID = { "FORM" };
     public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";
     private boolean linkScannerAlreadyOpen=false;
-    private static final String [] formTagEnders = {"HTML","BODY"};
+    private static final String [] formTagEnders = {"FORM","HTML","BODY"};
     
     /**
      * Constructs a form scanner.
@@ -63,7 +63,7 @@ public class FormScanner extends CompositeTagScanner
      */
     public FormScanner(String filter, Parser parser)
     {
-        super(filter,MATCH_ID,formTagEnders,false);
+        super(filter,MATCH_ID,formTagEnders);
         parser.addScanner(new InputTagScanner("-i"));
         parser.addScanner(new TextareaTagScanner("-t"));
         parser.addScanner(new SelectTagScanner("-select"));

@@ -42,7 +42,6 @@ import org.htmlparser.util.ParserException;
 public class BodyScanner extends CompositeTagScanner
 {
     private static final String MATCH_NAME [] = {"BODY"};
-    private static final String ENDERS [] = {};
     private static final String END_TAG_ENDERS [] = {"HTML"};
 
     public BodyScanner()
@@ -52,7 +51,7 @@ public class BodyScanner extends CompositeTagScanner
 
     public BodyScanner(String filter)
     {
-        super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS,false);
+        super(filter,MATCH_NAME,MATCH_NAME,END_TAG_ENDERS);
     }
 
     public String [] getID()

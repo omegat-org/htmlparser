@@ -42,11 +42,11 @@ public class LabelScanner extends CompositeTagScanner {
     private static final String MATCH_NAME [] = {"LABEL"};
 
     public LabelScanner() {
-        super(MATCH_NAME,new String [] {},false);
+        super(MATCH_NAME,MATCH_NAME);
     }
 
     public LabelScanner(String filter) {
-        super(filter,MATCH_NAME,new String [] {},false);
+        super(filter,MATCH_NAME,MATCH_NAME);
     }
 
     public String [] getID() {

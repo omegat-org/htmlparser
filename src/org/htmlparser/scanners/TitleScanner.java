@@ -41,11 +41,11 @@ import org.htmlparser.util.ParserException;
  */
 public class TitleScanner extends CompositeTagScanner {
     private static final String MATCH_NAME [] = {"TITLE"};
-    private static final String ENDERS [] = {"BODY"};
+    private static final String ENDERS [] = {"TITLE","BODY"};
     private static final String END_TAG_ENDERS [] = {"HEAD", "HTML"};
 
     public TitleScanner(String filter) {
-        super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS,false);
+        super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS);
     }
 
     public String [] getID() {

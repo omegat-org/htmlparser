@@ -558,7 +558,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         }
 
         public CustomScanner(boolean selfChildrenAllowed) {
-            super("", MATCH_NAME, new String[] {}, selfChildrenAllowed);
+            super("", MATCH_NAME, selfChildrenAllowed ? new String[] {} : MATCH_NAME);
         }
 
         public String[] getID() {
@@ -589,7 +589,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         }
 
         public AnotherScanner(boolean acceptCustomTagsButDontAcceptCustomEndTags) {
-            super("", MATCH_NAME, new String[] {}, new String[] {"CUSTOM"}, true);
+            super("", MATCH_NAME, new String[] {}, new String[] {"CUSTOM"});
         }
 
         public String[] getID() {

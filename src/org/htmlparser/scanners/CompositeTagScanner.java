@@ -47,7 +47,6 @@ import org.htmlparser.util.ParserException;
  * <ul>
  * <li>Tags which will trigger a match</li>
  * <li>Tags which when encountered before a legal end tag, should force a correction</li>
- * <li>Preventing more tags of its own type to appear as children
  * </ul>
  * Here are examples of each:<BR>
  * <B>Tags which will trigger a match</B>
@@ -78,14 +77,13 @@ import org.htmlparser.util.ParserException;
  * <B>Preventing children of same type</B>
  * This is useful when you know that a certain tag can never hold children of its own type.
  * e.g. &lt;FORM&gt; can never have more form tags within it. If it does, it is an error and should
- * be corrected. The default behavior is to allow nesting.
+ * be corrected. Specify the tagEnders set to contain (at least) the match ids.
  * <pre>
  * MyScanner extends CompositeTagScanner {
  *   private static final String [] MATCH_IDS = { "FORM" };
- *   private static final String [] ENDERS = {};
  *   private static final String [] END_TAG_ENDERS = { "BODY", "HTML" };
  *   MyScanner() {
- *      super(MATCH_IDS, ENDERS,END_TAG_ENDERS, false);
+ *      super(MATCH_IDS, MATCH_IDS, END_TAG_ENDERS, false);
  *   }
  *   ...
  * }
@@ -95,7 +93,6 @@ import org.htmlparser.util.ParserException;
 public abstract class CompositeTagScanner extends TagScanner
 {
     protected String [] nameOfTagToMatch;
-    private boolean allowSelfChildren;
     protected Set tagEnderSet;
     private Set endTagEnderSet;
     private boolean balance_quotes;
@@ -110,38 +107,26 @@ public abstract class CompositeTagScanner extends TagScanner
         this("",nameOfTagToMatch,tagEnders);
     }
 
-    public CompositeTagScanner(String [] nameOfTagToMatch, String [] tagEnders, boolean allowSelfChildren)
-    {
-        this("",nameOfTagToMatch,tagEnders,allowSelfChildren);
-    }
-
     public CompositeTagScanner(String filter, String [] nameOfTagToMatch)
     {
-        this(filter,nameOfTagToMatch,new String [] {},true);
+        this(filter,nameOfTagToMatch,new String [] {});
     }
 
-    public CompositeTagScanner(String filter, String [] nameOfTagToMatch, String [] tagEnders)
+    public CompositeTagScanner(
+        String filter,
+        String [] nameOfTagToMatch,
+        String [] tagEnders) 
     {
-        this(filter,nameOfTagToMatch,tagEnders,true);
+        this(filter,nameOfTagToMatch,tagEnders,new String[] {});
     }
 
     public CompositeTagScanner(
         String filter,
         String [] nameOfTagToMatch,
         String [] tagEnders,
-        boolean allowSelfChildren) 
+        String [] endTagEnders)
     {
-        this(filter,nameOfTagToMatch,tagEnders,new String[] {}, allowSelfChildren);
-    }
-
-    public CompositeTagScanner(
-        String filter,
-        String [] nameOfTagToMatch,
-        String [] tagEnders,
-        String [] endTagEnders,
-        boolean allowSelfChildren)
-    {
-        this(filter,nameOfTagToMatch,tagEnders,endTagEnders, allowSelfChildren, false);
+        this(filter,nameOfTagToMatch,tagEnders,endTagEnders, false);
     }
 
    /**
@@ -170,12 +155,10 @@ public abstract class CompositeTagScanner extends TagScanner
         String [] nameOfTagToMatch,
         String [] tagEnders,
         String [] endTagEnders,
-        boolean allowSelfChildren,
         boolean balance_quotes) 
     {
         super(filter);
         this.nameOfTagToMatch = nameOfTagToMatch;
-        this.allowSelfChildren = allowSelfChildren;
         this.balance_quotes = balance_quotes;
         this.tagEnderSet = new HashSet();
         for (int i=0;i<tagEnders.length;i++)
@@ -192,10 +175,9 @@ public abstract class CompositeTagScanner extends TagScanner
      * no children.<p>
      * If it's not an empty XML tag, the lexer is repeatedly asked for
      * subsequent nodes until an end tag is found or a node is encountered
-     * that matches the tag ender set or end tag ender set, or a node of
-     * the same type is found and {@link #isAllowSelfChildren} returns
-     * <code>false</code>. In all but the first case, a virtual end tag
-     * is created. Each node found that is not the end tag is added to
+     * that matches the tag ender set or end tag ender set.
+     * In the latter case, a virtual end tag is created.
+     * Each node found that is not the end tag is added to
      * the list of children.<p>
      * The scanner's {@link #createTag} method is called with details about
      * the start tag, end tag and children. The attributes from the start tag
@@ -212,6 +194,7 @@ public abstract class CompositeTagScanner extends TagScanner
         Node node;
         NodeList nodeList;
         Tag endTag;
+        String match;
         String name;
         TagScanner scanner;
         CompositeTag composite;
@@ -219,6 +202,7 @@ public abstract class CompositeTagScanner extends TagScanner
         
         nodeList = new NodeList ();
         endTag = null;
+        match = tag.getTagName ();
 
         if (tag.isEmptyXmlTag ())
             endTag = tag;
@@ -233,17 +217,12 @@ public abstract class CompositeTagScanner extends TagScanner
                         Tag next = (Tag)node;
                         name = next.getTagName ();
                         // check for normal end tag
-                        if (next.isEndTag () && name.equals (tag.getTagName ()))
+                        if (next.isEndTag () && name.equals (match))
                         {
                             endTag = next;
                             node = null;
                         }
-                        else if (isTagToBeEndedFor (next) || // check DTD
-                            (   // check for child of same name not allowed
-                                !(next.isEndTag ()) &&
-                                !isAllowSelfChildren () &&
-                                name.equals (tag.getTagName ())
-                            ))
+                        else if (isTagToBeEndedFor (next)) // check DTD
                         {
                             // insert a virtual end tag and backup one node
                             endTag = createVirtualEndTag (tag, lexer.getPage (), next.elementBegin ());
@@ -337,6 +316,7 @@ public abstract class CompositeTagScanner extends TagScanner
         boolean ret;
 
         ret = false;
+
         name = tag.getTagName ();
         if (tag.isEndTag ())
             ret = endTagEnderSet.contains (name);
@@ -344,10 +324,5 @@ public abstract class CompositeTagScanner extends TagScanner
             ret = tagEnderSet.contains (name);
         
         return (ret);
-    }
-
-    public final boolean isAllowSelfChildren()
-    {
-        return allowSelfChildren;
     }
 }
