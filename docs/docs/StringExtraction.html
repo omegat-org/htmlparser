@@ -1,6 +1,6 @@
-<html><head><title>String Extraction</title></head><body><DIV CLASS="wikitext">
+<html><head><title>String Extraction</title></head><body><DIV class="wikitext">
 <P><B>String Extraction</B></P>
-<P>To get all the text content from a web page, use the <A CLASS="wiki" HREF="TextExtractingVisitor.html">TextExtractingVisitor</A>, like so :</P>
+<P>To get all the text content from a web page, use the <A class="wiki" HREF="TextExtractingVisitor.html">TextExtractingVisitor</A>, like so :</P>
 <PRE>   Parser parser = new Parser("http://pageIwantToParse.com");
    TextExtractingVisitor visitor = new TextExtractingVisitor();
    parser.visitAllNodesWith(visitor);
@@ -9,4 +9,4 @@
 <PRE>   String cleanText =
       ParserUtils.removeEscapeCharacters(
          visitor.getExtractedText()
-      );</PRE></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:20:23 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
+      );</PRE></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Sunday, February 23, 2003  5:20:23 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>

@@ -1,11 +1,11 @@
-<html><head><title>Using Cookies With Parser</title></head><body><DIV CLASS="wikitext">
+<html><head><title>Using Cookies With Parser</title></head><body><DIV class="wikitext">
 <P><B>Using Cookies with the Parser</B></P>
-<P><B>Problem:</B> (by <SPAN CLASS="wikiunknown"><U>ShanSivakolundhu</U></SPAN>)<BR/>In order to access a particular site I neet to have
+<P><B>Problem:</B> (by <SPAN class="wikiunknown"><U>ShanSivakolundhu</U></SPAN>)<BR/>In order to access a particular site I neet to have
 a cookie set. Is there any way I can set the cookie
 before I create a parser object ? Just like ...</P>
 <PRE>URLConnection.("Cookie", cookieValue);
 URLConnection.connect();</PRE>
-<P><B>Solution:</B> (by <SPAN CLASS="wikiunknown"><U>BobLewis</U></SPAN>)<BR/>In order to send cookies in your Http requests, all
+<P><B>Solution:</B> (by <SPAN class="wikiunknown"><U>BobLewis</U></SPAN>)<BR/>In order to send cookies in your Http requests, all
 you need to do is set the Cookie HTTP Header in the
 URL Connection.</P>
 <P>Generally what I've done is first create a
@@ -25,7 +25,7 @@ something like this:</P>
            new InputStreamReader(urlConn.getInputStream(), charset);
         reader = new HTMLReader(isr, 8192);
         parser = new HTMLParser(reader, feedback);</PRE>
-<P>The <SPAN CLASS="wikiunknown"><U>HttpUtil</U></SPAN>.getCharacterSet method used above is
+<P>The <SPAN class="wikiunknown"><U>HttpUtil</U></SPAN>.getCharacterSet method used above is
 basically just taken from the method of the same name
 in the HTMLParser class.  That method is protected, so
 I had to duplicate it elsewhere.</P>
@@ -67,4 +67,4 @@ I had to duplicate it elsewhere.</P>
             else buf.append(" ");
         }
         return buf.toString();
-    }</PRE></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Wednesday, April  2, 2003  3:04:24 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
+    }</PRE></DIV><DIV id="actionbar" class="toolbar"><HR noshade="noshade" class="printer"/><P class="editdate">Last edited on Wednesday, April  2, 2003  3:04:24 pm.</P><HR noshade="noshade" class="toolbar"/></body></html>

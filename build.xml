@@ -1,7 +1,7 @@
 <!--
 Build Procedure
 - cd htmlparser
-- 'ant jars' generates new htmlparser.jar and htmllexer.jar in htmlparser/release/htmlparser1_4/lib
+- 'ant jar' generates new htmlparser.jar and htmllexer.jar in htmlparser/release/htmlparser1_4/lib
 
 Release Procedure
 - cd htmlparser
@@ -12,11 +12,11 @@ Release Procedure
   to the day since it comes from the version coded in the Parser.java file,
   that's why this step can't be automated
 - incorporate changes from ChangeLog into htmlparser/docs/changes under
-  a heading like "Integration Build 1.4 - 20030713"
-- 'ant jar' generates new htmlparser.jar in htmlparser/release/htmlparser1_4/lib
+  a heading like "Integration Build 1.4 - 20030824"
+- 'ant jar' generates new htmlparser.jar and htmllexer.jar in htmlparser/release/htmlparser1_4/lib
 - 'ant test' compiles and runs the unit tests
-- 'rm /home/derrick/htmlparser/htmlparser_cvs/htmlparser/docs/docs/*'
-  and 'rm /home/derrick/htmlparser/htmlparser_cvs/htmlparser/docs/docs/images/*'
+- 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/*'
+  and 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/images/*'
   deletes local Wiki pages, of course any one else would have to adjust this and
   also the hard-coded path in WikiCapturer
 - 'javac -classpath release/htmlparser1_4/lib/htmlparser.jar ../WikiCapturer/src/org/htmlparser/wikicapturer/CaptureWiki.java ../WikiCapturer/src/org/htmlparser/wikicapturer/PhpWikiVisitor.java'
@@ -24,11 +24,11 @@ Release Procedure
   fetches current Wiki pages
 - perform a CVS update on htmlparser/docs/docs to identify new and changed files
   and commit them - that's why this step can't be automated
-- 'ant' updates the version headers, creates the jar file and doc files and zips
-  everything into a file htmlparser/distribution/htmlparser1_4_20030727.zip
+- 'ant clean htmlparser' updates the version headers, creates the jar file and doc files and zips
+  everything into a file htmlparser/distribution/htmlparser1_4_20030824.zip
 - commit docs/changes, docs/docs, docs/docs/images and src/* using a reason of
   the form:
-Update version headers to 1.4-20030727 and update changelog.
+Update version headers to 1.4-20030824 and update changelog.
 
 Sourceforge File Release Procedure
 - upload the zip file to the sourceforge site
@@ -37,10 +37,10 @@ Name: anonymous
 Password: yourname@users.sourceforge.org
 ftp> cd incoming
 ftp> bin
-ftp> put htmlparser1_4_20030727.zip
+ftp> put htmlparser1_4_20030824.zip
 ftp> bye
 - add a release to the 'Integation Builds' package
-Admin-File Releases-Add Release, use a name of the form '1_4_20030727'
+Admin-File Releases-Add Release, use a name of the form '1_4_2003824'
 - Step 1, 'Paste The Notes' (using numeric character references and
   character entity references because this is displayed as HTML) with a
   format like :
@@ -49,7 +49,7 @@ Failing Unit Tests:
 Open Bugs:
 Pending Bugs:
 - use the 'Upload Change Log:' field to specify the ChamgeLog file you edited
-- Step 2, check the checkbox of the htmlparser1_4_20030727.zip file from the
+- Step 2, check the checkbox of the htmlparser1_4_20030824.zip file from the
   list of files in the uploads section
 - Submit/Refresh
 - Step 3, mark the zip file Processor-Independent, and give it a .zip type
@@ -62,7 +62,7 @@ Pending Bugs:
 
 Submit News
 - from the project summary screen, select 'Submit News' and title it like:
-HTML Parser Integration Release 1.4-20030727 
+HTML Parser Integration Release 1.4-20030824 
 - type in a summary of the changes made
 - SUBMIT
 - delete the previous release news item using Admin-Publicity-Administrate project news
@@ -196,11 +196,72 @@ HTML Parser Integration Release 1.4-20030727
     <echo message="**********************************"/>
 
     <!-- Compile the java code in ${src} -->
-    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" classpath="src:${commons-logging.jar}" />
+    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" classpath="src:${commons-logging.jar}"/>
   </target>
 
-  <!-- Create the distribution of htmlparser.jar and htmllexer.jar -->
-  <target name="jars" depends="compile" description="create htmlparser.jar and htmllexer.jar">
+  <target name="compilelexer" description="compile lexer java files">
+    <echo message="**********************************"/>
+    <echo message="*  Compiling lexer....           *"/>
+    <echo message="**********************************"/>
+    <javac srcdir="${src}" debug="on" classpath="src:${commons-logging.jar}" target="1.1">
+      <include name="org/htmlparser/lexer/**/*.java"/>
+      <include name="org/htmlparser/AbstractNode.java"/>
+      <include name="org/htmlparser/Node.java"/>
+      <include name="org/htmlparser/util/ParserException.java"/>
+      <include name="org/htmlparser/util/ChainedException.java"/>
+      <include name="org/htmlparser/util/NodeList.java"/>
+      <include name="org/htmlparser/util/NodeIterator.java"/>
+      <include name="org/htmlparser/util/SimpleNodeIterator.java"/>
+      <include name="org/htmlparser/util/sort/**/*.java"/>
+      <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
+    </javac>
+  </target>
+
+  <target name="compileparser" depends="compilelexer" description="compile parser java files">
+    <echo message="**********************************"/>
+    <echo message="*  Compiling parser....          *"/>
+    <echo message="**********************************"/>
+    <javac srcdir="${src}" debug="on" classpath="src:${commons-logging.jar}">
+      <include name="org/htmlparser/**/*.java"/>
+      <exclude name="org/htmlparser/tests/**"/>
+      <exclude name="org/htmlparser/util/Generate.java"/> 
+    </javac>
+  </target>
+
+    <!-- Create the distribution of htmlparser.jar and htmllexer.jar -->
+  <target name="jar" depends="jarlexer,jarparser" description="create htmlparser.jar and htmllexer.jar"/>
+
+  <!-- Create the distribution of htmllexer.jar -->
+  <target name="jarlexer" depends="compilelexer" description="create htmllexer.jar">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
+    <echo message="**********************************"/>
+    <echo message="*  Creating htmllexer.jar....   *"/>
+    <echo message="**********************************"/>
+
+    <!-- Put classes and images into the htmllexer.jar file -->
+    <jar jarfile="${dist}/lib/htmllexer.jar"
+      basedir="${src}">
+      <include name="org/htmlparser/lexer/**/*.class"/>
+      <include name="org/htmlparser/AbstractNode.class"/>
+      <include name="org/htmlparser/Node.class"/>
+      <include name="org/htmlparser/util/ParserException.class"/>
+      <include name="org/htmlparser/util/ChainedException.class"/>
+      <include name="org/htmlparser/util/NodeList*.class"/>
+      <include name="org/htmlparser/util/NodeIterator.class"/>
+      <include name="org/htmlparser/util/SimpleNodeIterator.class"/>
+      <include name="org/htmlparser/util/sort/**/*.class"/>
+      <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
+      <manifest>
+        <attribute name="Main-Class" value="org.htmlparser.lexer.Lexer"/>
+      </manifest>
+    </jar>
+
+  </target>
+
+  <!-- Create the distribution of htmlparser.jar -->
+  <target name="jarparser" depends="compileparser" description="create htmlparser.jar">
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
 
@@ -232,31 +293,10 @@ HTML Parser Integration Release 1.4-20030727
         </section>
       </manifest>
     </jar>
-
-    <echo message="**********************************"/>
-    <echo message="*  Creating htmllexer.jar....   *"/>
-    <echo message="**********************************"/>
-
-    <!-- Put classes and images into the htmllexer.jar file -->
-    <jar jarfile="${dist}/lib/htmllexer.jar"
-      basedir="${src}">
-      <include name="org/htmlparser/lexer/**/*.class"/>
-      <include name="org/htmlparser/AbstractNode.class"/>
-      <include name="org/htmlparser/Node.class"/>
-      <include name="org/htmlparser/util/ParserException.class"/>
-      <include name="org/htmlparser/util/ChainedException.class"/>
-      <include name="org/htmlparser/util/sort/**/*.class"/>
-      <!-- to be removed -->
-      <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
-      <manifest>
-        <attribute name="Main-Class" value="org.htmlparser.lexer.Lexer"/>
-      </manifest>
-    </jar>
-
   </target>
 
   <!-- Run the unit tests -->
-  <target name="test" depends="jars" description="run the JUnit tests">
+  <target name="test" depends="jar" description="run the JUnit tests">
     <echo message="**********************************"/>
     <echo message="*  Running unit tests....        *"/>
     <echo message="**********************************"/>
@@ -351,7 +391,7 @@ HTML Parser Integration Release 1.4-20030727
   </target>
 
   <!-- The release directory structuring finishes here -->
-  <target name="Release" depends="versionSource,jars,javadoc,CopyBatch" description="prepare the release files">
+  <target name="Release" depends="versionSource,jar,javadoc,CopyBatch" description="prepare the release files">
   </target>
 
   <!-- Package the release -->
