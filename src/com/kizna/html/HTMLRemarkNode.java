@@ -127,6 +127,10 @@ public class HTMLRemarkNode extends HTMLNode
 			{
 				state=REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE;
 			} 
+			if (state==REMARK_NODE_ACCEPTING_STATE && ch == '<')
+			{
+				state=REMARK_NODE_ILLEGAL_STATE;
+			} 
 			if (state==REMARK_NODE_ACCEPTING_STATE)
 			{
 				// We can append contents now		
@@ -167,9 +171,14 @@ public class HTMLRemarkNode extends HTMLNode
 			if (state > REMARK_NODE_OPENING_ANGLE_BRACKET_STATE && state < REMARK_NODE_ACCEPTED_STATE && i == input.length() - 1)
 			{
 				// We need to continue parsing to the next line
-				input = reader.getNextLine();
+				//input = reader.getNextLine();
 				tagContents.append("\n");
-				inputLen = input.length();
+				do {
+					input = reader.getNextLine();		
+				}
+				while (input!=null && input.length()==0);
+				if (input!=null)
+				inputLen = input.length(); else inputLen=-1;
 				i=-1;
 			}
 			if (state==REMARK_NODE_ILLEGAL_STATE)

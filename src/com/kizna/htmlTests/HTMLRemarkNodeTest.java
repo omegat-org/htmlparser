@@ -205,5 +205,30 @@ public void testToPlainTextString() {
 		assertEquals("Text contents","&nbsp;",stringNode.getText());
 		assertEquals("Tag Contents","![endif]",tag.getText());
 		
-	}	
+	}
+	/**
+	 * This is the simulation of bug report 586756, submitted
+	 * by John Zook.
+	 * If all the comment contains is a blank line, it breaks
+	 * the state
+	 */	
+	public void testRemarkNodeWithBlankLine() {
+		String testHTML = new String("<!--\n"+
+		"\n"+
+		"-->");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		int i = 0;
+		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		{
+			node[i++] = (HTMLNode)e.nextElement();
+		}
+		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
+		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
+		assertEquals("Expected contents","\n",remarkNode.getText());
+		
+	}
 }

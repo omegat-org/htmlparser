@@ -231,10 +231,10 @@ public void testNestedTags() {
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
                 nice = (String)h.get("YOURPARAMETER");
-                assertEquals ("Link tag (A)",a,"A");
-                assertEquals ("href value",href,"http://www.iki.fi/kaila");
-                assertEquals ("myparameter value",myValue,"");
-                assertEquals ("yourparameter value",nice,"Kaarle");
+                assertEquals ("Link tag (A)","A",a);
+                assertEquals ("href value","http://www.iki.fi/kaila",href);
+                assertEquals ("myparameter value","",myValue);
+                assertEquals ("yourparameter value","Kaarle Kaaila",nice);
 //                }
             }
             if (!(o instanceof HTMLLinkTag)) {
