@@ -1,3 +1,7 @@
+Integration Build 1.2 - 20021215
+--------------------------------
+[1] Modified API of HTMLImageTag (refactored name of image loc), HTMLLinkTag (added getters)
+
 Integration Build 1.2 - 20021208
 --------------------------------
 [1] Fixed bug in base href scanner - would always expect href
@@ -5,6 +9,7 @@ Integration Build 1.2 - 20021208
 [3] Refactored HTMLRenderer to use the Visitor pattern- enabling
 connections with links and images
 [4] HTMLStringNode returns a blank string in toPlainTextString()
+[5] HTMLFormTag returns string information in toPlainTextString()
 
 Integration Build 1.2 - 20021201
 --------------------------------
