@@ -423,7 +423,7 @@ public void testNestedTags() {
      * up our parsing almost completely.
      * 
      */
-    public void testParsing() {
+    public void testStrictParsing() {
 		String testHTML = "<div align=\"center\"><font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"><a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+ 
         "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
         "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
@@ -446,6 +446,30 @@ public void testNestedTags() {
 			node[i++] = (HTMLNode)e.nextElement();
 		}	    	
 		assertEquals("Number of nodes found",12,i);
-		
+		// Check the tags
+		HTMLTag tag = (HTMLTag)node[0];
+		assertEquals("DIV Tag expected","div align=\"center\"",tag.getText());		
+		tag = (HTMLTag)node[1];
+		assertEquals("Second tag should be corrected","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
+		// Try to parse the parameters from this tag.
+		Hashtable table = tag.parseParameters();
+		assertNotNull("Parameters table",table);
+		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
+		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
+    }
+    public void testCheckValidity() {
+    	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
+    	int state = HTMLTag.checkValidity(HTMLTag.TAG_IGNORE_DATA_STATE,tag);
+    	assertEquals("Expected State",HTMLTag.TAG_FINISHED_PARSING_STATE,state);
+    }
+    public void testExtractWord() {
+    	String line = "Abc DEF GHHI";
+    	String word = HTMLTag.extractWord(line);
+    	assertEquals("Word expected","ABC",HTMLTag.extractWord(line));
+    }
+    public void testCorrectTag() {
+    	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
+		HTMLTag.correctTag(tag);
+		assertEquals("Corrected Tag","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
     }
 }

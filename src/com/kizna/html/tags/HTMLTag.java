@@ -49,11 +49,12 @@ public class HTMLTag implements HTMLNode
     * in parseParameters  (Kaarle Kaila 3.8.2001)
     */
     public final static String TAGNAME = "$<TAGNAME>$";    
-	protected final static int TAG_BEFORE_PARSING_STATE=0;
-    protected final static int TAG_BEGIN_PARSING_STATE=1;
-    protected final static int TAG_FINISHED_PARSING_STATE=2;
-	protected final static int TAG_ILLEGAL_STATE=3;
-	protected final static int TAG_IGNORE_DATA_STATE=4;	    
+	public final static int TAG_BEFORE_PARSING_STATE=0;
+    public final static int TAG_BEGIN_PARSING_STATE=1;
+    public final static int TAG_FINISHED_PARSING_STATE=2;
+	public final static int TAG_ILLEGAL_STATE=3;
+	public final static int TAG_IGNORE_DATA_STATE=4;	    
+	private static Vector strictTags=null;
 	/**
 	 * Tag contents will have the contents of the comment tag.
    */
@@ -176,12 +177,74 @@ public class HTMLTag implements HTMLNode
 		return state;
 	}
 	private static int checkFinishedState(int state, int i, char ch, HTMLTag tag) {
-		if (ch=='>' && state==TAG_BEGIN_PARSING_STATE)
+		if (ch=='>')
 		{
-			state = TAG_FINISHED_PARSING_STATE;
-			tag.setTagEnd(i);
+			if (state==TAG_BEGIN_PARSING_STATE)
+			{
+				state = TAG_FINISHED_PARSING_STATE;
+				tag.setTagEnd(i);
+			}
+			else
+			if (state==TAG_IGNORE_DATA_STATE) {
+				// Now, either this is a valid > input, and should be ignored,
+				// or it is a mistake in the html, in which case we need to correct it *sigh*
+				state = checkValidity(state, tag);
+				// If the state has changed to TAG_FINISH_STATE
+				// then we must perform a correction routine to the text that
+				// has just been parsed
+				if (state==TAG_FINISHED_PARSING_STATE) {
+					tag.setTagEnd(i);
+					// Do Correction
+					System.out.println("We need to correct "+tag.getText());
+					// Correct the tag - assuming its grouped into name value pairs
+					// First remove all inverted commas.
+					correctTag(tag);
+				}
+			}
 		}
 		return state;
+	}
+	public static void correctTag(HTMLTag tag) {
+		String tempText = tag.getText();
+		StringBuffer absorbedText = new StringBuffer();
+		char c;
+		for (int j=0;j<tempText.length();j++) {
+			c = tempText.charAt(j);
+			if (c!='"')
+			absorbedText.append(c);
+		}
+		tag.setText(absorbedText.toString());
+	}
+	public static int checkValidity(int state,HTMLTag tag) {
+		// If the tag begins with any of the strictness tag values, then we may assume
+		// that this is a valid > within the ignore state, and continue as normal
+		// if however, this tag does not come under the strictness vector, then we
+		// need to correct
+		if (strictTags==null) return TAG_FINISHED_PARSING_STATE;
+		// Get the first word within the tag
+		String word = extractWord(tag.getText());
+		// Now we have the word. Check if it exists in the vector
+
+		if (strictTags.contains(word)) {
+			// Yes it is contained
+			// Hence, continue parsing as normal
+			return state;
+		}
+		else {
+			// Nope - it is not contained.
+			// Assume this was a mistake.
+			return TAG_FINISHED_PARSING_STATE;			
+		}
+	}
+	public static String extractWord(String s) {
+		String word = "";
+		boolean parse=true;
+		for (int i=0;i<s.length() && parse==true;i++) {
+			char ch = s.charAt(i);
+			if (ch==' ') parse = false; else word +=ch;
+		}
+		word = word.toUpperCase();
+		return word;
 	}
 	private static int checkIllegalState(int state, int i, char ch, HTMLTag tag) {
 		if (ch=='/' && i>0 && tag.getTagLine().charAt(i-1)=='<')
@@ -236,6 +299,9 @@ public java.lang.String getTagLine() {
 	public String getText()
 	{
 		return tagContents.toString();
+	}
+	public void setText(String text) {
+		tagContents = new StringBuffer(text);
 	}
 	/**
 	 * Return the scanner associated with this tag.
@@ -452,6 +518,23 @@ public java.lang.String getTagLine() {
 	 */
 	public void setParsed(Hashtable parsed) {
 		this.parsed = parsed;
+	}
+	
+	
+	/**
+	 * Gets the strictTags.
+	 * @return Returns a Vector
+	 */
+	public static Vector getStrictTags() {
+		return strictTags;
+	}
+
+	/**
+	 * Sets the strictTags.
+	 * @param strictTags The strictTags to set
+	 */
+	public static void setStrictTags(Vector strictTags) {
+		HTMLTag.strictTags = strictTags;
 	}
 
 }
