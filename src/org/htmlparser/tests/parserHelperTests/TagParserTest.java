@@ -216,12 +216,11 @@ bar">
         assertStringEquals ("attribute 2","<foo>\r\nbar", attribute2);
     }
 
-/*
-<meta name="foo" content="foo>
-bar">
-*/
-    public void testMultiLine6 () throws ParserException
-    {
+	/**
+	 * <meta name="foo" content="foo>
+	 * bar">
+	 */
+    public void testMultiLine6 () throws ParserException {
         createParser("<meta name=\"foo\" content=\"foo>\nbar\">");
         parseAndAssertNodeCount (1);
         assertType ("should be Tag", Tag.class, node[0]);
@@ -233,11 +232,11 @@ bar">
         String attribute2 = tag.getAttribute ("CONTENT");
         assertStringEquals ("attribute 2","foo>\r\nbar", attribute2);
     }
-
-/*
-<meta name="foo" content="<foo
-bar">
-*/
+	
+	/**
+	 * <meta name="foo" content="<foo
+	 * bar">
+	 */
     public void testMultiLine7 () throws ParserException
     {
         createParser("<meta name=\"foo\" content=\"<foo\nbar\"");
