@@ -26,14 +26,20 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Hashtable;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.filters.TagNameFilter;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.scanners.ScriptDecoder;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class ScriptScannerTest extends ParserTestCase
@@ -577,5 +583,91 @@ public class ScriptScannerTest extends ParserTestCase
             htmlBuffer.append (tnode.toHtml ());
         }
         assertStringEquals ("bad html", teststring, htmlBuffer.toString ());
+    }
+
+    /**
+     * See bug #902121 StringBean throws NullPointerException
+     * Contributed by Reza Motori (rezamotori)
+     */
+    public void testDecodeScript ()
+        throws ParserException
+    {
+        String plaintext =
+            "<HTML>\n" +
+            "<HEAD>\n" +
+            "<TITLE>Script Encoder Sample Page</TITLE>\n" +
+            "<SCRIPT LANGUAGE=\"JScript.Encode\">\n" +
+            "<!--//\n" +
+            "//Copyright© 1998 Microsoft Corporation. All Rights Reserved.\n" +
+            "//**Start Encode**\r\n" +
+            "function verifyCorrectBrowser(){\r\n" +
+            "  if(navigator.appName == \"Microsoft Internet Explorer\")\r\n" +
+            "    if (navigator.appVersion.indexOf (\"5.\") >= 0)\r\n" +
+            "      return(true);\r\n" +
+            "    else\r\n" +
+            "      return(false);\r\n" +
+            "}\r\n" +
+            "function getAppropriatePage(){\r\n" +
+            "  var str1 = \"Had this been an actual Web site, a page compatible with \";\r\n" +
+            "  var str2 = \"browsers other than \";\r\n" +
+            "  var str3 = \"Microsoft Internet Explorer 5.0 \";\r\n" +
+            "  var str4 = \"would have been loaded.\";\r\n" +
+            "  if (verifyCorrectBrowser())\r\n" +
+            "    document.write(str1 + str3 + str4);\r\n" +
+            "  else\r\n" +
+            "    document.write(str1 + str2 + str3 + str4);\r\n" +
+            "}\r\n" +
+            "//-->\r\n" +
+            "</SCRIPT>\n" +
+            "</HEAD>\n" +
+            "<BODY onload=\"getAppropriatePage()\">\n" +
+            "</BODY>\n" +
+            "</HTML>";
+        String cryptext =
+            "<HTML>\n" +
+            "<HEAD>\n" +
+            "<TITLE>Script Encoder Sample Page</TITLE>\n" +
+            "<SCRIPT LANGUAGE=\"JScript.Encode\">\n" +
+            "<!--//\n" +
+            "//Copyright© 1998 Microsoft Corporation. All Rights Reserved.\n" +
+            "//**Start Encode**#@~^ZwIAAA==@#@&0;	mDkW	P7nDb0zZKD.n1YAMGhk+Dvb`@#@&P,kW`UC7kLlDGDcl22gl:n~{'~Jtr1DGkW6YP&xDnD	+OPA62sKD+ME#@#@&P,~~k6PvxC\\rLmYGDcCwa.n.kkWU bx[+X66Pcr*cJ#,@*{~!*@#@&P,P~~,D+D;D	`YM;n#p@#@&P~P~n^/n@#@&~P,P~~M+Y;.	`Wl^d#I@#@&)@#@&6E	^YbWUPT+O)awDK2DblYKCo`*	@#@&~~7l.PkOD8Px~rCl[~Dtr/,8+U,l	Pl1Y!CV,n4,/rO~Pm~wmo+,^G:alDk8Vn~SkOt,Ei@#@&~~7lD~dDD+P{~r4.Khk+DkPKOtD~Y4lU~ri@#@&~P7lD,dOD2P{PEHr^MWdW6OP&xOnMx+O~A62VK.D~lRZPJp@#@&~P7l.PkY.*,'PrAW!VN,4C\\P(+nx~sKl[+9 Jp@#@&~,k0~c7+.k6z;W.M+1YAMWSd+M`b#@#@&~~,PNK^Es+xD ADbY`dY.q,_~/D.&,_~dDDcbI@#@&~Psk+@#@&P,PP9W1;:xORSDrO`/D.F,_PkO. ,_,/ODf~3PdYM*#p@#@&N@#@&z&R @*@#@&qrIAAA==^#~@</SCRIPT>\n" +
+            "</HEAD>\n" +
+            "<BODY onload=\"getAppropriatePage()\">\n" +
+            "</BODY>\n" +
+            "</HTML>";
+        Lexer lexer;
+        
+        lexer = new Lexer (cryptext);
+        ScriptDecoder.LAST_STATE = ScriptDecoder.STATE_INITIAL; // read everything
+        try
+        {
+            String result = ScriptDecoder.Decode (lexer.getPage (), lexer.getCursor ());
+            assertStringEquals ("decoding failed", plaintext, result);
+        }
+        finally
+        {
+            ScriptDecoder.LAST_STATE = ScriptDecoder.STATE_DONE;
+        }
+    }
+    
+    /**
+     * See bug #902121 StringBean throws NullPointerException
+     * Contributed by Reza Motori (rezamotori)
+     */
+    public void testDecodePage ()
+        throws ParserException
+    {
+        String url = "http://htmlparser.sourceforge.net/test/EncryptedScriptExample.html";
+        String plaintext =
+            "\r\n" +
+            "var nows = new Date();\r\n" +
+            "var nIndexs = nows.getTime();\r\n" +
+            "document.write(\"<img src=\\\"http://www.parsads.com/adserve/scriptinject.asp?F=4&Z=3,4,5,10,12&N=1&U=644&O=&nocache=\"  + nIndexs + \"\\\" width=\\\"1\\\" hight=\\\"1\\\"><img src=\\\"http://www.parsads.com/adserve/scriptinject.asp?F=4&Z=3,4,5,10,12&N=1&U=643&O=&nocache=\"  + nIndexs + \"\\\" width=\\\"1\\\" hight=\\\"1\\\"><img src=\\\"http://www.parsads.com/adserve/scriptinject.asp?F=4&Z=3,4,5,10,12&N=1&U=324&O=&nocache=\"  + nIndexs + \"\\\" width=\\\"1\\\" hight=\\\"1\\\">\");\r\n";
+        
+        parser = new Parser (url);
+        NodeList scripts = parser.extractAllNodesThatMatch (new TagNameFilter ("SCRIPT"));
+        assertEquals ("wrong number of scripts found", 2, scripts.size ());
+        ScriptTag script = (ScriptTag)scripts.elementAt (1);
+        assertStringEquals ("script not decoded correctly", plaintext, script.getScriptCode ());
     }
 }

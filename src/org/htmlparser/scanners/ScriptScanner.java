@@ -32,9 +32,12 @@ import org.htmlparser.Node;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
+import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.nodes.NodeFactory;
+import org.htmlparser.scanners.ScriptDecoder;
 import org.htmlparser.tags.CompositeTag;
+import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -67,6 +70,7 @@ public class ScriptScanner
     public Tag scan (Tag tag, Lexer lexer, NodeList stack)
         throws ParserException
     {
+        String language;
         Node node;
         boolean done;
         int position;
@@ -79,6 +83,19 @@ public class ScriptScanner
         last = null;
         end = null;
         factory = lexer.getNodeFactory ();
+        if (tag instanceof ScriptTag)
+        {
+            language = ((ScriptTag)tag).getLanguage ();
+            if ((null != language) &&
+                (language.equalsIgnoreCase ("JScript.Encode") ||
+                 language.equalsIgnoreCase ("VBScript.Encode")))
+            {
+                int start = lexer.getPosition ();
+                String code = ScriptDecoder.Decode (lexer.getPage (), lexer.getCursor ());
+                ((ScriptTag)tag).setScriptCode (code);
+                last = (StringNode)factory.createStringNode (lexer.getPage (), start, lexer.getPosition ());
+            }
+        }
         lexer.setNodeFactory (new PrototypicalNodeFactory (true));
         try
         {

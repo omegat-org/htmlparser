@@ -161,6 +161,11 @@ public class StringBean extends NodeVisitor implements Serializable
     protected boolean mIsPre;
 
     /**
+     * Set <code>true</code> when traversing a STYLE tag.
+     */
+    protected boolean mIsStyle;
+
+   /**
      * Create a StringBean object.
      * Default property values are set to 'do the right thing':
      * <p><code>Links</code> is set <code>false</code> so text appears like a
@@ -184,6 +189,7 @@ public class StringBean extends NodeVisitor implements Serializable
 		mBuffer = new StringBuffer (4096);
 		mIsScript = false;
 		mIsPre = false;
+        mIsStyle = false;
     }
 
     //
@@ -321,6 +327,7 @@ public class StringBean extends NodeVisitor implements Serializable
             {
                 mIsPre = false;
                 mIsScript = false;
+                mIsStyle = false;
                 try
                 {   // try again with the encoding now in force
                     mParser.reset ();
@@ -615,7 +622,7 @@ public class StringBean extends NodeVisitor implements Serializable
      */
     public void visitStringNode (StringNode string)
     {
-        if (!mIsScript)
+        if (!mIsScript && !mIsStyle)
         {
             String text = string.getText ();
             if (!mIsPre)
@@ -646,6 +653,8 @@ public class StringBean extends NodeVisitor implements Serializable
             mIsPre = true;
         else if (name.equalsIgnoreCase ("SCRIPT"))
             mIsScript = true;
+        else if (name.equalsIgnoreCase ("STYLE"))
+            mIsStyle = true;
         if (tag.breaksFlow ())
             carriage_return ();
     }
@@ -663,6 +672,8 @@ public class StringBean extends NodeVisitor implements Serializable
             mIsPre = false;
         else if (name.equalsIgnoreCase ("SCRIPT"))
             mIsScript = false;
+        else if (name.equalsIgnoreCase ("STYLE"))
+            mIsStyle = false;
     }
 
     /**

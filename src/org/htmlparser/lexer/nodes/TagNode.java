@@ -600,7 +600,9 @@ public class TagNode
     }
 
     /**
-     * A call to a tag's toHTML() method will render it in HTML.
+     * Render the tag as HTML.
+     * A call to a tag's <code>toHtml()</code> method will render it in HTML.
+     * @return The tag as an HTML fragment.
      * @see org.htmlparser.Node#toHtml()
      */
     public String toHtml ()
@@ -818,7 +820,7 @@ public class TagNode
         
         raw = getRawTagName ();
 
-        return ((null == raw) ? false : ('/' == raw.charAt (0)));
+        return ((null == raw) ? false : ((0 != raw.length ()) && ('/' == raw.charAt (0))));
     }
 
     /**

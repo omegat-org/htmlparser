@@ -63,6 +63,8 @@ public class Tag extends TagNode implements Cloneable
         names = getIds ();
         if ((null != names) && (0 != names.length))
             setTagName (names[0]);
+        else
+            setTagName (""); // make sure it's not null
         setThisScanner (mDefaultScanner);
     }
 
@@ -70,12 +72,16 @@ public class Tag extends TagNode implements Cloneable
     {
         super (node.getPage (), node.getTagBegin (), node.getTagEnd (), node.getAttributesEx ());
         mScanner = scanner;
+        if (null == getTagName ())
+            setTagName (""); // make sure it's not null
     }
 
     public Tag (Page page, int start, int end, Vector attributes)
     {
         super (page, start, end, attributes);
         mScanner = null;
+        if (null == getTagName ())
+            setTagName (""); // make sure it's not null
     }
 
     public Object clone() throws CloneNotSupportedException

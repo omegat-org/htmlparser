@@ -44,6 +44,11 @@ public class ScriptTag extends CompositeTag
     private static final String[] mEndTagEnders = new String[] {"BODY", "HTML"};
 
     /**
+     * Script code if different from the page contents.
+     */
+    protected String mCode;
+
+    /**
      * Create a new script tag.
      */
     public ScriptTag ()
@@ -78,11 +83,30 @@ public class ScriptTag extends CompositeTag
     }
 
     /**
-     * Get the contents of the tag's children.
+     * Get the script code.
+     * Normally this is the contents of the children, but in the rare case that
+     * the script is encoded, this is the plaintext decrypted code.
+     * @return The plaintext or overridden code contents of the tag.
      */
-    public String getScriptCode()
+    public String getScriptCode ()
     {
-        return (getChildrenHTML ());
+        String ret;
+        
+        if (null != mCode)
+            ret = mCode;
+        else
+            ret = getChildrenHTML ();
+
+        return (ret);
+    }
+
+    /**
+     * Set the code contents.
+     * @param code The new code contents of this tag.
+     */
+    public void setScriptCode (String code)
+    {
+        mCode = code;
     }
 
     /**
@@ -109,6 +133,30 @@ public class ScriptTag extends CompositeTag
     public void setType (String type)
     {
         setAttribute ("TYPE", type);
+    }
+
+    /**
+     * Render the tag as HTML.
+     * @return The tag as an HTML fragment.
+     * @see org.htmlparser.Node#toHtml()
+     */
+    public String toHtml()
+    {
+        StringBuffer ret;
+        
+        ret = new StringBuffer ();
+        ret.append (super.toHtml ());
+        if (!isEmptyXmlTag ())
+        {
+            if (null != getScriptCode ())
+                ret.append (getScriptCode ());
+            else
+                putChildrenInto (ret);
+            if (null != getEndTag ())
+                putEndTagInto (ret);
+        }
+
+        return (ret.toString());
     }
 
     /**

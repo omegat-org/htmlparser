@@ -107,17 +107,18 @@ public class ParserTestCase extends TestCase {
 
         if (expected.length() < actual.length()) {
             mismatchInfo = "\n\nACTUAL result has "+(actual.length()-expected.length())+" extra characters at the end. They are :";
-
-            for (int i = expected.length(); i < actual.length(); i++) {
+            int limit = Math.min (expected.length() + 10, actual.length());
+            for (int i = expected.length(); i < limit; i++)
                 mismatchInfo += ("\nPosition : " + i + " , Code = " + (int) actual.charAt(i));
-            }
+            if (limit != actual.length())
+                mismatchInfo += "\netc.";
         } else if(expected.length() > actual.length()) {
             mismatchInfo = "\n\nEXPECTED result has "+(expected.length()-actual.length())+" extra characters at the end. They are :";
-
-            for (int i = actual.length(); i < expected.length(); i++) {
+            int limit = Math.min (actual.length() + 10, expected.length());
+            for (int i = actual.length(); i < expected.length(); i++)
                 mismatchInfo += ("\nPosition : " + i + " , Code = " + (int) expected.charAt(i));
-            }
-
+            if (limit != expected.length ())
+                mismatchInfo += "\netc.";
         }
         for (int i = 0; i < expected.length(); i++) {
             if (
