@@ -350,9 +350,11 @@ public class ParserTestCase extends TestCase {
             assertActualTagHasNoExtraAttributes(displayMessage, expectedTag, actualTag);
     }
 
-    private void assertActualTagHasNoExtraAttributes(String displayMessage, Tag expectedTag, Tag actualTag) {
+    private void assertActualTagHasNoExtraAttributes(String displayMessage, Tag expectedTag, Tag actualTag)
+    {
+        assertStringEquals (displayMessage+"\ntag name", expectedTag.getTagName (), actualTag.getTagName ());
         Vector v = actualTag.getAttributesEx ();
-        for (int i = 0; i < v.size (); i++)
+        for (int i = 1; i < v.size (); i++)
         {
             Attribute a = (Attribute)v.elementAt (i);
             if (a.isWhitespace ())
@@ -369,8 +371,9 @@ public class ParserTestCase extends TestCase {
         Tag expectedTag,
         Tag actualTag)
     {
+        assertStringEquals (displayMessage+"\ntag name", expectedTag.getTagName (), actualTag.getTagName ());
         Vector v = actualTag.getAttributesEx ();
-        for (int i = 0; i < v.size (); i++)
+        for (int i = 1; i < v.size (); i++)
         {
             Attribute a = (Attribute)v.elementAt (i);
             if (a.isWhitespace ())
