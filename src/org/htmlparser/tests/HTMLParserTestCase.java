@@ -6,9 +6,17 @@ import java.io.StringReader;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLRemarkNode;
+import org.htmlparser.HTMLStringNode;
+import org.htmlparser.scanners.HTMLLinkScanner;
+import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
+import org.htmlparser.util.HTMLEnumeration;
+import org.htmlparser.util.HTMLParserException;
 
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * @author Somik Raha
@@ -39,5 +47,23 @@ public class HTMLParserTestCase extends TestCase {
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[numNodes];
 	}
+
+	public void assertStringEquals(String message,String s1,String s2) {
+		for (int i=0;i<s1.length();i++) {
+			if (s1.charAt(i)!=s2.charAt(i)) {
+				assertTrue(message+
+					" \nMismatch of strings at char posn "+i+
+					" \nString 1 upto mismatch = "+s1.substring(0,i)+
+					" \nString 2 upto mismatch = "+s2.substring(0,i)+
+					" \nString 1 mismatch character = "+s1.charAt(i)+", code = "+(int)s1.charAt(i)+
+					" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i)+
+					" \nComplete String 1 = "+s1+
+					" \nComplete String 2 = "+s2,false);
+			}
+		}
+	}    
+	
+	
+
 
 }
