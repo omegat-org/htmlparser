@@ -118,21 +118,13 @@ public abstract class CompositeTag extends Tag {
         sb.append(startTag.toHtml());
     }
 
-    protected void putChildrenInto(StringBuffer sb) {
-        Node node,prevNode=startTag;
-        for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
-            node = e.nextNode();
-            if (prevNode!=null) {
-                if (prevNode.elementEnd()>node.elementBegin()) {
-                    // Its a new line
-                    sb.append(Parser.getLineSeparator());
-                }
-            }
-            sb.append(node.toHtml());
-            prevNode=node;
-        }
-        if (prevNode.elementEnd()>endTag.elementBegin()) {
-            sb.append(Parser.getLineSeparator());
+    protected void putChildrenInto(StringBuffer sb)
+    {
+        Node node;
+        for (SimpleNodeIterator e = children (); e.hasMoreNodes ();)
+        {
+            node = e.nextNode ();
+            sb.append (node.toHtml ());
         }
     }
 

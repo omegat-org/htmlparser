@@ -28,6 +28,7 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.Node;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
@@ -77,10 +78,17 @@ public class FrameSetTag extends CompositeTag
 
     public FrameTag getFrame(String frameName) {
         boolean found = false;
+        Node node;
         FrameTag frameTag=null;
-        for (SimpleNodeIterator e=frames.elements();e.hasMoreNodes() && !found;) {
-            frameTag = (FrameTag)e.nextNode();
-            if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase())) found = true;
+        for (SimpleNodeIterator e=frames.elements();e.hasMoreNodes() && !found;)
+        {
+            node = e.nextNode();
+            if (node instanceof FrameTag)
+            {
+                frameTag = (FrameTag)node;
+                if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase()))
+                    found = true;
+            }
         }
         if (found)
         return frameTag; else return null;

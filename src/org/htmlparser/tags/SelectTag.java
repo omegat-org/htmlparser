@@ -28,6 +28,7 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.Node;
 
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -63,13 +64,18 @@ public class SelectTag extends CompositeTag
     {
         StringBuffer lString;
         NodeList children;
+        Node node;
 
         lString = new StringBuffer(ParserUtils.toString(this));
         children = getChildren ();
         for(int i=0;i<children.size(); i++)
         {
-            OptionTag optionTag = (OptionTag)children.elementAt(i);
-            lString.append(optionTag.toString()).append("\n");
+            node = children.elementAt(i);
+            if (node instanceof OptionTag)
+            {
+                OptionTag optionTag = (OptionTag)node;
+                lString.append(optionTag.toString()).append("\n");
+            }
         }
 
         return lString.toString();

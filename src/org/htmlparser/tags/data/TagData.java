@@ -29,7 +29,9 @@
 package org.htmlparser.tags.data;
 
 import java.util.Vector;
+import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.util.ParserException;
 
 public class TagData {
     private Page mPage;
@@ -120,6 +122,16 @@ public class TagData {
         mPage = new Page (tagContents);
         tagBegin = 0;
         tagEnd = tagContents.length ();
+        // TODO: this really needs work
+        try
+        {
+            Cursor cursor = new Cursor (mPage, tagBegin);
+            for (int i = tagBegin; i < tagEnd; i++)
+                mPage.getCharacter (cursor);
+        }
+        catch (ParserException pe)
+        {
+        }
         mAttributes = attributes;
         urlBeingParsed = url;
         isXmlEndTag = xml_end_tag;

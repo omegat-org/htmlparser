@@ -69,6 +69,16 @@ public class StringNode extends AbstractNode
         mPage = new Page (text);
         nodeBegin = 0;
         nodeEnd = text.length ();
+        // TODO: this really needs work
+        try
+        {
+            Cursor cursor = new Cursor (mPage, nodeBegin);
+            for (int i = nodeBegin; i < nodeEnd; i++)
+                mPage.getCharacter (cursor);
+        }
+        catch (ParserException pe)
+        {
+        }
     }
 
     public String toPlainTextString ()

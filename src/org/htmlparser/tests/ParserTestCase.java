@@ -223,7 +223,7 @@ public class ParserTestCase extends TestCase {
         do {
             nextExpectedNode = getNextNodeUsing(expectedIterator);
             nextActualNode = getNextNodeUsing(actualIterator);
-
+            assertNotNull (nextActualNode);
             assertStringValueMatches(
                 displayMessage,
                 nextExpectedNode,
@@ -287,12 +287,15 @@ public class ParserTestCase extends TestCase {
         return "\n\n"+displayMessage+"\n\nComplete Xml\n************\nEXPECTED:\n"+expected+"\nACTUAL:\n"+actual;
     }
 
-    private void fixIfXmlEndTag(Parser parser, Node node) {
-        if (node instanceof Tag) {
+    private void fixIfXmlEndTag (Parser parser, Node node)
+    {
+        if (node instanceof Tag)
+        {
             Tag tag = (Tag)node;
-            if (tag.isEmptyXmlTag()) {
-// oh crap...
-                // Add end tag
+            if (tag.isEmptyXmlTag())
+            {
+                System.out.println (tag);
+//                // Add end tag
 //                String currLine = parser.getReader().getCurrentLine();
 //                int pos = parser.getReader().getLastReadPosition();
 //                currLine =
@@ -346,7 +349,7 @@ public class ParserTestCase extends TestCase {
         Iterator i = expectedTag.getAttributes().keySet().iterator();
         while (i.hasNext()) {
             String key = (String)i.next();
-            if (key=="/") continue;
+            if (key.trim().equals ("/")) continue;
             String expectedValue =
                 expectedTag.getAttribute(key);
             String actualValue =

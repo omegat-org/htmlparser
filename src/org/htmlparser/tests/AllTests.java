@@ -100,20 +100,26 @@ public class AllTests extends junit.framework.TestCase
         }
     }
 
-    public static TestSuite suite() {
-        TestSuite suite = new TestSuite("HTMLParser Tests");
-        TestSuite basic = new TestSuite("Basic Tests");
-        basic.addTestSuite(ParserTest.class);
-        suite.addTest(basic);
-        suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());
-        suite.addTest(org.htmlparser.tests.utilTests.AllTests.suite());
-        suite.addTest(org.htmlparser.tests.tagTests.AllTests.suite());
-        suite.addTest(org.htmlparser.tests.visitorsTests.AllTests.suite());
-        suite.addTest(org.htmlparser.tests.parserHelperTests.AllTests.suite());
-        suite.addTest(org.htmlparser.tests.nodeDecoratorTests.AllTests.suite());
-        suite.addTest(AssertXmlEqualsTest.suite());
-        suite.addTest(LineNumberAssignedByNodeReaderTest.suite());
-        return suite;
+    public static TestSuite suite()
+    {
+        TestSuite suite;
+        TestSuite sub;
+        
+        suite = new TestSuite ("HTMLParser Tests");
+        sub = new TestSuite ("Basic Tests");
+        sub.addTestSuite (ParserTest.class);
+        sub.addTestSuite (AssertXmlEqualsTest.class);
+        sub.addTestSuite (FunctionalTests.class);
+        sub.addTestSuite (LineNumberAssignedByNodeReaderTest.class);
+        suite.addTest (sub);
+        suite.addTest (org.htmlparser.tests.scannersTests.AllTests.suite ());
+        suite.addTest (org.htmlparser.tests.utilTests.AllTests.suite ());
+        suite.addTest (org.htmlparser.tests.tagTests.AllTests.suite ());
+        suite.addTest (org.htmlparser.tests.visitorsTests.AllTests.suite ());
+        suite.addTest (org.htmlparser.tests.parserHelperTests.AllTests.suite ());
+        suite.addTest (org.htmlparser.tests.nodeDecoratorTests.AllTests.suite ());
+
+        return (suite);
     }
 }
 
