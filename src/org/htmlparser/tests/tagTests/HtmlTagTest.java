@@ -28,9 +28,9 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.Html;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;

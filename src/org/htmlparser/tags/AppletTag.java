@@ -32,7 +32,9 @@ import java.util.Vector;
 
 import org.htmlparser.Attribute;
 import org.htmlparser.Node;
+import org.htmlparser.Tag;
 import org.htmlparser.Text;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
@@ -237,7 +239,7 @@ public class AppletTag
             attributes.addElement (new Attribute ("VALUE", paramValue, '"'));
             attributes.addElement (new Attribute (" "));
             attributes.addElement (new Attribute ("NAME", paramName, '"'));
-            tag = new Tag (null, 0, 0, attributes);
+            tag = new TagNode (null, 0, 0, attributes);
             kids.add (tag);
         }
 

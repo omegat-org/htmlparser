@@ -26,10 +26,14 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.nodes.TagNode;
+
 /**
  * An input tag in a form.
  */
-public class InputTag extends Tag
+public class InputTag
+    extends
+        TagNode
 {
     /**
      * The set of names handled by this tag.

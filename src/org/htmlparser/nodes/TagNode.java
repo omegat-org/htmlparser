@@ -36,6 +36,8 @@ import org.htmlparser.Tag;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.scanners.Scanner;
+import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SpecialHashtable;
 import org.htmlparser.util.Translate;
@@ -43,7 +45,8 @@ import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * TagNode represents a generic tag.
- * 
+ * If no scanner is registered for a given tag name, this is what you get.
+ * This is also the base class for all tags created by the parser.
  */
 public class TagNode
     extends
@@ -51,6 +54,21 @@ public class TagNode
     implements
         Tag
 {
+    /**
+     * An empty set of tag names.
+     */
+    private final static String[] NONE = new String[0];
+    
+    /**
+     * The scanner for this tag.
+     */
+    private Scanner mScanner;
+    
+    /**
+     * The default scanner for non-composite tags.
+     */
+    protected final static Scanner mDefaultScanner = new TagScanner ();
+
     /**
      * The tag attributes.
      * Objects of type {@link Attribute}.
@@ -117,7 +135,30 @@ public class TagNode
     public TagNode (Page page, int start, int end, Vector attributes)
     {
         super (page, start, end);
+
+        mScanner = mDefaultScanner;
         mAttributes = attributes;
+        if ((null == mAttributes) || (0 == mAttributes.size ()))
+        {
+            String[] names;
+
+            names = getIds ();
+            if ((null != names) && (0 != names.length))
+                setTagName (names[0]);
+            else
+                setTagName (""); // make sure it's not null
+        }
+    }
+
+    /**
+     * Create a tag like the one provided.
+     * @param node The tag to emulate.
+     * @param scanner The scanner for this tag.
+     */
+    public TagNode (TagNode tag, TagScanner scanner)
+    {
+        this (tag.getPage (), tag.getTagBegin (), tag.getTagEnd (), tag.getAttributesEx ());
+        setThisScanner (scanner);
     }
 
     /**
@@ -466,13 +507,18 @@ public class TagNode
 
         attribute = new Attribute (name, null, (char)0);
         attributes = getAttributesEx ();
+        if (null == attributes)
+        {
+            attributes = new Vector ();
+            setAttributesEx (attributes);
+        }
         if (0 == attributes.size ())
             // nothing added yet
             attributes.addElement (attribute);
         else
         {
             zeroth = (Attribute)attributes.elementAt (0);
-            // check forn attribute that looks like a name
+            // check for attribute that looks like a name
             if ((null == zeroth.getValue ()) && (0 == zeroth.getQuote ()))
                 attributes.setElementAt (attribute, 0);
             else
@@ -875,5 +921,78 @@ public class TagNode
     public int getEndingLineNumber ()
     {
         return (getPage ().row (getEndPosition ()));
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * Since this a a generic tag, it has no ids.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (NONE);
+    }
+
+    /**
+     * Return the set of tag names that cause this tag to finish.
+     * These are the normal (non end tags) that if encountered while
+     * scanning (a composite tag) will cause the generation of a virtual
+     * tag.
+     * Since this a a non-composite tag, the default is no enders.
+     * @return The names of following tags that stop further scanning.
+     */
+    public String[] getEnders ()
+    {
+        return (NONE);
+    }
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * These are the end tags that if encountered while
+     * scanning (a composite tag) will cause the generation of a virtual
+     * tag.
+     * Since this a a non-composite tag, it has no end tag enders.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (NONE);
+    }
+
+    /**
+     * Return the scanner associated with this tag.
+     * @return The scanner associated with this tag.
+     */
+    public Scanner getThisScanner ()
+    {
+        return (mScanner);
+    }
+
+    /**
+     * Set the scanner associated with this tag.
+     * @param scanner The scanner for this tag.
+     */
+    public void setThisScanner (Scanner scanner)
+    {
+        mScanner = scanner;
+    }
+
+    /**
+     * Get the end tag for this (composite) tag.
+     * For a non-composite tag this always returns <code>null</code>.
+     * @return The tag that terminates this composite tag, i.e. &lt;/HTML&gt;.
+     */
+    public Tag getEndTag ()
+    {
+        return (null);
+    }
+
+    /**
+     * Set the end tag for this (composite) tag.
+     * For a non-composite tag this is a no-op.
+     * @param end The tag that terminates this composite tag, i.e. &lt;/HTML&gt;.
+     */
+    public void setEndTag (Tag end)
+    {
     }
 }

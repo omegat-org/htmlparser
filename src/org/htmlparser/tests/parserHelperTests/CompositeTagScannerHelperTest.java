@@ -26,7 +26,7 @@
 
 package org.htmlparser.tests.parserHelperTests;
 
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 

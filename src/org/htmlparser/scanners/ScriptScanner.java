@@ -32,13 +32,12 @@ import org.htmlparser.Node;
 import org.htmlparser.NodeFactory;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Remark;
+import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.scanners.ScriptDecoder;
-import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.ScriptTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
@@ -79,7 +78,7 @@ public class ScriptScanner
         Tag end;
         NodeFactory factory;
         Text content;
-        CompositeTag ret;
+        Tag ret;
 
         done = false;
         startpos = lexer.getPosition ();
@@ -134,8 +133,9 @@ public class ScriptScanner
             content = factory.createStringNode (lexer.getPage (), startpos, endpos);
             // build new end tag if required
             if (null == end)
-                end = new Tag (lexer.getPage (), endpos, endpos, new Vector ());
-            ret = (CompositeTag)tag;
+                end = (Tag)lexer.getNodeFactory ().createTagNode (
+                    lexer.getPage (), endpos, endpos, new Vector ());
+            ret = tag;
             ret.setEndTag (end);
             ret.setChildren (new NodeList (content));
             content.setParent (ret);

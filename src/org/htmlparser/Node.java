@@ -26,6 +26,7 @@
 
 package org.htmlparser;
 
+import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
@@ -169,6 +170,17 @@ public interface Node
      */
     public abstract void setEndPosition (int position);
 
+    /**
+     * Get the page this node came from.
+     * @return The page that supplied this node.
+     */
+    public Page getPage ();
+
+    /**
+     * Set the page this node came from.
+     * @param page The page that supplied this node.
+     */
+    public void setPage (Page page);
     /**
      * Apply the visitor to this node.
      * @param visitor The visitor to this node.

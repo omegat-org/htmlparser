@@ -29,6 +29,7 @@ package org.htmlparser.nodeDecorators;
 import org.htmlparser.Node;
 import org.htmlparser.Text;
 import org.htmlparser.NodeFilter;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
@@ -107,7 +108,26 @@ public abstract class AbstractNodeDecorator implements Text
         delegate.setEndPosition (position);
     }
     
-    public boolean equals(Object arg0) {
+    /**
+     * Get the page this node came from.
+     * @return The page that supplied this node.
+     */
+    public Page getPage ()
+    {
+        return (delegate.getPage ());
+    }
+
+    /**
+     * Set the page this node came from.
+     * @param page The page that supplied this node.
+     */
+    public void setPage (Page page)
+    {
+        delegate.setPage (page);
+    }
+
+    public boolean equals(Object arg0)
+    {
         return delegate.equals(arg0);
     }
 

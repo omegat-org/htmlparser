@@ -27,6 +27,7 @@
 package org.htmlparser.tests.filterTests;
 
 import org.htmlparser.Parser;
+import org.htmlparser.Tag;
 import org.htmlparser.filters.AndFilter;
 import org.htmlparser.filters.CssSelectorNodeFilter;
 import org.htmlparser.filters.HasAttributeFilter;
@@ -41,7 +42,6 @@ import org.htmlparser.lexer.Lexer;
 import org.htmlparser.Text;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;

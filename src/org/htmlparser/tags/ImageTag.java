@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Vector;
 
 import org.htmlparser.Attribute;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.ParserUtils;
 import org.htmlparser.visitors.NodeVisitor;
 
@@ -38,7 +39,7 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class ImageTag
     extends
-        Tag
+        TagNode
 {
     /**
      * The set of names handled by this tag.

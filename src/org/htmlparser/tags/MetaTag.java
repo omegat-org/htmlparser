@@ -27,6 +27,7 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.Attribute;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -34,7 +35,7 @@ import org.htmlparser.util.ParserException;
  */
 public class MetaTag
     extends
-        Tag
+        TagNode
 {
     /**
      * The set of names handled by this tag.

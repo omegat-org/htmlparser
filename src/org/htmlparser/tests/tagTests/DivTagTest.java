@@ -27,10 +27,10 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.TableTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 

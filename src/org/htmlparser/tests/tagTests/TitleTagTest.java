@@ -27,12 +27,12 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.HeadTag;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.StyleTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;

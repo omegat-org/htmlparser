@@ -35,8 +35,7 @@ import org.htmlparser.Remark;
 import org.htmlparser.Text;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.tags.CompositeTag;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
@@ -74,7 +73,7 @@ public class StyleScanner extends CompositeTagScanner
         Tag end;
         NodeFactory factory;
         Text content;
-        CompositeTag ret;
+        Tag ret;
 
         done = false;
         startpos = lexer.getPosition ();
@@ -117,8 +116,9 @@ public class StyleScanner extends CompositeTagScanner
             content = factory.createStringNode (lexer.getPage (), startpos, endpos);
             // build new end tag if required
             if (null == end)
-                end = new Tag (lexer.getPage (), endpos, endpos, new Vector ());
-            ret = (CompositeTag)tag;
+                end = (Tag)lexer.getNodeFactory ().createTagNode (
+                    lexer.getPage (), endpos, endpos, new Vector ());
+            ret = tag;
             ret.setEndTag (end);
             ret.setChildren (new NodeList (content));
             content.setParent (ret);

@@ -27,7 +27,7 @@
 package org.htmlparser.tests.visitorsTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.TagFindingVisitor;
 

@@ -26,15 +26,16 @@
 
 package org.htmlparser.filters;
 
-import org.htmlparser.*;
-import org.htmlparser.lexer.Lexer;
-import org.htmlparser.tags.Tag;
-import org.htmlparser.util.NodeIterator;
-import org.htmlparser.util.NodeList;
-
+import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.net.URLConnection;
+
+import org.htmlparser.Node;
+import org.htmlparser.NodeFilter;
+import org.htmlparser.Tag;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.NodeList;
 
 /**
  * A NodeFilter that accepts nodes based on whether they match a CSS2 selector.

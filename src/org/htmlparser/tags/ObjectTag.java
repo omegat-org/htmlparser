@@ -30,9 +30,11 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.htmlparser.Node;
-import org.htmlparser.nodes.TextNode;
 import org.htmlparser.Attribute;
+import org.htmlparser.Node;
+import org.htmlparser.Tag;
+import org.htmlparser.nodes.TextNode;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
@@ -342,7 +344,7 @@ public class ObjectTag extends CompositeTag
             attributes.addElement (new Attribute ("VALUE", paramValue, '"'));
             attributes.addElement (new Attribute (" "));
             attributes.addElement (new Attribute ("NAME", paramName.toUpperCase (), '"'));
-            tag = new Tag (null, 0, 0, attributes);
+            tag = new TagNode (null, 0, 0, attributes);
             kids.add (tag);
         }
         

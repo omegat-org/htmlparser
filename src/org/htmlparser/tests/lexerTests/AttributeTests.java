@@ -32,10 +32,11 @@ import org.htmlparser.Node;
 
 import org.htmlparser.Attribute;
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.lexer.PageAttribute;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -50,7 +51,7 @@ public class AttributeTests extends ParserTestCase
 
     private static final boolean JSP_TESTS_ENABLED = false;
     private Tag tag;
-    private Hashtable table;
+    private Vector attributes;
 
     public AttributeTests (String name) {
         super(name);
@@ -66,7 +67,6 @@ public class AttributeTests extends ParserTestCase
         String html;
         NodeIterator iterator;
         Node node;
-        Vector attributes;
 
         html = "<" + tagContents + ">";
         createParser (html);
@@ -97,10 +97,9 @@ public class AttributeTests extends ParserTestCase
                     }
                     System.out.println ();
                 }
-                table = tag.getAttributes ();
             }
             else
-                table = null;
+                attributes = null;
             String string = node.toHtml ();
             assertEquals ("toHtml differs", html, string);
             assertTrue ("shouldn't be any more nodes", !iterator.hasMoreNodes ());
@@ -133,7 +132,7 @@ public class AttributeTests extends ParserTestCase
         attributes.add (new Attribute (" "));
         // String String, String, char
         attributes.add (new Attribute ("name", "=", "topFrame", '"'));
-        tag = new Tag (null, 0, 0, attributes);
+        tag = new TagNode (null, 0, 0, attributes);
         html = "<wombat label=\"The civil war.\" frameborder= no name=\"topFrame\">";
         assertStringEquals ("tag contents", html, tag.toHtml ());
     }
@@ -190,7 +189,7 @@ public class AttributeTests extends ParserTestCase
         assertTrue ("should be valued", attribute.isValued ());
         assertTrue ("should not be empty", !attribute.isEmpty ());
         attributes.add (attribute);
-        tag = new Tag (null, 0, 0, attributes);
+        tag = new TagNode (null, 0, 0, attributes);
         html = "<wombat label=\"The civil war.\" frameborder= no name=\"topFrame\">";
         assertStringEquals ("tag contents", html, tag.toHtml ());
     }
@@ -217,7 +216,7 @@ public class AttributeTests extends ParserTestCase
         attributes.add (new PageAttribute (" "));
         // String String, String, char
         attributes.add (new PageAttribute ("name", "=", "topFrame", '"'));
-        tag = new Tag (null, 0, 0, attributes);
+        tag = new TagNode (null, 0, 0, attributes);
         html = "<wombat label=\"The civil war.\" frameborder= no name=\"topFrame\">";
         assertStringEquals ("tag contents", html, tag.toHtml ());
     }
@@ -278,7 +277,7 @@ public class AttributeTests extends ParserTestCase
         assertTrue ("should be valued", attribute.isValued ());
         assertTrue ("should not be empty", !attribute.isEmpty ());
          attributes.add (attribute);
-        tag = new Tag (null, 0, 0, attributes);
+        tag = new TagNode (null, 0, 0, attributes);
         html = "<wombat label=\"The civil war.\" frameborder= no name=\"topFrame\">";
         assertStringEquals ("tag contents", html, tag.toHtml ());
     }
@@ -288,7 +287,7 @@ public class AttributeTests extends ParserTestCase
      */
     public void testParseParameters() {
         getParameterTableFor("a b = \"c\"");
-        assertEquals("Value","c",table.get("B"));
+        assertEquals("Value","c",((Attribute)(attributes.elementAt (2))).getValue ());
     }
 
     /**
@@ -296,7 +295,7 @@ public class AttributeTests extends ParserTestCase
      */
     public void testParseTokenValues() {
         getParameterTableFor("a b = \"'\"");
-        assertEquals("Value","'",table.get("B"));
+        assertEquals("Value","'",((Attribute)(attributes.elementAt (2))).getValue ());
     }
 
     /**
@@ -304,7 +303,7 @@ public class AttributeTests extends ParserTestCase
      */
     public void testParseEmptyValues() {
         getParameterTableFor("a b = \"\"");
-        assertEquals("Value","",table.get("B"));
+        assertEquals("Value","",((Attribute)(attributes.elementAt (2))).getValue ());
     }
 
     /**
@@ -314,8 +313,7 @@ public class AttributeTests extends ParserTestCase
      */
     public void testParseMissingEqual() {
         getParameterTableFor("a b\"c\"");
-        assertEquals("ValueB",null,table.get("B"));
-        assertTrue("NameC",table.containsKey("B\"C\""));
+        assertEquals("NameC", "b\"c\"", ((Attribute)(attributes.elementAt (2))).getName ());
     }
 
     /**
@@ -323,8 +321,8 @@ public class AttributeTests extends ParserTestCase
      */
     public void testTwoParams(){
         getParameterTableFor("PARAM NAME=\"Param1\" VALUE=\"Somik\"");
-        assertEquals("Param1","Param1",table.get("NAME"));
-        assertEquals("Somik","Somik",table.get("VALUE"));
+        assertEquals("Param1","Param1",((Attribute)(attributes.elementAt (2))).getValue ());
+        assertEquals("Somik","Somik",((Attribute)(attributes.elementAt (4))).getValue ());
     }
 
     /**
@@ -332,8 +330,8 @@ public class AttributeTests extends ParserTestCase
      */
     public void testPlainParams(){
         getParameterTableFor("PARAM NAME=Param1 VALUE=Somik");
-        assertEquals("Param1","Param1",table.get("NAME"));
-        assertEquals("Somik","Somik",table.get("VALUE"));
+        assertEquals("Param1","Param1",((Attribute)(attributes.elementAt (2))).getValue ());
+        assertEquals("Somik","Somik",((Attribute)(attributes.elementAt (4))).getValue ());
     }
 
     /**
@@ -341,11 +339,11 @@ public class AttributeTests extends ParserTestCase
      */
     public void testValueMissing() {
         getParameterTableFor("INPUT type=\"checkbox\" name=\"Authorize\" value=\"Y\" checked");
-        assertEquals("Name of Tag","INPUT",table.get(SpecialHashtable.TAGNAME));
-        assertEquals("Type","checkbox",table.get("TYPE"));
-        assertEquals("Name","Authorize",table.get("NAME"));
-        assertEquals("Value","Y",table.get("VALUE"));
-        assertEquals("Checked",null,table.get("CHECKED"));
+        assertEquals("Name of Tag","INPUT",((Attribute)(attributes.elementAt (0))).getName ());
+        assertEquals("Type","checkbox",((Attribute)(attributes.elementAt (2))).getValue ());
+        assertEquals("Name","Authorize",((Attribute)(attributes.elementAt (4))).getValue ());
+        assertEquals("Value","Y",((Attribute)(attributes.elementAt (6))).getValue ());
+        assertEquals("Checked",null,((Attribute)(attributes.elementAt (8))).getValue ());
     }
 
     /**
@@ -356,13 +354,10 @@ public class AttributeTests extends ParserTestCase
     public void testIncorrectSpaceKeyBug() {
         getParameterTableFor("TEXTAREA name=\"Remarks\" ");
         // There should only be two keys..
-        assertEquals("There should only be two keys",2,table.size());
+        assertEquals("There should only be two attributes",4,attributes.size());
         // The first key is name
-        String key1 = "NAME";
-        String value1 = (String)table.get(key1);
-        assertEquals("Expected value 1", "Remarks",value1);
-        String key2 = SpecialHashtable.TAGNAME;
-        assertEquals("Expected Value 2","TEXTAREA",table.get(key2));
+        assertEquals("Expected name","TEXTAREA",((Attribute)(attributes.elementAt (0))).getName ());
+        assertEquals("Expected value 1", "Remarks",((Attribute)(attributes.elementAt (2))).getValue ());
     }
 
     /**
@@ -370,8 +365,8 @@ public class AttributeTests extends ParserTestCase
      */
     public void testNullTag(){
         getParameterTableFor("INPUT type=");
-        assertEquals("Name of Tag","INPUT",table.get(SpecialHashtable.TAGNAME));
-        assertEquals("Type","",table.get("TYPE"));
+        assertEquals("Name of Tag","INPUT",((Attribute)(attributes.elementAt (0))).getName ());
+        assertNull("Type",((Attribute)(attributes.elementAt (2))).getValue ());
     }
 
     /**
@@ -384,7 +379,7 @@ public class AttributeTests extends ParserTestCase
         assertStringEquals(
             "href",
             "/news/866201.asp?0sl=-32",
-            (String)table.get("HREF")
+            ((Attribute)(attributes.elementAt (4))).getValue ()
         );
     }
 
@@ -398,12 +393,12 @@ public class AttributeTests extends ParserTestCase
         assertStringEquals(
             "href",
             "mailto:sam@neurogrid.com?subject=Site Comments",
-            (String)table.get("HREF")
+            ((Attribute)(attributes.elementAt (2))).getValue ()
         );
         assertStringEquals(
             "tag name",
-            "A",
-            (String)table.get(SpecialHashtable.TAGNAME)
+            "a",
+            ((Attribute)(attributes.elementAt (0))).getName ()
         );
     }
 
@@ -419,7 +414,7 @@ public class AttributeTests extends ParserTestCase
      **/
     public void testEmptyTag () {
         getParameterTableFor("");
-        assertNull ("<> is not a tag",table);
+        assertNull ("<> is not a tag",attributes);
     }
 
     /**
@@ -436,7 +431,7 @@ public class AttributeTests extends ParserTestCase
             assertStringEquals(
                 "href",
                 "<%=Application(\"sURL\")%>/literature/index.htm",
-                (String)table.get("HREF")
+                ((Attribute)(attributes.elementAt (2))).getValue ()
             );
         }
     }
@@ -447,10 +442,10 @@ public class AttributeTests extends ParserTestCase
      */
     public void testScriptedTag () {
         getParameterTableFor("body onLoad=defaultStatus=''");
-        String name = (String)table.get(SpecialHashtable.TAGNAME);
+        String name = ((Attribute)(attributes.elementAt (0))).getName ();
         assertNotNull ("No Tag.TAGNAME", name);
-        assertStringEquals("tag name parsed incorrectly", "BODY", name);
-        String value = (String)table.get ("ONLOAD");
+        assertStringEquals("tag name parsed incorrectly", "body", name);
+        String value = ((Attribute)(attributes.elementAt (2))).getValue ();
         assertStringEquals ("parameter parsed incorrectly", "defaultStatus=''", value);
     }
 
@@ -462,8 +457,8 @@ public class AttributeTests extends ParserTestCase
     public void testStandaloneAttribute ()
     {
         getParameterTableFor ("INPUT DISABLED");
-        assertTrue ("Standalone attribute has no entry in table keyset",table.containsKey("DISABLED"));
-        assertNull ("Standalone attribute has non-null value",(String)table.get("DISABLED"));
+        assertStringEquals("Standalone attribute not parsed","DISABLED",((Attribute)(attributes.elementAt (2))).getName ());
+        assertNull ("Standalone attribute has non-null value",((Attribute)(attributes.elementAt (2))).getValue ());
     }
 
     /**
@@ -472,8 +467,8 @@ public class AttributeTests extends ParserTestCase
     public void testMissingAttribute ()
     {
         getParameterTableFor ("INPUT DISABLED=");
-        assertTrue ("Attribute has no entry in table keyset",table.containsKey("DISABLED"));
-        assertEquals ("Attribute has non-blank value","",(String)table.get("DISABLED"));
+        assertStringEquals("Empty attribute has no attribute","DISABLED",((Attribute)(attributes.elementAt (2))).getName ());
+        assertEquals ("Attribute has non-blank value",null,((Attribute)(attributes.elementAt (2))).getValue ());
     }
 
     /**
@@ -483,9 +478,10 @@ public class AttributeTests extends ParserTestCase
     public void testRule1 ()
     {
         getParameterTableFor ("tag att = other=fred");
-        assertTrue ("Attribute missing", table.containsKey ("ATT"));
-        assertEquals ("Attribute has wrong value", "other=fred", (String)table.get ("ATT"));
-        assertTrue ("No attribute should be called equal sign", !table.containsKey ("="));
+        assertStringEquals("Attribute not parsed","att",((Attribute)(attributes.elementAt (2))).getName ());
+        assertEquals ("Attribute has wrong value", "other=fred", ((Attribute)(attributes.elementAt (2))).getValue ());
+        for (int i = 0; i < attributes.size (); i++)
+            assertTrue ("No attribute should be called =", !((Attribute)(attributes.elementAt (2))).getName ().equals ("="));
     }
 
     /**
@@ -494,11 +490,12 @@ public class AttributeTests extends ParserTestCase
     public void testRule2 ()
     {
         getParameterTableFor ("tag att =value other=fred");
-        assertTrue ("Attribute missing", table.containsKey ("ATT"));
-        assertEquals ("Attribute has wrong value", "value", (String)table.get ("ATT"));
-        assertTrue ("No attribute should be called =value", !table.containsKey ("=VALUE"));
-        assertTrue ("Attribute missing", table.containsKey ("OTHER"));
-        assertEquals ("Attribute has wrong value", "fred", (String)table.get ("OTHER"));
+        assertStringEquals("Attribute not parsed","att",((Attribute)(attributes.elementAt (2))).getName ());
+        assertEquals ("Attribute has wrong value", "value", ((Attribute)(attributes.elementAt (2))).getValue ());
+        for (int i = 0; i < attributes.size (); i++)
+            assertTrue ("No attribute should be called =value", !((Attribute)(attributes.elementAt (2))).getName ().equals ("=value"));
+        assertStringEquals("Empty attribute not parsed","other",((Attribute)(attributes.elementAt (4))).getName ());
+        assertEquals ("Attribute has wrong value", "fred", ((Attribute)(attributes.elementAt (4))).getValue ());
     }
 
     /**
@@ -507,11 +504,12 @@ public class AttributeTests extends ParserTestCase
     public void testRule3 ()
     {
         getParameterTableFor ("tag att= \"value\" other=fred");
-        assertTrue ("Attribute missing", table.containsKey ("ATT"));
-        assertEquals ("Attribute has wrong value", "value", (String)table.get ("ATT"));
-        assertTrue ("No attribute should be called \"value\"", !table.containsKey ("\"VALUE\""));
-        assertTrue ("Attribute missing", table.containsKey ("OTHER"));
-        assertEquals ("Attribute has wrong value", "fred", (String)table.get ("OTHER"));
+        assertStringEquals("Attribute not parsed","att",((Attribute)(attributes.elementAt (2))).getName ());
+        assertEquals ("Attribute has wrong value", "value", ((Attribute)(attributes.elementAt (2))).getValue ());
+        for (int i = 0; i < attributes.size (); i++)
+            assertTrue ("No attribute should be called \"value\"", !((Attribute)(attributes.elementAt (2))).getName ().equals ("\"value\""));
+        assertStringEquals("Empty attribute not parsed","other",((Attribute)(attributes.elementAt (4))).getName ());
+        assertEquals ("Attribute has wrong value", "fred", ((Attribute)(attributes.elementAt (4))).getValue ());
     }
 
     /**
@@ -521,13 +519,15 @@ public class AttributeTests extends ParserTestCase
     public void testRule4 ()
     {
         getParameterTableFor ("tag att=\"va\"lue\" other=fred");
-        assertTrue ("Attribute missing", table.containsKey ("ATT"));
-        assertEquals ("Attribute has wrong value", "va", (String)table.get ("ATT"));
-        assertTrue ("No attribute should be called va\"lue", !table.containsKey ("VA\"LUE"));
-        assertTrue ("Attribute missing", table.containsKey ("LUE\""));
-        assertNull ("Attribute has wrong value", table.get ("LUE\""));
-        assertTrue ("Attribute missing", table.containsKey ("OTHER"));
-        assertEquals ("Attribute has wrong value", "fred", (String)table.get ("OTHER"));
+        assertStringEquals("Attribute not parsed","att",((Attribute)(attributes.elementAt (2))).getName ());
+        assertEquals ("Attribute has wrong value", "va", ((Attribute)(attributes.elementAt (2))).getValue ());
+        for (int i = 0; i < attributes.size (); i++)
+            assertTrue ("No attribute should be called va\"lue", !((Attribute)(attributes.elementAt (2))).getName ().equals ("va\"lue"));
+        assertStringEquals("Attribute missing","att",((Attribute)(attributes.elementAt (2))).getName ());
+        assertStringEquals("Attribute not parsed","lue\"",((Attribute)(attributes.elementAt (3))).getName ());
+        assertNull ("Attribute has wrong value", ((Attribute)(attributes.elementAt (3))).getValue ());
+        assertStringEquals("Empty attribute not parsed","other",((Attribute)(attributes.elementAt (5))).getName ());
+        assertEquals ("Attribute has wrong value", "fred", ((Attribute)(attributes.elementAt (5))).getValue ());
     }
 
     /**
@@ -537,13 +537,14 @@ public class AttributeTests extends ParserTestCase
     public void testRule5 ()
     {
         getParameterTableFor ("tag att='va'lue' other=fred");
-        assertTrue ("Attribute missing", table.containsKey ("ATT"));
-        assertEquals ("Attribute has wrong value", "va", (String)table.get ("ATT"));
-        assertTrue ("No attribute should be called va'lue", !table.containsKey ("VA'LUE"));
-        assertTrue ("Attribute missing", table.containsKey ("LUE'"));
-        assertNull ("Attribute has wrong value", table.get ("LUE'"));
-        assertTrue ("Attribute missing", table.containsKey ("OTHER"));
-        assertEquals ("Attribute has wrong value", "fred", (String)table.get ("OTHER"));
+        assertStringEquals("Attribute not parsed","att",((Attribute)(attributes.elementAt (2))).getName ());
+        assertEquals ("Attribute has wrong value", "va", ((Attribute)(attributes.elementAt (2))).getValue ());
+        for (int i = 0; i < attributes.size (); i++)
+            assertTrue ("No attribute should be called va'lue", !((Attribute)(attributes.elementAt (2))).getName ().equals ("va'lue"));
+        assertStringEquals("Attribute not parsed","lue'",((Attribute)(attributes.elementAt (3))).getName ());
+        assertNull ("Attribute has wrong value", ((Attribute)(attributes.elementAt (3))).getValue ());
+        assertStringEquals("Empty attribute not parsed","other",((Attribute)(attributes.elementAt (5))).getName ());
+        assertEquals ("Attribute has wrong value", "fred", ((Attribute)(attributes.elementAt (5))).getValue ());
     }
     
     /**

@@ -28,8 +28,8 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.tags.JspTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 

@@ -26,10 +26,14 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.nodes.TagNode;
+
 /**
  * Identifies a frame tag
  */
-public class FrameTag extends Tag
+public class FrameTag
+    extends
+        TagNode
 {
     /**
      * The set of names handled by this tag.

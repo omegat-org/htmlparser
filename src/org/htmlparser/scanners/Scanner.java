@@ -26,8 +26,8 @@
 
 package org.htmlparser.scanners;
 
+import org.htmlparser.Tag;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 

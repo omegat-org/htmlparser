@@ -29,17 +29,20 @@ package org.htmlparser.tests;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Vector;
 
 import junit.framework.TestCase;
+import org.htmlparser.Attribute;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -253,8 +256,8 @@ public class ParserTestCase extends TestCase {
             else
                 nextActualNode = getNextNodeUsing (actualIterator);
             assertNotNull (nextActualNode);
-            tag1 = fixIfXmlEndTag (nextExpectedNode);
-            tag2 = fixIfXmlEndTag (nextActualNode);
+            tag1 = fixIfXmlEndTag (expectedParser.getLexer ().getPage (), nextExpectedNode);
+            tag2 = fixIfXmlEndTag (resultParser.getLexer ().getPage (), nextActualNode);
             assertStringValueMatches(
                 displayMessage,
                 nextExpectedNode,
@@ -319,7 +322,7 @@ public class ParserTestCase extends TestCase {
     /**
      * Return a following tag if node is an empty XML tag.
      */
-    private Tag fixIfXmlEndTag (Node node)
+    private Tag fixIfXmlEndTag (Page page, Node node)
     {
         Tag ret;
 
@@ -330,67 +333,53 @@ public class ParserTestCase extends TestCase {
             if (tag.isEmptyXmlTag())
             {
                 tag.setEmptyXmlTag (false);
-                ret = new Tag (tag.getPage (), tag.getStartPosition (), tag.getEndPosition (), tag.getAttributesEx ());
+                ret = new TagNode (page, tag.getStartPosition (), tag.getEndPosition (), tag.getAttributesEx ());
             }
         }
         
         return (ret);
     }
 
-    private void assertAttributesMatch(String displayMessage, Tag expectedTag, Tag actualTag) {
+    private void assertAttributesMatch(String displayMessage, Tag expectedTag, Tag actualTag)
+    {
         assertAllExpectedTagAttributesFoundInActualTag(
             displayMessage,
             expectedTag,
             actualTag);
-        if (expectedTag.getAttributes().size()!=actualTag.getAttributes().size()) {
+        if (expectedTag.getAttributesEx().size() != actualTag.getAttributesEx().size())
             assertActualTagHasNoExtraAttributes(displayMessage, expectedTag, actualTag);
-        }
     }
 
     private void assertActualTagHasNoExtraAttributes(String displayMessage, Tag expectedTag, Tag actualTag) {
-        Iterator i = actualTag.getAttributes().keySet().iterator();
-        while (i.hasNext()) {
-            String key = (String)i.next();
-            if (key=="/") continue;
-            String expectedValue =
-                expectedTag.getAttribute(key);
-            String actualValue =
-                actualTag.getAttribute(key);
-            if (key==SpecialHashtable.TAGNAME) {
-                expectedValue = ParserUtils.removeChars(expectedValue,'/');
-                actualValue = ParserUtils.removeChars(actualValue,'/');
-                assertStringEquals(displayMessage+"\ntag name",actualValue,expectedValue);
+        Vector v = actualTag.getAttributesEx ();
+        for (int i = 0; i < v.size (); i++)
+        {
+            Attribute a = (Attribute)v.elementAt (i);
+            if (a.isWhitespace ())
                 continue;
-            }
-
-            if (expectedValue==null)
-                fail(
-                    "\nActual tag had extra key: "+key+displayMessage
-                );
+            String actualValue = actualTag.getAttribute (a.getName ());
+            String expectedValue = expectedTag.getAttribute (a.getName ());
+            if (null == expectedValue)
+                fail("\nActual tag had extra attribute: " + a.getName () + displayMessage);
         }
     }
 
     private void assertAllExpectedTagAttributesFoundInActualTag(
         String displayMessage,
         Tag expectedTag,
-        Tag actualTag) {
-        Iterator i = expectedTag.getAttributes().keySet().iterator();
-        while (i.hasNext()) {
-            String key = (String)i.next();
-            if (key.trim().equals ("/")) continue;
-            String expectedValue =
-                expectedTag.getAttribute(key);
-            String actualValue =
-                actualTag.getAttribute(key);
-            if (key==SpecialHashtable.TAGNAME) {
-                expectedValue = ParserUtils.removeChars(expectedValue,'/');
-                actualValue = ParserUtils.removeChars(actualValue,'/');
-                assertStringEquals(displayMessage+"\ntag name",expectedValue,actualValue);
+        Tag actualTag)
+    {
+        Vector v = actualTag.getAttributesEx ();
+        for (int i = 0; i < v.size (); i++)
+        {
+            Attribute a = (Attribute)v.elementAt (i);
+            if (a.isWhitespace ())
                 continue;
-            }
+            String actualValue = actualTag.getAttribute (a.getName ());
+            String expectedValue = expectedTag.getAttribute (a.getName ());
 
             assertStringEquals(
-                "\nvalue for key "+key+" in tag "+expectedTag.getTagName()+" expected="+expectedValue+" but was "+actualValue+
+                "\nvalue for attribute " + a.getName () + " in tag "+expectedTag.getTagName()+" expected="+expectedValue+" but was "+actualValue+
                 "\n\nComplete Tag expected:\n"+expectedTag.toHtml()+
                 "\n\nComplete Tag actual:\n"+actualTag.toHtml()+
                 displayMessage,

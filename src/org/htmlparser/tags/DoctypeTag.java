@@ -26,10 +26,14 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.nodes.TagNode;
+
 /**
  * The HTML Document Declaration Tag can identify &lt;&#33;DOCTYPE&gt; tags.
  */
-public class DoctypeTag extends Tag
+public class DoctypeTag
+    extends
+        TagNode
 {
     /**
      * The set of names handled by this tag.

@@ -27,10 +27,10 @@
 package org.htmlparser.util;
 
 import org.htmlparser.Node;
+import org.htmlparser.Tag;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.scanners.Scanner;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeIterator;
 
 public class IteratorImpl implements NodeIterator

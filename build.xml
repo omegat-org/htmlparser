@@ -269,6 +269,8 @@ Update the Web Site
       <include name="org/htmlparser/Remark.class"/>
       <include name="org/htmlparser/Tag.class"/>
       <include name="org/htmlparser/Text.class"/>
+      <include name="org/htmlparser/scanners/Scanner.class"/>
+      <include name="org/htmlparser/scanners/TagScanner.class"/>
       <include name="org/htmlparser/util/ParserException.class"/>
       <include name="org/htmlparser/util/ChainedException.class"/>
       <include name="org/htmlparser/util/NodeList*.class"/>

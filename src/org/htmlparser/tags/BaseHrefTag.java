@@ -27,13 +27,16 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.lexer.Page;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.ParserException;
 
 /**
  * BaseHrefTag represents an &lt;Base&gt; tag.
  * It extends a basic tag by providing an accessor to the HREF attribute.
  */
-public class BaseHrefTag extends Tag
+public class BaseHrefTag
+    extends
+        TagNode
 {
     /**
      * The set of names handled by this tag.

@@ -31,9 +31,9 @@ import junit.framework.TestSuite;
 import org.htmlparser.Node;
 
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.Html;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;

@@ -26,10 +26,14 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.nodes.TagNode;
+
 /**
  * The JSP/ASP tags like &lt;%&#46;&#46;&#46;%&gt; can be identified by this class.
  */
-public class JspTag extends Tag
+public class JspTag
+    extends
+        TagNode
 {
     /**
      * The set of names handled by this tag.

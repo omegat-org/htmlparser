@@ -42,6 +42,7 @@ import org.htmlparser.lexer.Page;
 import org.htmlparser.nodes.AbstractNode;
 import org.htmlparser.nodes.TextNode;
 import org.htmlparser.nodes.RemarkNode;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.BodyTag;
@@ -105,6 +106,11 @@ public class PrototypicalNodeFactory
     protected Remark mRemark;
 
     /**
+     * The prototypical tag node.
+     */
+    protected Tag mTag;
+
+    /**
      * The list of tags to return.
      * The list is keyed by tag name.
      */
@@ -128,6 +134,7 @@ public class PrototypicalNodeFactory
         clear ();
         mText = new TextNode (null, 0, 0);
         mRemark = new RemarkNode (null, 0, 0);
+        mTag = new TagNode (null, 0, 0, null);
         if (!empty)
             registerTags ();
     }
@@ -136,7 +143,7 @@ public class PrototypicalNodeFactory
      * Create a new factory with the given tag as the only registered tag.
      * @param tag The single tag to register in the otherwise empty factory.
      */
-    public PrototypicalNodeFactory (org.htmlparser.tags.Tag tag)
+    public PrototypicalNodeFactory (Tag tag)
     {
         this (true);
         registerTag (tag);
@@ -146,7 +153,7 @@ public class PrototypicalNodeFactory
      * Create a new factory with the given tags registered.
      * @param tags The tags to register in the otherwise empty factory.
      */
-    public PrototypicalNodeFactory (org.htmlparser.tags.Tag[] tags)
+    public PrototypicalNodeFactory (Tag[] tags)
     {
         this (true);
         for (int i = 0; i < tags.length; i++)
@@ -206,9 +213,9 @@ public class PrototypicalNodeFactory
      * Register a tag.
      * Registers the given tag under every id the tag has.
      * @param tag The tag to register (subclass of
-     * {@link org.htmlparser.tags.Tag}).
+     * {@link Tag}).
      */
-    public void registerTag (org.htmlparser.tags.Tag tag)
+    public void registerTag (Tag tag)
     {
         String ids[];
         
@@ -221,9 +228,9 @@ public class PrototypicalNodeFactory
      * Unregister a tag.
      * Unregisters the given tag from every id the tag has.
      * @param tag The tag to unregister (subclass of
-     * {@link org.htmlparser.tags.Tag}).
+     * {@link Tag}).
      */
-    public void unregisterTag (org.htmlparser.tags.Tag tag)
+    public void unregisterTag (Tag tag)
     {
         String ids[];
         
@@ -233,29 +240,9 @@ public class PrototypicalNodeFactory
     }
 
     /**
-     * Register a tag.
-     * Registers the given tag under the tag {@link Tag#getTagName() name}.
-     * @param tag The tag to register (implements {@link org.htmlparser.Tag}).
-     */
-    public void registerTag (Tag tag)
-    {
-        put (tag.getTagName (), tag);
-    }
-
-    /**
-     * Unregister a tag.
-     * Unregisters the given tag from the tag {@link Tag#getTagName() name}.
-     * @param tag The tag to unregister (implements {@link org.htmlparser.Tag}).
-     */
-    public void unregisterTag (Tag tag)
-    {
-        remove (tag.getTagName ());
-    }
-
-    /**
      * Register all known tags in the tag package.
      * Registers tags from the {@link org.htmlparser.tags tag package} by
-     * calling {@link #registerTag(org.htmlparser.tags.Tag) registerTag()}.
+     * calling {@link #registerTag(Tag) registerTag()}.
      * @return 'this' nodefactory as a convenience.
      */
     public PrototypicalNodeFactory registerTags ()
@@ -336,6 +323,31 @@ public class PrototypicalNodeFactory
             mRemark = remark;
     }
 
+    /**
+     * Get the object being used to generate generic tag nodes.
+     * These are returned from {@link createTagNode} when no specific tag
+     * is found in the registered tag list.
+     * @return The prototype for {@link Tag} nodes.
+     */
+    public Tag getTagPrototype ()
+    {
+        return (mTag);
+    }
+
+    /**
+     * Set the object to be used to generate tag nodes.
+     * These are returned from {@link createTagNode} when no specific tag
+     * is found in the registered tag list.
+     * @param remark The prototype for {@link Tag} nodes.
+     */
+    public void setTagPrototype (Tag tag)
+    {
+        if (null == tag)
+            throw new IllegalArgumentException ("tag prototype node cannot be null");
+        else
+            mTag = tag;
+    }
+
     //
     // NodeFactory interface
     //
@@ -353,10 +365,7 @@ public class PrototypicalNodeFactory
         try
         {
             ret = (Text)(getTextPrototype ().clone ());
-            if (ret instanceof AbstractNode)
-                ((AbstractNode)ret).setPage (page);
-            else
-                ret.setText (page.getText (start, end));
+            ret.setPage (page);
             ret.setStartPosition (start);
             ret.setEndPosition (end);
         }
@@ -383,17 +392,7 @@ public class PrototypicalNodeFactory
         try
         {
             ret = (Remark)(getRemarkPrototype ().clone ());
-            if (ret instanceof AbstractNode)
-                ((AbstractNode)ret).setPage (page);
-            else
-            {
-                first = start + 4; // <!--
-                last = end - 3; // -->
-                if (first >= last)
-                    ret.setText ("");
-                else
-                    ret.setText (page.getText (first, last));
-            }
+            ret.setPage (page);
             ret.setStartPosition (start);
             ret.setEndPosition (end);
         }
@@ -444,8 +443,7 @@ public class PrototypicalNodeFactory
                         if (null != prototype)
                         {
                             ret = (Tag)prototype.clone ();
-                            if (ret instanceof AbstractNode)
-                                ((AbstractNode)ret).setPage (page);
+                            ret.setPage (page);
                             ret.setStartPosition (start);
                             ret.setEndPosition (end);
                             ret.setAttributesEx (attributes);
@@ -459,8 +457,20 @@ public class PrototypicalNodeFactory
             }
         }
         if (null == ret)
-            // generate a generic node
-            ret = new org.htmlparser.tags.Tag (page, start, end, attributes);
+        {   // generate a generic node
+            try
+            {
+                ret = (Tag)getTagPrototype ().clone ();
+                ret.setPage (page);
+                ret.setStartPosition (start);
+                ret.setEndPosition (end);
+                ret.setAttributesEx (attributes);
+            }
+            catch (CloneNotSupportedException cnse)
+            {
+                ret = new TagNode (page, start, end, attributes);
+            }
+        }
 
         return (ret);
     }

@@ -27,16 +27,17 @@
 package org.htmlparser.tests.tagTests;
 
 import java.util.Hashtable;
+import org.htmlparser.Attribute;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -126,7 +127,6 @@ public class TagTest extends ParserTestCase
         String lin1 = "<DIV class=\"userData\" id=\"oLayout\" name=\"oLayout\"></DIV>";
         createParser(lin1);
         NodeIterator en = parser.elements();
-        Hashtable h;
 
         try {
 
@@ -134,8 +134,7 @@ public class TagTest extends ParserTestCase
                 node = en.nextNode();
 
                 tag = (Tag)node;
-                h = tag.getAttributes();
-                String classValue= (String)h.get("CLASS");
+                String classValue= tag.getAttribute ("CLASS");
                 assertEquals ("The class value should be ","userData",classValue);
             }
 
@@ -158,7 +157,6 @@ public class TagTest extends ParserTestCase
         String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
         createParser(lin1);
         NodeIterator en = parser.elements();
-        Hashtable h;
         String a,href,myValue,nice;
 
         try {
@@ -167,11 +165,10 @@ public class TagTest extends ParserTestCase
                 node = en.nextNode();
 
                 tag = (Tag)node;
-                h = tag.getAttributes();
-                a = (String)h.get(SpecialHashtable.TAGNAME);
-                href = (String)h.get("HREF");
-                myValue = (String)h.get("MYPARAMETER");
-                nice = (String)h.get("YOURPARAMETER");
+                a = ((Attribute)(tag.getAttributesEx ().elementAt (0))).getName ();
+                href = tag.getAttribute ("HREF");
+                myValue = tag.getAttribute ("MYPARAMETER");
+                nice = tag.getAttribute ("YOURPARAMETER");
                 assertEquals ("Link tag (A)","A",a);
                 assertEquals ("href value","http://www.iki.fi/kaila",href);
                 assertEquals ("myparameter value",null,myValue);
@@ -228,7 +225,6 @@ public class TagTest extends ParserTestCase
         String lin1 = "<G href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaila\">Kaarle's homepage</G><p>Paragraph</p>";
         createParser(lin1);
         NodeIterator en = parser.elements();
-        Hashtable h;
         String a,href,myValue,nice;
 
         try {
@@ -237,11 +233,10 @@ public class TagTest extends ParserTestCase
                 node = en.nextNode();
 
                 tag = (Tag)node;
-                h = tag.getAttributes();
-                a = (String)h.get(SpecialHashtable.TAGNAME);
-                href = (String)h.get("HREF");
-                myValue = (String)h.get("MYPARAMETER");
-                nice = (String)h.get("YOURPARAMETER");
+                a = ((Attribute)(tag.getAttributesEx ().elementAt (0))).getName ();
+                href = tag.getAttribute ("HREF");
+                myValue = tag.getAttribute ("MYPARAMETER");
+                nice = tag.getAttribute ("YOURPARAMETER");
                 assertEquals ("The tagname should be G",a,"G");
                 assertEquals ("Check the http address",href,"http://www.iki.fi/kaila");
                 assertEquals ("myValue is not null",myValue,null);
@@ -305,9 +300,8 @@ public class TagTest extends ParserTestCase
                 node = en.nextNode();
 
                 tag = (Tag)node;
-                h = tag.getAttributes();
-                a = (String)h.get(SpecialHashtable.TAGNAME);
-                nice = (String)h.get("YOURPARAMETER");
+                a = ((Attribute)(tag.getAttributesEx ().elementAt (0))).getName ();
+                nice = tag.getAttribute ("YOURPARAMETER");
                 assertEquals ("Link tag (A)",a,"A");
                 assertEquals ("yourParameter value","Kaarle",nice);
             }
@@ -362,13 +356,10 @@ public class TagTest extends ParserTestCase
         Tag fontTag = (Tag)div.children().nextNode();
         // an alternate interpretation: assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",fontTag.getText());
         assertEquals("Second tag should be corrected","font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",fontTag.getText());
-        // Try to parse the parameters from this tag.
-        Hashtable table = fontTag.getAttributes();
-        assertNotNull("Parameters table",table);
-        assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
+        assertEquals("font sans-serif parameter","sans-serif",fontTag.getAttribute("SANS-SERIF"));
         // an alternate interpretation: assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
         // another: assertEquals("font face parameter","Arial,\"helvetica,",table.get("FACE"));
-        assertEquals("font face parameter","Arial,",table.get("FACE"));
+        assertEquals("font face parameter","Arial,",fontTag.getAttribute("FACE"));
     }
 
     public void testToHTML() throws ParserException {
@@ -693,16 +684,11 @@ public class TagTest extends ParserTestCase
         createParser("<TABLE BORDER=0>");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
-        // the node should be an HTMLTag
-        assertTrue("Node should be a HTMLTag",node[0] instanceof Tag);
+        // the node should be a Tag
+        assertTrue("Node should be a Tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
         assertEquals("Initial text should be","TABLE BORDER=0",tag.getText ());
-
-        Hashtable tempHash = tag.getAttributes ();
-        tempHash.put ("BORDER","\"1\"");
-        tag.setAttributes (tempHash);
-
-        String s = tag.toHtml ();
-        assertEquals("HTML should be","<TABLE BORDER=\"1\">", s);
+        tag.setAttribute ("BORDER","\"1\"");
+        assertEquals("HTML should be","<TABLE BORDER=\"1\">", tag.toHtml ());
     }
 }

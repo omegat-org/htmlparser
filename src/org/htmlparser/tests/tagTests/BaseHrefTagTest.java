@@ -27,9 +27,9 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;

@@ -28,6 +28,7 @@ package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Node;
 import org.htmlparser.PrototypicalNodeFactory;
+import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.nodes.AbstractNode;
 import org.htmlparser.scanners.CompositeTagScanner;
@@ -37,7 +38,6 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 

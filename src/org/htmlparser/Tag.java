@@ -26,7 +26,10 @@
 
 package org.htmlparser;
 
+import java.util.Hashtable;
 import java.util.Vector;
+
+import org.htmlparser.scanners.Scanner;
 
 /**
  * Identifies what a Tag such as &lt;XXX xxx yyy="zzz"&gt; can do.
@@ -95,6 +98,32 @@ public interface Tag extends Node
      * @param attribs The attribute collection to set.
      */
     public void setAttributesEx (Vector attribs);
+    
+    /**
+     * Gets the attributes in the tag.
+     * This is not the preferred  method to get attributes, see {@link
+     * #getAttributesEx getAttributesEx} which returns a list of {@link
+     * Attribute} objects, which offer more information than the simple
+     * <code>String</code> objects available from this <code>Hashtable</code>.
+     * @return Returns a list of name/value pairs representing the attributes.
+     * These are not in order, the keys (names) are converted to uppercase and the values
+     * are not quoted, even if they need to be. The table <em>will</em> return
+     * <code>null</code> if there was no value for an attribute (no equals
+     * sign or nothing to the right of the equals sign). A special entry with
+     * a key of SpecialHashtable.TAGNAME ("$<TAGNAME>$") holds the tag name.
+     * The conversion to uppercase is performed with an ENGLISH locale.
+     * @deprecated Use getAttributesEx() instead.
+     */
+    public Hashtable getAttributes ();
+
+    /**
+     * Sets the attributes.
+     * A special entry with a key of SpecialHashtable.TAGNAME ("$<TAGNAME>$")
+     * sets the tag name.
+     * @param attributes The attribute collection to set.
+     * @deprecated Use setAttributesEx() instead.
+     */
+    public void setAttributes (Hashtable attributes);
 
     /**
      * Return the name of this tag.
@@ -116,6 +145,13 @@ public interface Tag extends Node
      * @param name The tag name.
      */
     public void setTagName (String name);
+
+    /**
+     * Return the name of this tag.
+     * @return The tag name or null if this tag contains nothing or only
+     * whitespace.
+     */
+    public String getRawTagName ();
 
     /**
      * Determines if the given tag breaks the flow of text.
@@ -151,4 +187,68 @@ public interface Tag extends Node
      * i.e. &lt;tag/&gt;, otherwise removes it.
      */
     public void setEmptyXmlTag (boolean emptyXmlTag);
+
+    /**
+     * Return the set of names handled by this tag.
+     * Since this a a generic tag, it has no ids.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ();
+
+    /**
+     * Return the set of tag names that cause this tag to finish.
+     * These are the normal (non end tags) that if encountered while
+     * scanning (a composite tag) will cause the generation of a virtual
+     * tag.
+     * Since this a a non-composite tag, the default is no enders.
+     * @return The names of following tags that stop further scanning.
+     */
+    public String[] getEnders ();
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * These are the end tags that if encountered while
+     * scanning (a composite tag) will cause the generation of a virtual
+     * tag.
+     * Since this a a non-composite tag, it has no end tag enders.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ();
+
+    /**
+     * Get the end tag for this (composite) tag.
+     * For a non-composite tag this always returns <code>null</code>.
+     * @return The tag that terminates this composite tag, i.e. &lt;/HTML&gt;.
+     */
+    public Tag getEndTag ();
+
+    /**
+     * Set the end tag for this (composite) tag.
+     * For a non-composite tag this is a no-op.
+     * @param end The tag that terminates this composite tag, i.e. &lt;/HTML&gt;.
+     */
+    public void setEndTag (Tag end);
+
+    /**
+     * Return the scanner associated with this tag.
+     * @return The scanner associated with this tag.
+     */
+    public Scanner getThisScanner ();
+
+    /**
+     * Set the scanner associated with this tag.
+     * @param scanner The scanner for this tag.
+     */
+    public void setThisScanner (Scanner scanner);
+    
+    /**
+     * Get the line number where this tag starts.
+     * @return The (zero based) line number in the page where this tag starts.
+     */
+    public int getStartingLineNumber ();
+    /**
+     * Get the line number where this tag ends.
+     * @return The (zero based) line number in the page where this tag ends.
+     */
+    public int getEndingLineNumber ();
 }
