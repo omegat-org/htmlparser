@@ -182,4 +182,8 @@ public abstract class CompositeTagScanner extends TagScanner {
 		return allowSelfChildren;
 	}
 
+	public boolean shouldCreateEndTagAndExit(NodeReader reader, CompositeTagScanner scanner) {
+		return false;
+	}
+
 }

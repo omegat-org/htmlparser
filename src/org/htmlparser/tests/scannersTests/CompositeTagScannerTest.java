@@ -514,6 +514,17 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		Node grandchild = customChild.childAt(0);
 		assertType("grandchild",AnotherTag.class,grandchild);
 	}
+
+	public void testDisallowedChildren() throws ParserException {
+		createParser(
+			"<custom>\n" +			"Hello" +			"<custom>\n" +			"World" +			"<custom>\n" +			"Hey\n" +			"</custom>" 
+		);
+		parser.addScanner(new CustomScanner(false));
+		parseAndAssertNodeCount(3);
+		for (int i=0;i<nodeCount;i++) {
+			assertType("node "+i,CustomTag.class,node[i]);
+		}
+	}
 	
 	public static class CustomScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "CUSTOM" };

@@ -42,6 +42,7 @@ import org.htmlparser.parserHelper.StringParser;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -61,7 +62,8 @@ public class NodeReader extends BufferedReader
 	private String previousLine;
 	private StringParser stringParser = new StringParser();
 	private RemarkNodeParser remarkNodeParser = new RemarkNodeParser();
-	private Node nextParsedNode = null;
+	private NodeList nextParsedNode = new NodeList();
+	private boolean dontReadNextLine=false;
 	/**
 	 * The constructor takes in a reader object, it's length and the url to be read.
 	 */
@@ -205,13 +207,12 @@ public class NodeReader extends BufferedReader
 	public Node readElement() throws ParserException
 	{
 		try {
-			if (nextParsedNode!=null) {
-				node = nextParsedNode;
-				nextParsedNode = null;
+			if (nextParsedNode.size()>0) {
+				node = nextParsedNode.elementAt(0);
+				nextParsedNode.remove(0);
 				return node; 
 			}
-			if (readNextLine())
-			{
+			if (readNextLine()) {
 				do
 				{
 					line = getNextLine();
@@ -219,7 +220,9 @@ public class NodeReader extends BufferedReader
 				while (line!=null && line.length()==0);
 	
 			}
-            else
+            else if (dontReadNextLine) {
+            	dontReadNextLine = false;
+            } else
                 posInLine=node.elementEnd()+1;
 			if (line==null)
                 return null;
@@ -293,6 +296,9 @@ public class NodeReader extends BufferedReader
 	 */
 	protected boolean readNextLine()
 	{
+		if (dontReadNextLine) {
+			return false;
+		}
 		if (posInLine==-1 || (line!=null && node.elementEnd()+1>=line.length()))
 				return true;
 		else return false;
@@ -379,7 +385,16 @@ public class NodeReader extends BufferedReader
 		return stringParser;
 	}
 	
-	public void setNextParsedNode(Node nextParsedNode) {
-		this.nextParsedNode = nextParsedNode;		
+	public void addNextParsedNode(Node nextParsedNode) {
+		this.nextParsedNode.add(nextParsedNode);		
 	}
+	
+	public boolean isDontReadNextLine() {
+		return dontReadNextLine;
+	}
+
+	public void setDontReadNextLine(boolean dontReadNextLine) {
+		this.dontReadNextLine = dontReadNextLine;
+	}
+
 }

@@ -28,11 +28,16 @@
 
 package org.htmlparser.parserHelper;
 
-import org.htmlparser.*;
-import org.htmlparser.scanners.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.tags.data.*;
-import org.htmlparser.util.*;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
+import org.htmlparser.scanners.CompositeTagScanner;
+import org.htmlparser.tags.CompositeTag;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 public class CompositeTagScannerHelper {
 	private CompositeTagScanner scanner;
@@ -65,8 +70,12 @@ public class CompositeTagScannerHelper {
 		
 	public Tag scan() throws ParserException {
 		this.startingLineNumber = reader.getLastLineNumber();
+		if (shouldCreateEndTagAndExit()) {
+			return createEndTagAndRepositionReader();
+		}
 		scanner.beforeScanningStarts();
 		Node currentNode = tag;
+	
 		doEmptyXmlTagCheckOn(currentNode);
 		if (!endTagFound) { 
 			do {
@@ -85,8 +94,20 @@ public class CompositeTagScannerHelper {
 		if (endTag==null) {
 			createCorrectionEndTagBefore(reader.getLastReadPosition()+1);
 		}
+		
 		this.endingLineNumber = reader.getLastLineNumber();
 		return createTag();
+	}
+
+	private boolean shouldCreateEndTagAndExit() {
+		return scanner.shouldCreateEndTagAndExit(reader,scanner);
+	}
+
+	private Tag createEndTagAndRepositionReader() {
+		createCorrectionEndTagBefore(tag.elementBegin());
+		reader.setPosInLine(tag.elementBegin());
+		reader.setDontReadNextLine(true);
+		return endTag;
 	}
 
 	private void createCorrectionEndTagBefore(int pos) {
@@ -108,7 +129,7 @@ public class CompositeTagScannerHelper {
 		int endTagBegin = possibleEndTagCauser.elementBegin();
 		int endTagEnd = endTagBegin + endTagName.length() + 2; 
 		possibleEndTagCauser.setTagBegin(endTagEnd+1);
-		reader.setNextParsedNode(possibleEndTagCauser);
+		reader.addNextParsedNode(possibleEndTagCauser);
 		endTag = new EndTag(
 			new TagData(
 				endTagBegin,
