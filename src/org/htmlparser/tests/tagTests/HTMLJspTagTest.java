@@ -171,5 +171,17 @@ public class HTMLJspTagTest extends HTMLParserTestCase
 		assertEquals("Raw String of the fourth JSP tag",expected,tag4.toHTML());
 		
 	}
+	public void testSpecialCharacters() throws HTMLParserException {
+		StringBuffer sb1 = new StringBuffer(); 
+		sb1.append("<% for (i=0;i<j;i++);%>"); 
+		createParser(sb1.toString());
+		
+		// Register the jsp scanner 
+		parser.addScanner(new HTMLJspScanner("-j")); 
+		parseAndAssertNodeCount(1);
+		//assertTrue("Node should be a jsp tag",node[1] instanceof HTMLJspTag);
+		HTMLJspTag jspTag = (HTMLJspTag)node[0]; 
+		assertEquals("jsp toHTML()","<% for (i=0;i<j;i++);%>",jspTag.toHTML());
+	}	
 
 }

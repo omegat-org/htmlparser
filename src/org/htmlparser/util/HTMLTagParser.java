@@ -134,7 +134,7 @@ public class HTMLTagParser {
 				feedback.warning(msg.toString());
 			}
 		} else
-		if (ch=='<' && state==TAG_BEGIN_PARSING_STATE) {
+		if (ch=='<' && state==TAG_BEGIN_PARSING_STATE && tag.getText().charAt(0)!='%') {
 			state = TAG_FINISHED_PARSING_STATE;
 			tag.setTagEnd(i-1);i--;
 		}

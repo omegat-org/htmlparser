@@ -251,18 +251,6 @@ public class HTMLTag extends HTMLNode
 				retVal=scanner.createScannedNode(this,url,reader,tagLine);
 				reader.setPreviousOpenScanner(null);
 			}
-
-/*			for (Enumeration e=scanners;(e.hasMoreElements() && !found);)
-			{
-				HTMLTagScanner scanner = (HTMLTagScanner)e.nextElement();
-				if (scanner.evaluate(tagContents.toString(),reader.getPreviousOpenScanner()))
-				{
-					found=true;
-					reader.setPreviousOpenScanner(scanner);
-					retVal=scanner.createScannedNode(this,url,reader,tagLine);
-					reader.setPreviousOpenScanner(null);
-				}
-			}*/
 			
 			if (!found) return this;
 			else {   			
