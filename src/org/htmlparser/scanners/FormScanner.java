@@ -76,8 +76,8 @@ public class FormScanner extends CompositeTagScanner
   /**
    * Extract the location of the image, given the string to be parsed, and the url
    * of the html page in which this tag exists.
-   * @param s String to be parsed
-   * @param url URL of web page being parsed
+   * @param tag The form tag with the 'ACTION' attribute.
+   * @param url URL of web page being parsed.
    */
 	public String extractFormLocn(Tag tag,String url) throws ParserException
 	{

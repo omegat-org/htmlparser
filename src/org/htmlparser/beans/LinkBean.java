@@ -159,7 +159,7 @@ public class LinkBean extends Object implements Serializable
     /**
      * Remove a PropertyChangeListener from the listener list.
      * This removes a PropertyChangeListener that was registered for all properties.
-     * @param the PropertyChangeListener to be removed.
+     * @param listener The PropertyChangeListener to be removed.
      */
     public void removePropertyChangeListener (PropertyChangeListener listener)
     {
@@ -262,7 +262,7 @@ public class LinkBean extends Object implements Serializable
     
     /**
      * Setter for property Connection.
-     * @param url New value of property Connection.
+     * @param connection New value of property Connection.
      */
     public void setConnection (URLConnection connection)
     {

@@ -178,7 +178,6 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Appends a newline to the buffer if there isn't one there already.
      * Except if the buffer is empty.
-     * @param buffer The buffer to append to.
      */
     protected void carriage_return ()
     {
@@ -355,7 +354,7 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Remove a PropertyChangeListener from the listener list.
      * This removes a PropertyChangeListener that was registered for all properties.
-     * @param the PropertyChangeListener to be removed.
+     * @param listener The PropertyChangeListener to be removed.
      */
     public void removePropertyChangeListener (PropertyChangeListener listener)
     {

@@ -232,7 +232,7 @@ public abstract class AbstractNode implements Node, Serializable {
 	
 	/**
 	 * Sets the string contents of the node.
-	 * @param The new text for the node.
+	 * @param text The new text for the node.
 	 */
 	public void setText(String text) {
 

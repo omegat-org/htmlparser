@@ -49,11 +49,10 @@ public class RemarkNode extends AbstractNode
 	 * @param nodeBegin beginning position of the tag
 	 * @param nodeEnd ending position of the tag
 	 * @param tagContents contents of the remark tag
-	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public RemarkNode(int tagBegin, int tagEnd, String tagContents)
+	public RemarkNode(int nodeBegin, int nodeEnd, String tagContents)
 	{
-		super(tagBegin,tagEnd);
+		super(nodeBegin,nodeEnd);
 		this.tagContents = tagContents;
 	}
 

@@ -65,8 +65,8 @@ public class FrameScanner extends TagScanner
   /**
    * Extract the location of the image, given the string to be parsed, and the url
    * of the html page in which this tag exists.
-   * @param s String to be parsed
-   * @param url URL of web page being parsed
+   * @param tag The tag with the 'SRC' attribute.
+   * @param url URL of web page being parsed.
    */
 	public String extractFrameLocn(Tag tag,String url) throws ParserException
 	{

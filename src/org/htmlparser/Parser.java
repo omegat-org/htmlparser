@@ -248,7 +248,7 @@ public class Parser
     //
 
 	/**
-	 * @param lineSeparator New Line separator to be used
+	 * @param lineSeparatorString New Line separator to be used
 	 */
 	public static void setLineSeparator(String lineSeparatorString)
 	{

@@ -66,7 +66,8 @@ public class AttributeParser {
 	private String tokenAccumulator;
 	/**
 	* Method to break the tag into pieces.
-	* @param returns a Hastable with elements containing the
+	* @param text All the text within the tag inside &lt; and &gt;.
+    * @return A Hastable with elements containing the
 	* pieces of the tag. The tag-name has the value field set to
 	* the constant Tag.TAGNAME. In addition the tag-name is
 	* stored into the Hashtable with the name Tag.TAGNAME

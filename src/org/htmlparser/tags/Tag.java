@@ -465,7 +465,7 @@ public class Tag extends AbstractNode
 	 * A call to a tag's toHTML() method will render it in HTML
 	 * Most tags that do not have children and inherit from Tag,
 	 * do not need to override toHTML().
-	 * @see org.htmlparser.Node#toHTML()
+	 * @see org.htmlparser.Node#toHtml()
 	 */
 	public String toHtml()
     {

@@ -104,7 +104,7 @@ public class HTMLLinkBean extends JList implements Serializable, PropertyChangeL
      * Remove a PropertyChangeListener from the listener list.
      * This removes a PropertyChangeListener that was registered for all properties.
      * <p><em>Delegates to the underlying StringBean</em>
-     * @param the PropertyChangeListener to be removed.
+     * @param listener The PropertyChangeListener to be removed.
      */
     public void removePropertyChangeListener (PropertyChangeListener listener)
     {
@@ -157,7 +157,7 @@ public class HTMLLinkBean extends JList implements Serializable, PropertyChangeL
     
     /**
      * Setter for property Connection.
-     * @param url New value of property Connection.
+     * @param connection New value of property Connection.
      */
     public void setConnection (URLConnection connection)
     {
