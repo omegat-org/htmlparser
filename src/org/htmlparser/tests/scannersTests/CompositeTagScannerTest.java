@@ -8,7 +8,6 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
-import java.util.Arrays;
 
 public class CompositeTagScannerTest extends ParserTestCase {
 	private CompositeTagScanner scanner;
@@ -70,72 +69,9 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertType("second child",CustomTag.class,node);
 	}
 	
-	/**
-	 * Test to ensure that the <code>Tag</code> being created by the
-	 * <code>CompositeTagScanner</code> has the correct startLine and endLine
-	 * information in the <code>TagData</code> it is constructed with. 
-	 * @throws ParserException if there is a problem parsing the test data
-	 */ 
-	public void testLineNumbers() throws ParserException {
-		testLineNumber("<Custom/>", 1, 0, 1, 1);
-		testLineNumber("<Custom />", 1, 0, 1, 1);
-		testLineNumber("<Custom></Custom>", 1, 0, 1, 1);
-		testLineNumber("<Custom>Content</Custom>", 1, 0, 1, 1);
-		testLineNumber(
-			"<Custom>\n" +
-			"	Content\n" +
-			"</Custom>",
-			1, 0, 1, 3
-		);
-		testLineNumber(
-			"Foo\n" +
-			"<Custom>\n" +
-			"	Content\n" +
-			"</Custom>",
-			2, 1, 2, 4
-		);
-		testLineNumber(
-			"Foo\n" +
-			"<Custom>\n" +
-			"	<Custom>SubContent</Custom>\n" +
-			"</Custom>",
-			2, 1, 2, 4
-		);
-		char[] oneHundredNewLines = new char[100];
-		Arrays.fill(oneHundredNewLines, '\n');
-		testLineNumber(
-			"Foo\n" +
-			new String(oneHundredNewLines) +
-			"<Custom>\n" +
-			"	<Custom>SubContent</Custom>\n" +
-			"</Custom>",
-			2, 1, 102, 104
-		);
-	}
+
 	
-	/**
-	 * Helper method to ensure that the <code>Tag</code> being created by the
-	 * <code>CompositeTagScanner</code> has the correct startLine and endLine
-	 * information in the <code>TagData</code> it is constructed with.
-	 * @param xml String containing HTML or XML to parse, containing a Custom tag
-	 * @param numNodes int number of expected nodes returned by parser
-	 * @param useNode int index of the node to test (should be of type CustomTag) 
-	 * @param startLine int the expected start line number of the tag
-	 * @param endLine int the expected end line number of the tag
-	 * @throws ParserException if there is an exception during parsing
-	 */ 
-	private void testLineNumber(String xml, int numNodes, int useNode, int startLine, int endLine) throws ParserException {
-		createParser(xml);
-		parser.addScanner(new CustomScanner());
-		parseAndAssertNodeCount(numNodes);
-		assertType("custom node",CustomTag.class,node[useNode]);
-		CustomTag tag = (CustomTag)node[useNode];
-		assertEquals("start line", tag.tagData.getStartLine(), startLine);
-		assertEquals("end line", tag.tagData.getEndLine(), endLine);
-		
-	}
-	
-	private static class CustomScanner extends CompositeTagScanner {
+	public static class CustomScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "CUSTOM" };
 		public CustomScanner() { super("", MATCH_NAME); }
 		public String[] getID() { return MATCH_NAME; }
@@ -146,7 +82,8 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			return false;
 		}
 	}
-	private static class AnotherScanner extends CompositeTagScanner {
+	
+	public static class AnotherScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "ANOTHER" };
 		public AnotherScanner() { super("", MATCH_NAME); }
 		public String[] getID() { return MATCH_NAME; }
@@ -159,14 +96,14 @@ public class CompositeTagScannerTest extends ParserTestCase {
 	}
 
 	// Custom Tags
-	private static class CustomTag extends CompositeTag {
+	public static class CustomTag extends CompositeTag {
 		public TagData tagData;
 		public CustomTag(TagData tagData, CompositeTagData compositeTagData) {
 			super(tagData,compositeTagData);
 			this.tagData = tagData;
 		}
 	}
-	private static class AnotherTag extends CompositeTag {
+	public static class AnotherTag extends CompositeTag {
 		public AnotherTag(TagData tagData, CompositeTagData compositeTagData) {
 			super(tagData,compositeTagData);
 		}

@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030330 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030405 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -110,6 +110,7 @@ public class AllTests extends junit.framework.TestCase
 		suite.addTest(org.htmlparser.tests.visitorsTests.AllTests.suite());
 		suite.addTest(org.htmlparser.tests.parserHelperTests.AllTests.suite());
 		suite.addTest(AssertXmlEqualsTest.suite());
+		suite.addTest(LineNumberAssignedByNodeReaderTest.suite());
 		return suite;
 	} 
 }

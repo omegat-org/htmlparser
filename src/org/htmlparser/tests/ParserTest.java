@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030330 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030405 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -582,7 +582,7 @@ public class ParserTest extends ParserTestCase {
 			""
 		);
 		parser.registerScanners();
-		parser.removeScanner(new FormScanner(""));
+		parser.removeScanner(new FormScanner("")); 
 		Map scanners = parser.getScanners();
 		TagScanner scanner = (TagScanner)scanners.get("FORM");
 		assertNull("shouldnt have found scanner",scanner);
