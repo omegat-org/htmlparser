@@ -41,20 +41,23 @@ public class TableColumnScanner extends CompositeTagScanner {
 	}
 
 	public TableColumnScanner(String filter) {
-		super(filter,MATCH_STRING);
+		this(filter, MATCH_STRING, new String[] {}, new String[] {}, false);
 	}
 
 	public TableColumnScanner(
 		String filter,
 		String[] nameOfTagToMatch,
-		boolean removeScanners,
-		boolean stringNodeIgnoreMode) {
+		String [] tagEnders, 
+		String [] endTagEnders,
+		boolean allowSelfChildren) {
 		super(
 			filter, 
 			nameOfTagToMatch, 
-			new String[] {} 
+			tagEnders,
+            endTagEnders,
+            allowSelfChildren
 		);
-	}
+    }
 
 	public Tag createTag(
 		TagData tagData,
