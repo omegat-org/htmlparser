@@ -1,4 +1,4 @@
-Integration Build 1.2 - 20021006
+Integration Build 1.2 - 20021002
 --------------------------------
 [1] Bug fixed in HTMLStyleScanner, allowing attributes to show
 in style tag
@@ -8,7 +8,8 @@ and is reflected in toHTML()
 [4] Added default parser feedback object constructor in HTMLParser
 [5] Only single LinkProcessor object created now for link and image 
 scanners - leading to better performance
-
+[6] Added Base Ref Scanner - relative links to this can be handled
+for both standard links and image locations
 
 Integration Build 1.2 - 20020831
 --------------------------------
