@@ -31,10 +31,7 @@
 package org.htmlparser.nodeDecorators;
 
 import org.htmlparser.Node;
-import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.visitors.NodeVisitor;
-
 
 public abstract class AbstractNodeDecorator implements Node {
 	protected Node delegate;

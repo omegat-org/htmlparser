@@ -32,19 +32,15 @@
 
 package org.htmlparser.lexer;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Vector;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import org.htmlparser.Node;
-import org.htmlparser.lexer.Stream;
-import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.*;
+import org.htmlparser.lexer.nodes.*;
 import org.htmlparser.lexer.nodes.RemarkNode;
 import org.htmlparser.lexer.nodes.StringNode;
-import org.htmlparser.lexer.nodes.TagNode;
-import org.htmlparser.util.ParserException;
+import org.htmlparser.util.*;
 
 /**
  * This class parses the HTML stream into nodes.
