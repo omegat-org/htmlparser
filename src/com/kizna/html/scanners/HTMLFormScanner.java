@@ -152,33 +152,4 @@ public class HTMLFormScanner extends HTMLTagScanner
 		return formTag;
 	}
 
-	public String getAccessKey(String text)
-	{
-		// Find the occurence of ACCESSKEY in given
-		String sub = "ACCESSKEY";
-		String accessKey=null;
-		int n = text.toUpperCase().indexOf(sub);
-		if (n!=-1)
-		{
-			n+=sub.length();
-			// Parse the = sign
-			char ch;
-			do
-			{
-				ch = text.charAt(n);
-				n++;
-			}
-			while (ch!='=');
-			// Start parsing for a number
-			accessKey = "";
-			do
-			{
-				ch = text.charAt(n);
-				if (ch>='0' && ch<='9') accessKey+=ch;
-				n++;
-			}
-			while (ch>='0' && ch<='9' && n<text.length());
-			return accessKey;
-		} else return null;
-	}
 }
