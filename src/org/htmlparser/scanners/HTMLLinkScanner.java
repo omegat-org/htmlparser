@@ -42,6 +42,7 @@ import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLLinkTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
@@ -92,7 +93,14 @@ public class HTMLLinkScanner extends HTMLTagScanner
 				endTag,
 				nodeVector
 			),
-			link,linkText,accessKey,mailLink,javascriptLink,linkContents
+			new HTMLLinkTagData(
+				link,
+				linkText,
+				accessKey,
+				mailLink,
+				javascriptLink,
+				linkContents
+			)
 		);
 		linkTag.setThisScanner(this);
 		return linkTag;

@@ -31,6 +31,7 @@ package org.htmlparser.tags;
 
 import org.htmlparser.*;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLLinkTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 
 import java.util.Enumeration;
@@ -92,25 +93,19 @@ public class HTMLLinkTag extends HTMLCompositeTag
 	 * }
 	 * </pre>
 	 * The link tag processes all its contents in collectInto().
-	 * @link The URL to which the link points to
-	 * @linkText The text which is stored inside this link tag
-	 * @linkBegin The beginning position of the link tag
-	 * @linkEnd The ending position of the link tag
-	 * @param linkContents contains the data from the link element
-	 * @accessKey The accessKey element of the link tag (valid for Compact HTML - IMODE devices)
+	 * @tagData The data relating to the tag
+	 * @compositeTagData The data regarding the composite structure of the tag
+	 * @linkTagData The data specific to the link tag
 	 * @see linkData()
 	 */
-	public HTMLLinkTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData,String link,String linkText,String accessKey,boolean mailLink,
-	boolean javascriptLink, String linkContents) {
+	public HTMLLinkTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData,HTMLLinkTagData linkTagData) {
 		super(tagData,compositeTagData);  
-		this.link = link;
-		this.linkText = linkText;
-		this.accessKey = accessKey;
-		this.mailLink = mailLink;
-		this.linkContents = linkContents;  // Kaarle Kaila 23.10.2001
-
-		this.javascriptLink = javascriptLink;
-
+		this.link = linkTagData.getLink();
+		this.linkText = linkTagData.getLinkText();
+		this.accessKey = linkTagData.getAccessKey();
+		this.mailLink = linkTagData.isMailLink();
+		this.linkContents = linkTagData.getLinkContents();  
+		this.javascriptLink = linkTagData.isJavascriptLink();
 	}
 	/**
 	 * Returns the accesskey element if any inside this link tag
@@ -267,7 +262,14 @@ public class HTMLLinkTag extends HTMLCompositeTag
 				node.collectInto(collectionVector,filter);
 			}
 		}
-		
 	}
-
+	
+	/**
+	 * This method returns an enumeration of data that it contains
+	 * @return Enumeration
+	 * @deprecated Use children() instead.
+	 */
+	public Enumeration linkData() {
+		return children();
+	}
 }
