@@ -374,7 +374,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		assertEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageLocation());
 		assertEquals("Width","1",imageTag.getParameter("WIDTH"));
 		assertEquals("Height","1",imageTag.getParameter("HEIGHT"));
-		//assertEquals("Alt","",imageTag.getParameter("ALT"));
+		assertEquals("Alt","",imageTag.getParameter("ALT"));
 		
 	}
 }
