@@ -37,7 +37,6 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class RemarkNode extends Node
 {
-	public static final String TYPE="REMARK_NODE";
 	public final static String REMARK_NODE_FILTER="-r";
 	
 	/**
@@ -85,10 +84,6 @@ public class RemarkNode extends Node
 
 	public void accept(NodeVisitor visitor) {
 		visitor.visitRemarkNode(this);
-	}
-
-	public String getType() {
-		return TYPE;
 	}
 
 }
