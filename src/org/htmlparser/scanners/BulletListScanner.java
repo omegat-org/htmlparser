@@ -39,7 +39,7 @@ import org.htmlparser.util.ParserException;
 
 
 public class BulletListScanner extends CompositeTagScanner {
-	private static final String [] MATCH_STRING = {"UL"};
+	private static final String [] MATCH_STRING = { "UL", "OL" };
 	private final static String ENDERS [] = { "BODY", "HTML" };
 	private Stack ulli = new Stack();
 	

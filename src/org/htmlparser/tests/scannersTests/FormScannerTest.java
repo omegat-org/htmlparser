@@ -38,6 +38,7 @@ import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
@@ -252,7 +253,8 @@ public class FormScannerTest extends ParserTestCase {
 			"<FORM ACTION=\".\" METHOD=\"GET\">\n"+
 				"<INPUT TYPE=\"TEXT\">\n"+
 				"<BR>\n"+
-				"<A HREF=\"http://www.helpme.com\">Help</A> " +				"<INPUT TYPE=\"checkbox\">\n"+
+				"<A HREF=\"http://www.helpme.com\">Help</A> " +
+				"<INPUT TYPE=\"checkbox\">\n"+
 				"<P>\n"+
 				"<INPUT TYPE=\"SUBMIT\">\n"+
 			"</FORM>"
@@ -291,5 +293,24 @@ public class FormScannerTest extends ParserTestCase {
 			0,
 			nodes.length
 		);
-	}		
+	}
+    
+    /**
+     * See bug #745566 StackOverflowError on select with too many unclosed options.
+     * Under Windows this throws a stack overflow exception.
+     */
+	public void testUnclosedOptions () throws ParserException
+    {
+		String url = "http://htmlparser.sourceforge.net/test/overflowpage.html";
+        int i;
+        Node[] nodes;
+		
+		parser = new Parser(url);
+        parser.registerScanners ();
+        i = 0;
+        nodes = new Node[50];
+		for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
+			nodes[i++] = e.nextNode();
+        assertEquals ("Expected nodes", 39, i);
+    }
 }

@@ -31,6 +31,8 @@
 
 package org.htmlparser.tests.tagTests;
 
+import java.util.Stack;
+
 import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.scanners.SelectTagScanner;
 import org.htmlparser.tags.OptionTag;
@@ -61,8 +63,8 @@ public class SelectTagTest extends ParserTestCase
 	protected void setUp() throws Exception{
 		super.setUp();
 		createParser(testHTML);
-		parser.addScanner(new SelectTagScanner("-s"));
-		parser.addScanner(new OptionTagScanner("-o"));
+		parser.addScanner(new SelectTagScanner("-s", new Stack ()));
+		parser.addScanner(new OptionTagScanner("-o", new Stack ()));
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag);
 		selectTag = (SelectTag) node[0];
@@ -71,11 +73,11 @@ public class SelectTagTest extends ParserTestCase
 	public void testToHTML() throws ParserException 
 	{
 		assertStringEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
-									"<OPTION VALUE=\"Spouse\">Spouse</OPTION>"+
+									"<OPTION VALUE=\"Spouse\">Spouse</OPTION>\r\n"+
 									"<OPTION VALUE=\"Father\"></OPTION>\r\n"+
-									"<OPTION VALUE=\"Mother\">Mother\r\n</OPTION>" +
+									"<OPTION VALUE=\"Mother\">Mother\r\n</OPTION>\r\n" +
 									"<OPTION VALUE=\"Son\">\r\nSon\r\n</OPTION>"+
-									"<OPTION VALUE=\"Daughter\">\r\nDaughter\r\n</OPTION>"+
+									"<OPTION VALUE=\"Daughter\">\r\nDaughter\r\n</OPTION>\r\n"+
 									"<OPTION VALUE=\"Nephew\">\r\nNephew</OPTION>\r\n"+
 									"<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>"+
 									"</SELECT>",

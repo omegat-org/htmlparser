@@ -28,6 +28,8 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import java.util.Stack;
+
 import org.htmlparser.scanners.TextareaTagScanner;
 import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -54,9 +56,9 @@ public class TextareaTagScannerTest extends ParserTestCase
 	
 	public void testScan() throws ParserException 
 	{
-		scanner = new TextareaTagScanner("-i");
+		scanner = new TextareaTagScanner("-i", new Stack ());
 		createParser(testHTML);
-		scanner = new TextareaTagScanner("-ta");
+		scanner = new TextareaTagScanner("-ta", new Stack ());
 		parser.addScanner(scanner);
 		parseAndAssertNodeCount(5);
 	 	assertTrue(node[0] instanceof TextareaTag);

@@ -29,13 +29,15 @@ public class BulletListScannerTest extends ParserTestCase {
 
 	public void testScan() throws ParserException {
 		createParser(
-			"<ul TYPE=DISC>" +				"<ul TYPE=\"DISC\"><li>Energy supply\n"+
+			"<ul TYPE=DISC>" +
+				"<ul TYPE=\"DISC\"><li>Energy supply\n"+
 					" (Campbell)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"+
 					" (MacPhail)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"+
 				"</ul><A NAME=\"calpinecorp\"></A><B>Calpine Corp.</B>\n"+
 				"<ul TYPE=\"DISC\"><li>Power plant projects\n"+
 					" (Neufeld)  <A HREF=\"/hansard/37th3rd/h20314p.htm#1985\">1985</A>\n"+
-				"</ul>" +			"</ul>"
+				"</ul>" +
+			"</ul>"
 		);
 		parser.registerScanners();
 		parseAndAssertNodeCount(1);
@@ -62,8 +64,19 @@ public class BulletListScannerTest extends ParserTestCase {
 		);
 		assertStringEquals(
 			"expected text",
-			"Energy supply\r\n" +			" (Campbell)  ",
+			"Energy supply\r\n" +
+			" (Campbell)  ",
 			firstNodeInFirstBullet.toPlainTextString()
 		);
 	}
+
+	public void testMissingendtag ()
+        throws ParserException
+    {
+		createParser ("<li>item 1<li>item 2");
+		parser.registerScanners ();
+		parseAndAssertNodeCount (2);
+        assertStringEquals ("item 1 not correct", "item 1", ((Bullet)node[0]).childAt (0).toHtml ());
+        assertStringEquals ("item 2 not correct", "item 2", ((Bullet)node[1]).childAt (0).toHtml ());
+    }
 }

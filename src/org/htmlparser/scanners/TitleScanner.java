@@ -50,7 +50,8 @@ public class TitleScanner extends CompositeTagScanner {
 	
 	public boolean evaluate(String tagNameBeingChecked, TagScanner previousOpenScanner) {
 		absorbLeadingBlanks(tagNameBeingChecked);
-        return (tagNameBeingChecked.toUpperCase ().startsWith (MATCH_NAME[0]) && null == previousOpenScanner);
+        return (tagNameBeingChecked.toUpperCase ().startsWith (MATCH_NAME[0]) && ((null == previousOpenScanner)
+        || !previousOpenScanner.getID ()[0].equals  ("TITLE")));
 	} 
 
 	public Tag createTag(

@@ -28,6 +28,8 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Stack;
+
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tags.data.CompositeTagData;
@@ -36,15 +38,19 @@ import org.htmlparser.tags.data.TagData;
 public class TextareaTagScanner extends CompositeTagScanner
 {
 	private static final String MATCH_NAME [] = {"TEXTAREA"};
+	private static final String [] ENDERS = { "INPUT", "TEXTAREA", "SELECT", "OPTION" };
+    private static final String [] END_TAG_ENDERS = {"FORM", "BODY", "HTML" };
+	private Stack stack;
 
-	public TextareaTagScanner()
+	public TextareaTagScanner(Stack stack)
 	{
-		super(MATCH_NAME);
+		this("", stack);
 	}
 	
-	public TextareaTagScanner(String filter)
+	public TextareaTagScanner(String filter, Stack stack)
 	{
-		super(filter,MATCH_NAME);
+        super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
+        this.stack = stack;
 	}
 
 	public String [] getID() {
@@ -54,7 +60,39 @@ public class TextareaTagScanner extends CompositeTagScanner
 	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
+        if (!stack.empty () && (this == stack.peek ()))
+            stack.pop ();
 		return new TextareaTag(tagData,compositeTagData);
 	}
 
+	public void beforeScanningStarts ()
+    {
+        stack.push (this);
+	}
+
+	/**
+	 * This is the logic that decides when a option tag can be allowed
+	 */
+	public boolean shouldCreateEndTagAndExit ()
+    {
+        boolean ret;
+        
+        ret = false;
+
+		if (0 != stack.size ())
+        {
+            TagScanner parentScanner = (TagScanner)stack.peek ();
+            if (parentScanner instanceof CompositeTagScanner)
+            {
+                CompositeTagScanner scanner = (CompositeTagScanner)parentScanner;
+                if (scanner.tagEnderSet.contains (MATCH_NAME[0])) // should loop over names
+                {
+                    stack.pop ();
+                    ret = true;
+                }
+            }
+        }
+        
+        return (ret);
+	}
 }

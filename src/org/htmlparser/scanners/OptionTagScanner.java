@@ -28,6 +28,8 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Stack;
+
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
@@ -36,24 +38,59 @@ import org.htmlparser.tags.data.TagData;
 public class OptionTagScanner extends CompositeTagScanner
 {
 	private static final String MATCH_NAME [] = {"OPTION"};
-	private static final String [] ENDERS = { };
-    private static final String [] END_TAG_ENDERS = { "SELECT", "BODY", "HTML" };
+	private static final String [] ENDERS = { "INPUT", "TEXTAREA", "SELECT", "OPTION" };
+    private static final String [] END_TAG_ENDERS = { "SELECT", "FORM", "BODY", "HTML" };
+    private Stack stack;
 
-	public OptionTagScanner() {
-		super(MATCH_NAME[0], ENDERS, END_TAG_ENDERS, false);
+	public OptionTagScanner(Stack stack) {
+		this("", stack);
 	}
 	
-	public OptionTagScanner(String filter) {
+	public OptionTagScanner(String filter, Stack stack) {
 		super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
+        this.stack = stack;
 	}
 
-	public String [] getID() {
+    public String [] getID() {
 		return MATCH_NAME;
 	}
 	
 	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
+        if (!stack.empty () && (this == stack.peek ()))
+            stack.pop ();
 		return new OptionTag(tagData,compositeTagData);
+	}
+
+	public void beforeScanningStarts ()
+    {
+        stack.push (this);
+	}
+
+	/**
+	 * This is the logic that decides when a option tag can be allowed
+	 */
+	public boolean shouldCreateEndTagAndExit ()
+    {
+        boolean ret;
+        
+        ret = false;
+
+		if (0 != stack.size ())
+        {
+            TagScanner parentScanner = (TagScanner)stack.peek ();
+            if (parentScanner instanceof CompositeTagScanner)
+            {
+                CompositeTagScanner scanner = (CompositeTagScanner)parentScanner;
+                if (scanner.tagEnderSet.contains (MATCH_NAME[0])) // should loop over names
+                {
+                    stack.pop ();
+                    ret = true;
+                }
+            }
+        }
+        
+        return (ret);
 	}
 }

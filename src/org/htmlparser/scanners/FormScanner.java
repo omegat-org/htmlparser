@@ -31,6 +31,8 @@ package org.htmlparser.scanners;
 //////////////////
 // Java Imports //
 //////////////////
+import java.util.Stack;
+
 import org.htmlparser.Parser;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.Tag;
@@ -52,6 +54,7 @@ public class FormScanner extends CompositeTagScanner
 	private boolean linkScannerAlreadyOpen=false;
 	private static final String [] formTagEnders = {"HTML","BODY"
 	};
+	private Stack stack = new Stack();
  	/**
 	 * HTMLFormScanner constructor comment.
 	 */
@@ -65,9 +68,9 @@ public class FormScanner extends CompositeTagScanner
 	{
 		super(filter,MATCH_ID,formTagEnders,false);
 		parser.addScanner(new InputTagScanner("-i"));
-		parser.addScanner(new TextareaTagScanner("-t"));
-		parser.addScanner(new SelectTagScanner("-select"));
-		parser.addScanner(new OptionTagScanner("-option"));
+		parser.addScanner(new TextareaTagScanner("-t",stack));
+		parser.addScanner(new SelectTagScanner("-select", stack));
+		parser.addScanner(new OptionTagScanner("-option",stack));
 	}
 	
   /**
@@ -164,8 +167,13 @@ public class FormScanner extends CompositeTagScanner
 		String formUrl = extractFormLocn(compositeTagData.getStartTag(),tagData.getUrlBeingParsed());
 		if (formUrl!=null && formUrl.length()>0) 
 			compositeTagData.getStartTag().setAttribute("ACTION",formUrl);
+        if (!stack.empty () && (this == stack.peek ()))
+            stack.pop ();
 		return new FormTag(tagData, compositeTagData);
 	}
 
+	public void beforeScanningStarts() {
+		stack.push(this);
+	}
 
 }

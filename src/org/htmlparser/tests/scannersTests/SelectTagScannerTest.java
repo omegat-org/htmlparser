@@ -28,6 +28,8 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import java.util.Stack;
+
 import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.scanners.SelectTagScanner;
 import org.htmlparser.tags.OptionTag;
@@ -62,11 +64,11 @@ public class SelectTagScannerTest extends ParserTestCase
 	public void testScan() throws ParserException 
 	{
 		
-		scanner = new SelectTagScanner("-i");
+		scanner = new SelectTagScanner("-i", new Stack ());
 		createParser(testHTML,"http://www.google.com/test/index.html");
-		scanner = new SelectTagScanner("-ta");
+		scanner = new SelectTagScanner("-ta", new Stack ());
 		parser.addScanner(scanner);
-		parser.addScanner(new OptionTagScanner(""));
+		parser.addScanner(new OptionTagScanner("", new Stack ()));
 		
 		
 		parseAndAssertNodeCount(5);

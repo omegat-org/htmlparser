@@ -94,7 +94,7 @@ import org.htmlparser.util.ParserException;
 public abstract class CompositeTagScanner extends TagScanner {
 	protected String [] nameOfTagToMatch;
 	private boolean allowSelfChildren;
-	private Set tagEnderSet;
+	protected Set tagEnderSet;
 	private Set endTagEnderSet;
 	private boolean balance_quotes;
 			
