@@ -8,6 +8,7 @@ Integration Build 1.3 - 20030427
 [6] Fixed bug #725374 NPE while parsing text
 This will lead to a change in behavior, empty angle brackets are no longer returned
 as nodes, i.e. "this text<> has angles" used to return three nodes now returns one
+[7] Fixed bug #725376 StringIndexOutOfBounds Exception
 
 Integration Build 1.3 - 20030420
 --------------------------------
