@@ -164,6 +164,18 @@ public class HTMLParser
      */
     public static HTMLParserFeedback stdout = new DefaultHTMLParserFeedback ();
 
+    //
+    // Static methods
+    //
+
+	/**
+	 * @param lineSeparator New Line separator to be used
+	 */
+	public static void setLineSeparator(String lineSeparator)
+	{
+		HTMLNode.setLineSeparator(lineSeparator);	
+	}
+	
     /**
      * Opens a connection using the given url.
      * @param url The url to open.
@@ -250,6 +262,25 @@ public class HTMLParser
         return (ret);
     }
 
+    //
+    // Constructors
+    //
+
+    /**
+     * Zero argument constructor.
+     * The parser is in a safe but useless state.
+     * Set the reader or connection using setReader() or setConnection().
+     * @see #setReader(HTMLReader)
+     * @see #setReader(URLConnection)
+     */
+    public HTMLParser ()
+    {
+        setFeedback (null);
+        setScanners (null);
+        setReader (new HTMLReader (new StringReader (""), "http://localhost"));
+		HTMLTag.setTagParser (new HTMLTagParser (getFeedback ()));
+    }
+
     /**
 	 * This constructor enables the construction of test cases, with readers
 	 * associated with test string buffers. It can also be used with readers of the user's choice
@@ -271,14 +302,10 @@ public class HTMLParser
 	 */
 	public HTMLParser(HTMLReader rd, HTMLParserFeedback fb) 
 	{
-        feedback = (null == fb) ? noFeedback : fb;
-        resourceLocn = rd.getURL ();
-		reader = rd;
-        scanners = new Hashtable();
-        character_set = "";
-        url_conn = null;
+        setFeedback (fb);
+        setScanners (null);
+        setReader (rd);
 		HTMLTag.setTagParser(new HTMLTagParser(feedback));
-		reader.setParser(this);
 	}
 	
     /**
@@ -291,31 +318,10 @@ public class HTMLParser
         throws
             HTMLParserException
     {
-        feedback = (null == fb) ? noFeedback : fb;
+        setFeedback (fb);
+        setScanners (null);
         HTMLTag.setTagParser (new HTMLTagParser (feedback));
-        resourceLocn = connection.getURL ().toExternalForm ();
-        scanners = new Hashtable();
-        try
-        {
-            url_conn = connection;
-            url_conn.connect ();
-            character_set = getCharacterSet (url_conn);
-            createReader ();
-        }
-        catch (UnsupportedEncodingException uee)
-        {
-            String msg = "HTMLParser() : The content of " + connection.getURL ().toExternalForm () + " has an encoding which is not supported";
-            HTMLParserException ex = new HTMLParserException (msg, uee);
-            feedback.error (msg, ex);
-            throw ex;
-        }
-        catch (IOException ioe)
-        {
-            String msg = "HTMLParser() : Error in opening a connection to " + connection.getURL ().toExternalForm ();
-            HTMLParserException ex = new HTMLParserException (msg, ioe);
-            feedback.error (msg, ex);
-            throw ex;
-        }
+        setConnection (connection);
     }
 
 	/**
@@ -374,6 +380,255 @@ public class HTMLParser
     {
         this (connection, stdout);
     }
+
+    //
+    // Bean patterns
+    //
+
+    /**
+     * Set the connection for this parser.
+     * This method sets four of the fields in the parser object;
+     * <code>resourceLocn</code>, <code>url_conn</code>, <code>character_set</code>
+     * and <code>reader</code>. It does not adjust the <code>scanners</code> list
+     * or <code>feedback</code> object. The four fields are set atomicly by
+     * this method, either they are all set or none of them is set. Trying to
+     * set the connection to null is a noop.
+     * @param connection A fully conditioned connection. The connect()
+     * method will be called so it need not be connected yet.
+     * @exception HTMLParserException if the character set specified in the
+     * HTTP header is not supported, or an i/o exception occurs creating the
+     * reader.
+     */
+    public void setConnection (URLConnection connection)
+        throws
+            HTMLParserException
+    {
+        String res;
+        HTMLReader rd;
+        String chs;
+        URLConnection con;
+
+        if (null != connection)
+        {
+            res = getURL ();
+            rd = getReader ();
+            chs = getEncoding ();
+            con = getConnection ();
+            try
+            {
+                resourceLocn = connection.getURL ().toExternalForm ();
+                url_conn = connection;
+                url_conn.connect ();
+                character_set = getCharacterSet (url_conn);
+                createReader ();
+            }
+            catch (UnsupportedEncodingException uee)
+            {
+                String msg = "setConnection() : The content of " + connection.getURL ().toExternalForm () + " has an encoding which is not supported";
+                HTMLParserException ex = new HTMLParserException (msg, uee);
+                feedback.error (msg, ex);
+                resourceLocn = res;
+                url_conn = con;
+                character_set = chs;
+                reader = rd;
+                throw ex;
+            }
+            catch (IOException ioe)
+            {
+                String msg = "setConnection() : Error in opening a connection to " + connection.getURL ().toExternalForm ();
+                HTMLParserException ex = new HTMLParserException (msg, ioe);
+                feedback.error (msg, ex);
+                resourceLocn = res;
+                url_conn = con;
+                character_set = chs;
+                reader = rd;
+                throw ex;
+            }
+        }
+    }
+
+    /**
+     * Return the current connection.
+     * @return The connection either created by the parser or passed into this
+     * parser via <code>setConnection</code>.
+     * @see #setConnection(URLConnection)
+     */
+    public URLConnection getConnection ()
+    {
+        return (url_conn);
+    }
+
+    /**
+     * Set the URL for this parser.
+     * This method sets four of the fields in the parser object;
+     * <code>resourceLocn</code>, <code>url_conn</code>, <code>character_set</code>
+     * and <code>reader</code>. It does not adjust the <code>scanners</code> list
+     * or <code>feedback</code> object.Trying to set the url to null or an
+     * empty string is a noop.
+     * @see #setConnection(URLConnection)
+     */
+    public void setURL (String url)
+        throws
+            HTMLParserException
+    {
+        if ((null != url) && !"".equals (url))
+            setConnection (openConnection (url, getFeedback ()));
+    }
+
+    /**
+     * Return the current URL being parsed.
+     * @return The url passed into the constructor or the file name
+     * passed to the constructor modified to be a URL.
+     */
+    public String getURL ()
+    {
+        return (resourceLocn);
+    }
+
+    /**
+     * Set the encoding for this parser.
+     * If there is no connection (getConnection() returns null) it simply sets
+     * the character set name stored in the parser (Note: the reader object
+     * which must have been set in the constructor or by <code>setReader()</code>,
+     * may or may not be using this character set).
+     * Otherwise (getConnection() doesn't return null) it does this by reopening the
+     * input stream of the connection and creating a reader that uses this
+     * character set. In this case, this method sets two of the fields in the
+     * parser object; <code>character_set</code> and <code>reader</code>.
+     * It does not adjust <code>resourceLocn</code>, <code>url_conn</code>,
+     * <code>scanners</code> or <code>feedback</code>. The two fields are set
+     * atomicly by this method, either they are both set or none of them is set.
+     * Trying to set the encoding to null or an empty string is a noop.
+     * @exception HTMLParserException If the opening of the reader
+     */
+    public void setEncoding (String encoding)
+        throws
+            HTMLParserException
+    {
+        String chs;
+        HTMLReader rd;
+
+        if ((null != encoding) && !"".equals (encoding))
+            if (null == getConnection ())
+                character_set = encoding;
+            else
+            {
+                rd = getReader ();
+                chs = getEncoding ();
+                try
+                {
+                    character_set = encoding;
+                    createReader ();
+                }
+                catch (UnsupportedEncodingException uee)
+                {
+                    String msg = "setEncoding() : The specified encoding is not supported";
+                    HTMLParserException ex = new HTMLParserException (msg, uee);
+                    feedback.error (msg, ex);
+                    character_set = chs;
+                    reader = rd;
+                    throw ex;
+                }
+                catch (IOException ioe)
+                {
+                    String msg = "setEncoding() : Error in opening a connection to " + getConnection ().getURL ().toExternalForm ();
+                    HTMLParserException ex = new HTMLParserException (msg, ioe);
+                    feedback.error (msg, ex);
+                    character_set = chs;
+                    reader = rd;
+                    throw ex;
+                }
+            }
+    }
+
+    /**
+     * The current encoding.
+     * This item is et from the HTTP header but may be overridden by meta
+     * tags in the head, so this may change after the head has been parsed.
+     */
+    public String getEncoding ()
+    {
+        return (character_set);
+    }
+
+    /**
+     * Set the reader for this parser.
+     * This method sets four of the fields in the parser object;
+     * <code>resourceLocn</code>, <code>url_conn</code>, <code>character_set</code>
+     * and <code>reader</code>. It does not adjust the <code>scanners</code> list
+     * or <code>feedback</code> object. The <code>url_conn</code> is set to
+     * null since this cannot be determined from the reader. The 
+     * <code>character_set</code> is set to the default character set since
+     * this cannot be determined from the reader.
+     * Trying to set the reader to <code>null</code> is a noop.
+     * @param rd The reader object to use. This reader will be bound to this
+     * parser after this call.
+     */
+    public void setReader (HTMLReader rd)
+    {
+        if (null != rd)
+        {
+            resourceLocn = rd.getURL ();
+            reader = rd;
+            character_set = DEFAULT_CHARSET;
+            url_conn = null;
+            reader.setParser(this);
+        }
+    }
+
+	/**
+	 * Returns the reader associated with the parser
+	 * @return HTMLReader
+	 */
+	public HTMLReader getReader() {
+		return reader;
+	}
+
+	/**
+	 * Get the number of scanners registered currently in the scanner.
+	 * @return int number of scanners registered
+	 */
+	public int getNumScanners() {
+		return scanners.size();	
+	}
+	
+	/**
+	 * This method is to be used to change the set of scanners in the current parser.
+	 * @param newScanners Vector holding scanner objects to be used during the parsing process.
+	 */
+	public void setScanners(Hashtable newScanners)
+    {
+		scanners = (null == newScanners) ? new Hashtable() : newScanners;
+	}
+	
+	/**
+	 * Get an enumeration of scanners registered currently in the parser
+	 * @return Enumeration of scanners currently registered in the parser
+	 */
+	public Hashtable getScanners() {
+		return scanners;
+	}
+
+	/**
+	 * Sets the feedback object used in scanning.
+	 * @param fb The new feedback object to use.
+	 */
+	public void setFeedback(HTMLParserFeedback fb)
+    {
+        feedback = (null == fb) ? noFeedback : fb;
+	}
+
+	/**
+	 * Returns the feedback.
+	 * @return HTMLParserFeedback
+	 */
+	public HTMLParserFeedback getFeedback() {
+		return feedback;
+	}
+
+    //
+    // Internal methods
+    //
 
     /**
      * Create a new reader for the URLConnection object.
@@ -530,25 +785,9 @@ public class HTMLParser
         return (ret);
     }
 
-    /**
-     * Return the current URL being parsed.
-     * @return The url passed into the constructor or the file name
-     * passed to the constructor modified to be a URL.
-     */
-    public String getURL ()
-    {
-        return (resourceLocn);
-    }
-
-    /**
-     * The current encoding.
-     * This item is et from the HTTP header but may be overridden by meta
-     * tags in the head, so this may change after the head has been parsed.
-     */
-    public String getEncoding ()
-    {
-        return (character_set);
-    }
+    //
+    // Public methods
+    //
 
 	/**
 	 * Add a new Tag Scanner.
@@ -672,22 +911,6 @@ public class HTMLParser
 	}
 	
 	/**
-	 * Get the number of scanners registered currently in the scanner.
-	 * @return int number of scanners registered
-	 */
-	public int getNumScanners() {
-		return scanners.size();	
-	}
-	
-	/**
-	 * Get an enumeration of scanners registered currently in the parser
-	 * @return Enumeration of scanners currently registered in the parser
-	 */
-	public Hashtable getScanners() {
-		return scanners;
-	}
-	
-	/**
 	 * Return the scanner registered in the parser having the
 	 * given id
 	 * @param id The id of the requested scanner
@@ -696,56 +919,7 @@ public class HTMLParser
 	public HTMLTagScanner getScanner(String id) {
 		return (HTMLTagScanner)scanners.get(id);
 	}
-	/**
-	 * The main program, which can be executed from the command line
-	 */
-	public static void main(String [] args)
-	{
-		System.out.println("HTMLParser v"+VERSION_STRING);
-		if (args.length<1 || args[0].equals("-help"))
-		{
-			System.out.println();
-			System.out.println("Syntax : java -jar htmlparser.jar <resourceLocn/website> -l");
-			System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path if not in current directory)");
-			System.out.println("   -l Show only the link tags extracted from the document");
-			System.out.println("   -i Show only the image tags extracted from the document");
-			System.out.println("   -s Show only the Javascript code extracted from the document");
-			System.out.println("   -t Show only the Style code extracted from the document");
-			System.out.println("   -a Show only the Applet tag extracted from the document");
-			System.out.println("   -j Parse JSP tags");	
-			System.out.println("   -m Parse Meta tags");		
-			System.out.println("   -T Extract the Title");
-			System.out.println("   -f Extract forms");
-			System.out.println("   -r Extract frameset");
-			System.out.println("   -help This screen");
-			System.out.println();
-			System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
-			System.out.println();
-			System.out.println("Example : java -jar htmlparser.jar http://www.yahoo.com");
-			System.out.println();
-			System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
-			System.exit(-1);
-		}
-		try {
-			HTMLParser parser = new HTMLParser(args[0]);
-            System.out.println("Parsing " + parser.getURL ());
-			parser.registerScanners();
-			try {
-				if (args.length==2)
-				{
-					parser.parse(args[1]);
-				} else
-				parser.parse(null);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		catch (HTMLParserException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	/**
 	 * Parse the given resource, using the filter provided
 	 */
@@ -830,37 +1004,54 @@ public class HTMLParser
 	public void removeScanner(HTMLTagScanner scanner) {
 		scanners.remove(scanner);
 	}
-	
+
 	/**
-	 * This method is to be used to change the set of scanners in the current parser.
-	 * @param newScanners Vector holding scanner objects to be used during the parsing process.
+	 * The main program, which can be executed from the command line
 	 */
-	public void setScanners(Hashtable newScanners) {
-		scanners = newScanners;
-	}
-	
-	/**
-	 * @param lineSeparator New Line separator to be used
-	 */
-	public static void setLineSeparator(String lineSeparator)
+	public static void main(String [] args)
 	{
-		HTMLNode.setLineSeparator(lineSeparator);	
+		System.out.println("HTMLParser v"+VERSION_STRING);
+		if (args.length<1 || args[0].equals("-help"))
+		{
+			System.out.println();
+			System.out.println("Syntax : java -jar htmlparser.jar <resourceLocn/website> -l");
+			System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path if not in current directory)");
+			System.out.println("   -l Show only the link tags extracted from the document");
+			System.out.println("   -i Show only the image tags extracted from the document");
+			System.out.println("   -s Show only the Javascript code extracted from the document");
+			System.out.println("   -t Show only the Style code extracted from the document");
+			System.out.println("   -a Show only the Applet tag extracted from the document");
+			System.out.println("   -j Parse JSP tags");	
+			System.out.println("   -m Parse Meta tags");		
+			System.out.println("   -T Extract the Title");
+			System.out.println("   -f Extract forms");
+			System.out.println("   -r Extract frameset");
+			System.out.println("   -help This screen");
+			System.out.println();
+			System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
+			System.out.println();
+			System.out.println("Example : java -jar htmlparser.jar http://www.yahoo.com");
+			System.out.println();
+			System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
+			System.exit(-1);
+		}
+		try {
+			HTMLParser parser = new HTMLParser(args[0]);
+            System.out.println("Parsing " + parser.getURL ());
+			parser.registerScanners();
+			try {
+				if (args.length==2)
+				{
+					parser.parse(args[1]);
+				} else
+				parser.parse(null);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		catch (HTMLParserException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	/**
-	 * Returns the feedback.
-	 * @return HTMLParserFeedback
-	 */
-	public HTMLParserFeedback getFeedback() {
-		return feedback;
-	}
-
-	/**
-	 * Returns the reader associated with the parser
-	 * @return HTMLReader
-	 */
-	public HTMLReader getReader() {
-		return reader;
-	}
-
 }
