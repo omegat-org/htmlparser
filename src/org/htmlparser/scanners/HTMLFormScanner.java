@@ -132,6 +132,12 @@ public class HTMLFormScanner extends HTMLTagScanner
 			linkBegin = tag.elementBegin();
 		    boolean endFlag = false;
 			nodeVector.addElement(tag);
+
+			Hashtable oldScanners = adjustScanners(reader);
+			reader.getParser().addScanner(new HTMLInputTagScanner(""));
+			reader.getParser().addScanner(new HTMLSelectTagScanner(""));
+			reader.getParser().addScanner(new HTMLOptionTagScanner(""));
+			reader.getParser().addScanner(new HTMLTextareaTagScanner(""));
 		    do
 			{
 				node = reader.readElement();
@@ -152,6 +158,8 @@ public class HTMLFormScanner extends HTMLTagScanner
 				nodeVector.addElement(node);
 			}
 			while (endFlag==false && node!=null);
+			restoreScanners(reader,oldScanners);
+			
 			if (node==null && endFlag==false) {
 				StringBuffer msg = new StringBuffer();
 				for (Enumeration e = inputVector.elements();e.hasMoreElements();) {

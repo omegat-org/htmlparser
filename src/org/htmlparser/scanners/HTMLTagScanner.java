@@ -31,6 +31,7 @@ package org.htmlparser.scanners;
 // Java Imports //
 //////////////////
 import java.io.IOException;
+import java.util.Hashtable;
 
 /////////////////////////
 // HTML Parser Imports //
@@ -55,37 +56,37 @@ import org.htmlparser.util.*;
  */
 public abstract class HTMLTagScanner
 {
-  /**
-   * A filter which is used to associate this tag. The filter contains a string
-   * that is used to match which tags are to be allowed to pass through. This can
-   * be useful when one wishes to dynamically filter out all tags except one type
-   * which may be programmed later than the parser. Is also useful for command line
-   * implementations of the parser.
-   */
-  protected String filter;
-  
-  /**
-   * HTMLParserFeedback object automatically initialized
-   */
-  protected HTMLParserFeedback feedback;
-  /**
-   * Default Constructor, automatically registers the scanner into a static array of 
-   * scanners inside HTMLTag
-   */
-  public HTMLTagScanner()
-  {
-    this.filter="";
-  }
-  /**
-   * This constructor automatically registers the scanner, and sets the filter for this
-   * tag. 
-   * @param filter The filter which will allow this tag to pass through.
-   */
-  public HTMLTagScanner(String filter)
-  {
-    this.filter=filter;
-  }
-	/**
+	  /**
+	   * A filter which is used to associate this tag. The filter contains a string
+	   * that is used to match which tags are to be allowed to pass through. This can
+	   * be useful when one wishes to dynamically filter out all tags except one type
+	   * which may be programmed later than the parser. Is also useful for command line
+	   * implementations of the parser.
+	   */
+	  protected String filter;
+	  
+	  /**
+	   * HTMLParserFeedback object automatically initialized
+	   */
+	  protected HTMLParserFeedback feedback;
+	  /**
+	   * Default Constructor, automatically registers the scanner into a static array of 
+	   * scanners inside HTMLTag
+	   */
+	  public HTMLTagScanner()
+	  {
+	    this.filter="";
+	  }
+	  /**
+	   * This constructor automatically registers the scanner, and sets the filter for this
+	   * tag. 
+	   * @param filter The filter which will allow this tag to pass through.
+	   */
+	  public HTMLTagScanner(String filter)
+	  {
+	    this.filter=filter;
+	  }
+		/**
 	 * Insert the method's description here.
 	 * Creation date: (6/4/2001 11:44:09 AM)
 	 * @return java.lang.String
@@ -101,31 +102,31 @@ public abstract class HTMLTagScanner
 	 * Creation date: (6/18/2001 2:15:02 AM)
 	 * @return java.lang.String
 	 */
-	public static String absorbLeadingBlanks(String s) 
-	{
-	  String temp = new String(s);
-	  while (temp.length()!=0 && temp.charAt(0)==' ')
-	  {
-	    temp = temp.substring(1,temp.length());
+		public static String absorbLeadingBlanks(String s) 
+		{
+		  String temp = new String(s);
+		  while (temp.length()!=0 && temp.charAt(0)==' ')
+		  {
+		    temp = temp.substring(1,temp.length());
+		  }
+		  return temp;
+		}
+	  /**
+	   * This method is used to decide if this scanner can handle this tag type. If the
+	   * evaluation returns true, the calling side makes a call to scan().
+	   * <strong>This method has to be implemented meaningfully only if a first-word match with 
+	   * the scanner id does not imply a match (or extra processing needs to be done).
+	   * Default returns true</strong>
+	   * @param s The complete text contents of the HTMLTag.
+	   * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
+	   * scan has begun, and hence allows us to write scanners that can work with dirty html
+	   */
+	  public boolean evaluate(String s,HTMLTagScanner previousOpenScanner) {
+	  	return true;
 	  }
-	  return temp;
-	}
-  /**
-   * This method is used to decide if this scanner can handle this tag type. If the
-   * evaluation returns true, the calling side makes a call to scan().
-   * <strong>This method has to be implemented meaningfully only if a first-word match with 
-   * the scanner id does not imply a match (or extra processing needs to be done).
-   * Default returns true</strong>
-   * @param s The complete text contents of the HTMLTag.
-   * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-   * scan has begun, and hence allows us to write scanners that can work with dirty html
-   */
-  public boolean evaluate(String s,HTMLTagScanner previousOpenScanner) {
-  	return true;
-  }
-  public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) throws HTMLParserException{
-	try {	  
-	  String xmlData = "";
+	  public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) throws HTMLParserException{
+		try {	  
+		  String xmlData = "";
 	
 	  boolean xmlTagFound = isXMLTagFound(node, tagName);
 	  if (xmlTagFound) {
@@ -136,17 +137,17 @@ public abstract class HTMLTagScanner
 	          if (node instanceof HTMLStringNode) {
 	            HTMLStringNode stringNode = (HTMLStringNode)node;
 	            if (xmlData.length()>0) xmlData+=" ";
-	            xmlData += stringNode.getText();
-	          } else if (!(node instanceof org.htmlparser.tags.HTMLEndTag))
-	            xmlTagFound = false;
-	        }
-	      }
-	      while (node instanceof HTMLStringNode);
-	      
+	        xmlData += stringNode.getText();
+	      } else if (!(node instanceof org.htmlparser.tags.HTMLEndTag))
+	        xmlTagFound = false;
 	    }
+	  }
+	  while (node instanceof HTMLStringNode);
+	  
+	}
 	
-	    catch (Exception e) {
-	    	throw new HTMLParserException("HTMLTagScanner.extractXMLData() : error while trying to find xml tag",e);
+	catch (Exception e) {
+		throw new HTMLParserException("HTMLTagScanner.extractXMLData() : error while trying to find xml tag",e);
 	    }
 	  }
 	  if (xmlTagFound) {
@@ -163,74 +164,93 @@ public abstract class HTMLTagScanner
 	}
 	catch (Exception e) {
 		throw new HTMLParserException("HTMLTagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
-	}
-  }
-  /**
-   * Get the filter associated with this node.
-   */
-  public String getFilter()
-  {
-    return filter;
-  }
-	/**
+		}
+	  }
+	  /**
+	   * Get the filter associated with this node.
+	   */
+	  public String getFilter()
+	  {
+	    return filter;
+	  }
+		/**
 	 * Insert the method's description here.
 	 * Creation date: (10/24/2001 6:27:02 PM)
 	 */
 	public static boolean isXMLTagFound(HTMLNode node, String tagName) {
-	  boolean xmlTagFound=false;
-	  if (node instanceof HTMLTag) {
-	    HTMLTag tag = (HTMLTag)node;
-	    if (tag.getText().toUpperCase().indexOf(tagName)==0) {
-	      xmlTagFound=true;
-	    }
-	  }
-	  return xmlTagFound;
+		boolean xmlTagFound=false;
+		if (node instanceof HTMLTag) {
+			HTMLTag tag = (HTMLTag)node;
+		    if (tag.getText().toUpperCase().indexOf(tagName)==0) {
+		      xmlTagFound=true;
+		    }
+		}
+		return xmlTagFound;
 	}
+	
 	public final HTMLTag createScannedNode(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException {
 		HTMLTag thisTag = scan(tag,url,reader,currLine);
 		thisTag.setThisScanner(this);
 		thisTag.setParsed(tag.getParsed());		
 		return thisTag;
 	}
-  /** 
-   * Scan the tag and extract the information related to this type. The url of the 
-   * initiating scan has to be provided in case relative links are found. The initial 
-   * url is then prepended to it to give an absolute link.
-   * The HTMLReader is provided in order to do a lookahead operation. We assume that
-   * the identification has already been performed using the evaluate() method.
-   * @param tag HTML Tag to be scanned for identification
-   * @param url The initiating url of the scan (Where the html page lies)
-   * @param reader The reader object responsible for reading the html page
-   */
-  public abstract HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException;
-
-  public String removeChars(String s,char occur)  {
-    StringBuffer newString = new StringBuffer();
-    char ch;
-    for (int i=0;i<s.length();i++) {
-      ch = s.charAt(i);
-      if (ch!=occur) newString.append(ch);
-    }
-    return newString.toString();
-  }
-  public String removeChars(String s,String occur)  {
-    StringBuffer newString = new StringBuffer();
-    char ch;
-    int index;
-    do {
-    	index = s.indexOf(occur);
-    	if (index!=-1) {
-    		newString.append(s.substring(0,index));
-    		s=s.substring(index+occur.length());
-    	}
-    }
-    while (index!=-1);
-    newString.append(s);
-    return newString.toString();
-  }
-  public abstract String [] getID();
-
-  public final void setFeedback(HTMLParserFeedback feedback) {
-  	this.feedback = feedback;
-  }
+	
+	/** 
+     * Scan the tag and extract the information related to this type. The url of the 
+	 * initiating scan has to be provided in case relative links are found. The initial 
+	 * url is then prepended to it to give an absolute link.
+	 * The HTMLReader is provided in order to do a lookahead operation. We assume that
+	 * the identification has already been performed using the evaluate() method.
+	 * @param tag HTML Tag to be scanned for identification
+	 * @param url The initiating url of the scan (Where the html page lies)
+	 * @param reader The reader object responsible for reading the html page
+	 */
+  	public abstract HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException;
+	
+	public String removeChars(String s,char occur)  {
+	    StringBuffer newString = new StringBuffer();
+	    char ch;
+	    for (int i=0;i<s.length();i++) {
+	      ch = s.charAt(i);
+	      if (ch!=occur) newString.append(ch);
+	    }
+	    return newString.toString();
+	}
+	
+	public String removeChars(String s,String occur)  {
+	    StringBuffer newString = new StringBuffer();
+	    char ch;
+	    int index;
+	    do {
+	    	index = s.indexOf(occur);
+	    	if (index!=-1) {
+	    		newString.append(s.substring(0,index));
+	    		s=s.substring(index+occur.length());
+	    	}
+	    }
+	    while (index!=-1);
+	    newString.append(s);
+	    return newString.toString();
+	}
+	  
+	public abstract String [] getID();
+	
+	public final void setFeedback(HTMLParserFeedback feedback) {
+	  	this.feedback = feedback;
+	}
+	
+	public static Hashtable adjustScanners(HTMLReader pReader) 
+	{
+		Hashtable tempScanners= new Hashtable();
+		tempScanners = pReader.getParser().getScanners();		
+		// Remove all existing scanners
+		pReader.getParser().flushScanners();
+		return tempScanners;
+	}
+	
+	public static void restoreScanners(HTMLReader pReader, Hashtable tempScanners)
+	{
+		// Flush the scanners
+		pReader.getParser().setScanners(tempScanners);
+	}  
 }

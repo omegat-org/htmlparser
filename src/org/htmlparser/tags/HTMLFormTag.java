@@ -90,15 +90,16 @@ public class HTMLFormTag extends HTMLTag
       	}
 		return formMethod;
 	}
+	
 	/**
 	 * @param name The name of the input tag to be retrieved
 	 * @return HTMLTag The input tag corresponding to the name provided
 	 */
-	public HTMLTag getInputTag(String name) {
-		HTMLTag inputTag=null;
+	public HTMLInputTag getInputTag(String name) {
+		HTMLInputTag inputTag=null;
 		boolean found=false;
 		for (Enumeration e = formInputVector.elements();e.hasMoreElements() && !found;) {
-			inputTag = (HTMLTag)e.nextElement();
+			inputTag = (HTMLInputTag)e.nextElement();
 			if (inputTag.getParameter("NAME").equals(name)) {
 				found=true;
 			}
@@ -106,12 +107,14 @@ public class HTMLFormTag extends HTMLTag
 		if (found)
 		return inputTag; else return null;
 	}
+	
 	/**
 	 * @return String The name of the form
 	 */
 	public String getFormName() {
 		return formName;
 	}
+	
 	/**
 	 * Set the form inputs
 	 * @param formInputVector The vector of input tags
@@ -120,6 +123,7 @@ public class HTMLFormTag extends HTMLTag
 	{
 		this.formInputVector = formInputVector;
 	}
+	
 	/**
 	 * Set the form location. Modification of this element will cause the HTML rendering 
 	 * to change as well (in a call to toHTML()).

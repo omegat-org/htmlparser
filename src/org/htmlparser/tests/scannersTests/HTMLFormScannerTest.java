@@ -39,6 +39,7 @@ import org.htmlparser.HTMLReader;
 import org.htmlparser.scanners.HTMLFormScanner;	
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLFormTag;
+import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
@@ -51,7 +52,33 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class HTMLFormScannerTest extends HTMLParserTestCase {
+	public static final String FORM_HTML =
+	"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
+		"</FORM>";
 	
+	public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM METHOD=\"post\" ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\">\r\n";
+	public static final String EXPECTED_FORM_HTML_REST_OF_FORM=	
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT NAME=\"name\" SIZE=\"20\" TYPE=\"text\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT NAME=\"passwd\" SIZE=\"20\" TYPE=\"password\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT VALUE=\"Login\" NAME=\"submit\" TYPE=\"submit\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<INPUT NAME=\"password\" SIZE=\"20\" TYPE=\"hidden\">\r\n"+
+		"</FORM>";
+	public static final String EXPECTED_FORM_HTML = EXPECTED_FORM_HTML_FORMLINE+EXPECTED_FORM_HTML_REST_OF_FORM;
+			
 	public HTMLFormScannerTest(String name) {
 		super(name);
 	}
@@ -66,55 +93,42 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		assertTrue("Line 3",formScanner.evaluate(line3,null));
 	}
 	
+	public void assertTypeNameSize(String description,String type,String name,String size,HTMLInputTag inputTag) {
+		assertEquals(description+" type",type,inputTag.getParameter("TYPE"));
+		assertEquals(description+" name",name,inputTag.getParameter("NAME"));
+		assertEquals(description+" size",size,inputTag.getParameter("SIZE"));
+	}
+	public void assertTypeNameValue(String description,String type,String name,String value,HTMLInputTag inputTag) {
+		assertEquals(description+" type",type,inputTag.getParameter("TYPE"));
+		assertEquals(description+" name",name,inputTag.getParameter("NAME"));
+		assertEquals(description+" value",value,inputTag.getParameter("VALUE"));
+	}	
 	public void testScan() throws HTMLParserException {
-		createParser(
-		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
-		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
-		"</FORM>","http://www.google.com/test/index.html");
-		
+		createParser(FORM_HTML,"http://www.google.com/test/index.html");
 		parser.addScanner(new HTMLFormScanner(""));
-		
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		assertEquals("Method","post",formTag.getFormMethod());
 		assertEquals("Location","http://www.google.com/test/do_login.php",formTag.getFormLocation());
 		assertEquals("Name","login_form",formTag.getFormName());		
-		HTMLTag nameTag = formTag.getInputTag("name");
-		HTMLTag passwdTag = formTag.getInputTag("passwd");
-		HTMLTag submitTag = formTag.getInputTag("submit");
-		HTMLTag dummyTag = formTag.getInputTag("dummy");
+		HTMLInputTag nameTag = formTag.getInputTag("name");
+		HTMLInputTag passwdTag = formTag.getInputTag("passwd");
+		HTMLInputTag submitTag = formTag.getInputTag("submit");
+		HTMLInputTag dummyTag = formTag.getInputTag("dummy");
 		assertNotNull("Input Name Tag should not be null",nameTag);
 		assertNotNull("Input Password Tag should not be null",passwdTag);
 		assertNotNull("Input Submit Tag should not be null",submitTag);
 		assertNull("Input dummy tag should be null",dummyTag);
 		
-		assertEquals("Input Name Tag","<INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\">",nameTag.toHTML());
-		assertEquals("Input Password Tag","<INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\">",passwdTag.toHTML());
-		assertEquals("Input Submit Tag","<INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\">",submitTag.toHTML());
+		assertTypeNameSize("Input Name Tag","text","name","20",nameTag);
+		assertTypeNameSize("Input Password Tag","password","passwd","20",passwdTag);
+		assertTypeNameValue("Input Submit Tag","submit","submit","Login",submitTag);
 		
-		String tempString = "<FORM METHOD=\"post\" ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\">\r\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\r\n"+
-		"</FORM>";
-		assertEquals("Length of string",tempString.length(),formTag.toHTML().length());
+		
+		assertEquals("Length of string",EXPECTED_FORM_HTML.length(),formTag.toHTML().length());
 
-		assertStringEquals("Raw String",tempString,formTag.toHTML());
+		assertStringEquals("Raw String",EXPECTED_FORM_HTML,formTag.toHTML());
 	}
 	
 	public void testScanFormWithNoEnding() {
