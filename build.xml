@@ -98,5 +98,7 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   <target name="clean">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
+    <!-- Delete the release directory also -->
+    <delete dir="${releaseDir}"/>
   </target>
 </project>
