@@ -49,6 +49,7 @@ import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.AppletScanner;
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.scanners.BulletScanner;
+import org.htmlparser.scanners.DivScanner;
 import org.htmlparser.scanners.DoctypeScanner;
 import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.scanners.FrameSetScanner;
@@ -1004,7 +1005,7 @@ public class Parser
 		addScanner(new BulletScanner("-bullet"));
 		
 	//	addScanner(new SpanScanner("-p"));
-	//	addScanner(new DivScanner("-div"));
+		addScanner(new DivScanner("-div"));
 		addScanner(new TableScanner(this));
 	}
 	
