@@ -34,6 +34,7 @@ import org.htmlparser.Attribute;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.lexer.PageAttribute;
 import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
@@ -746,5 +747,31 @@ public class AttributeTests extends ParserTestCase
         assertTrue ("setQuote('\\0') failed", "src=images/third".equals (src.toString ()));
         src.setQuote ('\'');
         assertTrue ("setQuote('\\'') failed", "src='images/third'".equals (src.toString ()));
+    }
+    
+    /**
+     * see bug #979893 Not Parsing all Attributes
+     */
+    public void testNoSpace () throws ParserException
+    {
+        String id = "A19012_00002";
+        String rawid = "\"" + id + "\"";
+        String cls = "BuyLink";
+        String rawcls = "\"" + cls + "\"";
+        String href = "http://www.someplace.com/buyme.html";
+        String rawhref = "\"" + href + "\"";
+        String html = "<a id=" + rawid + /* no space */ "class=" + rawcls + " href=" + rawhref + ">Pick me.</a>";
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be an LinkTag", node[0] instanceof LinkTag);
+        LinkTag link = (LinkTag)node[0];
+        Vector attributes = link.getAttributesEx ();
+        assertEquals ("Incorrect number of attributes", 6, attributes.size ());
+        assertStringEquals ("id wrong", rawid, link.getAttributeEx ("id").getRawValue ());
+        assertStringEquals ("class wrong", rawcls, link.getAttributeEx ("class").getRawValue ());
+        assertStringEquals ("href wrong", rawhref, link.getAttributeEx ("href").getRawValue ());
+        assertStringEquals ("id wrong", id, link.getAttributeEx ("id").getValue ());
+        assertStringEquals ("class wrong", cls, link.getAttributeEx ("class").getValue ());
+        assertStringEquals ("href wrong", href, link.getAttributeEx ("href").getValue ());
     }
 }
