@@ -109,6 +109,7 @@ public class AllTests extends junit.framework.TestCase
 		suite.addTest(org.htmlparser.tests.tagTests.AllTests.suite());
 		suite.addTest(org.htmlparser.tests.visitorsTests.AllTests.suite());
 		suite.addTest(org.htmlparser.tests.parserHelperTests.AllTests.suite());
+		suite.addTest(AssertXmlEqualsTest.suite());
 		return suite;
 	} 
 }

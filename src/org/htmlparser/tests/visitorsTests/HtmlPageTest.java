@@ -60,7 +60,7 @@ public class HtmlPageTest extends ParserTestCase {
 		parser.visitAllNodesWith(page);
 		NodeList bodyNodes = page.getBody();
 		assertEquals("number of nodes in body",2,bodyNodes.size());
-		assertXMLEquals(
+		assertXmlEquals(
 			"body html",
 			"Welcome to HTMLParser" +
 			"<table>" +

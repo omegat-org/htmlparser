@@ -150,65 +150,129 @@ public class ParserTestCase extends TestCase {
 		assertNodeCount(nodeCountExpected);
 	}
 
-	public void assertXMLEquals(String displayMessage, String expected, String result) throws Exception {
-		displayMessage = "\n\n"+displayMessage+
-		"\n\nExpected XML:\n"+expected+
-		"\n\nActual XML:\n"+result;
-		expected = removeEscapeCharacters(expected);
-		result   = removeEscapeCharacters(result);
-		Parser expectedParser = Parser.createParser(expected);
-		Parser resultParser   = Parser.createParser(result);
-		Node expectedNode, actualNode;
-		NodeIterator actualEnumeration = resultParser.elements();
-		int cnt=0;
-		Node prevNode=null;
-		for (NodeIterator e = expectedParser.elements();e.hasMoreNodes();) {
-			expectedNode = e.nextNode();
-			actualNode   = actualEnumeration.nextNode();
-			cnt++;
-			String expectedNodeHtml="null", actualNodeHtml="null";
-			String expectedNodeName="null", actualNodeName="null";
-			if (expectedNode!=null) {
-				expectedNodeHtml = expectedNode.toHtml();
-				expectedNodeName = expectedNode.getClass().getName();
-			}
-			if (actualNode!=null) {
-				actualNodeHtml = actualNode.toHtml();
-				actualNodeName = actualNode.getClass().getName();
-			}
-			String prevNodeHtml="null";
-			if (prevNode!=null)
-				prevNodeHtml = prevNode.toHtml();
-		
-			System.out.println("Matching: \n" +				"expectedNode = "+expectedNodeHtml+"\n" +				"actualNode = "+actualNodeHtml);
-			assertStringEquals(
-				"the two nodes should be the same type\n"+
-				"expected node:"+expectedNodeHtml+"\n"+
-				"  actual node:"+actualNodeHtml+"\n"+
-				"comparison no: "+cnt+"\n"+
-				"expected node type: "+expectedNodeName+"\n"+
-				"actual node type  : "+actualNodeName+"\n"+
-				"previous matched node : "+prevNodeHtml+
-				displayMessage,
-				expectedNodeName,
-				actualNodeName
-			);
-			assertTagEquals(
-				displayMessage+"\n"+
-				"previous matched node : "+prevNodeHtml,
-				expectedNode,
-				actualNode,
-				actualEnumeration
-			);
-			assertStringNodeEquals(
-				displayMessage, 
-				expectedNode, 
-				actualNode
-			);			
-			prevNode = actualNode;
-			
+	public void assertSameType(String displayMessage, Node expected, Node actual) {
+		String expectedNodeName = expected.getClass().getName();
+		String actualNodeName = actual.getClass().getName();
+		displayMessage = 
+			"The types did not match: Expected "+
+			expectedNodeName+" \nbut was "+
+			actualNodeName+"\nEXPECTED XML:"+expected.toHtml()+"\n"+
+			"ACTUAL XML:"+actual.toHtml()+displayMessage;
+		assertStringEquals(displayMessage, expectedNodeName, actualNodeName);
+	}
+	
+	public void assertTagEquals(String displayMessage, Node expected, Node actual) {
+		if (expected instanceof Tag) {
+			Tag expectedTag = (Tag)expected;
+			Tag actualTag   = (Tag)actual; 
+			assertTagNameMatches(displayMessage, expectedTag, actualTag);
+			assertAttributesMatch(displayMessage, expectedTag, actualTag);
 		}
 	}
+
+	private void assertTagNameMatches(
+		String displayMessage,
+		Tag nextExpectedTag,
+		Tag nextActualTag) {
+		String expectedTagName = nextExpectedTag.getTagName();
+		String actualTagName = nextActualTag.getTagName();
+		displayMessage = "The tag names did not match: Expected "+expectedTagName+" \nbut was "+actualTagName+displayMessage;
+		assertStringEquals(displayMessage, expectedTagName, actualTagName);
+	}
+	
+	public void assertXmlEquals(String displayMessage, String expected, String actual) throws Exception {
+		expected = removeEscapeCharacters(expected);
+		actual   = removeEscapeCharacters(actual);
+		
+		Parser expectedParser = Parser.createParser(expected);
+		Parser resultParser   = Parser.createParser(actual);
+		
+		NodeIterator expectedIterator = expectedParser.elements();
+		NodeIterator actualIterator =  resultParser.elements();
+		displayMessage = createGenericFailureMessage(displayMessage, expected, actual);
+		
+		Node nextExpectedNode = null, nextActualNode = null;
+		do {
+			nextExpectedNode = getNextNodeUsing(expectedIterator);
+			nextActualNode = getNextNodeUsing(actualIterator);
+						
+			assertStringValueMatches(
+				displayMessage, 
+				nextExpectedNode, 
+				nextActualNode
+			);
+			fixIfXmlEndTag(resultParser, nextActualNode);
+			fixIfXmlEndTag(expectedParser, nextExpectedNode);
+			assertSameType(displayMessage, nextExpectedNode, nextActualNode);
+			assertTagEquals(displayMessage, nextExpectedNode, nextActualNode);
+		}
+		while (expectedIterator.hasMoreNodes());
+		assertActualXmlHasNoMoreNodes(displayMessage, actualIterator);
+	}
+
+	private Node getNextNodeUsing(NodeIterator nodeIterator)
+		throws ParserException {
+		Node nextNode;
+		String text=null;
+		do {
+			nextNode = nodeIterator.nextNode();
+			if (nextNode instanceof StringNode) {
+				text = nextNode.toPlainTextString().trim();
+			} else text = null;
+		}
+		while (text!=null && text.length()==0);
+		return nextNode;
+	}
+
+	private void assertStringValueMatches(
+		String displayMessage, Node expectedNode,Node actualNode) {
+		
+		String expected = expectedNode.toPlainTextString().trim();
+		String actual = actualNode.toPlainTextString().trim();
+		displayMessage = "String value mismatch\nEXPECTED:"+expected+"\nACTUAL:"+actual+displayMessage; 
+		assertStringEquals(displayMessage,expected,actual);
+		
+	}
+
+	private void assertActualXmlHasNoMoreNodes(
+		String displayMessage,
+		NodeIterator actualIterator)
+		throws ParserException {
+		if (actualIterator.hasMoreNodes()) {
+			String extraTags = "\nExtra Tags\n**********\n";
+			do {
+				extraTags += actualIterator.nextNode().toHtml();
+			}
+			while (actualIterator.hasMoreNodes());
+			
+			displayMessage = "Actual had more data than expected\n"+extraTags+displayMessage;
+			fail(displayMessage);
+		}
+	}
+
+	private String createGenericFailureMessage(
+		String displayMessage,
+		String expected,
+		String actual) {
+		return "\n\n"+displayMessage+"\n\nComplete Xml\n************\nEXPECTED:\n"+expected+"\nACTUAL:\n"+actual;
+	}
+
+	private void fixIfXmlEndTag(Parser parser, Node node) {
+		if (node instanceof Tag) {
+			Tag tag = (Tag)node;
+			if (tag.isEmptyXmlTag()) {
+				// Add end tag
+				String currLine = parser.getReader().getCurrentLine();
+				int pos = parser.getReader().getLastReadPosition();
+				currLine = 
+					currLine.substring(0,pos+1)+
+					"</"+tag.getTagName()+">"+
+					currLine.substring(pos+1,currLine.length());
+				parser.getReader().changeLine(currLine);
+			}
+		}
+	}
+	
 
 	private void assertStringNodeEquals(
 		String displayMessage,
@@ -239,7 +303,7 @@ public class ParserTestCase extends TestCase {
 			Tag actualTag   = (Tag)actualNode;
 			if (isTagAnXmlEndTag(expectedTag)) {
 				if (!isTagAnXmlEndTag(actualTag)) {
-					assertTagEquals(displayMessage, expectedTag, actualTag);
+					assertAttributesMatch(displayMessage, expectedTag, actualTag);
 					Node tempNode =
 						actualEnumeration.nextNode();
 					assertTrue(
@@ -259,7 +323,7 @@ public class ParserTestCase extends TestCase {
 					
 				}
 			} else
-			assertTagEquals(displayMessage, expectedTag, actualTag);
+			assertAttributesMatch(displayMessage, expectedTag, actualTag);
 		}
 	}
 
@@ -268,7 +332,7 @@ public class ParserTestCase extends TestCase {
 	}
 
 
-	private void assertTagEquals(String displayMessage, Tag expectedTag, Tag actualTag) {
+	private void assertAttributesMatch(String displayMessage, Tag expectedTag, Tag actualTag) {
 		Iterator i = expectedTag.getAttributes().keySet().iterator();
 		while (i.hasNext()) {
 			String key = (String)i.next();
