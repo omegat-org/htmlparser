@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.IOException;
 import com.kizna.html.scanners.HTMLTagScanner;
 import com.kizna.html.util.HTMLParameterParser;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLReader;
 /**
@@ -356,27 +357,32 @@ public boolean isEndOfLineCharState() {
 	 * @param url URL at which HTML page is located
 	 * @param reader The HTMLReader that is to be used for reading the url
 	 */
-	public HTMLNode scan(Enumeration scanners,String url,HTMLReader reader) throws IOException
+	public HTMLNode scan(Enumeration scanners,String url,HTMLReader reader) throws HTMLParserException
 	{
-		boolean found=false;
-		HTMLNode retVal=null;
-		
-		for (Enumeration e=scanners;(e.hasMoreElements() && !found);)
-		{
-			HTMLTagScanner scanner = (HTMLTagScanner)e.nextElement();
-//			parsed = parseParameters();
-	//		if (scanner.evaluate(this))
-			if (scanner.evaluate(tagContents.toString(),reader.getPreviousOpenScanner()))
+		try {
+			boolean found=false;
+			HTMLNode retVal=null;
+			
+			for (Enumeration e=scanners;(e.hasMoreElements() && !found);)
 			{
-				found=true;
-				reader.setPreviousOpenScanner(scanner);
-				retVal=scanner.createScannedNode(this,url,reader,tagLine);
-				reader.setPreviousOpenScanner(null);
+				HTMLTagScanner scanner = (HTMLTagScanner)e.nextElement();
+				if (scanner.evaluate(tagContents.toString(),reader.getPreviousOpenScanner()))
+				{
+					found=true;
+					reader.setPreviousOpenScanner(scanner);
+					retVal=scanner.createScannedNode(this,url,reader,tagLine);
+					reader.setPreviousOpenScanner(null);
+				}
+			}
+			if (!found) return this;
+			else {   			
+			    return retVal;
 			}
 		}
-		if (!found) return this;
-		else {   			
-		    return retVal;
+		catch (Exception e) {
+			String errorMsg;
+			if (tagContents!=null) errorMsg = tagContents.toString(); else errorMsg="null";
+			throw new HTMLParserException("HTMLTag.scan() : Error while scanning tag, tag contents = "+errorMsg+", tagLine = "+tagLine,e);
 		}
 	}
 /**

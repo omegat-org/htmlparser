@@ -36,6 +36,7 @@ package com.kizna.html.scanners;
 // HTML Parser Imports //
 /////////////////////////
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.tags.HTMLEndTag;
@@ -97,14 +98,18 @@ public void extractLanguage(HTMLTag tag)
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */
-public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws java.io.IOException 
+public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws HTMLParserException
 {
-	// Find the JSP Tag - basically remove the first and last character
-	String tagContents = tag.getText();
-	tagContents=tagContents.substring(1,tagContents.length()-1);
-	HTMLJspTag jspTag = new HTMLJspTag(tag.elementBegin(),tag.elementEnd(),tagContents,currentLine);
-	return jspTag;
-
+	try {
+		// Find the JSP Tag - basically remove the first and last character
+		String tagContents = tag.getText();
+		tagContents=tagContents.substring(1,tagContents.length()-1);
+		HTMLJspTag jspTag = new HTMLJspTag(tag.elementBegin(),tag.elementEnd(),tagContents,currentLine);
+		return jspTag;
+	}
+	catch (Exception e) {
+		throw new HTMLParserException("HTMLJspScanner.scan() : Error while scanning jsp tag, current line = "+currentLine,e);
+	}
 }
 /**
  * Insert the method's description here.

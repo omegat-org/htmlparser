@@ -49,6 +49,7 @@ import com.kizna.html.HTMLParser;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLImageTag;
 import com.kizna.html.util.HTMLLinkProcessor;
+import com.kizna.html.util.HTMLParserException;
 /**
  * Scans for the Image Tag. This is a subclass of HTMLTagScanner, and is called using a 
  * variant of the template method. If the evaluate() method returns true, that means the
@@ -92,14 +93,21 @@ public class HTMLImageScanner extends HTMLTagScanner
    * @param s String to be parsed
    * @param url URL of web page being parsed
    */
-	public String extractImageLocn(HTMLTag tag,String url)
+	public String extractImageLocn(HTMLTag tag,String url) throws HTMLParserException
 	{
-		table = tag.parseParameters();
-		String relativeLink =  (String)table.get("SRC");
-		if (relativeLink!=null) relativeLink = removeChars(relativeLink,'\n');
-		if (relativeLink==null) return ""; else
-		return (new HTMLLinkProcessor()).extract(relativeLink,url);		
+		String relativeLink=null;
+		try {
+			table = tag.parseParameters();
+			relativeLink =  (String)table.get("SRC");
+			if (relativeLink!=null) relativeLink = removeChars(relativeLink,'\n');
+			if (relativeLink==null) return ""; else
+			return (new HTMLLinkProcessor()).extract(relativeLink,url);		
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLImageScanner.extractImageLocn() : Error in extracting image location, relativeLink = "+relativeLink+", url = "+url,e);
+		}
 	}
+	
 	/** 
 	 * Scan the tag and extract the information related to the <IMG> tag. The url of the 
 	 * initiating scan has to be provided in case relative links are found. The initial 
@@ -111,19 +119,25 @@ public class HTMLImageScanner extends HTMLTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */	
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
 	{
-		HTMLNode node;
-		String link,linkText="";
-		int linkBegin, linkEnd;
-
-		// Yes, the tag is a link
-		// Extract the link
-		//link = extractImageLocn(tag.getText(),url);
-		link = extractImageLocn(tag,url);
-		linkBegin = tag.elementBegin();
-		linkEnd = tag.elementEnd();
-		HTMLImageTag imageTag = new HTMLImageTag(link,linkBegin,linkEnd,currentLine,tag.getText());
-		return imageTag;
+		try {
+			HTMLNode node;
+			String link,linkText="";
+			int linkBegin, linkEnd;
+	
+			// Yes, the tag is a link
+			// Extract the link
+			//link = extractImageLocn(tag.getText(),url);
+			link = extractImageLocn(tag,url);
+			linkBegin = tag.elementBegin();
+			linkEnd = tag.elementEnd();
+			HTMLImageTag imageTag = new HTMLImageTag(link,linkBegin,linkEnd,currentLine,tag.getText());		
+			return imageTag;
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLImageScanner.scan() : Some Error occurred while scanning an image tag\n"+
+			"specifically, tag being parsed was "+tag.getText()+",\n currentLine = "+currentLine,e);
+		}
 	}
 }

@@ -123,7 +123,8 @@ public class HTMLLinkProcessor {
 		return dir;
 	}
 	
-	public String extract(String link,String url) {
+	public String extract(String link,String url) throws HTMLParserException {
+		try {
 			link = checkIfLinkIsRelative(link, url);
 			
 			
@@ -131,6 +132,10 @@ public class HTMLLinkProcessor {
 			// currently removing #38;
 			link=removeEscapeCharacters(link);
 			return link;
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLLinkProcessor.extract() : Error in extraction, link = "+link+", url = "+url,e);
+		}
 	}
 	public String handleRelationalPath(Vector directories, String link) {
 		int dotLoc = link.indexOf("..");

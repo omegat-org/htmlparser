@@ -207,13 +207,6 @@ public void addScanner(HTMLTagScanner scanner) {
 					else
 						return true;
 				}
-				catch (IOException e)
-				{
-					throw new HTMLParserException("I/O Exception occured while reading "+resourceLocn,e);
-				}
-				catch (NullPointerException e) {
-					throw new HTMLParserException("Null Pointer exception occurred in HTMLParser.hasMoreNodes()",e);
-				}
 				catch (Exception e) {
 					throw new HTMLParserException("Unexpected Exception occurred in HTMLParser.hasMoreNodes()"+resourceLocn,e);
 				}
@@ -225,13 +218,6 @@ public void addScanner(HTMLTagScanner scanner) {
 				{
 					if (!readFlag) node = reader.readElement();
 					return node;
-				}
-				catch (IOException e)
-				{
-					throw new HTMLParserException("I/O Exception occured while reading "+resourceLocn+", in nextHTMLNode",e);
-				}
-				catch (NullPointerException e) {
-					throw new HTMLParserException("Null Pointer Exception occurred while reading "+resourceLocn+", in nextHTMLNode",e);
 				}
 				catch (Exception e) {
 					throw new HTMLParserException("Unexpected Exception occurred while reading "+resourceLocn+", in nextHTMLNode",e);

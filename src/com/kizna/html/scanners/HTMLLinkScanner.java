@@ -17,6 +17,7 @@ import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.HTMLStringNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.util.HTMLLinkProcessor;
+import com.kizna.html.util.HTMLParserException;
 /**
  * Scans for the Link Tag. This is a subclass of HTMLTagScanner, and is called using a 
  * variant of the template method. If the evaluate() method returns true, that means the
@@ -93,12 +94,19 @@ public class HTMLLinkScanner extends HTMLTagScanner
    * Extract the link from the given string. The URL of the actual html page is also 
    * provided.    
    */
-	public String extractLink(HTMLTag tag,String url)
+	public String extractLink(HTMLTag tag,String url) throws HTMLParserException
 	{
-		Hashtable table = tag.parseParameters();
-		String relativeLink =  (String)table.get("HREF");
-		if (relativeLink!=null) relativeLink = removeChars(relativeLink,'\n');
-		return (new HTMLLinkProcessor()).extract(relativeLink,url);
+		try {
+			Hashtable table = tag.parseParameters();
+			String relativeLink =  (String)table.get("HREF");
+			if (relativeLink!=null) relativeLink = removeChars(relativeLink,'\n');
+			return (new HTMLLinkProcessor()).extract(relativeLink,url);
+		}
+		catch (Exception e) {
+			String msg; 
+			if (tag!=null) msg = tag.getText(); else msg="null";
+			throw new HTMLParserException("HTMLLinkScanner.extractLink() : Error while extracting link from tag "+msg+", url = "+url,e);
+		}
 	}
 	/**
 	 * Extract the access key from the given text.
@@ -147,99 +155,104 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	 * @param reader The HTML reader used to read this url
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
 	{
-		if (previousOpenLinkScanner!=null) {
-			// Fool the reader into thinking this is an end tag (to handle dirty html, where there is 
-			// actually no end tag for the link
-			if (tag.getText().length()==1) {
-				// Replace tag - it was a <A> tag - replace with </a>
-				String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
-				reader.changeLine(newLine);
-				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
-			}
-			 else 
-			{
-				// Insert end tag
-				String newLine = insertEndTagBeforeNode(tag, currentLine);
-				reader.changeLine(newLine);
-				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
-			}
-		}
-		previousOpenLinkScanner = this;
-		HTMLNode node;
-		boolean mailLink = false;
-		String link,linkText="",accessKey=null,tmp;
-		int linkBegin, linkEnd;
-		String tagContents =  tag.getText();
-		String linkContents=""; // Kaarle Kaila 23.10.2001
-		// Yes, the tag is a link
-		// Extract the link
-		link = extractLink(tag,url);
-		
-		//link = extractLink(tag.getText(),url);
-		// Check if its a mailto link
-		int mailto = link.indexOf("mailto");
-		if (mailto==0)
-		{
-			mailto = link.indexOf(":");
-			// yes it is
-			link = link.substring(mailto+1);
-			mailLink = true;			
-		}
-		accessKey = getAccessKey(tag.getText());
-		linkBegin = tag.elementBegin();
-		// Get the next element, which is string, till </a> is encountered
-		boolean endFlag=false;
-		Vector nodeVector = new Vector();
-		do
-		{
-			node = reader.readElement();
-
-			if (node instanceof HTMLStringNode)
-			{
-				
-				tmp =((HTMLStringNode)node).getText();
-				linkText += tmp;
-				linkContents += tmp;   // Kaarle Kaila 23.10.2001
-				
-			}
-			if (node instanceof HTMLEndTag)
-			{
-			    tmp = ((HTMLEndTag)node).getText();
-			    linkContents += "</" + tmp  ;   // Kaarle Kaila 23.10.2001
-				char ch = tmp.charAt(0);
-				if (ch=='a' || ch=='A') endFlag=true; else {
-					// This is the case that we found some wierd end tag inside
-					// a link tag.
-					endFlag=false;
-					// If this happens to be a td, or a tr tag,
-					// then we definitely dont want to treat it as part
-					// of the link tag. We would instead add the missing </A>
-					if (tmp.toUpperCase().indexOf("TD")!=-1 || tmp.toUpperCase().indexOf("TR")!=-1) {
-						// Yes, we need to assume that the link tag has ended here.
-						String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
-						reader.changeLine(newLine);
-						endFlag = true;
-						node = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A",newLine);
-					}
+		try {
+			if (previousOpenLinkScanner!=null) {
+				// Fool the reader into thinking this is an end tag (to handle dirty html, where there is 
+				// actually no end tag for the link
+				if (tag.getText().length()==1) {
+					// Replace tag - it was a <A> tag - replace with </a>
+					String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
+					reader.changeLine(newLine);
+					return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
 				}
-			} 
-			else if (node!=null) nodeVector.addElement(node);
-		}
-		while (endFlag==false && node!=null);
-		if (node instanceof HTMLEndTag || node==null)
-		{
-			if (node==null)  {
-				// Add an end link tag
-				HTMLEndTag endTag = new HTMLEndTag(0,3,"A","</A>");
-				node = endTag;
+				 else 
+				{
+					// Insert end tag
+					String newLine = insertEndTagBeforeNode(tag, currentLine);
+					reader.changeLine(newLine);
+					return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
+				}
 			}
-			previousOpenLinkScanner = null;
-			return createLinkTag(currentLine, node, mailLink, link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
+			previousOpenLinkScanner = this;
+			HTMLNode node;
+			boolean mailLink = false;
+			String link,linkText="",accessKey=null,tmp;
+			int linkBegin, linkEnd;
+			String tagContents =  tag.getText();
+			String linkContents=""; // Kaarle Kaila 23.10.2001
+			// Yes, the tag is a link
+			// Extract the link
+			link = extractLink(tag,url);
+			
+			//link = extractLink(tag.getText(),url);
+			// Check if its a mailto link
+			int mailto = link.indexOf("mailto");
+			if (mailto==0)
+			{
+				mailto = link.indexOf(":");
+				// yes it is
+				link = link.substring(mailto+1);
+				mailLink = true;			
+			}
+			accessKey = getAccessKey(tag.getText());
+			linkBegin = tag.elementBegin();
+			// Get the next element, which is string, till </a> is encountered
+			boolean endFlag=false;
+			Vector nodeVector = new Vector();
+			do
+			{
+				node = reader.readElement();
+	
+				if (node instanceof HTMLStringNode)
+				{
+					
+					tmp =((HTMLStringNode)node).getText();
+					linkText += tmp;
+					linkContents += tmp;   // Kaarle Kaila 23.10.2001
+					
+				}
+				if (node instanceof HTMLEndTag)
+				{
+				    tmp = ((HTMLEndTag)node).getText();
+				    linkContents += "</" + tmp  ;   // Kaarle Kaila 23.10.2001
+					char ch = tmp.charAt(0);
+					if (ch=='a' || ch=='A') endFlag=true; else {
+						// This is the case that we found some wierd end tag inside
+						// a link tag.
+						endFlag=false;
+						// If this happens to be a td, or a tr tag,
+						// then we definitely dont want to treat it as part
+						// of the link tag. We would instead add the missing </A>
+						if (tmp.toUpperCase().indexOf("TD")!=-1 || tmp.toUpperCase().indexOf("TR")!=-1) {
+							// Yes, we need to assume that the link tag has ended here.
+							String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
+							reader.changeLine(newLine);
+							endFlag = true;
+							node = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A",newLine);
+						}
+					}
+				} 
+				else if (node!=null) nodeVector.addElement(node);
+			}
+			while (endFlag==false && node!=null);
+			if (node instanceof HTMLEndTag || node==null)
+			{
+				if (node==null)  {
+					// Add an end link tag
+					HTMLEndTag endTag = new HTMLEndTag(0,3,"A","</A>");
+					node = endTag;
+				}
+				previousOpenLinkScanner = null;
+				return createLinkTag(currentLine, node, mailLink, link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
+			}
+			
+			return null;
 		}
-		
-		return null;
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLLinkScanner.scan() : Error while scanning a link tag, current line = "+currentLine,e);
+		}	
 	}
 	public String replaceFaultyTagWithEndTag(HTMLTag tag, String currentLine) {
 		String newLine = currentLine.substring(0,tag.elementBegin());

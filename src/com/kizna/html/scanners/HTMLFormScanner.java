@@ -54,6 +54,7 @@ import com.kizna.html.HTMLParser;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLImageTag;
 import com.kizna.html.util.HTMLLinkProcessor;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.tags.HTMLFormTag;
 
 /**
@@ -90,11 +91,18 @@ public class HTMLFormScanner extends HTMLTagScanner
    * @param s String to be parsed
    * @param url URL of web page being parsed
    */
-	public String extractFormLocn(HTMLTag tag,String url)
+	public String extractFormLocn(HTMLTag tag,String url) throws HTMLParserException
 	{
-		String formURL= tag.getParameter("ACTION");
-		if (formURL==null) return ""; else
-		return (new HTMLLinkProcessor()).extract(formURL, url);
+		try {
+			String formURL= tag.getParameter("ACTION");
+			if (formURL==null) return ""; else
+			return (new HTMLLinkProcessor()).extract(formURL, url);
+		}
+		catch (Exception e) {
+			String msg;
+			if (tag!=null) msg=  tag.getText(); else msg="";
+			throw new HTMLParserException("HTMLFormScanner.extractFormLocn() : Error in extracting form location, tag = "+msg+", url = "+url,e);
+		}
 	}
 
 	public String extractFormName(HTMLTag tag)
@@ -121,41 +129,46 @@ public class HTMLFormScanner extends HTMLTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)
 	 */
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
 	{
-		HTMLNode node;
-      	Vector inputVector = new Vector(), nodeVector = new Vector();
-		String link,name="",method="GET";
-		int linkBegin=-1, linkEnd=-1;
-
-		link = extractFormLocn(tag,url);
-    	name = extractFormName(tag);
-	    method = extractFormMethod(tag);
-		linkBegin = tag.elementBegin();
-	    boolean endFlag = false;
-		nodeVector.addElement(tag);
-	    do
-		{
-			node = reader.readElement();
-			if (node instanceof HTMLEndTag)
+		try {
+			HTMLNode node;
+	      	Vector inputVector = new Vector(), nodeVector = new Vector();
+			String link,name="",method="GET";
+			int linkBegin=-1, linkEnd=-1;
+	
+			link = extractFormLocn(tag,url);
+	    	name = extractFormName(tag);
+		    method = extractFormMethod(tag);
+			linkBegin = tag.elementBegin();
+		    boolean endFlag = false;
+			nodeVector.addElement(tag);
+		    do
 			{
-				HTMLEndTag endTag = (HTMLEndTag)node;
-				if (endTag.getText().toUpperCase().equals("FORM")) {
-					endFlag=true;
-					linkEnd = endTag.elementEnd();
+				node = reader.readElement();
+				if (node instanceof HTMLEndTag)
+				{
+					HTMLEndTag endTag = (HTMLEndTag)node;
+					if (endTag.getText().toUpperCase().equals("FORM")) {
+						endFlag=true;
+						linkEnd = endTag.elementEnd();
+					}
 				}
+				else 
+				if (node instanceof HTMLTag) {
+					HTMLTag thisTag=(HTMLTag)node;
+					if (thisTag.getText().toUpperCase().indexOf("INPUT")==0)
+					inputVector.addElement(thisTag);
+				}
+				nodeVector.addElement(node);
 			}
-			else 
-			if (node instanceof HTMLTag) {
-				HTMLTag thisTag=(HTMLTag)node;
-				if (thisTag.getText().toUpperCase().indexOf("INPUT")==0)
-				inputVector.addElement(thisTag);
-			}
-			nodeVector.addElement(node);
+			while (endFlag==false);
+			HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,nodeVector);
+			return formTag;
 		}
-		while (endFlag==false);
-		HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,nodeVector);
-		return formTag;
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLFormScanner.scan() : Error while scanning the form tag, current line = "+currentLine,e);
+		}
 	}
 
 }

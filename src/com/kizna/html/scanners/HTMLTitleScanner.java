@@ -8,6 +8,7 @@ import java.io.IOException;
 import com.kizna.html.HTMLStringNode;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLTitleTag;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.tags.HTMLTag;
@@ -39,32 +40,37 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 	/**
 	 * @see HTMLTagScanner#scan(HTMLTag, String, HTMLReader, String)
 	 */
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws IOException {
-		boolean endFlag = false;
-		String title = "";
-		String tmp;
-		HTMLNode node;
-		HTMLEndTag endTag=null;
-		do
-		{
-			node = reader.readElement();
-
-			if (node instanceof HTMLStringNode)
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException {
+		try {
+			boolean endFlag = false;
+			String title = "";
+			String tmp;
+			HTMLNode node;
+			HTMLEndTag endTag=null;
+			do
 			{
-				title =((HTMLStringNode)node).getText();
+				node = reader.readElement();
+	
+				if (node instanceof HTMLStringNode)
+				{
+					title =((HTMLStringNode)node).getText();
+				}
+				if (node instanceof HTMLEndTag)
+				{
+					endTag = (HTMLEndTag)node;
+				    tmp = endTag.getText();
+				    if (tmp.toUpperCase().equals("TITLE")) {
+				    	endFlag = true;
+				    }
+				} 
 			}
-			if (node instanceof HTMLEndTag)
-			{
-				endTag = (HTMLEndTag)node;
-			    tmp = endTag.getText();
-			    if (tmp.toUpperCase().equals("TITLE")) {
-			    	endFlag = true;
-			    }
-			} 
+			while (endFlag==false);
+			HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,tag.getText(),tag.getTagLine());
+			return titleTag;		
 		}
-		while (endFlag==false);
-		HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,tag.getText(),tag.getTagLine());
-		return titleTag;		
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLTitleTagScanner.scan() : Error in scanning TitleTag, currentLine = "+currLine,e);
+		}
 	}
 
 }

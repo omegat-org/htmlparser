@@ -38,6 +38,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLStringNode;
 import com.kizna.html.HTMLReader;
@@ -125,40 +126,45 @@ public java.lang.String getType() {
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)	 
 	 */
-public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws java.io.IOException 
+public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLine) throws HTMLParserException
 {
-	// We know we have script stuff. So first extract the information from the tag about the language
-	extractLanguage(tag);
-	extractType(tag);
-	HTMLEndTag endTag=null;
-	HTMLNode node = null;
-	boolean endScriptFound=false;
-	StringBuffer buff=new StringBuffer();
-	// Remove all existing scanners, so as to parse only till the end tag
-	Vector tempScannerVector = adjustScanners(reader);	
-	HTMLNode prevNode=tag;
-	do {
-		node = reader.readElement();
-		if (node instanceof HTMLEndTag) {
-			endTag = (HTMLEndTag)node;
-			if (endTag.getText().toUpperCase().equals("SCRIPT")) 
-			{
-				endScriptFound = true;
-				// Check if there was anything in front of endTag, and if so, add it to the code buffer
+	try {
+		// We know we have script stuff. So first extract the information from the tag about the language
+		extractLanguage(tag);
+		extractType(tag);
+		HTMLEndTag endTag=null;
+		HTMLNode node = null;
+		boolean endScriptFound=false;
+		StringBuffer buff=new StringBuffer();
+		// Remove all existing scanners, so as to parse only till the end tag
+		Vector tempScannerVector = adjustScanners(reader);	
+		HTMLNode prevNode=tag;
+		do {
+			node = reader.readElement();
+			if (node instanceof HTMLEndTag) {
+				endTag = (HTMLEndTag)node;
+				if (endTag.getText().toUpperCase().equals("SCRIPT")) 
+				{
+					endScriptFound = true;
+					// Check if there was anything in front of endTag, and if so, add it to the code buffer
+				}
+			} else {
+				if (prevNode!=null) {
+					if (prevNode.elementEnd() > node.elementBegin()) buff.append("\r\n");
+				}
+				buff.append(node.toHTML());
+	
+				prevNode = node;
 			}
-		} else {
-			if (prevNode!=null) {
-				if (prevNode.elementEnd() > node.elementBegin()) buff.append("\r\n");
-			}
-			buff.append(node.toHTML());
-
-			prevNode = node;
 		}
+		while (!endScriptFound);
+		HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
+		restoreScanners(reader, tempScannerVector);
+		return scriptTag; 
 	}
-	while (!endScriptFound);
-	HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
-	restoreScanners(reader, tempScannerVector);
-	return scriptTag; 
+	catch (Exception e) {
+		throw new HTMLParserException("HTMLScriptScanner.scan() : Error while scanning a script tag, currentLine = "+currentLine,e);
+	}
 }
 /**
  * Insert the method's description here.

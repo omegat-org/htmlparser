@@ -108,43 +108,47 @@ public static String absorbLeadingBlanks(String s)
    * scan has begun, and hence allows us to write scanners that can work with dirty html
    */
   public abstract boolean evaluate(String s,HTMLTagScanner previousOpenScanner);
-public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) throws HTMLParserException{
-  
-  String xmlData = "";
-
-  boolean xmlTagFound = isXMLTagFound(node, tagName);
-  if (xmlTagFound) {
-    try{
-      do {
-        node = reader.readElement();
-        if (node!=null) {
-          if (node instanceof HTMLStringNode) {
-            HTMLStringNode stringNode = (HTMLStringNode)node;
-            if (xmlData.length()>0) xmlData+=" ";
-            xmlData += stringNode.getText();
-          } else if (!(node instanceof com.kizna.html.tags.HTMLEndTag))
-            xmlTagFound = false;
-        }
-      }
-      while (node instanceof HTMLStringNode);
-      
-    }
-
-    catch (IOException e) {
-    	throw new HTMLParserException("extractXMLData() threw an IOException while trying to read the next element");
-    }
-  }
-  if (xmlTagFound) {
-      if (node!=null) {
-        if (node instanceof com.kizna.html.tags.HTMLEndTag) {
-          com.kizna.html.tags.HTMLEndTag endTag = (com.kizna.html.tags.HTMLEndTag)node;
-          if (!endTag.getText().equals(tagName)) xmlTagFound = false;		
-        }
-      
-      }
-
-  }
-  if (xmlTagFound) return xmlData; else return null;
+  public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) throws HTMLParserException{
+	try {	  
+	  String xmlData = "";
+	
+	  boolean xmlTagFound = isXMLTagFound(node, tagName);
+	  if (xmlTagFound) {
+	    try{
+	      do {
+	        node = reader.readElement();
+	        if (node!=null) {
+	          if (node instanceof HTMLStringNode) {
+	            HTMLStringNode stringNode = (HTMLStringNode)node;
+	            if (xmlData.length()>0) xmlData+=" ";
+	            xmlData += stringNode.getText();
+	          } else if (!(node instanceof com.kizna.html.tags.HTMLEndTag))
+	            xmlTagFound = false;
+	        }
+	      }
+	      while (node instanceof HTMLStringNode);
+	      
+	    }
+	
+	    catch (Exception e) {
+	    	throw new HTMLParserException("HTMLTagScanner.extractXMLData() : error while trying to find xml tag",e);
+	    }
+	  }
+	  if (xmlTagFound) {
+	      if (node!=null) {
+	        if (node instanceof com.kizna.html.tags.HTMLEndTag) {
+	          com.kizna.html.tags.HTMLEndTag endTag = (com.kizna.html.tags.HTMLEndTag)node;
+	          if (!endTag.getText().equals(tagName)) xmlTagFound = false;		
+	        }
+	      
+	      }
+	
+	  }
+	  if (xmlTagFound) return xmlData; else return null;
+	}
+	catch (Exception e) {
+		throw new HTMLParserException("HTMLTagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
+	}
 }
   /**
    * Get the filter associated with this node.
@@ -167,7 +171,7 @@ public static boolean isXMLTagFound(HTMLNode node, String tagName) {
   }
   return xmlTagFound;
 }
-  public final HTMLTag createScannedNode(HTMLTag tag,String url,HTMLReader reader,String currLine) throws IOException {
+  public final HTMLTag createScannedNode(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException {
     HTMLTag thisTag = scan(tag,url,reader,currLine);
     thisTag.setThisScanner(this);
     thisTag.setParsed(tag.getParsed());		
@@ -183,7 +187,7 @@ public static boolean isXMLTagFound(HTMLNode node, String tagName) {
    * @param url The initiating url of the scan (Where the html page lies)
    * @param reader The reader object responsible for reading the html page
    */
-  public abstract HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws IOException;
+  public abstract HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException;
 
   public String removeChars(String s,char occur)  {
     StringBuffer newString = new StringBuffer();

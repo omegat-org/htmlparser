@@ -204,7 +204,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 	 * This is the reproduction of a bug which causes a null pointer exception
 	 * Creation date: (6/18/2001 2:26:41 AM)
 	 */
-	public void testExtractLinkInvertedCommasBug()
+	public void testExtractLinkInvertedCommasBug() throws HTMLParserException
 	{
 		String tagContents = "a href=r/anorth/top.html";
 		HTMLTag tag = new HTMLTag(0,0,tagContents,"");

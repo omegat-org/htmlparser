@@ -52,6 +52,7 @@ import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLFrameSetTag;
 import com.kizna.html.tags.HTMLFrameTag;
 import com.kizna.html.util.HTMLLinkProcessor;
+import com.kizna.html.util.HTMLParserException;
 /**
  * Scans for the Frame Tag. This is a subclass of HTMLTagScanner, and is called using a
  * variant of the template method. If the evaluate() method returns true, that means the
@@ -98,35 +99,40 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)
 	 */
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
 	{
-		/* Remove all the existing scanners and register only the frame scanner. Proceed scanning till end
-		 * tag is found. Then register all the scanners back.
-		 */
-		// Store all the current scanners in tempScannerVector
-		Vector tempScannerVector = adjustScanners(reader);
-		Vector frameVector = new Vector();
-		// Scanners have been adjusted, begin processing till we recieve the end tag for the frame
-		boolean endFrameSetFound=false;
-		HTMLNode node;
-		int frameSetEnd=-1;
-		do {
-			node = reader.readElement();
-			if (node instanceof HTMLEndTag) {
-				HTMLEndTag endTag = (HTMLEndTag)node;
-				if (endTag.getText().toUpperCase().equals("FRAMESET")) {
-					endFrameSetFound = true;
-					frameSetEnd = endTag.elementEnd();
+		try {
+			/* Remove all the existing scanners and register only the frame scanner. Proceed scanning till end
+			 * tag is found. Then register all the scanners back.
+			 */
+			// Store all the current scanners in tempScannerVector
+			Vector tempScannerVector = adjustScanners(reader);
+			Vector frameVector = new Vector();
+			// Scanners have been adjusted, begin processing till we recieve the end tag for the frame
+			boolean endFrameSetFound=false;
+			HTMLNode node;
+			int frameSetEnd=-1;
+			do {
+				node = reader.readElement();
+				if (node instanceof HTMLEndTag) {
+					HTMLEndTag endTag = (HTMLEndTag)node;
+					if (endTag.getText().toUpperCase().equals("FRAMESET")) {
+						endFrameSetFound = true;
+						frameSetEnd = endTag.elementEnd();
+					}
+				} else
+				if (node instanceof HTMLFrameTag) {
+					frameVector.addElement(node);
 				}
-			} else
-			if (node instanceof HTMLFrameTag) {
-				frameVector.addElement(node);
 			}
+			while(!endFrameSetFound);
+			HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector);
+			restoreScanners(reader, tempScannerVector);
+			return frameSetTag;		
 		}
-		while(!endFrameSetFound);
-		HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector);
-		restoreScanners(reader, tempScannerVector);
-		return frameSetTag;		
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLFrameSetScanner.scan() : Error while scanning Frameset tag, current line = "+currentLine,e);
+		}
 	}
 	public void restoreScanners(HTMLReader reader, Vector tempScannerVector) {
 		// Flush the scanners

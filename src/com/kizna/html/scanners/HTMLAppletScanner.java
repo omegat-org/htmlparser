@@ -43,6 +43,7 @@ import com.kizna.html.*;
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLAppletTag;
+import com.kizna.html.util.HTMLParserException;
 /**
  * Used to scan for applet tags.
  */
@@ -124,47 +125,53 @@ public java.lang.String getCodebase() {
 	 * @param url The initiating url of the scan (Where the html page lies)
 	 * @param reader The reader object responsible for reading the html page
 	 */
-public HTMLTag scan(HTMLTag tag, String url, com.kizna.html.HTMLReader reader, String currLine) throws java.io.IOException 
+public HTMLTag scan(HTMLTag tag, String url, com.kizna.html.HTMLReader reader, String currLine) throws HTMLParserException
 {
-	String tagContents = tag.getText();
-	// From the tagContents, get the class name, archive, codebase
-	extractFields(tag);
-
-	String line;
-	HTMLEndTag endTag=null;
-	HTMLNode node = null;
-	boolean endScriptFound=false;
-	Vector buff=new Vector();
-	Vector misc=new Vector();
-	Hashtable table = new Hashtable();
-
-	do {
-		node = reader.readElement();
-		if (node instanceof HTMLEndTag) {
-			endTag = (HTMLEndTag)node;
-			if (endTag.getText().toUpperCase().equals("APPLET")) 
-			{
-				endScriptFound = true; 
-			}
-		}
-		else if (node instanceof HTMLTag) {
-			HTMLTag htag = (HTMLTag)node;
-			String paramName = htag.getParameter("NAME");
-			if (paramName!=null && paramName.length()!=0)
-			{
-				String paramValue = htag.getParameter("VALUE");
-				table.put(paramName,paramValue);
-			}
-			else
-			{
-				misc.addElement(htag);
-			}
-		}
-	}
-	while (!endScriptFound);
+	try {
+		String tagContents = tag.getText();
+		// From the tagContents, get the class name, archive, codebase
+		extractFields(tag);
 	
-	HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,misc);
-	return appTag;
+		String line;
+		HTMLEndTag endTag=null;
+		HTMLNode node = null;
+		boolean endScriptFound=false;
+		Vector buff=new Vector();
+		Vector misc=new Vector();
+		Hashtable table = new Hashtable();
+	
+		do {
+			node = reader.readElement();
+			if (node instanceof HTMLEndTag) {
+				endTag = (HTMLEndTag)node;
+				if (endTag.getText().toUpperCase().equals("APPLET")) 
+				{
+					endScriptFound = true; 
+				}
+			}
+			else if (node instanceof HTMLTag) {
+				HTMLTag htag = (HTMLTag)node;
+				String paramName = htag.getParameter("NAME");
+				if (paramName!=null && paramName.length()!=0)
+				{
+					String paramValue = htag.getParameter("VALUE");
+					table.put(paramName,paramValue);
+				}
+				else
+				{
+					misc.addElement(htag);
+				}
+			}
+		}
+		while (!endScriptFound);
+		
+		HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,misc);
+		return appTag;
+	}
+	catch (Exception e) {
+		throw new HTMLParserException("HTMLAppletScannet.scan(): Error in scanning applet tag, current line = "+currLine,e);
+	}
+	
 }
 /**
  * Insert the method's description here.

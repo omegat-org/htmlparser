@@ -51,6 +51,7 @@ import com.kizna.html.HTMLParser;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLFrameTag;
 import com.kizna.html.util.HTMLLinkProcessor;
+import com.kizna.html.util.HTMLParserException;
 /**
  * Scans for the Frame Tag. This is a subclass of HTMLTagScanner, and is called using a
  * variant of the template method. If the evaluate() method returns true, that means the
@@ -91,13 +92,21 @@ public class HTMLFrameScanner extends HTMLTagScanner
    * @param s String to be parsed
    * @param url URL of web page being parsed
    */
-	public String extractFrameLocn(HTMLTag tag,String url)
+	public String extractFrameLocn(HTMLTag tag,String url) throws HTMLParserException
 	{
-		Hashtable table = tag.parseParameters();
-		String relativeFrame =  (String)table.get("SRC");
-		if (relativeFrame==null) return ""; else
-		return (new HTMLLinkProcessor()).extract(relativeFrame,url);
+		try {
+			Hashtable table = tag.parseParameters();
+			String relativeFrame =  (String)table.get("SRC");
+			if (relativeFrame==null) return ""; else
+			return (new HTMLLinkProcessor()).extract(relativeFrame,url);
+		}
+		catch (Exception e) {
+			String msg;
+			if (tag!=null) msg = tag.getText(); else msg = "null";
+			throw new HTMLParserException("HTMLFrameScanner.extractFrameLocn() : Error in extracting frame location from tag "+msg,e); 
+		}
 	}
+	
 
 
 	public String extractFrameName(HTMLTag tag,String url)
@@ -116,20 +125,25 @@ public class HTMLFrameScanner extends HTMLTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by HTMLTag)
 	 */
-	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
+	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
 	{
-		HTMLNode node;
-		String frame, frameName, linkText="";
-		int frameBegin, frameEnd;
-
-		// Yes, the tag is a link
-		// Extract the link
-		//link = extractImageLocn(tag.getText(),url);
-		frame = extractFrameLocn(tag,url);
-	    frameName = extractFrameName(tag,url);
-		frameBegin = tag.elementBegin();
-		frameEnd = tag.elementEnd();
-		HTMLFrameTag frameTag = new HTMLFrameTag(frame, frameName, tag.getText(), frameBegin,frameEnd,currentLine);
-		return frameTag;
+		try {
+			HTMLNode node;
+			String frame, frameName, linkText="";
+			int frameBegin, frameEnd;
+	
+			// Yes, the tag is a link
+			// Extract the link
+			//link = extractImageLocn(tag.getText(),url);
+			frame = extractFrameLocn(tag,url);
+		    frameName = extractFrameName(tag,url);
+			frameBegin = tag.elementBegin();
+			frameEnd = tag.elementEnd();
+			HTMLFrameTag frameTag = new HTMLFrameTag(frame, frameName, tag.getText(), frameBegin,frameEnd,currentLine);
+			return frameTag;
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLFrameScanner.scan() : Error while scanning frame tag, current line = "+currentLine,e);
+		}
 	}
 }

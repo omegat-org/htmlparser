@@ -42,6 +42,7 @@ import java.util.*;
 /////////////////////////
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.tags.HTMLEndTag;
+import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
 
 /**
@@ -141,47 +142,52 @@ public HTMLParser getParser() {
 	 * Read the next element
 	 * @return HTMLNode - The next node
  	 */
-	public HTMLNode readElement() throws IOException
+	public HTMLNode readElement() throws HTMLParserException
 	{
-		if (readNextLine())
-		{
-			do
+		try {
+			if (readNextLine())
 			{
-				line = getNextLine();
-			}
-			while (line!=null && line.length()==0);
-
-		} else
-		posInLine=node.elementEnd()+1;
-		if (line==null) return null;
-		node = HTMLRemarkNode.find(this,line,posInLine);
-		if (node!=null) return node;
-
-		node = HTMLStringNode.find(this,line,posInLine);
-		if (node!=null) return node;
-		
-		node = HTMLTag.find(this,line,posInLine);
-		if (node!=null)
-		{
-			HTMLTag tag = (HTMLTag)node;
-			try
-			{
-				node = tag.scan(parser.getScanners(),url,this);
-				return node;
-			}
-			catch (IOException e)
-			{
-				System.err.println("Error! I/O Exception occurred while reading "+url);
-			}
-		}
-
-		// If we couldnt get a string, then it is probably an end tag
-		
-		node = HTMLEndTag.find(line,posInLine);
-		if (node!=null) return node;
-
+				do
+				{
+					line = getNextLine();
+				}
+				while (line!=null && line.length()==0);
 	
-		return null;
+			} else
+			posInLine=node.elementEnd()+1;
+			if (line==null) return null;
+			node = HTMLRemarkNode.find(this,line,posInLine);
+			if (node!=null) return node;
+	
+			node = HTMLStringNode.find(this,line,posInLine);
+			if (node!=null) return node;
+			
+			node = HTMLTag.find(this,line,posInLine);
+			if (node!=null)
+			{
+				HTMLTag tag = (HTMLTag)node;
+				try
+				{
+					node = tag.scan(parser.getScanners(),url,this);
+					return node;
+				}
+				catch (Exception e)
+				{
+					throw new HTMLParserException("HTMLReader.readElement() : Error occurred while trying to decipher the tag using scanners",e);
+				}
+			}
+	
+			// If we couldnt get a string, then it is probably an end tag
+			
+			node = HTMLEndTag.find(line,posInLine);
+			if (node!=null) return node;
+	
+		
+			return null;
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLReader.readElement() : Error occurred while trying to read the next element",e);
+		}
 	}
 /**
  * Delegates to the BufferedReader's readLine method

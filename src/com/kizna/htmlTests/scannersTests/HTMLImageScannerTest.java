@@ -103,7 +103,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 * This is the reproduction of a bug which causes a null pointer exception
 	 * Creation date: (6/18/2001 2:26:41 AM)
 	 */
-	public void testExtractImageLocnInvertedCommasBug()
+	public void testExtractImageLocnInvertedCommasBug() throws HTMLParserException
 	{
 		HTMLTag tag = new HTMLTag(0,0,"img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo","");
 		String link = "img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo";
