@@ -336,16 +336,6 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		
 		return newLine;
 	}
-	/**
-	 * Insert an EndTag in the currentLine, just before the occurence of the provided tag
-	 */
-	public String insertEndTagBeforeNode(HTMLNode node, String currentLine) {
-		String newLine = currentLine.substring(0,node.elementBegin());
-		newLine += "</A>";
-		newLine += currentLine.substring(node.elementBegin(),currentLine.length());
-		return newLine;
-	}
-	// Creates a Base Ref Scanner sharing the same link processor
 	public HTMLBaseHREFScanner createBaseHREFScanner(String filter) {
 		return new HTMLBaseHREFScanner(filter,processor);
 	}

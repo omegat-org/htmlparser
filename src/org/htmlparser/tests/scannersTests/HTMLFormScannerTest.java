@@ -256,4 +256,32 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		}
 		assertEquals("Remark Node Count",1,i);
 	}		
+	
+	/**
+	 * Bug 656870 - a form tag with a previously open link causes infinite loop
+	 * on encounter
+	 */
+	public void testScanFormWithPreviousOpenLink() throws HTMLParserException {
+		createParser(
+			"<A HREF=\"http://www.oygevalt.org/\">Home</A>\n"+
+			"<P>\n"+
+			"And now, the good stuff:\n"+
+			"<P>\n"+
+			"<A HREF=\"http://www.yahoo.com\">Yahoo!\n"+
+			"<FORM ACTION=\".\" METHOD=\"GET\">\n"+
+			"<INPUT TYPE=\"TEXT\">\n"+
+			"<BR>\n"+
+			"<A HREF=\"http://www.helpme.com\">Help</A> <INPUT TYPE=\"checkbox\">\n"+
+			"<P>\n"+
+			"<INPUT TYPE=\"SUBMIT\">\n"+
+			"</FORM>"
+		);
+		parser.registerScanners();
+		parseAndAssertNodeCount(6);
+		assertTrue("Fifth Node is a link",node[4] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[4];
+		assertEquals("Link Text","Yahoo!\r\n",linkTag.getLinkText());
+		assertEquals("Link URL","http://www.yahoo.com",linkTag.getLink());
+		assertTrue("Sixth Node is a form tag",node[5] instanceof HTMLFormTag);
+	}
 }

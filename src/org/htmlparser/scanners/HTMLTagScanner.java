@@ -36,8 +36,11 @@ import java.util.Hashtable;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
+import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.util.*;
@@ -252,5 +255,17 @@ public abstract class HTMLTagScanner
 	{
 		// Flush the scanners
 		pReader.getParser().setScanners(tempScanners);
-	}  
+	}
+
+	/**
+	 * Insert an EndTag in the currentLine, just before the occurence of the provided tag
+	 */
+	public String insertEndTagBeforeNode(HTMLNode node, String currentLine) {
+		String newLine = currentLine.substring(0,node.elementBegin());
+		newLine += "</A>";
+		newLine += currentLine.substring(node.elementBegin(),currentLine.length());
+		return newLine;
+	}
+	// Creates a Base Ref Scanner sharing the same link processor
+  
 }

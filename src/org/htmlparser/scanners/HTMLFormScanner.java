@@ -64,6 +64,7 @@ import org.htmlparser.tags.HTMLFormTag;
 public class HTMLFormScanner extends HTMLTagScanner
 {
 	private Vector textAreaVector;
+	private boolean linkScannerAlreadyOpen=false;
  	/**
 	 * HTMLFormScanner constructor comment.
 	 */
@@ -123,6 +124,11 @@ public class HTMLFormScanner extends HTMLTagScanner
 	 */
 	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
 	{
+		if (linkScannerAlreadyOpen) {
+			String newLine = insertEndTagBeforeNode(tag, currentLine);
+			reader.changeLine(newLine);
+			return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A",currentLine);
+		}
 		try {
 			HTMLNode node;
 	      	Vector inputVector = new Vector(), textAreaVector = new Vector(), 
@@ -201,6 +207,14 @@ public class HTMLFormScanner extends HTMLTagScanner
 		String [] ids = new String[1];
 		ids[0] = "FORM";
 		return ids;
+	}
+
+	public boolean evaluate(String s, HTMLTagScanner previousOpenScanner) {
+		if (previousOpenScanner instanceof HTMLLinkScanner)
+			linkScannerAlreadyOpen = true;			
+		else 	
+			linkScannerAlreadyOpen = false;
+		return super.evaluate(s, previousOpenScanner);
 	}
 
 }
