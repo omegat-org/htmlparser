@@ -1,5 +1,3 @@
-package com.kizna.html.scanners;
-
 // HTMLParser Library v1.03 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
@@ -25,6 +23,7 @@ package com.kizna.html.scanners;
 // R&D Team
 // Kizna Corporation
 // 2-1-17-6F, Sakamoto Bldg., Moto Azabu, Minato ku, Tokyo, 106 0046, JAPAN
+package com.kizna.html.scanners;
 
 //////////////////
 // Java Imports //
@@ -58,28 +57,7 @@ import com.kizna.html.tags.HTMLFormTag;
  */
 public class HTMLFormScanner extends HTMLTagScanner
 {
-   /*public final static String TEXT = "TEXT";
-   public final static String IMAGE = "IMAGE";
-   public final static String HIDDEN = "HIDDEN";
-   public final static String PASSWORD = "PASSWORD";
-   public final static String FILE = "FILE";*/
-   /*public final static String TEXT = "TEXT";
-   public final static String IMAGE = "IMAGE";
-   public final static String HIDDEN = "HIDDEN";
-   public final static String PASSWORD = "PASSWORD";
-   public final static String FILE = "FILE";*/
-   /*public final static String TEXT = "TEXT";
-   public final static String IMAGE = "IMAGE";
-   public final static String HIDDEN = "HIDDEN";
-   public final static String PASSWORD = "PASSWORD";
-   public final static String FILE = "FILE";*/
-	/**
-	 * Overriding the default constructor
-	 */
-	public HTMLFormScanner()
-	{
-		super();
-	}
+ 
 	/**
 	 * Overriding the constructor to accept the filter
 	 */
@@ -95,37 +73,9 @@ public class HTMLFormScanner extends HTMLTagScanner
 	public boolean evaluate(String s, HTMLTagScanner previousOpenScanner)
 	{
 		// Eat up leading blanks
-
 		s = absorbLeadingBlanks(s);
-		int state = 0;
-		s=s.toUpperCase();
-		for (int i=0;(i<s.length() && state<4);i++)
-		{
-			char ch = s.charAt(i);
-			if (ch=='F' && state==0)
-			{
-				state=1;
-				continue;
-			}
-			if (ch=='O' && state==1)
-			{
-				state=2;
-				continue;
-			}
-			if (ch=='R' && state==2)
-			{
-				state=3;
-				continue;
-			}
-			if (ch=='M' && state==3)
-			{
-				state=4;
-				continue;
-			}
-			if (ch==' ') continue;
-			state=5;
-		}
-		if (state==4) return true; else return false;
+		if (s.toUpperCase().indexOf("FORM")==0)
+		return true; else return false;		
 	}
   /**
    * Extract the location of the image, given the string to be parsed, and the url
@@ -386,11 +336,5 @@ public class HTMLFormScanner extends HTMLTagScanner
 			while (ch>='0' && ch<='9' && n<text.length());
 			return accessKey;
 		} else return null;
-}
-
-   /*public final static String TEXT = "TEXT";
-   public final static String IMAGE = "IMAGE";
-   public final static String HIDDEN = "HIDDEN";
-   public final static String PASSWORD = "PASSWORD";
-   public final static String FILE = "FILE";*/
+	}
 }
