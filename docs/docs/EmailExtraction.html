@@ -5,21 +5,45 @@
 <div class="wikitext">
 <p><b>Email Extraction
 
-<p>This is very similar to link extraction. You have to extract links from a page and verify that they are email addresses. Link tags have a method - <i>isMailLink()
+<p>This is very similar to <a href="LinkExtraction.html" class="named-wiki" title="LinkExtraction">link extraction</a>. You have to extract links from a page and verify that they are email addresses. Link tags have a method - <i>isMailLink() to check if the HREF starts with "mailto:". Using an inner class in the NodeFilter example:
 
 <pre>
-   Parser parser = new Parser(..);
-   parser.registerScanners();
-   Node links [] = parser.extractAllNodesThatAre(LinkTag.class);
-   for (int i=0;i&lt;links.length;i++) {
-     LinkTag linkTag = links[i];
-     if (linkTag[i].isMailLink()) {
-        // Yes, its an email id
-        System.out.println("Email address: "+linkTag.getLink());
-     }
-   }
+import org.htmlparser.Node;
+import org.htmlparser.NodeFilter;
+import org.htmlparser.Parser;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
-<p>--<a href="SomikRaha.html" class="wiki">SomikRaha</a>, February 16, 2003 11:41 am
+public class EmailLinkDemo
+{
+    public static void main (String[] args) throws ParserException
+    {
+        Parser parser = new Parser ("http://urlIWantToParse.com");
+        NodeFilter filter = new NodeFilter ()
+        {
+            /**
+             * Accept nodes that are mail links.
+             * @param node The node to check.
+             */
+            public boolean accept (Node node)
+            {
+                 return (LinkTag.class.isAssignableFrom (node.getClass ())
+                    &amp;&amp; ((LinkTag)node).isMailLink ());
+            }
+        };
+        NodeList links = new NodeList ();
+        for (NodeIterator e = parser.elements (); e.hasMoreNodes (); )
+            e.nextNode ().collectInto (links, filter);
+        for (int i = 0; i &lt; links.size (); i++)
+        {
+            LinkTag linkTag = (LinkTag)links.elementAt (i);
+            System.out.print ("\"" + linkTag.getLinkText () + "\" =&gt; ");
+            System.out.println (linkTag.getLink ());
+        }
+    }
+}
 
 
 
@@ -27,7 +51,7 @@
 
 <hr class="printer" noshade="noshade" />
 
-<p class="editdate">Last edited on Sunday, February 23, 2003  5:24:25 pm.
+<p class="editdate">Last edited on Wednesday, January  7, 2004  5:26:12 pm.
 
 <hr class="toolbar" noshade="noshade" />
 </body></html>

@@ -7,96 +7,20 @@
 
 <p>There are many ways of extracting links.
 
-<p>1. Use the <span class="wikiunknown"><u>ObjectFindingVisitor to extract links, like so:
+<ul>
 
-<pre>
-   Parser parser = new Parser("http://urlIWantToParse.com");
-   // Create a visitor, specify that you want to recurse through its children
-   // Recursion is needed only if you register all scanners, and a link tag could be embedded
-   // within a form tag. But if you register only the link scanner, you don't need recursion.
-   ObjectFindingVisitor visitor =
-     new ObjectFindingVisitor(LinkTag.class,true);
+<li><a href="VisitorLinks.html" class="named-wiki" title="VisitorLinks">Use an ObjectFindingVisitor</a>
 
-   parser.registerScanners();
+<li><a href="CustomVisitorLinks.html" class="named-wiki" title="CustomVisitorLinks">Use a custom Visitor</a>
 
-   // Instead of registering all scanners,
-   // you could also do - parser.addScanner(new LinkScanner(""));
-   parser.visitAllNodesWith(visitor);
-   Node [] links = visitor.getTags();
-   for (int i=0;i&lt;links.length;i++) {
-      LinkTag linkTag = (LinkTag)links[i];
-      System.out.println(linkTag.getLink());
-      System.out.println(linkTag.getLinkText());
-   }
+<li><a href="LinkBeanLinks.html" class="named-wiki" title="LinkBeanLinks">Use a LinkBean</a>
 
-<p>2. Use the parser utility method - extractAllNodesThatAre().
+<li><a href="CustomTagLinks.html" class="named-wiki" title="CustomTagLinks">Use a custom Tag</a>
 
-<pre>
-   Parser parser = new Parser("http://urlIWantToParse.com");
-   parser.registerScanners();
-   Node [] links = parser.extractAllNodesThatAre(LinkTag.class);
-   // Instead of registering all scanners,
-   // you could also do - parser.addScanner(new LinkScanner(""));
-   for (int i=0;i&lt;links.length;i++) {
-      LinkTag linkTag = (LinkTag)links[i];
-      System.out.println(linkTag.getLink());
-      System.out.println(linkTag.getLinkText());
-   }
+<li><a href="FilterLinks.html" class="named-wiki" title="FilterLinks">Use a NodeFilter</a>
 
-<p>3. It is possible that you are interested in extracting more than just links. In order to customize extraction, write your own visitor. Extend the Visitor class (in the package org.htmlparser.visitors - Parser v1.3 upwards) like so :
+<li><a href="LexerLinks.html" class="named-wiki" title="LexerLinks">Use a low level Lexer</a>
 
-<pre>
-   public class MyCustomizedVisitor extends Visitor {
-      public MyCustomizedVisitor(Parser parser) {
-         super(true);  /// Its usually a good idea to perform recursion
-         // Add the scanners you want.
-         // This decouples your application from having to know which scanners are required
-         parser.addScanner(new LinkScanner(""));
-         parser.addScanner(new ImageScanner(""));
-         // or add all scanners with registerScanners()
-      }
-
-      public void visitTag(Tag tag) {
-        // Collect any tags you want
-        // You can also do type checking like so:
-        if (tag instanceof MetaTag) {
-           // This tag is a meta tag
-           MetaTag metaTag = (MetaTag)tag;
-        }
-      }
-
-      public void visitStringNode(StringNode stringNode) {
-        // Collect text in the page here
-      }
-
-      public void visitLinkTag(LinkTag linkTag) {
-        // Collect links here
-      }
-
-      public void visitImageTag(ImageTag imageTag) {
-        // Collect images here
-      }
-
-      public void visitEndTag(EndTag endTag) {
-        // Checking for end tags can be useful when performing more involved
-        // searches in a page
-      }
-
-      public void visitRemarkNode(RemarkNode remarkNode) {
-         // Collect remark nodes here
-      }
-
-      // Add getters to get the data you have collected..
-}
-
-In your app..
-Parser parser = new Parser(...);
-MyCustomizedVisitor visitor = new MyCustomizedVisitor(parser);
-parser.visitAllNodesWith(visitor);
-// You can now get the data from the visitor interface.
-
-
-<p>--<a href="SomikRaha.html" class="wiki">SomikRaha</a>
 
 
 
@@ -104,7 +28,7 @@ parser.visitAllNodesWith(visitor);
 
 <hr class="printer" noshade="noshade" />
 
-<p class="editdate">Last edited on Tuesday, September  2, 2003  1:59:15 pm.
+<p class="editdate">Last edited on Wednesday, January  7, 2004  5:22:23 pm.
 
 <hr class="toolbar" noshade="noshade" />
 </body></html>

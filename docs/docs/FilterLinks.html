@@ -1,0 +1,69 @@
+<html><head><title>Filter Links</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>Using a NodeFilter to Extract Links
+
+<p>The filter capability is much more powerful than the simple link extraction illustrated here:
+
+<pre>
+import org.htmlparser.NodeFilter;
+import org.htmlparser.Parser;
+import org.htmlparser.filters.NodeClassFilter;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
+
+public class LinkDemo
+{
+    public static void main (String[] args) throws ParserException
+    {
+        Parser parser = new Parser ("http://urlIWantToParse.com");
+        NodeFilter filter = new NodeClassFilter (LinkTag.class);
+        NodeList links = new NodeList ();
+        for (NodeIterator e = parser.elements (); e.hasMoreNodes (); )
+            e.nextNode ().collectInto (links, filter);
+        for (int i = 0; i &lt; links.size (); i++)
+        {
+            LinkTag linkTag = (LinkTag)links.elementAt (i);
+            System.out.print ("\"" + linkTag.getLinkText () + "\" =&gt; ");
+            System.out.println (linkTag.getLink ());
+        }
+    }
+}
+
+<p>In fact, this is so useful that there is a convenience method to apply a NodeClassFilter directly from the parser:
+
+<pre>
+import org.htmlparser.Parser;
+import org.htmlparser.util.ParserException;
+import org.htmlparser.Node;
+import org.htmlparser.tags.LinkTag;
+
+public class LinkDemo
+{
+    public static void main (String[] args) throws ParserException
+    {
+        Parser parser = new Parser ("http://urlIWantToParse.com");
+        Node [] links = parser.extractAllNodesThatAre (LinkTag.class);
+        for (int i = 0; i &lt; links.length; i++)
+        {
+            LinkTag linkTag = (LinkTag)links[i];
+            System.out.print ("\"" + linkTag.getLinkText () + "\" =&gt; ");
+            System.out.println (linkTag.getLink ());
+        }
+    }
+}
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Wednesday, January  7, 2004  4:48:39 pm.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

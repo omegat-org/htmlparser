@@ -12,6 +12,79 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20040125
+--------------------------------
+
+2004-01-25 19:27  derrickoswald
+
+	* src/org/htmlparser/Parser.java:
+
+	Fix RFE #817723 enhancement: add user-agent
+	Add get/setDefaultRequestProperties() which is used when creating a new connection
+	to condition the connection prior to connecting.
+	Currently, the only request property is  "User-Agent", which is set to "HTMLParser/1.4".
+	Sophisticated users may set other properties to tailor the parser behaviour.
+	
+2004-01-25 16:32  derrickoswald
+
+	* src/org/htmlparser/: PrototypicalNodeFactory.java,
+	filters/HasAttributeFilter.java, filters/StringFilter.java,
+	filters/TagNameFilter.java, lexer/nodes/TagNode.java,
+	tags/CompositeTag.java, tags/FrameSetTag.java, tags/ImageTag.java,
+	tests/FunctionalTests.java, tests/ParserTest.java,
+	visitors/LinkFindingVisitor.java,
+	visitors/StringFindingVisitor.java:
+
+	Fix bug #883664 toUpperCase on tag names and attributes depends on locale
+	Added locale information to all relevant toUpperCase() calls, with an English locale
+	for tag names and attribute names, or developers choice of locale for methods that
+	do uppercase conversion as part of their algorithms.
+	
+2004-01-24 18:57  derrickoswald
+
+	* src/org/htmlparser/: filters/HasChildFilter.java,
+	filters/HasParentFilter.java, filters/IsEqualFilter.java,
+	tags/AppletTag.java, tags/CompositeTag.java, tags/FormTag.java,
+	tags/SelectTag.java, tags/TableRow.java, tags/TableTag.java,
+	tests/tagTests/BulletListTagTest.java,
+	tests/tagTests/DivTagTest.java, tests/tagTests/SpanTagTest.java:
+
+	Fix bug #882940 empty applet tag contents causes NullPointerException
+	Also found and fixed other similar problems where getChildren() could
+	return null.
+	Then changed table row and column handling to handle rows and
+	columns embedded within other tags.
+	
+2004-01-24 13:12  derrickoswald
+
+	* src/org/htmlparser/: tags/TableRow.java, tags/TableHeader.java,
+	PrototypicalNodeFactory.java:
+
+	Add TableHeaderTag submitted by Pim Schrama.
+	Robustify TableRow against null getChildren().
+	
+2004-01-24 12:41  derrickoswald
+
+	* src/org/htmlparser/tags/CompositeTag.java:
+
+	Fix StackOverflowError similar to the previous one.
+	Recursion in the collectInto() wasn't checking for an end tag the same as 'this'.
+	Scanned for other similar occurances, and fixed it in visitor code too.
+	
+2004-01-24 12:13  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	tests/lexerTests/LexerTests.java, tests/tagTests/JspTagTest.java,
+	tests/ParserTest.java:
+
+	Fix bug #880283 Character ">" erroneously inserted by Lexer.
+	Some jsp tags are now handled in a separate jsp parse in the lexer.
+	Jsp tags embedded as attributes are still not handled.
+	Refer to bug #772700 Jsp Tags are not parsed correctly when in quoted attributes,
+	which is now reversed (i.e. in quotes are OK, outside of quotes causes problems),
+	but this points out a deficiency in the data structure holding tag contents (attribute lists)
+	that doesn't provide for tags within attributes.
+	
 Integration Build 1.4 - 20040119
 --------------------------------
 

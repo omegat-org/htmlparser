@@ -4,12 +4,12 @@
 
 <div class="wikitext">
 <p><b>Writing Your Own Scanners
-
-<p>There are two types of scanners, depending on the type of tags that you wish to parse:
+<b>Warning: this is out of date and needs to be completely rewritten
+There are two types of scanners, depending on the type of tags that you wish to parse:
 
 <ul>
 
-<li><a href="TagScanner.html" class="wiki">TagScanner</a> - for parsing tags that have no child elements
+<li>TagScanner - for parsing tags that have no child elements
 
 <li>CompositeTagScanner - for parsing tags with children
 
@@ -28,7 +28,7 @@ parser.addScanner(new MyOwnScanner());
 2. If a match is found (using getId()-  which you MUST override), a closer match or special processing can be done by calling the evaluate() method of the scanner. This is optional, subclasses don't have to override the evaluate() method.
 <br />
 <br />
-3. If a match was found, call the scan() method. For both <a href="TagScanner.html" class="wiki">TagScanner</a> and CompositeTagScanner, overriding this method is optional, and NOT recommended for standard cases. The default scan() methods will make a call to createTag.
+3. If a match was found, call the scan() method. For both <span class="wikiunknown"><u>TagScanner and CompositeTagScanner, overriding this method is optional, and NOT recommended for standard cases. The default scan() methods will make a call to createTag.
 <br />
 <br />
 4. createTag describes the creation of a new tag. This method MUST be overridden in your scanner.
@@ -108,7 +108,7 @@ public class MyCompositeTag extends CompositeTag {
 
 <hr class="printer" noshade="noshade" />
 
-<p class="editdate">Last edited on Thursday, May  1, 2003  6:54:01 pm.
+<p class="editdate">Last edited on Thursday, January  8, 2004  4:13:18 am.
 
 <hr class="toolbar" noshade="noshade" />
 </body></html>

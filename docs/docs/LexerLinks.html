@@ -1,0 +1,51 @@
+<html><head><title>Lexer Links</title></head><body>
+
+
+
+<div class="wikitext">
+<p><b>Using a Lexer to Extract Links
+
+<p>If you are after raw link text only, then you can use a Lexer to access the links:
+
+<pre>
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import org.htmlparser.Node;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.nodes.TagNode;
+import org.htmlparser.util.ParserException;
+
+public class LinkDemo
+{
+    public static void main (String[] args) throws ParserException, IOException
+    {
+        Node node;
+
+        URL url = new URL ("http://urlIWantToParse.com");
+        URLConnection connection = url.openConnection ();
+        Lexer lexer = new Lexer (connection);
+        while (null != (node = lexer.nextNode ()))
+            if (node instanceof TagNode)
+            {
+                TagNode tag = (TagNode)node;
+                if (tag.getTagName ().equals ("A") &amp;&amp; !tag.isEndTag ())
+                {
+                    String href = tag.getAttribute ("href");
+                    if (null != href)
+                        System.out.println (href);
+                }
+            }
+     }
+}
+
+
+
+<div id="actionbar" class="toolbar">
+
+<hr class="printer" noshade="noshade" />
+
+<p class="editdate">Last edited on Thursday, January  8, 2004  4:06:57 am.
+
+<hr class="toolbar" noshade="noshade" />
+</body></html>

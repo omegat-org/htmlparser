@@ -5,22 +5,30 @@
 <div class="wikitext">
 <p><b>Custom Tag Extraction
 
-<p>Custom tag extraction is easy. Simply create an array of tag names that you want to extract from a page, and pass it in to <a href="TagFindingVisitor.html" class="wiki">TagFindingVisitor</a>, like so :
+<p>Custom tag extraction is easy. Simply create an array of tag names that you want to extract from a page, and pass it in to a TagFindingVisitor, like so:
 
 <pre>
-Parser parser = new Parser(..);
-String [] tagsToBeFound = {"P","BR","MYTAG"};
-TagFindingVisitor visitor = new TagFindingVisitor(tagsToBeFound);
-parser.visitAllNodesWith(visitor);
-// First tag specified in search
-Node [] allPTags = visitor.getTags(0);
-// Second tag specified in search
-Node [] allBRTags = visitor.getTags(1);
-// Third tag specified in search
-Node [] allMyTags = visitor.getTags(2);
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.util.ParserException;
+import org.htmlparser.visitors.TagFindingVisitor;
 
-<p>--<a href="SomikRaha.html" class="wiki">SomikRaha</a>
-// Just a test of wiki
+public class CustomTagDemo
+{
+    public static void main (String[] args) throws ParserException
+    {
+        Parser parser = new Parser ("http://urlIWantToParse.com");
+        String [] tagsToBeFound = {"P","BR","MYTAG"};
+        TagFindingVisitor visitor = new TagFindingVisitor (tagsToBeFound);
+        parser.visitAllNodesWith (visitor);
+        // First tag specified in search
+        Node [] allPTags = visitor.getTags(0);
+        // Second tag specified in search
+        Node [] allBRTags = visitor.getTags(1);
+        // Third tag specified in search
+        Node [] allMyTags = visitor.getTags(2);
+    }
+}
 
 
 
@@ -28,7 +36,7 @@ Node [] allMyTags = visitor.getTags(2);
 
 <hr class="printer" noshade="noshade" />
 
-<p class="editdate">Last edited on Wednesday, April  2, 2003  1:38:24 pm.
+<p class="editdate">Last edited on Wednesday, January  7, 2004  6:22:39 pm.
 
 <hr class="toolbar" noshade="noshade" />
 </body></html>
