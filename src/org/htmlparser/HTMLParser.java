@@ -1102,12 +1102,29 @@ public class HTMLParser
 		}
 	}
 	
-        /** Initializes the parser with the given input HTML String.
-         * @param inputHTML the input HTML that is to be parsed.
-         */
-        public void setInputHTML(String inputHTML) {
-          if ("".equals(inputHTML)) {
-            reader = new HTMLReader(new StringReader(inputHTML),"");      
-          }
-        }
+	/** Initializes the parser with the given input HTML String.
+	 * @param inputHTML the input HTML that is to be parsed.
+	 */
+	public void setInputHTML(String inputHTML) {
+	  if ("".equals(inputHTML)) {
+		reader = new HTMLReader(new StringReader(inputHTML),"");      
+	  }
+	}	
+	
+	/**
+	 * Creates the parser on an input string.
+	 * @param inputHTML
+	 * @return HTMLParser
+	 */
+	public static HTMLParser createParser(String inputHTML) {
+		HTMLReader reader =	
+			new HTMLReader(new StringReader(inputHTML),"");
+		return new HTMLParser(reader);
+	}
+	
+	public static HTMLParser createLinkRecognizingParser(String inputHTML) {
+		HTMLParser parser = createParser(inputHTML);
+		parser.addScanner(new HTMLLinkScanner(HTMLLinkTag.LINK_TAG_FILTER));
+		return parser;
+	}
 }
