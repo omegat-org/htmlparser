@@ -362,6 +362,49 @@ public class HTMLParserTest extends HTMLParserTestCase {
         }
     }
 
+    /**
+     * Test with a HTTP header with a valid charset parameter.
+     * Here, ibm.co.jp is an example of a HTTP server that correctly sets the
+     * charset in the header to match the content encoding.
+     */
+    public void testHTTPCharset ()
+    {
+		HTMLParser parser;
+		try
+        {
+			parser = new HTMLParser("http://www.ibm.co.jp", HTMLParser.nul);
+			assertEquals("Character set should be Shift_JIS", "Shift_JIS", parser.getEncoding ());
+		}
+		catch (HTMLParserException e)
+        {
+            fail ("could not open http://www.ibm.co.jp");
+		}
+    }
+
+    /**
+     * Test with a HTML header with a charset parameter not matching the HTTP header.
+     * Here, www.sony.co.jp is an example of a HTTP server that does not set the
+     * charset in the header to match the content encoding. We check that after
+     * the enumeration is created, that the charset has changed to the correct value.
+     */
+    public void testHTMLCharset ()
+    {
+		HTMLParser parser;
+        HTMLEnumeration enumeration;
+        
+		try
+        {
+			parser = new HTMLParser("http://www.sony.co.jp", HTMLParser.nul);
+			assertEquals("Character set by default is ISO-8859-1", "ISO-8859-1", parser.getEncoding ());
+            enumeration = parser.elements();
+			assertEquals("Character set should be Shift_JIS", "Shift_JIS", parser.getEncoding ());
+		}
+		catch (HTMLParserException e)
+        {
+            fail ("could not open http://www.sony.co.jp");
+		}
+    }
+
 	public void testNullUrl() {
 		HTMLParser parser;
 		try {
