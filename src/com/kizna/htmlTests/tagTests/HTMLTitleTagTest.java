@@ -1,4 +1,4 @@
-package com.kizna.htmlTests;
+package com.kizna.htmlTests.tagTests;
 
 import java.io.BufferedReader;
 import com.kizna.html.HTMLReader;

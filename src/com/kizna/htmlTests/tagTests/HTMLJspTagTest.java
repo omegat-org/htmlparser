@@ -30,7 +30,7 @@
 // Fax : +81-3-5449-4870
 // Website : www.kizna.com
 
-package com.kizna.htmlTests;
+package com.kizna.htmlTests.tagTests;
 import java.io.BufferedReader;
 import java.util.Enumeration;
 import com.kizna.html.*;

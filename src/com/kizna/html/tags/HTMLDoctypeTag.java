@@ -39,7 +39,7 @@ import com.kizna.html.HTMLNode;
 public class HTMLDoctypeTag extends HTMLTag
 {
 	/**
-	 * The HTMLDecTag is constructed by providing the beginning posn, ending posn
+	 * The HTMLDoctypeTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.
 	 * @param tagBegin beginning position of the tag
 	 * @param tagEnd ending position of the tag
@@ -63,11 +63,17 @@ public class HTMLDoctypeTag extends HTMLTag
 	{
 		return tagEnd;
 	}
-		/**
+	/**
 	 * Print the contents of the remark tag.
 	 */
 	public String toString()
 	{
 		return "Doctype Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+	}
+	/**
+	 * Returns the raw HTML string
+	 */
+	public String toRawString() {
+		return "";
 	}
 }
