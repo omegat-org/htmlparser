@@ -12,6 +12,85 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20040119
+--------------------------------
+
+2004-01-19 17:44  derrickoswald
+
+	* src/org/htmlparser/tags/CompositeTag.java:
+
+	Fix CompositeTag.toString() which caused java.lang.StackOverflowError for tags of the form <td width="69"/>.
+	In this case the end tag is 'this' tag which wasn't handled by the output code.
+	Added testXMLTypeToString() to ParserTest.
+	
+2004-01-13 21:53  derrickoswald
+
+	* build.xml, src/doc-files/todo.html,
+	src/org/htmlparser/Parser.java,
+	src/org/htmlparser/PrototypicalNodeFactory.java,
+	src/org/htmlparser/RemarkNode.java,
+	src/org/htmlparser/StringNode.java,
+	src/org/htmlparser/lexer/nodes/TagNode.java,
+	src/org/htmlparser/parserapplications/SiteCapturer.java,
+	src/org/htmlparser/scanners/CompositeTagScanner.java,
+	src/org/htmlparser/scanners/ScriptScanner.java,
+	src/org/htmlparser/tags/BaseHrefTag.java,
+	src/org/htmlparser/tags/FormTag.java,
+	src/org/htmlparser/tags/FrameTag.java,
+	src/org/htmlparser/tags/ImageTag.java,
+	src/org/htmlparser/tags/JspTag.java,
+	src/org/htmlparser/tags/SelectTag.java,
+	src/org/htmlparser/tags/Tag.java,
+	src/org/htmlparser/tags/TextareaTag.java,
+	src/org/htmlparser/tests/FunctionalTests.java,
+	src/org/htmlparser/tests/ParserTest.java,
+	src/org/htmlparser/tests/ParserTestCase.java,
+	src/org/htmlparser/tests/lexerTests/AttributeTests.java,
+	src/org/htmlparser/tests/lexerTests/KitTest.java,
+	src/org/htmlparser/tests/lexerTests/LexerTests.java,
+	src/org/htmlparser/tests/lexerTests/PageTests.java,
+	src/org/htmlparser/tests/lexerTests/SourceTests.java,
+	src/org/htmlparser/tests/lexerTests/StreamTests.java,
+	src/org/htmlparser/tests/scannersTests/CompositeTagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/JspScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/ScriptScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/TagScannerTest.java,
+	src/org/htmlparser/tests/tagTests/BaseHrefTagTest.java,
+	src/org/htmlparser/tests/tagTests/BulletTagTest.java,
+	src/org/htmlparser/tests/tagTests/ImageTagTest.java,
+	src/org/htmlparser/tests/tagTests/JspTagTest.java,
+	src/org/htmlparser/tests/tagTests/LinkTagTest.java,
+	src/org/htmlparser/tests/tagTests/ScriptTagTest.java,
+	src/org/htmlparser/tests/utilTests/CharacterTranslationTest.java,
+	src/org/htmlparser/util/ParserUtils.java,
+	src/org/htmlparser/util/sort/Sort.java,
+	src/org/htmlparser/visitors/HtmlPage.java,
+	src/org/htmlparser/visitors/TextExtractingVisitor.java:
+
+	Remove unneeded imports.
+	
+2004-01-10 10:23  derrickoswald
+
+	* src/org/htmlparser/: beans/StringBean.java, lexer/Page.java,
+	tests/lexerTests/LexerTests.java,
+	util/EncodingChangeException.java, util/IteratorImpl.java:
+
+	Fix bug #874175 StringBean doesn't handle charset change well
+	Add EncodingChangeException to distinguish a recoverable character set change
+	occuring after the lexer has already coughed up some characters using the wrong
+	encoding. Added testEncodingChange in LexerTests to excercise it.
+	Changed IteratorImpl to not wrap a ParserException with another ParserException.
+	Changed StringBean to retry the URL when an encoding change exception is caught.
+	
+2004-01-09 19:06  derrickoswald
+
+	* src/org/htmlparser/: filters/HasAttributeFilter.java,
+	parserapplications/SiteCapturer.java,
+	parserapplications/WikiCapturer.java, util/NodeList.java:
+
+	First pass at the wiki capturer.
+	Added useful extensions to the HasAttributeFilter, SiteCapturer and NodeList
+
 Integration Build 1.4 - 20040104
 --------------------------------
 
