@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021207 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021208 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -138,7 +138,7 @@ public class HTMLParser
 	// Please dont change the formatting of the VERSION_STRING
 	// below. This is done so as to facilitate the ant script
 	public final static java.lang.String 
-	VERSION_STRING="1.2 (Integration Build Dec 07, 2002)"
+	VERSION_STRING="1.2 (Integration Build Dec 08, 2002)"
 	;
 	// End of formatting
 	/**

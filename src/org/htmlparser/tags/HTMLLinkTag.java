@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021207 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021208 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -263,6 +263,10 @@ public class HTMLLinkTag extends HTMLTag
 	}
 	public String toHTML(HTMLRenderer renderer) {
 		return renderer.renderLinksToHTML(this);
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 
 }
