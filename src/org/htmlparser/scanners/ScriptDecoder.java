@@ -308,7 +308,7 @@ public class ScriptDecoder
         {
             input_character = page.getCharacter (cursor);
             character = (char)input_character;
-            if (0 == input_character)
+            if (Page.EOF == input_character)
             {
                 if (   (STATE_INITIAL != state)
                     || (0 != substate_initial)

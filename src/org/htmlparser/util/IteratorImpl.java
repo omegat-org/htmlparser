@@ -30,6 +30,7 @@ import org.htmlparser.Node;
 import org.htmlparser.Tag;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.scanners.Scanner;
 import org.htmlparser.util.NodeIterator;
 
@@ -55,7 +56,7 @@ public class IteratorImpl implements NodeIterator
         boolean ret;
 
         mCursor.setPosition (mLexer.getPosition ());
-        ret = 0 != mLexer.getPage ().getCharacter (mCursor); // more characters?
+        ret = Page.EOF != mLexer.getPage ().getCharacter (mCursor); // more characters?
 
         return (ret);
     }

@@ -142,7 +142,7 @@ public class Tabby
                 modified = false;
                 expected = 0;
                 last = -1;
-                while (0 != (ch = page.getCharacter (cursor)))
+                while (Page.EOF != (ch = page.getCharacter (cursor)))
                 {
                     if (++expected != cursor.getPosition ())
                     {
@@ -295,6 +295,14 @@ public class Tabby
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.3  2005/03/13 14:51:44  derrickoswald
+ * Bug #1121401 No Parsing with yahoo!
+ * By default nio.charset.CharsetDecoder replaces characters it cannot
+ * represent in the current encoding with zero, which was the value
+ * returned by the page when the Stream reached EOF.
+ * This changes the Page return value to (char)Source.EOF (-1) when
+ * the end of stream is encountered.
+ *
  * Revision 1.2  2004/07/31 16:42:34  derrickoswald
  * Remove unused variables and other fixes exposed by turning on compiler warnings.
  *

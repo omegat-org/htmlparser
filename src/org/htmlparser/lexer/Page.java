@@ -68,6 +68,12 @@ public class Page
     public static final String DEFAULT_CONTENT_TYPE = "text/html";
 
     /**
+     * Character value when the page is exhausted.
+     * Has a value of {@value}.
+     */
+    public static final char EOF = (char)Source.EOF;
+
+    /**
      * The URL this page is coming from.
      * Cached value of <code>getConnection().toExternalForm()</code> or
      * <code>setUrl()</code>.
@@ -646,8 +652,8 @@ public class Page
             try
             {
                 i = mSource.read ();
-                if (0 > i)
-                    ret = 0;
+                if (Source.EOF == i)
+                    ret = EOF;
                 else
                 {
                     ret = (char)i;
@@ -686,7 +692,7 @@ public class Page
                 try
                 {
                     i = mSource.read ();
-                    if (-1 == i)
+                    if (Source.EOF == i)
                     {
                         // do nothing
                     }

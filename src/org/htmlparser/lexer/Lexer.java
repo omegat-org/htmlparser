@@ -260,12 +260,12 @@ public class Lexer
         ch = mPage.getCharacter (mCursor);
         switch (ch)
         {
-            case 0: // end of input
+            case Page.EOF:
                 ret = null;
                 break;
             case '<':
                 ch = mPage.getCharacter (mCursor);
-                if (0 == ch)
+                if (Page.EOF == ch)
                     ret = makeString (start, mCursor.getPosition ());
                 else if ('%' == ch)
                 {
@@ -280,7 +280,7 @@ public class Lexer
                 else if ('!' == ch)
                 {
                     ch = mPage.getCharacter (mCursor);
-                    if (0 == ch)
+                    if (Page.EOF == ch)
                         ret = makeString (start, mCursor.getPosition ());
                     else
                     {
@@ -328,7 +328,7 @@ public class Lexer
         while (!done)
         {
             ch = mPage.getCharacter (cursor);
-            if (0 == ch)
+            if (Page.EOF == ch)
                 done = true;
             else
                 switch (state)
@@ -376,17 +376,17 @@ public class Lexer
         while (!done)
         {
             ch = mPage.getCharacter (mCursor);
-            if (0 == ch)
+            if (Page.EOF == ch)
                 done = true;
             else if (0x1b == ch) // escape
             {
                 ch = mPage.getCharacter (mCursor);
-                if (0 == ch)
+                if (Page.EOF == ch)
                     done = true;
                 else if ('$' == ch)
                 {
                     ch = mPage.getCharacter (mCursor);
-                    if (0 == ch)
+                    if (Page.EOF == ch)
                         done = true;
                     else if ('B' == ch)
                         scanJIS (mCursor);
@@ -405,7 +405,8 @@ public class Lexer
             else if (quotesmart && (0 != quote) && ('\\' == ch))
             {
                 ch = mPage.getCharacter (mCursor); //try to consume escaped character
-                if (  (ch != '\\') // escaped backslash
+                if ((Page.EOF != ch)
+                    && ('\\' != ch) // escaped backslash
                     && (ch != quote)) // escaped quote character 
                        // ( reflects ["] or [']  whichever opened the quotation)
                     mCursor.retreat(); // unconsume char if character was not an escapable char.
@@ -417,13 +418,13 @@ public class Lexer
                 // handle multiline and double slash comments (with a quote) in script like:
                 // I can't handle single quotations.
                 ch = mPage.getCharacter (mCursor);
-                if (0 == ch)
+                if (Page.EOF == ch)
                     done = true;
                 else if ('/' == ch)
                 {
                     do
                         ch = mPage.getCharacter (mCursor);
-                    while ((ch != 0) && (ch != '\n'));
+                    while ((Page.EOF != ch) && ('\n' != ch));
                 }
                 else if ('*' == ch)
                 {
@@ -431,12 +432,12 @@ public class Lexer
                     {
                         do
                             ch = mPage.getCharacter (mCursor);
-                        while ((ch != 0) && (ch != '*'));
+                        while ((Page.EOF != ch) && ('*' != ch));
                         ch = mPage.getCharacter (mCursor);
                         if (ch == '*')
                             mCursor.retreat ();
                     }
-                    while ((ch != 0) && (ch != '/'));
+                    while ((Page.EOF != ch) && ('/' != ch));
                 }
                 else
                     mCursor.retreat ();
@@ -444,7 +445,7 @@ public class Lexer
             else if ((0 == quote) && ('<' == ch))
             {
                 ch = mPage.getCharacter (mCursor);
-                if (0 == ch)
+                if (Page.EOF == ch)
                     done = true;
                 // the order of these tests might be optimized for speed:
                 else if ('/' == ch || Character.isLetter (ch) || '!' == ch || '%' == ch)
@@ -599,7 +600,7 @@ public class Lexer
             switch (state)
             {
                 case 0: // outside of any attribute
-                    if ((0 == ch) || ('>' == ch) || ('<' == ch))
+                    if ((Page.EOF == ch) || ('>' == ch) || ('<' == ch))
                     {
                         if ('<' == ch)
                         {
@@ -617,7 +618,7 @@ public class Lexer
                     }
                     break;
                 case 1: // within attribute name
-                    if ((0 == ch) || ('>' == ch) || ('<' == ch))
+                    if ((Page.EOF == ch) || ('>' == ch) || ('<' == ch))
                     {
                         if ('<' == ch)
                         {
@@ -639,7 +640,7 @@ public class Lexer
                         state = 2;
                     break;
                 case 2: // equals hit
-                    if ((0 == ch) || ('>' == ch))
+                    if ((Page.EOF == ch) || ('>' == ch))
                     {
                         empty (attributes, bookmarks);
                         done = true;
@@ -664,7 +665,7 @@ public class Lexer
                         state = 3;
                     break;
                 case 3: // within naked attribute value
-                    if ((0 == ch) || ('>' == ch))
+                    if ((Page.EOF == ch) || ('>' == ch))
                     {
                         naked (attributes, bookmarks);
                         done = true;
@@ -677,7 +678,7 @@ public class Lexer
                     }
                     break;
                 case 4: // within single quoted attribute value
-                    if (0 == ch)
+                    if (Page.EOF == ch)
                     {
                         single_quote (attributes, bookmarks);
                         done = true; // complain?
@@ -690,7 +691,7 @@ public class Lexer
                     }
                     break;
                 case 5: // within double quoted attribute value
-                    if (0 == ch)
+                    if (Page.EOF == ch)
                     {
                         double_quote (attributes, bookmarks);
                         done = true; // complain?
@@ -707,7 +708,7 @@ public class Lexer
                 // See Bug # 891058 Bug in lexer.
                 case 6: // undecided for state 0 or 2
                         // we have read white spaces after an attributte name
-                    if (0 == ch)
+                    if (Page.EOF == ch)
                     {
                         // same as last else clause
                         standalone (attributes, bookmarks);
@@ -823,7 +824,7 @@ public class Lexer
         while (!done)
         {
             ch = mPage.getCharacter (mCursor);
-            if (0 == ch)
+            if (Page.EOF == ch)
                 done = true;
             else
                 switch (state)
@@ -841,7 +842,7 @@ public class Lexer
                         {
                             // handle <!--> because netscape does
                             ch = mPage.getCharacter (mCursor);
-                            if (0 == ch)
+                            if (Page.EOF == ch)
                                 done = true;
                             else if ('>' == ch)
                                 done = true;
@@ -857,7 +858,7 @@ public class Lexer
                     case 2: // prior to the first closing delimiter
                         if ('-' == ch)
                             state = 3;
-                        else if (0 == ch)
+                        else if (Page.EOF == ch)
                             return (parseString (start, quotesmart)); // no terminator
                         break;
                     case 3: // prior to the second closing delimiter
@@ -945,7 +946,7 @@ public class Lexer
                         case '%': // <%
                             state = 1;
                             break;
-                        // case 0:   // <\0
+                        // case Page.EOF: // <\0
                         // case '>': // <>
                         default:
                             done = true;
@@ -955,7 +956,7 @@ public class Lexer
                 case 1: // prior to the optional qualifier
                     switch (ch)
                     {
-                        case 0:   // <%\0
+                        case Page.EOF:   // <%\0
                         case '>': // <%>
                             done = true;
                             break;
@@ -975,7 +976,7 @@ public class Lexer
                 case 2: // prior to the closing percent
                     switch (ch)
                     {
-                        case 0:   // <%x\0
+                        case Page.EOF: // <%x\0
                         case '>': // <%x>
                             done = true;
                             break;
@@ -993,7 +994,7 @@ public class Lexer
                 case 3:
                     switch (ch)
                     {
-                        case 0:   // <%x??%\0
+                        case Page.EOF: // <%x??%\0
                             done = true;
                             break;
                         case '>':
@@ -1008,7 +1009,7 @@ public class Lexer
                 case '"':
                     switch (ch)
                     {
-                        case 0:   // <%x??"\0
+                        case Page.EOF: // <%x??"\0
                             done = true;
                             break;
                         case '"':
@@ -1021,7 +1022,7 @@ public class Lexer
                 case '\'':
                     switch (ch)
                     {
-                        case 0:   // <%x??'\0
+                        case Page.EOF: // <%x??'\0
                             done = true;
                             break;
                         case '\'':
@@ -1109,7 +1110,7 @@ public class Lexer
                 case 0: // prior to ETAGO
                     switch (ch)
                     {
-                        case 0: // end of input
+                        case Page.EOF:
                             done = true;
                             break;
                         case '\'':
@@ -1131,8 +1132,8 @@ public class Lexer
                                 if (0 != quote)
                                 {
                                     ch = mPage.getCharacter (mCursor); // try to consume escaped character
-                                    if (0 == ch)
-                                        mCursor.retreat ();
+                                    if (Page.EOF == ch)
+                                        done = true;
                                     else if (  (ch != '\\') && (ch != quote))
                                         mCursor.retreat (); // unconsume char if character was not an escapable char.
                                 }
@@ -1143,13 +1144,13 @@ public class Lexer
                                 {
                                     // handle multiline and double slash comments (with a quote)
                                     ch = mPage.getCharacter (mCursor);
-                                    if (0 == ch)
-                                        mCursor.retreat ();
+                                    if (Page.EOF == ch)
+                                        done = true;
                                     else if ('/' == ch)
                                     {
                                         do
                                             ch = mPage.getCharacter (mCursor);
-                                        while ((ch != 0) && (ch != '\n'));
+                                        while ((Page.EOF != ch) && ('\n' != ch));
                                     }
                                     else if ('*' == ch)
                                     {
@@ -1157,12 +1158,12 @@ public class Lexer
                                         {
                                             do
                                                 ch = mPage.getCharacter (mCursor);
-                                            while ((ch != 0) && (ch != '*'));
+                                            while ((Page.EOF != ch) && ('*' != ch));
                                             ch = mPage.getCharacter (mCursor);
                                             if (ch == '*')
                                                 mCursor.retreat ();
                                         }
-                                        while ((ch != 0) && (ch != '/'));
+                                        while ((Page.EOF != ch) && ('/' != ch));
                                     }
                                     else
                                         mCursor.retreat ();
@@ -1184,7 +1185,7 @@ public class Lexer
                 case 1: // <
                     switch (ch)
                     {
-                        case 0: // end of input
+                        case Page.EOF:
                             done = true;
                             break;
                         case '/':
@@ -1196,7 +1197,7 @@ public class Lexer
                     }
                     break;
                 case 2: // </
-                    if (0 == ch)
+                    if (Page.EOF == ch)
                         done = true;
                     else if (Character.isLetter (ch))
                     {

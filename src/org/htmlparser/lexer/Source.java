@@ -109,7 +109,7 @@ public abstract class Source
      * @param cbuf Destination buffer
      * @param off Offset at which to start storing characters
      * @param len Maximum number of characters to read
-     * @return The number of characters read, or {@link #EOF} if the esource is
+     * @return The number of characters read, or {@link #EOF} if the source is
      * exhausted.
      * @exception IOException If an I/O error occurs.
      */
@@ -120,7 +120,7 @@ public abstract class Source
      * This method will block until some input is available, an I/O error occurs,
      * or the source is exhausted.
      * @param cbuf Destination buffer.
-     * @return The number of characters read, or {@link #EOF} if the esource is
+     * @return The number of characters read, or {@link #EOF} if the source is
      * exhausted.
      * @exception IOException If an I/O error occurs.
      */
