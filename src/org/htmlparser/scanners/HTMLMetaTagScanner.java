@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021208 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021214 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ public class HTMLMetaTagScanner extends HTMLTagScanner {
 		try {
 			// Since its a simple tag, all META TAG info will 
 			// be in the tag itself
-			Hashtable table = tag.parseParameters();
+			Hashtable table = tag.getParsed();
 			String metaTagName = (String)table.get("NAME");					
 			String metaTagContents = (String)table.get("CONTENT");
 			String httpEquiv = (String)table.get("HTTP-EQUIV");
