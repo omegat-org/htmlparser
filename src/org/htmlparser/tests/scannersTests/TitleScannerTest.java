@@ -27,9 +27,15 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.scannersTests;
+
+import org.htmlparser.scanners.BodyScanner;
+import org.htmlparser.scanners.HeadScanner;
+import org.htmlparser.scanners.HtmlScanner;
 import org.htmlparser.scanners.MetaTagScanner;
 import org.htmlparser.scanners.StyleScanner;
 import org.htmlparser.scanners.TitleScanner;
+import org.htmlparser.tags.HeadTag;
+import org.htmlparser.tags.Html;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
@@ -65,16 +71,33 @@ public class TitleScannerTest extends ParserTestCase {
      * null pointer exceptions..
      */
     public void testIncompleteTitle() throws ParserException {
-        createParser(
-        "<TITLE>SISTEMA TERRA, VOL. VI , No. 1-3, December 1997</TITLE\n"+
-        "</HEAD>");
-        TitleScanner titleScanner = new TitleScanner("-t");
-        parser.addScanner(titleScanner);
-        parseAndAssertNodeCount(2);
-        assertTrue("First Node is a title tag",node[0] instanceof TitleTag);
-        TitleTag titleTag = (TitleTag)node[0];
+        String text =
+            "<HTML>\n"+
+            "<HEAD>\n"+
+            // note the missing angle bracket on the close title:
+            "<TITLE>SISTEMA TERRA, VOL. VI , No. 1-3, December 1997</TITLE\n"+
+            "</HEAD>\n"+
+            "<BODY>\n"+
+            "The body.\n"+
+            "</BODY>\n"+
+            "</HTML>";        
+        createParser(text);
+        parser.addScanner (new HtmlScanner ());
+        parser.addScanner (new TitleScanner ("-t"));
+        parser.addScanner (new HeadScanner ());
+        parser.addScanner (new BodyScanner ());
+        parseAndAssertNodeCount(1);
+        assertTrue ("Only node is a html tag",node[0] instanceof Html);
+        Html html = (Html)node[0];
+        assertEquals ("Html node has five children", 5, html.getChildCount ());
+        assertTrue ("Second child is a head tag", html.childAt (1) instanceof HeadTag);
+        HeadTag head = (HeadTag)html.childAt (1);
+        assertEquals ("Head node has two children", 2, head.getChildCount ());
+        assertTrue ("Second child is a title tag", head.childAt (1) instanceof TitleTag);
+        TitleTag titleTag = (TitleTag)head.childAt (1);
         assertEquals("Title","SISTEMA TERRA, VOL. VI , No. 1-3, December 1997",titleTag.getTitle());
-
+// Note: this will fail because of the extra > inserted to finish the /TITLE tag:
+//        assertStringEquals ("toHtml", text, html.toHtml ());
     }
 
     /**
@@ -90,9 +113,12 @@ public class TitleScannerTest extends ParserTestCase {
         "<body><html>");
         TitleScanner titleScanner = new TitleScanner("-t");
         parser.addScanner(titleScanner);
-        parseAndAssertNodeCount(8);
+        parseAndAssertNodeCount(9);
         assertTrue("Third tag should be a title tag",node[2] instanceof TitleTag);
         TitleTag titleTag = (TitleTag)node[2];
+        assertEquals("Title","\n",titleTag.getTitle());
+        assertTrue("Fourth tag should be a title tag",node[3] instanceof TitleTag);
+        titleTag = (TitleTag)node[3];
         assertEquals("Title","\nDouble tags can hang the code\n",titleTag.getTitle());
     }
 

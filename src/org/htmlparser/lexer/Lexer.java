@@ -269,13 +269,18 @@ public class Lexer
                         ret = makeString (probe);
                     else
                     {
-                        probe.retreat (); // remark and tag need this character
-                        if ('-' == ch)
-                            ret = parseRemark (probe, quotesmart);
+                        if ('>' == ch) // handle <!>
+                            ret = makeRemark (probe);
                         else
                         {
-                            probe.retreat (); // tag needs the previous one too
-                            ret = parseTag (probe);
+                            probe.retreat (); // remark and tag need this character
+                            if ('-' == ch)
+                                ret = parseRemark (probe, quotesmart);
+                            else
+                            {
+                                probe.retreat (); // tag needs the previous one too
+                                ret = parseTag (probe);
+                            }
                         }
                     }
                 }
@@ -482,8 +487,14 @@ public class Lexer
             switch (state)
             {
                 case 0: // outside of any attribute
-                    if ((0 == ch) || ('>' == ch))
+                    if ((0 == ch) || ('>' == ch) || ('<' == ch))
                     {
+                        if ('<' == ch)
+                        {
+                            // don't consume the opening angle
+                            cursor.retreat ();
+                            bookmarks[state + 1] = cursor.getPosition ();
+                        }
                         whitespace (attributes, bookmarks);
                         done = true;
                     }
@@ -494,8 +505,14 @@ public class Lexer
                     }
                     break;
                 case 1: // within attribute name
-                    if ((0 == ch) || ('>' == ch))
+                    if ((0 == ch) || ('>' == ch) || ('<' == ch))
                     {
+                        if ('<' == ch)
+                        {
+                            // don't consume the opening angle
+                            cursor.retreat ();
+                            bookmarks[state + 1] = cursor.getPosition ();
+                        }
                         standalone (attributes, bookmarks);
                         done = true;
                     }
@@ -796,45 +813,62 @@ public class Lexer
         while (!done)
         {
             ch = mPage.getCharacter (cursor);
-            switch (state)
-            {
-                case 0: // prior to the first open delimiter
-                    if ('-' == ch)
-                        state = 1;
-                    else
-                        return (parseString (cursor, quotesmart));
-                    break;
-                case 1: // prior to the second open delimiter
-                    if ('-' == ch)
-                        state = 2;
-                    else
-                        return (parseString (cursor, quotesmart));
-                    break;
-                case 2: // prior to the first closing delimiter
-                    if ('-' == ch)
-                        state = 3;
-                    else if (0 == ch)
-                        return (parseString (cursor, quotesmart)); // no terminator
-                    break;
-                case 3: // prior to the second closing delimiter
-                    if ('-' == ch)
-                        state = 4;
-                    else
-                        state = 2;
-                    break;
-                case 4: // prior to the terminating >
-                    if ('>' == ch)
-                        done = true;
-                    else if (('!' == ch) || ('-' == ch) || Character.isWhitespace (ch))
-                    {
-                        // stay in state 4
-                    }
-                    else
-                        state = 2;
-                    break;
-                default:
-                    throw new IllegalStateException ("how the fuck did we get in state " + state);
-            }
+            if (0 == ch)
+                done = true;
+            else
+                switch (state)
+                {
+                    case 0: // prior to the first open delimiter
+                        if ('>' == ch)
+                            done = true;
+                        if ('-' == ch)
+                            state = 1;
+                        else
+                            return (parseString (cursor, quotesmart));
+                        break;
+                    case 1: // prior to the second open delimiter
+                        if ('-' == ch)
+                        {
+                            // handle <!--> because netscape does
+                            ch = mPage.getCharacter (cursor);
+                            if (0 == ch)
+                                done = true;
+                            else if ('>' == ch)
+                                done = true;
+                            else
+                            {
+                                cursor.retreat ();
+                                state = 2;
+                            }                        
+                        }
+                        else
+                            return (parseString (cursor, quotesmart));
+                        break;
+                    case 2: // prior to the first closing delimiter
+                        if ('-' == ch)
+                            state = 3;
+                        else if (0 == ch)
+                            return (parseString (cursor, quotesmart)); // no terminator
+                        break;
+                    case 3: // prior to the second closing delimiter
+                        if ('-' == ch)
+                            state = 4;
+                        else
+                            state = 2;
+                        break;
+                    case 4: // prior to the terminating >
+                        if ('>' == ch)
+                            done = true;
+                        else if (('!' == ch) || ('-' == ch) || Character.isWhitespace (ch))
+                        {
+                            // stay in state 4
+                        }
+                        else
+                            state = 2;
+                        break;
+                    default:
+                        throw new IllegalStateException ("how the fuck did we get in state " + state);
+                }
         }
 
         return (makeRemark (cursor));

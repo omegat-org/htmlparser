@@ -54,17 +54,28 @@ public class RemarkNode extends AbstractNode
 
     /**
      * Returns the text contents of the comment tag.
-     * todo: this only works for the usual case.
      */
     public String getText()
     {
-        return (mPage.getText (elementBegin () + 4, elementEnd () - 3));
+        int start;
+        int end;
+        String ret;
+
+        start = elementBegin () + 4;
+        end = elementEnd () - 3;
+        if (start >= end)
+            ret = "";
+        else
+            ret = mPage.getText (start, end);
+
+        return (ret);
     }
 
     public String toPlainTextString()
     {
         return (getText());
     }
+    
     public String toHtml() {
         return (mPage.getText (elementBegin (), elementEnd ()));
     }
