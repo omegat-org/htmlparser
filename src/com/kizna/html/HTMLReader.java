@@ -16,7 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
-// Email :somik@kizna.com
+// Email :somik@industriallogic.com
 // 
 // Postal Address : 
 // Somik Raha
@@ -24,8 +24,8 @@
 // Industrial Logic Corporation
 // 2583 Cedar Street, Berkeley, 
 // CA 94708, USA
-// Email : somik@industriallogic.com
 // Website : http://www.industriallogic.com
+
 
 package com.kizna.html;
 

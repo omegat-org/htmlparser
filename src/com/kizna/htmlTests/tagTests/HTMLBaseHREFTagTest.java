@@ -10,25 +10,21 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-//
+// 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
-// Email :somik@kizna.com
+// Email :somik@industriallogic.com
 // 
 // Postal Address : 
 // Somik Raha
-// R&D Team
-// Kizna Corporation
-// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
-// Shibuya-ku, Tokyo, 
-// 150-0012, 
-// JAPAN
-// Tel  :  +81-3-54752646
-// Fax : +81-3-5449-4870
-// Website : www.kizna.com
+// Extreme Programmer & Coach
+// Industrial Logic Corporation
+// 2583 Cedar Street, Berkeley, 
+// CA 94708, USA
+// Website : http://www.industriallogic.com
 
 package com.kizna.htmlTests.tagTests;
 
