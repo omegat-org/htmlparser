@@ -39,6 +39,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
 
 import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.ParserException;
@@ -318,10 +320,19 @@ public class Page
         Stream stream;
         String type;
         String charset;
+        String contentEncoding;
 
         mConnection = connection;
         try
         {
+            try
+            {
+                getConnection ().setRequestProperty ("Accept-Encoding", "gzip, deflate");
+            }
+            catch (IllegalStateException ise) //  already connected
+            {
+                // assume all request properties have already been set
+            }
             getConnection ().connect ();
         }
         catch (UnknownHostException uhe)
@@ -342,7 +353,19 @@ public class Page
         charset = getCharset (type);
         try
         {
-            stream = new Stream (getConnection ().getInputStream ());
+            contentEncoding = connection.getContentEncoding();
+            if ((null != contentEncoding) && (-1 != contentEncoding.indexOf ("gzip")))
+            {
+                stream = new Stream (new GZIPInputStream (getConnection ().getInputStream ()));
+            }
+            else if ((null != contentEncoding) && (-1 != contentEncoding.indexOf ("deflate")))
+            {
+                stream = new Stream (new InflaterInputStream (getConnection ().getInputStream ()));
+            }
+            else
+            {
+                stream = new Stream (getConnection ().getInputStream ());
+            }
             try
             {
                 mSource = new Source (stream, charset);
