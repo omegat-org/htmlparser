@@ -90,7 +90,6 @@ public class LinkBean extends Object implements Serializable
     {
         Parser parser;
         Vector vector;
-        Node node;
         LinkTag link;
         URL[] ret;
         

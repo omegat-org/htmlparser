@@ -535,7 +535,6 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         String url;
         URLConnection conn;
-        boolean change;
         
         url = getURL ();
         conn = getConnection ();
@@ -613,6 +612,8 @@ public class StringBean extends NodeVisitor implements Serializable
             mIsPre = false;
         else if (name.equalsIgnoreCase ("SCRIPT"))
             mIsScript = false;
+		if (end.breaksFlow ())
+			carriage_return ();            
     }
     
     /**
