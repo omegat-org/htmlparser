@@ -47,7 +47,7 @@ public class CompositeTagScannerHelperTest extends ParserTestCase {
 
 	protected void setUp() {
 		helper = 
-			new CompositeTagScannerHelper(null,null,null,null,null);
+			new CompositeTagScannerHelper(null,null,null,null,null,false);
 	}
 	
 	public void testIsXmlEndTagForRealXml() { 

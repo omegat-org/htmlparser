@@ -200,11 +200,23 @@ public class NodeReader extends BufferedReader
         return (ret);
     }
 
-	/**
+    /**
 	 * Read the next element
 	 * @return Node - The next node
  	 */
 	public Node readElement() throws ParserException
+    {
+        return (readElement (false));
+    }
+
+	/**
+	 * Read the next element
+     * @param balance_quotes If <code>true</code> string nodes are parsed
+     * paying attention to single and double quotes, such that tag-like
+     * strings are ignored if they are quoted.
+	 * @return Node - The next node
+ 	 */
+	public Node readElement(boolean balance_quotes) throws ParserException
 	{
 		try {
 			if (nextParsedNode.size()>0) {
@@ -261,7 +273,7 @@ public class NodeReader extends BufferedReader
             }
             else
             {
-                node = stringParser.find(this,line,posInLine);
+                node = stringParser.find (this, line, posInLine, balance_quotes);
                 if (node!=null) return node;
             }
 		

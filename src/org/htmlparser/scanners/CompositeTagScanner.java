@@ -96,6 +96,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 	private boolean allowSelfChildren;
 	private Set tagEnderSet;
 	private Set endTagEnderSet;
+	private boolean balance_quotes;
 			
 	public CompositeTagScanner(String [] nameOfTagToMatch) {
 		this(nameOfTagToMatch,new String[] {});
@@ -124,16 +125,49 @@ public abstract class CompositeTagScanner extends TagScanner {
 		boolean allowSelfChildren) {
 		this(filter,nameOfTagToMatch,tagEnders,new String[] {}, allowSelfChildren);
 	}
-	
+
 	public CompositeTagScanner(
 		String filter, 
 		String [] nameOfTagToMatch, 
 		String [] tagEnders, 
 		String [] endTagEnders,
-		boolean allowSelfChildren) {
+		boolean allowSelfChildren)
+    {
+        this(filter,nameOfTagToMatch,tagEnders,endTagEnders, allowSelfChildren, false);
+    }
+
+   /**
+    * Constructor specifying all member fields.
+    * @param filter A string that is used to match which tags are to be allowed
+    * to pass through. This can be useful when one wishes to dynamically filter
+    * out all tags except one type which may be programmed later than the parser.
+    * @param nameOfTagToMatch The tag names recognized by this scanner.
+    * @param tagEnders The non-endtag tag names which signal that no closing
+    * end tag was found. For example, encountering &lt;FORM&gt; while
+    * scanning a &lt;A&gt; link tag would mean that no &lt;/A&gt; was found
+    * and needs to be corrected.
+    * @param endTagEnders The endtag names which signal that no closing end
+    * tag was found. For example, encountering &lt;/HTML&gt; while
+    * scanning a &lt;BODY&gt; tag would mean that no &lt;/BODY&gt; was found
+    * and needs to be corrected. These items are not prefixed by a '/'.
+    * @param allowSelfChildren If <code>true</code> a tag of the same name is
+    * allowed within this tag. Used to determine when an endtag is missing.
+    * @param balance_quotes <code>true</code> if scanning string nodes needs to
+    * honour quotes. For example, ScriptScanner defines this <code>true</code>
+    * so that text within &lt;SCRIPT&gt;&lt;/SCRIPT&gt; ignores tag-like text
+    * within quotes.
+    */
+	public CompositeTagScanner(
+		String filter, 
+		String [] nameOfTagToMatch, 
+		String [] tagEnders, 
+		String [] endTagEnders,
+		boolean allowSelfChildren,
+        boolean balance_quotes) {
 		super(filter);
 		this.nameOfTagToMatch = nameOfTagToMatch;
 		this.allowSelfChildren = allowSelfChildren;
+        this.balance_quotes = balance_quotes;
 		this.tagEnderSet = new HashSet();
 		for (int i=0;i<tagEnders.length;i++)
 			tagEnderSet.add(tagEnders[i]);
@@ -144,7 +178,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
 		CompositeTagScannerHelper helper = 
-			new CompositeTagScannerHelper(this,tag,url,reader,currLine);
+			new CompositeTagScannerHelper(this,tag,url,reader,currLine,balance_quotes);
 		return helper.scan();
 	}
 
@@ -192,5 +226,4 @@ public abstract class CompositeTagScanner extends TagScanner {
 	public boolean shouldCreateEndTagAndExit() {
 		return false;
 	}
-
 }

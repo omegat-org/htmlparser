@@ -116,7 +116,7 @@ public class ScriptScannerTest extends ParserTestCase
 		parseAndAssertNodeCount(2);
 		
 		StringBuffer sb2 = new StringBuffer();
-		sb2.append("\r\nif(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
+		sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
 		sb2.append(" document.write ('xxx');\r\n"); 
 		sb2.append("else\r\n"); 
 		sb2.append(" document.write ('yyy');\r\n"); 
@@ -126,7 +126,8 @@ public class ScriptScannerTest extends ParserTestCase
 		instanceof ScriptTag); 
 		// Check the data in the applet tag 
 		ScriptTag scriptTag = (ScriptTag)node[1];
-		assertStringEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
+        String s = scriptTag.getScriptCode();
+		assertStringEquals("Expected Script Code",testHTML2,s); 
 	}
 	
 	public void testScanScriptWithLinks() throws ParserException
@@ -170,7 +171,7 @@ public class ScriptScannerTest extends ParserTestCase
 		// Check the data in the applet tag 
 		ScriptTag scriptTag = (ScriptTag)node[0];
 		String scriptCode = scriptTag.getScriptCode();	  
-		String expectedCode = "\r\n<!--\r\n"+
+		String expectedCode = "<!--\r\n"+
 						  "  function validateForm()\r\n"+
 						  "  {\r\n"+
 						  "     var i = 10;\r\n"+
@@ -178,7 +179,7 @@ public class ScriptScannerTest extends ParserTestCase
 						  "     i = i - 1 ; \r\n"+
 						  "     return true;\r\n"+
 						  "  }\r\n"+
-						  "// -->\r\n";
+						  "// -->";
 		assertStringEquals("Expected Code",expectedCode,scriptCode);
 	}
 	
@@ -544,5 +545,15 @@ public class ScriptScannerTest extends ParserTestCase
 		parser.addScanner(new ScriptScanner("-s"));
 		parseAndAssertNodeCount(1);
 	}
-	
+
+    /**
+     * See bug #741769 ScriptScanner doesn't handle quoted </script> tags
+     */
+	public void testScanQuotedEndTag() throws ParserException	{
+		createParser("<SCRIPT language=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>");
+		parser.addScanner(new ScriptScanner("-s"));
+		parseAndAssertNodeCount(1);
+        String s = node[0].toHtml ();
+        assertEquals ("Parse error","<SCRIPT LANGUAGE=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>",s);
+	}
 }

@@ -37,13 +37,7 @@ public class StringParser {
 	private final static int PARSE_HAS_BEGUN_STATE=1;
 	private final static int PARSE_COMPLETED_STATE=2;	
 	private final static int PARSE_IGNORE_STATE=3;
-	private boolean ignoreStateMode=false;
 
-	
-	public Node find(NodeReader reader,String input,int position) {
-		return find(reader, input, position, ignoreStateMode);	
-	}
-	
     /**
      * Returns true if the text at <code>pos</code> in <code>line</code> should be scanned as a tag.
      * Basically an open angle followed by a known special character or a letter.
@@ -75,10 +69,10 @@ public class StringParser {
 	 * @param reader HTML reader to be provided so as to allow reading of next line
 	 * @param input Input String
 	 * @param position Position to start parsing from
-	 * @param ignoreStateMode enter ignoring state - if set, will enter ignoring
-	 * state on encountering apostrophes
+	 * @param balance_quotes If <code>true</code> enter ignoring state on
+     * encountering quotes.
 	 */		
-	public Node find(NodeReader reader,String input,int position, boolean ignoreStateMode)
+	public Node find(NodeReader reader,String input,int position, boolean balance_quotes)
 	{
 		StringBuffer textBuffer = new StringBuffer();
 		int state = BEFORE_PARSE_BEGINS_STATE;
@@ -86,6 +80,7 @@ public class StringParser {
 		int textEnd=position;
 		int inputLen = input.length();
 		char ch;
+        char ignore_ender = '\"';
 		for (int i=position;(i<inputLen && state!=PARSE_COMPLETED_STATE);i++)
 		{
 			ch  = input.charAt(i);
@@ -97,13 +92,18 @@ public class StringParser {
                     textEnd=i-1;
                 }
 			}
-			if (ignoreStateMode && (ch=='\'' || ch=='"')) {
-				if (state==PARSE_IGNORE_STATE) state=PARSE_HAS_BEGUN_STATE;
-				else {
-					if (input.charAt(i+1)=='<')
-						state = PARSE_IGNORE_STATE;
+			if (balance_quotes && (ch=='\'' || ch=='"'))
+            {
+				if (state==PARSE_IGNORE_STATE)
+                {
+                    if (ch == ignore_ender)
+                        state=PARSE_HAS_BEGUN_STATE;
+                }
+				else
+                {
+                    ignore_ender = ch;
+                    state = PARSE_IGNORE_STATE;
 				}
-				
 			}					
 			if (state==BEFORE_PARSE_BEGINS_STATE)
 			{
@@ -139,12 +139,4 @@ public class StringParser {
 		}
 		return new StringNode(textBuffer,textBegin,textEnd);
 	}
-	
-	public boolean isIgnoreStateMode() {
-		return ignoreStateMode;
-	}
-
-	public void setIgnoreStateMode(boolean ignoreStateMode) {
-		this.ignoreStateMode = ignoreStateMode;
-	}	
 }

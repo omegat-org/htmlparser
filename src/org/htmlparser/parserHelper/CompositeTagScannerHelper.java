@@ -50,13 +50,15 @@ public class CompositeTagScannerHelper {
 	private boolean endTagFound;
 	private int startingLineNumber;
 	private int endingLineNumber;
+	private boolean balance_quotes;
 	
 	public CompositeTagScannerHelper(
 		CompositeTagScanner scanner,
 		Tag tag, 
 		String url, 
 		NodeReader reader,
-		String currLine) {
+		String currLine,
+        boolean balance_quotes) {
 		
 		this.scanner = scanner;
 		this.tag = tag;
@@ -66,8 +68,9 @@ public class CompositeTagScannerHelper {
 		this.endTag = null;
 		this.nodeList = new NodeList();
 		this.endTagFound = false;
+        this.balance_quotes = balance_quotes;
 	}
-		
+
 	public Tag scan() throws ParserException {
 		this.startingLineNumber = reader.getLastLineNumber();
 		if (shouldCreateEndTagAndExit()) {
@@ -79,7 +82,7 @@ public class CompositeTagScannerHelper {
 		doEmptyXmlTagCheckOn(currentNode);
 		if (!endTagFound) { 
 			do {
-				currentNode = reader.readElement();
+				currentNode = reader.readElement(balance_quotes);
 				if (currentNode==null) continue; 
 				currLine = reader.getCurrentLine();
 				if (currentNode instanceof Tag) 
