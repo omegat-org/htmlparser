@@ -37,7 +37,8 @@ import org.htmlparser.Node;
  * manner, without needing to do class casts for Node.
  * @author Somik Raha
  */
-public interface SimpleNodeIterator {
+public interface SimpleNodeIterator extends NodeIterator
+{
 	/**
 	 * Check if more nodes are available.
 	 * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will

@@ -62,8 +62,18 @@ public abstract class CompositeTag extends Tag {
 	public NodeList getChildren() {
 		return childTags;
 	}
-	
-	public String toPlainTextString() {
+
+    /**
+     * Return the child tags as an iterator.
+     * Equivalent to calling getChildren ().elements ().
+     * @return An iterator over the children.
+     */
+	public SimpleNodeIterator elements()
+    {
+        return (getChildren ().elements ());
+    }
+
+    public String toPlainTextString() {
 		StringBuffer stringRepresentation = new StringBuffer();
 		for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
 			stringRepresentation.append(e.nextNode().toPlainTextString());
