@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.htmlparser.parserHelper.*;
 import org.htmlparser.tags.*;
-import org.htmlparser.tags.data.*;
 
 public class Attributes extends ColumnFixture {
 	private AttributeParser attParser = new AttributeParser();
@@ -27,8 +26,7 @@ public class Attributes extends ColumnFixture {
 	}
 
 	public void execute() throws Exception {
-		Tag tag = new Tag(new TagData(0, 0, 0, 0, tagContents, null, null, false));
-		table = attParser.parseAttributes(tag);
+		table = attParser.parseAttributes(tagContents);
 	}
 
 	public void wrong (Parse cell, String actual) {

@@ -898,17 +898,9 @@ public class Parser
 	 */
 	public NodeIterator elements() throws ParserException
     {
-        boolean remove_scanner;
-        Node node;
-        MetaTag meta;
-        String httpEquiv;
-        String charset;
-        boolean restart;
-        EndTag end;
+        boolean remove_scanner = false;
         IteratorImpl ret;
 
-        remove_scanner = false;
-        restart = false;
         ret = new IteratorImpl (reader, resourceLocn, feedback);
   		ret = createIteratorImpl(remove_scanner, ret);
 
