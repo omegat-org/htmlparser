@@ -28,7 +28,9 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import org.htmlparser.scanners.HTMLOptionTagScanner;
 import org.htmlparser.scanners.HTMLSelectTagScanner;
+import org.htmlparser.tags.HTMLOptionTag;
 import org.htmlparser.tags.HTMLSelectTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
@@ -38,8 +40,8 @@ public class HTMLSelectTagScannerTest extends HTMLParserTestCase
 {
 	
 	private String testHTML = new String(
-									"<Select name=\"Remarks\">The intervention by the UN proved beneficial</Select>" +
-									"<Select>The capture of the Somali warloard was elusive</Select>" +
+									"<Select name=\"Remarks\">" +										"<option value='option1'>option1</option>" +									"</Select>" +
+									"<Select name=\"something\">" +										"<option value='option2'>option2</option>" +									"</Select>" +
 									"<Select></Select>" +
 									"<Select name=\"Remarks\">The death threats of the organization\n" +
 									"refused to intimidate the soldiers</Select>" +
@@ -60,7 +62,9 @@ public class HTMLSelectTagScannerTest extends HTMLParserTestCase
 		createParser(testHTML,"http://www.google.com/test/index.html");
 		scanner = new HTMLSelectTagScanner("-ta");
 		parser.addScanner(scanner);
-	
+		parser.addScanner(new HTMLOptionTagScanner(""));
+		
+		
 		parseAndAssertNodeCount(5);
 	 	assertTrue(node[0] instanceof HTMLSelectTag);
 	 	assertTrue(node[1] instanceof HTMLSelectTag);
@@ -74,5 +78,11 @@ public class HTMLSelectTagScannerTest extends HTMLParserTestCase
 			HTMLSelectTag SelectTag = (HTMLSelectTag) node[j];
 			assertEquals("Select Scanner",scanner,SelectTag.getThisScanner());
 		}
+		
+		HTMLSelectTag selectTag = (HTMLSelectTag)node[0];
+		HTMLOptionTag [] optionTags = selectTag.getOptionTags();
+		assertEquals("option tag array length",1,optionTags.length);
+		assertEquals("option tag value","option1",optionTags[0].getValue());
 	}
+	
 }

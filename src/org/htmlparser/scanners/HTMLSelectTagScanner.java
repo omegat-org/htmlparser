@@ -42,7 +42,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 public class HTMLSelectTagScanner extends HTMLCompositeTagScanner
 {
 	private static final String MATCH_NAME [] = {"SELECT"};
-	private List optionTags = new ArrayList();
+	private List optionTags;
 		
 	public HTMLSelectTagScanner()
 	{
@@ -68,6 +68,10 @@ public class HTMLSelectTagScanner extends HTMLCompositeTagScanner
 	protected void childNodeEncountered(HTMLNode node) {
 		if (node instanceof HTMLOptionTag)
 			optionTags.add(node);
+	}
+
+	protected void beforeScanningStarts() {
+		optionTags = new ArrayList();
 	}
 
 }

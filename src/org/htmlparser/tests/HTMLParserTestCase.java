@@ -134,8 +134,8 @@ public class HTMLParserTestCase extends TestCase {
 		displayMessage = "\n\n"+displayMessage+
 		"\n\nExpected XML:\n"+expected+
 		"\n\nActual XML:\n"+result;
-		expected = HTMLParserUtils.removeEscapeCharacters(expected);
-		result   = HTMLParserUtils.removeEscapeCharacters(result);
+		expected = removeEscapeCharacters(expected);
+		result   = removeEscapeCharacters(result);
 		HTMLParser expectedParser = HTMLParser.createParser(expected);
 		HTMLParser resultParser   = HTMLParser.createParser(result);
 		HTMLNode expectedNode, actualNode;
@@ -144,7 +144,10 @@ public class HTMLParserTestCase extends TestCase {
 			expectedNode = e.nextNode();
 			actualNode   = actualEnumeration.nextNode();
 			assertEquals(
-				"the two nodes should be the same type",
+				"the two nodes should be the same type\n"+
+				"expected node:"+expectedNode.toHTML()+"\n"+
+				"  actual node:"+actualNode.toHTML()+
+				displayMessage,
 				expectedNode.getClass().getName(),
 				actualNode.getClass().getName()
 			);
@@ -235,4 +238,10 @@ public class HTMLParserTestCase extends TestCase {
 		}
 	}
 
+	public String removeEscapeCharacters(String inputString) {
+		inputString = inputString.replaceAll("\r","");
+		inputString = inputString.replaceAll("\n","");
+		inputString = inputString.replaceAll("\t","");
+		return inputString;
+	}	
 }

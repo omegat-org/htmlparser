@@ -31,6 +31,7 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 	
 	public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currLine)
 		throws HTMLParserException {
+		beforeScanningStarts();
 		HTMLTag startTag = tag;
 		HTMLTag endTag = null;
 		boolean endTagFound = false;
@@ -74,6 +75,8 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 				startTag,endTag,childVector
 			)
 		);
+	}
+	protected void beforeScanningStarts() {
 	}
 	
 	protected void childNodeEncountered(HTMLNode node) {
