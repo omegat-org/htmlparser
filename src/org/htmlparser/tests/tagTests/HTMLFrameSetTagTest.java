@@ -38,6 +38,7 @@ import org.htmlparser.HTMLReader;
 import org.htmlparser.scanners.HTMLFrameScanner;
 import org.htmlparser.scanners.HTMLFrameSetScanner;
 import org.htmlparser.tags.HTMLFrameSetTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -45,35 +46,23 @@ import org.htmlparser.util.HTMLParserException;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class HTMLFrameSetTagTest extends TestCase {
+public class HTMLFrameSetTagTest extends HTMLParserTestCase {
 
-	/**
-	 * Constructor for HTMLFrameSetTagTest.
-	 * @param arg0
-	 */
-	public HTMLFrameSetTagTest(String arg0) {
-		super(arg0);
+	public HTMLFrameSetTagTest(String name) {
+		super(name);
 	}
+
 	public void testToHTML() throws HTMLParserException{
-		String testHTML = new String(
+		createParser(
 		"<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+ 
   			"<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"+
 	  		"<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n"+
 		"</frameset>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLFrameSetScanner(""));
 		parser.addScanner(new HTMLFrameScanner(""));
 		
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 nodes identified",1,i);	
+		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be End Tag",node[0] instanceof HTMLFrameSetTag);
 		HTMLFrameSetTag frameSetTag = (HTMLFrameSetTag)node[0];
 		assertEquals("HTML Contents",
@@ -82,10 +71,6 @@ public class HTMLFrameSetTagTest extends TestCase {
 	  		"<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\r\n"+
 		"</FRAMESET>",
 		frameSetTag.toHTML());
-		
-	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLFrameSetTagTest.class);
 	}
 }
 
