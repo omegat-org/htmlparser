@@ -1035,6 +1035,7 @@ public class HTMLParser
 		addScanner(new HTMLFormScanner("-f"));
 		addScanner(new HTMLFrameSetScanner("-r"));	
 		addScanner(linkScanner.createBaseHREFScanner("-b"));
+		addScanner(new SpanScanner("-p"));
 		//addScanner(new TableScanner(this));
 	}
 	
