@@ -72,6 +72,7 @@ public class HTMLParameterParser {
         StringTokenizer token = new StringTokenizer(tag.getText() + " ",delim,true);
         while (token.hasMoreTokens()) {
             st = token.nextToken();
+            
             //
             // First let's combine tokens that are inside "" or ''
             //
@@ -101,6 +102,7 @@ public class HTMLParameterParser {
             if (delim.indexOf(t)>=0) {
                 // t was a delimiter
                 if (waitingForValue) {
+					
                     if (t.equals("=")) {
                         // here set to receive next value of parameter
                         waitingForValue=false;

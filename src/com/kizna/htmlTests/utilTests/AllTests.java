@@ -30,7 +30,9 @@
 // Fax : +81-3-5449-4870
 // Website : www.kizna.com
 
-package com.kizna.htmlTests;
+package com.kizna.htmlTests.utilTests;
+
+
 import junit.framework.TestSuite;
 /**
  * Insert the type's description here.
@@ -57,11 +59,8 @@ public static void main(String[] args) {
 public static TestSuite suite() {
 	TestSuite suite = new TestSuite();
 	
-	suite.addTest(HTMLStringNodeTest.suite());
-	suite.addTest(HTMLRemarkNodeTest.suite());
-	suite.addTest(com.kizna.htmlTests.scannersTests.AllTests.suite());
-	suite.addTest(com.kizna.htmlTests.utilTests.AllTests.suite());
-	suite.addTest(com.kizna.htmlTests.tagTests.AllTests.suite());
+	suite.addTest(HTMLLinkProcessorTest.suite());
+	suite.addTest(HTMLParameterParserTest.suite());	
 	return suite;
 } 
 }
