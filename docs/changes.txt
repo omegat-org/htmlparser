@@ -4,6 +4,7 @@ Integration Build 1.2 - 20020721
 skip some wierd Microsoft tags (endif)
 [2] Fixed a deep bug in HTMLTag.java, the parser would crash
 on http://www.cybergeo.presse.fr/culture/weili/weili.htm
+[3] Fixed bug in HTMLTagScanner.java, in absorbLeadingBlanks()
 
 Integration Build 1.2 - 20020707
 --------------------------------
