@@ -48,6 +48,12 @@ public class HTMLTitleScannerTest extends HTMLParserTestCase {
 		super(arg0);
 	}
 
+	public static TestSuite suite() 
+	{
+		TestSuite suite = new TestSuite(HTMLTitleScannerTest.class);
+		return suite;
+	}	
+
 	public void testEvaluate() {
 		HTMLTitleScanner scanner = new HTMLTitleScanner("-t");
 		boolean retVal = scanner.evaluate("TITLE",null);
