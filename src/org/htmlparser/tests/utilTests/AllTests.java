@@ -109,21 +109,23 @@ public AllTests(String name) {
         }
 	}
 
-/**
- * Insert the method's description here.
- * Creation date: (6/17/2001 6:07:15 PM)
- * @return junit.framework.TestSuite
- */
-public static TestSuite suite() {
-	TestSuite suite = new TestSuite("Utility Tests");
-	
-	suite.addTestSuite(BeanTest.class);
-	suite.addTestSuite(CharacterTranslationTest.class);
-	suite.addTestSuite(HTMLLinkProcessorTest.class);
-    suite.addTestSuite(HTMLParserUtilsTest.class);
-	suite.addTestSuite(HTMLTagParserTest.class);
-	suite.addTestSuite(NodeListTest.class);
+    /**
+     * Insert the method's description here.
+     * Creation date: (6/17/2001 6:07:15 PM)
+     * @return junit.framework.TestSuite
+     */
+    public static TestSuite suite()
+    {
+        TestSuite suite = new TestSuite("Utility Tests");
 
-	return suite;
-} 
+        suite.addTestSuite(BeanTest.class);
+        suite.addTestSuite(CharacterTranslationTest.class);
+        suite.addTestSuite(HTMLLinkProcessorTest.class);
+        suite.addTestSuite(HTMLParserUtilsTest.class);
+        suite.addTestSuite(HTMLTagParserTest.class);
+        suite.addTestSuite(NodeListTest.class);
+        suite.addTestSuite(SortTest.class);
+
+        return suite;
+    } 
 }

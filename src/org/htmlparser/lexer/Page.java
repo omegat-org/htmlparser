@@ -34,9 +34,12 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import org.htmlparser.util.ParserException;
 
 /**
  * Represents the contents of an HTML page.
@@ -78,12 +81,7 @@ public class Page
     /**
      * Character positions of the first character in each line.
      */
-    protected int mIndex[];
-
-    /**
-     * The index position to be used next.
-     */
-    protected int mIndexLength;
+    protected PageIndex mIndex;
 
     /**
      * Messages for page not there (404).
@@ -108,22 +106,41 @@ public class Page
      * method will be called so it need not be connected yet.
      * @exception IOException If an i/o exception occurs creating the
      * source.
-     * @exception UnsupportedEncodingException if the character set specified in the
+     * @exception ParserException An exception object wrapping a number of
+     * possible error conditions, some of which are outlined below.
+     * UnsupportedEncodingException if the character set specified in the
      * HTTP header is not supported.
      */
-    public Page (URLConnection connection)
-        throws
-            IOException,
-            UnsupportedEncodingException
+    public Page (URLConnection connection) throws ParserException
+//        throws
+//            IOException,
+//            UnsupportedEncodingException
     {
         if (null == connection)
             throw new IllegalArgumentException ("connection cannot be null");
-        connection.connect ();
-        mSource = new Source (new Stream (connection.getInputStream ()), getCharacterSet (connection));
+        try
+        {
+            connection.connect ();
+        }
+        catch (UnknownHostException uhe)
+        {
+            throw new ParserException ("the host (" + connection.getURL ().getHost () + ") was not found", uhe);
+        }
+        catch (IOException ioe)
+        {
+            throw new ParserException ("oops", ioe);
+        }
+        try
+        {
+            mSource = new Source (new Stream (connection.getInputStream ()), getCharacterSet (connection));
+        }
+        catch (IOException ioe)
+        {
+            throw new ParserException ("oops2", ioe);
+        }
         mCharacters = null;
         mString = null;
-        mIndex = null;
-        mIndexLength = 0;
+        mIndex = new PageIndex (this);
     }
 
     /**
@@ -167,7 +184,7 @@ public class Page
      * the name to findCharset() to render it into canonical form.
      * If the charset parameter is not found in the given string, the default
      * character set is returned.
-     * @see ParserHelper#findCharset
+     * @see #findCharset
      * @see #DEFAULT_CHARSET
      */
     protected String getCharset (String content)
