@@ -238,10 +238,10 @@ public class HTMLParserTestCase extends TestCase {
 		}
 	}
 
-	public String removeEscapeCharacters(String inputString) {
-		inputString = inputString.replaceAll("\r","");
-		inputString = inputString.replaceAll("\n","");
-		inputString = inputString.replaceAll("\t","");
+	public static String removeEscapeCharacters(String inputString) {
+		inputString = HTMLParserUtils.removeChars(inputString,'\r');
+		inputString = HTMLParserUtils.removeChars(inputString,'\n');
+		inputString = HTMLParserUtils.removeChars(inputString,'\t');
 		return inputString;
-	}	
+	}		
 }
