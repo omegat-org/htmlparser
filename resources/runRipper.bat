@@ -1,0 +1,1 @@
+java -classpath ..\lib\htmlparser.jar com.kizna.html.parserapplications.MailRipper %1 %2

@@ -1,0 +1,1 @@
+java -classpath ..\lib\htmlparser.jar com.kizna.html.parserapplications.Robot %1 %2
