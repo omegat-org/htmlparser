@@ -22,7 +22,7 @@ Contents of the distribution
 
   (v) license.txt (GNU Lesser General Public License)
 
- (vi) this file, release.txt
+ (vi) this file, readme.txt
 
 Changes since Version 1.4
 -------------------------

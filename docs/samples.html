@@ -25,7 +25,7 @@
     </td>
     <td>
     <i>Parse a web page and print the tags in a simple loop.</i><br>
-    <a href="../javadoc/org/htmlparser/Parser.html#main(java.lang.String[])" target="_parent">org.htmlparser.Parser.main(String[] args)</a>
+    <a href="javadoc/org/htmlparser/Parser.html#main(java.lang.String[])" target="_parent">org.htmlparser.Parser.main(String[] args)</a>
     <pre>
     <code>bin/parser http://website_url [tag_name]</code>
     where tag_name is an optional tag name to be used as a filter, i.e.
@@ -35,7 +35,31 @@
     NOTE: this is also the default program for the htmlparser.jar, so the above could be:
     <code>java -jar lib/htmlparser.jar http://website_url [tag_name]</code>
     </pre>
-	</td>
+    </td>
+  </tr>
+  <tr> 
+    <td valign="top">
+    <strong>Lexer</strong><br>
+    </td>
+    <td>
+    <i>Print the low level nodes of a web page.</i><br>
+    <a href="javadoc/org/htmlparser/lexer/Lexer.html" target="_parent">org.htmlparser.lexer.Lexer</a>
+    <pre>
+    <code>bin/lexer http://website_url</code>
+    </pre>
+    </td>
+  </tr>
+  <tr> 
+    <td valign="top">
+    <strong>Filter Builder</strong><br>
+    </td>
+    <td>
+    <i>Interactively generate source code to extract web site contents.</i><br>
+    <a href="javadoc/org/htmlparser/parserapplications/filterbuilder/FilterBuilder.html" target="_parent">org.htmlparser.parserapplications.filterbuilder.FilterBuilder</a>
+    <pre>
+    <code>bin/filterbuilder</code>
+    </pre>
+    </td>
   </tr>
   <tr> 
     <td valign="top">
@@ -43,12 +67,12 @@
     </td>
     <td>
     <i>Extract links/mail addresses from a web page.</i><br>
-    <a href="../javadoc/org/htmlparser/parserapplications/LinkExtractor.html" target="_parent">org.htmlparser.parserapplications.LinkExtractor</a>
+    <a href="javadoc/org/htmlparser/parserapplications/LinkExtractor.html" target="_parent">org.htmlparser.parserapplications.LinkExtractor</a>
     <pre>
     <code>bin/linkextractor http://website_url [-maillinks]</code>
     the optional -maillinks argument causes mailto: links to be printed
     </pre>
-	</td>
+    </td>
   </tr>
   <tr> 
     <td valign="top">
@@ -56,12 +80,12 @@
     </td>
     <td>
     <i>Extract text from a web page.</i><br>
-    <a href="../javadoc/org/htmlparser/parserapplications/StringExtractor.html" target="_parent">org.htmlparser.parserapplications.StringExtractor</a>
+    <a href="javadoc/org/htmlparser/parserapplications/StringExtractor.html" target="_parent">org.htmlparser.parserapplications.StringExtractor</a>
     <pre>
     <code>bin/stringextractor http://website_url [-links]</code>
     the optional -links argument causes hyperlinks to be shown within the text
     </pre>
-	</td>
+    </td>
   </tr>
   <tr> 
     <td valign="top">
@@ -69,13 +93,13 @@
     </td>
     <td>
     <i>Save a web site locally.</i><br>
-    <a href="../javadoc/org/htmlparser/parserapplications/SiteCapturer.html" target="_parent">org.htmlparser.parserapplications.SiteCapturer</a>
+    <a href="javadoc/org/htmlparser/parserapplications/SiteCapturer.html" target="_parent">org.htmlparser.parserapplications.SiteCapturer</a>
     <pre>
     <code>bin/sitecapturer http://source_website /target_directory/ [true|false]</code>
     the optional boolean argument determines whether resources such as images,
     audio and video are to be captured
     </pre>
-	</td>
+    </td>
   </tr>
   <tr> 
     <td valign="top">
@@ -83,11 +107,11 @@
     </td>
     <td>
     <i>View images behind thumbnails.</i><br>
-    <a href="../javadoc/org/htmlparser/lexerapplications/thumbelina/package-summary.html" target="_parent">org.htmlparser.lexerapplications.thumbelina.Thumbelina</a>
+    <a href="javadoc/org/htmlparser/lexerapplications/thumbelina/package-summary.html" target="_parent">org.htmlparser.lexerapplications.thumbelina.Thumbelina</a>
     <pre>
     <code>bin/thumbelina [http://starting_website]</code>
     </pre>
-	</td>
+    </td>
   </tr>
   <tr> 
     <td valign="top">
@@ -95,11 +119,23 @@
     </td>
     <td>
     <i>Parser Java Bean demo.</i><br>
-    <a href="../javadoc/org/htmlparser/beans/BeanyBaby.html" target="_parent">org.htmlparser.beans.BeanyBaby</a>
+    <a href="javadoc/org/htmlparser/beans/BeanyBaby.html" target="_parent">org.htmlparser.beans.BeanyBaby</a>
     <pre>
     <code>bin/beanybaby [http://starting_website]</code>
     </pre>
-	</td>
+    </td>
+  </tr>
+  <tr> 
+    <td valign="top">
+    <strong>Translate</strong><br>
+    </td>
+    <td>
+    <i>Numeric character reference and character entity reference to unicode codec.</i><br>
+    <a href="javadoc/org/htmlparser/util/Translate.html" target="_parent">org.htmlparser.util.Translate</a>
+    <pre>
+    <code>bin/translate [-encode] &lt;input_file &gt;output_file</code>
+    </pre>
+    </td>
   </tr>
 </table>
 </body>
