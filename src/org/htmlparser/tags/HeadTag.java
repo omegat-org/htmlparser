@@ -31,16 +31,19 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+/**
+ * A head tag.
+ */
+public class HeadTag extends CompositeTag
+{
 
-public class HeadTag extends CompositeTag {
-
-    public HeadTag(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData, compositeTagData);
+    public HeadTag ()
+    {
+        setTagName ("HEAD");
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "HEAD: " + super.toString();
     }
 }

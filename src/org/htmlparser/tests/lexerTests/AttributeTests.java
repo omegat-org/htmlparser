@@ -37,7 +37,6 @@ import org.htmlparser.Parser;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.PageAttribute;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;

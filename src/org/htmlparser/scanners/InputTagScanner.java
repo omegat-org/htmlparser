@@ -28,9 +28,10 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
 public class InputTagScanner extends TagScanner
@@ -51,9 +52,16 @@ public class InputTagScanner extends TagScanner
         return ids;
     }
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException {
-        return new InputTag(tagData);
-    }
+    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    {
+        InputTag ret;
 
+        ret = new InputTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+
+        return (ret);
+    }
 }

@@ -29,35 +29,50 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 /**
- * Scans body tags.
+ * Scanner for body tags.
  */
-public class BodyScanner extends CompositeTagScanner {
+public class BodyScanner extends CompositeTagScanner
+{
     private static final String MATCH_NAME [] = {"BODY"};
     private static final String ENDERS [] = {};
     private static final String END_TAG_ENDERS [] = {"HTML"};
 
-    public BodyScanner() {
+    public BodyScanner()
+    {
         this("");
     }
 
-    public BodyScanner(String filter) {
+    public BodyScanner(String filter)
+    {
         super(filter,MATCH_NAME,ENDERS,END_TAG_ENDERS,false);
     }
 
-    public String [] getID() {
+    public String [] getID()
+    {
         return MATCH_NAME;
     }
 
-    public Tag createTag(
-        TagData tagData,
-        CompositeTagData compositeTagData) {
-        return new BodyTag(tagData,compositeTagData);
-    }
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        BodyTag ret;
 
+        ret = new BodyTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
+    }
 }

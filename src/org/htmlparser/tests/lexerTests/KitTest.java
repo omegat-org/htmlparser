@@ -43,7 +43,7 @@ import org.htmlparser.Node;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.lexer.nodes.AbstractNode;
+import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.util.ParserException;
@@ -607,6 +607,11 @@ public class KitTest extends ParserCallback
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.5  2003/10/20 01:28:03  derrickoswald
+ * Removed lexer level AbstractNode.
+ * Removed data package from parser level tags.
+ * Separated tag creation from recursion in NodeFactory interface.
+ *
  * Revision 1.4  2003/09/10 03:38:24  derrickoswald
  * Add style checking target to ant build script:
  *     ant checkstyle

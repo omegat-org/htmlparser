@@ -29,30 +29,23 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.TagData;
-
 /**
  * The HTML Document Declaration Tag can identify &lt;&#33;DOCTYPE&gt; tags.
  */
 public class DoctypeTag extends Tag
 {
-    /**
-     * The HTMLDoctypeTag is constructed by providing the beginning posn, ending posn
-     * and the tag contents.
-     * @param tagData The data for this tag.
-     */
-    public DoctypeTag(TagData tagData)
+    public DoctypeTag ()
     {
-        super(tagData);
+        setTagName ("!DOCTYPE");
     }
+
     /**
-     * Print the contents of the remark tag.
+     * Print the contents of the document declaration tag.
      */
     public String toString()
     {
-        return "Doctype Tag : "+getTagContents()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
-    }
-    public String toHtml() {
-        return "<!DOCTYPE "+getTagContents()+">";
+        String guts = toHtml();
+        guts = guts.substring (1, guts.length () - 2);
+        return "Doctype Tag : "+guts+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
     }
 }

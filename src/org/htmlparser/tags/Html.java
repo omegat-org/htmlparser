@@ -28,13 +28,14 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+/**
+ * A html tag.
+ */
+public class Html extends CompositeTag
+{
 
-public class Html extends CompositeTag {
-
-    public Html(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData, compositeTagData);
+    public Html ()
+    {
+        setTagName ("HTML");
     }
-
 }

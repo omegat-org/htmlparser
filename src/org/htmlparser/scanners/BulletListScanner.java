@@ -29,39 +29,59 @@
 package org.htmlparser.scanners;
 
 import java.util.Stack;
+import java.util.Vector;
 
 import org.htmlparser.Parser;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.BulletList;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
-
-public class BulletListScanner extends CompositeTagScanner {
+/**
+ * Scanner for bullet lists.
+ * Handles both UL and OL tags.
+ */
+public class BulletListScanner extends CompositeTagScanner
+{
     private static final String [] MATCH_STRING = { "UL", "OL" };
     private final static String ENDERS [] = { "BODY", "HTML" };
     private Stack ulli = new Stack();
 
-    public BulletListScanner(Parser parser) {
+    public BulletListScanner(Parser parser) 
+    {
         this("",parser);
     }
 
-    public BulletListScanner(String filter, Parser parser) {
+    public BulletListScanner(String filter, Parser parser)
+    {
         super(filter, MATCH_STRING, ENDERS);
         parser.addScanner(new BulletScanner("-bullet",ulli));
     }
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-        throws ParserException {
-        return new BulletList(tagData,compositeTagData);
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        BulletList ret;
+
+        ret = new BulletList ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
     }
 
-    public String[] getID() {
+    public String[] getID()
+    {
         return MATCH_STRING;
     }
 
-    public void beforeScanningStarts() {
+    public void beforeScanningStarts()
+    {
         ulli.push(this);
     }
 

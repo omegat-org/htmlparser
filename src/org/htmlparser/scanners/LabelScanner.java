@@ -31,10 +31,12 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.LabelTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 public class LabelScanner extends CompositeTagScanner {
     private static final String MATCH_NAME [] = {"LABEL"};
@@ -51,9 +53,19 @@ public class LabelScanner extends CompositeTagScanner {
         return MATCH_NAME;
     }
 
-    public Tag createTag(
-        TagData tagData,
-        CompositeTagData compositeTagData) {
-        return new LabelTag(tagData,compositeTagData);
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        LabelTag ret;
+
+        ret = new LabelTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
     }
 }

@@ -28,14 +28,13 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-
-
+/**
+ * A bullet tag.
+ */
 public class Bullet extends CompositeTag {
 
-    public Bullet(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData, compositeTagData);
+    public Bullet ()
+    {
+        setTagName ("LI");
     }
-
 }

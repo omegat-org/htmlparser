@@ -29,12 +29,13 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
 import org.htmlparser.tags.JspTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
 public class JspScanner extends TagScanner {
@@ -55,12 +56,16 @@ public class JspScanner extends TagScanner {
         return ids;
     }
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException
+    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
     {
-        tagData.setTagBegin (tagData.getTagBegin () + 1);
-        tagData.setTagEnd (tagData.getTagEnd () - 1);
-        return new JspTag(tagData);
+        JspTag ret;
+        
+        ret = new JspTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        
+        return (ret);
     }
-
 }

@@ -29,6 +29,7 @@
 
 package org.htmlparser.lexer.nodes;
 
+import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;

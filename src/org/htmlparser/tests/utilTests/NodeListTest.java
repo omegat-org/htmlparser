@@ -115,7 +115,7 @@ public class NodeListTest extends ParserTestCase {
     }
 
     private Node createHTMLNodeObject() {
-        Node node = new AbstractNode(10,20) {
+        Node node = new AbstractNode(null,10,20) {
             public void accept(Object visitor) {
             }
 

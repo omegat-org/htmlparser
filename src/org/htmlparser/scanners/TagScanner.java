@@ -40,14 +40,20 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserFeedback;
+
 /**
  * TagScanner is an abstract superclass which is subclassed to create specific
- * scanners, that operate on a tag's strings, identify it, and can extract data from it.
+ * scanners.
+ * This isn't much use other than creating a specific tag type since scanning
+ * is mostly done by the lexer level. If you want to match end tags and 
+ * handle special syntax between tags, then you'll probably want to subclass
+ * {@link CompositeTagScanner} instead. Use TagScanner when you have meta task
+ * to do like setting the BASE url for the page when a BASE tag is encountered.
  * <br>
  * If you wish to write your own scanner, then you must implement scan().
  * You MAY implement evaluate() as well, if your evaluation logic is not based on a simple text match.
@@ -235,6 +241,16 @@ public abstract class TagScanner
     }
 
     /**
+     * Override this method to create your own tag type
+     * @param tagData
+     * @param tag
+     * @param url
+     * @return Tag
+     * @throws ParserException
+     */
+    protected abstract Tag createTag(Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException;
+
+    /**
      * Scan the tag and extract the information related to this type. The url of the
      * initiating scan has to be provided in case relative links are found. The initial
      * url is then prepended to it to give an absolute link.
@@ -246,14 +262,7 @@ public abstract class TagScanner
      */
     public Tag scan(Tag tag,String url,Lexer lexer) throws ParserException
     {
-        TagData data;
-        
-        data = new TagData(
-            lexer.getPage (),
-            tag.elementBegin(),
-            tag.elementEnd(),
-            new Vector ());
-        return (createTag(data, tag, url));
+        return (createTag(lexer.getPage (), tag.elementBegin(), tag.elementEnd(), tag.getAttributesEx (), tag, url));
     }
 
     public String removeChars(String s,String occur)  {
@@ -303,16 +312,6 @@ public abstract class TagScanner
         newLine += currentLine.substring(node.elementBegin(),currentLine.length());
         return newLine;
     }
-
-    /**
-     * Override this method to create your own tag type
-     * @param tagData
-     * @param tag
-     * @param url
-     * @return Tag
-     * @throws ParserException
-     */
-    protected abstract Tag createTag(TagData tagData, Tag tag, String url) throws ParserException; 
 
 //    protected Tag getReplacedEndTag(Tag tag, NodeReader reader, String currentLine) {
 //        // Replace tag - it was a <A> tag - replace with </a>

@@ -29,46 +29,21 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
 /**
- * @author ili
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
-/**
  * Represents a FORM tag.
+ * @author ili
  */
 public class FormTag extends CompositeTag
 {
     public static final String POST="POST";
     public static final String GET="GET";
-    protected String formURL;
-    protected String formName;
-    protected String formMethod;
-    protected NodeList formInputList;
-    private NodeList textAreaList;
 
-    /**
-     * Constructor takes in tagData, compositeTagData, formTagData
-     * @param tagData
-     * @param compositeTagData
-     */
-    public FormTag(TagData tagData, CompositeTagData compositeTagData)
+    public FormTag ()
     {
-        super(tagData,compositeTagData);
-
-        this.formURL = compositeTagData.getStartTag().getAttribute("ACTION");
-        this.formName = compositeTagData.getStartTag().getAttribute("NAME");
-        this.formMethod = compositeTagData.getStartTag().getAttribute("METHOD");
-        this.formInputList = compositeTagData.getChildren().searchFor(InputTag.class, true);
-        this.textAreaList = compositeTagData.getChildren().searchFor(TextareaTag.class, true);
+        setTagName ("FORM");
     }
 
     /**
@@ -77,36 +52,50 @@ public class FormTag extends CompositeTag
      */
     public NodeList getFormInputs()
     {
-        return formInputList;
+        return (getChildren().searchFor(InputTag.class, true));
     }
 
     /**
      * Get the list of text areas.
-     * @return Textarea elements in the form
+     * @return Textarea elements in the form.
      */
     public NodeList getFormTextareas()
     {
-        return textAreaList;
+        return (getChildren().searchFor(TextareaTag.class, true));
     }
 
     /**
-     * @return String The url of the form
+     * Get the value of the action attribute.
+     * @return The submit url of the form.
      */
     public String getFormLocation()
     {
-        return formURL;
+        return (getAttribute("ACTION"));
     }
 
     /**
-     * Returns the method of the form
-     * @return String The method of the form (GET if nothing is specified)
+     * Set the form location. Modification of this element will cause the HTML rendering
+     * to change as well (in a call to toHTML()).
+     * @param url The new FORM location
      */
-    public String getFormMethod() {
-        if(formMethod==null)
-        {
-            formMethod = "GET";
-        }
-        return formMethod;
+    public void setFormLocation(String url)
+    {
+        setAttribute ("ACTION", url);
+    }
+
+    /**
+     * Returns the method of the form, GET or POST.
+     * @return String The method of the form (GET if nothing is specified).
+     */
+    public String getFormMethod()
+    {
+        String ret;
+        
+        ret = getAttribute("METHOD");
+        if (null == ret)
+            ret = GET;
+
+        return (ret);
     }
 
     /**
@@ -114,62 +103,62 @@ public class FormTag extends CompositeTag
      * @param name The name of the input tag to be retrieved
      * @return Tag The input tag corresponding to the name provided
      */
-    public InputTag getInputTag(String name) {
-        InputTag inputTag=null;
-        boolean found=false;
-        for (SimpleNodeIterator e = formInputList.elements();e.hasMoreNodes() && !found;) {
+    public InputTag getInputTag (String name)
+    {
+        InputTag inputTag;
+        boolean found;
+        String inputTagName;
+        
+        inputTag = null;
+        found = false;
+        for (SimpleNodeIterator e = getFormInputs().elements();e.hasMoreNodes() && !found;)
+        {
             inputTag = (InputTag)e.nextNode();
-            String inputTagName = inputTag.getAttribute("NAME");
-            if (inputTagName!=null && inputTagName.equalsIgnoreCase(name)) {
+            inputTagName = inputTag.getAttribute("NAME");
+            if (inputTagName!=null && inputTagName.equalsIgnoreCase(name))
                 found=true;
-            }
         }
         if (found)
-        return inputTag; else return null;
+            return (inputTag);
+        else
+            return (null);
     }
 
     /**
+     * Get the value of the name attribute.
      * @return String The name of the form
      */
-    public String getFormName() {
-        return formName;
-    }
-
-    /**
-     * Set the form location. Modification of this element will cause the HTML rendering
-     * to change as well (in a call to toHTML()).
-     * @param formURL The new FORM location
-     */
-    public void setFormLocation(String formURL) {
-        setAttribute ("ACTION", formURL);
-        this.formURL = formURL;
-    }
-
-    /**
-     * @return String The contents of the FormTag
-     */
-    public String toString() {
-        return "FORM TAG : Form at "+formURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    public String getFormName()
+    {
+        return (getAttribute("NAME"));
     }
 
     /**
      * Find the textarea tag matching the given name
      * @param name Name of the textarea tag to be found within the form
      */
-    public TextareaTag getTextAreaTag(String name) {
+    public TextareaTag getTextAreaTag(String name)
+    {
         TextareaTag textareaTag=null;
         boolean found = false;
-        for (SimpleNodeIterator e=textAreaList.elements();e.hasMoreNodes() && !found;) {
+        for (SimpleNodeIterator e=getFormTextareas ().elements();e.hasMoreNodes() && !found;)
+        {
             textareaTag = (TextareaTag)e.nextNode();
             String textAreaName = textareaTag.getAttribute("NAME");
-            if (textAreaName!=null && textAreaName.equals(name)) {
+            if (textAreaName!=null && textAreaName.equals(name))
                 found = true;
-            }
         }
         if (found)
-            return textareaTag;
+            return (textareaTag);
         else
-            return null;
+            return (null);
     }
 
+    /**
+     * @return A textual representation of the form tag.
+     */
+    public String toString()
+    {
+        return "FORM TAG : Form at "+getFormLocation()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
 }

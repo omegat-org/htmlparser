@@ -110,9 +110,8 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
         parseAndAssertNodeCount(numNodes);
         assertType("custom node",CustomTag.class,node[useNode]);
         CustomTag tag = (CustomTag)node[useNode];
-        assertEquals("start line", expectedStartLine, tag.tagData.getStartLine());
-        assertEquals("end line", expectedEndLine, tag.tagData.getEndLine());
-
+        assertEquals("start line", expectedStartLine, tag.getStartingLineNumber ());
+        assertEquals("end line", expectedEndLine, tag.getEndingLineNumber ());
     }
 
     public static TestSuite suite() {

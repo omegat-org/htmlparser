@@ -44,7 +44,6 @@ import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.IteratorImpl;
 import org.htmlparser.util.NodeIterator;
@@ -293,18 +292,20 @@ public class ParserTestCase extends TestCase {
         return "\n\n"+displayMessage+"\n\nComplete Xml\n************\nEXPECTED:\n"+expected+"\nACTUAL:\n"+actual;
     }
 
+    // TODO:
+    // Man, this is really screwed up.
     private void fixIfXmlEndTag (NodeIterator iterator, Node node)
     {
-        TagData data;
         if (node instanceof Tag)
         {
             Tag tag = (Tag)node;
             if (tag.isEmptyXmlTag())
             {
                 tag.setEmptyXmlTag (false);
-                data = new TagData
-                    ("/" + tag.getTagName (), tag.elementEnd (), new Vector (), "", false);
-                node = new Tag (data);
+//                data = new TagData
+//                    ("/" + tag.getTagName (), tag.elementEnd (), new Vector (), "", false);
+                node = new Tag (tag.getPage (), tag.getStartPosition (), tag.getEndPosition (), tag.getAttributesEx ());
+                //data.getTagBegin (), data.getTagEnd (), data.getAttributes ());
                 // cheat here and poink the new node into the iterator
                 ((IteratorImpl)iterator).push (node);
             }

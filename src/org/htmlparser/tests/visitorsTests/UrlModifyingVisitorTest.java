@@ -42,8 +42,8 @@ public class UrlModifyingVisitorTest extends ParserTestCase {
     // Note: links are only quoted if needed
     private static final String MODIFIED_HTML =
     "<HTML><BODY>" +
-        "<A HREF=localhost://mylink.html>" +
-        "<IMG SRC=localhost://mypic.jpg></A>" +
+        "<A HREF=\"localhost://mylink.html\">" +
+        "<IMG SRC=\"localhost://mypic.jpg\"></A>" +
         "<IMG SRC=\"localhost://my second image.gif\">" +
     "</BODY></HTML>";
 

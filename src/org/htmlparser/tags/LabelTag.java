@@ -31,20 +31,23 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-
-public class LabelTag extends CompositeTag {
-
-    public LabelTag(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData, compositeTagData);
+/**
+ * A label tag.
+ */
+public class LabelTag extends CompositeTag
+{
+    public LabelTag ()
+    {
+        setTagName ("LABEL");
     }
 
-    public String getLabel() {
+    public String getLabel()
+    {
         return toPlainTextString();
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "LABEL: "+getLabel();
     }
 }

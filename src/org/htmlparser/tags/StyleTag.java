@@ -28,40 +28,38 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-
 /**
- * A HTMLStyleTag represents a &lt;style&gt; tag
+ * A StyleTag represents a &lt;style&gt; tag.
  */
 public class StyleTag extends CompositeTag {
-    /**
-     * The HTMLStyleTag is constructed by providing the beginning posn, ending posn
-     * and the tag contents.
-     * @param tagData The data for this tag.
-     * @param compositeTagData The data for this composite tag.
-     */
-    public StyleTag(TagData tagData,CompositeTagData compositeTagData) {
-        super(tagData,compositeTagData);
+    
+    public StyleTag ()
+    {
+        setTagName ("STYLE");
     }
+
     /**
-     * Get the javascript code in this tag
-     * @return java.lang.String
+     * Get the style data in this tag.
+     * @return The HTML of the children of this tag.
      */
-    public java.lang.String getStyleCode() {
+    public String getStyleCode()
+    {
         return getChildrenHTML();
     }
+
     /**
-     * Print the contents of the javascript node
+     * Print the contents of the style node.
      */
     public String toString()
     {
+        String guts = toHtml();
+        guts = guts.substring (1, guts.length () - 2);
         StringBuffer sb = new StringBuffer();
         sb.append("Style Node : \n");
         sb.append("\n");
         sb.append("Code\n");
         sb.append("****\n");
-        sb.append(getTagContents ()+"\n");
+        sb.append(guts+"\n");
         return sb.toString();
     }
 }

@@ -29,11 +29,13 @@
 package org.htmlparser.scanners;
 
 import java.util.Stack;
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 public class OptionTagScanner extends CompositeTagScanner
 {
@@ -55,12 +57,26 @@ public class OptionTagScanner extends CompositeTagScanner
         return MATCH_NAME;
     }
 
-    public Tag createTag(
-        TagData tagData,
-        CompositeTagData compositeTagData) {
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        OptionTag ret;
+
+        // special step here...
+        // not sure why the recursion is tracked this way,
+        // rather than using the ENDERS and END_TAG_ENDERS arrays...
         if (!stack.empty () && (this == stack.peek ()))
             stack.pop ();
-        return new OptionTag(tagData,compositeTagData);
+
+        ret = new OptionTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
     }
 
     public void beforeScanningStarts ()

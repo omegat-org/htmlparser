@@ -28,38 +28,55 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
-public class BaseHrefScanner extends TagScanner {
+/**
+ * Scanner for base tags.
+ * Even though BASE is not a composite tag, this scanner is present to
+ * handle setting the base href which is referenced by other tags.
+ */
+public class BaseHrefScanner extends TagScanner
+{
     private LinkProcessor processor;
 
-    public BaseHrefScanner() {
+    public BaseHrefScanner()
+    {
         super();
     }
 
-    public BaseHrefScanner(String filter,LinkProcessor processor) {
+    public BaseHrefScanner(String filter,LinkProcessor processor)
+    {
         super(filter);
         this.processor = processor;
     }
 
-    public String [] getID() {
+    public String [] getID()
+    {
         String [] ids = new String[1];
         ids[0] = "BASE";
         return ids;
     }
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException {
-        String baseUrl = (String)tag.getAttribute("HREF");
-        String absoluteBaseUrl="";
-        if (baseUrl != null && baseUrl.length()>0) {
-            absoluteBaseUrl = LinkProcessor.removeLastSlash(baseUrl.trim());
-            processor.setBaseUrl(absoluteBaseUrl);
-        }
-        return new BaseHrefTag(tagData,absoluteBaseUrl);
+    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    {
+        BaseHrefTag ret;
+        
+        ret = new BaseHrefTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        
+        // special step here
+        // Need to set the base url for the current link processor,
+        // which can't be done in the tag because it doesn't have it.
+        processor.setBaseUrl (ret.getBaseUrl ());
+
+        return (ret);
     }
 }

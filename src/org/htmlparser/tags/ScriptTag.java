@@ -28,69 +28,72 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-
 /**
- * A HTMLScriptTag represents a JavaScript node
+ * A script tag.
  */
-public class ScriptTag extends CompositeTag {
-    private java.lang.String language;
-    private java.lang.String type;
-    private String scriptCode;
-    /**
-     * The HTMLScriptTag is constructed by providing the beginning posn, ending posn
-     * and the tag contents.
-     * @param tagData The data for this tag.
-     * @param compositeTagData The data for this composite tag.
-     */
-    public ScriptTag(TagData tagData,CompositeTagData compositeTagData)
+public class ScriptTag extends CompositeTag
+{
+    public ScriptTag ()
     {
-        super(tagData,compositeTagData);
-        this.scriptCode = getChildrenHTML();
-        this.language = getAttribute("LANGUAGE");
-        this.type = getAttribute("TYPE");
+        setTagName ("SCRIPT");
     }
 
-    public java.lang.String getLanguage() {
-        return language;
-    }
-
-    public java.lang.String getScriptCode() {
-        return scriptCode;
-    }
-
-    public java.lang.String getType() {
-        return type;
-    }
     /**
-     * Set the language of the javascript tag
-     * @param newLanguage java.lang.String
+     * Get the language attribute value.
      */
-    public void setLanguage(java.lang.String newLanguage) {
-        language = newLanguage;
-    }
-    /**
-     * Set the type of the javascript node
-     * @param newType java.lang.String
-     */
-    public void setType(java.lang.String newType) {
-        type = newType;
+    public String getLanguage()
+    {
+        return (getAttribute("LANGUAGE"));
     }
 
     /**
-     * Print the contents of the javascript node
+     * Get the contents of the tag's children.
+     */
+    public String getScriptCode()
+    {
+        return (getChildrenHTML ());
+    }
+
+    /**
+     * Get the type attribute value.
+     */
+    public String getType()
+    {
+        return (getAttribute("TYPE"));
+    }
+
+    /**
+     * Set the language of the script tag.
+     * @param language The new language value.
+     */
+    public void setLanguage (String language)
+    {
+        setAttribute ("LANGUAGE", language);
+    }
+
+    /**
+     * Set the type of the script tag.
+     * @param type The new type value.
+     */
+    public void setType (String type)
+    {
+        setAttribute ("TYPE", type);
+    }
+
+    /**
+     * Print the contents of the script tag.
      */
     public String toString()
     {
         StringBuffer sb = new StringBuffer();
         sb.append("Script Node : \n");
-        if (language!=null && type!=null)
-        if (language.length()!=0 || type.length()!=0)
+        if (getLanguage () != null || getType () != null)
         {
             sb.append("Properties -->\n");
-            if (language.length()!=0) sb.append("[Language : "+language+"]\n");
-            if (type!=null && type.length()!=0) sb.append("[Type : "+type+"]\n");
+            if (getLanguage () != null && getLanguage ().length () !=0)
+                sb.append("[Language : "+ getLanguage ()+"]\n");
+            if (getType () != null && getType ().length () != 0)
+                sb.append("[Type : "+ getType ()+"]\n");
         }
         sb.append("\n");
         sb.append("Code\n");

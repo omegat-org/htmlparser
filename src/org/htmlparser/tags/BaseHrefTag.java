@@ -29,32 +29,44 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.LinkProcessor;
 
 /**
- * @author Somik Raha
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
+ * BaseHrefTag represents an &lt;Base&gt; tag.
+ * It extends a basic tag by providing an accessor to the HREF attribute.
  */
-public class BaseHrefTag extends Tag {
-    private String baseUrl;
+public class BaseHrefTag extends Tag
+{
+    public BaseHrefTag ()
+    {
+        setTagName ("BASE");
+    }
 
-    public BaseHrefTag(TagData tagData, String baseUrl) {
-        super(tagData);
-        this.baseUrl = baseUrl;
+    /**
+     * Get the value of the HREF attribute, if any.
+     * @return The HREF value, with the last slash removed, if any.
+     */
+    public String getBaseUrl()
+    {
+        String base;
+
+        base = getAttribute ("HREF");
+        if (base != null && base.length() > 0)
+            base = LinkProcessor.removeLastSlash (base.trim());
+        base = (null == base) ? "" : base;
+        
+        return (base);
     }
-    public String getBaseUrl() {
-        return baseUrl;
+
+    public void setBaseUrl (String base)
+    {
+        setAttribute ("HREF", base);
     }
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-    public String toString() {
+
+    public String toString()
+    {
         return "BASE TAG\n"+
                 "--------\n"+
-                "Name : "+baseUrl;
+                "Name : "+getBaseUrl();
     }
 }

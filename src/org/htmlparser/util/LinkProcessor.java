@@ -60,8 +60,6 @@ public class LinkProcessor
      * @return The fully qualified URL or the original link if a failure occured.
      */
     public String extract (String link, String base)
-        throws
-            ParserException
     {
         String ret;
 

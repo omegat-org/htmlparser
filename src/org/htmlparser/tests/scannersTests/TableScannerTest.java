@@ -103,7 +103,7 @@ public class TableScannerTest extends ParserTestCase {
         TableRow tr = table.getRow(2);
         assertEquals("columns",1,tr.getColumnCount());
         TableColumn td = tr.getColumns()[0];
-        Node node = td.childAt(0);
+        Node node = td.childAt(1);
         assertType("node",TableTag.class,node);
         TableTag table2 = (TableTag)node;
         assertEquals("second table row count",1,table2.getRowCount());

@@ -28,32 +28,26 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.Node;
+import org.htmlparser.util.SimpleNodeIterator;
 
 /**
  * The JSP/ASP tags like &lt;%&#46;&#46;&#46;%&gt; can be identified by this class.
  */
 public class JspTag extends Tag
 {
-    /**
-     * The JspTag is constructed by providing the beginning posn, ending posn
-     * and the tag contents.
-     * @param tagData The data for this tag.
-     */
-    public JspTag(TagData tagData)
+    public JspTag ()
     {
-        super(tagData);
-    }
-
-    public String toHtml() {
-        return "<"+getTagContents()+">";
+        setTagName ("%");
     }
 
     /**
-     * Print the contents of the remark tag.
+     * Print the contents of the jsp tag.
      */
     public String toString()
     {
-        return "JSP/ASP Tag : "+getTagContents()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        String guts = toHtml();
+        guts = guts.substring (1, guts.length () - 2);
+        return "JSP/ASP Tag : "+guts+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
     }
 }

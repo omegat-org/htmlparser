@@ -34,16 +34,15 @@ import org.htmlparser.Parser;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
- * The ScriptScanner handles javascript code.
+ * The ScriptScanner handles script code.
  * It gathers all interior nodes into one undifferentiated string node.
  */
 public class ScriptScanner extends CompositeTagScanner {
@@ -67,10 +66,20 @@ public class ScriptScanner extends CompositeTagScanner {
         return MATCH_NAME;
     }
 
-    public Tag createTag(
-        TagData tagData,
-        CompositeTagData compositeTagData) {
-        return new ScriptTag(tagData,compositeTagData);
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        ScriptTag ret;
+
+        ret = new ScriptTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
     }
 
     /**
@@ -89,7 +98,6 @@ public class ScriptScanner extends CompositeTagScanner {
         StringNode last;
         Tag end;
         NodeFactory factory;
-        TagData data;
         Tag ret;
 
         done = false;
@@ -157,28 +165,9 @@ public class ScriptScanner extends CompositeTagScanner {
                 last = (StringNode)factory.createStringNode (lexer, position, position);
             // build new end tag if required
             if (null == end)
-            {
-                data =  new TagData(
-                    "/" + tag.getTagName (),
-                    tag.getEndPosition (),
-                    new Vector (),
-                    lexer.getPage ().getUrl (),
-                    false);
-                end = new Tag (data);
-//TODO: use the factory: end = factory.createTagNode (mLexer, last.getEndPosition (), last.getEndPosition () + 
-            }
-            data =  new TagData(
-                lexer.getPage (),
-                tag.elementBegin(),
-                end.elementEnd(),
-                tag.getAttributesEx (),
-                lexer.getPage ().getUrl (),
-                tag.isEmptyXmlTag ());
-
-            ret = createTag(
-                data,
-                new CompositeTagData(tag, end, new NodeList (last))
-                );
+                end = new Tag (lexer.getPage (), tag.getEndPosition (), tag.getEndPosition (), new Vector ());
+//TODO: use the factory:
+            ret = createTag (lexer.getPage (), tag.elementBegin(), end.elementEnd(), tag.getAttributesEx (), tag, end, new NodeList (last));
         }
         finally
         {

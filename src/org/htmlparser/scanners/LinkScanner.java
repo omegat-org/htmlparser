@@ -33,13 +33,13 @@ package org.htmlparser.scanners;
 // Java Imports //
 //////////////////
 import java.util.Hashtable;
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.LinkData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 /**
@@ -52,7 +52,7 @@ public class LinkScanner extends CompositeTagScanner
 {
     private static final String MATCH_NAME [] = {"A"};
     public static final String LINK_SCANNER_ID = "A";
-    private LinkProcessor processor;
+    public LinkProcessor processor;
     private final static String ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
     private final static String ENDTAG_ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
 
@@ -71,42 +71,20 @@ public class LinkScanner extends CompositeTagScanner
         processor = new LinkProcessor();
     }
 
-    public Tag createTag(
-        TagData tagData,
-        CompositeTagData compositeTagData) throws ParserException {
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        LinkTag ret;
 
-        String link = extractLink(compositeTagData.getStartTag(),tagData.getUrlBeingParsed());
-        int mailto = link.indexOf("mailto");
-        boolean mailLink=false;
-        if (mailto==0)
-        {
-            // yes it is
-            mailto = link.indexOf(":");
-            link = link.substring(mailto+1);
-            mailLink = true;
-        }
-        int javascript = link.indexOf("javascript:");
-        boolean javascriptLink = false;
-        if (javascript == 0) {
-            link = link.substring(11); // this magic number is "javascript:".length()
-            javascriptLink = true;
-        }
-        String accessKey = getAccessKey(compositeTagData.getStartTag());
-        String myLinkText = compositeTagData.getChildren().toString();
+        ret = new LinkTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
 
-        LinkTag linkTag = new LinkTag(
-            tagData,
-            compositeTagData,
-            new LinkData(
-                link,
-                myLinkText,
-                accessKey,
-                mailLink,
-                javascriptLink
-            )
-        );
-        linkTag.setThisScanner(this);
-        return linkTag;
+        return (ret);        
     }
 
     /**
@@ -135,37 +113,6 @@ public class LinkScanner extends CompositeTagScanner
         }
 
         return (ret);
-    }
-
-    /**
-     * Extract the link from the given string. The URL of the actual html page is also
-     * provided.
-     */
-    public String extractLink(Tag tag,String url) throws ParserException
-    {
-        try {
-            Hashtable table = tag.getAttributes();
-            String relativeLink =  (String)table.get("HREF");
-            if (relativeLink!=null) {
-                relativeLink = ParserUtils.removeChars(relativeLink,'\n');
-                relativeLink = ParserUtils.removeChars(relativeLink,'\r');
-            }
-            return processor.extract(relativeLink,url);
-        }
-        catch (Exception e) {
-            String msg;
-            if (tag!=null) msg = tag.getText(); else msg="null";
-            throw new ParserException("HTMLLinkScanner.extractLink() : Error while extracting link from tag "+msg+", url = "+url,e);
-        }
-    }
-
-    /**
-     * Extract the access key from the given tag.
-     * @param text Text to be parsed to pick out the access key.
-     * @return The value of the ACCESSKEY attribute.
-     */
-    private String getAccessKey (Tag tag) {
-        return tag.getAttribute("ACCESSKEY");
     }
 
     public BaseHrefScanner createBaseHREFScanner(String filter) {

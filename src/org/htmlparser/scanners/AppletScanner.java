@@ -28,16 +28,19 @@
 
 
 package org.htmlparser.scanners;
+
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
- * Scanner for Applet tags
+ * Scanner for applet tags.
  */
-public class AppletScanner extends CompositeTagScanner {
+public class AppletScanner extends CompositeTagScanner
+{
     private static String [] MATCH_STRING = {"APPLET"};
 
     public AppletScanner() {
@@ -52,10 +55,19 @@ public class AppletScanner extends CompositeTagScanner {
         return MATCH_STRING;
     }
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-        throws ParserException {
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        AppletTag ret;
 
-        return new AppletTag(tagData,compositeTagData);
+        ret = new AppletTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
     }
-
 }

@@ -28,25 +28,29 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
- * A Title Tag
+ * A title tag.
  */
-public class TitleTag extends CompositeTag {
-
-    public TitleTag(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData,compositeTagData);
+public class TitleTag extends CompositeTag
+{
+    public TitleTag ()
+    {
+        setTagName ("TITLE");
     }
 
-    public String getTitle() {
+    /**
+     * Get the title text.
+     */
+    public String getTitle()
+    {
         return toPlainTextString();
     }
 
-    public String toString() {
-        return "TITLE: "+getTitle();
+    public String toString()
+    {
+        return "TITLE: " + getTitle();
     }
 
     /**

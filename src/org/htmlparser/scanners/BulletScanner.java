@@ -29,11 +29,12 @@
 package org.htmlparser.scanners;
 
 import java.util.Stack;
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 
 import org.htmlparser.tags.Bullet;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -45,44 +46,64 @@ import org.htmlparser.util.ParserException;
  * <p>
  * These rules are implemented easily through the shared stack.
  */
-public class BulletScanner extends CompositeTagScanner {
+public class BulletScanner extends CompositeTagScanner
+{
     private static final String [] MATCH_STRING = {"LI"};
     private final static String ENDERS [] = { "BODY", "HTML" };
     private final static String END_TAG_ENDERS [] = { "UL" };
     private Stack ulli;
 
-    public BulletScanner(Stack ulli) {
+    public BulletScanner(Stack ulli)
+    {
         this("",ulli);
     }
 
-    public BulletScanner(String filter, Stack ulli) {
+    public BulletScanner(String filter, Stack ulli)
+    {
         super(filter, MATCH_STRING, ENDERS, END_TAG_ENDERS, false);
         this.ulli = ulli;
     }
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-        throws ParserException {
-        return new Bullet(tagData,compositeTagData);
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        Bullet ret;
+
+        ret = new Bullet ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
     }
 
-    public String[] getID() {
+    public String[] getID()
+    {
         return MATCH_STRING;
     }
 
     /**
      * This is the logic that decides when a bullet tag can be allowed
      */
-    public boolean shouldCreateEndTagAndExit() {
-        if (ulli.size()==0) return false;
+    public boolean shouldCreateEndTagAndExit()
+    {
+        if (ulli.size()==0)
+            return false;
         CompositeTagScanner parentScanner = (CompositeTagScanner)ulli.peek();
-        if (parentScanner == this) {
+        if (parentScanner == this)
+        {
             ulli.pop();
             return true;
-        } else
+        }
+        else
             return false;
     }
 
-    public void beforeScanningStarts() {
+    public void beforeScanningStarts()
+    {
         ulli.push(this);
     }
 

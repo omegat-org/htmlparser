@@ -29,75 +29,72 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.Node;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
 /**
- * Identifies an frame tag
+ * Identifies an frame set tag.
  */
 public class FrameSetTag extends CompositeTag
 {
-    /**
-     * The URL where the image is stored.
-     */
-    protected String frameURL;
-    protected String frameName;
-    protected NodeList frames;
-    public FrameSetTag(TagData tagData,CompositeTagData compositeTagData) {
-        super(tagData,compositeTagData);
-        this.frames = compositeTagData.getChildren();
+    public FrameSetTag ()
+    {
+        setTagName ("FRAMESET");
     }
 
     /**
-     * Returns the location of the frame
+     * Print the contents of the FrameSetTag
      */
-    public String getFrameLocation() {
-        return frameURL;
-    }
-
-    public String getFrameName() {
-        return frameName;
-    }
-
-    /**
-     * Print the contents of the HTMLImageNode
-     */
-    public String toString() {
-        return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    public String toString()
+    {
+        return "FRAMESET TAG : begins at : "+elementBegin()+"; ends at : "+elementEnd();
     }
 
     /**
      * Returns the frames.
-     * @return Vector
+     * @return The children of this tag.
      */
-    public NodeList getFrames() {
-        return frames;
+    public NodeList getFrames()
+    {
+        return (getChildren());
     }
 
-    public FrameTag getFrame(String frameName) {
-        boolean found = false;
+    /**
+     * Gets a frame by name.
+     * @param 
+     * @return The specified frame or <code>null</code> if it wasn't found.
+     */
+    public FrameTag getFrame(String name)
+    {
+        boolean found;
         Node node;
-        FrameTag frameTag=null;
-        for (SimpleNodeIterator e=frames.elements();e.hasMoreNodes() && !found;)
+        FrameTag frameTag;
+        
+        found = false;
+        name = name.toUpperCase ();
+        frameTag = null;
+        for (SimpleNodeIterator e=getFrames().elements();e.hasMoreNodes() && !found;)
         {
             node = e.nextNode();
             if (node instanceof FrameTag)
             {
                 frameTag = (FrameTag)node;
-                if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase()))
+                if (frameTag.getFrameName().toUpperCase().equals(name))
                     found = true;
             }
         }
         if (found)
-        return frameTag; else return null;
+            return (frameTag);
+        else
+            return (null);
     }
+
     /**
-     * Sets the frames.
+     * Sets the frames (children of this tag).
      * @param frames The frames to set
      */
-    public void setFrames(NodeList frames) {
-        this.frames = frames;
+    public void setFrames(NodeList frames)
+    {
+        setChildren (frames);
     }
 }

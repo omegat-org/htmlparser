@@ -28,46 +28,156 @@
 
 package org.htmlparser.tags;
 
+import java.util.Vector;
+import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.TagNode;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.ParserException;
+import org.htmlparser.util.ParserUtils;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
- * Identifies an image tag
+ * Identifies an image tag.
  */
 public class ImageTag extends Tag
 {
     public static final String IMAGE_TAG_FILTER="-i";
+
     /**
-     * The URL where the image is stored.
+     * Holds the set value of the SRC attribute, since this can differ
+     * from the attribute value due to relative references resolved by
+     * the scanner.
      */
     protected String imageURL;
 
-    /**
-     * Constructor creates an HTMLImageNode object, which stores the location
-     * where the image is to be found.
-     * @param tagData Specifies character position and content of the tag.
-     * @param imageURL Location of the image.
-     */
-    public ImageTag(TagData tagData,String imageURL)
+    public ImageTag ()
     {
-        super(tagData);
-        this.imageURL = imageURL;
+        setTagName ("IMG");
+        imageURL = null;
     }
+
+    /**
+    * Extract the location of the image
+    * Given the tag (with attributes), and the url of the html page in which
+    * this tag exists, perform best effort to extract the 'intended' URL.
+    * Attempts to handle such attributes as:
+    * <pre>
+    * &lt;IMG SRC=http://www.redgreen.com&gt; - normal
+    * &lt;IMG SRC =http://www.redgreen.com&gt; - space between attribute name and equals sign
+    * &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value
+    * &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign
+    * </pre>
+    * @param tag The tag with the 'SRC' attribute.
+    * @param url URL of web page being parsed.
+    */
+    public String extractImageLocn ()
+    {
+        Vector attributes;
+        int size;
+        Attribute attribute;
+        String string;
+        String data;
+        int state;
+        String name;
+        String ret;
+    
+        // TODO: move this logic into the lexer?
+
+        ret = "";
+        state = 0;
+        attributes = getAttributesEx ();
+        size = attributes.size ();
+        for (int i = 0; (i < size) && (state < 3); i++)
+        {
+            attribute = (Attribute)attributes.elementAt (i);
+            string = attribute.getName ();
+            data = attribute.getValue ();
+            switch (state)
+            {
+                case 0: // looking for 'src'
+                    if (null != string)
+                    {
+                        name = string.toUpperCase ();
+                        if (name.equals ("SRC"))
+                        {
+                            state = 1;
+                            if (null != data)
+                            {
+                                if ("".equals (data))
+                                    state = 2; // empty attribute, SRC= 
+                                else
+                                {
+                                    ret = data;
+                                    i = size; // exit fast
+                                }
+                            }
+
+                        }
+                        else if (name.startsWith ("SRC"))
+                        {
+                            // missing equals sign
+                            ret = string.substring (3);
+                            state = 0; // go back to searching for SRC
+                            // because, maybe we found SRCXXX
+                            // where XXX isn't a URL
+                        }
+                    }
+                    break;
+                case 1: // looking for equals sign
+                    if (null != string)
+                    {
+                        if (string.startsWith ("="))
+                        {
+                            state = 2;
+                            if (1 < string.length ())
+                            {
+                                ret = string.substring (1);
+                                state = 0; // keep looking ?
+                            }
+                            else if (null != data)
+                            {
+                                ret = string.substring (1);
+                                state = 0; // keep looking ?
+                            }
+                        }
+                    }
+                    break;
+                case 2: // looking for a valueless attribute that could be a relative or absolute URL
+                    if (null != string)
+                    {
+                        if (null == data)
+                            ret = string;
+                        state = 0; // only check first non-whitespace item
+                        // not every valid attribute after an equals
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException ("we're not supposed to in state " + state);
+            }
+        }
+        ret = ParserUtils.removeChars (ret, '\n');
+        ret = ParserUtils.removeChars (ret, '\r');
+        
+        return (ret);
+    }
+
     /**
      * Returns the location of the image
      */
     public String getImageURL()
     {
-        return imageURL;
-    }
-    public String toString()
-    {
-        return "IMAGE TAG : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        if (null == imageURL)
+            imageURL = extractImageLocn ();
+        return (imageURL);
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public String toString()
+    {
+        return "IMAGE TAG : Image at " + getImageURL () +"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
+
+    public void setImageURL (String url)
+    {
+        imageURL = url;
         setAttribute ("SRC", imageURL);
     }
 

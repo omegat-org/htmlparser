@@ -35,8 +35,6 @@ import java.util.Vector;
 import org.htmlparser.Node;
 import org.htmlparser.StringNode;
 import org.htmlparser.lexer.nodes.Attribute;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
@@ -47,14 +45,9 @@ import org.htmlparser.util.SimpleNodeIterator;
  */
 public class AppletTag extends CompositeTag
 {
-    /**
-     * Create a new AppletTag with the dats given.
-     * @param tagData The data for this tag.
-     * @param compositeTagData The data for this composite tag.
-     */
-    public AppletTag (TagData tagData,CompositeTagData compositeTagData)
+    public AppletTag ()
     {
-        super(tagData,compositeTagData);
+        setTagName ("APPLET");
     }
 
     /**

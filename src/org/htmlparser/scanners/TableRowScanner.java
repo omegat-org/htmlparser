@@ -28,13 +28,14 @@
 
 package org.htmlparser.scanners;
 
+import java.util.Vector;
 import org.htmlparser.Parser;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 public class TableRowScanner extends CompositeTagScanner {
     private final static String MATCH_STRING [] = { "TR" };
@@ -64,12 +65,20 @@ public class TableRowScanner extends CompositeTagScanner {
         parser.addScanner(new TableColumnScanner());
     }
 
-    public Tag createTag(
-        TagData tagData,
-        CompositeTagData compositeTagData) {
-        NodeList columns =
-            compositeTagData.getChildren().searchFor(TableColumn.class);
-        return new TableRow(tagData,compositeTagData,columns);
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        TableRow ret;
+
+        ret = new TableRow ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
     }
 
     public String[] getID() {

@@ -29,13 +29,20 @@
 package org.htmlparser;
 
 import java.io.Serializable;
+import org.htmlparser.lexer.Page;
 
 import org.htmlparser.util.NodeList;
 
 /**
  * AbstractNode, which implements the Node interface, is the base class for all types of nodes, including tags, string elements, etc
  */
-public abstract class AbstractNode implements Node, Serializable {
+public abstract class AbstractNode implements Node, Serializable
+{
+    /**
+     * The page this node came from.
+     */
+    protected Page mPage;
+
     /**
      * The beginning position of the tag in the line
      */
@@ -58,14 +65,18 @@ public abstract class AbstractNode implements Node, Serializable {
 
     /**
      * Create an abstract node with the page positions given.
-     * @param begin The starting position of the node.
-     * @param end The ending position of the node.
+     * Remember the page and start & end cursor positions.
+     * @param page The page this tag was read from.
+     * @param start The starting offset of this node within the page.
+     * @param end The ending offset of this node within the page.
      */
-    public AbstractNode (int begin, int end)
+    public AbstractNode (Page page, int start, int end)
     {
-        nodeBegin = begin;
-        nodeEnd   = end;
+        mPage = page;
+        nodeBegin = start;
+        nodeEnd = end;
         parent = null;
+        children = null;
     }
 
     /**
@@ -163,16 +174,38 @@ public abstract class AbstractNode implements Node, Serializable {
 
     /**
      * Returns the beginning position of the tag.
+     * @deprecated Use {@link #getStartPosition}.
      */
-    public int elementBegin() {
-        return nodeBegin;
+    public int elementBegin()
+    {
+        return (getStartPosition ());
     }
 
     /**
      * Returns the ending position fo the tag
+     * @deprecated Use {@link #getEndPosition}.
      */
-    public int elementEnd() {
-        return nodeEnd;
+    public int elementEnd()
+    {
+        return (getEndPosition ());
+    }
+
+    /**
+     * Get the page this node came from.
+     * @return The page that supplied this node.
+     */
+    public Page getPage ()
+    {
+        return (mPage);
+    }
+
+    /**
+     * Set the page this node came from.
+     * @param page The page that supplied this node.
+     */
+    public void setPage (Page page)
+    {
+        mPage = page;
     }
 
     /**

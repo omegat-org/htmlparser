@@ -37,8 +37,6 @@ import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
@@ -122,13 +120,7 @@ public class CompositeTagScannerHelper {
         String endTagName = "/" + mTag.getRawTagName();
         Vector attributes = new Vector ();
         attributes.addElement (new Attribute (endTagName, (String)null));
-        TagData data = new TagData(
-                endTagName,
-                position,
-                attributes,
-                mLexer.getPage ().getUrl (),
-                false);
-        endTag = new Tag (data);
+        endTag = new Tag (mLexer.getPage (), position, position, attributes);
     }
 
 //    private void createCorrectionEndTagBefore(Tag possibleEndTagCauser) {
@@ -150,26 +142,16 @@ public class CompositeTagScannerHelper {
 
     private Tag createTag() throws ParserException
     {
-        TagData data;
-        
-        data =  new TagData(
-            mLexer.getPage (),
-            mTag.elementBegin(),
-            endTag.elementEnd(),
-            mTag.getAttributesEx (),
-            mLexer.getPage ().getUrl (),
-            mTag.isEmptyXmlTag ());
+        CompositeTag ret;
 
-        CompositeTag newTag = (CompositeTag)scanner.createTag (data,
-            new CompositeTagData(
-                mTag,endTag,nodeList
-            )
-        );
-        for (int i=0;i<newTag.getChildCount();i++) {
-            Node child = newTag.childAt(i);
-            child.setParent(newTag);
+        ret = (CompositeTag)scanner.createTag (mLexer.getPage (), mTag.elementBegin(), endTag.elementEnd(), mTag.getAttributesEx (), mTag, endTag, nodeList);
+        for (int i=0;i<ret.getChildCount();i++)
+        {
+            Node child = ret.childAt(i);
+            child.setParent(ret);
         }
-        return newTag;
+
+        return (ret);
     }
 
     private void doChildAndEndTagCheckOn(Node currentNode)

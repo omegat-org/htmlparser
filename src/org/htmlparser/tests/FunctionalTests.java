@@ -75,7 +75,7 @@ public class FunctionalTests extends TestCase {
     public int findImageTagCount() {
         int imgTagCount = 0;
         try {
-            URL url = new URL("http://www.yahoo.com");
+            URL url = new URL("http://education.yahoo.com/");
             InputStream is = url.openStream();
             BufferedReader reader;
             reader = new BufferedReader(new InputStreamReader(is));
@@ -92,7 +92,7 @@ public class FunctionalTests extends TestCase {
     }
 
     public int countImageTagsWithHTMLParser() throws ParserException {
-        Parser parser = new Parser("http://www.yahoo.com",new DefaultParserFeedback());
+        Parser parser = new Parser("http://education.yahoo.com/",new DefaultParserFeedback());
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
         int parserImgTagCount = 0;
         Node node;

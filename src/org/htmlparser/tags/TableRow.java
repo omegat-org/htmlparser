@@ -28,29 +28,37 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 
+/**
+ * A table row tag.
+ */
 public class TableRow extends CompositeTag {
-    private NodeList columnsList;
-    public TableRow(
-        TagData tagData,
-        CompositeTagData compositeTagData,
-        NodeList columnsList) {
-        super(tagData, compositeTagData);
-        this.columnsList = columnsList;
+    
+    public TableRow ()
+    {
+        setTagName ("TR");
     }
 
-    public int getColumnCount() {
-        return columnsList.size();
+    /**
+     * Get the number of columns in this row.
+     */
+    public int getColumnCount()
+    {
+        return (getChildren ().searchFor (TableColumn.class).size ());
     }
 
-    public TableColumn [] getColumns() {
-        TableColumn [] columns = new TableColumn[columnsList.size()];
-        for (int i=0;i<columnsList.size();i++) {
-            columns[i] = (TableColumn)columnsList.elementAt(i);
-        }
-        return columns;
+    /**
+     * Get the children (columns) of this row.
+     */
+    public TableColumn [] getColumns()
+    {
+        NodeList list;
+        
+        list = getChildren ().searchFor (TableColumn.class);
+        TableColumn [] columns = new TableColumn[list.size()];
+        list.copyToNodeArray (columns);
+        
+        return (columns);
     }
 }

@@ -28,34 +28,43 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-
+/**
+ * An option tag within a form.
+ */
 public class OptionTag extends CompositeTag
 {
-    private String value;
-
-    public OptionTag(TagData tagData, CompositeTagData compositeTagData)
+    public OptionTag ()
     {
-        super(tagData, compositeTagData);
-        this.value = (String)this.getAttribute("VALUE");
+        setTagName ("OPTION");
     }
 
-    public String getValue() {
-        return this.value;
+    /**
+     * Get the value of the value attribute.
+     */
+    public String getValue()
+    {
+        return (getAttribute("VALUE"));
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    /**
+     * Set the value of the value attribute.
+     */
+    public void setValue(String value)
+    {
         this.setAttribute("VALUE",value);
     }
 
-    public String getOptionText() {
+    /**
+     * Get the text of this optin.
+     */
+    public String getOptionText()
+    {
         return toPlainTextString();
     }
 
-    public String toString() {
-        String output = "OPTION VALUE: " + value + " TEXT: "+getOptionText()+"\n";
+    public String toString()
+    {
+        String output = "OPTION VALUE: " + getValue() + " TEXT: " + getOptionText()+"\n";
         return output;
     }
 

@@ -28,15 +28,16 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserUtils;
 
+/**
+ * A text area tag within a form.
+ */
 public class TextareaTag extends CompositeTag
 {
-    public TextareaTag(TagData tagData, CompositeTagData compositeTagData)
+    public TextareaTag ()
     {
-        super(tagData,compositeTagData);
+        setTagName ("TEXTAREA");
     }
 
     public String getValue() {

@@ -28,44 +28,70 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.lexer.nodes.Attribute;
 
 /**
  * A Meta Tag
  */
-public class MetaTag extends Tag {
-    private String metaTagName;
-    private String metaTagContents;
-    private String httpEquiv;
-    public MetaTag(TagData tagData, String httpEquiv, String metaTagName,String metaTagContents) {
-        super(tagData);
-        this.httpEquiv = httpEquiv;
-        this.metaTagName = metaTagName;
-        this.metaTagContents = metaTagContents;
+public class MetaTag extends Tag
+{
+    
+    public MetaTag ()
+    {
+        setTagName ("META");
     }
-    public String getHttpEquiv() {
-        return httpEquiv;
+
+    public String getHttpEquiv ()
+    {
+        return (getAttribute ("HTTP-EQUIV"));
     }
-    public String getMetaContent() {
-        return metaTagContents;
+
+    public String getMetaContent ()
+    {
+        return (getAttribute ("CONTENT"));
     }
-    public String getMetaTagName() {
-        return metaTagName;
+
+    public String getMetaTagName ()
+    {
+        return (getAttribute ("NAME"));
     }
-    public void setHttpEquiv(String httpEquiv) {
-        this.httpEquiv = httpEquiv;
+
+    public void setHttpEquiv(String httpEquiv)
+    {
+        Attribute equiv;
+        equiv = getAttributeEx ("HTTP-EQUIV");
+        if (null != equiv)
+            equiv.setValue (httpEquiv);
+        else
+            getAttributesEx ().add (new Attribute ("HTTP-EQUIV", httpEquiv));
     }
-    public void setMetaTagContents(String metaTagContents) {
-        this.metaTagContents = metaTagContents;
+
+    public void setMetaTagContents(String metaTagContents)
+    {
+        Attribute content;
+        content = getAttributeEx ("CONTENT");
+        if (null != content)
+            content.setValue (metaTagContents);
+        else
+            getAttributesEx ().add (new Attribute ("CONTENT", metaTagContents));
     }
-    public void setMetaTagName(String metaTagName) {
-        this.metaTagName = metaTagName;
+
+    public void setMetaTagName(String metaTagName)
+    {
+        Attribute name;
+        name = getAttributeEx ("NAME");
+        if (null != name)
+            name.setValue (metaTagName);
+        else
+            getAttributesEx ().add (new Attribute ("NAME", metaTagName));
     }
-    public String toString() {
+
+    public String toString()
+    {
         return "META TAG\n"+
                 "--------\n"+
                 "Http-Equiv : "+getHttpEquiv()+"\n"+
-                "Name : "+metaTagName+"\n"+
-                "Contents : "+metaTagContents+"\n";
+                "Name : "+ getMetaTagName() +"\n"+
+                "Contents : "+getMetaContent()+"\n";
     }
 }

@@ -28,37 +28,29 @@
 
 package org.htmlparser.tags;
 
+import java.util.Vector;
 import org.htmlparser.*;
 import org.htmlparser.AbstractNode;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.TagNode;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 import org.htmlparser.visitors.NodeVisitor;
 
+/*
+ * The base class for tags that have an end tag.
+ * Provided extra accessors for the children above and beyond what the basic
+ * {@link Tag} provides. Also handles the conversion of it's children for
+ * the {@link #toHtml toHtml} method.
+ */
 public abstract class CompositeTag extends Tag {
     protected TagNode startTag;
     protected TagNode endTag;
 
-    public CompositeTag(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData);
-
-        // from Tag(TagData)
-//        super(tagData.getTagBegin(),tagData.getTagEnd());
-//        this.startLine = tagData.getStartLine();
-//        this.tagContents = new StringBuffer();
-//        this.tagContents.append(tagData.getTagContents());
-//        this.tagLine = tagData.getTagLine();
-//        this.tagLines = new String[] {tagData.getTagLine()};
-//        this.emptyXmlTag = tagData.isEmptyXmlTag();
-
-        
-        startTag  = compositeTagData.getStartTag();
-        endTag    = compositeTagData.getEndTag();
-        setChildren (compositeTagData.getChildren());
+    public CompositeTag ()
+    {
     }
-
+    
     /**
      * Get an iterator over the children of this node.
      * @return Am iterator over the children of this node.
@@ -343,12 +335,24 @@ public abstract class CompositeTag extends Tag {
         return (getChildren ().size ());
     }
 
-    public TagNode getStartTag() {
+    public TagNode getStartTag()
+    {
         return startTag;
     }
 
-    public TagNode getEndTag() {
+    public void setStartTag (TagNode start)
+    {
+        startTag = start;
+    }
+
+    public TagNode getEndTag()
+    {
         return endTag;
+    }
+
+    public void setEndTag(TagNode end)
+    {
+        endTag = end;
     }
 
     /**

@@ -33,11 +33,11 @@ package org.htmlparser.scanners;
 //////////////////
 import java.util.Hashtable;
 import java.util.Vector;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.Attribute;
 
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
@@ -68,120 +68,35 @@ public class ImageScanner extends TagScanner
         this.processor = processor;
     }
 
-   /**
-    * Extract the location of the image
-    * Given the tag (with attributes), and the url of the html page in which
-    * this tag exists, perform best effort to extract the 'intended' URL.
-    * Attempts to handle such attributes as:
-    * <pre>
-    * &lt;IMG SRC=http://www.redgreen.com&gt; - normal
-    * &lt;IMG SRC =http://www.redgreen.com&gt; - space between attribute name and equals sign
-    * &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value
-    * &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign
-    * </pre>
-    * @param tag The tag with the 'SRC' attribute.
-    * @param url URL of web page being parsed.
-    */
-    public String extractImageLocn (Tag tag, String url) throws ParserException
-    {
-        Vector attributes;
-        int size;
-        Attribute attribute;
-        String string;
-        String data;
-        int state;
-        String name;
-        String ret;
-
-        ret = "";
-        state = 0;
-        attributes = tag.getAttributesEx ();
-        size = attributes.size ();
-        for (int i = 0; (i < size) && (state < 3); i++)
-        {
-            attribute = (Attribute)attributes.elementAt (i);
-            string = attribute.getName ();
-            data = attribute.getValue ();
-            switch (state)
-            {
-                case 0: // looking for 'src'
-                    if (null != string)
-                    {
-                        name = string.toUpperCase ();
-                        if (name.equals ("SRC"))
-                        {
-                            state = 1;
-                            if (null != data)
-                            {
-                                if ("".equals (data))
-                                    state = 2; // empty attribute, SRC= 
-                                else
-                                {
-                                    ret = data;
-                                    i = size; // exit fast
-                                }
-                            }
-
-                        }
-                        else if (name.startsWith ("SRC"))
-                        {
-                            // missing equals sign
-                            ret = string.substring (3);
-                            state = 0; // go back to searching for SRC
-                            // because, maybe we found SRCXXX
-                            // where XXX isn't a URL
-                        }
-                    }
-                    break;
-                case 1: // looking for equals sign
-                    if (null != string)
-                    {
-                        if (string.startsWith ("="))
-                        {
-                            state = 2;
-                            if (1 < string.length ())
-                            {
-                                ret = string.substring (1);
-                                state = 0; // keep looking ?
-                            }
-                            else if (null != data)
-                            {
-                                ret = string.substring (1);
-                                state = 0; // keep looking ?
-                            }
-                        }
-                    }
-                    break;
-                case 2: // looking for a valueless attribute that could be a relative or absolute URL
-                    if (null != string)
-                    {
-                        if (null == data)
-                            ret = string;
-                        state = 0; // only check first non-whitespace item
-                        // not every valid attribute after an equals
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException ("we're not supposed to in state " + state);
-            }
-        }
-        ret = ParserUtils.removeChars (ret, '\n');
-        ret = ParserUtils.removeChars (ret, '\r');
-        ret = processor.extract (ret, url);
-        
-        return (ret);
-    }
-
     public String [] getID() {
         String [] ids = new String[1];
         ids[0] = IMAGE_SCANNER_ID;
         return ids;
     }
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException {
-        String link = extractImageLocn(tag,url);
-        return new ImageTag(tagData, link);
-    }
+    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    {
+        ImageTag ret;
 
+        ret = new ImageTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+
+        // special step here...
+        // Need to update the imageURL string in the image tag,
+        // but not the SRC attribute which it does when you set the ImageURL
+        // property. Can't do it in the tag, because the tag doesn't have the
+        // current link processor object which might have a BASE href different
+        // than the page.
+        String src = ret.getAttribute ("SRC");
+        ret.setImageURL (processor.extract (ret.getImageURL (), page.getUrl ()));
+        if (null == src)
+            ret.removeAttribute ("SRC");
+        else
+            ret.setAttribute ("SRC", src);
+
+        return (ret);
+    }
 }

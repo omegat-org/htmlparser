@@ -27,39 +27,46 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.scanners;
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
+
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
+
 import org.htmlparser.tags.DoctypeTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
 /**
- * The HTMLDoctypeScanner identifies Doctype tags
+ * The DoctypeScanner identifies doctype tags.
  */
-
-public class DoctypeScanner extends TagScanner {
-    public DoctypeScanner() {
+public class DoctypeScanner extends TagScanner
+{
+    public DoctypeScanner()
+    {
         super();
     }
 
-    public DoctypeScanner(String filter) {
+    public DoctypeScanner(String filter) 
+    {
         super(filter);
     }
 
-    public String [] getID() {
+    public String [] getID() 
+    {
         String [] ids = new String[1];
         ids[0] = "!DOCTYPE";
         return ids;
     }
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException {
-        String tagContents = tag.getText();
-        tagContents=tagContents.substring(9,tagContents.length());
-        tagData.setTagContents (tagContents, tag.getAttributesEx (), "" /*url*/, false /*xml_end_tag*/);
-        return new DoctypeTag(tagData);
-    }
+    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    {
+        DoctypeTag ret;
 
+        ret = new DoctypeTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+
+        return (ret);
+    }
 }

@@ -30,7 +30,6 @@ package org.htmlparser.tests.tagTests;
 
 import java.util.Vector;
 import org.htmlparser.tags.BaseHrefTag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
@@ -41,7 +40,8 @@ public class BaseHrefTagTest extends ParserTestCase {
     }
 
     public void testConstruction() {
-        BaseHrefTag baseRefTag = new BaseHrefTag(new TagData("BASE", 0, new Vector (), "http://www.abc.com", false),"http://www.abc.com");
+        BaseHrefTag baseRefTag = new BaseHrefTag ();
+        baseRefTag.setBaseUrl ("http://www.abc.com");
         assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
     }
 

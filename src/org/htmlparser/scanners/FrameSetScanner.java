@@ -26,23 +26,18 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
-
 package org.htmlparser.scanners;
 
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 
-//////////////////
-// Java Imports //
-//////////////////
 import org.htmlparser.tags.FrameSetTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 /**
- * Scans for the Frame Tag. This is a subclass of TagScanner, and is called using a
- * variant of the template method. If the evaluate() method returns true, that means the
- * given string contains an image tag. Extraction is done by the scan method thereafter
- * by the user of this class.
+ * Scanner for frame set tags.
  */
 public class FrameSetScanner extends CompositeTagScanner
 {
@@ -58,14 +53,24 @@ public class FrameSetScanner extends CompositeTagScanner
         super(filter,MATCH_NAME);
     }
 
-    public String [] getID() {
+    public String [] getID()
+    {
         return MATCH_NAME;
     }
 
-    public Tag createTag(
-        TagData tagData,
-        CompositeTagData compositeTagData) {
-        return new FrameSetTag(tagData,compositeTagData);
-    }
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        FrameSetTag ret;
 
+        ret = new FrameSetTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);
+    }
 }

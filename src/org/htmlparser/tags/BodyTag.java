@@ -28,24 +28,24 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-
-
 /**
- * A Body Tag
+ * A Body Tag.
+ * Primarily a container for child tags.
  */
 public class BodyTag extends CompositeTag
 {
-    public BodyTag(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData,compositeTagData);
+    public BodyTag ()
+    {
+        setTagName ("BODY");
     }
 
-    public String getBody() {
+    public String getBody()
+    {
         return toPlainTextString();
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "BODY: "+getBody();
     }
 }

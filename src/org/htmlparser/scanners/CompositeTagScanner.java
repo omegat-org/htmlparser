@@ -30,17 +30,18 @@ package org.htmlparser.scanners;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Vector;
 
 import org.htmlparser.Node;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.parserHelper.CompositeTagScannerHelper;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
- * To create your own scanner that can hold children, create a subclass of this class.
+ * To create your own scanner that can create tags tht hold children, create a subclass of this class.
  * The composite tag scanner can be configured with:<br>
  * <ul>
  * <li>Tags which will trigger a match</li>
@@ -90,30 +91,36 @@ import org.htmlparser.util.ParserException;
  * </pre>
  * Inside the scanner, use createTag() to specify what tag needs to be created.
  */
-public abstract class CompositeTagScanner extends TagScanner {
+public abstract class CompositeTagScanner extends TagScanner
+{
     protected String [] nameOfTagToMatch;
     private boolean allowSelfChildren;
     protected Set tagEnderSet;
     private Set endTagEnderSet;
     private boolean balance_quotes;
 
-    public CompositeTagScanner(String [] nameOfTagToMatch) {
+    public CompositeTagScanner(String [] nameOfTagToMatch)
+    {
         this(nameOfTagToMatch,new String[] {});
     }
 
-    public CompositeTagScanner(String [] nameOfTagToMatch, String [] tagEnders) {
+    public CompositeTagScanner(String [] nameOfTagToMatch, String [] tagEnders)
+    {
         this("",nameOfTagToMatch,tagEnders);
     }
 
-    public CompositeTagScanner(String [] nameOfTagToMatch, String [] tagEnders, boolean allowSelfChildren) {
+    public CompositeTagScanner(String [] nameOfTagToMatch, String [] tagEnders, boolean allowSelfChildren)
+    {
         this("",nameOfTagToMatch,tagEnders,allowSelfChildren);
     }
 
-    public CompositeTagScanner(String filter, String [] nameOfTagToMatch) {
+    public CompositeTagScanner(String filter, String [] nameOfTagToMatch)
+    {
         this(filter,nameOfTagToMatch,new String [] {},true);
     }
 
-    public CompositeTagScanner(String filter, String [] nameOfTagToMatch, String [] tagEnders) {
+    public CompositeTagScanner(String filter, String [] nameOfTagToMatch, String [] tagEnders)
+    {
         this(filter,nameOfTagToMatch,tagEnders,true);
     }
 
@@ -121,7 +128,8 @@ public abstract class CompositeTagScanner extends TagScanner {
         String filter,
         String [] nameOfTagToMatch,
         String [] tagEnders,
-        boolean allowSelfChildren) {
+        boolean allowSelfChildren) 
+    {
         this(filter,nameOfTagToMatch,tagEnders,new String[] {}, allowSelfChildren);
     }
 
@@ -162,7 +170,8 @@ public abstract class CompositeTagScanner extends TagScanner {
         String [] tagEnders,
         String [] endTagEnders,
         boolean allowSelfChildren,
-        boolean balance_quotes) {
+        boolean balance_quotes) 
+    {
         super(filter);
         this.nameOfTagToMatch = nameOfTagToMatch;
         this.allowSelfChildren = allowSelfChildren;
@@ -175,7 +184,8 @@ public abstract class CompositeTagScanner extends TagScanner {
             endTagEnderSet.add(endTagEnders[i]);
     }
 
-    public Tag scan (Tag tag, String url, Lexer lexer) throws ParserException {
+    public Tag scan (Tag tag, String url, Lexer lexer) throws ParserException 
+    {
         CompositeTagScannerHelper helper =
             new CompositeTagScannerHelper(this, tag, lexer, balance_quotes);
         return helper.scan();
@@ -186,34 +196,42 @@ public abstract class CompositeTagScanner extends TagScanner {
      * before the start of the scan. This is just after a tag has triggered the scanner
      * but before the scanner begins its processing.
      */
-    public void beforeScanningStarts() {
+    public void beforeScanningStarts() 
+    {
     }
 
     /**
      * This method is called everytime a child to the composite is found. It is useful when we
      * need to store special children seperately. Though, all children are collected anyway into a node list.
      */
-    public void childNodeEncountered(Node node) {
+    public void childNodeEncountered(Node node) 
+    {
     }
 
     /**
      * For composite tags this shouldn't be used and hence throws an exception.
-     * @param tagData
-     * @param tag
-     * @param url
-     * @return Tag
-     * @throws ParserException
      */
-    protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException
+    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
     {
-        throw new IllegalStateException ("composite tags shouldn't be using this");
+        throw new ParserException ("composite tags shouldn't be using this");
     }
 
     /**
-     * You must override this method to create the tag of your choice upon successful parsing. Data required
-     * for construction of your tag can be found within tagData and compositeTagData
+     * You must override this method to create the tag of your choice upon successful parsing.
+     * This method is called after the scanner has completed the scan.
+     * The first four arguments are standard tag constructor arguments.
+     * The last three are for the composite tag construction.
+     * @param page The page the tag is found on.
+     * @param start The starting offset in the page of the tag.
+     * @param end The ending offset in the page of the tag.
+     * @param attributes The contents of the tag as a list of {@list Attribute} objects.
+     * @param startTag The tag that begins the composite tag.
+     * @param endTag The tag that ends the composite tag. Note this could be a
+     * virtual tag created to satisfy  the scanner (check is it's starting and
+     * ending position are the same).
+     * @param children The list of nodes contained within the ebgin end tag pair.
      */
-    public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
+    public abstract Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException;
 
     public final boolean isTagToBeEndedFor(Tag tag)
     {

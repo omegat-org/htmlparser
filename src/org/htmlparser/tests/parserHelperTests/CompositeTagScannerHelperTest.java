@@ -30,7 +30,6 @@ package org.htmlparser.tests.parserHelperTests;
 
 import org.htmlparser.parserHelper.CompositeTagScannerHelper;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 
 /**

@@ -29,10 +29,11 @@
 package org.htmlparser.scanners;
 
 import java.util.Hashtable;
+import java.util.Vector;
+import org.htmlparser.lexer.Page;
 
 import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
 public class MetaTagScanner extends TagScanner {
@@ -46,19 +47,16 @@ public class MetaTagScanner extends TagScanner {
         return ids;
     }
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException {
-        Hashtable table = tag.getAttributes();
-        String metaTagName = (String)table.get("NAME");
-        String metaTagContents = (String)table.get("CONTENT");
-        String httpEquiv = (String)table.get("HTTP-EQUIV");
-
-        return new MetaTag(
-            tagData,
-            httpEquiv,
-            metaTagName,
-            metaTagContents
-        );
+    protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    {
+        MetaTag ret;
+        
+        ret = new MetaTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        
+        return (ret);
     }
-
 }

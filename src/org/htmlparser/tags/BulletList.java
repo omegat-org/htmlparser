@@ -28,24 +28,14 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-
 /**
- * @author Somik Raha
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * A bullet list tag.
+ * Either &lt;UL&gt; or &lt;OL&gt;.
  */
 public class BulletList extends CompositeTag {
 
-    public BulletList(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData, compositeTagData);
+    public BulletList ()
+    {
+        setTagName ("UL"); // could be "OL" too
     }
-
-    public String toString() {
-        // TODO Auto-generated method stub
-        return "BulletList";
-    }
-
 }

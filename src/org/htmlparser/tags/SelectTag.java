@@ -30,34 +30,29 @@ package org.htmlparser.tags;
 
 import org.htmlparser.Node;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserUtils;
 
+/**
+ * A select tag within a form.
+ */
 public class SelectTag extends CompositeTag
 {
-    private OptionTag[] optionTags=null;
-    private NodeList optionTagList;
-
-    public SelectTag(
-        TagData tagData,
-        CompositeTagData compositeTagData,
-        NodeList optionTagList)
+    public SelectTag ()
     {
-        super(tagData,compositeTagData);
-        this.optionTagList = optionTagList;
+        setTagName ("SELECT");
     }
 
-    public OptionTag [] getOptionTags()
+    public OptionTag [] getOptionTags ()
     {
-        if (optionTags==null) {
-            optionTags = new OptionTag[optionTagList.size()];
-            for (int i=0;i<optionTagList.size();i++) {
-                optionTags[i] = (OptionTag)optionTagList.elementAt(i);
-            }
-        }
-        return optionTags;
+        NodeList list;
+        OptionTag[] ret;
+        
+        list = getChildren ().searchFor (OptionTag.class, true);
+        ret = new OptionTag[list.size()];
+        list.copyToNodeArray (ret);
+
+        return (ret);
     }
 
     public String toString()

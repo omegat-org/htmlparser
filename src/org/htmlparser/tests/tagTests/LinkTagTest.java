@@ -32,9 +32,6 @@ import java.util.Vector;
 import org.htmlparser.Parser;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.LinkData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
@@ -58,8 +55,8 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        // The node should be an LinkTag
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[0];
         assertEquals("The image locn","http://www.google.com/test.html",linkNode.getLink());
     }
@@ -78,8 +75,8 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        // The node should be an LinkTag
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[0];
         assertEquals("The image locn","http://www.google.com/test.html",linkNode.getLink());
     }
@@ -97,8 +94,8 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        // The node should be an LinkTag
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[0];
         assertEquals("Link incorrect","http://www.cj.com/mylink.html",linkNode.getLink());
     }
@@ -116,8 +113,8 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        // The node should be an LinkTag
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[0];
         assertEquals("Link incorrect!!","http://www.cj.com/mylink.html",linkNode.getLink());
     }
@@ -170,7 +167,7 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[0];
         assertStringEquals("Link incorrect","somik@yahoo.com",linkNode.getLink());
         assertEquals("Link Type",new Boolean(true),new Boolean(linkNode.isMailLink()));
@@ -188,7 +185,7 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[0];
         assertEquals("Link incorrect","http://www.cj.com/abcd.html",linkNode.getLink());
     }
@@ -207,8 +204,8 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        // The node should be an LinkTag
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag LinkTag = (LinkTag)node[0];
         assertEquals("The image locn","http://www.google.com/test/test.html",LinkTag.getLink());
     }
@@ -227,8 +224,8 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        // The node should be an LinkTag
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag LinkTag = (LinkTag)node[0];
         assertEquals("The image locn","http://www.google.com/test.html",LinkTag.getLink());
     }
@@ -247,8 +244,8 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        // The node should be an LinkTag
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[0];
         assertEquals("The link location","",linkTag.getLink());
         assertEquals("The link text","Something",linkTag.getLinkText());
@@ -260,7 +257,7 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(1);
-        assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
+        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[0];
         assertEquals("Link Plain Text","hello",linkTag.toPlainTextString());
     }
@@ -281,80 +278,100 @@ public class LinkTagTest extends ParserTestCase {
         assertTrue("First Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[0];
         assertStringEquals("Link Raw Text",link1,linkTag.toHtml());
-        assertTrue("Ninth Node should be a HTMLLinkTag",node[8] instanceof LinkTag);
+        assertTrue("Ninth Node should be a LinkTag",node[8] instanceof LinkTag);
         linkTag = (LinkTag)node[8];
         assertStringEquals("Link Raw Text",link2,linkTag.toHtml());
     }
 
-    public void testTypeHttps() throws ParserException{
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("https://www.someurl.com","","",false,false)
-        );
-        assertTrue("This is a https link",linkTag.isHTTPSLink());
+    public void testTypeHttps() throws ParserException
+    {
+        LinkTag link;
+
+        createParser ("<A HREF='https://www.someurl.com'>Try https.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
+        assertTrue("This is a https link",link.isHTTPSLink());
     }
 
-    public void testTypeFtp() throws ParserException{
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("ftp://www.someurl.com","","",false,false)
-        );
-        assertTrue("This is an ftp link",linkTag.isFTPLink());
+    public void testTypeFtp() throws ParserException
+    {
+        LinkTag link;
+
+        createParser ("<A HREF='ftp://www.someurl.com'>Try ftp.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
+        assertTrue("This is an ftp link",link.isFTPLink());
     }
 
-    public void testTypeJavaScript() throws ParserException {
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("javascript://www.someurl.com","","",false,true)
-        );
-        assertTrue("This is a javascript link",linkTag.isJavascriptLink());
+    public void testTypeJavaScript() throws ParserException
+    {
+        LinkTag link;
+
+        createParser ("<A HREF='javascript://www.someurl.com'>Try javascript.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
+        assertTrue("This is a javascript link",link.isJavascriptLink());
     }
 
-    public void testTypeHttpLink() throws ParserException {
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("http://www.someurl.com","","",false,false)
-        );
-        assertTrue("This is a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-        linkTag =
-        new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("somePage.html","","",false,false)
-        );
-        assertTrue("This relative link is alsp a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-        linkTag =
-        new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("ftp://somePage.html","","",false,false)
-        );
-        assertTrue("This is not a http link : "+linkTag.getLink(),!linkTag.isHTTPLink());
+    public void testTypeHttpLink() throws ParserException
+    {
+        LinkTag link;
+
+        createParser ("<A HREF='http://www.someurl.com'>Try http.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
+        assertTrue("This is a http link : "+link.getLink(),link.isHTTPLink());
     }
 
-    public void testTypeHttpLikeLink() throws ParserException {
-        LinkTag linkTag =
-        new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("http://","","",false,false)
-        );
-        assertTrue("This is a http link",linkTag.isHTTPLikeLink());
-        LinkTag linkTag2 =
-        new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("https://www.someurl.com","","",false,false)
-        );
-        assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
+    public void testRelativeTypeHttpLink() throws ParserException
+    {
+        LinkTag link;
+
+        createParser ("<A HREF='somePage.html'>Try relative http.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
+        assertTrue("This relative link is also a http link : "+link.getLink(),link.isHTTPLink());
+    }
+    
+    public void testTypeNonHttp() throws ParserException
+    {
+        LinkTag link;
+
+        createParser ("<A HREF='ftp://www.someurl.com'>Try non-http.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
+        assertTrue("This is not a http link : "+link.getLink(),!link.isHTTPLink());
+    }
+
+    public void testTypeHttpLikeLink() throws ParserException
+    {
+        LinkTag link;
+
+        createParser ("<A HREF='http://'>Try basic http.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
+        assertTrue("This is a http link",link.isHTTPLikeLink());
+        
+        createParser ("<A HREF='https://www.someurl.com'>Try https.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
+        assertTrue("This is a https link",link.isHTTPLikeLink());
     }
 
     /**
@@ -369,7 +386,7 @@ public class LinkTagTest extends ParserTestCase {
         parser.addScanner (new LinkScanner ("-l"));
 
         parseAndAssertNodeCount (1);
-        assertTrue ("Node should be a HTMLLinkTag", node[0] instanceof LinkTag);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
         link = (LinkTag)node[0];
         assertTrue ("bug #738504 MailLink != HTTPLink", !link.isHTTPLink ());
         assertTrue ("bug #738504 MailLink != HTTPSLink", !link.isHTTPSLink ());
@@ -382,11 +399,11 @@ public class LinkTagTest extends ParserTestCase {
     {
         LinkTag link;
 
-        link = new LinkTag(
-            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
-            new CompositeTagData(null,null,null),
-            new LinkData("irc://server/channel","","",false,false)
-        );
+        createParser ("<A HREF='irc://server/channel'>Try irc.</A>","http://sourceforge.net");
+        parser.addScanner (new LinkScanner ("-l"));
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        link = (LinkTag)node[0];
         assertTrue("This is not a http link", !link.isHTTPLikeLink ());
     }
 }

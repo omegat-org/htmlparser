@@ -28,13 +28,16 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserUtils;
 
+/**
+ * An input tag in a form.
+ */
 public class InputTag extends Tag
 {
-    public InputTag(TagData tagData) {
-        super(tagData);
+    public InputTag ()
+    {
+        setTagName ("INPUT");
     }
 
     public String toString() {

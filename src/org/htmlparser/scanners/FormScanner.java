@@ -28,41 +28,41 @@
 
 package org.htmlparser.scanners;
 
-//////////////////
-// Java Imports //
-//////////////////
 import java.util.Stack;
+import java.util.Vector;
 
 import org.htmlparser.Parser;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
- * Scans for the Image Tag. This is a subclass of TagScanner, and is called using a
- * variant of the template method. If the evaluate() method returns true, that means the
- * given string contains an image tag. Extraction is done by the scan method thereafter
- * by the user of this class.
+ * Scanner for form tags.
  */
 public class FormScanner extends CompositeTagScanner
 {
     private static final String [] MATCH_ID = { "FORM" };
     public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";
     private boolean linkScannerAlreadyOpen=false;
-    private static final String [] formTagEnders = {"HTML","BODY"
-    };
+    private static final String [] formTagEnders = {"HTML","BODY"};
+    
     private Stack stack = new Stack();
+
     /**
-     * HTMLFormScanner constructor comment.
+     * Constructs a form scanner.
+     * Adds input, textarea, select and option scanners to the parser's
+     * scanner list.
      */
-    public FormScanner(Parser parser) {
+    public FormScanner(Parser parser)
+    {
         this("", parser);
     }
+
     /**
-     * Overriding the constructor to accept the filter
+     * Overriding the constructor to accept the filter.
      */
     public FormScanner(String filter, Parser parser)
     {
@@ -73,12 +73,12 @@ public class FormScanner extends CompositeTagScanner
         parser.addScanner(new OptionTagScanner("-option",stack));
     }
 
-  /**
-   * Extract the location of the image, given the string to be parsed, and the url
-   * of the html page in which this tag exists.
-   * @param tag The form tag with the 'ACTION' attribute.
-   * @param url URL of web page being parsed.
-   */
+    /**
+     * Extract the location of the image, given the tag, and the url
+     * of the html page in which this tag exists.
+     * @param tag The form tag with the 'ACTION' attribute.
+     * @param url URL of web page being parsed.
+     */
     public String extractFormLocn(Tag tag,String url) throws ParserException
     {
         try {
@@ -107,42 +107,15 @@ public class FormScanner extends CompositeTagScanner
     }
 
     /**
-     * Scan the tag and extract the information related to the <IMG> tag. The url of the
-     * initiating scan has to be provided in case relative links are found. The initial
-     * url is then prepended to it to give an absolute link.
-     * The NodeReader is provided in order to do a lookahead operation. We assume that
-     * the identification has already been performed using the evaluate() method.
-     * @param tag HTML Tag to be scanned for identification
-     * @param url The initiating url of the scan (Where the html page lies)
-     * @param reader The reader object responsible for reading the html page
-     * @param currentLine The current line (automatically provided by Tag)
-     */
-//  public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
-//  {
-//      if (linkScannerAlreadyOpen) {
-//          String newLine = insertEndTagBeforeNode(tag, currentLine);
-//          reader.changeLine(newLine);
-//          return new EndTag(
-//              new TagData(
-//                  tag.elementBegin(),
-//                  tag.elementBegin()+3,
-//                  "A",
-//                  currentLine
-//              )
-//          );
-//      }
-//      return super.scan(tag,url,reader,currentLine);
-//  }
-
-
-    /**
      * @see org.htmlparser.scanners.TagScanner#getID()
      */
-    public String [] getID() {
+    public String [] getID()
+    {
         return MATCH_ID;
     }
 
-    public boolean evaluate(String s, TagScanner previousOpenScanner) {
+    public boolean evaluate(String s, TagScanner previousOpenScanner)
+    {
         if (previousOpenScanner instanceof LinkScanner) {
             linkScannerAlreadyOpen = true;
             StringBuffer msg= new StringBuffer();
@@ -162,18 +135,36 @@ public class FormScanner extends CompositeTagScanner
         return super.evaluate(s, previousOpenScanner);
     }
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-        throws ParserException {
-        String formUrl = extractFormLocn(compositeTagData.getStartTag(),tagData.getUrlBeingParsed());
-        if (formUrl!=null && formUrl.length()>0)
-            compositeTagData.getStartTag().setAttribute("ACTION",formUrl);
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        FormTag ret;
+
+        // special step here...
+        // not sure why the recursion is tracked this way,
+        // rather than using the ENDERS and END_TAG_ENDERS arrays...
         if (!stack.empty () && (this == stack.peek ()))
             stack.pop ();
-        return new FormTag(tagData, compositeTagData);
+
+        ret = new FormTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        // special step here...
+        // ... is it true that without an ACTION the default is to send it back to the same page?
+        String formUrl = extractFormLocn(startTag, page.getUrl ());
+        if (formUrl!=null && formUrl.length()>0)
+            startTag.setAttribute("ACTION",formUrl);
+
+        return (ret);
     }
 
-    public void beforeScanningStarts() {
+    public void beforeScanningStarts()
+    {
         stack.push(this);
     }
-
 }

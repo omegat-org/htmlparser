@@ -28,13 +28,13 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-
+/**
+ * A span tag.
+ */
 public class Span extends CompositeTag {
 
-    public Span(TagData tagData, CompositeTagData compositeTagData) {
-        super(tagData, compositeTagData);
+    public Span ()
+    {
+        setTagName ("SPAN");
     }
-
 }

@@ -28,29 +28,34 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.*;
-import org.htmlparser.util.*;
+/**
+ * A table tag.
+ */
+public class TableTag extends CompositeTag
+{
 
-public class TableTag extends CompositeTag {
-    private NodeList rows;
-
-    public TableTag(
-        TagData tagData,
-        CompositeTagData compositeTagData,
-        NodeList rows) {
-        super(tagData, compositeTagData);
-        this.rows = rows;
+    public TableTag ()
+    {
+        setTagName ("TABLE");
     }
 
-    public int getRowCount() {
-        return rows.size();
+    /**
+     * Get the number of rows in this table.
+     */
+    public int getRowCount()
+    {
+        return (getChildren().searchFor(TableRow.class).size());
     }
 
+    /**
+     * Get the row at the given index.
+     */
     public TableRow getRow(int i) {
-        return (TableRow)rows.elementAt(i);
+        return (TableRow)(getChildren().searchFor(TableRow.class)).elementAt(i);
     }
 
-    public String toString() {
+    public String toString()
+    {
         return
             "TableTag\n" +
             "********\n"+

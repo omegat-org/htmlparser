@@ -28,36 +28,41 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.LinkProcessor;
 
 /**
- * Identifies an frame tag
+ * Identifies a frame tag
  */
 public class FrameTag extends Tag
 {
-    /**
-     * The URL where the image is stored.
-     */
-    protected String frameURL;
-    protected String frameName;
-    public FrameTag(TagData tagData, String frameURL,String frameName) {
-        super(tagData);
-        this.frameURL = frameURL;
-      this.frameName = frameName;
+    public FrameTag ()
+    {
+        setTagName ("FRAME");
     }
+
     /**
-     * Returns the location of the image
+     * Returns the location of the frames.
+     * TODO: handle base url?
      */
-    public String getFrameLocation() {
-        return frameURL;
+    public String getFrameLocation()
+    {
+        String relativeFrame = getAttribute ("SRC");
+        if (relativeFrame==null)
+            return "";
+        else
+            return (new LinkProcessor()).extract(relativeFrame, getPage ().getUrl ());
     }
-    public String getFrameName() {
-        return frameName;
+
+    public String getFrameName()
+    {
+        return (getAttribute ("NAME"));
     }
+
     /**
-     * Print the contents of the HTMLFrameTag
+     * Print the contents of the FrameTag.
      */
-    public String toString() {
-        return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    public String toString()
+    {
+        return "FRAME TAG : Frame " +getFrameName() + " at "+getFrameLocation()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
     }
 }

@@ -38,22 +38,24 @@ import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.scanners.TagScanner;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SpecialHashtable;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
- * Tag represents a generic tag. This class allows users to register specific
- * tag scanners, which can identify links, or image references. This tag asks the
- * scanners to run over the text, and identify. It can be used to dynamically
- * configure a parser.
+ * Tag represents a generic tag.
+ * If no scanner is registered for a given tag name, this is what you get.
+ * This is also the base class for all tags created by the parser (not the
+ * lexer which has nodes).
  */
 public class Tag extends TagNode
 {
     private TagScanner mScanner;
-    private TagData mData;
+
+    public Tag ()
+    {
+    }
 
     public Tag (TagNode node, TagScanner scanner)
     {
@@ -64,13 +66,6 @@ public class Tag extends TagNode
     public Tag (Page page, int start, int end, Vector attributes)
     {
         super (page, start, end, attributes);
-        mScanner = null;
-    }
-
-    public Tag (TagData data)
-    {
-        super (data.getPage (), data.getTagBegin (), data.getTagEnd (), data.getAttributes ());
-        mData = data;
         mScanner = null;
     }
 
@@ -101,21 +96,6 @@ public class Tag extends TagNode
     }
 
     /**
-     * Jeez I hope this goes away.
-     */
-    public String getTagContents ()
-    {
-        String ret;
-
-        if (null != mData)
-            ret = mData.getTagContents();
-        else
-            ret = "";
-        
-        return (ret);
-    }
-
-    /**
      * Handle a visitor.
      * <em>NOTE: This currently defers to accept(NodeVisitor). If
      * subclasses of Node override accept(Object) directly, they must
@@ -140,5 +120,15 @@ public class Tag extends TagNode
             ((NodeVisitor)visitor).visitEndTag (this);
         else
             ((NodeVisitor)visitor).visitTag (this);
+    }
+    
+    public int getStartingLineNumber ()
+    {
+        return (getPage ().row (getStartPosition ()));
+    }
+
+    public int getEndingLineNumber ()
+    {
+        return (getPage ().row (getEndPosition ()));
     }
 }

@@ -28,12 +28,14 @@
 
 
 package org.htmlparser.tests.scannersTests;
+
+import java.util.Vector;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -120,7 +122,7 @@ public class TagScannerTest extends ParserTestCase
             public Tag scan(Tag tag,String url,Lexer lexer) { return null;}
             public boolean evaluate(String s,TagScanner previousOpenScanner) { return false; }
             public String [] getID() { return null; }
-            protected Tag createTag(TagData tagData, Tag tag, String url) { return null; }
+            protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) { return null; }
         };
         String result = scanner.removeChars(test,"\r\n");
         assertEquals("Removing Chars","helloworld\tqsdsds",result);

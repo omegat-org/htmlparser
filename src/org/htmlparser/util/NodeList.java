@@ -139,6 +139,10 @@ public class NodeList implements Serializable {
         return nodeArray;
     }
 
+    public void copyToNodeArray(Node[] array) {
+        System.arraycopy(nodeData, 0, array, 0, size);
+    }
+
     public String asString() {
         StringBuffer buff = new StringBuffer();
         for (int i=0;i<size;i++)

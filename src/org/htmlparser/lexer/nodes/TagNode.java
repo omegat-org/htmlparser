@@ -31,6 +31,7 @@ package org.htmlparser.lexer.nodes;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import org.htmlparser.AbstractNode;
 
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
@@ -161,16 +162,17 @@ public class TagNode
         needed = false;
         singleq = true;
         doubleq = true;
-        for (int i = 0; i < value.length (); i++)
-        {
-            ch = value.charAt (i);
-            if (Character.isWhitespace (ch))
-                needed = true;
-            else if ('\'' == ch)
-                singleq  = false;
-            else if ('"' == ch)
-                doubleq = false;
-        }
+        if (null != value)
+            for (int i = 0; i < value.length (); i++)
+            {
+                ch = value.charAt (i);
+                if (Character.isWhitespace (ch))
+                    needed = true;
+                else if ('\'' == ch)
+                    singleq  = false;
+                else if ('"' == ch)
+                    doubleq = false;
+            }
 
         // now apply quoting
         if (needed)
@@ -201,6 +203,19 @@ public class TagNode
         else
             quote = 0;
         setAttribute (key, value, quote);
+    }
+
+    /**
+     * Remove the attribute with the given key, if it exists.
+     * @param key The name of the attribute.
+     */
+    public void removeAttribute (String key)
+    {
+        Attribute attribute;
+
+        attribute = getAttributeEx (key);
+        if (null != attribute)
+            getAttributesEx ().remove (attribute);
     }
 
     /**
@@ -283,7 +298,7 @@ public class TagNode
         if (!replaced)
         {
             // add whitespace between attributes
-            if (!((Attribute)attributes.elementAt (length - 1)).isWhitespace ())
+            if ((0 != length) && !((Attribute)attributes.elementAt (length - 1)).isWhitespace ())
                 attributes.addElement (new Attribute (" "));
             attributes.addElement (attribute);
         }
@@ -585,17 +600,10 @@ public class TagNode
         ret = new StringBuffer ();
         attributes = getAttributesEx ();
         ret.append ("<");
-        if (0 < attributes.size ())
+        for (int i = 0; i < attributes.size (); i++)
         {
-            // special handling for the node name
-            attribute = (Attribute)attributes.elementAt (0);
-            ret.append (attribute.getName ());
-            // the rest
-            for (int i = 1; i < attributes.size (); i++)
-            {
-                attribute = (Attribute)attributes.elementAt (i);
-                attribute.toString (ret);
-            }
+            attribute = (Attribute)attributes.elementAt (i);
+            attribute.toString (ret);
         }
         ret.append (">");
 
