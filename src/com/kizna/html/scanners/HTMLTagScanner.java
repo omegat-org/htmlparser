@@ -108,7 +108,7 @@ public static String absorbLeadingBlanks(String s)
    * scan has begun, and hence allows us to write scanners that can work with dirty html
    */
   public abstract boolean evaluate(String s,HTMLTagScanner previousOpenScanner);
-public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) {
+public static String extractXMLData(HTMLNode node, String tagName, HTMLReader reader) throws HTMLParserException{
   
   String xmlData = "";
 
@@ -128,7 +128,11 @@ public static String extractXMLData(HTMLNode node, String tagName, HTMLReader re
       }
       while (node instanceof HTMLStringNode);
       
-    }catch (HTMLParserException e) {}
+    }
+    catch (HTMLParserException e) { throw e;}
+    catch (IOException e) {
+    	throw new HTMLParserException("extractXMLData() threw an IOException while trying to read the next element");
+    }
   }
   if (xmlTagFound) {
       if (node!=null) {
