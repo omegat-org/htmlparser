@@ -195,9 +195,8 @@ public class HTMLTag implements HTMLNode
 				if (state==TAG_FINISHED_PARSING_STATE) {
 					tag.setTagEnd(i);
 					// Do Correction
-					System.out.println("We need to correct "+tag.getText());
 					// Correct the tag - assuming its grouped into name value pairs
-					// First remove all inverted commas.
+					// Remove all inverted commas.
 					correctTag(tag);
 				}
 			}
