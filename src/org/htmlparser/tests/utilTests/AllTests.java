@@ -59,6 +59,7 @@ public static TestSuite suite() {
 	suite.addTestSuite(HTMLParameterParserTest.class);	
 	suite.addTestSuite(HTMLTagParserTest.class);
 	suite.addTestSuite(CharacterTranslationTest.class);
+	suite.addTestSuite(HTMLVectorTest.class);
 	return suite;
 } 
 }

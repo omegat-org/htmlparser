@@ -33,7 +33,7 @@ import java.util.Vector;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 
-public class HTMLEnumerationImpl implements HTMLEnumeration
+public class HTMLEnumerationImpl implements HTMLPeekingEnumeration
 {
     HTMLReader reader;
     Vector preRead;

@@ -52,8 +52,9 @@ import org.htmlparser.util.HTMLParserException;
  * htmlparser.jar file available at
  * <a href="http://htmlparser.sourceforge.net">htmlparser.sourceforge.net</a>
  * written by Somik Raha (
- * <a href='mailto:somik@kizna.com?subject=htmlparser'>somik@kizna.com</a>
- * <a href="http://www.kizna.com">www.kizna.com</a>).
+ * <a href='mailto:somik@industriallogic.com?
+ * subject=htmlparser'>somik@industriallogic. com</a>
+ * <a href="http://industriallogic.com">http://industriallogic.com</a>).
  * @author <a href='mailto:DerrickOswald@users.sourceforge.net?subject=Character Reference Translation class'>Derrick Oswald</a>
  */
 public class Generate
