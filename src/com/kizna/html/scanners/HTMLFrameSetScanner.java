@@ -25,19 +25,19 @@ import com.kizna.html.util.HTMLLinkProcessor;
  * given string contains an image tag. Extraction is done by the scan method thereafter
  * by the user of this class.
  */
-public class HTMLFrameScanner extends HTMLTagScanner
+public class HTMLFrameSetScanner extends HTMLTagScanner
 {
 	/**
 	 * Overriding the default constructor
 	 */
-	public HTMLFrameScanner()
+	public HTMLFrameSetScanner()
 	{
 		super();
 	}
 	/**
 	 * Overriding the constructor to accept the filter
 	 */
-	public HTMLFrameScanner(String filter)
+	public HTMLFrameSetScanner(String filter)
 	{
 		super(filter);
 	}
@@ -50,7 +50,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 	{
 		// Eat up leading blanks
 		s = absorbLeadingBlanks(s);
-		if (s.toUpperCase().indexOf("FRAME")==0)
+		if (s.toUpperCase().indexOf("FRAMESET")==0)
 		return true; else return false;			
 	}
   /**

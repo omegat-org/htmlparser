@@ -62,7 +62,9 @@ public static TestSuite suite() {
 	suite.addTest(HTMLStyleScannerTest.suite());	
 	suite.addTest(HTMLMetaTagScannerTest.suite());			
 	suite.addTest(HTMLTitleScannerTest.suite());				
-	suite.addTest(HTMLFormScannerTest.suite());		
+	suite.addTest(HTMLFormScannerTest.suite());	
+	suite.addTest(HTMLFrameScannerTest.suite());	
+	suite.addTest(HTMLFrameSetScannerTest.suite());	
 	return suite;
 }
 }
