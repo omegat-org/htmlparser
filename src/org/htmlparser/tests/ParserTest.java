@@ -33,6 +33,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
 
 import org.htmlparser.Node;
@@ -460,6 +461,78 @@ public class ParserTest extends ParserTestCase {
         assertTrue ("Wrong encoding", parser.getEncoding ().equals ("UTF-8"));
     }
 
+    /**
+     * Test a bogus comma delimited charset specification in the HTTP header.
+     * See bug #722941.
+     * A comma delimted charset in the HTTP header does not meet the HTTP/1.1
+     * specification in RFC 2068. In this case that I believe
+     * that some idiot has misconfigured the HTTP server, but since it's
+     * AOL it would be nice to handle this case.
+     */
+	public void testCommaListCharset () throws ParserException
+    {
+        URL url;
+        URLConnection connection;
+		Parser parser;
+		String idiots = "http://users.aol.com/geinster/rej.htm";
+
+        try
+        {
+            url = new URL (idiots);
+            connection = url.openConnection ();
+            // this little subclass just gets around normal JDK 1.4 processing
+            // that filters out bogus character sets
+            parser = new Parser ()
+            {
+                protected String getCharset(String content)
+                {
+                    int index;
+                    String ret;
+
+                    ret = DEFAULT_CHARSET;
+                    if (null != content)
+                    {
+                        index = content.indexOf(CHARSET_STRING);
+
+                        if (index != -1)
+                        {
+                            content = content.substring(index + CHARSET_STRING.length()).trim();
+                            if (content.startsWith("="))
+                            {
+                                content = content.substring(1).trim();
+                                index = content.indexOf(";");
+                                if (index != -1)
+                                    content = content.substring(0, index);
+
+                                //remove any double quotes from around charset string
+                                if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
+                                    content = content.substring (1, content.length () - 1);
+
+                                //remove any single quote from around charset string
+                                if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
+                                    content = content.substring (1, content.length () - 1);
+
+                                ret = content; // short circuit findCharset() processing
+                            }
+                        }
+                    }
+
+                    return (ret);
+                }
+            };
+            parser.setConnection (connection);
+            // must be the default
+            assertTrue ("Wrong encoding", parser.getEncoding ().equals ("ISO-8859-1"));
+            for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+                e.nextNode();
+            assertTrue ("Wrong encoding", parser.getEncoding ().equals ("windows-1252"));
+        }
+        catch (Exception e)
+        {
+            fail (e.getMessage ());
+        }
+    }
+
     public void testNullUrl() {
 		Parser parser;
 		try {
@@ -497,7 +570,39 @@ public class ParserTest extends ParserTestCase {
 		"// -->\n"+
 		"</script>\n"+
 		"</head><body bgcolor=#ffffff text=#000000 link=#0000cc vlink=#551a8b alink=#ff0000 onLoad=sf()><center><table border=0 cellspacing=0 cellpadding=0><tr><td><img src=\"images/logo.gif\" width=276 height=110 alt=\"Google\"></td></tr></table><br>\n"+
-		"<table border=0 cellspacing=0 cellpadding=0>" +			"<tr>" +			"<td width=15>&nbsp;</td>" +			"<td id=0 bgcolor=#3366cc align=center width=95 nowrap>" +				"<font color=#ffffff size=-1><b>Web</b></font>" +			"</td>" +			"<td width=15>&nbsp;</td>" +			"<td id=1 bgcolor=#efefef align=center width=95 nowrap onClick=\"return c('www.google.com/imghp');\" style=cursor:pointer;cursor:hand;><a id=1a class=q href=\"/imghp?hl=en&ie=UTF-8&oe=UTF-8\" onClick=\"return c('www.google.com/imghp');\"><font size=-1>Images</font></a></td><td width=15>&nbsp;</td><td id=2 bgcolor=#efefef align=center width=95 nowrap onClick=\"return c('www.google.com/grphp');\" style=cursor:pointer;cursor:hand;><a id=2a class=q href=\"/grphp?hl=en&ie=UTF-8&oe=UTF-8\" onClick=\"return c('www.google.com/grphp');\"><font size=-1>Groups</font></a></td><td width=15>&nbsp;</td><td id=3 bgcolor=#efefef align=center width=95 nowrap onClick=\"return c('www.google.com/dirhp');\" style=cursor:pointer;cursor:hand;><a id=3a class=q href=\"/dirhp?hl=en&ie=UTF-8&oe=UTF-8\" onClick=\"return c('www.google.com/dirhp');\"><font size=-1>Directory</font></a></td><td width=15>&nbsp;</td><td id=4 bgcolor=#efefef align=center width=95 nowrap onClick=\"return c('www.google.com/nwshp');\" style=cursor:pointer;cursor:hand;><a id=4a class=q href=\"/nwshp?hl=en&ie=UTF-8&oe=UTF-8\" onClick=\"return c('www.google.com/nwshp');\"><font size=-1><nobr>News-<font	color=red>New!</font></nobr></font></a></td><td width=15>&nbsp;</td></tr><tr><td colspan=12 bgcolor=#3366cc><img width=1 height=1 alt=\"\">" +			"</td>" +			"</tr>" +		"</table>" +		"<br>" +		"<form action=\"/search\" name=f>" +			"<table cellspacing=0 cellpadding=0>" +			"<tr>" +				"<td width=75>&nbsp;</td>" +				"<td align=center>" +					"<input type=hidden name=hl value=en>" +					"<input type=hidden name=ie value=\"UTF-8\">" +					"<input type=hidden name=oe value=\"UTF-8\">" +					"<input maxLength=256 size=55 name=q value=\"\"><br>" +					"<input type=submit value=\"Google Search\" name=btnG>" +					"<input type=submit value=\"I'm Feeling Lucky\" name=btnI>" +				"</td>" +				"<td valign=top nowrap>" +					"<font size=-2>&nbsp;&#8226;&nbsp;<a href=/advanced_search?hl=en>Advanced&nbsp;Search</a>" +					"<br>&nbsp;&#8226;&nbsp;<a href=/preferences?hl=en>Preferences</a>" +					"<br>&nbsp;&#8226;&nbsp;<a href=/language_tools?hl=en>Language Tools</a>" +					"</font>" +				"</td>" +			"</tr>" +			"</table>" +		"</form><br>\n"+
+		"<table border=0 cellspacing=0 cellpadding=0>" +
+			"<tr>" +
+			"<td width=15>&nbsp;</td>" +
+			"<td id=0 bgcolor=#3366cc align=center width=95 nowrap>" +
+				"<font color=#ffffff size=-1><b>Web</b></font>" +
+			"</td>" +
+			"<td width=15>&nbsp;</td>" +
+			"<td id=1 bgcolor=#efefef align=center width=95 nowrap onClick=\"return c('www.google.com/imghp');\" style=cursor:pointer;cursor:hand;><a id=1a class=q href=\"/imghp?hl=en&ie=UTF-8&oe=UTF-8\" onClick=\"return c('www.google.com/imghp');\"><font size=-1>Images</font></a></td><td width=15>&nbsp;</td><td id=2 bgcolor=#efefef align=center width=95 nowrap onClick=\"return c('www.google.com/grphp');\" style=cursor:pointer;cursor:hand;><a id=2a class=q href=\"/grphp?hl=en&ie=UTF-8&oe=UTF-8\" onClick=\"return c('www.google.com/grphp');\"><font size=-1>Groups</font></a></td><td width=15>&nbsp;</td><td id=3 bgcolor=#efefef align=center width=95 nowrap onClick=\"return c('www.google.com/dirhp');\" style=cursor:pointer;cursor:hand;><a id=3a class=q href=\"/dirhp?hl=en&ie=UTF-8&oe=UTF-8\" onClick=\"return c('www.google.com/dirhp');\"><font size=-1>Directory</font></a></td><td width=15>&nbsp;</td><td id=4 bgcolor=#efefef align=center width=95 nowrap onClick=\"return c('www.google.com/nwshp');\" style=cursor:pointer;cursor:hand;><a id=4a class=q href=\"/nwshp?hl=en&ie=UTF-8&oe=UTF-8\" onClick=\"return c('www.google.com/nwshp');\"><font size=-1><nobr>News-<font	color=red>New!</font></nobr></font></a></td><td width=15>&nbsp;</td></tr><tr><td colspan=12 bgcolor=#3366cc><img width=1 height=1 alt=\"\">" +
+			"</td>" +
+			"</tr>" +
+		"</table>" +
+		"<br>" +
+		"<form action=\"/search\" name=f>" +
+			"<table cellspacing=0 cellpadding=0>" +
+			"<tr>" +
+				"<td width=75>&nbsp;</td>" +
+				"<td align=center>" +
+					"<input type=hidden name=hl value=en>" +
+					"<input type=hidden name=ie value=\"UTF-8\">" +
+					"<input type=hidden name=oe value=\"UTF-8\">" +
+					"<input maxLength=256 size=55 name=q value=\"\"><br>" +
+					"<input type=submit value=\"Google Search\" name=btnG>" +
+					"<input type=submit value=\"I'm Feeling Lucky\" name=btnI>" +
+				"</td>" +
+				"<td valign=top nowrap>" +
+					"<font size=-2>&nbsp;&#8226;&nbsp;<a href=/advanced_search?hl=en>Advanced&nbsp;Search</a>" +
+					"<br>&nbsp;&#8226;&nbsp;<a href=/preferences?hl=en>Preferences</a>" +
+					"<br>&nbsp;&#8226;&nbsp;<a href=/language_tools?hl=en>Language Tools</a>" +
+					"</font>" +
+				"</td>" +
+			"</tr>" +
+			"</table>" +
+		"</form><br>\n"+
 		"<br><font size=-1><a href=\"/ads/\">Advertise&nbsp;with&nbsp;Us</a> - <a href=\"/services/\">Search&nbsp;Solutions</a> - <a href=\"/options/\">Services&nbsp;&amp;&nbsp;Tools</a> - <a href=/about.html>Jobs,&nbsp;Press,&nbsp;&amp;&nbsp;Help</a><span id=hp style=\"behavior:url(#default#homepage)\"></span>\n"+
 		"<script>\n"+
 		"if (!hp.isHomePage('http://www.google.com/')) {document.write(\"<p><a href=\"/mgyhp.html\" onClick=\"style.behavior='url(#default#homepage)';setHomePage('http://www.google.com/');\">Make Google Your Homepage!</a>\");}\n"+

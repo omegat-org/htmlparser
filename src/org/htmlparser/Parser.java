@@ -420,17 +420,6 @@ public class Parser
                 character_set = getCharacterSet (url_conn);
                 createReader ();
             }
-            catch (UnsupportedEncodingException uee)
-            {
-                String msg = "setConnection() : The content of " + connection.getURL ().toExternalForm () + " has an encoding which is not supported";
-                ParserException ex = new ParserException (msg, uee);
-                feedback.error (msg, ex);
-                resourceLocn = res;
-                url_conn = con;
-                character_set = chs;
-                reader = rd;
-                throw ex;
-            }
             catch (IOException ioe)
             {
                 String msg = "setConnection() : Error in opening a connection to " + connection.getURL ().toExternalForm ();
@@ -519,16 +508,6 @@ public class Parser
                 {
                     character_set = encoding;
                     recreateReader ();
-                }
-                catch (UnsupportedEncodingException uee)
-                {
-                    String msg = "setEncoding() : The specified encoding is not supported";
-                    ParserException ex = new ParserException (msg, uee);
-                    feedback.error (msg, ex);
-                    character_set = chs;
-                    reader = rd;
-                    input = in;
-                    throw ex;
                 }
                 catch (IOException ioe)
                 {
@@ -633,17 +612,52 @@ public class Parser
     //
 
     /**
+     * Open a stream reader on the <code>InputStream</code>.
+     * Revise the character set to it's default value if an
+     * <code>UnsupportedEncodingException</code> is thrown.
+     * @exception UnsupportedEncodingException in the unlikely event that
+     * the default character set is not supported on this platform.
+     */
+    protected InputStreamReader createInputStreamReader ()
+        throws
+            UnsupportedEncodingException
+    {
+        InputStreamReader ret;
+
+        try
+        {
+            ret = new InputStreamReader (input, character_set);
+        }
+        catch (UnsupportedEncodingException uee)
+        {
+            StringBuffer msg;
+            String message;
+            
+            msg = new StringBuffer (1024);
+            msg.append (url_conn.getURL ().toExternalForm ());
+            msg.append (" has an encoding (");
+            msg.append (character_set);
+            msg.append (") which is not supported, using ");
+            msg.append (DEFAULT_CHARSET);
+            message = msg.toString ();
+            feedback.warning (message);
+            character_set = DEFAULT_CHARSET;
+            ret = new InputStreamReader (input, character_set);
+        }
+        
+        return (ret);
+    }
+        
+    /**
      * Create a new reader for the URLConnection object.
      * The current character set is used to transform the input stream
      * into a character reader.
-     * @exception UnsupportedEncodingException if the current character set 
-     * is not supported on this platform.
      * @exception IOException if there is a problem constructing the reader.
+     * @see #createInputStreamReader()
      * @see #getEncoding()
      */
     protected void createReader ()
         throws
-            UnsupportedEncodingException,
             IOException
     {
         InputStream stream;
@@ -652,7 +666,7 @@ public class Parser
         stream = url_conn.getInputStream ();
         input = new BufferedInputStream (stream);
         input.mark (Integer.MAX_VALUE);
-        in = new InputStreamReader (input, character_set);
+        in = createInputStreamReader ();
         reader = new NodeReader (in, resourceLocn);
         reader.setParser (this);
     }
@@ -662,14 +676,13 @@ public class Parser
      * The current character set is used to transform the input stream
      * into a character reader. Defaults to <code>createReader()</code> if
      * there is no existing input stream.
-     * @exception UnsupportedEncodingException if the current character set 
-     * is not supported on this platform.
      * @exception IOException if there is a problem constructing the reader.
+     * @see #createReader()
+     * @see #createInputStreamReader()
      * @see #getEncoding()
      */
     protected void recreateReader ()
         throws
-            UnsupportedEncodingException,
             IOException
     {
         InputStreamReader in;
@@ -680,7 +693,7 @@ public class Parser
         {
             input.reset ();
             input.mark (Integer.MAX_VALUE);
-            in = new InputStreamReader (input, character_set);
+            in = createInputStreamReader ();
             reader = new NodeReader (in, resourceLocn);
             reader.setParser (this);
         }
