@@ -28,29 +28,21 @@
 
 package org.htmlparser.tests;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLParserTest extends HTMLParserTestCase {
 
@@ -372,7 +364,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		HTMLParser parser;
 		try
         {
-			parser = new HTMLParser("http://www.ibm.co.jp", HTMLParser.nul);
+			parser = new HTMLParser("http://www.ibm.co.jp", HTMLParser.noFeedback);
 			assertEquals("Character set should be Shift_JIS", "Shift_JIS", parser.getEncoding ());
 		}
 		catch (HTMLParserException e)
@@ -394,7 +386,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
         
 		try
         {
-			parser = new HTMLParser("http://www.sony.co.jp", HTMLParser.nul);
+			parser = new HTMLParser("http://www.sony.co.jp", HTMLParser.noFeedback);
 			assertEquals("Character set by default is ISO-8859-1", "ISO-8859-1", parser.getEncoding ());
             enumeration = parser.elements();
 			assertEquals("Character set should be Shift_JIS", "Shift_JIS", parser.getEncoding ());
@@ -408,7 +400,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 	public void testNullUrl() {
 		HTMLParser parser;
 		try {
-			parser = new HTMLParser("http://someoneexisting.com", HTMLParser.nul);
+			parser = new HTMLParser("http://someoneexisting.com", HTMLParser.noFeedback);
 			assertTrue("Should have thrown an exception!",false);
 		}
 		catch (HTMLParserException e) {

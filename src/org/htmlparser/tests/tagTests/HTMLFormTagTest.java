@@ -66,7 +66,7 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 
 		formTag.setFormLocation("http://www.yahoo.com/yahoo/do_not_login.jsp");
  
-		String expectedHTML = "<FORM METHOD=\""+HTMLFormTag.POST+"\" ACTION=\"http://www.yahoo.com/yahoo/do_not_login.jsp\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\">\r\n"+
+		String expectedHTML = "<FORM ACTION=\"http://www.yahoo.com/yahoo/do_not_login.jsp\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\" METHOD=\""+HTMLFormTag.POST+"\">\r\n"+
 		HTMLFormScannerTest.EXPECTED_FORM_HTML_REST_OF_FORM;
 		assertStringEquals("Raw String",expectedHTML,formTag.toHTML());
 	}

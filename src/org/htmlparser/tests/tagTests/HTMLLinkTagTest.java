@@ -28,19 +28,11 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.io.BufferedReader;
-import java.util.Enumeration;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.HTMLParser;
+import org.htmlparser.scanners.HTMLLinkScanner;
+import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.scanners.*;
-
-import java.io.StringReader;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 public class HTMLLinkTagTest extends HTMLParserTestCase
 {
@@ -132,7 +124,7 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 		createParser("<a href=http://note.kimo.com.tw/>筆記</a>&nbsp; <a \n"+
 		"href=http://photo.kimo.com.tw/>相簿</a>&nbsp; <a\n"+
 		"href=http://address.kimo.com.tw/>通訊錄</a>&nbsp;&nbsp;","http://www.cj.com");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));
 			
@@ -277,7 +269,7 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 			"<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font> <a \n"+
 			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
 			"nical.html\"> Journalism 3.0</a> by Rajesh Jain","http://www.cj.com/");
-		parser.setLineSeparator("\r\n");
+		HTMLParser.setLineSeparator("\r\n");
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));
 			
@@ -291,34 +283,34 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 	}
 
 	public void testTypeHttps() throws HTMLParserException{
-		HTMLLinkTag linkTag = new HTMLLinkTag("https://www.someurl.com","",0,0,"","",null,false,false,"","");
+		HTMLLinkTag linkTag = new HTMLLinkTag("https://www.someurl.com","",0,0,"","",null,false,false,"","",null,null);
 		assertTrue("This is a https link",linkTag.isHTTPSLink());
 	}
 
 	public void testTypeFtp() throws HTMLParserException{
-		HTMLLinkTag linkTag = new HTMLLinkTag("ftp://www.someurl.com","",0,0,"","",null,false,false,"","");
+		HTMLLinkTag linkTag = new HTMLLinkTag("ftp://www.someurl.com","",0,0,"","",null,false,false,"","",null,null);
 		assertTrue("This is an ftp link",linkTag.isFTPLink());
 	}	
 
 	public void testTypeJavaScript() throws HTMLParserException {
-		HTMLLinkTag linkTag = new HTMLLinkTag("javascript://","",0,0,"","",null,false,true,"","");
+		HTMLLinkTag linkTag = new HTMLLinkTag("javascript://","",0,0,"","",null,false,true,"","",null,null);
 		assertTrue("This is a javascript link",linkTag.isJavascriptLink());
 	}
 
 	public void testTypeHttpLink() throws HTMLParserException {
-		HTMLLinkTag linkTag = new HTMLLinkTag("http://","",0,0,"","",null,false,false,"","");
+		HTMLLinkTag linkTag = new HTMLLinkTag("http://","",0,0,"","",null,false,false,"","",null,null);
 		assertTrue("This is a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-		linkTag = new HTMLLinkTag("somePage.html","",0,0,"","",null,false,false,"","");
+		linkTag = new HTMLLinkTag("somePage.html","",0,0,"","",null,false,false,"","",null,null);
 		assertTrue("This relative link is alsp a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-		linkTag = new HTMLLinkTag("ftp://somePage.html","",0,0,"","",null,false,false,"","");
+		linkTag = new HTMLLinkTag("ftp://somePage.html","",0,0,"","",null,false,false,"","",null,null);
 		assertTrue("This is not a http link : "+linkTag.getLink(),!linkTag.isHTTPLink());
 		
 	}	
 
 	public void testTypeHttpLikeLink() throws HTMLParserException {
-		HTMLLinkTag linkTag = new HTMLLinkTag("http://","",0,0,"","",null,false,false,"","");
+		HTMLLinkTag linkTag = new HTMLLinkTag("http://","",0,0,"","",null,false,false,"","",null,null);
 		assertTrue("This is a http link",linkTag.isHTTPLikeLink());
-		HTMLLinkTag linkTag2 = new HTMLLinkTag("https://www.someurl.com","",0,0,"","",null,false,false,"","");
+		HTMLLinkTag linkTag2 = new HTMLLinkTag("https://www.someurl.com","",0,0,"","",null,false,false,"","",null,null);
 		assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
 
 	}	
@@ -328,6 +320,6 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Expected link",node[0] instanceof HTMLLinkTag);
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
-		assertEquals("contents and end of link","<IMG SRC=\"pic.jpg\">abcd</A>",linkTag.getLinkContentsAndEndTagWith(null));		
+		assertEquals("contents and end of link","<IMG SRC=\"pic.jpg\">abcd</A>",linkTag.getChildContentsAndEndTagWith(null));		
 	}	
 }

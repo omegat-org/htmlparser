@@ -199,7 +199,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[11];
 		HTMLNode [] node2 = new HTMLNode[10];
 		int j = 0;
-		for (Enumeration e = linkTag.linkData();e.hasMoreElements();) {
+		for (Enumeration e = linkTag.children();e.hasMoreElements();) {
 			node2[j++] = (HTMLNode)e.nextElement();
 		}
 		assertEquals("Number of tags within the link",1,j);

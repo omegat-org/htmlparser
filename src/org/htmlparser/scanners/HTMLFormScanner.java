@@ -32,28 +32,18 @@ package org.htmlparser.scanners;
 // Java Imports //
 //////////////////
 import java.util.Enumeration;
-import java.util.Vector;
-import java.util.StringTokenizer;
-import java.io.IOException;
 import java.util.Hashtable;
-import java.util.HashMap;
+import java.util.Vector;
 
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
-import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLStringNode;
-import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLParser;
 import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLImageTag;
+import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tags.HTMLInputTag;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTextareaTag;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.tags.HTMLFormTag;
 
 /**
  * Scans for the Image Tag. This is a subclass of HTMLTagScanner, and is called using a
@@ -132,6 +122,8 @@ public class HTMLFormScanner extends HTMLTagScanner
 		}
 		try {
 			HTMLNode node;
+			HTMLTag startFormTag = tag;
+			HTMLTag endFormTag = null;
 	      	Vector inputVector = new Vector(), textAreaVector = new Vector(), 
 	      	nodeVector = new Vector();
 			
@@ -139,11 +131,12 @@ public class HTMLFormScanner extends HTMLTagScanner
 			int linkBegin=-1, linkEnd=-1;
 	
 			link = extractFormLocn(tag,url);
+			tag.getParsed().put("ACTION",link);
 	    	name = extractFormName(tag);
 		    method = extractFormMethod(tag);
 			linkBegin = tag.elementBegin();
 		    boolean endFlag = false;
-			nodeVector.addElement(tag);
+			//nodeVector.addElement(tag);
 			
 			// The following two lines added by Somik Raha, to fix a bug - so as to allow 
 			// links inside form tags to be scanned.
@@ -161,7 +154,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 			reader.getParser().addScanner(linkScanner);
 			reader.getParser().addScanner(imageScanner);
 			// End of modification
-			
+			boolean dontPutTag=false;
 		    do
 			{
 				node = reader.readElement();
@@ -171,6 +164,8 @@ public class HTMLFormScanner extends HTMLTagScanner
 					if (endTag.getText().toUpperCase().equals("FORM")) {
 						endFlag=true;
 						linkEnd = endTag.elementEnd();
+						dontPutTag = true;
+						endFormTag = endTag;
 					}
 				}
 				else 
@@ -180,7 +175,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 				if (node instanceof HTMLTextareaTag) {
 					textAreaVector.addElement(node);
 				}
-				nodeVector.addElement(node);
+				if (!dontPutTag) nodeVector.addElement(node);
 			}
 			while (endFlag==false && node!=null);
 			restoreScanners(reader,oldScanners);
@@ -193,7 +188,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 				throw new HTMLParserException("HTMLFormScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
 				"Input Vector contents : "+msg.toString());
 			}		
-			HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,textAreaVector,nodeVector);
+			HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,textAreaVector,nodeVector,startFormTag,endFormTag);
 			return formTag;
 		}
 		catch (Exception e) {

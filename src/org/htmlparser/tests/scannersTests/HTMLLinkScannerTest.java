@@ -28,22 +28,17 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.io.BufferedReader;
-import java.util.Hashtable;
-import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.tests.tagTests.HTMLTagTest;
-import org.htmlparser.HTMLStringNode;
 import java.util.Enumeration;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
-import java.io.StringReader;
+
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.HTMLLinkScanner;
-import org.htmlparser.scanners.HTMLImageScanner;
-import junit.framework.TestSuite;
+import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLImageTag;
+import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLLinkScannerTest extends HTMLParserTestCase
 {
@@ -98,7 +93,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		// Verify the link data
 		assertEquals("Link Text","",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertStringEquals("Raw String","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></img></A>",linkTag.toHTML());
+		assertStringEquals("toHTML","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></img></A>",linkTag.toHTML());
 		// Verify the tags in between
 		assertTrue("Second node should be an end tag",node[1] instanceof HTMLEndTag);
 		assertTrue("Third node should be an HTMLTag",node[2] instanceof HTMLTag);		
@@ -245,7 +240,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		// Get the link data and cross-check
 		HTMLNode [] dataNode= new HTMLNode[10];
 		int i = 0;
-		for (Enumeration e = linkTag.linkData();e.hasMoreElements();)
+		for (Enumeration e = linkTag.children();e.hasMoreElements();)
 		{
 			dataNode[i++] = (HTMLNode)e.nextElement();
 		}
@@ -328,7 +323,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		assertEquals("Link Text","",linkTag.getLinkText());
 		HTMLNode [] containedNodes = new HTMLNode[10];
 		int i=0;
-		for (Enumeration e = linkTag.linkData();e.hasMoreElements();) {
+		for (Enumeration e = linkTag.children();e.hasMoreElements();) {
 			containedNodes[i++] = (HTMLNode)e.nextElement();
 		}
 		assertEquals("There should be 5 contained nodes in the link tag",5,i);
@@ -480,7 +475,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 
 		HTMLNode insideNodes [] = new HTMLNode[10];
 		int j =0 ;
-		for (Enumeration e = linkTag.linkData();e.hasMoreElements();) {
+		for (Enumeration e = linkTag.children();e.hasMoreElements();) {
 			insideNodes[j++]= (HTMLNode)e.nextElement();
 		}
 		assertEquals("Number of contained internal nodes",1,j);

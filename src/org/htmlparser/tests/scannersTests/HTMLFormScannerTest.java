@@ -28,31 +28,17 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.util.Enumeration;
-import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLParser;
-import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLRemarkNode;
-import org.htmlparser.scanners.HTMLFormScanner;	
-import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.scanners.HTMLFormScanner;
 import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTextareaTag;
-import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLEnumeration;
-import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.tests.tagTests.HTMLTagTest;
-
-import junit.extensions.ExceptionTestCase;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.htmlparser.util.HTMLParserException;
 
 public class HTMLFormScannerTest extends HTMLParserTestCase {
 	public static final String FORM_HTML =
@@ -71,7 +57,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		"<INPUT TYPE=\"submit\">\n"+
 		"</FORM>";
 	
-	public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM METHOD=\""+HTMLFormTag.POST+"\" ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\">\r\n";
+	public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\" METHOD=\""+HTMLFormTag.POST+"\">\r\n";
 	public static final String EXPECTED_FORM_HTML_REST_OF_FORM=	
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
@@ -139,9 +125,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		assertEquals("Text Area Tag Contents","Contents of TextArea",textAreaTag.getValue());
 		assertNull("Should have been null",formTag.getTextAreaTag("junk"));
 		
-		assertEquals("Length of string",EXPECTED_FORM_HTML.length(),formTag.toHTML().length());
-
-		assertStringEquals("Raw String",EXPECTED_FORM_HTML,formTag.toHTML());
+		assertStringEquals("toHTML",EXPECTED_FORM_HTML,formTag.toHTML());
 	}
 	
 	public void testScanFormWithNoEnding() {
@@ -190,7 +174,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		HTMLLinkTag [] linkTag = new HTMLLinkTag[10];
 		int i = 0;
-		for (Enumeration e=formTag.getAllNodesVector().elements();e.hasMoreElements();) {
+		for (Enumeration e=formTag.children();e.hasMoreElements();) {
 			HTMLNode formNode = (HTMLNode)e.nextElement();
 			if (formNode instanceof HTMLLinkTag) {
 				linkTag[i++] = (HTMLLinkTag)formNode;		
@@ -223,7 +207,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		HTMLRemarkNode [] remarkNode = new HTMLRemarkNode[10];
 		int i = 0;
-		for (Enumeration e=formTag.getAllNodesVector().elements();e.hasMoreElements();) {
+		for (Enumeration e=formTag.children();e.hasMoreElements();) {
 			HTMLNode formNode = (HTMLNode)e.nextElement();
 			if (formNode instanceof HTMLRemarkNode) {
 				remarkNode[i++] = (HTMLRemarkNode)formNode;		
@@ -248,7 +232,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		HTMLRemarkNode [] remarkNode = new HTMLRemarkNode[10];
 		int i = 0;
-		for (Enumeration e=formTag.getAllNodesVector().elements();e.hasMoreElements();) {
+		for (Enumeration e=formTag.children();e.hasMoreElements();) {
 			HTMLNode formNode = (HTMLNode)e.nextElement();
 			if (formNode instanceof HTMLRemarkNode) {
 				remarkNode[i++] = (HTMLRemarkNode)formNode;		

@@ -35,7 +35,7 @@ import java.util.Vector;
 /**
  * Identifies a link tag 
  */
-public class HTMLLinkTag extends HTMLTag
+public class HTMLLinkTag extends HTMLCompositeTag
 {
 	public static final String LINK_TAG_FILTER="-l";
 	/**
@@ -55,7 +55,6 @@ public class HTMLLinkTag extends HTMLTag
 	 * The accesskey existing inside this link.
 	 */
 	protected String accessKey;
-	private java.util.Vector nodeVector;
 	private boolean mailLink;
 	private boolean javascriptLink;
 
@@ -98,13 +97,12 @@ public class HTMLLinkTag extends HTMLTag
 	 * @accessKey The accessKey element of the link tag (valid for Compact HTML - IMODE devices)
 	 * @see linkData()
 	 */
-	public HTMLLinkTag(String link,String linkText,int linkBegin, int linkEnd, String accessKey,String currentLine,Vector nodeVector,boolean mailLink,boolean javascriptLink,String tagContents,String linkContents)
-	{
-		super(linkBegin,linkEnd,tagContents,currentLine);  // Kaarle Kaila 23.10.2001
+	public HTMLLinkTag(String link,String linkText,int linkBegin, int linkEnd, String accessKey,String currentLine,Vector nodeVector,boolean mailLink,boolean javascriptLink,String tagContents,String linkContents,
+	HTMLTag startTag, HTMLTag endTag) {
+		super(linkBegin,linkEnd,tagContents,currentLine,nodeVector,startTag,endTag);  // Kaarle Kaila 23.10.2001
 		this.link = link;
 		this.linkText = linkText;
 		this.accessKey = accessKey;
-		this.nodeVector = nodeVector;
 		this.mailLink = mailLink;
 		this.linkContents = linkContents;  // Kaarle Kaila 23.10.2001
 
@@ -193,13 +191,7 @@ public class HTMLLinkTag extends HTMLTag
                 return isHTTPLink() || isHTTPSLink();
         }
 
-	/**
-	 * Returns an enumeration of nodes contained within the link tag.
-	 */
-	public Enumeration linkData() 
-	{
-		return nodeVector.elements();	
-	}
+
 	/**
 	 * Insert the method's description here.
 	 * Creation date: (8/3/2001 1:49:31 AM)
@@ -217,42 +209,11 @@ public class HTMLLinkTag extends HTMLTag
 	public void setJavascriptLink(boolean newJavascriptLink) {
 		javascriptLink = newJavascriptLink;
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (7/1/2001 4:39:41 PM)
-	 * @param newNodeVector java.util.Vector
-	 */
-	public void setNodeVector(java.util.Vector newNodeVector) {
-		nodeVector = newNodeVector;
-	}
-	public String toPlainTextString() {
+
+	public String getChildContentsAndEndTagWith(HTMLRenderer renderer) {
 		StringBuffer sb = new StringBuffer();
 		HTMLNode node;
-		for (Enumeration e=linkData();e.hasMoreElements();)
-		{
-			node = (HTMLNode)e.nextElement();
-			sb.append(node.toPlainTextString());
-		}
-		return sb.toString();
-	}
-	
-	public String toHTML() {
-		StringBuffer sb = new StringBuffer();
-		putLinkStartTagInto(sb);
-		//sb.append(tagContents.toString());
-		HTMLNode node;
-		for (Enumeration e = linkData();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
-			sb.append(node.toHTML());
-		}
-		sb.append("</A>");
-		return sb.toString();
-	}
-	
-	public String getLinkContentsAndEndTagWith(HTMLRenderer renderer) {
-		StringBuffer sb = new StringBuffer();
-		HTMLNode node;
-		for (Enumeration e = linkData();e.hasMoreElements();) {
+		for (Enumeration e = children();e.hasMoreElements();) {
 			node = (HTMLNode)e.nextElement();
 			sb.append(node.toHTML(renderer));
 		}
@@ -260,21 +221,6 @@ public class HTMLLinkTag extends HTMLTag
 		return sb.toString();
 	}	
 	
-	public void putLinkStartTagInto(StringBuffer sb) {
-		sb.append("<A ");
-		String key,value;
-		int i = 0;
-		for (Enumeration e = parsed.keys();e.hasMoreElements();) {
-			key = (String)e.nextElement();
-			i++;
-			if (key!=TAGNAME) {
-				value = getParameter(key);
-				sb.append(key+"=\""+value+"\"");
-				if (i<parsed.size()-1) sb.append(" ");
-			}
-		}
-		sb.append(">");
-	}
 	/**
 	 * Print the contents of this Link Node
 	 */
@@ -284,14 +230,14 @@ public class HTMLLinkTag extends HTMLTag
 		sb.append("Link to : "+link + "; titled : "+linkText+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+ ", AccessKey=");
 		if (accessKey==null) sb.append("null\n");
 		else sb.append(accessKey+"\n");
-		if (linkData()!=null) 
+		if (children()!=null) 
 		{
 			sb.append("  "+"LinkData\n");
 			sb.append("  "+"--------\n");
 			
 			HTMLNode node;
 			int i = 0;
-			for (Enumeration e=linkData();e.hasMoreElements();)
+			for (Enumeration e=children();e.hasMoreElements();)
 			{
 				node = (HTMLNode)e.nextElement();
 				sb.append("   "+(i++)+ " ");
@@ -313,7 +259,7 @@ public class HTMLLinkTag extends HTMLTag
 	public void collectInto(Vector collectionVector, String filter) {
 		if (filter==LINK_TAG_FILTER) collectionVector.add(this); else {
 			HTMLNode node;
-			for (Enumeration e=nodeVector.elements();e.hasMoreElements();) {
+			for (Enumeration e=children();e.hasMoreElements();) {
 				node = (HTMLNode)e.nextElement();
 				node.collectInto(collectionVector,filter);
 			}

@@ -156,7 +156,7 @@ public class HTMLParser
      * A quiet message sink.
      * Use this for no feedback.
      */
-    public static HTMLParserFeedback nul = new DefaultHTMLParserFeedback (DefaultHTMLParserFeedback.QUIET);
+    public static HTMLParserFeedback noFeedback = new DefaultHTMLParserFeedback (DefaultHTMLParserFeedback.QUIET);
     
     /**
      * A verbose message sink.
@@ -271,7 +271,7 @@ public class HTMLParser
 	 */
 	public HTMLParser(HTMLReader rd, HTMLParserFeedback fb) 
 	{
-        feedback = (null == fb) ? nul : fb;
+        feedback = (null == fb) ? noFeedback : fb;
         resourceLocn = rd.getURL ();
 		reader = rd;
         scanners = new Hashtable();
@@ -291,7 +291,7 @@ public class HTMLParser
         throws
             HTMLParserException
     {
-        feedback = (null == fb) ? nul : fb;
+        feedback = (null == fb) ? noFeedback : fb;
         HTMLTag.setTagParser (new HTMLTagParser (feedback));
         resourceLocn = connection.getURL ().toExternalForm ();
         scanners = new Hashtable();

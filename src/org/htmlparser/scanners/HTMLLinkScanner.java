@@ -75,14 +75,14 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		super(filter);
 		processor = new HTMLLinkProcessor();		
 	}
-	protected HTMLTag createLinkTag(String currentLine, HTMLNode node, boolean mailLink, boolean javascriptLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector) {
+	protected HTMLTag createLinkTag(String currentLine, HTMLNode node, boolean mailLink, boolean javascriptLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector, HTMLTag startTag, HTMLTag endTag) {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
 		// HTMLLinkNode Constructor got one extra parameter 
 		// Kaarle Kaila 23.10.2001
 		linkEnd = node.elementEnd();
-		HTMLLinkTag linkTag = new HTMLLinkTag(link,linkText,linkBegin,linkEnd,accessKey,currentLine,nodeVector,mailLink,javascriptLink,tagContents,linkContents);
+		HTMLLinkTag linkTag = new HTMLLinkTag(link,linkText,linkBegin,linkEnd,accessKey,currentLine,nodeVector,mailLink,javascriptLink,tagContents,linkContents,startTag,endTag);
 		linkTag.setThisScanner(this);
 		return linkTag;
 	}
@@ -273,6 +273,9 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			// Get the next element, which is string, till </a> is encountered
 			boolean endFlag=false;
 			Vector nodeVector = new Vector();
+			HTMLTag startTag = tag;
+			HTMLTag endTag   = null;
+			
 			do
 			{
 				node = reader.readElement();
@@ -290,7 +293,10 @@ public class HTMLLinkScanner extends HTMLTagScanner
 				    tmp = ((HTMLEndTag)node).getText();
 				    linkContents += "</" + tmp  ;   // Kaarle Kaila 23.10.2001
 					char ch = tmp.charAt(0);
-					if (ch=='a' || ch=='A') endFlag=true; else {
+					if (ch=='a' || ch=='A') {
+						endFlag=true;
+						endTag = (HTMLTag)node;
+					} else {
 						// This is the case that we found some wierd end tag inside
 						// a link tag.
 						endFlag=false;
@@ -302,7 +308,8 @@ public class HTMLLinkScanner extends HTMLTagScanner
 							String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
 							reader.changeLine(newLine);
 							endFlag = true;
-							node = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A",newLine);
+							endTag = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A",newLine);
+							node = endTag;
 						} else nodeVector.addElement(node);
 					}
 				} 
@@ -313,11 +320,11 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			{
 				if (node==null)  {
 					// Add an end link tag
-					HTMLEndTag endTag = new HTMLEndTag(0,3,"A","</A>");
+					endTag = new HTMLEndTag(0,3,"A","</A>");
 					node = endTag;
 				}
 				previousOpenLinkScanner = null;
-				return createLinkTag(currentLine, node, mailLink, javascriptLink,  link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
+				return createLinkTag(currentLine, node, mailLink, javascriptLink,  link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
 			}
 			HTMLParserException ex = new HTMLParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
 			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);

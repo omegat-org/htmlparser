@@ -38,7 +38,7 @@ import org.htmlparser.HTMLNode;
 /**
  * Represents a FORM tag.
  */
-public class HTMLFormTag extends HTMLTag
+public class HTMLFormTag extends HTMLCompositeTag
 {
 	public static final String POST="POST";
 	public static final String GET="GET";
@@ -46,7 +46,6 @@ public class HTMLFormTag extends HTMLTag
    	protected String formName;
    	protected String formMethod;
    	protected Vector formInputVector;
-   	protected Vector allNodesVector;
 
 	private Vector textAreaVector;
    	/**
@@ -61,14 +60,14 @@ public class HTMLFormTag extends HTMLTag
    	 * @param allNodesVector The vector of all elements in the FORM
    	 */
 	public HTMLFormTag(String formURL,String formName, String formMethod, int formBegin, int formEnd,
-                      String tagLine, Vector formInputVector, Vector textAreaVector, Vector allNodesVector)
+                      String tagLine, Vector formInputVector, Vector textAreaVector, Vector allNodesVector,
+                      HTMLTag startTag, HTMLTag endTag)
 	{
-		super(formBegin,formEnd,"",tagLine);
+		super(formBegin,formEnd,"",tagLine,allNodesVector,startTag, endTag);
 		this.formURL = formURL;
 	    this.formName = formName;
       	this.formMethod = formMethod;
       	this.formInputVector = formInputVector;
-      	this.allNodesVector = allNodesVector;
       	this.textAreaVector = textAreaVector;
 	}
 	/**
@@ -138,6 +137,7 @@ public class HTMLFormTag extends HTMLTag
 	public void setFormLocation(String formURL)
 	{
 		this.formURL = formURL;
+		parsed.put("ACTION",formURL);
 	}
 	/**
 	 * Set the form method
@@ -162,70 +162,11 @@ public class HTMLFormTag extends HTMLTag
 	{
 		return "FORM TAG : Form at "+formURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
-	/**
-	 * Returns the allNodesVector - all nodes in the form.
-	 * @return Vector
-	 */
-	public Vector getAllNodesVector() {
-		return allNodesVector;
-	}
-
-	/**
-	 * Sets the allNodesVector.
-	 * @param allNodesVector The allNodesVector to set
-	 */
-	public void setAllNodesVector(Vector allNodesVector) {
-		this.allNodesVector = allNodesVector;
-	}
-	/**
-	 * The HTML Rendering of the Form tag
-	 */
-	public String toHTML() {
-		StringBuffer rawBuffer = new StringBuffer();
-		HTMLNode node,prevNode=null;
-		rawBuffer.append("<FORM METHOD=\""+formMethod+"\" ACTION=\""+formURL+"\"");
-		if (formName!=null && formName.length()>0) rawBuffer.append(" NAME=\""+formName+"\"");
-		Enumeration e = allNodesVector.elements();
-		node = (HTMLNode)e.nextElement();
-		HTMLTag tag = (HTMLTag)node;
-		Hashtable table = tag.getParsed();
-		String key,value;
-		for (Enumeration en = table.keys();en.hasMoreElements();) {
-			key=(String)en.nextElement();
-			if (!(key.equals("METHOD") || key.equals("ACTION") || key.equals("NAME") || key.equals(HTMLTag.TAGNAME))) {
-				value = (String)table.get(key);		
-				rawBuffer.append(" "+key+"="+"\""+value+"\"");
-			}
-		}
-		rawBuffer.append(">");
-		rawBuffer.append(lineSeparator);
-		for (;e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
-			if (prevNode!=null) {
-				if (prevNode.elementEnd()>node.elementBegin()) {
-					// Its a new line
-					rawBuffer.append(lineSeparator);					
-				}
-			}
-			rawBuffer.append(node.toHTML());
-			prevNode=node;
-		}
-		return rawBuffer.toString();		
-	}
-	public String toPlainTextString() {
-		StringBuffer stringRepresentation = new StringBuffer();
-		HTMLNode node;
-		for (Enumeration e=getAllNodesVector().elements();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();		
-			stringRepresentation.append(node.toPlainTextString());
-		}
-		return stringRepresentation.toString();
-	}
 
 	public void collectInto(Vector collectionVector, String filter) {
 		super.collectInto(collectionVector, filter);
 		HTMLNode node;
-		for (Enumeration e = allNodesVector.elements();e.hasMoreElements();) {
+		for (Enumeration e = children();e.hasMoreElements();) {
 			node = (HTMLNode)e.nextElement();
 			node.collectInto(collectionVector,filter);
 		}
@@ -265,7 +206,7 @@ public class HTMLFormTag extends HTMLTag
 		Vector foundVector = new Vector();
 		HTMLNode node;
 		if (!caseSensitive) searchString = searchString.toUpperCase();
-		for (Enumeration e = allNodesVector.elements();e.hasMoreElements();) {
+		for (Enumeration e = children();e.hasMoreElements();) {
 			node = (HTMLNode)e.nextElement();
 			String nodeTextString = node.toPlainTextString(); 
 			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
@@ -279,7 +220,7 @@ public class HTMLFormTag extends HTMLTag
 		HTMLNode node;
 		HTMLTag tag=null;
 		boolean found = false;
-		for (Enumeration e = allNodesVector.elements();e.hasMoreElements() && !found;) {
+		for (Enumeration e = children();e.hasMoreElements() && !found;) {
 			node = (HTMLNode)e.nextElement();
 			if (node instanceof HTMLTag) {
 				tag = (HTMLTag)node;

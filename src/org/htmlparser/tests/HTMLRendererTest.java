@@ -26,8 +26,8 @@ public class HTMLRendererTest extends HTMLParserTestCase {
 			public String renderLinksToHTML(HTMLLinkTag linkTag) {
 				StringBuffer sb = new StringBuffer();
 				linkTag.setLink("Modified://"+linkTag.getLink());
-				linkTag.putLinkStartTagInto(sb);
-				sb.append(linkTag.getLinkContentsAndEndTagWith(this));
+				linkTag.putStartTagInto(sb);
+				sb.append(linkTag.getChildContentsAndEndTagWith(this));
 				return sb.toString();
 			}
 
