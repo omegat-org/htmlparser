@@ -183,6 +183,10 @@ public class AttributeParserTest extends ParserTestCase {
     public void testScriptedTag ()
     {
 		getParameterTableFor("body onLoad=defaultStatus=''");
-		assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
+        String name = (String)table.get(Tag.TAGNAME);
+		assertNotNull ("No Tag.TAGNAME", name);
+        assertEquals ("tag name parsed incorrectly", "BODY", name);
+        String value = (String)table.get ("ONLOAD");
+        assertEquals ("parameter parsed incorrectly", "defaultStatus=''", value);
     }
 }
