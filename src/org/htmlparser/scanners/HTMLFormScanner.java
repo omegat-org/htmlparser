@@ -43,6 +43,7 @@ import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTextareaTag;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLFormTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
@@ -209,7 +210,13 @@ public class HTMLFormScanner extends HTMLTagScanner
 					endFormTag,
 					nodeVector
 				),
-				link,name,method,inputVector,textAreaVector
+				new HTMLFormTagData(
+					link,
+					name,
+					method,
+					inputVector,
+					textAreaVector
+				)
 			);
 			return formTag;
 		}

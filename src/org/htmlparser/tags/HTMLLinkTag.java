@@ -29,13 +29,13 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.*;
+import java.util.Enumeration;
+
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLRenderer;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLLinkTagData;
 import org.htmlparser.tags.data.HTMLTagData;
-
-import java.util.Enumeration;
-import java.util.Vector;
 /**
  * Identifies a link tag 
  */
@@ -254,16 +254,6 @@ public class HTMLLinkTag extends HTMLCompositeTag
 		attributes.put("HREF",link);
 	}
 
-	public void collectInto(Vector collectionVector, String filter) {
-		if (filter==LINK_TAG_FILTER) collectionVector.add(this); else {
-			HTMLNode node;
-			for (Enumeration e=children();e.hasMoreElements();) {
-				node = (HTMLNode)e.nextElement();
-				node.collectInto(collectionVector,filter);
-			}
-		}
-	}
-	
 	/**
 	 * This method returns an enumeration of data that it contains
 	 * @return Enumeration

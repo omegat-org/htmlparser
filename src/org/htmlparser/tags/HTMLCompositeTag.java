@@ -66,4 +66,55 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 		return sb.toString();
 	}
 
+	public HTMLTag searchByName(String name) {
+		HTMLNode node;
+		HTMLTag tag=null;
+		boolean found = false;
+		for (Enumeration e = children();e.hasMoreElements() && !found;) {
+			node = (HTMLNode)e.nextElement();
+			if (node instanceof HTMLTag) {
+				tag = (HTMLTag)node;
+				String nameAttribute = tag.getParameter("NAME");
+				if (nameAttribute!=null && nameAttribute.equals(name)) found=true;
+			}
+		}
+		if (found) 
+			return tag;
+		else
+			return null;
+	}
+
+	public Vector searchFor(String searchString, boolean caseSensitive) {
+		Vector foundVector = new Vector();
+		HTMLNode node;
+		if (!caseSensitive) searchString = searchString.toUpperCase();
+		for (Enumeration e = children();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			String nodeTextString = node.toPlainTextString(); 
+			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
+			if (nodeTextString.indexOf(searchString)!=-1) {
+				foundVector.addElement(node);
+			}	
+		}
+		return foundVector;
+	}
+
+	/** 
+	 * Case insensitive search
+	 * @param searchString
+	 * @return Vector
+	 */
+	public Vector searchFor(String searchString) {
+		return searchFor(searchString, false);
+	}
+
+	public void collectInto(Vector collectionVector, String filter) {
+		super.collectInto(collectionVector, filter);
+		HTMLNode node;
+		for (Enumeration e = children();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			node.collectInto(collectionVector,filter);
+		}
+	}
+
 }

@@ -32,8 +32,8 @@ package org.htmlparser.tags;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLFormTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 
 /**
@@ -49,6 +49,7 @@ public class HTMLFormTag extends HTMLCompositeTag
    	protected Vector formInputVector;
 
 	private Vector textAreaVector;
+   	
    	/**
    	 * A form tag - contains information contained in the form tag.
    	 * @param formURL URL to which form data will be sent
@@ -60,16 +61,16 @@ public class HTMLFormTag extends HTMLCompositeTag
    	 * @param formInputVector The vector of INPUT elements
    	 * @param allNodesVector The vector of all elements in the FORM
    	 */
-	public HTMLFormTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData, String formURL, String formName, String formMethod,
-                      Vector formInputVector, Vector textAreaVector)
+	public HTMLFormTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData, HTMLFormTagData formTagData)
 	{
 		super(tagData,compositeTagData);
-		this.formURL = formURL;
-	    this.formName = formName;
-      	this.formMethod = formMethod;
-      	this.formInputVector = formInputVector;
-      	this.textAreaVector = textAreaVector;
+		this.formURL = formTagData.getFormURL();
+	    this.formName = formTagData.getFormName();
+      	this.formMethod = formTagData.getFormMethod();
+      	this.formInputVector = formTagData.getFormInputVector();
+      	this.textAreaVector = formTagData.getTextAreaVector();
 	}
+	
 	/**
 	 * @return Vector Input elements in the form
 	 */
@@ -77,6 +78,7 @@ public class HTMLFormTag extends HTMLCompositeTag
 	{
 		return formInputVector;
 	}
+	
 	/**
 	 * @return String The url of the form
 	 */
@@ -84,7 +86,9 @@ public class HTMLFormTag extends HTMLCompositeTag
 	{
 		return formURL;
 	}
+	
 	/**
+	 * Returns the method of the form
 	 * @return String The method of the form (GET if nothing is specified)
 	 */
 	public String getFormMethod() {
@@ -96,6 +100,7 @@ public class HTMLFormTag extends HTMLCompositeTag
 	}
 	
 	/**
+	 * Get the input tag in the form corresponding to the given name
 	 * @param name The name of the input tag to be retrieved
 	 * @return HTMLTag The input tag corresponding to the name provided
 	 */
@@ -121,59 +126,22 @@ public class HTMLFormTag extends HTMLCompositeTag
 	}
 	
 	/**
-	 * Set the form inputs
-	 * @param formInputVector The vector of input tags
-	 */
-	public void setFormInputs(Vector formInputVector)
-	{
-		this.formInputVector = formInputVector;
-	}
-	
-	/**
 	 * Set the form location. Modification of this element will cause the HTML rendering 
 	 * to change as well (in a call to toHTML()).
 	 * @param formURL The new FORM location
 	 */
-	public void setFormLocation(String formURL)
-	{
+	public void setFormLocation(String formURL) {
 		attributes.put("ACTION",formURL);
 		this.formURL = formURL;
 	}
-	/**
-	 * Set the form method
-	 * @param formMethod The new method of sending data
-	 */
-	public void setFormMethod(String formMethod)
-	{
-		attributes.put("METHOD",formMethod);
-		this.formMethod = formMethod;
-	}
-	/**
-	 * Set the form name
-	 * @param formName The name of the form
-	 */
-   	public void setFormName(String formName)
-   	{
-      	attributes.put("NAME",formName);
-      	this.formName = formName;
-   	}
+
 	/**
 	 * @return String The contents of the HTMLFormTag
 	 */
-	public String toString()
-	{
+	public String toString() {
 		return "FORM TAG : Form at "+formURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 
-	public void collectInto(Vector collectionVector, String filter) {
-		super.collectInto(collectionVector, filter);
-		HTMLNode node;
-		for (Enumeration e = children();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
-			node.collectInto(collectionVector,filter);
-		}
-	}
-	
 	/**
 	 * Find the textarea tag matching the given name
 	 * @param name Name of the textarea tag to be found within the form
@@ -194,46 +162,4 @@ public class HTMLFormTag extends HTMLCompositeTag
 			return null;
 	}
 	
-	/** 
-	 * Case insensitive search
-	 * @param searchString
-	 * @return Vector
-	 */
-	public Vector searchFor(String searchString) {
-		return searchFor(searchString, false);
-	}
-	
-	
-	public Vector searchFor(String searchString, boolean caseSensitive) {
-		Vector foundVector = new Vector();
-		HTMLNode node;
-		if (!caseSensitive) searchString = searchString.toUpperCase();
-		for (Enumeration e = children();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
-			String nodeTextString = node.toPlainTextString(); 
-			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
-			if (nodeTextString.indexOf(searchString)!=-1) {
-				foundVector.addElement(node);
-			}	
-		}
-		return foundVector;
-	}
-	public HTMLTag searchByName(String name) {
-		HTMLNode node;
-		HTMLTag tag=null;
-		boolean found = false;
-		for (Enumeration e = children();e.hasMoreElements() && !found;) {
-			node = (HTMLNode)e.nextElement();
-			if (node instanceof HTMLTag) {
-				tag = (HTMLTag)node;
-				String nameAttribute = tag.getParameter("NAME");
-				if (nameAttribute!=null && nameAttribute.equals(name)) found=true;
-			}
-		}
-		if (found) 
-			return tag;
-		else
-			return null;
-	}
-
 }
