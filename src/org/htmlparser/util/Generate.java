@@ -1,4 +1,4 @@
-// HTMLParser Library v1_4_20031109 - A java-based parser for HTML
+// HTMLParser Library v1_4_20031207 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -442,7 +442,7 @@ public class Generate
             ParserException
     {
         Generate filter = new Generate ();
-        System.out.println ("// HTMLParser Library v1_4_20031109 - A java-based parser for HTML");
+        System.out.println ("// HTMLParser Library v1_4_20031207 - A java-based parser for HTML");
         System.out.println ("// Copyright (C) Dec 31, 2000 Somik Raha");
         System.out.println ("//");
         System.out.println ("// This library is free software; you can redistribute it and/or");

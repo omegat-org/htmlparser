@@ -12,6 +12,123 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20031207
+--------------------------------
+
+2003-12-07 18:41  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, PrototypicalNodeFactory.java,
+	RemarkNode.java, StringNode.java, StringNodeFactory.java,
+	beans/LinkBean.java, beans/StringBean.java, lexer/Lexer.java,
+	lexer/Page.java, lexer/nodes/Attribute.java,
+	lexer/nodes/RemarkNode.java, lexer/nodes/StringNode.java,
+	lexer/nodes/TagNode.java, parserapplications/LinkExtractor.java,
+	parserapplications/MailRipper.java, parserapplications/Robot.java,
+	scanners/AppletScanner.java, scanners/BaseHrefScanner.java,
+	scanners/BodyScanner.java, scanners/BulletListScanner.java,
+	scanners/BulletScanner.java, scanners/DivScanner.java,
+	scanners/DoctypeScanner.java, scanners/FormScanner.java,
+	scanners/FrameScanner.java, scanners/FrameSetScanner.java,
+	scanners/HeadScanner.java, scanners/HtmlScanner.java,
+	scanners/ImageScanner.java, scanners/InputTagScanner.java,
+	scanners/LabelScanner.java, scanners/LinkScanner.java,
+	scanners/MetaTagScanner.java, scanners/OptionTagScanner.java,
+	scanners/ScriptScanner.java, scanners/SelectTagScanner.java,
+	scanners/SpanScanner.java, scanners/StyleScanner.java,
+	scanners/TableColumnScanner.java, scanners/TableRowScanner.java,
+	scanners/TableScanner.java, scanners/TextareaTagScanner.java,
+	scanners/TitleScanner.java, tags/CompositeTag.java,
+	tags/FormTag.java, tags/ImageTag.java, tags/InputTag.java,
+	tags/LabelTag.java, tags/LinkTag.java, tags/MetaTag.java,
+	tags/SelectTag.java, tags/TableColumn.java, tags/TableRow.java,
+	tags/TextareaTag.java, tests/FunctionalTests.java,
+	tests/InstanceofPerformanceTest.java,
+	tests/LineNumberAssignedByNodeReaderTest.java,
+	tests/ParserTest.java, tests/ParserTestCase.java,
+	tests/PerformanceTest.java, tests/filterTests/FilterTest.java,
+	tests/lexerTests/AttributeTests.java,
+	tests/lexerTests/TagTests.java,
+	tests/nodeDecoratorTests/DecodingNodeTest.java,
+	tests/nodeDecoratorTests/EscapeCharacterRemovingNodeTest.java,
+	tests/nodeDecoratorTests/NonBreakingSpaceConvertingNodeTest.java,
+	tests/parserHelperTests/RemarkNodeParserTest.java,
+	tests/parserHelperTests/StringParserTest.java,
+	tests/scannersTests/AllTests.java,
+	tests/scannersTests/AppletScannerTest.java,
+	tests/scannersTests/BaseHREFScannerTest.java,
+	tests/scannersTests/BodyScannerTest.java,
+	tests/scannersTests/BulletListScannerTest.java,
+	tests/scannersTests/BulletScannerTest.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/scannersTests/DivScannerTest.java,
+	tests/scannersTests/FormScannerTest.java,
+	tests/scannersTests/FrameScannerTest.java,
+	tests/scannersTests/FrameSetScannerTest.java,
+	tests/scannersTests/HeadScannerTest.java,
+	tests/scannersTests/HtmlTest.java,
+	tests/scannersTests/ImageScannerTest.java,
+	tests/scannersTests/InputTagScannerTest.java,
+	tests/scannersTests/JspScannerTest.java,
+	tests/scannersTests/LabelScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/scannersTests/MetaTagScannerTest.java,
+	tests/scannersTests/OptionTagScannerTest.java,
+	tests/scannersTests/ScriptScannerTest.java,
+	tests/scannersTests/SelectTagScannerTest.java,
+	tests/scannersTests/SpanScannerTest.java,
+	tests/scannersTests/StyleScannerTest.java,
+	tests/scannersTests/TableScannerTest.java,
+	tests/scannersTests/TextareaTagScannerTest.java,
+	tests/scannersTests/TitleScannerTest.java,
+	tests/scannersTests/XmlEndTagScanningTest.java,
+	tests/tagTests/AllTests.java, tests/tagTests/AppletTagTest.java,
+	tests/tagTests/BaseHrefTagTest.java,
+	tests/tagTests/BodyTagTest.java,
+	tests/tagTests/BulletListTagTest.java,
+	tests/tagTests/BulletTagTest.java,
+	tests/tagTests/CompositeTagTest.java,
+	tests/tagTests/DivTagTest.java, tests/tagTests/DoctypeTagTest.java,
+	tests/tagTests/EndTagTest.java, tests/tagTests/FormTagTest.java,
+	tests/tagTests/FrameSetTagTest.java,
+	tests/tagTests/FrameTagTest.java, tests/tagTests/HeadTagTest.java,
+	tests/tagTests/HtmlTagTest.java, tests/tagTests/ImageTagTest.java,
+	tests/tagTests/InputTagTest.java, tests/tagTests/JspTagTest.java,
+	tests/tagTests/LabelTagTest.java, tests/tagTests/LinkTagTest.java,
+	tests/tagTests/MetaTagTest.java,
+	tests/tagTests/ObjectCollectionTest.java,
+	tests/tagTests/OptionTagTest.java,
+	tests/tagTests/ScriptTagTest.java,
+	tests/tagTests/SelectTagTest.java, tests/tagTests/SpanTagTest.java,
+	tests/tagTests/StyleTagTest.java, tests/tagTests/TableTagTest.java,
+	tests/tagTests/TagTest.java, tests/tagTests/TextareaTagTest.java,
+	tests/tagTests/TitleTagTest.java, tests/utilTests/BeanTest.java,
+	tests/utilTests/HTMLLinkProcessorTest.java,
+	tests/visitorsTests/HtmlPageTest.java,
+	tests/visitorsTests/LinkFindingVisitorTest.java,
+	tests/visitorsTests/TextExtractingVisitorTest.java,
+	util/Generate.java, util/ParserUtils.java, util/Translate.java,
+	visitors/HtmlPage.java, visitors/NodeVisitor.java,
+	visitors/UrlModifyingVisitor.java:
+
+	Remove most of the scanners.
+	The only scanners left are ones that really do something different (script and jsp).
+	Instead of registering a scanner to enable returning a specific tag you now add a
+	tag to the a PrototypicalNodeFactory. All known tags are 'registered' by default
+	in a new Parser which is similar to having called the old 'registerDOMScanners()',
+	so tags are fully nested. This is different behaviour, and specifically,
+	you will need to recurse into returned nodes to get at what you want.
+	I've tried to adjust the applications accordingly, but worked examples are still scarce.
+	If you want to return only some of the derived tags while keeping most as generic tags,
+	there are various constructors and manipulators on the factory. See the javadocs
+	and examples in the tests package.
+	Nearly all the old scanner tests are folded into the tag tests.
+	
+	toString() has been revamped.
+	This means that the default Parser mainline now returns an indented listing of tags,
+	making it easy to see the structure of a page. The downside is the text of the page
+	had to have newlines, tabs etc. turned into escape sequences. But if you were really
+	interested in content you would be using toHtml() or toPlainTextString().
+	
 Integration Build 1.4 - 20031109
 --------------------------------
 
