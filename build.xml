@@ -3,7 +3,7 @@
   <!-- set global properties for this build -->
   <property name="src" value="src"/>
   <property name="build" value="build"/>
-  <property name="versionString" value="1_2"/>
+  <property name="versionString" value="1_3"/>
   <property name="docs" value="docs"/>
   <property name="resources" value="resources"/>
   <property name="dist"  value="release/htmlparser${versionString}"/>
@@ -20,8 +20,8 @@
     	<format property="TODAY" pattern="yyyyMMdd" locale="en"/>
     	<format property="TODAY_STRING" pattern="MMM dd, yyyy"/>
     </tstamp>
-    <property name="version" value="1_2_${TODAY}"/>
-    <property name="displayVersion" value="&quot;1.2 (Integration Build ${TODAY_STRING})&quot;"/>
+    <property name="version" value="1_3_${TODAY}"/>
+    <property name="displayVersion" value="&quot;1.3 (Integration Build ${TODAY_STRING})&quot;"/>
     <echo message="version=${version}"/>
     <echo message="displayVersion=${displayVersion}"/>
 
@@ -217,8 +217,8 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
     <echo message="**********************************"/>
 
     <!-- Delete the ${build} and ${dist} directory trees --> 
-      <!--  <delete dir="${build}"/>-->
+    <delete dir="${build}"/>
     <!-- Delete the release directory also -->
-<!--    <delete dir="${releaseDir}"/> -->
+    <delete dir="${releaseDir}"/> 
   </target>
 </project>
