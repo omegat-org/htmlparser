@@ -263,10 +263,13 @@ public void testToPlainTextString() throws HTMLParserException {
 	 * it doesent get parsed correctly
 	 */	
 	public void testTagWithinRemarkNode() throws HTMLParserException {
-		String testHTML = new String("<!-- <A> -->");
+		String testHTML = new String("<!-- \n"+
+		"<A>\n"+
+		"bcd -->");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		parser.setLineSeparator("\n");
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -276,7 +279,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
-		assertEquals("Expected contents"," <A> ",remarkNode.getText());
+		assertStringEquals("Expected contents"," \n<A>\nbcd ",remarkNode.getText());
 				
 	}
 	/**
