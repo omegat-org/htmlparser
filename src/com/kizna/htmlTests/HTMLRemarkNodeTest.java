@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021002 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021016 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -107,6 +107,7 @@ public void testRemarkNodeBug() throws HTMLParserException
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+	parser.setLineSeparator("\r\n");
 	HTMLNode [] node = new HTMLNode[20];
 	int i = 0;
 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -141,6 +142,7 @@ public void testToPlainTextString() throws HTMLParserException {
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+	parser.setLineSeparator("\r\n");
 	HTMLNode [] node = new HTMLNode[20];
 	int i = 0;
 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -172,6 +174,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		parser.setLineSeparator("\r\n");
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -222,6 +225,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		parser.setLineSeparator("\r\n");
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)

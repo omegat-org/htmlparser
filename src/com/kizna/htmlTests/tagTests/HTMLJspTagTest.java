@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021002 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021016 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -101,6 +101,7 @@ public class HTMLJspTagTest extends TestCase
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		parser.setLineSeparator("\r\n");
 		HTMLNode [] node = new HTMLNode[20];
 		// Register the Jsp Scanner
 		parser.addScanner(new HTMLJspScanner("-j"));	
@@ -171,6 +172,7 @@ public class HTMLJspTagTest extends TestCase
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		parser.setLineSeparator("\r\n");
 		HTMLNode [] node = new HTMLNode[20];
 		// Register the Jsp Scanner
 		parser.addScanner(new HTMLJspScanner("-j"));	
