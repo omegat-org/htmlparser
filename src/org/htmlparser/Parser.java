@@ -493,27 +493,26 @@ public class Parser
     /**
      * Parse the given resource, using the filter provided.
      * @param filter The filter to apply to the parsed nodes.
+     * @return The list of matching nodes (for a <code>null</code>
+     * filter this is all the top level nodes).
      */
-    public void parse (NodeFilter filter) throws ParserException
+    public NodeList parse (NodeFilter filter) throws ParserException
     {
         NodeIterator e;
         Node node;
-        NodeList list;
+        NodeList ret;
 
-        list = new NodeList ();
+        ret = new NodeList ();
         for (e = elements (); e.hasMoreNodes (); )
         {
             node = e.nextNode ();
             if (null != filter)
-            {
-                node.collectInto (list, filter);
-                for (int i = 0; i < list.size (); i++)
-                    System.out.println (list.elementAt (i));
-                list.removeAll ();
-            }
+                node.collectInto (ret, filter);
             else
-                System.out.println (node);
+                ret.add (node);
         }
+        
+        return (ret);
     }
 
     public void visitAllNodesWith(NodeVisitor visitor) throws ParserException {
@@ -642,7 +641,7 @@ public class Parser
 	                getConnectionManager ().setMonitor (parser);
 	            }
 	            parser.setURL (args[0]);
-	            parser.parse (filter);
+	            System.out.println (parser.parse (filter));
 	        }
 	        catch (ParserException e)
 	        {

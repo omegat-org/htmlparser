@@ -107,7 +107,7 @@ public class HtmlPageTest extends ParserTestCase {
         parser.visitAllNodesWith(page);
         NodeList bodyNodes = page.getBody();
         assertEquals("number of nodes in body",2,bodyNodes.size());
-        assertXmlEquals("body html", guts, bodyNodes.asHtml());
+        assertXmlEquals("body html", guts, bodyNodes.toHtml());
         TableTag tables [] = page.getTables();
         assertEquals("number of tables",1,tables.length);
         assertEquals("number of rows",1,tables[0].getRowCount());

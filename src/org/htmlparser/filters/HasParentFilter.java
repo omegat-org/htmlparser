@@ -28,28 +28,104 @@ package org.htmlparser.filters;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
+import org.htmlparser.Tag;
 
 /**
  * This class accepts all tags that have a parent acceptable to another filter.
+ * It can be set to operate recursively, that is perform a scan up the node
+ * heirarchy looking for any ancestor that matches the predicate filter.
+ * End tags are not considered to be children of any tag.
  */
-public class HasParentFilter implements NodeFilter
+public class HasParentFilter
+	implements
+		NodeFilter
 {
     /**
      * The filter to apply to the parent.
      */
-    public NodeFilter mFilter;
+    public NodeFilter mParentFilter;
 
     /**
-     * Creates a new instance of HasParentFilter that accepts tags with parent acceptable to the filter.
+     * Performs a recursive search up the node heirarchy if <code>true</code>.
+     */
+    public boolean mRecursive;
+
+    /**
+     * Creates a new instance of HasParentFilter.
+     * With no parent filter, this would always return <code>false</code>
+     * from {@link #accept}.
+     */
+    public HasParentFilter ()
+    {
+        this (null);
+    }
+
+    /**
+     * Creates a new instance of HasParentFilter that accepts nodes with direct parent acceptable to the filter.
      * @param filter The filter to apply to the parent.
      */
     public HasParentFilter (NodeFilter filter)
     {
-        mFilter = filter;
+        this (filter, false);
+    }
+
+    /**
+     * Creates a new instance of HasParentFilter that accepts nodes with a parent acceptable to the filter.
+     * @param filter The filter to apply to the parent.
+     * @param recursive If <code>true</code>, any enclosing node acceptable
+     * to the given filter causes the node being tested to be accepted
+     * (i.e. a recursive scan through the parent nodes up the node
+     * heirarchy is performed).
+     */
+    public HasParentFilter (NodeFilter filter, boolean recursive)
+    {
+        setParentFilter (filter);
+        setRecursive (recursive);
+    }
+
+    /**
+     * Get the filter used by this HasParentFilter.
+     * @return The filter to apply to parents.
+     */
+    public NodeFilter getParentFilter ()
+    {
+        return (mParentFilter);
+    }
+    
+    /**
+     * Set the filter for this HasParentFilter.
+     * @param filter The filter to apply to parents in {@link #accept}.
+     */
+    public void setParentFilter (NodeFilter filter)
+    {
+        mParentFilter = filter;
+    }
+
+    /**
+     * Get the recusion setting for the filter.
+     * @return Returns <code>true</code> if the filter is recursive
+     * up the node heirarchy.
+     */
+    public boolean getRecursive ()
+    {
+        return mRecursive;
+    }
+
+    /**
+     * Sets whether the filter is recursive or not.
+     * @param recursive The recursion setting for the filter.
+     */
+    public void setRecursive (boolean recursive)
+    {
+        mRecursive = recursive;
     }
 
     /**
      * Accept tags with parent acceptable to the filter.
+     * If recursion is enabled, each parent in turn up to
+     * the topmost enclosing node is checked.
+     * Recursion only proceeds while no parent satisfies the
+     * filter.
      * @param node The node to check.
      */
     public boolean accept (Node node)
@@ -58,9 +134,16 @@ public class HasParentFilter implements NodeFilter
         boolean ret;
 
         ret = false;
-        parent = node.getParent ();
-        if (null != parent)
-            ret = mFilter.accept (parent);
+        if (!(node instanceof Tag) || !((Tag)node).isEndTag ())
+        {
+	        parent = node.getParent ();
+	        if ((null != parent) && (null != getParentFilter ()))
+	        {
+	            ret = getParentFilter ().accept (parent);
+	            if (!ret && getRecursive ())
+	                ret = accept (parent);
+	        }
+        }
 
         return (ret);
     }

@@ -333,9 +333,27 @@ Update the Web Site
       defaultexcludes="no"
       update="true">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.class"/>
-      <zipfileset src="${lib}/htmllexer.jar" includes="**/*.class"/>
       <manifest>
         <attribute name="Main-Class" value="org.htmlparser.lexerapplications.thumbelina.Thumbelina"/>
+      </manifest>
+    </jar>
+  </target>
+  
+  <!-- Create the FilterBuilder jar -->
+  <target name="filterbuilder" depends="JDK1.4,jarparser" description="create filterbuilder.jar" if="JDK1.4">
+    <!-- Create the lib directory -->
+    <mkdir dir="${lib}"/>
+    <javac compiler="javac1.4" srcdir="${src}" debug="on" classpath="src:${lib}/htmlparser.jar" source="1.3">
+      <include name="org/htmlparser/parserapplications/filterbuilder/**/*.java"/>
+    </javac>
+    <jar jarfile="${lib}/filterbuilder.jar"
+      basedir="${src}"
+      defaultexcludes="no"
+      update="true">
+      <include name="org/htmlparser/parserapplications/filterbuilder/**/*.class"/>
+      <include name="org/htmlparser/parserapplications/filterbuilder/**/*.gif"/>
+      <manifest>
+        <attribute name="Main-Class" value="org.htmlparser.parserapplications.filterbuilder.FilterBuilder"/>
       </manifest>
     </jar>
   </target>

@@ -150,7 +150,22 @@ public class NodeList implements Serializable {
         return buff.toString();
     }
 
-    public String asHtml() {
+    /**
+     * Convert this nodelist into the equivalent HTML.
+     * @deprecated Use {@link #toHtml}.
+     * @return The contents of the list as HTML text.
+     */
+    public String asHtml()
+    {
+        return (toHtml ());
+    }
+
+    /**
+     * Convert this nodelist into the equivalent HTML.
+     * @return The contents of the list as HTML text.
+     */
+    public String toHtml()
+    {
         StringBuffer buff = new StringBuffer();
         for (int i=0;i<size;i++)
             buff.append(nodeData[i].toHtml());
@@ -174,11 +189,17 @@ public class NodeList implements Serializable {
         numberOfAdjustments = 0;
     }
 
-    public String toString() {
+    /**
+     * Return the contents of the list as a string.
+     * Suitable for debugging.
+     * @return A string representation of the list. 
+     */
+    public String toString()
+    {
         StringBuffer text = new StringBuffer();
         for (int i=0;i<size;i++)
-            text.append(nodeData[i].toPlainTextString());
-        return text.toString();
+            text.append (nodeData[i]);
+        return (text.toString ());
     }
 
     /**

@@ -107,7 +107,7 @@ public class TableRow extends CompositeTag
                         new AndFilter ( // recurse up the parent chain
                             new NotFilter (cls), // but not past the first row
                             recursion));
-            recursion.mFilter = filter;
+            recursion.setParentFilter (filter);
             kids = kids.extractAllNodesThatMatch (
                 // it's a column, and has this row as it's enclosing row
                 new AndFilter (
@@ -154,7 +154,7 @@ public class TableRow extends CompositeTag
                         new AndFilter ( // recurse up the parent chain
                             new NotFilter (cls), // but not past the first row
                             recursion));
-            recursion.mFilter = filter;
+            recursion.setParentFilter (filter);
             kids = kids.extractAllNodesThatMatch (
                 // it's a header, and has this row as it's enclosing row
                 new AndFilter (

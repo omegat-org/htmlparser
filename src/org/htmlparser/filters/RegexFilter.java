@@ -82,6 +82,11 @@ public class RegexFilter implements NodeFilter
     public static final int FIND = 3;
 
     /**
+     * The regular expression to search for.
+     */
+    protected String mPatternString;
+
+    /**
      * The compiled regular expression to search for.
      */
     protected Pattern mPattern;
@@ -91,6 +96,15 @@ public class RegexFilter implements NodeFilter
      * @see #RegexFilter(String, int)
      */
     protected int mStrategy;
+
+    /**
+     * Creates a new instance of RegexFilter that accepts string nodes matching
+     * the regular expression ".*" using the FIND strategy.
+     */
+    public RegexFilter ()
+    {
+        this (".*", FIND);
+    }
 
     /**
      * Creates a new instance of RegexFilter that accepts string nodes matching
@@ -115,7 +129,44 @@ public class RegexFilter implements NodeFilter
      */
     public RegexFilter (String pattern, int strategy)
     {
+        setPattern (pattern);
+        setStrategy (strategy);
+    }
+
+    /**
+     * Get the search pattern.
+     * @return Returns the pattern.
+     */
+    public String getPattern ()
+    {
+        return (mPatternString);
+    }
+
+    /**
+     * Set the search pattern.
+     * @param pattern The pattern to set.
+     */
+    public void setPattern (String pattern)
+    {
+        mPatternString = pattern;
         mPattern = Pattern.compile (pattern);
+    }
+
+    /**
+     * Get the search strategy.
+     * @return Returns the strategy.
+     */
+    public int getStrategy ()
+    {
+        return (mStrategy);
+    }
+
+    /**
+     * Set the search pattern.
+     * @param strategy The strategy to use. One of MATCH, LOOKINGAT or FIND.
+     */
+    public void setStrategy (int strategy)
+    {
         mStrategy = strategy;
     }
 

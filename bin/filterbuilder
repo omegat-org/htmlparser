@@ -53,5 +53,5 @@ fi
 
 HTMLPARSER_LIB="${HTMLPARSER_HOME}/lib"
 
-"$JAVACMD" -Xmx256M -classpath "${HTMLPARSER_LIB}/thumbelina.jar:${HTMLPARSER_LIB}/htmllexer.jar" org.htmlparser.lexerapplications.thumbelina.Thumbelina "$@"
+"$JAVACMD" -Xmx256M -classpath "${HTMLPARSER_LIB}/filterbuilder.jar:${HTMLPARSER_LIB}/htmlparser.jar" org.htmlparser.parserapplications.filterbuilder.FilterBuilder "$@"
 

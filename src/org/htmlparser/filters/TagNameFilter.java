@@ -45,12 +45,40 @@ public class TagNameFilter
     protected String mName;
 
     /**
+     * Creates a new instance of TagNameFilter.
+     * With no name, this would always return <code>false</code>
+     * from {@link #accept}.
+     */
+    public TagNameFilter ()
+    {
+        this ("");
+    }
+
+    /**
      * Creates a new instance of TagNameFilter that accepts tags with the given name.
      * @param name The tag name to match.
      */
     public TagNameFilter (String name)
     {
         mName = name.toUpperCase (Locale.ENGLISH);
+    }
+
+    /**
+     * Get the tag name.
+     * @return Returns the name of acceptable tags.
+     */
+    public String getName ()
+    {
+        return (mName);
+    }
+
+    /**
+     * Set the tag name.
+     * @param name The name of the tag to accept.
+     */
+    public void setName (String name)
+    {
+        mName = name;
     }
 
     /**

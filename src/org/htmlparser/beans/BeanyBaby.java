@@ -60,9 +60,9 @@ public class BeanyBaby
         mCrumb = -1;
 
         // shenanigans to get the splitter bar at the midpoint
-        show ();
+        setVisible (true);
         mSplitPane.setDividerLocation(0.5);
-        hide ();
+        setVisible (false);
 
         // set up twinning
         mLinkBean.addPropertyChangeListener (this);
@@ -367,7 +367,7 @@ public class BeanyBaby
     public static void main (String[] args)
     {
         BeanyBaby bb = new BeanyBaby ();
-        bb.show ();
+        bb.setVisible (true);
         bb.setURL ("http://www.slashdot.org");
     }
 }

@@ -40,10 +40,36 @@ public class NodeClassFilter implements NodeFilter
     protected Class mClass;
 
     /**
+     * Creates a new instance of NodeClassFilter that accepts tags of the Html (top level) class.
+     */
+    public NodeClassFilter ()
+    {
+        this (org.htmlparser.tags.Html.class);
+    }
+
+    /**
      * Creates a new instance of NodeClassFilter that accepts tags of the given class.
      * @param cls The cls to match.
      */
     public NodeClassFilter (Class cls)
+    {
+        mClass = cls;
+    }
+
+    /**
+     * Get the class to match.
+     * @return Returns the class.
+     */
+    public Class getMatchClass ()
+    {
+        return (mClass);
+    }
+
+    /**
+     * Set the class to match.
+     * @param cls The node class to match.
+     */
+    public void setMatchClass (Class cls)
     {
         mClass = cls;
     }
@@ -54,6 +80,6 @@ public class NodeClassFilter implements NodeFilter
      */
     public boolean accept (Node node)
     {
-        return (mClass.isAssignableFrom (node.getClass ()));
+        return ((null != mClass) && mClass.isAssignableFrom (node.getClass ()));
     }
 }

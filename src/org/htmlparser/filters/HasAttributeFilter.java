@@ -49,6 +49,16 @@ public class HasAttributeFilter implements NodeFilter
     protected String mValue;
 
     /**
+     * Creates a new instance of HasAttributeFilter.
+     * With no attribute name, this would always return <code>false</code>
+     * from {@link #accept}.
+     */
+    public HasAttributeFilter ()
+    {
+        this ("", null);
+    }
+
+    /**
      * Creates a new instance of HasAttributeFilter that accepts tags with the given attribute.
      * @param attribute The attribute to search for.
      */
@@ -65,6 +75,43 @@ public class HasAttributeFilter implements NodeFilter
     public HasAttributeFilter (String attribute, String value)
     {
         mAttribute = attribute.toUpperCase (Locale.ENGLISH);
+        mValue = value;
+    }
+
+    /**
+     * Get the attribute name.
+     * @return Returns the name of the attribute that is acceptable.
+     */
+    public String getAttributeName ()
+    {
+        return (mAttribute);
+    }
+
+    /**
+     * Set the attribute name.
+     * @param name The name of the attribute to accept.
+     */
+    public void setAttributeName (String name)
+    {
+        mAttribute = name;
+    }
+
+    /**
+     * Get the attribute value.
+     * @return Returns the value of the attribute that is acceptable.
+     */
+    public String getAttributeValue ()
+    {
+        return (mValue);
+    }
+
+    /**
+     * Set the attribute value.
+     * @param value The value of the attribute to accept.
+     * If <code>null</code>, any tag with the attribute, no matter it's value is acceptable.
+     */
+    public void setAttributeValue (String value)
+    {
         mValue = value;
     }
 

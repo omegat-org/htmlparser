@@ -99,7 +99,7 @@ public class TableTag extends CompositeTag
                         new AndFilter ( // recurse up the parent chain
                             new NotFilter (cls), // but not past the first table
                             recursion));
-            recursion.mFilter = filter;
+            recursion.setParentFilter (filter);
             kids = kids.extractAllNodesThatMatch (
                 // it's a row, and has this table as it's enclosing table
                 new AndFilter (

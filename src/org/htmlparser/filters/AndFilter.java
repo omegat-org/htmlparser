@@ -30,37 +30,81 @@ import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 
 /**
- * This class accepts all nodes matching both filters (AND operation).
+ * Accepts nodes matching all of it's predicate filters (AND operation).
  */
-public class AndFilter implements NodeFilter
+public class AndFilter
+	implements
+		NodeFilter
 {
     /**
-     * The left hand side.
+     * The predicates that are to be and'ed together;
      */
-    protected NodeFilter mLeft;
+    protected NodeFilter[] mPredicates;
 
     /**
-     * The right hand side.
+     * Creates a new instance of an AndFilter.
+     * With no predicates, this would always answer <code>true</code>
+     * to {@link #accept}.
+     * @see #setPredicates
      */
-    protected NodeFilter mRight;
+    public AndFilter ()
+    {
+        setPredicates (null);
+    }
 
     /**
-     * Creates a new instance of AndFilter that accepts nodes acceptable to both filters.
+     * Creates a new instance of an AndFilter that accepts nodes acceptable to both filters.
      * @param left One filter.
      * @param right The other filter.
      */
     public AndFilter (NodeFilter left, NodeFilter right)
     {
-        mLeft = left;
-        mRight = right;
+        NodeFilter[] predicates;
+        
+        predicates = new NodeFilter[2];
+        predicates[0] = left;
+        predicates[1] = right;
+        setPredicates (predicates);
     }
 
     /**
-     * Accept nodes that are acceptable to both filters.
+     * Get the predicates used by this AndFilter.
+     * @return The predicates currently in use.
+     */
+    public NodeFilter[] getPredicates ()
+    {
+        return (mPredicates);
+    }
+    
+    /**
+     * Set the predicates for this AndFilter.
+     * @param predicates The list of predidcates to use in {@link #accept}.
+     */
+    public void setPredicates (NodeFilter[] predicates)
+    {
+        if (null == predicates)
+            predicates = new NodeFilter[0];
+        mPredicates = predicates;
+    }
+
+    //
+    // NodeFilter interface
+    //
+
+    /**
+     * Accept nodes that are acceptable to all of it's predicate filters.
      * @param node The node to check.
      */
     public boolean accept (Node node)
     {
-        return (mLeft.accept (node) && mRight.accept (node));
+        boolean ret;
+        
+        ret = true;
+        
+        for (int i = 0; ret && (i < mPredicates.length); i++)
+            if (!mPredicates[i].accept (node))
+                ret = false;
+            
+        return (ret);
     }
 }

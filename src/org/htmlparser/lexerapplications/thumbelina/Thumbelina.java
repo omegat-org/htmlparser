@@ -1296,7 +1296,7 @@ public class Thumbelina
             }
 
         version = System.getProperty ("java.version");
-        if (version.startsWith ("1.4"))
+        if (version.startsWith ("1.4") || version.startsWith ("1.5"))
             frame = new ThumbelinaFrame (url);
         else
         {
@@ -1452,6 +1452,9 @@ public class Thumbelina
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.7  2005/02/13 20:36:00  derrickoswald
+ * FilterBuilder
+ *
  * Revision 1.6  2004/07/31 16:42:30  derrickoswald
  * Remove unused variables and other fixes exposed by turning on compiler warnings.
  *

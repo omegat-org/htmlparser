@@ -30,37 +30,79 @@ import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 
 /**
- * This class accepts all nodes matching either filter (OR operation).
+ * Accepts nodes matching any of it's predicates filters (OR operation).
  */
 public class OrFilter implements NodeFilter
 {
     /**
-     * The left hand side.
+     * The predicates that are to be or'ed together;
      */
-    protected NodeFilter mLeft;
+    protected NodeFilter[] mPredicates;
 
     /**
-     * The right hand side.
+     * Creates a new instance of an OrFilter.
+     * With no predicates, this would always answer <code>false</code>
+     * to {@link #accept}.
+     * @see #setPredicates
      */
-    protected NodeFilter mRight;
+    public OrFilter ()
+    {
+        setPredicates (null);
+    }
 
     /**
-     * Creates a new instance of OrFilter that accepts nodes acceptable to either filter.
+     * Creates a new instance of an OrFilter that accepts nodes acceptable to either filter.
      * @param left One filter.
      * @param right The other filter.
      */
     public OrFilter (NodeFilter left, NodeFilter right)
     {
-        mLeft = left;
-        mRight = right;
+        NodeFilter[] predicates;
+        
+        predicates = new NodeFilter[2];
+        predicates[0] = left;
+        predicates[1] = right;
+        setPredicates (predicates);
     }
 
     /**
-     * Accept nodes that are acceptable to either filter.
+     * Get the predicates used by this OrFilter.
+     * @return The predicates currently in use.
+     */
+    public NodeFilter[] getPredicates ()
+    {
+        return (mPredicates);
+    }
+    
+    /**
+     * Set the predicates for this OrFilter.
+     * @param predicates The list of predidcates to use in {@link #accept}.
+     */
+    public void setPredicates (NodeFilter[] predicates)
+    {
+        if (null == predicates)
+            predicates = new NodeFilter[0];
+        mPredicates = predicates;
+    }
+
+    //
+    // NodeFilter interface
+    //
+
+    /**
+     * Accept nodes that are acceptable to any of it's predicate filters.
      * @param node The node to check.
      */
     public boolean accept (Node node)
     {
-        return (mLeft.accept (node) || mRight.accept (node));
+        boolean ret;
+        
+        ret = false;
+        
+        for (int i = 0; !ret && (i < mPredicates.length); i++)
+            if (mPredicates[i].accept (node))
+                ret = true;
+            
+        return (ret);
     }
 }

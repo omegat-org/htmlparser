@@ -30,30 +30,63 @@ import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 
 /**
- * This class accepts all nodes not acceptable to the filter.
+ * Accepts all nodes not acceptable to it's predicate filter.
  */
 public class NotFilter implements NodeFilter
 {
     /**
      * The filter to gainsay.
      */
-    protected NodeFilter mFilter;
+    protected NodeFilter mPredicate;
 
     /**
-     * Creates a new instance of NotFilter that accepts nodes not acceptable to the filter.
-     * @param filter The filter to consult.
+     * Creates a new instance of a NotFilter.
+     * With no predicates, this would always return <code>false</code>
+     * from {@link #accept}.
+     * @see #setPredicates
      */
-    public NotFilter (NodeFilter filter)
+    public NotFilter ()
     {
-        mFilter = filter;
+        setPredicate (null);
     }
 
     /**
-     * Accept nodes that are not acceptable to the filter.
+     * Creates a new instance of NotFilter that accepts nodes not acceptable to the predicate filter.
+     * @param predicate The filter to consult.
+     */
+    public NotFilter (NodeFilter predicate)
+    {
+        setPredicate (predicate);
+    }
+
+    /**
+     * Get the predicate used by this NotFilter.
+     * @return The predicate currently in use.
+     */
+    public NodeFilter getPredicate ()
+    {
+        return (mPredicate);
+    }
+    
+    /**
+     * Set the predicate for this NotFilter.
+     * @param predicate The predidcate to use in {@link #accept}.
+     */
+    public void setPredicate (NodeFilter predicate)
+    {
+        mPredicate = predicate;
+    }
+
+    //
+    // NodeFilter interface
+    //
+
+    /**
+     * Accept nodes that are not acceptable to the predicate filter.
      * @param node The node to check.
      */
     public boolean accept (Node node)
     {
-        return (!mFilter.accept (node));
+        return ((null != mPredicate) && !mPredicate.accept (node));
     }
 }
