@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030112 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030202 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-//
+// 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-//
-// Postal Address :
+// 
+// Postal Address : 
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
+// 2583 Cedar Street, Berkeley, 
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -39,7 +39,7 @@ public class AttributeParserTest extends HTMLParserTestCase {
 	private AttributeParser parser;
 	private HTMLTag tag;
 	private Hashtable table;
-
+	
 	public AttributeParserTest(String name) {
 		super(name);
 	}
@@ -47,13 +47,13 @@ public class AttributeParserTest extends HTMLParserTestCase {
 	protected void setUp() {
 		parser = new AttributeParser();
 	}
-
+	
 	public void getParameterTableFor(String tagContents) {
 		tag = new HTMLTag(new TagData(0,0,tagContents,""));
 		table = parser.parseAttributes(tag);
-
+		
 	}
-
+	
 	public void testParseParameters() {
 		getParameterTableFor("a b = \"c\"");
 		assertEquals("Value","c",table.get("B"));
@@ -63,41 +63,41 @@ public class AttributeParserTest extends HTMLParserTestCase {
 		getParameterTableFor("a b = \"'\"");
 		assertEquals("Value","'",table.get("B"));
 	}
-
+        
 	public void testParseEmptyValues() {
 		getParameterTableFor("a b = \"\"");
-		assertEquals("Value","",table.get("B"));
+		assertEquals("Value","",table.get("B"));		
 	}
 
 	public void testParseMissingEqual() {
 		getParameterTableFor("a b\"c\"");
 		assertEquals("ValueB","",table.get("B"));
-
+                
 	}
-
+        
     public void testTwoParams(){
 		getParameterTableFor("PARAM NAME=\"Param1\" VALUE=\"Somik\">\n");
 		assertEquals("Param1","Param1",table.get("NAME"));
-		assertEquals("Somik","Somik",table.get("VALUE"));
+		assertEquals("Somik","Somik",table.get("VALUE"));                
     }
 
     public void testPlainParams(){
         getParameterTableFor("PARAM NAME=Param1 VALUE=Somik");
         assertEquals("Param1","Param1",table.get("NAME"));
-        assertEquals("Somik","Somik",table.get("VALUE"));
+        assertEquals("Somik","Somik",table.get("VALUE"));                
     }
-
+    
     public void testValueMissing() {
         getParameterTableFor("INPUT type=\"checkbox\" name=\"Authorize\" value=\"Y\" checked");
         assertEquals("Name of Tag","INPUT",table.get(HTMLTag.TAGNAME));
-        assertEquals("Type","checkbox",table.get("TYPE"));
+        assertEquals("Type","checkbox",table.get("TYPE"));                
         assertEquals("Name","Authorize",table.get("NAME"));
         assertEquals("Value","Y",table.get("VALUE"));
         assertEquals("Checked","",table.get("CHECKED"));
     }
 
     /**
-     * This is a simulation of a bug reported by Dhaval Udani - wherein
+     * This is a simulation of a bug reported by Dhaval Udani - wherein 
      * a space before the end of the tag causes a problem - there is a key
      * in the table with just a space in it and an empty value
      */
@@ -116,14 +116,13 @@ public class AttributeParserTest extends HTMLParserTestCase {
     public void testNullTag(){
         getParameterTableFor("INPUT type=");
         assertEquals("Name of Tag","INPUT",table.get(HTMLTag.TAGNAME));
-        assertEquals("Type","",table.get("TYPE"));
+        assertEquals("Type","",table.get("TYPE"));                
     }
-
+    
     public void testAttributeWithSpuriousEqualTo() {
     	getParameterTableFor(
 			"a class=rlbA href=/news/866201.asp?0sl=-32"
 		);
-
 		assertStringEquals(
 			"href",
 			"/news/866201.asp?0sl=-32",

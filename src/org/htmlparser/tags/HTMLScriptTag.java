@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030112 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030202 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -90,6 +90,7 @@ public class HTMLScriptTag extends CompositeTag {
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("Script Node : \n");
+		if (language!=null && type!=null)
 		if (language.length()!=0 || type.length()!=0)
 		{
 			sb.append("Properties -->\n");

@@ -196,7 +196,8 @@ public class HTMLReader extends BufferedReader
                     catch (Exception e)
                     {			
                         StringBuffer msgBuffer = new StringBuffer();
-                        msgBuffer.append(DECIPHER_ERROR);
+                        msgBuffer.append(DECIPHER_ERROR+"\n" +                        	"    Tag being processed : "+tag.getTagName()+"\n" +                        	"    Current Tag Line : "+tag.getTagLine()
+                        ); 
                         appendLineDetails(msgBuffer);
                         HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
 
