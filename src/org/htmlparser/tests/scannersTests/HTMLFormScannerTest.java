@@ -221,4 +221,28 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		assertEquals("Remark Node Count",1,i);
 		assertEquals("First Remark Node"," Hello World ",remarkNode[0].toPlainTextString());
 	}	
+	/** 
+	 * Bug 652674 - forms with comments are not being parsed
+	 */
+	public void testScanFormWithComments2() throws HTMLParserException {
+		createParser(
+		"<FORM id=\"id\" name=\"name\" action=\"http://some.site/aPage.asp?id=97\" method=\"post\">\n"+			
+		"	<!--\n"+
+		"	Just a Comment\n"+
+		"	-->\n"+
+		"</FORM>");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Should be a HTMLFormTag",node[0] instanceof HTMLFormTag);
+		HTMLFormTag formTag = (HTMLFormTag)node[0];
+		HTMLRemarkNode [] remarkNode = new HTMLRemarkNode[10];
+		int i = 0;
+		for (Enumeration e=formTag.getAllNodesVector().elements();e.hasMoreElements();) {
+			HTMLNode formNode = (HTMLNode)e.nextElement();
+			if (formNode instanceof HTMLRemarkNode) {
+				remarkNode[i++] = (HTMLRemarkNode)formNode;		
+			}
+		}
+		assertEquals("Remark Node Count",1,i);
+	}		
 }
