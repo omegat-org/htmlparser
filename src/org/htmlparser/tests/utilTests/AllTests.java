@@ -53,7 +53,7 @@ public static void main(String[] args) {
  * @return junit.framework.TestSuite
  */
 public static TestSuite suite() {
-	TestSuite suite = new TestSuite();
+	TestSuite suite = new TestSuite("Utility Tests");
 	
 	suite.addTestSuite(HTMLLinkProcessorTest.class);
 	suite.addTestSuite(HTMLParameterParserTest.class);	

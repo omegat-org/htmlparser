@@ -37,7 +37,7 @@ public class AllTests extends junit.framework.TestCase
 	}
 
 	public static TestSuite suite() {
-		TestSuite suite = new TestSuite();
+		TestSuite suite = new TestSuite("Tag Tests");
 		suite.addTestSuite(HTMLJspTagTest.class);
 		suite.addTestSuite(HTMLScriptTagTest.class);
 		suite.addTestSuite(HTMLImageTagTest.class);

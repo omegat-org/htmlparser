@@ -58,7 +58,7 @@ public class AllTests extends junit.framework.TestCase
 	}
 	
 	public static TestSuite suite() {
-		TestSuite suite = new TestSuite();
+		TestSuite suite = new TestSuite("Scanner Tests");
 		suite.addTestSuite(HTMLTagScannerTest.class);
 		suite.addTestSuite(HTMLAppletScannerTest.class);
 		suite.addTestSuite(HTMLScriptScannerTest.class);
