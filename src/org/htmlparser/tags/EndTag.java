@@ -32,7 +32,7 @@ import org.htmlparser.Node;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.visitors.NodeVisitor;
 /**
- * HTMLEndTag can identify closing tags, like &lt;/A&gt;, &lt;/FORM&gt;, etc.
+ * EndTag can identify closing tags, like &lt;/A&gt;, &lt;/FORM&gt;, etc.
  */
 public class EndTag extends Tag
 {
@@ -43,7 +43,7 @@ public class EndTag extends Tag
 	public final static int ENDTAG_FINISHED_PARSING_STATE=3;
 	
 	/**
-	 * Constructor takes 3 arguments to construct an HTMLEndTag object.
+	 * Constructor takes 3 arguments to construct an EndTag object.
 	 * @param nodeBegin Beginning position of the end tag
 	 * @param nodeEnd Ending position of the end tag
 	 * @param tagContents Text contents of the tag

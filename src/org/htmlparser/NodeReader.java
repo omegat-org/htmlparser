@@ -156,7 +156,7 @@ public class NodeReader extends BufferedReader
 	}
 	/**
 	 * Gets the previousOpenScanner.
-	 * @return Returns a HTMLTagScanner
+	 * @return Returns a TagScanner
 	 */
 	public TagScanner getPreviousOpenScanner() {
 		return previousOpenScanner;

@@ -39,7 +39,7 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
 /**
- * Scans for the Frame Tag. This is a subclass of HTMLTagScanner, and is called using a
+ * Scans for the Frame Tag. This is a subclass of TagScanner, and is called using a
  * variant of the template method. If the evaluate() method returns true, that means the
  * given string contains an image tag. Extraction is done by the scan method thereafter
  * by the user of this class.

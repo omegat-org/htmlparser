@@ -40,7 +40,7 @@ import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 /**
- * Scans for the Image Tag. This is a subclass of HTMLTagScanner, and is called using a 
+ * Scans for the Image Tag. This is a subclass of TagScanner, and is called using a 
  * variant of the template method. If the evaluate() method returns true, that means the
  * given string contains an image tag. Extraction is done by the scan method thereafter
  * by the user of this class.

@@ -186,7 +186,7 @@ public class AppletScanner extends TagScanner {
 	}
 	
 	/**
-	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
+	 * @see org.htmlparser.scanners.TagScanner#getID()
 	 */
 	public String [] getID() {
 		String [] ids = new String[1];

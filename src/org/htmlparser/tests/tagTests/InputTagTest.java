@@ -71,7 +71,7 @@ public class InputTagTest extends ParserTestCase {
 	
 	/**
 	 * Reproduction of bug report 663038
-	 * @throws HTMLParserException
+	 * @throws ParserException
 	 */
 	public void testToHTML2() throws ParserException
 	{

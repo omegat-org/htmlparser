@@ -41,7 +41,7 @@ import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserFeedback;
 /**
- * HTMLTagScanner is an abstract superclass which is subclassed to create specific 
+ * TagScanner is an abstract superclass which is subclassed to create specific 
  * scanners, that operate on a tag's strings, identify it, and can extract data from it.
  * <br>
  * If you wish to write your own scanner, then you must implement scan().
@@ -268,7 +268,7 @@ public abstract class TagScanner
 	 * @param tag
 	 * @param url
 	 * @return Tag
-	 * @throws HTMLParserException
+	 * @throws ParserException
 	 */
 	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException { return null; }  
 }

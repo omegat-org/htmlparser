@@ -182,7 +182,7 @@ public class ScriptScannerTest extends ParserTestCase
 	
 	/**
 	 * Submitted by Dhaval Udani - reproducing bug 664404
-	 * @throws HTMLParserException
+	 * @throws ParserException
 	 */
 	public void testScriptTagComments() throws 
 	ParserException 

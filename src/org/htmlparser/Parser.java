@@ -79,7 +79,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * [1] Create a parser object - passing the URL and a feedback object to the parser<BR>
  * [2] Register the common scanners. See {@link #registerScanners()} <BR>
  * You wouldnt do this if you want to configure a custom lightweight parser. In that case, 
- * you would add the scanners of your choice using {@link #addScanner(HTMLTagScanner)}<BR>
+ * you would add the scanners of your choice using {@link #addScanner(TagScanner)}<BR>
  * [3] Enumerate through the elements from the parser object <BR>
  * It is important to note that the parsing occurs when you enumerate, ON DEMAND. This is a thread-safe way, 
  * and you only get the control back after a particular element is parsed and returned.
@@ -203,7 +203,7 @@ public class Parser
      * Opens a connection using the given url.
      * @param url The url to open.
      * @param feedback The ibject to use for messages or <code>null</code>.
-     * @exception HTMLParserException if an i/o exception occurs accessing the url.
+     * @exception ParserException if an i/o exception occurs accessing the url.
      */
     private static URLConnection openConnection (URL url, ParserFeedback feedback)
         throws
@@ -234,7 +234,7 @@ public class Parser
      * begins with one of the known protocol strings, i.e. <code>http://</code>.
      * @param string The name of a file or a url.
      * @param feedback The object to use for messages or <code>null</code> for no feedback.
-     * @exception HTMLParserException if the string is not a valid url or file.
+     * @exception ParserException if the string is not a valid url or file.
      */
     private static URLConnection openConnection (String string, ParserFeedback feedback)
         throws
@@ -453,7 +453,7 @@ public class Parser
      * set the connection to null is a noop.
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
-     * @exception HTMLParserException if the character set specified in the
+     * @exception ParserException if the character set specified in the
      * HTTP header is not supported, or an i/o exception occurs creating the
      * reader.
      */
@@ -557,7 +557,7 @@ public class Parser
      * <code>scanners</code> or <code>feedback</code>. The two fields are set
      * atomicly by this method, either they are both set or none of them is set.
      * Trying to set the encoding to null or an empty string is a noop.
-     * @exception HTMLParserException If the opening of the reader
+     * @exception ParserException If the opening of the reader
      */
     public void setEncoding (String encoding)
         throws
@@ -855,7 +855,7 @@ public class Parser
 	 * common parsers. But when you wish to either compose a parser with only certain scanners registered, use this method.
 	 * It is advantageous to register only the scanners you want, in order to achieve faster parsing speed. This method 
 	 * would also be of use when you have developed custom scanners, and need to register them into the parser.
-	 * @param scanner HTMLTagScanner object (or derivative) to be added to the list of registered scanners
+	 * @param scanner TagScanner object (or derivative) to be added to the list of registered scanners
 	 */
 	public void addScanner(TagScanner scanner) {
 		String ids[] = scanner.getID();
@@ -974,7 +974,7 @@ public class Parser
 	 * Return the scanner registered in the parser having the
 	 * given id
 	 * @param id The id of the requested scanner
-	 * @return HTMLTagScanner The Tag Scanner
+	 * @return TagScanner The Tag Scanner
 	 */
 	public TagScanner getScanner(String id) {
 		return (TagScanner)scanners.get(id);
@@ -1062,7 +1062,7 @@ public class Parser
 	
 	/**
 	 * Removes a specified scanner object.
-	 * @param scanner HTMLTagScanner object to be removed from the list of registered scanners
+	 * @param scanner TagScanner object to be removed from the list of registered scanners
 	 */
 	public void removeScanner(TagScanner scanner) {
 		scanners.remove(scanner);
