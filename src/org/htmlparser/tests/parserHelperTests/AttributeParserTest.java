@@ -172,7 +172,7 @@ public class AttributeParserTest extends ParserTestCase {
         Parser parser;
         
         parser = new Parser ();
-        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        if (1.4 <= Parser.getVersionNumber ())
         {
             getParameterTableFor(
                 "a href=\"<%=Application(\"sURL\")%>/literature/index.htm"
@@ -195,7 +195,7 @@ public class AttributeParserTest extends ParserTestCase {
         Parser parser;
         
         parser = new Parser ();
-        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        if (1.4 <= Parser.getVersionNumber ())
         {
             getParameterTableFor("body onLoad=defaultStatus=''");
             String name = (String)table.get(Tag.TAGNAME);

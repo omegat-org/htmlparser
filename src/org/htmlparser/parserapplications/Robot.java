@@ -101,7 +101,7 @@ public class Robot {
 
 	public static void main(String[] args) 
 	{
-	  System.out.println("Robot Crawler v"+Parser.VERSION_STRING);
+	  System.out.println("Robot Crawler v" + Parser.getVersion ());
 	  if (args.length<2 || args[0].equals("-help"))
 	  {
 	    System.out.println();

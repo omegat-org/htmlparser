@@ -122,7 +122,7 @@ public class TableScannerTest extends ParserTestCase {
 		String url = "http://htmlparser.sourceforge.net/test/badtable2.html";
 		
 		parser = new Parser (url);
-        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        if (1.4 <= Parser.getVersionNumber ())
         {
             parser.registerScanners ();
             for (NodeIterator e = parser.elements();e.hasMoreNodes();)

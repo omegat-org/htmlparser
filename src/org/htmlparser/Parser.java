@@ -135,12 +135,38 @@ public class Parser
     implements
         Serializable
 {
-	// Please don't change the formatting of the VERSION_STRING
-	// below. This is done so as to facilitate the ant script
-	public final static java.lang.String 
-	VERSION_STRING="1.3 (Integration Build May 11, 2003)"
+	// Please don't change the formatting of the version variables below.
+	// This is done so as to facilitate ant script processing.
+
+    /**
+     * The floating point version number.
+     */
+    public final static double
+    VERSION_NUMBER = 1.3
+    ;
+
+    /**
+     * The type of version.
+     */
+    public final static String
+    VERSION_TYPE = "Integration Build"
+    ;
+
+    /**
+     * The date of the version.
+     */
+    public final static String
+    VERSION_DATE = "May 11, 2003"
+    ;
+
+    /**
+     * The display version.
+     */
+    public final static String 
+	VERSION_STRING = "" + VERSION_NUMBER + " (" + VERSION_TYPE + " " + VERSION_DATE + ")"
 	;
-	// End of formatting
+
+    // End of formatting
 
     /**
      * The default charset.
@@ -203,6 +229,7 @@ public class Parser
     public static ParserFeedback stdout = new DefaultParserFeedback ();
 
 	private ParserHelper parserHelper = new ParserHelper();
+
     //
     // Static methods
     //
@@ -215,6 +242,28 @@ public class Parser
 		Node.setLineSeparator(lineSeparator);	
 	}
 	
+    /**
+     * Return the version string of this parser.
+     * @return A string of the form:
+     * <pre>
+     * "[floating point number] ([build-type] [build-date])"
+     * </pre>
+     */
+    public static String getVersion ()
+    {
+        return (VERSION_STRING);
+    }
+
+    /**
+     * Return the version number of this parser.
+     * @return A floating point number, the whole number part is the major
+     * version, and the fractional part is the minor version.
+     */
+    public static double getVersionNumber ()
+    {
+        return (VERSION_NUMBER);
+    }
+
     //
     // Constructors
     //
@@ -383,18 +432,6 @@ public class Parser
     //
     // Bean patterns
     //
-
-    /**
-     * Return the version string of this parser.
-     * @return A string of the form:
-     * <pre>
-     * "[floating point number] [description]"
-     * </pre>
-     */
-    public String getVersion ()
-    {
-        return (VERSION_STRING);
-    }
 
     /**
      * Set the connection for this parser.

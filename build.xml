@@ -1,12 +1,20 @@
 <project name="HTMLParser" default="htmlparser" basedir=".">
 
   <!-- set global properties for this build -->
+  <!--
+       Note: These can be overridden on the command line, as in:
+       ant -DversionMinor=4 -DversionType=Release\ Build versionSource
+  -->
+  <property name="versionMajor" value="1"/>
+  <property name="versionMinor" value="3"/>
+  <property name="versionType" value="Integration Build"/>
+  <property name="versionNumber" value="${versionMajor}.${versionMinor}"/>
+  <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
   <property name="src" value="src"/>
   <property name="build" value="build"/>
-  <property name="versionString" value="1_3"/>
   <property name="docs" value="docs"/>
   <property name="resources" value="resources"/>
-  <property name="dist"  value="release/htmlparser${versionString}"/>
+  <property name="dist"  value="release/htmlparser${versionQualifier}"/>
   <property name="releaseDir" value="release"/>
   <property name="finalLoc" value="distribution"/>
   <!-- location of junit.jar if there is no link to it in $JAVA_HOME/jre/lib/ext -->
@@ -17,40 +25,39 @@
     <echo message="*  Initializing.....             *"/>
     <echo message="**********************************"/>
     <tstamp>
-    	<format property="TODAY" pattern="yyyyMMdd" locale="en"/>
-    	<format property="TODAY_STRING" pattern="MMM dd, yyyy"/>
+      <format property="TODAY" pattern="yyyyMMdd" locale="en"/>
+      <format property="TODAY_STRING" pattern="MMM dd, yyyy"/>
     </tstamp>
-    <property name="version" value="1_3_${TODAY}"/>
-    <property name="displayVersion" value="&quot;1.3 (Integration Build ${TODAY_STRING})&quot;"/>
-    <echo message="version=${version}"/>
-    <echo message="displayVersion=${displayVersion}"/>
+    <property name="versionTag" value="${versionQualifier}_${TODAY}"/>
+    <echo message="versionTag=${versionTag}"/>
 
-    <!-- set property VERSION_STRING to current display version -->
+    <!-- retrieve VERSION_XXX properties from Parser.java  -->
     <loadproperties srcFile="${src}/org/htmlparser/Parser.java">
       <filterchain>
         <linecontains>
-          <contains value="VERSION_STRING"/>
+          <contains value="VERSION_"/>
         </linecontains>
+    	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
+          <param name="linebreaks" value=")&quot;"/>
+        </filterreader>
       </filterchain>
     </loadproperties>
 
-    <property name="previousDisplayVersion" value="${VERSION_STRING}"/>
-    <echo message="Detected Previous Display Version = ${previousDisplayVersion}"/>
+    <echo message="previous version number = ${VERSION_NUMBER}"/>
+    <echo message="previous version type = ${VERSION_TYPE}"/>
+    <echo message="previous version date = ${VERSION_DATE}"/>
 
     <!-- set property previousVersion to current version -->
-    <loadfile srcFile="${src}/org/htmlparser/Parser.java" property="previousVersion">
+    <loadfile srcFile="${src}/org/htmlparser/Parser.java" property="previousTag">
       <filterchain>
         <headfilter lines="1"/>
     	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
-          <param name="linebreaks" value=" - A java-based parser for HTML"/>
-        </filterreader>
-    	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
-    	  <param name="linebreaks" value="//Piy"/>
+          <param name="linebreaks" value="/Piy - A java-based parser for HTML"/>
         </filterreader>
         <striplinebreaks/>
       </filterchain>      		
     </loadfile>
-    <echo message="Detected Previous Version = ${previousVersion}"/>
+    <echo message="previous version tag = ${previousTag}"/>
 	
   </target>
 
@@ -59,15 +66,42 @@
     <echo message="*  Incorporating version info    *"/>
     <echo message="**********************************"/>
 
-    <echo message="Replacing version ${previousVersion} with ${version} in all source files"/>
-	<replace dir="${src}" value="${version}">
-	  <include name="**/*.java"/>
-	  <replacefilter token="${previousVersion}"/>
-	</replace>
-  	<replace file="${src}/org/htmlparser/Parser.java" token="${previousDisplayVersion}" value="${displayVersion}"/>
-  	<replace file="${docs}/release.txt" token="${previousDisplayVersion}" value="${displayVersion}"/>  	
+    <echo message="Replacing version VERSION_NUMBER = &quot;${VERSION_NUMBER}&quot; with VERSION_NUMBER = &quot;${versionNumber}&quot; in ${src}/org/htmlparser/Parser.java"/>
+    <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_NUMBER = &quot;${VERSION_NUMBER}&quot;" value="VERSION_NUMBER = &quot;${versionNumber}&quot;"/>
+
+    <echo message="Replacing version VERSION_TYPE = &quot;${VERSION_TYPE}&quot; with VERSION_TYPE = &quot;${versionType}&quot; in ${src}/org/htmlparser/Parser.java"/>
+    <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_TYPE = &quot;${VERSION_TYPE}&quot;" value="VERSION_TYPE = &quot;${versionType}&quot;"/>
+
+    <echo message="Replacing version VERSION_DATE = &quot;${VERSION_DATE}&quot; with VERSION_DATE = &quot;${TODAY_STRING}&quot; in ${src}/org/htmlparser/Parser.java"/>
+    <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_DATE = &quot;${VERSION_DATE}&quot;" value="VERSION_DATE = &quot;${TODAY_STRING}&quot;"/>
+
+    <echo message="Replacing version &quot;${VERSION_NUMBER} (${VERSION_TYPE} ${VERSION_DATE})&quot; with &quot;${versionNumber} (${versionType} ${TODAY_STRING})&quot; in ${docs}/release.txt"/>
+    <replace dir="${docs}" value="${versionNumber} (${versionType} ${TODAY_STRING})">
+      <include name="release.txt"/>
+      <replacefilter token="${VERSION_NUMBER} (${VERSION_TYPE} ${VERSION_DATE})"/>
+    </replace>
+    <echo message="Replacing version tag ${previousTag} with ${versionTag} in all source files"/>
+    <replace dir="${src}" value="${versionTag}">
+      <include name="**/*.java"/>
+      <replacefilter token="${previousTag}"/>
+    </replace>
   </target>
-  
+ 
+  <target name="changeLog" depends="init" description="create the change log from CVS logs">
+    <!-- ant has a changelog task already, but it outputs XML and doesn't unify dates or spit them out in chronological order -->
+    <!-- cvschangelog daysinpast="7" destfile="changelog.xml" / -->
+    <!-- so we use cvs2cl instead -->
+    <echo message="**********************************"/>
+    <echo message="*  Creating change log           *"/>
+    <echo message="**********************************"/>
+    <echo message="./cvs2cl.pl --separate-header -l &quot;-d'&gt;${VERSION_DATE}'&quot;"/>
+    <exec executable="./cvs2cl.pl">
+      <arg value="--separate-header"/>
+      <arg value="-l"/>
+      <arg value="-d'&gt;${VERSION_DATE}'"/>
+    </exec>
+  </target>
+
   <target name="compile" description="compile all java files">
     <echo message="**********************************"/>
     <echo message="*  Compiling....                 *"/>

@@ -208,7 +208,7 @@ public class TagParserTest extends ParserTestCase {
         // <meta name="foo" content="<foo>
         // bar">
         createParser("<meta name=\"foo\" content=\"<foo>\nbar\">");
-        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        if (1.4 <= Parser.getVersionNumber ())
         {
             parseAndAssertNodeCount (1);
             assertType ("should be Tag", Tag.class, node[0]);
@@ -232,7 +232,7 @@ public class TagParserTest extends ParserTestCase {
         // <meta name="foo" content="foo>
         // bar">
         createParser("<meta name=\"foo\" content=\"foo>\nbar\">");
-        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        if (1.4 <= Parser.getVersionNumber ())
         {
             parseAndAssertNodeCount (1);
             assertType ("should be Tag", Tag.class, node[0]);
@@ -256,7 +256,7 @@ public class TagParserTest extends ParserTestCase {
         // <meta name="foo" content="<foo
         // bar">
         createParser("<meta name=\"foo\" content=\"<foo\nbar\"");
-        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        if (1.4 <= Parser.getVersionNumber ())
         {
             parseAndAssertNodeCount (1);
             assertType ("should be Tag", Tag.class, node[0]);
@@ -282,7 +282,7 @@ public class TagParserTest extends ParserTestCase {
 	public void testThreadSafety() throws Exception
     {
         createParser("<html></html>");
-        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        if (1.4 <= Parser.getVersionNumber ())
         {
             String testHtml1 = "<a HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>" +
                                 TEST_HTML;

@@ -60,7 +60,7 @@ public class MailRipper {
 		}
 	}
 	public static void main(String[] args) {
-	  System.out.println("Mail Ripper v"+Parser.VERSION_STRING);
+	  System.out.println("Mail Ripper v" + Parser.getVersion ());
 	  if (args.length<1 || args[0].equals("-help"))
 	  {
 	    System.out.println();
