@@ -17,12 +17,27 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class CompositeTagScannerHelper {
-	public Tag scan(
+	private CompositeTagScanner scanner;
+	private Tag tag;
+	private String url;
+	private NodeReader reader;
+	private String currLine;
+	
+	public CompositeTagScannerHelper(
 		CompositeTagScanner scanner,
 		Tag tag, 
 		String url, 
 		NodeReader reader,
-		String currLine) throws ParserException {
+		String currLine) {
+		
+		this.scanner = scanner;
+		this.tag = tag;
+		this.url = url;
+		this.reader = reader;
+		this.currLine = currLine;		
+	}
+		
+	public Tag scan() throws ParserException {
 		Tag endTag = tag;
 		NodeList nodeList = new NodeList();
 		Node node = null;

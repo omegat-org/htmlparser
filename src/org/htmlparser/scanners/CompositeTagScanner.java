@@ -59,8 +59,8 @@ public abstract class CompositeTagScanner extends TagScanner {
 	
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
 		CompositeTagScannerHelper helper = 
-			new CompositeTagScannerHelper();
-		return helper.scan(this,tag,url,reader,currLine);
+			new CompositeTagScannerHelper(this,tag,url,reader,currLine);
+		return helper.scan();
 	}
 	
 //	public Tag scan(Tag tag, String url, NodeReader reader,String currLine)
