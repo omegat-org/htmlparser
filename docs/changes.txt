@@ -6,6 +6,9 @@ Integration Build 1.3 - 20030504
 [2] Fixed bug #729334 NodeReader::readElement() Null point dereferenced
 [3] Fixed bug #729368 Embedded quote and split tag
 [4] Fixed bug #731684 Body and title tags with attributes not parsed
+This will lead to a change in behaviour, BODY tags with attributes will now
+have all the html body encapsulated within them as children. If you were
+handling BODY tags as composite tags before, this shouldn't make any difference.
 
 Integration Build 1.3 - 20030427
 --------------------------------
