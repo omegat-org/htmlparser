@@ -2,6 +2,7 @@ Integration build 1.3 - 20021228
 --------------------------------
 [1] Add URLConnection constructors to HTMLParser
 [2] Honour charset parameter on HTTP header and in HTML meta tag
+[3] Refactored HTMLFormTag and HTMLLinkTag. Both inherit from HTMLCompositeTag.
 
 Production Release 1.2
 ----------------------
