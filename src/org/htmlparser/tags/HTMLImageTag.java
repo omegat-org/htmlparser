@@ -28,8 +28,8 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.HTMLRenderer;
 import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.visitors.HTMLVisitor;
 
 /**
  * Identifies an image tag 
@@ -65,14 +65,13 @@ public class HTMLImageTag extends HTMLTag
 		return "IMAGE TAG : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 
-	public String toHTML(HTMLRenderer renderer) {
-		if (renderer==null) return toHTML(); else		
-		return renderer.renderImagesToHTML(this);
-	}
-
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
 		attributes.put("SRC",imageURL);
+	}
+
+	public void accept(HTMLVisitor visitor) {
+		visitor.visitImageTag(this);
 	}
 
 }
