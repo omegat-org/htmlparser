@@ -1,4 +1,4 @@
-HTMLParser Version 1.5 (Integration Build May 22, 2004)
+HTMLParser Version 1.5 (Integration Build Jun 13, 2004)
 *********************************************
 
 Contents of the distribution
@@ -28,16 +28,20 @@ Changes since Version 1.4
 -------------------------
 Configuration Management
     Removed the need for the Translate class to be packaged with htmllexer.jar.
-    This results in a lighter weight component.
+    This results in a lighter weight component. Updated the logo and included
+    the LGPL license.
 Refactoring
-    Added Tag interface. Obviated LinkProcessor and moved it's functionality to
-    the Page class.
+    Obviated LinkProcessor and moved it's functionality to the Page class.
+    Added Tag, Text and Remark interfaces and moved concrete node
+    implementations to the nodes package, removing the lexer.nodes package.
 Filters
-    Added CssSelectorNodeFilter.
+    Added CssSelectorNodeFilter and RegExFilter.
     
 Enhancement Requests
 --------------------
 943593 LinkProcessor.extract(link,base) weird behaviour?
+943197 Accept gzip / deflate content encodings
+874000 Remove specialized tag signatures from NodeVisitor
 
 Bug Fixes
 ---------

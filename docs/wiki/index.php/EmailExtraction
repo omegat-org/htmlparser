@@ -99,7 +99,7 @@ public class EmailLinkDemo
 <tr><td>
 
 </td><td>
-<span class="debug">Page Execution took 0.26 seconds</span>
+<span class="debug">Page Execution took 0.256 seconds</span>
 </td></tr></table>
 <!-- This keeps the valid XHTML! icons from "hanging off the bottom of the scree" -->
 <br style="clear: both;" />

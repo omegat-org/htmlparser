@@ -15,6 +15,259 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.5 - 20040613
+--------------------------------
+
+2004-06-13 20:06  derrickoswald
+
+	* src/org/htmlparser/: Node.java, PrototypicalNodeFactory.java,
+	package.html, nodeDecorators/AbstractNodeDecorator.java,
+	nodes/AbstractNode.java, nodes/RemarkNode.java,
+	nodes/TextNode.java, scanners/ScriptScanner.java,
+	scanners/StyleScanner.java, tests/MemoryTest.java:
+
+	Rework PrototypicalNodeFactory to use interfaces.
+	
+2004-06-08 06:20  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java,
+	filters/HasParentFilter.java:
+
+	DocComment fix and another getText() signature.
+	
+2004-06-02 21:20  derrickoswald
+
+	* docs/index.html:
+
+	Allow scrolling left panel.
+	
+2004-06-02 21:18  derrickoswald
+
+	* docs/: contributors.html, pics/rsf.gif:
+
+	Add Rodney S. Foley's photo.
+	
+2004-06-02 21:12  derrickoswald
+
+	* resources/logofiles/: htmlparser2in.gif, htmlparser_cmyk.eps,
+	htmlparser_greyscale.eps, htmlparser_pms.eps,
+	htmlparser_rgb_2inch.jpg, htmlparser_rgb_5inch.jpg:
+
+	Full set of logo files from Jon Gillette.
+	
+2004-06-02 18:47  somik
+
+	* src/org/htmlparser/tests/ParserTestCase.java:
+
+	modified to allow usage of assertXmlEquals
+	
+2004-06-02 18:47  somik
+
+	* .cvsignore:
+
+	added .cvsignore
+	
+2004-05-31 21:44  derrickoswald
+
+	* docs/contributors.html:
+
+	Add htmlparser.org reference in Rodney S. Foley's writeup.
+	
+2004-05-31 18:27  derrickoswald
+
+	* docs/: contributors.html, htmlparser.jpg, htmlparserlogo.jpg,
+	panel.html, release.txt:
+
+	New logo from Jon Gillette.
+	
+2004-05-29 21:43  derrickoswald
+
+	* build.xml,
+	src/org/htmlparser/parserapplications/WikiCapturer.java,
+	docs/wiki/index.html, docs/wiki/index.php/Benchmarks,
+	docs/wiki/index.php/BlockFeedback,
+	docs/wiki/index.php/CollectingParameter,
+	docs/wiki/index.php/CompositePattern,
+	docs/wiki/index.php/CustomTagExtraction,
+	docs/wiki/index.php/CustomTagLinks,
+	docs/wiki/index.php/CustomVisitorLinks,
+	docs/wiki/index.php/EmailExtraction,
+	docs/wiki/index.php/EnableFeedback,
+	docs/wiki/index.php/ExternalIterators,
+	docs/wiki/index.php/FactoryMethod,
+	docs/wiki/index.php/FeedbackMechanism,
+	docs/wiki/index.php/FilterLinks,
+	docs/wiki/index.php/FrequentlyAskedQuestions,
+	docs/wiki/index.php/HomePage, docs/wiki/index.php/ImageExtraction,
+	docs/wiki/index.php/InternalIterators,
+	docs/wiki/index.php/IteratorPattern, docs/wiki/index.php/JavaBeans,
+	docs/wiki/index.php/LexerLinks, docs/wiki/index.php/LinkBeanLinks,
+	docs/wiki/index.php/LinkExtraction,
+	docs/wiki/index.php/ParserDesign,
+	docs/wiki/index.php/PatternStories,
+	docs/wiki/index.php/PostOperation, docs/wiki/index.php/RSSFeeds,
+	docs/wiki/index.php/ReverseHtml,
+	docs/wiki/index.php/SamplePrograms,
+	docs/wiki/index.php/SearchingForData,
+	docs/wiki/index.php/SomikRaha, docs/wiki/index.php/StrategyPattern,
+	docs/wiki/index.php/StringExtraction,
+	docs/wiki/index.php/TemplateMethod,
+	docs/wiki/index.php/TestDrivenDevelopment,
+	docs/wiki/index.php/UsingCookiesWithParser,
+	docs/wiki/index.php/VisitorLinks,
+	docs/wiki/index.php/VisitorPattern, docs/wiki/index.php/WebCrawler,
+	docs/wiki/index.php/WebRipper,
+	docs/wiki/index.php/WritingYourOwnScanners,
+	docs/wiki/themes/MacOSX/buttons/uww.png,
+	docs/wiki/themes/MacOSX/buttons/en/BackLinks.png,
+	docs/wiki/themes/MacOSX/buttons/en/DebugInfo.png,
+	docs/wiki/themes/MacOSX/buttons/en/Diff.png,
+	docs/wiki/themes/MacOSX/buttons/en/Edit.png,
+	docs/wiki/themes/MacOSX/buttons/en/FindPage.png,
+	docs/wiki/themes/MacOSX/buttons/en/LikePages.png,
+	docs/wiki/themes/MacOSX/buttons/en/PageHistory.png,
+	docs/wiki/themes/MacOSX/buttons/en/PageInfo.png,
+	docs/wiki/themes/MacOSX/buttons/en/RecentChanges.png,
+	docs/wiki/themes/MacOSX/images/http.png,
+	docs/wiki/themes/MacOSX/images/logo.png,
+	docs/wiki/themes/default/buttons/vcss.gif,
+	docs/wiki/themes/default/buttons/vxhtml10.gif:
+
+	Use WikiCapturer to pull Wiki pages locally.
+	
+2004-05-29 16:40  derrickoswald
+
+	* build.xml, docs/release.txt, resources/license.txt:
+
+	Add LGPL license.txt to the distribution.
+	
+2004-05-29 15:51  derrickoswald
+
+	* build.xml, resources/inherit.gif:
+
+	Fix javadoc inheritance white background GIF.
+	
+2004-05-24 15:36  derrickoswald
+
+	* src/org/htmlparser/: tests/filterTests/FilterTest.java,
+	filters/RegexFilter.java:
+
+	Add regular expression filter.
+	
+2004-05-24 12:31  derrickoswald
+
+	* src/org/htmlparser/: scanners/package.html,
+	tests/lexerTests/AttributeTests.java:
+
+	Fix some files misplaced in last refactoring submission.
+	
+2004-05-24 12:18  derrickoswald
+
+	* build.xml, src/org/htmlparser/AbstractNode.java,
+	src/org/htmlparser/Attribute.java,
+	src/org/htmlparser/NodeFactory.java,
+	src/org/htmlparser/Parser.java,
+	src/org/htmlparser/PrototypicalNodeFactory.java,
+	src/org/htmlparser/Remark.java, src/org/htmlparser/RemarkNode.java,
+	src/org/htmlparser/StringNode.java,
+	src/org/htmlparser/StringNodeFactory.java,
+	src/org/htmlparser/Tag.java, src/org/htmlparser/Text.java,
+	src/org/htmlparser/beans/StringBean.java,
+	src/org/htmlparser/filters/HasAttributeFilter.java,
+	src/org/htmlparser/filters/StringFilter.java,
+	src/org/htmlparser/filters/TagNameFilter.java,
+	src/org/htmlparser/lexer/Lexer.java,
+	src/org/htmlparser/lexer/PageAttribute.java,
+	src/org/htmlparser/lexerapplications/thumbelina/Thumbelina.java,
+	src/org/htmlparser/nodeDecorators/AbstractNodeDecorator.java,
+	src/org/htmlparser/nodeDecorators/DecodingNode.java,
+	src/org/htmlparser/nodeDecorators/EscapeCharacterRemovingNode.java,
+	src/org/htmlparser/nodeDecorators/NonBreakingSpaceConvertingNode.java,
+	src/org/htmlparser/scanners/CompositeTagScanner.java,
+	src/org/htmlparser/scanners/ScriptScanner.java,
+	src/org/htmlparser/scanners/StyleScanner.java,
+	src/org/htmlparser/tags/AppletTag.java,
+	src/org/htmlparser/tags/CompositeTag.java,
+	src/org/htmlparser/tags/ImageTag.java,
+	src/org/htmlparser/tags/MetaTag.java,
+	src/org/htmlparser/tags/Tag.java,
+	src/org/htmlparser/tests/ParserTest.java,
+	src/org/htmlparser/tests/ParserTestCase.java,
+	src/org/htmlparser/tests/filterTests/FilterTest.java,
+	src/org/htmlparser/tests/lexerTests/AttributeTests.java,
+	src/org/htmlparser/tests/lexerTests/KitTest.java,
+	src/org/htmlparser/tests/lexerTests/LexerTests.java,
+	src/org/htmlparser/tests/parserHelperTests/RemarkNodeParserTest.java,
+	src/org/htmlparser/tests/parserHelperTests/StringParserTest.java,
+	src/org/htmlparser/tests/scannersTests/CompositeTagScannerTest.java,
+	src/org/htmlparser/tests/tagTests/BulletListTagTest.java,
+	src/org/htmlparser/tests/tagTests/CompositeTagTest.java,
+	src/org/htmlparser/tests/tagTests/FormTagTest.java,
+	src/org/htmlparser/tests/tagTests/ImageTagTest.java,
+	src/org/htmlparser/tests/tagTests/LinkTagTest.java,
+	src/org/htmlparser/tests/tagTests/OptionTagTest.java,
+	src/org/htmlparser/tests/tagTests/StyleTagTest.java,
+	src/org/htmlparser/tests/tagTests/TagTest.java,
+	src/org/htmlparser/tests/utilTests/CharacterTranslationTest.java,
+	src/org/htmlparser/tests/utilTests/HTMLParserUtilsTest.java,
+	src/org/htmlparser/tests/utilTests/NodeListTest.java,
+	src/org/htmlparser/tests/visitorsTests/HtmlPageTest.java,
+	src/org/htmlparser/tests/visitorsTests/NodeVisitorTest.java,
+	src/org/htmlparser/util/ParserUtils.java,
+	src/org/htmlparser/visitors/NodeVisitor.java,
+	src/org/htmlparser/visitors/StringFindingVisitor.java,
+	src/org/htmlparser/visitors/TextExtractingVisitor.java,
+	src/org/htmlparser/visitors/UrlModifyingVisitor.java,
+	src/org/htmlparser/nodes/AbstractNode.java,
+	src/org/htmlparser/nodes/RemarkNode.java,
+	src/org/htmlparser/nodes/TagNode.java,
+	src/org/htmlparser/nodes/TextNode.java,
+	src/org/htmlparser/nodes/package.html:
+
+	Part three of a multiphase refactoring.
+	The three node types are now fronted by interfaces (program to the interface paradigm)
+	with concrete implementations in the new htmlparser.nodes package. Classes from the
+	lexer.nodes package are moved to this package, and obvious references to the concrete
+	classes that got broken by this have been changed to use the interfaces where possible.
+	
+2004-05-23 20:38  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, Node.java,
+	RemarkNode.java, StringNode.java, beans/StringBean.java,
+	filters/StringFilter.java, lexer/Lexer.java,
+	nodeDecorators/AbstractNodeDecorator.java, tags/ImageTag.java,
+	tags/LinkTag.java, tags/Tag.java, tags/TitleTag.java,
+	tests/filterTests/FilterTest.java,
+	tests/lexerTests/LexerTests.java,
+	tests/utilTests/NodeListTest.java,
+	tests/visitorsTests/NodeVisitorTest.java,
+	tests/visitorsTests/ScriptCommentTest.java, visitors/HtmlPage.java,
+	visitors/LinkFindingVisitor.java, visitors/NodeVisitor.java,
+	visitors/ObjectFindingVisitor.java,
+	visitors/TagFindingVisitor.java,
+	visitors/TextExtractingVisitor.java,
+	visitors/UrlModifyingVisitor.java:
+
+	Part two of a multiphase refactoring. Part one added the Tag interface.
+	This submission eliminates some of the duplication between the lexer.nodes package
+	and the htmlparser package by removing the tag specific signatures, visitTitleTag,
+	visitLinkTag and visitImageTag, from the NodeVisitor class. This allows the lexer to
+	return htmlparser level classes for StringNode and RemarkNode. The TagNode is
+	still present in the lexer.nodes package, but will move next.
+	This means that classes derived from NodeVisitor *will not* work using the above
+	signatures; instead a check for tag class (or name) should be performed in visitTag.
+	A document will be added to the visitors package with comprehensive porting instructions.
+	
+2004-05-23 15:42  derrickoswald
+
+	* src/org/htmlparser/lexer/Page.java:
+
+	Incorporate feature request submitted by Bradford A. Folkens
+	#943197 Accept gzip / deflate content encodings
+	by setting request property "Accept-Encoding" to "gzip, deflate" in Page.setConnection(),
+	if possible, and handling those encodings.
+	No test case added because it needs a specially configured HTTP server.
+	
 Integration Build 1.5 - 20040522
 --------------------------------
 

@@ -71,7 +71,7 @@ writeToFile(visitor.getModifiedResult()); // you have to define writeToFile in y
 <tr><td>
 
 </td><td>
-<span class="debug">Page Execution took 0.242 seconds</span>
+<span class="debug">Page Execution took 0.261 seconds</span>
 </td></tr></table>
 <!-- This keeps the valid XHTML! icons from "hanging off the bottom of the scree" -->
 <br style="clear: both;" />

@@ -83,7 +83,7 @@ public class CustomTagDemo
 <tr><td>
 
 </td><td>
-<span class="debug">Page Execution took 0.352 seconds</span>
+<span class="debug">Page Execution took 0.213 seconds</span>
 </td></tr></table>
 <!-- This keeps the valid XHTML! icons from "hanging off the bottom of the scree" -->
 <br style="clear: both;" />

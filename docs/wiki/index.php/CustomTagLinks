@@ -89,7 +89,7 @@ public class LinkDemo
 <tr><td>
 
 </td><td>
-<span class="debug">Page Execution took 0.332 seconds</span>
+<span class="debug">Page Execution took 0.225 seconds</span>
 </td></tr></table>
 <!-- This keeps the valid XHTML! icons from "hanging off the bottom of the scree" -->
 <br style="clear: both;" />

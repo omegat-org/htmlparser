@@ -101,7 +101,7 @@ The <i>toHtml()</i> method applies to all nodes, not just tags. For tags it is b
 <tr><td>
 
 </td><td>
-<span class="debug">Page Execution took 0.421 seconds</span>
+<span class="debug">Page Execution took 0.254 seconds</span>
 </td></tr></table>
 <!-- This keeps the valid XHTML! icons from "hanging off the bottom of the scree" -->
 <br style="clear: both;" />

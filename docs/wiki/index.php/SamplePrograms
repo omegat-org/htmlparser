@@ -72,7 +72,7 @@ body {background-image: url(/wiki/themes/MacOSX/images/bgpaper8.png);}
 <tr><td>
 
 </td><td>
-<span class="debug">Page Execution took 0.29 seconds</span>
+<span class="debug">Page Execution took 0.289 seconds</span>
 </td></tr></table>
 <!-- This keeps the valid XHTML! icons from "hanging off the bottom of the scree" -->
 <br style="clear: both;" />
