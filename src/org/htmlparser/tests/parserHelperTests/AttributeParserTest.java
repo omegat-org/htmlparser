@@ -129,4 +129,5 @@ public class AttributeParserTest extends HTMLParserTestCase {
 			(String)table.get("HREF")
 		);
     }
+    
 }

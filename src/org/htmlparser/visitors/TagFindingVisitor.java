@@ -31,31 +31,65 @@
 package org.htmlparser.visitors;
 
 import org.htmlparser.HTMLNode;
+import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.NodeList;
 
 public class TagFindingVisitor extends HTMLVisitor {
-	private String tagNameToFind;
-	private int count = 0;
-	private NodeList tags;
+	private String [] tagsToBeFound;
+	private int count [];
+	private int endTagCount [];
+	private NodeList [] tags;
+	private NodeList [] endTags;
+	private boolean endTagCheck;
 	
-	public TagFindingVisitor(String tagNameToFind) {
-		this.tagNameToFind = tagNameToFind;
-		this.tags = new NodeList();
+	public TagFindingVisitor(String [] tagsToBeFound) {
+		this(tagsToBeFound,false);
 	}
+
+	public TagFindingVisitor(String [] tagsToBeFound, boolean endTagCheck) {
+		this.tagsToBeFound = tagsToBeFound;
+		this.tags = new NodeList[tagsToBeFound.length];
+		if (endTagCheck) {
+			endTags = new NodeList[tagsToBeFound.length];
+			endTagCount = new int[tagsToBeFound.length];
+		}
+		for (int i=0;i<tagsToBeFound.length;i++) {
+			tags[i] = new NodeList();
+			if (endTagCheck)
+				endTags[i] = new NodeList();
+		}
+		this.count = new int[tagsToBeFound.length];
+		this.endTagCheck = endTagCheck;	
+	}	
 	
-	public int getCount() {
-		return count;
+	public int getTagCount(int index) {
+		return count[index];
 	}
 
 	public void visitTag(HTMLTag tag) {
-		if (tag.getTagName().equalsIgnoreCase(tagNameToFind)) {
-			count++;
-			tags.add(tag);
-		}
+		for (int i=0;i<tagsToBeFound.length;i++)
+			if (tag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
+				count[i]++;
+				tags[i].add(tag);
+			}
 	}
 
-	public HTMLNode [] getTags() {
-		return tags.toNodeArray();
+	public HTMLNode [] getTags(int index) {
+		return tags[index].toNodeArray();
 	}
+
+	public void visitEndTag(HTMLEndTag endTag) {
+		if (!endTagCheck) return;
+		for (int i=0;i<tagsToBeFound.length;i++)
+			if (endTag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
+				endTagCount[i]++;
+				endTags[i].add(endTag);
+			}
+	}
+	
+	public int getEndTagCount(int index) {
+		return endTagCount[index];
+	}
+
 }

@@ -20,14 +20,45 @@ public class TagFindingVisitorTest extends HTMLParserTestCase {
 	}
 
 	public void testTagFound() throws Exception {
-		TagFindingVisitor visitor = new TagFindingVisitor("HEAD");
+		TagFindingVisitor visitor = new TagFindingVisitor(new String[] {"HEAD"});
 		parser.visitAllNodesWith(visitor);
-		assertEquals("HEAD found", 1, visitor.getCount());
+		assertEquals("HEAD found", 1, visitor.getTagCount(0));
 	}
 
 	public void testTagsFound() throws Exception {
-		TagFindingVisitor visitor = new TagFindingVisitor("LI");
+		TagFindingVisitor visitor = new TagFindingVisitor(new String [] {"LI"});
 		parser.visitAllNodesWith(visitor);
-		assertEquals("LI tags found", 2, visitor.getCount());
+		assertEquals("LI tags found", 2, visitor.getTagCount(0));
 	}
+	
+	public void testMultipleTags() throws Exception {
+		TagFindingVisitor visitor = 
+			new TagFindingVisitor(
+				new String [] {
+					"LI","BODY","UL","A"
+				}
+			);
+		parser.visitAllNodesWith(visitor);
+		assertEquals("LI tags found", 2, visitor.getTagCount(0));
+		assertEquals("BODY tag found", 1, visitor.getTagCount(1));
+		assertEquals("UL tag found", 1, visitor.getTagCount(2));
+		assertEquals("A tag found", 1, visitor.getTagCount(3));
+	}
+
+	public void testEndTags() throws Exception {
+		TagFindingVisitor visitor = 
+			new TagFindingVisitor(
+				new String [] {
+					"LI","BODY","UL","A"
+				},
+				true
+			);
+		parser.visitAllNodesWith(visitor);
+		assertEquals("LI tags found", 2, visitor.getTagCount(0));
+		assertEquals("BODY tag found", 1, visitor.getTagCount(1));
+		assertEquals("UL tag found", 1, visitor.getTagCount(2));
+		assertEquals("A tag found", 1, visitor.getTagCount(3));
+		assertEquals("BODY end tag found", 1, visitor.getEndTagCount(1));
+	}
+
 }

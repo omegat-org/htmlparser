@@ -51,7 +51,7 @@ public class TagParser {
 	public final static int TAG_ILLEGAL_STATE=4;
 	public final static int TAG_IGNORE_DATA_STATE=5;	    
 	public final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
-	public final static String ENCOUNTERED_QUERY_MESSAGE = "HTMLTagParser : Encountered > after a query. Accepting without correction and continuing parsing";
+	public final static String ENCOUNTERED_QUERY_MESSAGE = "TagParser : Encountered > after a query. Accepting without correction and continuing parsing";
 	private HTMLParserFeedback feedback;
 	private boolean encounteredQuery;
 	private int i;
