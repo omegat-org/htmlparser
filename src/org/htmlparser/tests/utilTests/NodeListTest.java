@@ -33,7 +33,6 @@ import org.htmlparser.Node;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
-import org.htmlparser.visitors.NodeVisitor;
 
 public class NodeListTest extends ParserTestCase {
 	private NodeList nodeList;

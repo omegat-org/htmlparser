@@ -41,8 +41,6 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Vector;
 
-import junit.framework.TestCase;
-
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.beans.LinkBean;
