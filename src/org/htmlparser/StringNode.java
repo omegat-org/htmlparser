@@ -64,6 +64,14 @@ public class StringNode extends Node
 	{
 		return textBuffer.toString();
 	}
+    /**
+     * Sets the string contents of the node.
+     * @param The new text for the node.
+     */
+	public void setText(String text)
+	{
+		textBuffer = new StringBuffer (text);
+	}
 	public String toPlainTextString() {
 		return textBuffer.toString();
 	}
