@@ -1,7 +1,6 @@
 Nightly Build 1.2 - 20020507
 ----------------------------
 [1] HTMLNode is no longer an interface, but an abstract class. There were two reasons for this change. Firstly, I couldnt think of a scenario where an object would be an html tag AND something else. Secondly, I wanted to enforce the implementation of toString(), which is usually done if you implement from the interface (as Object has a default toString()).
-
 [2] abstract toString() method - children have to implement this.
 [3] print() and print(PrintWriter) - final methods. They will make a call to toString(), and print to standard output and the print writer respectively.
 [4] toPlainText() - this method will provide a string representation of a tag, if there is such a representation. If not , a blank string is returned. This has implications - our program to extract all strings from a html page will be simplified to:
