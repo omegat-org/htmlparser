@@ -29,11 +29,14 @@
 
 package org.htmlparser;
 
+import java.util.Vector;
+
 /**
  * The remark tag is identified and represented by this class.
  */
 public class HTMLRemarkNode extends HTMLNode
 {
+	public final static String REMARK_NODE_FILTER="-r";
 	public final static int REMARK_NODE_BEFORE_PARSING_STATE=0;
 	public final static int REMARK_NODE_OPENING_ANGLE_BRACKET_STATE=1;
 	public final static int REMARK_NODE_EXCLAMATION_RECEIVED_STATE=2;
@@ -210,6 +213,10 @@ public class HTMLRemarkNode extends HTMLNode
 	public String toString()
 	{
 		return "Comment Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+"\n";
+	}
+
+	public void collectInto(Vector collectionVector, String filter) {
+		if (filter==REMARK_NODE_FILTER) collectionVector.add(this);
 	}
 
 }

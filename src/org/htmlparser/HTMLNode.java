@@ -30,6 +30,7 @@
 package org.htmlparser;
 
 import java.io.PrintWriter;
+import java.util.Vector;
 
 /**
  * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)
@@ -54,26 +55,6 @@ public abstract class HTMLNode
 	 */
     protected static String lineSeparator = System.getProperty ("line.separator", "\n");
 
-    // It is unclear why security precautions were being taken just to access
-    // a simple accessible property. If the above is a problem, use this instead:
-//    protected static String lineSeparator = 
-//			(String)java.security.AccessController.doPrivileged (
-//                // inner anonymous class based on PrivilegedAction interface
-//                new java.security.PrivilegedAction ()
-//                {
-//                    /**
-//                     * Get the line separator.
-//                     * This method will be called by
-//                     * <code>AccessController.doPrivileged</code>
-//                     * after enabling privileges.
-//                     * @return The current value of system property <em>line.separator</em>.
-//                     */
-//                    public Object run ()
-//                    {
-//						return (System.getProperty ("line.separator", "\n"));
-//                    }
-//                });
-	
 	public HTMLNode(int nodeBegin, int nodeEnd) {
 		this.nodeBegin = nodeBegin;
 		this.nodeEnd = nodeEnd;
@@ -183,7 +164,40 @@ public abstract class HTMLNode
 	public String toHTML(HTMLRenderer renderer) {
 		return toHTML();
 	}
-
+	
+	/**
+	 * Collect this node and its child nodes (if-applicable) into the collection parameter, provided the node
+	 * satisfies the filtering criteria. <P/>
+	 * 
+	 * This mechanism allows powerful filtering code to be written very easily, without bothering about collection
+	 * of embedded tags separately. e.g. when we try to get all the links on a page, it is not possible to get it
+	 * at the top-level, as many tags (like form tags), can contain links embedded in them. We could get the links
+	 * out by checking if the current node is a form tag, and going through its contents. However, this ties us down
+	 * to specific tags, and is not a very clean approach. <P/>
+	 * 
+	 * Using collectInto(), programs get a lot shorter. Now, the code to extract all links from a page would look 
+	 * like :
+	 * <pre>
+	 * Vector collectionVector = new Vector();
+	 * HTMLNode node;
+	 * String filter = HTMLLinkTag.LINK_TAG_FILTER;
+	 * for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+	 * 		node = e.nextHTMLNode();
+	 * 		node.collectInto(collectionVector,filter);
+	 * }
+	 * </pre>
+	 * Thus, collectionVector will hold all the link nodes, irrespective of how deep the links are embedded.
+	 * This of course implies that tags must fulfill their responsibilities toward honouring certain filters.
+	 * 
+	 * <B>Important:</B> In order to keep performance optimal, <B>do not create</B> you own filter strings, as 
+	 * the internal matching occurs with the pre-existing filter string object (in the relevant class). i.e. do not
+	 * make calls like : <I>collectInto(collectionVector,"-l")</I>, instead, make calls only like :
+	 * <I>collectInto(collectionVector,HTMLLinkTag.LINK_TAG_FILTER)</I>.<P/>
+	 * 
+	 * To find out if your desired tag has filtering support, check the API of the tag.
+	 */
+	public abstract void collectInto(Vector collectionVector,String filter);
+	
 	/**
 	 * Returns the beginning position of the tag.
 	 */
@@ -199,5 +213,5 @@ public abstract class HTMLNode
 	{
 		return nodeEnd;
 	}
-
+	
 }

@@ -29,13 +29,16 @@
 
 package org.htmlparser;
 
+import java.util.Vector;
+
 /**
  * Normal text in the html document is identified and represented by this class.
  */
 public class HTMLStringNode extends HTMLNode
 {
-	/**
-	 * The text of the string.
+  public static final String STRING_FILTER="-string";
+  /**
+   * The text of the string.
    */	
 	protected StringBuffer textBuffer;
 
@@ -136,4 +139,8 @@ public class HTMLStringNode extends HTMLNode
 	public String toString() {
 		return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	public void collectInto(Vector collectionVector, String filter) {
+		if (filter==STRING_FILTER) collectionVector.add(this);
+	}
+
 }

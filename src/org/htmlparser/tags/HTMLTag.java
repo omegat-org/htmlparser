@@ -360,4 +360,8 @@ public class HTMLTag extends HTMLNode
     {
         return (mBreakTags.contains (getText ().toUpperCase ()));
     }
+	public void collectInto(Vector collectionVector, String filter) {
+		if (thisScanner!=null && thisScanner.getFilter()==filter) collectionVector.add(this);
+	}
+
 }

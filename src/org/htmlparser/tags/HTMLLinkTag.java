@@ -37,6 +37,7 @@ import java.util.Vector;
  */
 public class HTMLLinkTag extends HTMLTag
 {
+	public static final String LINK_TAG_FILTER="-l";
 	/**
 	 * The URL where the link points to
 	 */	
@@ -78,6 +79,17 @@ public class HTMLLinkTag extends HTMLTag
 	 * 		}
 	 * }
 	 * </pre>
+	 * There is another mechanism available that allows for uniform extraction of images. You could do this to
+	 * get all images from a web page : 
+	 * <pre>
+	 * HTMLNode node;
+	 * Vector imageCollectionVector = new Vector();
+	 * for (HTMLEnumeration e = parser.elements();e.hasMoreNode();) {
+	 * 		node = e.nextHTMLNode();
+	 * 		node.collectInto(imageCollectionVector,HTMLImageTag.IMAGE_FILTER);
+	 * }
+	 * </pre>
+	 * The link tag processes all its contents in collectInto().
 	 * @link The URL to which the link points to
 	 * @linkText The text which is stored inside this link tag
 	 * @linkBegin The beginning position of the link tag
@@ -267,6 +279,17 @@ public class HTMLLinkTag extends HTMLTag
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public void collectInto(Vector collectionVector, String filter) {
+		if (filter==LINK_TAG_FILTER) collectionVector.add(this); else {
+			HTMLNode node;
+			for (Enumeration e=nodeVector.elements();e.hasMoreElements();) {
+				node = (HTMLNode)e.nextElement();
+				node.collectInto(collectionVector,filter);
+			}
+		}
+		
 	}
 
 }

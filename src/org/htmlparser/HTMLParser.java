@@ -38,6 +38,8 @@ import java.util.*;
 // HTML Parser Imports //
 /////////////////////////
 import org.htmlparser.scanners.*;
+import org.htmlparser.tags.HTMLImageTag;
+import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.ChainedException;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
@@ -532,12 +534,12 @@ public class HTMLParser
 			System.err.println("Other scanners already exist, hence this method call wont have any effect");
 			return;
 		}
-		HTMLLinkScanner linkScanner = new HTMLLinkScanner("-l");
+		HTMLLinkScanner linkScanner = new HTMLLinkScanner(HTMLLinkTag.LINK_TAG_FILTER);
 		// Note - The BaseHREF and Image scanners share the same
 		// link processor - internally linked up with the factory
 		// method in the link scanner class
 		addScanner(linkScanner);
-		addScanner(linkScanner.createImageScanner("-i"));
+		addScanner(linkScanner.createImageScanner(HTMLImageTag.IMAGE_TAG_FILTER));
 		addScanner(new HTMLScriptScanner("-s"));
 		addScanner(new HTMLStyleScanner("-t"));
 		addScanner(new HTMLJspScanner("-j"));

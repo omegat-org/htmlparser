@@ -216,4 +216,13 @@ public class HTMLFormTag extends HTMLTag
 		return stringRepresentation.toString();
 	}
 
+	public void collectInto(Vector collectionVector, String filter) {
+		super.collectInto(collectionVector, filter);
+		HTMLNode node;
+		for (Enumeration e = allNodesVector.elements();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			node.collectInto(collectionVector,filter);
+		}
+	}
+
 }

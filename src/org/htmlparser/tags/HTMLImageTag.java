@@ -35,6 +35,7 @@ import org.htmlparser.HTMLRenderer;
  */
 public class HTMLImageTag extends HTMLTag
 {
+	public static final String IMAGE_TAG_FILTER="-i";
 	/**
 	 * The URL where the image is stored.
 	 */
