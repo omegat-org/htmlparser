@@ -56,6 +56,7 @@ import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.scanners.MetaTagScanner;
 import org.htmlparser.scanners.ScriptScanner;
+import org.htmlparser.scanners.SelectTagScanner;
 import org.htmlparser.scanners.StyleScanner;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.scanners.TextareaTagScanner;
@@ -1003,6 +1004,7 @@ public class Parser
 		addScanner(new TextareaTagScanner("-t"));
 		addScanner(linkScanner.createBaseHREFScanner("-b"));
 		addScanner(new BulletScanner("-bullet"));
+		addScanner(new SelectTagScanner("-select"));
 	//	addScanner(new SpanScanner("-p"));
 	//	addScanner(new DivScanner("-div"));
 //		addScanner(new TableScanner(this));
