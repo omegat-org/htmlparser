@@ -171,8 +171,7 @@ public class AttributeParserTest extends ParserTestCase {
      * This was throwing a null pointer exception when the empty &lt;&gt; was encountered.
      * Bug #725420 NPE in StringBean.visitTag
      **/
-    public void testEmptyTag ()
-    {
+    public void testEmptyTag () {
 		getParameterTableFor("");
 		assertNotNull ("No Tag.TAGNAME",table.get(Tag.TAGNAME));
     }
@@ -180,13 +179,12 @@ public class AttributeParserTest extends ParserTestCase {
     /**
      * Case of script in attributes.
      */
-    public void testScriptedTag ()
-    {
+    public void testScriptedTag () {
 		getParameterTableFor("body onLoad=defaultStatus=''");
         String name = (String)table.get(Tag.TAGNAME);
 		assertNotNull ("No Tag.TAGNAME", name);
-        assertEquals ("tag name parsed incorrectly", "BODY", name);
+        assertStringEquals("tag name parsed incorrectly", "BODY", name);
         String value = (String)table.get ("ONLOAD");
-        assertEquals ("parameter parsed incorrectly", "defaultStatus=''", value);
+        assertStringEquals ("parameter parsed incorrectly", "defaultStatus=''", value);
     }
 }
