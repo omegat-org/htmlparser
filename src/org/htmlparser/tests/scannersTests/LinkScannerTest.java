@@ -90,9 +90,9 @@ public class LinkScannerTest extends ParserTestCase
 		
 		assertEquals("number of links",2,linkNodes.length);
 		LinkTag linkTag = (LinkTag)linkNodes[0];
-		assertEquals("Link","http://www.yahoo.com/s/8741",linkTag.getLink());
+		assertStringEquals("Link","http://www.yahoo.com/s/8741",linkTag.getLink());
 		// Verify the link data
-		assertEquals("Link Text","",linkTag.getLinkText());
+		assertStringEquals("Link Text","",linkTag.getLinkText());
 		// Verify the reconstruction html
 		assertStringEquals("toHTML","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></IMG></A>",linkTag.toHtml());
 	}

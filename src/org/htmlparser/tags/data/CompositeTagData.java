@@ -62,5 +62,11 @@ public class CompositeTagData {
 	public Tag getStartTag() {
 		return startTag;
 	}
-
+	
+	public String toString() {
+		StringBuffer childrenString = new StringBuffer();
+		for (int i=0;i<children.size();i++)
+			childrenString.append(children.elementAt(i).toPlainTextString());
+		return childrenString.toString();
+	}
 }

@@ -76,13 +76,23 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createLinkTag(String currentLine, Node node, boolean mailLink, boolean javascriptLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) {
+	protected Tag createLinkTag(String url, String currentLine, Node node, boolean mailLink, boolean javascriptLink, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) throws ParserException {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
 		// HTMLLinkNode Constructor got one extra parameter 
 		// Kaarle Kaila 23.10.2001
 		linkEnd = node.elementEnd();
+		
+		String myLink = extractLink(startTag,url);
+		int mailto = myLink.indexOf("mailto");
+		if (mailto==0)
+		{
+			// yes it is
+			mailto = myLink.indexOf(":");
+			myLink = myLink.substring(mailto+1);
+			mailLink = true;			
+		} 
 		LinkTag linkTag = new LinkTag(
 			new TagData(
 				linkBegin,
@@ -96,7 +106,7 @@ public class LinkScanner extends CompositeTagScanner
 				nodeVector
 			),
 			new LinkData(
-				link,
+				myLink,
 				linkText,
 				accessKey,
 				mailLink,
@@ -172,14 +182,16 @@ public class LinkScanner extends CompositeTagScanner
 			throw new ParserException("HTMLLinkScanner.extractLink() : Error while extracting link from tag "+msg+", url = "+url,e);
 		}
 	}
+	
 	/**
-	 * Extract the access key from the given text.
+	 * Extract the access key from the given tag.
 	 * @param text Text to be parsed to pick out the access key.
      * @return The value of the ACCESSKEY attribute.
 	 */
-	public String getAccessKey (Tag tag) {
+	private String getAccessKey (Tag tag) {
 		return tag.getAttribute("ACCESSKEY");
 	}
+	
 	/**
 	 * Scan the tag and extract the information relevant to the link tag.
 	 * @param tag HTML Tag to be scanned
@@ -217,13 +229,7 @@ public class LinkScanner extends CompositeTagScanner
 			int http = link.indexOf("http://");
 			int https = link.indexOf("https://");
 			
-			if (mailto==0)
-			{
-				// yes it is
-				mailto = link.indexOf(":");
-				link = link.substring(mailto+1);
-				mailLink = true;			
-			} else if (javascript == 0) {
+			if (javascript == 0) {
 				link = link.substring(11); // this magic number is "javascript:".length()
 				javascriptLink = true;
 			}  
@@ -292,7 +298,7 @@ public class LinkScanner extends CompositeTagScanner
 			{
 				
 				previousOpenScanner = null;
-				return createLinkTag(currentLine, node, mailLink, javascriptLink,  link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
+				return createLinkTag(url,currentLine, node, mailLink, javascriptLink,  linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
 			}
 			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
 			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);
@@ -308,9 +314,11 @@ public class LinkScanner extends CompositeTagScanner
 	public BaseHrefScanner createBaseHREFScanner(String filter) {
 		return new BaseHrefScanner(filter,processor);
 	}
+	
 	public ImageScanner createImageScanner(String filter) {
 		return new ImageScanner(filter,processor);
 	}
+	
 	/**
 	 * @see org.htmlparser.scanners.TagScanner#getID()
 	 */
