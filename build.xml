@@ -9,24 +9,24 @@
   <property name="dist"  value="release/htmlparser${versionString}"/>
   <property name="releaseDir" value="release"/>
   <property name="finalLoc" value="distribution"/>
+  <!-- location of junit.jar if there is no link to it in $JAVA_HOME/jre/lib/ext -->
+  <property name="junit.jar" value="../nonexistant_directory/junit.jar"/>
 
-  <target name="init">
+  <target name="init" description="initialize version properties">
     <echo message="**********************************"/>
     <echo message="*  Initializing.....             *"/>
     <echo message="**********************************"/>
-	<mkdir dir="${finalLoc}"/>
-    <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}"/>
     <tstamp>
     	<format property="TODAY" pattern="yyyyMMdd" locale="en"/>
     	<format property="TODAY_STRING" pattern="MMM dd, yyyy"/>
-	</tstamp>
-	<property name="version" value="1_2_${TODAY}"/>
-	<property name="displayVersion" value="&quot;1.2 (Integration Build ${TODAY_STRING})&quot;"/>
-	<echo message="version=${version}"/>
-	<echo message="displayVersion=${displayVersion}"/>
-	
-	<loadproperties srcFile="${src}/org/htmlparser/HTMLParser.java">
+    </tstamp>
+    <property name="version" value="1_2_${TODAY}"/>
+    <property name="displayVersion" value="&quot;1.2 (Integration Build ${TODAY_STRING})&quot;"/>
+    <echo message="version=${version}"/>
+    <echo message="displayVersion=${displayVersion}"/>
+
+    <!-- set property VERSION_STRING to current display version -->
+    <loadproperties srcFile="${src}/org/htmlparser/HTMLParser.java">
       <filterchain>
         <linecontains>
           <contains value="VERSION_STRING"/>
@@ -35,26 +35,26 @@
     </loadproperties>
 
     <property name="previousDisplayVersion" value="${VERSION_STRING}"/>
-	<echo message="Detected Previous Display Version = ${previousDisplayVersion}"/>
-	
-	<loadfile srcFile="${src}/org/htmlparser/HTMLParser.java" property="previousVersion">
-	  <filterchain>
-	   	<headfilter lines="1"/>
-  	  	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
-    	  <param name="linebreaks" value=" - A java-based parser for HTML"/>
-	    </filterreader>
-  	  	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
+    <echo message="Detected Previous Display Version = ${previousDisplayVersion}"/>
+
+    <!-- set property previousVersion to current version -->
+    <loadfile srcFile="${src}/org/htmlparser/HTMLParser.java" property="previousVersion">
+      <filterchain>
+        <headfilter lines="1"/>
+    	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
+          <param name="linebreaks" value=" - A java-based parser for HTML"/>
+        </filterreader>
+    	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
     	  <param name="linebreaks" value="//Piy"/>
-	    </filterreader>
-	    <striplinebreaks/>
-	  </filterchain>      		
-   		
-	</loadfile>
-	<echo message="Detected Previous Version = ${previousVersion}"/>
+        </filterreader>
+        <striplinebreaks/>
+      </filterchain>      		
+    </loadfile>
+    <echo message="Detected Previous Version = ${previousVersion}"/>
 	
   </target>
 
-  <target name="versionSource" depends="init">
+  <target name="versionSource" depends="init" description="update the version in all java files">
     <echo message="**********************************"/>
     <echo message="*  Incorporating version info    *"/>
     <echo message="**********************************"/>
@@ -68,17 +68,19 @@
   	<replace file="${docs}/release.txt" token="${previousDisplayVersion}" value="${displayVersion}"/>  	
   </target>
   
-  <target name="compile" depends="versionSource">
+  <target name="compile" description="compile all java files">
     <echo message="**********************************"/>
     <echo message="*  Compiling....                 *"/>
     <echo message="**********************************"/>
 
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
     <!-- Compile the java code from ${src} into ${build} -->
     <javac srcdir="${src}" destdir="${build}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" />
   </target>
 
   <!-- Create the distribution of htmlparser.jar -->
-  <target name="Create HTMLParser.jar" depends="compile">
+  <target name="jar" depends="compile" description="create htmlparser.jar">
     <echo message="**********************************"/>
     <echo message="*  Creating htmlparser.jar....   *"/>
     <echo message="**********************************"/>
@@ -90,8 +92,27 @@
     <jar jarfile="${dist}/lib/htmlparser.jar" basedir="${build}" manifest="${resources}/Manifest.mf" />
   </target>
 
+  <!-- Run the unit tests -->
+  <target name="test" depends="jar" description="run the JUnit tests">
+    <echo message="**********************************"/>
+    <echo message="*  Running unit tests....        *"/>
+    <echo message="**********************************"/>
+    <javac srcdir="${src}" includes="org/htmlparser/tests/**" debug="on">
+      <classpath>
+        <pathelement location="${junit.jar}"/>
+      </classpath>
+    </javac>
+    <java classname="org.htmlparser.tests.AllTests" fork="yes" failonerror="yes">
+      <classpath>
+        <pathelement location="${dist}/lib/htmlparser.jar"/>
+        <pathelement location="${src}"/>
+        <pathelement location="${junit.jar}"/>
+      </classpath>
+    </java>
+  </target>
+
   <!-- Create the javadoc for the project -->
-  <target name="javadoc" depends="init,CopyDoc">
+  <target name="javadoc" depends="init,CopyDoc" description="create JavaDoc (API) documentation">
     <echo message="**********************************"/>
     <echo message="*  Generating Javadoc....        *"/>
     <echo message="**********************************"/>
@@ -123,7 +144,7 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   </target>
 
   <!-- Copy the design documentation and release notes into the doc director -->
-  <target name="CopyDoc">
+  <target name="CopyDoc" description="copy documentation to distribution directory">
     <echo message="**********************************"/>
     <echo message="*  Copying Documentation....     *"/>
     <echo message="**********************************"/>
@@ -137,7 +158,7 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   </target>
 
   <!-- Copy the batch files into the htmlparser release directory -->
-  <target name="CopyBatch">
+  <target name="CopyBatch" description="copy batch files to distribution directory">
     <echo message="**********************************"/>
     <echo message="*  Copying Batch Files....       *"/>
     <echo message="**********************************"/>
@@ -149,15 +170,16 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   </target>
 
   <!-- The release directory structuring finishes here -->  
-  <target name="Release" depends="Create HTMLParser.jar,javadoc,CopyBatch">
+  <target name="Release" depends="versionSource,jar,javadoc,CopyBatch" description="prepare the release files">
   </target>
 
   <!-- Package the release, creating the docs gzip also for uploading -->
-  <target name="Package" depends="Release,sources">
+  <target name="Package" depends="Release,sources" description="glom the release and source files into the distribution zip file">
     <echo message="**********************************"/>
     <echo message="*  Packaging....                 *"/>
     <echo message="**********************************"/>
 
+    <mkdir dir="${finalLoc}"/>
     <zip zipfile="${finalLoc}/htmlparser${version}.zip"
        basedir="${releaseDir}"/>
     <tar tarfile="${finalLoc}/docs.tar" basedir="${dist}/docs"/>
@@ -165,7 +187,7 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   </target>
   
   <!-- Prepare the sources zip, allowing folks to build the code -->
-  <target name="sources">
+  <target name="sources" description="create the source zip">
     <echo message="**********************************"/>
     <echo message="*  Preparing Sources....         *"/>
     <echo message="**********************************"/>
@@ -189,7 +211,7 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   </target>
 
   <!-- Clean up -->
-  <target name="htmlparser" depends="Package">
+  <target name="htmlparser" depends="Package" description="vacuous, same as Package">
     <echo message="**********************************"/>
     <echo message="*  Cleaning up and finishing.... *"/>
     <echo message="**********************************"/>
