@@ -161,7 +161,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertType("tag 2",CustomTag.class,node[1]);
 	}
 	
-	public void _testXmlTypeCompositeTags() throws ParserException {
+	public void testXmlTypeCompositeTags() throws ParserException {
 		createParser(
 			"<Custom>" +
 				"<Another name=\"subtag\"/>" +
