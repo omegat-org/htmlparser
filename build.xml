@@ -1,37 +1,87 @@
-<project name="HTMLParser" default="Package" basedir=".">
+<project name="HTMLParser" default="htmlparser" basedir=".">
 
   <!-- set global properties for this build -->
   <property name="src" value="src"/>
   <property name="build" value="build"/>
-  <property name="version" value="1_2_20021002"/>
   <property name="versionString" value="1_2"/>
-  <property name="previousVersion" value="1_2_20020831"/>
   <property name="docs" value="docs"/>
   <property name="resources" value="resources"/>
   <property name="dist"  value="release/htmlparser${versionString}"/>
   <property name="releaseDir" value="release"/>
   <property name="finalLoc" value="distribution"/>
 
-  <target name="init" depends="versionSource">
+  <target name="init">
+    <echo message="**********************************"/>
+    <echo message="*  Initializing.....             *"/>
+    <echo message="**********************************"/>
 	<mkdir dir="${finalLoc}"/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
+    <tstamp>
+    	<format property="TODAY" pattern="yyyyMMdd" locale="en"/>
+    	<format property="TODAY_STRING" pattern="MMM dd, yyyy"/>
+	</tstamp>
+	<property name="version" value="1_2_${TODAY}"/>
+	<property name="displayVersion" value="&quot;1.2 (Integration Build ${TODAY_STRING})&quot;"/>
+	<echo message="version=${version}"/>
+	<echo message="displayVersion=${displayVersion}"/>
+	
+	<loadproperties srcFile="${src}/com/kizna/html/HTMLParser.java">
+      <filterchain>
+        <linecontains>
+          <contains value="VERSION_STRING"/>
+        </linecontains>
+      </filterchain>
+    </loadproperties>
+
+    <property name="previousDisplayVersion" value="${VERSION_STRING}"/>
+	<echo message="Detected Previous Display Version = ${previousDisplayVersion}"/>
+	
+	<loadfile srcFile="${src}/com/kizna/html/HTMLParser.java" property="previousVersion">
+	  <filterchain>
+	   	<headfilter lines="1"/>
+  	  	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
+    	  <param name="linebreaks" value=" - A java-based parser for HTML"/>
+	    </filterreader>
+  	  	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
+    	  <param name="linebreaks" value="//Piy"/>
+	    </filterreader>
+	    <striplinebreaks/>
+	  </filterchain>      		
+   		
+	</loadfile>
+	<echo message="Detected Previous Version = ${previousVersion}"/>
+	
   </target>
 
-  <target name="versionSource">
-  	<replace dir="${src}" value="v${version}">
-		<include name="**/*.java"/>
-		<replacefilter token="v${previousVersion}" value="v${version}"/>
-  	</replace>	
+  <target name="versionSource" depends="init">
+    <echo message="**********************************"/>
+    <echo message="*  Incorporating version info    *"/>
+    <echo message="**********************************"/>
+
+    <echo message="Replacing version ${previousVersion} with ${version} in all source files"/>
+	<replace dir="${src}" value="${version}">
+	  <include name="**/*.java"/>
+	  <replacefilter token="${previousVersion}"/>
+	</replace>
+  	<replace file="${src}/com/kizna/html/HTMLParser.java" token="${previousDisplayVersion}" value="${displayVersion}"/>
   </target>
   
-  <target name="compile" depends="init">
+  <target name="compile" depends="versionSource">
+    <echo message="**********************************"/>
+    <echo message="*  Compiling....                 *"/>
+    <echo message="**********************************"/>
+
     <!-- Compile the java code from ${src} into ${build} -->
     <javac srcdir="${src}/com/kizna/html" destdir="${build}"/>
   </target>
 
   <!-- Create the distribution of htmlparser.jar -->
   <target name="Create HTMLParser.jar" depends="compile">
+    <echo message="**********************************"/>
+    <echo message="*  Creating htmlparser.jar....   *"/>
+    <echo message="**********************************"/>
+
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
 
@@ -41,6 +91,10 @@
 
   <!-- Create the javadoc for the project -->
   <target name="javadoc" depends="init,CopyDoc">
+    <echo message="**********************************"/>
+    <echo message="*  Generating Javadoc....        *"/>
+    <echo message="**********************************"/>
+
     <!-- Create the javadoc directory -->
     <mkdir dir="${dist}/docs/javadoc"/>
 
@@ -68,6 +122,10 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
 
   <!-- Copy the design documentation and release notes into the doc director -->
   <target name="CopyDoc">
+    <echo message="**********************************"/>
+    <echo message="*  Copying Documentation....     *"/>
+    <echo message="**********************************"/>
+
     <copy todir="${dist}/docs">
     	<fileset dir="${docs}"/>
     </copy> 
@@ -78,6 +136,10 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
 
   <!-- Copy the batch files into the htmlparser release directory -->
   <target name="CopyBatch">
+    <echo message="**********************************"/>
+    <echo message="*  Copying Batch Files....       *"/>
+    <echo message="**********************************"/>
+
      <mkdir dir="${dist}/bin"/>   
      <copy todir="${dist}/bin" >
         <fileset dir="${resources}" includes="*.bat"/>
@@ -89,16 +151,47 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   </target>
 
   <!-- Package the release, creating the docs gzip also for uploading -->
-  <target name="Package" depends="Release">
-    <zip zipfile="${dist}/src.zip"
-       basedir="${src}"/>
+  <target name="Package" depends="Release,sources">
+    <echo message="**********************************"/>
+    <echo message="*  Packaging....                 *"/>
+    <echo message="**********************************"/>
+
     <zip zipfile="${finalLoc}/htmlparser${version}.zip"
        basedir="${releaseDir}"/>
     <tar tarfile="${finalLoc}/docs.tar" basedir="${dist}/docs"/>
     <gzip zipfile="${finalLoc}/docs.tar.gz" src="${finalLoc}/docs.tar"/>
   </target>
+  
+  <!-- Prepare the sources zip, allowing folks to build the code -->
+  <target name="sources">
+    <echo message="**********************************"/>
+    <echo message="*  Preparing Sources....         *"/>
+    <echo message="**********************************"/>
 
-  <target name="clean">
+    <mkdir dir="${dist}/sources/src"/>
+    <copy todir="${dist}/sources/src">
+    	<fileset dir="${src}"/>
+    </copy>
+    <copy file="build.xml" todir="${dist}/sources"/>
+	<mkdir dir="${dist}/sources/resources"/>
+	<copy todir="${dist}/sources/resources" >
+        <fileset dir="${resources}"/>
+    </copy>
+    <mkdir dir="${dist}/sources/docs"/>
+    <copy todir="${dist}/sources/docs">
+    	<fileset dir="${docs}"/>
+    </copy>
+    <zip zipfile="${dist}/src.zip"
+       basedir="${dist}/sources"/>
+    <delete dir="${dist}/sources"/>
+  </target>
+
+  <!-- Clean up -->
+  <target name="htmlparser" depends="Package">
+    <echo message="**********************************"/>
+    <echo message="*  Cleaning up and finishing.... *"/>
+    <echo message="**********************************"/>
+
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
     <!-- Delete the release directory also -->
