@@ -175,11 +175,12 @@ public class TableScannerTest extends ParserTestCase {
      */
     public void testOverFlow () throws ParserException
     {
-        Parser parser;
-        Node node;
-        
-        parser = new Parser("http://www.sec.gov/Archives/edgar/data/30554/000089322002000287/w57038e10-k.htm");
+        Parser parser = 
+        	new Parser(
+				"http://www.sec.gov/Archives/edgar/data/30554/000089322002000287/w57038e10-k.htm"
+			);
         parser.addScanner(new TableScanner(parser));
+        Node node;
         for (NodeIterator e = parser.elements(); e.hasMoreNodes(); )
             node = e.nextNode();
     }
