@@ -130,4 +130,18 @@ public class AttributeParserTest extends ParserTestCase {
 		);
     }
     
+    /**
+     * attributes are not parsed correctly, when they contain
+     * scriptlets.
+     * Submitted by Cory Seefurth
+     */
+    public void testJspWithinAttributes() {
+		getParameterTableFor(
+			"a href=\"<%=Application(\"sURL\")%>/literature/index.htm"     	);
+		assertStringEquals(
+			"href",
+			"<%=Application(\"sURL\")%>/literature/index.htm",
+			(String)table.get("HREF")
+		);
+    }
 }
