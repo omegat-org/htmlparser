@@ -1,1 +1,0 @@
-java -classpath ..\lib\htmlparser.jar org.htmlparser.parserapplications.Robot %1 %2

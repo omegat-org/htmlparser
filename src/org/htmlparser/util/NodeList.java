@@ -32,6 +32,8 @@ import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 import org.htmlparser.Node;
+import org.htmlparser.NodeFilter;
+import org.htmlparser.filters.NodeClassFilter;
 
 public class NodeList implements Serializable {
     private static final int INITIAL_CAPACITY=10;
@@ -182,7 +184,45 @@ public class NodeList implements Serializable {
     }
 
     /**
-     * Search for nodes of the given type non-recursively.
+     * Filter the list with the given filter non-recursively.
+     * @param filter The filter to use.
+     */
+    public NodeList extractAllNodesThatMatch (NodeFilter filter)
+    {
+        return (extractAllNodesThatMatch (filter, false));
+    }
+
+    /**
+     * Filter the list with the given filter.
+     * @param filter The filter to use.
+     * @param recursive If <code>true<code> digs into the children recursively.
+     */
+    public NodeList extractAllNodesThatMatch (NodeFilter filter, boolean recursive)
+    {
+        String name;
+        Node node;
+        NodeList children;
+        NodeList ret;
+
+        ret = new NodeList ();
+        for (int i = 0; i < size; i++)
+        {
+            node = nodeData[i];
+            if (filter.accept (node))
+                ret.add (node);
+            if (recursive)
+            {
+                children = node.getChildren ();
+                if (null != children)
+                    ret.add (children.extractAllNodesThatMatch (filter, recursive));
+            }
+        }
+
+        return (ret);
+    }
+
+    /**
+     * Convenience method to search for nodes of the given type non-recursively.
      * @param classType The class to search for.
      */
     public NodeList searchFor (Class classType)
@@ -191,32 +231,12 @@ public class NodeList implements Serializable {
     }
 
     /**
-     * Search for nodes of the given type recursively.
+     * Convenience method to search for nodes of the given type.
      * @param classType The class to search for.
      * @param recursive If <code>true<code> digs into the children recursively.
      */
     public NodeList searchFor (Class classType, boolean recursive)
     {
-        String name;
-        Node node;
-        NodeList children;
-        NodeList ret;
-
-        ret = new NodeList ();
-        name = classType.getName ();
-        for (int i = 0; i < size; i++)
-        {
-            node = nodeData[i];
-            if (node.getClass ().getName ().equals (name))
-                ret.add (node);
-            if (recursive)
-            {
-                children = node.getChildren ();
-                if (null != children)
-                    ret.add (children.searchFor (classType, recursive));
-            }
-        }
-
-        return (ret);
+        return (extractAllNodesThatMatch (new NodeClassFilter (classType), recursive));
     }
 }

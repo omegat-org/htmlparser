@@ -1,1 +1,0 @@
-java -classpath ..\lib\htmlparser.jar org.htmlparser.parserapplications.MailRipper %1 %2

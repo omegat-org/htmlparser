@@ -96,43 +96,38 @@ public class StreamTests extends ParserTestCase
     public void testSameBytes () throws IOException
     {
         String link;
-        ArrayList bytes1;
-        ArrayList bytes2;
         URL url;
-        URLConnection connection;
+        URLConnection connection1;
+        URLConnection connection2;
         BufferedInputStream in;
-        int b;
+        int b1;
+        int b2;
         Stream stream;
         int index;
 
         // pick a big file
-        link = "http://sourceforge.net/projects/htmlparser/HTMLParser_Coverage.html";
-        bytes1 = new ArrayList ();
-        bytes2 = new ArrayList ();
+        link = "http://htmlparser.sourceforge.net/HTMLParser_Coverage.html";
         try
         {
             url = new URL (link);
-            connection = url.openConnection ();
-            connection.connect ();
-            in = new BufferedInputStream (connection.getInputStream ());
-            while (-1 != (b = in.read ()))
-                bytes1.add (new Byte ((byte)b));
-            in.close ();
-
-            connection = url.openConnection ();
-            connection.connect ();
-            stream = new Stream (connection.getInputStream ());
-            while (-1 != (b = stream.read ()))
-                bytes2.add (new Byte ((byte)b));
-            stream.close ();
-
+            connection1 = url.openConnection ();
+            connection1.connect ();
+            in = new BufferedInputStream (connection1.getInputStream ());
+            connection2 = url.openConnection ();
+            connection2.connect ();
+            stream = new Stream (connection2.getInputStream ());
             index = 0;
-            while (index < bytes1.size ())
+            while (-1 != (b1 = in.read ()))
             {
-                assertEquals ("bytes differ at position " + index, bytes1.get (index), bytes2.get (index));
+                b2 = stream.read ();
+                if (b1 != b2)
+                    fail ("bytes differ at position " + index + ", expected " + b1 + ", actual " + b2);
                 index++;
             }
-            assertTrue ("extra bytes", index == bytes2.size ());
+            b2 = stream.read ();
+            stream.close ();
+            in.close ();
+            assertTrue ("extra bytes", b2 == -1);
         }
         catch (MalformedURLException murle)
         {
@@ -288,7 +283,7 @@ public class StreamTests extends ParserTestCase
         int index;
 
         // pick a small file > 2000 bytes
-        link = "http://sourceforge.net/projects/htmlparser/overview-summary.html";
+        link = "http://htmlparser.sourceforge.net/javadoc_1_3/overview-summary.html";
         bytes1 = new ArrayList ();
         bytes2 = new ArrayList ();
         try
@@ -363,7 +358,7 @@ public class StreamTests extends ParserTestCase
         int index;
 
         // pick a small file > 2000 bytes
-        link = "http://sourceforge.net/projects/htmlparser/overview-summary.html";
+        link = "http://htmlparser.sourceforge.net/javadoc_1_3/overview-summary.html";
         bytes1 = new ArrayList ();
         bytes2 = new ArrayList ();
         try

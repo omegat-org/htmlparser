@@ -255,7 +255,7 @@ public class Stream extends InputStream implements Runnable
         if (0 == available ())
             fill (false);
         if (0 != available ())
-            ret = mBuffer[mOffset++];
+            ret = mBuffer[mOffset++] & 0xff;
         else
             ret = EOF;
 
