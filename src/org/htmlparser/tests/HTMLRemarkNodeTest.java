@@ -87,12 +87,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 			"<TEST>\n"+
 			"</TEST>\n");
 		parser.setLineSeparator("\r\n");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 8 nodes identified",new Integer(8),new Integer(i));
+		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
@@ -115,12 +110,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 			"<TEST>\n"+
 			"</TEST>\n");
 		parser.setLineSeparator("\r\n");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 8 nodes identified",new Integer(8),new Integer(i));
+		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
@@ -144,12 +134,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 			"<TEST>\n"+
 			"</TEST>\n");
 		parser.setLineSeparator("\r\n");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 8 nodes identified",new Integer(8),new Integer(i));
+		parseAndAssertNodeCount(8);
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
@@ -162,12 +147,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 	
 	public void testNonRemarkNode() throws HTMLParserException {
 		createParser("&nbsp;<![endif]>");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 2 nodes identified",new Integer(2),new Integer(i));
+		parseAndAssertNodeCount(2);
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a string node",node[0] instanceof HTMLStringNode);
 		assertTrue("Second node should be a HTMLTag",node[1] instanceof HTMLTag);
@@ -189,12 +169,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		"\n"+
 		"-->");
 		parser.setLineSeparator("\r\n");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
 		assertEquals("Expected contents","\r\n",remarkNode.getText());
@@ -208,12 +183,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 	 */	
 	public void testRemarkNodeWithNothing() throws HTMLParserException {
 		createParser("<!-->");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
 		assertEquals("Expected contents","",remarkNode.getText());
@@ -231,12 +201,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		"<A>\n"+
 		"bcd -->");
 		parser.setLineSeparator("\n");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
+		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
 		assertStringEquals("Expected contents"," \n<A>\nbcd ",remarkNode.getText());
@@ -257,12 +222,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		"-\n"+
 		"ssd -->");
 		parser.setLineSeparator("\n");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
+		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLTag but was "+node[0],node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
 		assertStringEquals("Expected contents","!\n"+
@@ -278,12 +238,7 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 	 */
 	public void testDashesInComment() throws HTMLParserException{
 		createParser("<!-- -- -->");
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
+		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLRemarkNode but was "+node[0],node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
 		assertEquals("Remark Node contents"," -- ",remarkNode.getText());

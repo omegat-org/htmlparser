@@ -29,6 +29,7 @@ import junit.framework.TestSuite;
 public class HTMLParserTestCase extends TestCase {
 	protected HTMLParser parser;
 	protected HTMLNode node [];
+	protected int nodeCount;
 	public HTMLParserTestCase(String name) {
 		super(name);
 	}
@@ -62,8 +63,18 @@ public class HTMLParserTestCase extends TestCase {
 			}
 		}
 	}    
-	
-	
-
-
+	public void parseNodes() throws HTMLParserException{
+		nodeCount = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		{
+			node[nodeCount++] = e.nextHTMLNode();
+		}	
+	}
+	public void assertNodeCount(int nodeCountExpected) {
+		assertEquals("Number of nodes parsed",nodeCountExpected,nodeCount);
+	}
+	public void parseAndAssertNodeCount(int nodeCountExpected) throws HTMLParserException {
+		parseNodes();
+		assertNodeCount(nodeCountExpected);
+	}
 }
