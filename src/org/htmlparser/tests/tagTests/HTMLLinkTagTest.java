@@ -309,7 +309,12 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 
 	public void testTypeHttpLink() throws HTMLParserException {
 		HTMLLinkTag linkTag = new HTMLLinkTag("http://","",0,0,"","",null,false,false,"","");
-		assertTrue("This is a http link",linkTag.isHTTPLink());
+		assertTrue("This is a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
+		linkTag = new HTMLLinkTag("somePage.html","",0,0,"","",null,false,false,"","");
+		assertTrue("This relative link is alsp a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
+		linkTag = new HTMLLinkTag("ftp://somePage.html","",0,0,"","",null,false,false,"","");
+		assertTrue("This is not a http link : "+linkTag.getLink(),!linkTag.isHTTPLink());
+		
 	}	
 
 	public void testTypeHttpLikeLink() throws HTMLParserException {

@@ -171,7 +171,8 @@ public class HTMLLinkTag extends HTMLTag
 	 * @return flag indicating if this link is an HTTP link
 	 */
     public boolean isHTTPLink() {
-		return link.indexOf("http://")==0;
+    	if (!isFTPLink() && !isHTTPSLink() && !isJavascriptLink()) return true;
+    	else return false;
 	}
 
 	/**
