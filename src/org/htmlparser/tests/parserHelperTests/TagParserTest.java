@@ -43,12 +43,25 @@ public class TagParserTest extends ParserTestCase {
 		
 		createParser(testHtml);
 		parseAndAssertNodeCount(1);
-		assertType("should be HTMLTag",Tag.class,node[0]);
+		assertType("should be Tag",Tag.class,node[0]);
 		Tag tag = (Tag)node[0];
 		assertStringEquals("alt","Marshall Field's",tag.getAttribute("ALT"));
 		assertStringEquals(
 			"html",
 			"<IMG BORDER=\"0\" ALT=\"Marshall Field's\" WIDTH=\"87\" SRC=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" HEIGHT=\"20\">",
+			tag.toHtml()
+		);
+	}
+	
+	public void testEmptyTag() throws Exception {
+		createParser("<custom/>");
+		parseAndAssertNodeCount(1);
+		assertType("should be Tag",Tag.class,node[0]);
+		Tag tag = (Tag)node[0];
+		assertStringEquals("tag name","CUSTOM",tag.getTagName());
+		assertStringEquals(
+			"html",
+			"<CUSTOM/>",
 			tag.toHtml()
 		);
 	}
