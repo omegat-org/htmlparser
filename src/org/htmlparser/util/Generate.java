@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031207 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2004 Derrick Oswald
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,26 +16,12 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
-//
-// This class was contributed by
-// Derrick Oswald
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
 package org.htmlparser.util;
@@ -442,8 +436,17 @@ public class Generate
             ParserException
     {
         Generate filter = new Generate ();
-        System.out.println ("// HTMLParser Library v1_4_20031207 - A java-based parser for HTML");
-        System.out.println ("// Copyright (C) Dec 31, 2000 Somik Raha");
+
+        System.out.println ("// HTMLParser Library $Name$ - A java-based parser for HTML");
+        System.out.println ("// http://sourceforge.org/projects/htmlparser");
+        System.out.println ("// Copyright (C) 2004 Derrick Oswald");
+        System.out.println ("//");
+        System.out.println ("// Revision Control Information");
+        System.out.println ("//");
+        System.out.println ("// $Source$");
+        System.out.println ("// $Author$");
+        System.out.println ("// $Date$");
+        System.out.println ("// $Revision$");
         System.out.println ("//");
         System.out.println ("// This library is free software; you can redistribute it and/or");
         System.out.println ("// modify it under the terms of the GNU Lesser General Public");
@@ -452,26 +455,12 @@ public class Generate
         System.out.println ("//");
         System.out.println ("// This library is distributed in the hope that it will be useful,");
         System.out.println ("// but WITHOUT ANY WARRANTY; without even the implied warranty of");
-        System.out.println ("// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU");
+        System.out.println ("// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU");
         System.out.println ("// Lesser General Public License for more details.");
         System.out.println ("//");
         System.out.println ("// You should have received a copy of the GNU Lesser General Public");
         System.out.println ("// License along with this library; if not, write to the Free Software");
-        System.out.println ("// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA");
-        System.out.println ("//");
-        System.out.println ("// For any questions or suggestions, you can write to me at :");
-        System.out.println ("// Email :somik@industriallogic.com");
-        System.out.println ("//");
-        System.out.println ("// Postal Address :");
-        System.out.println ("// Somik Raha");
-        System.out.println ("// Extreme Programmer & Coach");
-        System.out.println ("// Industrial Logic Corporation");
-        System.out.println ("// 2583 Cedar Street, Berkeley,");
-        System.out.println ("// CA 94708, USA");
-        System.out.println ("// Website : http://www.industriallogic.com");
-        System.out.println ("//");
-        System.out.println ("// This class was contributed by");
-        System.out.println ("// Derrick Oswald");
+        System.out.println ("// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA");
         System.out.println ("//");
         System.out.println ();
         System.out.println ("package org.htmlparser.util;");

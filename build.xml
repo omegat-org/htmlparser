@@ -5,30 +5,32 @@ Build Procedure
 
 Release Procedure
 - cd htmlparser
+- delete the local Wiki pages with 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/*'
+  and 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/images/*',
+  of course any one else would have to adjust this and
+  also the hard-coded path in WikiCapturer
+- 'javac -classpath lib/htmlparser.jar ../WikiCapturer/src/org/htmlparser/wikicapturer/CaptureWiki.java ../WikiCapturer/src/org/htmlparser/wikicapturer/PhpWikiVisitor.java'
+  and 'java -classpath lib/htmlparser.jar:../WikiCapturer/src org.htmlparser.wikicapturer.CaptureWiki'
+  fetches current Wiki pages
 - set environment variables CVSROOT and CVS_RSH (see changelog task)
-- 'ant changelog' generates htmlparser/ChangeLog
+- 'ant changelog' generates htmlparser/ChangeLog (this will be changed to use the previous version tag someday)
 - edit the ChangeLog to exclude changes already incorporated and the previous 
   release's "update of version headers" drop - the CVS date spec is only accurate
   to the day since it comes from the version coded in the Parser.java file,
   that's why this step can't be automated
 - incorporate changes from ChangeLog into htmlparser/docs/changes under
-  a heading like "Integration Build 1.4 - 20030824"
-- 'ant jar' generates new htmlparser.jar and htmllexer.jar in htmlparser/release/htmlparser1_4/lib
+  a heading like "Integration Build 1.4 - 20040104"
+- 'ant versionSource' updates the version in Parser.java and release.txt
+- perform a CVS update on htmlparser to identify new and changed files
+- commit changed files (i.e. Parser.java, release.txt, docs/changes, docs/docs
+  and docs/docs/images) to the head revision using a reason of the form:
+Update version to 1.4-20040104.
+- use CVS to tag the current head revisions with a name like v1_4_20040104
+- use CVS to checkout everything with the tag used above
 - 'ant test' compiles and runs the unit tests
-- 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/*'
-  and 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/images/*'
-  deletes local Wiki pages, of course any one else would have to adjust this and
-  also the hard-coded path in WikiCapturer
-- 'javac -classpath lib/htmlparser.jar ../WikiCapturer/src/org/htmlparser/wikicapturer/CaptureWiki.java ../WikiCapturer/src/org/htmlparser/wikicapturer/PhpWikiVisitor.java'
-  and 'java -classpath lib/htmlparser.jar:../WikiCapturer/src org.htmlparser.wikicapturer.CaptureWiki'
-  fetches current Wiki pages
-- perform a CVS update on htmlparser/docs/docs to identify new and changed files
-  and commit them - that's why this step can't be automated
 - 'ant clean htmlparser' updates the version headers, creates the jar file and doc files and zips
-  everything into a file htmlparser/distribution/htmlparser1_4_20030824.zip
-- commit docs/changes, docs/docs, docs/docs/images and src/* using a reason of
-  the form:
-Update version headers to 1.4-20030824 and update changelog.
+  everything into a file htmlparser/distribution/htmlparser1_4_20040104.zip
+- use CVS to checkout everything against the head revision to reset your workspace
 
 Sourceforge File Release Procedure
 - upload the zip file to the sourceforge site
@@ -37,10 +39,10 @@ Name: anonymous
 Password: yourname@users.sourceforge.org
 ftp> cd incoming
 ftp> bin
-ftp> put htmlparser1_4_20030824.zip
+ftp> put htmlparser1_4_20040104.zip
 ftp> bye
 - add a release to the 'Integation Builds' package
-Admin-File Releases-Add Release, use a name of the form '1_4_2003824'
+Admin-File Releases-Add Release, use a name of the form '1_4_20040104'
 - Step 1, 'Paste The Notes' (using numeric character references and
   character entity references because this is displayed as HTML) with a
   format like :
@@ -49,7 +51,7 @@ Failing Unit Tests:
 Open Bugs:
 Pending Bugs:
 - use the 'Upload Change Log:' field to specify the ChamgeLog file you edited
-- Step 2, check the checkbox of the htmlparser1_4_20030824.zip file from the
+- Step 2, check the checkbox of the htmlparser1_4_20040104.zip file from the
   list of files in the uploads section
 - Submit/Refresh
 - Step 3, mark the zip file Processor-Independent, and give it a .zip type
@@ -62,7 +64,7 @@ Pending Bugs:
 
 Submit News
 - from the project summary screen, select 'Submit News' and title it like:
-HTML Parser Integration Release 1.4-20030824 
+HTML Parser Integration Release 1.4-20040104 
 - type in a summary of the changes made
 - SUBMIT
 - delete the previous release news item using Admin-Publicity-Administrate project news
@@ -149,7 +151,7 @@ HTML Parser Integration Release 1.4-20030824
     <echo message="previous version tag = ${previousTag}"/>
   </target>
 
-  <target name="versionSource" depends="init" description="update the version in all java files">
+  <target name="versionSource" depends="init" description="update the version">
     <echo message="Replacing version VERSION_NUMBER = ${VERSION_NUMBER} with VERSION_NUMBER = ${versionNumber} in ${src}/org/htmlparser/Parser.java"/>
     <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_NUMBER = ${VERSION_NUMBER}" value="VERSION_NUMBER = ${versionNumber}"/>
 
@@ -165,12 +167,6 @@ HTML Parser Integration Release 1.4-20030824
       <replacefilter token="${VERSION_NUMBER} (${VERSION_TYPE} ${VERSION_DATE})"/>
     </replace>
 
-    <echo message="Replacing version tag ${previousTag} with ${versionTag} in all source files"/>
-    <replace dir="${src}" value="${versionTag}">
-      <include name="**/*.java"/>
-      <include name="**/package.html"/>
-      <replacefilter token="${previousTag}"/>
-    </replace>
   </target>
  
   <target name="changelog" depends="init" description="create the change log from CVS logs">
@@ -331,7 +327,7 @@ HTML Parser Integration Release 1.4-20030824
     <mkdir dir="${docs}/javadoc"/>
     <property name="javadoc.doctitle" value="HTML Parser ${versionNumber}"/>
     <property name="javadoc.header" value="&lt;A HREF=&quot;http://htmlparser.sourceforge.net&quot; target=&quot;_top&quot;>HTML Parser Home Page&lt;/A>"/>
-    <property name="javadoc.footer" value="&amp;copy; 2003 Somik Raha&lt;div align=&quot;right&quot;&gt;${TODAY_STRING}&lt;/div&gt;"/>
+    <property name="javadoc.footer" value="&amp;copy; 2004 Somik Raha&lt;div align=&quot;right&quot;&gt;${TODAY_STRING}&lt;/div&gt;"/>
     <property name="javadoc.bottom" value="HTML Parser is an open source library released under
     &lt;A HREF=&quot;http://www.opensource.org/licenses/lgpl-license.html&quot; target=&quot;_top&quot;&gt;LGPL&lt;/A&gt;.&lt;BR&gt;
     &lt;div align=&quot;right&quot;&gt;&lt;A HREF=&quot;http://sourceforge.net/projects/htmlparser&quot; target=&quot;_top&quot;&gt;
@@ -366,7 +362,7 @@ HTML Parser Integration Release 1.4-20030824
     <delete file="${resources}/HtmlTaglet.class"/>
   </target>
 
-  <target name="Release" depends="versionSource,jar,thumbelina,javadoc" description="prepare the release files">
+  <target name="Release" depends="jar,thumbelina,javadoc" description="prepare the release files">
   </target>
 
   <!-- Package the release -->
