@@ -66,7 +66,7 @@ public class LinkExtractor {
 	}
 
 	public static void main(String[] args) {
-		if (args.length<0) {
+		if (args.length != 1) {
 			System.err.println("Syntax Error : Please provide the location(URL or file) to parse");
 			System.exit(-1);
 		}
