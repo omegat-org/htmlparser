@@ -723,4 +723,22 @@ public void testToHTML() throws HTMLParserException {
 		HTMLTag htmlTag = (HTMLTag)node[3];
 		assertEquals("Fourth node should be empty","",htmlTag.getText());
 	}		
+	
+	public void testAttributesReconstruction() throws HTMLParserException {
+		String testHTML = "<TEXTAREA name=\"JohnDoe\" ></TEXTAREA>";
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		HTMLNode [] node = new HTMLNode[10];
+		parser.registerScanners();
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should have been 2 nodes",2,i);
+		assertTrue("First node should be an HTMLtag",node[0] instanceof HTMLTag);
+		HTMLTag htmlTag = (HTMLTag)node[0];
+		String expectedHTML = "<TEXTAREA name=\"JohnDoe\" >";
+		assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHTML());
+	}
 }
