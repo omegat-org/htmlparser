@@ -32,7 +32,7 @@ import org.htmlparser.Node;
 
 import org.htmlparser.Attribute;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.lexer.nodes.PageAttribute;
+import org.htmlparser.lexer.PageAttribute;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;

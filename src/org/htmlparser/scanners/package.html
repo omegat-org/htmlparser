@@ -33,7 +33,7 @@ The scanners package contains classes responsible for the tertiary
 identification of tags. The lower level classes in the {@link
 org.htmlparser.lexer.Lexer lexer} package convert
 byte streams to characters and characters to nodes (via the {@link
-org.htmlparser.lexer.nodes.NodeFactory NodeFactory}). In the case of tags, the
+org.htmlparser.NodeFactory NodeFactory}). In the case of tags, the
 scanners in this package can then complete the tag or override the current tag
 and return an augmented tag. The existing implementation of the {@link
 org.htmlparser.scanners.CompositeTagScanner composite tag
