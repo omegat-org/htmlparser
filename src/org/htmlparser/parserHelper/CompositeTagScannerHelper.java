@@ -22,6 +22,8 @@ public class CompositeTagScannerHelper {
 	private String url;
 	private NodeReader reader;
 	private String currLine;
+	private Tag endTag;
+	private NodeList nodeList;
 	
 	public CompositeTagScannerHelper(
 		CompositeTagScanner scanner,
@@ -34,12 +36,12 @@ public class CompositeTagScannerHelper {
 		this.tag = tag;
 		this.url = url;
 		this.reader = reader;
-		this.currLine = currLine;		
+		this.currLine = currLine;	
+		this.endTag = tag;
+		this.nodeList = new NodeList();	
 	}
 		
 	public Tag scan() throws ParserException {
-		Tag endTag = tag;
-		NodeList nodeList = new NodeList();
 		Node node = null;
 		do {
 			node = reader.readElement();
