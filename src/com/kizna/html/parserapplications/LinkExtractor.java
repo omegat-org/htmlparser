@@ -31,37 +31,60 @@
 // Website : www.kizna.com
 
 package com.kizna.html.parserapplications;
-import com.kizna.html.util.HTMLEnumeration;
-import com.kizna.html.util.HTMLParserException;
+
 
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
+import com.kizna.html.tags.HTMLLinkTag;
+import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLParserException;
 
-public class StringExtractor {
-	private String resource;
-	public StringExtractor(String resource) {
-		this.resource = resource;
-	}
-	public String extractStrings() throws HTMLParserException {
-		HTMLParser parser = new HTMLParser(resource);
-		parser.registerScanners();
-		HTMLNode node;
-		StringBuffer results= new StringBuffer();
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node = e.nextHTMLNode();
-			results.append(node.toPlainTextString());
-		}
-		return results.toString();
-	}
-	public static void main(String[] args) {
-		System.out.println("Running StringExtractor..");
-		StringExtractor se = new StringExtractor(args[0]);	
+/**
+ * LinkExtractor extracts all the links from the given webpage
+ * and prints them on standard output.
+ */
+public class LinkExtractor {
+	private String location;
+	private HTMLParser parser;
+	public LinkExtractor(String location) {
+		this.location = location;
 		try {
-			System.out.println("Strings=  "+se.extractStrings());
+			this.parser   = new HTMLParser(location); // Create the parser object
+			parser.registerScanners(); // Register standard scanners (Very Important)
 		}
 		catch (HTMLParserException e) {
 			e.printStackTrace();
 		}
-			
+		
+	}
+	public void extractLinks() throws HTMLParserException {
+		HTMLNode node;
+		HTMLLinkTag linkTag;
+		System.out.println("Parsing "+location+" for links...");
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node = e.nextHTMLNode();	// Get the next HTML Node
+			if (node instanceof HTMLLinkTag) {
+				linkTag = (HTMLLinkTag)node; // Downcast to a Link Tag
+				
+				linkTag.print(); // Print it
+				
+				// To extract only mail addresses, uncomment the following line
+				//if (linkTag.isMailLink()) System.out.println(linkTag.getLink());
+			}
+		}
+	}
+	public static void main(String[] args) {
+		if (args.length<0) {
+			System.err.println("Syntax Error : Please provide the location(URL or file) to parse");
+			System.exit(-1);
+		}
+		LinkExtractor linkExtractor = new LinkExtractor(args[0]);
+		try {
+			linkExtractor.extractLinks();
+		}
+		catch (HTMLParserException e) {
+			e.printStackTrace();
+		}
 	}
 }
+
