@@ -59,10 +59,12 @@ public abstract class CompositeTagScanner extends TagScanner {
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
 		Tag endTag = (EndTag)reader.readElement();
 		
-		if (endTag == null) endTag = tag;
+		if (endTag == null) 
+			endTag = tag;
+		
 		return createTag(
 			new TagData(
-				0,17,0,0,"","","",true
+				0,17,0,0,"","","",tag.isEmptyXmlTag()
 			),
 			new CompositeTagData(
 				tag,endTag,null
