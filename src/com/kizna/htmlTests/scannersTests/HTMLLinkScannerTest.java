@@ -38,6 +38,7 @@ import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
+import com.kizna.htmlTests.tagTests.HTMLTagTest;
 import com.kizna.html.HTMLStringNode;
 import java.util.Enumeration;
 import com.kizna.html.*;
@@ -529,6 +530,38 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 					" \nComplete String 2 = "+s2,false);
 			}
 		}
-	} 
-	   		
+	}
+	/**
+	 * This is a reproduction of bug 617228, reported by
+	 * Stephen J. Harrington. When faced with a link like :
+	 * &lt;A 
+	 * HREF="/cgi-bin/view_search?query_text=postdate&gt;20020701&txt_clr=White&bg_clr=Red&url=http://loc 
+	 * al 
+	 * host/Testing/Report 
+	 * 1.html"&gt;20020702 Report 1&lt;/A&gt;
+	 * 
+	 * parser is unable to handle the link correctly due to the greater than 
+	 * symbol being confused to be the end of the tag.
+	 */
+	public void testQueryLink() throws HTMLParserException {
+		String testHTML = "<A \n"+
+		"HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://transfer.go.com");
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		HTMLNode [] node = new HTMLNode[10];
+		// Register the image scanner
+		parser.registerScanners();			
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		{
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		assertTrue("Node 1 should be a link tag",node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		HTMLTagTest.assertStringEquals("Resolved Link","http://transfer.go.com/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",linkTag.getLink());
+		assertEquals("Resolved Link Text","20020702 Report 1",linkTag.getLinkText());
+			
+	}
 }

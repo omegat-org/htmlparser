@@ -78,7 +78,9 @@ public class HTMLLinkProcessor {
 	 */
 	public String checkIfLinkIsRelative(String link, String url) {
 		if (link==null || link.length()==0) return "";
-		if (link.indexOf("://")==-1 && link.indexOf("mailto:")==-1 && url != null)
+		int slashLoc = link.indexOf("://");
+		int queryLoc = link.indexOf('?');
+		if ((slashLoc==-1 || (queryLoc!=-1 && queryLoc<slashLoc))  && link.indexOf("mailto:")==-1 && url != null)
 		{
 			// Bug fix by Karem for relative links that
 			// begin with /
@@ -90,6 +92,9 @@ public class HTMLLinkProcessor {
 			}
 		}
 		return link;
+	}
+	public boolean doesQueryComeBeforeSlash(int slashLoc, int queryLoc) {
+		return (queryLoc!=-1 && queryLoc<slashLoc);
 	}
 	public String processAppendRelativeLink(String link, String url) {
 		String temp=url;

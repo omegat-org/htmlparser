@@ -508,6 +508,7 @@ public void testToHTML() throws HTMLParserException {
     }
 	public static void assertStringEquals(String message,String s1,String s2) {
 		for (int i=0;i<s1.length();i++) {
+			if (i>=s2.length()) assertTrue("Second String ended : \nString 1 = "+s1+", \nString 2 = "+s2+", i = "+i+", \nlength of string 2 = "+s2.length(),false);
 			if (s1.charAt(i)!=s2.charAt(i)) {
 				assertTrue(message+
 					" \nMismatch of strings at char posn "+i+
@@ -740,5 +741,19 @@ public void testToHTML() throws HTMLParserException {
 		HTMLTag htmlTag = (HTMLTag)node[0];
 		String expectedHTML = "<TEXTAREA name=\"JohnDoe\" >";
 		assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHTML());
+	}
+	public void testIgnoreState() throws HTMLParserException {
+		String testHTML = "<A \n"+
+//		"HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
+		"HREF=\"/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://transfer.go.com");
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		HTMLNode node = HTMLTag.find(reader,testHTML,0);
+		assertTrue("Node should be a tag",node instanceof HTMLTag);
+		HTMLTag tag = (HTMLTag)node;
+		String href = tag.getParameter("HREF");
+		assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
+	
 	}
 }

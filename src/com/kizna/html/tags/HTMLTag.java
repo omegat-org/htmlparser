@@ -20,12 +20,13 @@ public class HTMLTag extends HTMLNode
     * in parseParameters  (Kaarle Kaila 3.8.2001)
     */
     public final static String TAGNAME = "$<TAGNAME>$";    
-	public final static int TAG_BEFORE_PARSING_STATE=0;
-    public final static int TAG_BEGIN_PARSING_STATE=1;
-    public final static int TAG_FINISHED_PARSING_STATE=2;
-	public final static int TAG_ILLEGAL_STATE=3;
-	public final static int TAG_IGNORE_DATA_STATE=4;	    
-	public final static int TAG_IGNORE_BEGIN_TAG_STATE=5;
+	public final static int TAG_BEFORE_PARSING_STATE=1;
+    public final static int TAG_BEGIN_PARSING_STATE=2;
+    public final static int TAG_FINISHED_PARSING_STATE=3;
+	public final static int TAG_ILLEGAL_STATE=4;
+	public final static int TAG_IGNORE_DATA_STATE=5;	    
+	public final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
+	private static boolean encounteredQuery=false;
 	private static Vector strictTags=null;
 	private static HTMLParameterParser paramParser = new HTMLParameterParser();
 	/**
@@ -117,6 +118,10 @@ public class HTMLTag extends HTMLNode
 			}
 			else
 			if (state==TAG_IGNORE_DATA_STATE) {
+				if (encounteredQuery) {
+					encounteredQuery=false;
+					return state;
+				}
 				// Now, either this is a valid > input, and should be ignored,
 				// or it is a mistake in the html, in which case we need to correct it *sigh*
 				state = TAG_FINISHED_PARSING_STATE;
@@ -131,6 +136,7 @@ public class HTMLTag extends HTMLNode
 	}
 	private static void checkIfAppendable(int state, char ch, HTMLTag tag) {
 		if (state==TAG_IGNORE_DATA_STATE || state==TAG_BEGIN_PARSING_STATE || state==TAG_IGNORE_BEGIN_TAG_STATE) {
+			if (ch=='?') encounteredQuery=true;
 			tag.append(ch);
 		}
 	}
@@ -247,6 +253,7 @@ public class HTMLTag extends HTMLNode
 		int i=position;
 		char ch;
 		HTMLTag tag = new HTMLTag(0,0,"",input);
+		encounteredQuery = false;
 		while (i<tag.getTagLine().length()&& state!=TAG_FINISHED_PARSING_STATE && state!=TAG_ILLEGAL_STATE)
 		{
 			ch = tag.getTagLine().charAt(i);
