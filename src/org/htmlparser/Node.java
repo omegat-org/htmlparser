@@ -119,12 +119,39 @@ public interface Node {
     public abstract void collectInto(NodeList collectionList, Class nodeType);
     /**
      * Returns the beginning position of the tag.
+     * <br>deprecated Use {@link #getEndPosition}
      */
     public abstract int elementBegin();
+
     /**
      * Returns the ending position fo the tag
+     * <br>deprecated Use {@link #getEndPosition}
      */
     public abstract int elementEnd();
+
+    /**
+     * Gets the starting position of the node.
+     * @return The start position.
+     */
+    public abstract int getStartPosition ();
+
+    /**
+     * Sets the starting position of the node.
+     * @param position The new start position.
+     */
+    public abstract void setStartPosition (int position);
+
+    /**
+     * Gets the ending position of the node.
+     * @return The end position.
+     */
+    public abstract int getEndPosition ();
+
+    /**
+     * Sets the ending position of the node.
+     * @param position The new end position.
+     */
+    public abstract void setEndPosition (int position);
 
     public abstract void accept(Object visitor);
 

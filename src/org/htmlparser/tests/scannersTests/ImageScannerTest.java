@@ -72,11 +72,14 @@ public class ImageScannerTest extends ParserTestCase
      */
     public void testExtractImageLocnInvertedCommasBug() throws ParserException
     {
-        fail ("not implemented");
-//        Tag tag = new Tag(new TagData(0,0,"img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo",""));
-//        String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
-//        ImageScanner scanner = new ImageScanner("-i",new LinkProcessor());
-//        assertEquals("Extracted Image Locn","http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif",scanner.extractImageLocn(tag,url));
+        String locn = "http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif";
+        createParser ("<img width=638 height=53 border=0 usemap=\"#m\" src=" + locn + " alt=Yahoo>");
+        // Register the image scanner
+        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parseAndAssertNodeCount(1);
+        assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
+        ImageTag imageTag = (ImageTag)node[0];
+        assertEquals("Expected Image Locn",locn,imageTag.getImageURL());
     }
 
     /**

@@ -31,6 +31,7 @@ package org.htmlparser.tests.scannersTests;
 import java.util.Stack;
 
 import org.htmlparser.Node;
+import org.htmlparser.StringNode;
 import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -64,9 +65,11 @@ public class OptionTagScannerTest extends ParserTestCase
         scanner = new OptionTagScanner("-i", new Stack ());
         createParser(testHTML,"http://www.google.com/test/index.html");
         parser.addScanner(scanner);
-        parseAndAssertNodeCount(9);
+        parseAndAssertNodeCount(10);
         for(int j=0;j<i;j++)
         {
+            if (node[j] instanceof StringNode)
+                continue;
             assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
             OptionTag OptionTag = (OptionTag) node[j];
             assertEquals("Option Scanner",scanner,OptionTag.getThisScanner());

@@ -32,6 +32,8 @@ package org.htmlparser.scanners;
 // Java Imports //
 //////////////////
 import java.util.Hashtable;
+import java.util.Vector;
+import org.htmlparser.lexer.nodes.Attribute;
 
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.Tag;
@@ -65,41 +67,107 @@ public class ImageScanner extends TagScanner
         super(filter);
         this.processor = processor;
     }
-  /**
-   * Extract the location of the image, given the string to be parsed, and the url
-   * of the html page in which this tag exists.
-   * @param tag The tag with the 'SRC' attribute.
-   * @param url URL of web page being parsed.
-   */
-    public String extractImageLocn (Tag tag,String url) throws ParserException
+
+   /**
+    * Extract the location of the image
+    * Given the tag (with attributes), and the url of the html page in which
+    * this tag exists, perform best effort to extract the 'intended' URL.
+    * Attempts to handle such attributes as:
+    * <pre>
+    * &lt;IMG SRC=http://www.redgreen.com&gt; - normal
+    * &lt;IMG SRC =http://www.redgreen.com&gt; - space between attribute name and equals sign
+    * &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value
+    * &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign
+    * </pre>
+    * @param tag The tag with the 'SRC' attribute.
+    * @param url URL of web page being parsed.
+    */
+    public String extractImageLocn (Tag tag, String url) throws ParserException
     {
+        Vector attributes;
+        int size;
+        Attribute attribute;
+        String string;
+        String data;
+        int state;
+        String name;
         String ret;
-        Hashtable table;
 
         ret = "";
-        try
+        state = 0;
+        attributes = tag.getAttributesEx ();
+        size = attributes.size ();
+        for (int i = 0; (i < size) && (state < 3); i++)
         {
-            table = tag.getAttributes ();
-            ret =  (String)table.get ("SRC");
-            if (null != ret)
+            attribute = (Attribute)attributes.elementAt (i);
+            string = attribute.getName ();
+            data = attribute.getValue ();
+            switch (state)
             {
-                ret = ParserUtils.removeChars (ret, '\n');
-                ret = ParserUtils.removeChars (ret, '\r');
-                ret = processor.extract (ret, url);
+                case 0: // looking for 'src'
+                    if (null != string)
+                    {
+                        name = string.toUpperCase ();
+                        if (name.equals ("SRC"))
+                        {
+                            state = 1;
+                            if (null != data)
+                            {
+                                if ("".equals (data))
+                                    state = 2; // empty attribute, SRC= 
+                                else
+                                {
+                                    ret = data;
+                                    i = size; // exit fast
+                                }
+                            }
+
+                        }
+                        else if (name.startsWith ("SRC"))
+                        {
+                            // missing equals sign
+                            ret = string.substring (3);
+                            state = 0; // go back to searching for SRC
+                            // because, maybe we found SRCXXX
+                            // where XXX isn't a URL
+                        }
+                    }
+                    break;
+                case 1: // looking for equals sign
+                    if (null != string)
+                    {
+                        if (string.startsWith ("="))
+                        {
+                            state = 2;
+                            if (1 < string.length ())
+                            {
+                                ret = string.substring (1);
+                                state = 0; // keep looking ?
+                            }
+                            else if (null != data)
+                            {
+                                ret = string.substring (1);
+                                state = 0; // keep looking ?
+                            }
+                        }
+                    }
+                    break;
+                case 2: // looking for a valueless attribute that could be a relative or absolute URL
+                    if (null != string)
+                    {
+                        if (null == data)
+                            ret = string;
+                        state = 0; // only check first non-whitespace item
+                        // not every valid attribute after an equals
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException ("we're not supposed to in state " + state);
             }
-            else
-                ret = "";
         }
-        catch (Exception e)
-        {
-            throw new ParserException (
-                "ImageScanner.extractImageLocn() : "
-                    + "Error in extracting image location, relativeLink = "
-                    + ret
-                    + ", url = "
-                    + url,
-                e);
-        }
+        ret = ParserUtils.removeChars (ret, '\n');
+        ret = ParserUtils.removeChars (ret, '\r');
+        ret = processor.extract (ret, url);
         
         return (ret);
     }

@@ -148,7 +148,7 @@ public class FormScannerTest extends ParserTestCase {
 
         parser.addScanner(new FormScanner("",parser));
 
-        parseAndAssertNodeCount(2);
+        parseAndAssertNodeCount(3);
     }
     /**
      * Bug reported by Pavan Podila - forms with links are not being parsed
@@ -262,12 +262,12 @@ public class FormScannerTest extends ParserTestCase {
         );
         parser.addScanner(new FormScanner("",parser));
         parser.addScanner(new LinkScanner());
-        parseAndAssertNodeCount(6);
-        assertTrue("Fifth Node is a link",node[4] instanceof LinkTag);
-        LinkTag linkTag = (LinkTag)node[4];
-        assertEquals("Link Text","Yahoo!\r\n",linkTag.getLinkText());
+        parseAndAssertNodeCount(8);
+        assertTrue("Seventh Node is a link",node[6] instanceof LinkTag);
+        LinkTag linkTag = (LinkTag)node[6];
+        assertEquals("Link Text","Yahoo!\n",linkTag.getLinkText());
         assertEquals("Link URL","http://www.yahoo.com",linkTag.getLink());
-        assertType("Sixth Node",FormTag.class,node[5]);
+        assertType("Eigth Node",FormTag.class,node[7]);
     }
 
     /**

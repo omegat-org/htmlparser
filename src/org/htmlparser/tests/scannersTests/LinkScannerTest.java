@@ -68,7 +68,7 @@ public class LinkScannerTest extends ParserTestCase
             "</p>"
         );
         parser.registerScanners();
-        parseAndAssertNodeCount(6);
+        parseAndAssertNodeCount(5);
         // The first node should be a Tag
         assertTrue("First node should be a Tag",node[0] instanceof Tag);
         // The second node should be a HTMLStringNode
@@ -397,9 +397,9 @@ public class LinkScannerTest extends ParserTestCase
         "</html>","http://transfer.go.com");
         // Register the image scanner
         parser.registerScanners();
-        parseAndAssertNodeCount(7);
-        assertTrue("Node 4 should be a link tag",node[4] instanceof LinkTag);
-        LinkTag linkTag = (LinkTag)node[4];
+        parseAndAssertNodeCount(11);
+        assertTrue("Node 4 should be a link tag",node[6] instanceof LinkTag);
+        LinkTag linkTag = (LinkTag)node[6];
         assertEquals("Resolved Link","http://www.abc.com/home.cfm",linkTag.getLink());
         assertEquals("Resolved Link Text","Home",linkTag.getLinkText());
     }

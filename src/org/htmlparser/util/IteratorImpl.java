@@ -74,6 +74,15 @@ public class IteratorImpl implements PeekingIterator
     }
 
     /**
+     * Makes <code>node</code> the next <code>Node</code> that will be returned.
+     * @param node The node to return next.
+     */
+    public void push (Node node)
+    {
+        preRead.insertElementAt (node, 0);
+    }
+
+    /**
      * Check if more nodes are available.
      * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
      */

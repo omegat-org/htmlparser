@@ -31,6 +31,7 @@ package org.htmlparser.tests;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Iterator;
+import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -43,7 +44,9 @@ import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.DefaultParserFeedback;
+import org.htmlparser.util.IteratorImpl;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
@@ -150,6 +153,7 @@ public class ParserTestCase extends TestCase {
                         expected +
                         " \n\n**** COMPLETE STRING ACTUAL***\n" + actual
                     );
+                    System.out.println ("string differs, expected \"" + expected + "\", actual \"" + actual + "\"");
                     fail(errorMsg.toString());
             }
 
@@ -170,6 +174,8 @@ public class ParserTestCase extends TestCase {
             msg.append(node[i].getClass().getName());
             msg.append("-->\n").append(node[i].toHtml()).append("\n");
         }
+        if (nodeCountExpected != nodeCount)
+            System.out.println ("node count differs, expected " + nodeCountExpected + ", actual " + nodeCount);
         assertEquals("Number of nodes parsed didn't match, nodes found were :\n"+msg.toString(),nodeCountExpected,nodeCount);
     }
 
@@ -229,8 +235,8 @@ public class ParserTestCase extends TestCase {
                 nextExpectedNode,
                 nextActualNode
             );
-            fixIfXmlEndTag(resultParser, nextActualNode);
-            fixIfXmlEndTag(expectedParser, nextExpectedNode);
+            fixIfXmlEndTag(actualIterator, nextActualNode);
+            fixIfXmlEndTag(expectedIterator, nextExpectedNode);
             assertSameType(displayMessage, nextExpectedNode, nextActualNode);
             assertTagEquals(displayMessage, nextExpectedNode, nextActualNode);
         }
@@ -287,22 +293,20 @@ public class ParserTestCase extends TestCase {
         return "\n\n"+displayMessage+"\n\nComplete Xml\n************\nEXPECTED:\n"+expected+"\nACTUAL:\n"+actual;
     }
 
-    private void fixIfXmlEndTag (Parser parser, Node node)
+    private void fixIfXmlEndTag (NodeIterator iterator, Node node)
     {
+        TagData data;
         if (node instanceof Tag)
         {
             Tag tag = (Tag)node;
             if (tag.isEmptyXmlTag())
             {
-                System.out.println (tag);
-//                // Add end tag
-//                String currLine = parser.getReader().getCurrentLine();
-//                int pos = parser.getReader().getLastReadPosition();
-//                currLine =
-//                    currLine.substring(0,pos+1)+
-//                    "</"+tag.getTagName()+">"+
-//                    currLine.substring(pos+1,currLine.length());
-//                parser.getReader().changeLine(currLine);
+                tag.setEmptyXmlTag (false);
+                data = new TagData
+                    ("/" + tag.getTagName (), tag.elementEnd (), new Vector (), "", false);
+                node = new Tag (data);
+                // cheat here and poink the new node into the iterator
+                ((IteratorImpl)iterator).push (node);
             }
         }
     }

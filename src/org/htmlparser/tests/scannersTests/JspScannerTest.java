@@ -52,9 +52,9 @@ public class JspScannerTest extends ParserTestCase {
 
         // Register the Jsp Scanner
         parser.addScanner(new JspScanner("-j"));
-        parseAndAssertNodeCount(4);
-        // The first node should be an HTMLJspTag
-        assertTrue("Third should be an HTMLJspTag",node[2] instanceof JspTag);
+        parseAndAssertNodeCount(5);
+        // The first node should be an JspTag
+        assertTrue("Third should be an JspTag",node[2] instanceof JspTag);
         JspTag tag = (JspTag)node[2];
         assertEquals("tag contents","=object",tag.getText());
     }
@@ -77,7 +77,7 @@ public class JspScannerTest extends ParserTestCase {
             "}\n" +
             "return value;\n" +
             "}\n" +
-            "%>\n");
+            "%>");
         Parser.setLineSeparator("\r\n");
         // Register the Jsp Scanner
         parser.addScanner(new JspScanner("-j"));

@@ -215,16 +215,19 @@ public abstract class CompositeTagScanner extends TagScanner {
      */
     public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
 
-    public final boolean isTagToBeEndedFor(Tag tag) {
-        boolean isEndTag = tag.isEndTag ();
-        String tagName = tag.getTagName();
-        if (isEndTag)
-            tagName = tagName.substring (1);
-        if (
-                ( isEndTag && endTagEnderSet.contains(tagName)) ||
-                (!isEndTag &&    tagEnderSet.contains(tagName))
-            )
-        return true; else return false;
+    public final boolean isTagToBeEndedFor(Tag tag)
+    {
+        String name;
+        boolean ret;
+
+        ret = false;
+        name = tag.getTagName ();
+        if (tag.isEndTag ())
+            ret = endTagEnderSet.contains (name);
+        else
+            ret = tagEnderSet.contains (name);
+        
+        return (ret);
     }
 
     public final boolean isAllowSelfChildren() {

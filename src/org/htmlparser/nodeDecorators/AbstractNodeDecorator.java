@@ -60,6 +60,42 @@ public abstract class AbstractNodeDecorator implements Node {
         return delegate.elementEnd();
     }
 
+    /**
+     * Gets the starting position of the node.
+     * @return The start position.
+     */
+    public int getStartPosition ()
+    {
+        return (delegate.getStartPosition ());
+    }
+
+    /**
+     * Sets the starting position of the node.
+     * @param position The new start position.
+     */
+    public void setStartPosition (int position)
+    {
+        delegate.setStartPosition (position);
+    }
+
+    /**
+     * Gets the ending position of the node.
+     * @return The end position.
+     */
+    public int getEndPosition ()
+    {
+        return (delegate.getEndPosition ());
+    }
+
+    /**
+     * Sets the ending position of the node.
+     * @param position The new end position.
+     */
+    public void setEndPosition (int position)
+    {
+        delegate.setEndPosition (position);
+    }
+    
     public boolean equals(Object arg0) {
         return delegate.equals(arg0);
     }

@@ -85,7 +85,7 @@ public class TitleScannerTest extends ParserTestCase {
         "<body><html>");
         TitleScanner titleScanner = new TitleScanner("-t");
         parser.addScanner(titleScanner);
-        parseAndAssertNodeCount(7);
+        parseAndAssertNodeCount(8);
         assertTrue("Third tag should be a title tag",node[2] instanceof TitleTag);
         TitleTag titleTag = (TitleTag)node[2];
         assertEquals("Title","Double tags can hang the code\r\n",titleTag.getTitle());

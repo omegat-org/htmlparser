@@ -175,6 +175,42 @@ public abstract class AbstractNode implements Node, Serializable {
         return nodeEnd;
     }
 
+    /**
+     * Gets the starting position of the node.
+     * @return The start position.
+     */
+    public int getStartPosition ()
+    {
+        return (nodeBegin);
+    }
+
+    /**
+     * Sets the starting position of the node.
+     * @param position The new start position.
+     */
+    public void setStartPosition (int position)
+    {
+        nodeBegin = position;
+    }
+
+    /**
+     * Gets the ending position of the node.
+     * @return The end position.
+     */
+    public int getEndPosition ()
+    {
+        return (nodeEnd);
+    }
+
+    /**
+     * Sets the ending position of the node.
+     * @param position The new end position.
+     */
+    public void setEndPosition (int position)
+    {
+        nodeEnd = position;
+    }
+
     public abstract void accept(Object visitor);
 
     /**

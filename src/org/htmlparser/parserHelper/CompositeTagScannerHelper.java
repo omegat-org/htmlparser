@@ -79,7 +79,7 @@ public class CompositeTagScannerHelper {
         doEmptyXmlTagCheckOn(currentNode);
         if (!endTagFound) {
             do {
-                currentNode = mLexer.nextNode (); // balance_quotes ?
+                currentNode = mLexer.nextNode (balance_quotes);
                 if (currentNode==null)
                     continue;
                 if (currentNode instanceof Tag)

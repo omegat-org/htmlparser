@@ -625,8 +625,7 @@ public class ParserTest extends ParserTestCase {
             Node node = e.nextNode();
             node.collectInto(collectionList,LinkTag.class);
         }
-        // NOTE: the link within the script is also found... this may be debatable
-        assertEquals("Size of collection vector should be 12",12,collectionList.size());
+        assertEquals("Size of collection vector should be 11",11,collectionList.size());
         // All items in collection vector should be links
         for (SimpleNodeIterator e = collectionList.elements();e.hasMoreNodes();) {
             Node node = e.nextNode();

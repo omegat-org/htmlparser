@@ -30,8 +30,10 @@
 package org.htmlparser.tests.scannersTests;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.lexer.Lexer;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -52,48 +54,45 @@ public class TagScannerTest extends ParserTestCase
     }
 
     public void testExtractXMLData() throws ParserException {
-        fail ("not implemented");
-//        createParser(
-//            "<MESSAGE>\n"+
-//            "Abhi\n"+
-//            "Sri\n"+
-//            "</MESSAGE>");
-//        Parser.setLineSeparator("\r\n");
-//        NodeIterator e = parser.elements();
-//
-//        Node node = e.nextNode();
-//        try {
-//            String result = TagScanner.extractXMLData(node,"MESSAGE",parser.getReader());
-//            assertEquals("Result","Abhi\r\nSri\r\n",result);
-//        }
-//        catch (ParserException ex) {
-//            assertTrue(e.toString(),false);
-//        }
+        createParser(
+            "<MESSAGE>\n"+
+            "Abhi\n"+
+            "Sri\n"+
+            "</MESSAGE>");
+        Parser.setLineSeparator("\r\n");
+        NodeIterator e = parser.elements();
+
+        Node node = e.nextNode();
+        try {
+            String result = TagScanner.extractXMLData (node, "MESSAGE", e);
+            assertEquals("Result","\nAbhi\nSri\n",result);
+        }
+        catch (ParserException ex) {
+            assertTrue(e.toString(),false);
+        }
     }
 
     public void testExtractXMLDataSingle() throws ParserException {
-        fail ("not implemented");
-//        createParser(
-//            "<MESSAGE>Test</MESSAGE>");
-//        NodeIterator e = parser.elements();
-//
-//        Node node = (Node)e.nextNode();
-//        try {
-//            String result = TagScanner.extractXMLData(node,"MESSAGE",parser.getReader());
-//            assertEquals("Result","Test",result);
-//        }
-//        catch (ParserException ex) {
-//            assertTrue(e.toString(),false);
-//        }
+        createParser(
+            "<MESSAGE>Test</MESSAGE>");
+        NodeIterator e = parser.elements();
+
+        Node node = (Node)e.nextNode();
+        try {
+            String result = TagScanner.extractXMLData (node, "MESSAGE", e);
+            assertEquals("Result","Test",result);
+        }
+        catch (ParserException ex) {
+            assertTrue(e.toString(),false);
+        }
     }
 
-    public void testTagExtraction()
+    public void testTagExtraction() throws ParserException
     {
-        fail ("not implemented");
-//        String testHTML = "<AREA \n coords=0,0,52,52 href=\"http://www.yahoo.com/r/c1\" shape=RECT>";
-//        createParser(testHTML);
-//        Tag tag = Tag.find(parser.getReader(),testHTML,0);
-//        assertNotNull(tag);
+        String testHTML = "<AREA \n coords=0,0,52,52 href=\"http://www.yahoo.com/r/c1\" shape=RECT>";
+        createParser(testHTML);
+        Tag tag = (Tag)parser.elements ().nextNode ();
+        assertNotNull(tag);
     }
 
     /**
@@ -116,18 +115,15 @@ public class TagScannerTest extends ParserTestCase
     }
 
     public void testRemoveChars2() {
-        fail ("not implemented");
-//        String test = "hello\r\nworld\r\n\tqsdsds";
-//        TagScanner scanner = new TagScanner() {
-//            public Tag scan(Tag tag,String url,NodeReader reader,String currLine) { return null;}
-//            public boolean evaluate(String s,TagScanner previousOpenScanner) { return false; }
-//            public String [] getID() {
-//                return null;
-//            }
-//
-//        };
-//        String result = scanner.removeChars(test,"\r\n");
-//        assertEquals("Removing Chars","helloworld\tqsdsds",result);
+        String test = "hello\r\nworld\r\n\tqsdsds";
+        TagScanner scanner = new TagScanner() {
+            public Tag scan(Tag tag,String url,Lexer lexer) { return null;}
+            public boolean evaluate(String s,TagScanner previousOpenScanner) { return false; }
+            public String [] getID() { return null; }
+            protected Tag createTag(TagData tagData, Tag tag, String url) { return null; }
+        };
+        String result = scanner.removeChars(test,"\r\n");
+        assertEquals("Removing Chars","helloworld\tqsdsds",result);
     }
 
     /**

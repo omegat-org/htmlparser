@@ -31,6 +31,7 @@ package org.htmlparser.tags.data;
 import java.util.Vector;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.util.ParserException;
 
 public class TagData {
@@ -67,11 +68,14 @@ public class TagData {
         this (
             null,
             tagBegin,
-            tagBegin + name.length () + 2 + (isXmlEndTag ? 1 : 0),
+            tagBegin, // a virtual node has no length, + name.length () + 2 + (isXmlEndTag ? 1 : 0),
+                      // was a todo: add attribute sizes to length
             attributes,
             urlBeingParsed,
             isXmlEndTag);
-        // todo: add attribute sizes
+        if (null != name && (0 == attributes.size ()))
+            attributes.insertElementAt (new Attribute (name), 0);
+            
     }
     
     public int getTagBegin() {

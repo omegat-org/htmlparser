@@ -48,8 +48,6 @@ public class TagNode
     extends
         AbstractNode
 {
-    private boolean emptyXmlTag;
-
     /**
      * The tag attributes.
      * Objects of type {@link Attribute}.
@@ -115,7 +113,6 @@ public class TagNode
     {
         super (page, start, end);
         mAttributes = attributes;
-        emptyXmlTag = false;
     }
 
     /**
@@ -373,23 +370,16 @@ public class TagNode
      */
     public String getTagName ()
     {
-        Vector attributes;
         String ret;
 
-        ret = null;
-        
-        attributes = getAttributesEx ();
-        if (0 != attributes.size ())
+        ret = getRawTagName ();
+        if (null != ret)
         {
-            ret = getRawTagName ();
-            if (null != ret)
-            {
-                ret = ret.toUpperCase ();
-                if (ret.startsWith ("/"))
-                    ret = ret.substring (1);
-                if (ret.endsWith ("/"))
-                    ret = ret.substring (0, ret.length () - 1);
-            }
+            ret = ret.toUpperCase ();
+            if (ret.startsWith ("/"))
+                ret = ret.substring (1);
+            if (ret.endsWith ("/"))
+                ret = ret.substring (0, ret.length () - 1);
         }
 
         return (ret);
@@ -606,8 +596,6 @@ public class TagNode
                 attribute.toString (ret);
             }
         }
-        if (isEmptyXmlTag ())
-            ret.append ("/");
         ret.append (">");
 
         return (ret.toString ());
@@ -667,18 +655,119 @@ public class TagNode
     }
 
     /**
-     * Is this an empty xml tag of the form<br>
-     * &lt;tag/&gt;
-     * @return boolean
+     * Is this an empty xml tag of the form &lt;tag/&gt;.
+     * @return true if the last character of the last attribute is a '/'.
      */
     public boolean isEmptyXmlTag ()
     {
-        return emptyXmlTag;
+        Vector attributes;
+        int size;
+        Attribute attribute;
+        String name;
+        int length;
+        boolean ret;
+
+        ret = false;
+
+        attributes = getAttributesEx ();
+        size = attributes.size ();
+        if (0 < size)
+        {
+            attribute = (Attribute)attributes.elementAt (size - 1);
+            name = attribute.getName ();
+            if (null != name)
+            {
+                length = name.length ();
+                ret = name.charAt (length - 1) == '/';
+            }
+        }
+
+        return (ret);
     }
 
+    /**
+     * Set this tag to be an empty xml node, or not.
+     * Adds or removes an ending slash on the tag.
+     * @param If true, ensures there is an ending slash in the node,
+     * i.e. &lt;tag/&gt;, otherwise removes it.
+     */
     public void setEmptyXmlTag (boolean emptyXmlTag)
     {
-        this.emptyXmlTag = emptyXmlTag;
+        Vector attributes;
+        int size;
+        Attribute attribute;
+        String name;
+        String value;
+        int length;
+        
+        attributes = getAttributesEx ();
+        size = attributes.size ();
+        if (0 < size)
+        {
+            attribute = (Attribute)attributes.elementAt (size - 1);
+            name = attribute.getName ();
+            if (null != name)
+            {
+                length = name.length ();
+                value = attribute.getValue ();
+                if (null == value)
+                    if (name.charAt (length - 1) == '/')
+                    {
+                        // already exists, remove if requested
+                        if (!emptyXmlTag)
+                            if (1 == length)
+                                attributes.removeElementAt (size - 1);
+                            else
+                            {
+                                // this shouldn't happen, but covers the case
+                                // where no whitespace separates the slash
+                                // from the previous attribute
+                                name = name.substring (0, length - 1);
+                                attribute = new Attribute (name);
+                                attributes.removeElementAt (size - 1);
+                                attributes.addElement (attribute);
+                            }
+                    }
+                    else
+                    {
+                        // ends with attribute, add whitespace + slash if requested
+                        if (emptyXmlTag)
+                        {
+                            attribute = new Attribute ((String)null, " ", (char)0);
+                            attributes.addElement (attribute);
+                            attribute = new Attribute ("/");
+                            attributes.addElement (attribute);
+                        }
+                    }
+                else
+                {
+                    // some valued attribute, add whitespace + slash if requested
+                    if (emptyXmlTag)
+                    {
+                        attribute = new Attribute ((String)null, " ", (char)0);
+                        attributes.addElement (attribute);
+                        attribute = new Attribute ("/");
+                        attributes.addElement (attribute);
+                    }
+                }
+            }
+            else
+            {
+                // ends with whitespace, add if requested
+                if (emptyXmlTag)
+                {
+                    attribute = new Attribute ("/");
+                    attributes.addElement (attribute);
+                }
+            }
+        }
+        else
+            // nothing there, add if requested
+            if (emptyXmlTag)
+            {
+                attribute = new Attribute ("/");
+                attributes.addElement (attribute);
+            }
     }
 
     /**

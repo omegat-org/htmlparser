@@ -48,13 +48,13 @@ public class FrameScannerTest extends ParserTestCase {
 
         parser.addScanner(new FrameScanner(""));
 
-        parseAndAssertNodeCount(4);
+        parseAndAssertNodeCount(7);
 
-        assertTrue("Node 1 should be Frame Tag",node[1] instanceof FrameTag);
         assertTrue("Node 2 should be Frame Tag",node[2] instanceof FrameTag);
+        assertTrue("Node 4 should be Frame Tag",node[4] instanceof FrameTag);
 
-        FrameTag frameTag1 = (FrameTag)node[1];
-        FrameTag frameTag2 = (FrameTag)node[2];
+        FrameTag frameTag1 = (FrameTag)node[2];
+        FrameTag frameTag2 = (FrameTag)node[4];
         assertEquals("Frame 1 Locn","http://www.google.com/test/demo_bc_top.html",frameTag1.getFrameLocation());
         assertEquals("Frame 1 Name","topFrame",frameTag1.getFrameName());
         assertEquals("Frame 2 Locn","http://www.kizna.com/web_e/",frameTag2.getFrameLocation());

@@ -98,36 +98,31 @@ public class ScriptTagTest extends ParserTestCase{
     */
     public void testToHTMLWG() throws ParserException
     {
+        StringBuffer sb2 = new StringBuffer();
+        sb2.append("<script language=\"javascript\">\r\n");
+        sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n");
+        sb2.append(" document.write ('xxx');\r\n");
+        sb2.append("else\r\n");
+        sb2.append(" document.write ('yyy');\r\n");
+        sb2.append("</script>");
+        String expectedHTML = sb2.toString();
+
         StringBuffer sb1 = new StringBuffer();
-        sb1.append("<body><script language=\"javascript\">\r\n");
-        sb1.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n");
-        sb1.append(" document.write ('xxx');\r\n");
-        sb1.append("else\r\n");
-        sb1.append(" document.write ('yyy');\r\n");
-        sb1.append("</script>\r\n");
-        String testHTML1 = new String(sb1.toString());
+        sb1.append("<body>");
+        sb1.append(expectedHTML);
+        sb1.append("\r\n");
+        String testHTML1 = sb1.toString();
 
         createParser(testHTML1);
         Parser.setLineSeparator("\r\n");
         // Register the image scanner
         parser.addScanner(new ScriptScanner("-s"));
 
-
-        StringBuffer sb2 = new StringBuffer();
-        sb2.append("<SCRIPT LANGUAGE=\"javascript\">\r\n");
-        sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n");
-        sb2.append(" document.write ('xxx');\r\n");
-        sb2.append("else\r\n");
-        sb2.append(" document.write ('yyy');\r\n");
-        sb2.append("</SCRIPT>");
-        String expectedHTML = new String(sb2.toString());
-
-        parseAndAssertNodeCount(2);
+        parseAndAssertNodeCount(3);
         assertTrue("Node should be a script tag",node[1]
         instanceof ScriptTag);
-        // Check the data in the applet tag
-        ScriptTag scriptTag = (ScriptTag)node
-        [1];
+        // Check the data in the script tag
+        ScriptTag scriptTag = (ScriptTag)node[1];
         assertStringEquals("Expected Script Code",expectedHTML,scriptTag.toHtml());
     }
 
@@ -160,10 +155,10 @@ public class ScriptTagTest extends ParserTestCase{
         // Register the image scanner
         parser.addScanner(new ScriptScanner("-s"));
         //parser.registerScanners();
-        parseAndAssertNodeCount(1);
+        parseAndAssertNodeCount(2);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
-        assertStringEquals("Script toHTML()","<SCRIPT LANGUAGE=\"javascript\">\r\nvar lower = '<%=lowerValue%>';\r\n</SCRIPT>",scriptTag.toHtml());
+        assertStringEquals("Script toHTML()","<script language=\"javascript\">\nvar lower = '<%=lowerValue%>';\n</script>",scriptTag.toHtml());
     }
 
     public void testSingleApostropheParsingBug() throws ParserException {

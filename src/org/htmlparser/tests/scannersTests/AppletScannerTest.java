@@ -60,8 +60,7 @@ public class AppletScannerTest extends ParserTestCase
             paramsMap.put(paramsData[i][0],paramsData[i][1]);
         }
         testHTML+=
-            "</APPLET>\n"+
-            "</HTML>";
+            "</APPLET></HTML>";
         createParser(testHTML);
 
         // Register the applet scanner

@@ -54,37 +54,38 @@ public class MetaTagScannerTest extends ParserTestCase {
         MetaTagScanner scanner = new MetaTagScanner("-t");
         parser.addScanner(scanner);
 
-        parseAndAssertNodeCount(11);
-        assertTrue("Node 5 should be End Tag",node[5] instanceof Tag && ((Tag)node[5]).isEndTag ());
-        assertTrue("Node 6 should be META Tag",node[6] instanceof MetaTag);
-        MetaTag metaTag;
-        metaTag = (MetaTag) node[6];
-        assertEquals("Meta Tag 6 Name","description",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 6 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaContent());
-
-        assertTrue("Node 7 should be META Tag",node[7] instanceof MetaTag);
-        assertTrue("Node 8 should be META Tag",node[8] instanceof MetaTag);
+        parseAndAssertNodeCount(18);
+        assertTrue("Node 7 should be End Tag",node[7] instanceof Tag && ((Tag)node[7]).isEndTag ());
         assertTrue("Node 9 should be META Tag",node[9] instanceof MetaTag);
-
-        metaTag = (MetaTag) node[7];
-        assertEquals("Meta Tag 7 Name","keywords",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 7 Contents","SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns",metaTag.getMetaContent());
-        assertNull("Meta Tag 7 Http-Equiv",metaTag.getHttpEquiv());
-
-        metaTag = (MetaTag) node[8];
-        assertEquals("Meta Tag 8 Name","language",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 8 Contents","en",metaTag.getMetaContent());
-        assertNull("Meta Tag 8 Http-Equiv",metaTag.getHttpEquiv());
-
+        MetaTag metaTag;
         metaTag = (MetaTag) node[9];
-        assertEquals("Meta Tag 9 Name","owner",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 9 Contents","service@admin.spamcop.net",metaTag.getMetaContent());
-        assertNull("Meta Tag 9 Http-Equiv",metaTag.getHttpEquiv());
+        assertEquals("Meta Tag 9 Name","description",metaTag.getMetaTagName());
+        assertEquals("Meta Tag 9 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaContent());
 
-        metaTag = (MetaTag) node[10];
-        assertNull("Meta Tag 10 Name",metaTag.getMetaTagName());
-        assertEquals("Meta Tag 10 Contents","text/html; charset=ISO-8859-1",metaTag.getMetaContent());
-        assertEquals("Meta Tag 10 Http-Equiv","content-type",metaTag.getHttpEquiv());
+        assertTrue("Node 11 should be META Tag",node[11] instanceof MetaTag);
+        assertTrue("Node 13 should be META Tag",node[13] instanceof MetaTag);
+        assertTrue("Node 15 should be META Tag",node[15] instanceof MetaTag);
+        assertTrue("Node 17 should be META Tag",node[17] instanceof MetaTag);
+
+        metaTag = (MetaTag) node[11];
+        assertEquals("Meta Tag 11 Name","keywords",metaTag.getMetaTagName());
+        assertEquals("Meta Tag 11 Contents","SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns",metaTag.getMetaContent());
+        assertNull("Meta Tag 11 Http-Equiv",metaTag.getHttpEquiv());
+
+        metaTag = (MetaTag) node[13];
+        assertEquals("Meta Tag 13 Name","language",metaTag.getMetaTagName());
+        assertEquals("Meta Tag 13 Contents","en",metaTag.getMetaContent());
+        assertNull("Meta Tag 13 Http-Equiv",metaTag.getHttpEquiv());
+
+        metaTag = (MetaTag) node[15];
+        assertEquals("Meta Tag 15 Name","owner",metaTag.getMetaTagName());
+        assertEquals("Meta Tag 15 Contents","service@admin.spamcop.net",metaTag.getMetaContent());
+        assertNull("Meta Tag 15 Http-Equiv",metaTag.getHttpEquiv());
+
+        metaTag = (MetaTag) node[17];
+        assertNull("Meta Tag 17 Name",metaTag.getMetaTagName());
+        assertEquals("Meta Tag 17 Contents","text/html; charset=ISO-8859-1",metaTag.getMetaContent());
+        assertEquals("Meta Tag 17 Http-Equiv","content-type",metaTag.getHttpEquiv());
 
         assertEquals("This Scanner",scanner,metaTag.getThisScanner());
     }

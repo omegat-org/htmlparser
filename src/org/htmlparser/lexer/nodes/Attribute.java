@@ -134,9 +134,23 @@ public class Attribute
      */
     public Attribute (String name, String value, char quote)
     {
+        mPage = null;
+        mNameStart = 0;
+        mNameEnd = 0;
+        mValueStart = 0;
+        mValueEnd = 0;
         mName = name;
         mValue = value;
         mQuote = quote;
+    }
+
+    /**
+     * Create a standalone attribute with the name given.
+     * @param name The name of this attribute.
+     */
+    public Attribute (String name)
+    {
+        this (name, (String)null, (char)0);
     }
 
     /**

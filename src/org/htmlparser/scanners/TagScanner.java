@@ -42,6 +42,7 @@ import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserFeedback;
 /**
@@ -141,49 +142,75 @@ public abstract class TagScanner
   public boolean evaluate(String tagContents,TagScanner previousOpenScanner) {
     return true;
   }
-  
-//  public static String extractXMLData(Node node, String tagName, NodeReader reader) throws ParserException{
-//    try {
-//      String xmlData = "";
-//
-//      boolean xmlTagFound = isXMLTagFound(node, tagName);
-//      if (xmlTagFound) {
-//        try{
-//          do {
-//            node = reader.readElement();
-//            if (node!=null) {
-//              if (node instanceof StringNode) {
-//                StringNode stringNode = (StringNode)node;
-//                if (xmlData.length()>0) xmlData+=" ";
-//            xmlData += stringNode.getText();
-//          } else if (!(node instanceof org.htmlparser.tags.EndTag))
-//            xmlTagFound = false;
-//        }
-//      }
-//      while (node instanceof StringNode);
-//
-//    }
-//
-//    catch (Exception e) {
-//        throw new ParserException("HTMLTagScanner.extractXMLData() : error while trying to find xml tag",e);
-//        }
-//      }
-//      if (xmlTagFound) {
-//          if (node!=null) {
-//            if (node instanceof org.htmlparser.tags.EndTag) {
-//              org.htmlparser.tags.EndTag endTag = (org.htmlparser.tags.EndTag)node;
-//              if (!endTag.getText().equals(tagName)) xmlTagFound = false;
-//            }
-//
-//          }
-//
-//      }
-//      if (xmlTagFound) return xmlData; else return null;
-//    }
-//    catch (Exception e) {
-//        throw new ParserException("HTMLTagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
-//        }
-//      }
+
+  /**
+   * Pull the text between two matching capitalized 'XML' tags.
+   * @deprecated This reads ahead on your iterator and doesn't put them back if it's not an XML tag.
+   */
+  public static String extractXMLData (Node node, String tagName, NodeIterator iterator)
+    throws
+        ParserException
+  {
+      try
+      {
+          String xmlData = "";
+          
+          boolean xmlTagFound = isXMLTagFound (node, tagName);
+          if (xmlTagFound)
+          {
+              try
+              {
+                  do
+                  {
+                      node = iterator.nextNode ();
+                      if (node!=null)
+                      {
+                          if (node instanceof StringNode)
+                          {
+                              StringNode stringNode = (StringNode)node;
+                              if (xmlData.length ()>0)
+                                xmlData+=" ";
+                              xmlData += stringNode.getText ();
+                          }
+                          else
+                              if (!(node instanceof Tag && ((Tag)node).isEndTag ()))
+                                xmlTagFound = false;
+                      }
+                  }
+                  while (node instanceof StringNode);
+                  
+              }
+              
+              catch (Exception e)
+              {
+                  throw new ParserException ("TagScanner.extractXMLData() : error while trying to find xml tag",e);
+              }
+          }
+          // check end tag matches start tag
+          if (xmlTagFound)
+          {
+              if (node!=null)
+              {
+                  if (node instanceof Tag && ((Tag)node).isEndTag ())
+                  {
+                      Tag endTag = (Tag)node;
+                      if (!endTag.getTagName ().equals (tagName))
+                          xmlTagFound = false;
+                  }
+                  
+              }
+              
+          }
+          if (xmlTagFound)
+             return xmlData;
+          else
+              return null;
+      }
+      catch (Exception e)
+      {
+          throw new ParserException ("TagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
+      }
+  }
 
     public String getFilter() {
         return filter;

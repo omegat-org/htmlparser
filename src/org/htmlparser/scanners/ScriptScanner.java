@@ -27,19 +27,25 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.scanners;
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
-import org.htmlparser.*;
-import org.htmlparser.lexer.Lexer;
-import org.htmlparser.parserHelper.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.tags.data.*;
-import org.htmlparser.util.*;
-/**
- * The HTMLScriptScanner identifies javascript code
- */
 
+import java.util.Vector;
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.nodes.NodeFactory;
+import org.htmlparser.tags.ScriptTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
+
+/**
+ * The ScriptScanner handles javascript code.
+ * It gathers all interior nodes into one undifferentiated string node.
+ */
 public class ScriptScanner extends CompositeTagScanner {
     private static final String SCRIPT_END_TAG = "</SCRIPT>";
     private static final String MATCH_NAME [] = {"SCRIPT"};
@@ -67,29 +73,125 @@ public class ScriptScanner extends CompositeTagScanner {
         return new ScriptTag(tagData,compositeTagData);
     }
 
-    public Tag scan (Tag tag, Lexer lexer)
-        throws ParserException {
-        try {
-            ScriptScannerHelper helper =
-                new ScriptScannerHelper(tag, lexer, this);
-            return helper.scan();
+    /**
+     * Scan for script.
+     * Accumulates nodes returned from the lexer, until &lt;/SCRIPT&gt;,
+     * &lt;BODY&gt; or &lt;HTML&gt; is encountered. Replaces the node factory
+     * in the lexer with a new Parser to avoid other scanners missing their 
+     * end tags and accumulating even the &lt;/SCRIPT&gt;.
+     */
+    public Tag scan (Tag tag, String url, Lexer lexer)
+        throws ParserException
+    {
+        Node node;
+        boolean done;
+        int position;
+        StringNode last;
+        Tag end;
+        NodeFactory factory;
+        TagData data;
+        Tag ret;
 
+        done = false;
+        last = null;
+        end = null;
+        factory = lexer.getNodeFactory ();
+        lexer.setNodeFactory (new Parser ()); // no scanners on a new Parser right?
+        try
+        {
+            do
+            {
+                position = lexer.getPosition ();
+                node = lexer.nextNode (true);
+                if (null == node)
+                    break;
+                else
+                    if (node instanceof Tag)
+                        if (   ((Tag)node).isEndTag ()
+                            && ((Tag)node).getTagName ().equals (MATCH_NAME[0]))
+                        {
+                            end = (Tag)node;
+                            done = true;
+                        }
+                        else if (isTagToBeEndedFor ((Tag)node))
+                        {
+                            lexer.setPosition (position);
+                            done = true;
+                        }
+                        else
+                        {
+                            // must be a string, even though it looks like a tag
+                            if (null != last)
+                                // append it to the previous one
+                                last.setEndPosition (node.elementEnd ());
+                            else
+                                // TODO: need to remove this cast
+                                last = (StringNode)lexer.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                        }
+                    else if (node instanceof RemarkNode)
+                    {
+                        if (null != last)
+                            last.setEndPosition (node.getEndPosition ());
+                        else
+                            // TODO: need to remove this cast
+                            last = (StringNode)lexer.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                    }
+                    else // StringNode
+                    {
+                        if (null != last)
+                            last.setEndPosition (node.getEndPosition ());
+                        else
+                            // TODO: need to remove this cast
+                            last = (StringNode)node;
+                    }
+
+            }
+            while (!done);
+
+            // build new string tag if required
+            if (null == last)
+                // TODO: need to remove this cast
+                last = (StringNode)factory.createStringNode (lexer, position, position);
+            // build new end tag if required
+            if (null == end)
+            {
+                data =  new TagData(
+                    "/" + tag.getTagName (),
+                    tag.getEndPosition (),
+                    new Vector (),
+                    lexer.getPage ().getUrl (),
+                    false);
+                end = new Tag (data);
+//TODO: use the factory: end = factory.createTagNode (mLexer, last.getEndPosition (), last.getEndPosition () + 
+            }
+            data =  new TagData(
+                lexer.getPage (),
+                tag.elementBegin(),
+                end.elementEnd(),
+                tag.getAttributesEx (),
+                lexer.getPage ().getUrl (),
+                tag.isEmptyXmlTag ());
+
+            ret = createTag(
+                data,
+                new CompositeTagData(tag, end, new NodeList (last))
+                );
         }
-        catch (Exception e) {
-            throw new ParserException("Error in ScriptScanner: ",e);
+        finally
+        {
+            lexer.setNodeFactory (factory);
         }
+
+        return (ret);
     }
-
 
     /**
      * Gets the end tag that the scanner uses to stop scanning. Subclasses of
      * <code>ScriptScanner</code> you should override this method.
      * @return String containing the end tag to search for, i.e. &lt;/SCRIPT&gt;
      */
-    public String getEndTag() {
+    public String getEndTag()
+    {
         return SCRIPT_END_TAG;
     }
-
-
-
 }

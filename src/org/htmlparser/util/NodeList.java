@@ -50,6 +50,16 @@ public class NodeList implements Serializable {
         numberOfAdjustments = 0;
     }
 
+    /**
+     * Create a one element node list.
+     * @param node The initial node to add.
+     */
+    public NodeList(Node node)
+    {
+        this ();
+        add (node);
+    }
+        
     public void add(Node node) {
         if (size==capacity)
             adjustVectorCapacity();

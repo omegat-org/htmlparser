@@ -74,7 +74,8 @@ public class ScriptScannerTest extends ParserTestCase
      */
     public void testScanBug() throws ParserException
     {
-        createParser("<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"../js/DetermineBrowser.js\"></SCRIPT>","http://www.google.com/test/index.html");
+        String src = "\"../js/DetermineBrowser.js\"";
+        createParser("<SCRIPT LANGUAGE=\"JavaScript\" SRC=" + src + "></SCRIPT>","http://www.google.com/test/index.html");
         // Register the image scanner
         parser.addScanner(new ScriptScanner("-s"));
         parseAndAssertNodeCount(1);
@@ -83,7 +84,7 @@ public class ScriptScannerTest extends ParserTestCase
         ScriptTag scriptTag = (ScriptTag)node[0];
         Hashtable table = scriptTag.getAttributes();
         String srcExpected = (String)table.get("SRC");
-        assertEquals("Expected SRC value","../js/DetermineBrowser.js",srcExpected);
+        assertEquals("Expected SRC value",src,srcExpected);
     }
 
     /**
@@ -99,14 +100,18 @@ public class ScriptScannerTest extends ParserTestCase
      */
     public void testScanBugWG() throws ParserException
     {
+        StringBuffer sb2 = new StringBuffer();
+        sb2.append("\r\nif(navigator.appName.indexOf(\"Netscape\") != -1)\r\n");
+        sb2.append(" document.write ('xxx');\r\n");
+        sb2.append("else\r\n");
+        sb2.append(" document.write ('yyy');\r\n");
+        String testHTML2 = sb2.toString();
+
         StringBuffer sb1 = new StringBuffer();
-        sb1.append("<body><script language=\"javascript\">\r\n");
-        sb1.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n");
-        sb1.append(" document.write ('xxx');\r\n");
-        sb1.append("else\r\n");
-        sb1.append(" document.write ('yyy');\r\n");
-        sb1.append("</script>\r\n");
-        String testHTML1 = new String(sb1.toString());
+        sb1.append("<body><script language=\"javascript\">");
+        sb1.append(testHTML2);
+        sb1.append("</script>");
+        String testHTML1 = sb1.toString();
 
         createParser(testHTML1,"http://www.google.com/test/index.html");
         Parser.setLineSeparator("\r\n");
@@ -114,13 +119,6 @@ public class ScriptScannerTest extends ParserTestCase
         parser.addScanner(new ScriptScanner("-s"));
 
         parseAndAssertNodeCount(2);
-
-        StringBuffer sb2 = new StringBuffer();
-        sb2.append("\r\nif(navigator.appName.indexOf(\"Netscape\") != -1)\r\n");
-        sb2.append(" document.write ('xxx');\r\n");
-        sb2.append("else\r\n");
-        sb2.append(" document.write ('yyy');\r\n");
-        String testHTML2 = new String(sb2.toString());
 
         assertTrue("Node should be a script tag",node[1]
         instanceof ScriptTag);
@@ -143,14 +141,13 @@ public class ScriptScannerTest extends ParserTestCase
         parser.registerScanners();
         //parser.addScanner(new HTMLScriptScanner("-s"));
 
-        parseAndAssertNodeCount(1);
+        parseAndAssertNodeCount(2);
         assertTrue("Node should be a script tag",node[0]
         instanceof ScriptTag);
     }
 
     public void testScanScriptWithComments() throws ParserException {
-        createParser("<SCRIPT Language=\"JavaScript\">\n"+
-                          "<!--\n"+
+        String expectedCode = "\n<!--\n"+
                           "  function validateForm()\n"+
                           "  {\n"+
                           "     var i = 10;\n"+
@@ -158,7 +155,8 @@ public class ScriptScannerTest extends ParserTestCase
                           "     i = i - 1 ; \n"+
                           "     return true;\n"+
                           "  }\n"+
-                          "// -->\n"+
+                          "// -->\n";
+        createParser("<SCRIPT Language=\"JavaScript\">"+expectedCode+
                           "</SCRIPT>","http://www.hardwareextreme.com/");
         // Register the image scanner
         parser.registerScanners();
@@ -168,15 +166,6 @@ public class ScriptScannerTest extends ParserTestCase
         // Check the data in the applet tag
         ScriptTag scriptTag = (ScriptTag)node[0];
         String scriptCode = scriptTag.getScriptCode();
-        String expectedCode = "\r\n<!--\r\n"+
-                          "  function validateForm()\r\n"+
-                          "  {\r\n"+
-                          "     var i = 10;\r\n"+
-                          "     if(i < 5)\r\n"+
-                          "     i = i - 1 ; \r\n"+
-                          "     return true;\r\n"+
-                          "  }\r\n"+
-                          "// -->\r\n";
         assertStringEquals("Expected Code",expectedCode,scriptCode);
     }
 
@@ -557,51 +546,40 @@ public class ScriptScannerTest extends ParserTestCase
 
 
     public void testScanScriptWithTagsInComment() throws ParserException {
-        String javascript = "// This is javascript with <li> tag in the comment";
-        createParser("<script>\n"+ javascript + "\n</script>");
+        String javascript = "\n// This is javascript with <li> tag in the comment\n";
+        createParser("<script>"+ javascript + "</script>");
         parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
         String scriptCode = scriptTag.getScriptCode();
-        String expectedCode =
-            wrapLineSeperatorAround(javascript);
-        assertStringEquals("Expected Code",expectedCode,scriptCode);
-    }
-
-    private String wrapLineSeperatorAround(String javascript) {
-        return Parser.getLineSeparator()+javascript+Parser.getLineSeparator();
+        assertStringEquals("Expected Code",javascript,scriptCode);
     }
 
     public void testScanScriptWithJavascriptLineEndings() throws ParserException {
         String javascript =
+            "\n" +
             "var s = \"This is a string \\\n" +
-            "that spans multiple lines;";
-        createParser("<script>\n"+ javascript + "\n</script>");
-        Parser.setLineSeparator("\n");
+            "that spans multiple lines;\"\n";
+        createParser("<script>"+ javascript + "</script>");
         parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
         String scriptCode = scriptTag.getScriptCode();
-
-        String expectedCode =
-            wrapLineSeperatorAround(javascript);
-        assertStringEquals("Expected Code",expectedCode,scriptCode);
+        assertStringEquals("Expected Code",javascript,scriptCode);
     }
 
 
     public void testScanScriptWithTags() throws ParserException {
-        String javascript = "Anything inside the script tag should be unchanged, even <li> and other html tags";
-        createParser("<script>\n"+ javascript + "\n</script>");
+        String javascript = "\nAnything inside the script tag should be unchanged, even <li> and other html tags\n";
+        createParser("<script>"+ javascript + "</script>");
         parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
         String scriptCode = scriptTag.getScriptCode();
-        String expectedCode =
-            wrapLineSeperatorAround(javascript);
-        assertStringEquals("Expected Code",expectedCode,scriptCode);
+        assertStringEquals("Expected Code",javascript,scriptCode);
     }
 
 

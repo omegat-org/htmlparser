@@ -140,7 +140,7 @@ public class LabelScannerTest extends ParserTestCase {
                                     "<LABEL value=\"ICQ Messenger\">" +
                                     "<LABEL>Mailcity\n</LABEL>"+
                                     "<LABEL>\nIndiatimes\n</LABEL>"+
-                                    "<LABEL>\nRediff\n</LABEL>\n"+
+                                    "<LABEL>\nRediff\n</LABEL>"+
                                     "<LABEL>Cricinfo" +
                                     "<LABEL value=\"Microsoft Passport\">" +
                                     "<LABEL value=\"AOL\"><SPAN>AOL</SPAN></LABEL>" +

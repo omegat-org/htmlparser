@@ -228,6 +228,20 @@ public class Lexer
         throws
             ParserException
     {
+        return nextNode (false);
+    }
+
+    /**
+     * Get the next node from the source.
+     * @param quotesmart If <code>true</code>, strings ignore quoted contents.
+     * @return A RemarkNode, StringNode or TagNode, or <code>null</code> if no
+     * more lexemes are present.
+     * @exception ParserException If there is a problem with the underlying page.
+     */
+    public Node nextNode (boolean quotesmart)
+        throws
+            ParserException
+    {
         Cursor probe;
         char ch;
         Node ret;
@@ -257,7 +271,7 @@ public class Lexer
                     {
                         probe.retreat (); // remark and tag need this character
                         if ('-' == ch)
-                            ret = parseRemark (probe);
+                            ret = parseRemark (probe, quotesmart);
                         else
                         {
                             probe.retreat (); // tag needs the previous one too
@@ -266,10 +280,10 @@ public class Lexer
                     }
                 }
                 else
-                    ret = parseString (probe);
+                    ret = parseString (probe, quotesmart);
                 break;
             default:
-                ret = parseString (probe);
+                ret = parseString (probe, quotesmart);
                 break;
         }
 
@@ -281,8 +295,10 @@ public class Lexer
      * Scan characters until "&lt;/", "&lt;%", "&lt;!" or &lt; followed by a
      * letter is encountered, or the input stream is exhausted, in which
      * case <code>null</code> is returned.
+     * @param cursor The position at which to start scanning.
+     * @param quotesmart If <code>true</code>, strings ignore quoted contents.
      */
-    protected Node parseString (Cursor cursor)
+    protected Node parseString (Cursor cursor, boolean quotesmart)
         throws
             ParserException
     {
@@ -291,15 +307,21 @@ public class Lexer
         int length;
         int begin;
         int end;
+        char quote;
         Node ret;
 
         done = false;
+        quote = 0;
         while (!done)
         {
             ch = mPage.getCharacter (cursor);
             if (0 == ch)
                 done = true;
-            else if ('<' == ch)
+            else if (quotesmart && (0 == quote) && (('\'' == ch) || ('"' == ch)))
+                quote = ch; // enter quoted state
+            else if (quotesmart && (ch == quote))
+                quote = 0; // exit quoted state
+            else if ((0 == quote) && ('<' == ch))
             {
                 ch = mPage.getCharacter (cursor);
                 if (0 == ch)
@@ -313,8 +335,8 @@ public class Lexer
                 }
                 else
                 {
-                    // it's not a tag, so keep going,
-                    // the extra characters consumed are in this string
+                    // it's not a tag, so keep going, but check for quotes
+                    cursor.retreat ();
                 }
             }
         }
@@ -442,6 +464,7 @@ public class Lexer
      * Attributes are stored in a <code>Vector</code> having
      * one slot for each whitespace or attribute/value pair.
      * The first slot is for attribute name (kind of like a standalone attribute).
+     * @param cursor The position at which to start scanning.
      */
     protected Node parseTag (Cursor cursor)
         throws
@@ -623,8 +646,10 @@ public class Lexer
      * All comment text (everything excluding the &lt; and &gt;), is included
      * in the remark text.
      * We allow terminators like --!&gt; even though this isn't part of the spec.
+     * @param cursor The position at which to start scanning.
+     * @param quotesmart If <code>true</code>, strings ignore quoted contents.
      */
-    protected Node parseRemark (Cursor cursor)
+    protected Node parseRemark (Cursor cursor, boolean quotesmart)
         throws
             ParserException
     {
@@ -643,19 +668,19 @@ public class Lexer
                     if ('-' == ch)
                         state = 1;
                     else
-                        return (parseString (cursor));
+                        return (parseString (cursor, quotesmart));
                     break;
                 case 1: // prior to the second open delimiter
                     if ('-' == ch)
                         state = 2;
                     else
-                        return (parseString (cursor));
+                        return (parseString (cursor, quotesmart));
                     break;
                 case 2: // prior to the first closing delimiter
                     if ('-' == ch)
                         state = 3;
                     else if (0 == ch)
-                        return (parseString (cursor)); // no terminator
+                        return (parseString (cursor, quotesmart)); // no terminator
                     break;
                 case 3: // prior to the second closing delimiter
                     if ('-' == ch)

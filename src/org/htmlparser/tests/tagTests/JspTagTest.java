@@ -76,20 +76,20 @@ public class JspTagTest extends ParserTestCase
         Parser.setLineSeparator("\r\n");
         // Register the Jsp Scanner
         parser.addScanner(new JspScanner("-j"));
-        parseAndAssertNodeCount(5);
-        // The first node should be an HTMLJspTag
-        assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof JspTag);
+        parseAndAssertNodeCount(8);
+        // The first node should be an JspTag
+        assertTrue("Node 1 should be an JspTag",node[0] instanceof JspTag);
         JspTag tag = (JspTag)node[0];
         assertStringEquals("Contents of the tag","@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" ",tag.getText());
 
         // The second node should be a normal tag
-        assertTrue("Node 2 should be an Tag",node[1] instanceof Tag);
-        Tag htag = (Tag)node[1];
+        assertTrue("Node 3 should be a normal Tag",node[2] instanceof Tag);
+        Tag htag = (Tag)node[2];
         assertStringEquals("Contents of the tag","jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"",htag.getText());
         assertStringEquals("html","<JSP:USEBEAN ID=\"transfer\" SCOPE=\"session\" CLASS=\"com.bank.PageBean\"/>",htag.toHtml());
-        // The third node should be an HTMLJspTag
-        assertTrue("Node 3 should be an HTMLJspTag",node[2] instanceof JspTag);
-        JspTag tag2 = (JspTag)node[2];
+        // The third node should be an JspTag
+        assertTrue("Node 5 should be an JspTag",node[4] instanceof JspTag);
+        JspTag tag2 = (JspTag)node[4];
         String expected = "\r\n"+
             "    org.apache.struts.util.BeanUtils.populate(transfer, request);\r\n"+
             "    if(request.getParameter(\"marker\") == null)\r\n"+
@@ -138,16 +138,16 @@ public class JspTagTest extends ParserTestCase
         Parser.setLineSeparator("\r\n");
         // Register the Jsp Scanner
         parser.addScanner(new JspScanner("-j"));
-        parseAndAssertNodeCount(5);
-        // The first node should be an HTMLJspTag
-        assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof JspTag);
+        parseAndAssertNodeCount(8);
+        // The first node should be an JspTag
+        assertTrue("Node 1 should be an JspTag",node[0] instanceof JspTag);
         JspTag tag = (JspTag)node[0];
         assertEquals("Raw String of the first JSP tag","<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>",tag.toHtml());
 
 
-        // The third node should be an HTMLJspTag
-        assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof JspTag);
-        JspTag tag2 = (JspTag)node[2];
+        // The third node should be an JspTag
+        assertTrue("Node 5 should be an JspTag",node[5] instanceof JspTag);
+        JspTag tag2 = (JspTag)node[8];
         String expected = "<%\r\n"+
             "    org.apache.struts.util.BeanUtils.populate(transfer, request);\r\n"+
             "    if(request.getParameter(\"marker\") == null)\r\n"+

@@ -136,12 +136,16 @@ public class Cursor
 
         ret = new StringBuffer (9 * 3 + 3); // three ints and delimiters
         ret.append (getPosition ());
-        row = mPage.row (this);
-        column = mPage.column (this);
         ret.append ("[");
-        ret.append (row);
+        if (null != mPage)
+            ret.append (mPage.row (this));
+        else
+            ret.append ("?");
         ret.append (",");
-        ret.append (column);
+        if (null != mPage)
+            ret.append (mPage.column (this));
+        else
+            ret.append ("?");
         ret.append ("]");
 
         return (ret.toString ());
