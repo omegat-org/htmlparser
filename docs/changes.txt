@@ -2,6 +2,7 @@ Integration Build 1.2 - 20021215
 --------------------------------
 [1] Modified API of HTMLImageTag (refactored name of image loc), HTMLLinkTag (added getters)
 [2] Fixed bug 650457 - removeEscapeCharacters() incorrect
+[3] Fixed bug 652263 - HTMLParser and null feedback
 
 Integration Build 1.2 - 20021208
 --------------------------------
