@@ -4,6 +4,7 @@ Integration Build 1.3 - 20030427
 [2] Update to build.xml to new naming scheme, clean up several javaDoc warnings
 [3] Fixed bug #725420 NPE in StringBean.visitTag
 [4] Fixed bug #717573 NullPointerException when unclosed HTML tag inside JSP tag
+[5] Fixed bug #722870 OutOfMemory error
 
 Integration Build 1.3 - 20030420
 --------------------------------
