@@ -365,7 +365,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		try
         {
 			parser = new HTMLParser("http://www.ibm.co.jp", HTMLParser.noFeedback);
-			assertEquals("Character set should be Shift_JIS", "Shift_JIS", parser.getEncoding ());
+			assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
 		}
 		catch (HTMLParserException e)
         {
@@ -389,7 +389,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 			parser = new HTMLParser("http://www.sony.co.jp", HTMLParser.noFeedback);
 			assertEquals("Character set by default is ISO-8859-1", "ISO-8859-1", parser.getEncoding ());
             enumeration = parser.elements();
-			assertEquals("Character set should be Shift_JIS", "Shift_JIS", parser.getEncoding ());
+			assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
 		}
 		catch (HTMLParserException e)
         {

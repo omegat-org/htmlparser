@@ -423,8 +423,6 @@ public class HTMLParser
     {
         String ret;
         
-        ret = _default;
-        
         try
         {
             Class cls;
@@ -438,13 +436,27 @@ public class HTMLParser
             object = method.invoke (object, new Object[] { });
             ret = (String)object;
         }
-        catch (Exception e)
+        catch (ClassNotFoundException cnfe)
         {
-            // aside from the usual reflection exceptions
-            // this could also throw
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (NoSuchMethodException nsme)
+        {
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (IllegalAccessException ia)
+        {
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (java.lang.reflect.InvocationTargetException ita)
+        {
             // java.nio.charset.IllegalCharsetNameException
             // and java.nio.charset.UnsupportedCharsetException
-            // but do nothing, the default is already returned
+            // return the default
+            ret = _default;
         }
         
         return (ret);
