@@ -12,6 +12,11 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20030325
+--------------------------------
+
+This is the same as Release Build 1.3 except the default minor version is 4.
+
 Release Build 1.3 - 20030525
 --------------------------------
 2003-05-25 15:30  derrickoswald

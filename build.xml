@@ -65,8 +65,8 @@
     <echo message="*  Incorporating version info    *"/>
     <echo message="**********************************"/>
 
-    <echo message="Replacing version VERSION_NUMBER = &quot;${VERSION_NUMBER}&quot; with VERSION_NUMBER = &quot;${versionNumber}&quot; in ${src}/org/htmlparser/Parser.java"/>
-    <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_NUMBER = &quot;${VERSION_NUMBER}&quot;" value="VERSION_NUMBER = &quot;${versionNumber}&quot;"/>
+    <echo message="Replacing version VERSION_NUMBER = ${VERSION_NUMBER} with VERSION_NUMBER = ${versionNumber} in ${src}/org/htmlparser/Parser.java"/>
+    <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_NUMBER = ${VERSION_NUMBER}" value="VERSION_NUMBER = ${versionNumber}"/>
 
     <echo message="Replacing version VERSION_TYPE = &quot;${VERSION_TYPE}&quot; with VERSION_TYPE = &quot;${versionType}&quot; in ${src}/org/htmlparser/Parser.java"/>
     <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_TYPE = &quot;${VERSION_TYPE}&quot;" value="VERSION_TYPE = &quot;${versionType}&quot;"/>
