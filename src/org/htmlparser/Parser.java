@@ -82,7 +82,7 @@ public class Parser
      * The date of the version.
      */
     public final static String
-    VERSION_DATE = "Jul 28, 2004"
+    VERSION_DATE = "Feb 13, 2005"
     ;
 
     /**
@@ -153,7 +153,7 @@ public class Parser
 
     /**
      * Set the connection manager all Parsers use.
-     * @return The connection manager.
+     * @param manager The new connection manager.
      */
     public static void setConnectionManager (ConnectionManager manager)
     {
@@ -422,8 +422,8 @@ public class Parser
     }
 
     /**
-     * Get the current node factory.
-     * @return The parser's node factory.
+     * Set the current node factory.
+     * @param factory The new node factory for the parser.
      */
     public void setNodeFactory (NodeFactory factory)
     {

@@ -841,7 +841,7 @@ public class FilterBuilder
 
     /**
      * Save the workspace contents to file.
-     * @param The name of the file to save it under.
+     * @param name The name of the file to save it under.
      */
     public void save (String name)
     {
@@ -1454,7 +1454,7 @@ public class FilterBuilder
      * Sets <code>this</code> up to listen to each command
      * in the list as a MouseListener.
      * Recursively descends the tree adding to all contained elements also.
-     * @param The container with commands in it.
+     * @param filters The container with commands in it.
      */
     public void setupMouseListeners (Filter[] filters)
     {
@@ -1475,7 +1475,7 @@ public class FilterBuilder
      * Set up drop targets.
      * Recursively descends the filter tree and sets up
      * the filter lists as drop targets.
-     * @param The container with filters in it.
+     * @param filters The container with filters in it.
      */
     public void setupDropTargets (Filter[] filters)
     {
@@ -1548,7 +1548,7 @@ public class FilterBuilder
     /**
      * Read a workspace from file.
      * The current contents are erased.
-     * @param The name of the file to open.
+     * @param name The name of the file to open.
      */
     public void open (String name)
     {
@@ -1609,7 +1609,7 @@ public class FilterBuilder
      * Show a pop up context menu.
      * Shows a context sensitive popup menu at the location of the
      * mouse event.
-     * @param The mouse event that initiates the popup.
+     * @param event The mouse event that initiates the popup.
      */
     public void showContextMenu (MouseEvent event)
     {
@@ -2013,7 +2013,6 @@ public class FilterBuilder
      * Handles window closing event.
      * Performs function <code>exitApplication()</code>.
      * @param event The window event.
-     * @see #shutdown
      */
     public void windowClosing (WindowEvent event)
     {
@@ -2035,7 +2034,6 @@ public class FilterBuilder
      * is displayed as the icon specified in the window's 
      * iconImage property.
      * <i>Not used.</i>
-     * @see Frame#setIconImage
      * @param event The window event.
      */
     public void windowIconified (WindowEvent event) {}

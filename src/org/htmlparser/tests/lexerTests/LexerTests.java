@@ -37,6 +37,7 @@ import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -599,6 +600,10 @@ public class LexerTests extends ParserTestCase
         mAcceptable.add ("TD");
         mAcceptable.add ("TITLE");
         mAcceptable.add ("TR");
+        mAcceptable.add ("META");
+        mAcceptable.add ("STRONG");
+        mAcceptable.add ("FORM");
+        mAcceptable.add ("INPUT");
     }
 
     /**
@@ -654,9 +659,19 @@ public class LexerTests extends ParserTestCase
         NodeIterator iterator;
         
         parser = new Parser ("http://www.009.com/");
-        iterator = parser.elements ();
-        while (iterator.hasMoreNodes ())
-            checkTagNames (iterator.nextNode ());
+        try
+        {
+            iterator = parser.elements ();
+            while (iterator.hasMoreNodes ())
+                checkTagNames (iterator.nextNode ());
+        }
+        catch (EncodingChangeException ece)
+        {
+            parser.reset ();
+            iterator = parser.elements ();
+            while (iterator.hasMoreNodes ())
+                checkTagNames (iterator.nextNode ());
+        }
     }
 
     /**

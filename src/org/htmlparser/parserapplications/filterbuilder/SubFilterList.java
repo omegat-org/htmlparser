@@ -182,7 +182,7 @@ public class SubFilterList
 
     /**
      * Remove a filter from the container.
-     * @param filter The filter to remove from the container.
+     * @param index The index of the filter to remove from the container.
      */
     public void removeFilter (int index)
     {

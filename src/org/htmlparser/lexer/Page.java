@@ -194,7 +194,7 @@ public class Page
 
     /**
      * Set the connection manager to use.
-     * @return The connection manager.
+     * @param manager The new connection manager.
      */
     public static void setConnectionManager (ConnectionManager manager)
     {

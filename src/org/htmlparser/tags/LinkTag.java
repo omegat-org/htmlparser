@@ -163,8 +163,8 @@ public class LinkTag extends CompositeTag
     {
         String ret;
 
-        if (null != getChildren())
-            ret = getChildren().toString();
+        if (null != getChildren ())
+            ret = getChildren ().asString ();
         else
             ret = "";
 

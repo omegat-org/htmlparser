@@ -15,6 +15,222 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.5 - 20050213
+--------------------------------
+2005-02-13 15:49  derrickoswald
+
+	* src/org/htmlparser/parserapplications/filterbuilder/:
+	images/.xvpics/copy.gif, images/.xvpics/cut.gif,
+	images/.xvpics/delete.gif, wrappers/images/.xvpics/AndFilter.gif,
+	wrappers/images/.xvpics/HasAttributeFilter.gif,
+	wrappers/images/.xvpics/HasChildFilter.gif,
+	wrappers/images/.xvpics/HasParentFilter.gif,
+	wrappers/images/.xvpics/HasSiblingFilter.gif,
+	wrappers/images/.xvpics/NodeClassFilter.gif,
+	wrappers/images/.xvpics/NotFilter.gif,
+	wrappers/images/.xvpics/OrFilter.gif,
+	wrappers/images/.xvpics/RegexFilter.gif,
+	wrappers/images/.xvpics/StringFilter.gif,
+	wrappers/images/.xvpics/StringFilter2.gif,
+	wrappers/images/.xvpics/TagNameFilter.gif:
+
+	FilterBuilder remove mistakenly dropped files.
+	
+2005-02-13 15:43  derrickoswald
+
+	* src/org/htmlparser/parserapplications/filterbuilder/:
+	Filter.java, FilterBuilder.java, HtmlTreeCellRenderer.java,
+	HtmlTreeModel.java, SubFilterList.java, images/about.gif,
+	images/copy.gif, images/cut.gif, images/delete.gif, images/new.gif,
+	images/open.gif, images/paste.gif, images/save.gif,
+	wrappers/AndFilterWrapper.java,
+	wrappers/HasAttributeFilterWrapper.java,
+	wrappers/HasChildFilterWrapper.java,
+	wrappers/HasParentFilterWrapper.java,
+	wrappers/HasSiblingFilterWrapper.java,
+	wrappers/NodeClassFilterWrapper.java,
+	wrappers/NotFilterWrapper.java, wrappers/OrFilterWrapper.java,
+	wrappers/RegexFilterWrapper.java,
+	wrappers/StringFilterWrapper.java,
+	wrappers/TagNameFilterWrapper.java, wrappers/images/AndFilter.gif,
+	wrappers/images/HasAttributeFilter.gif,
+	wrappers/images/HasChildFilter.gif,
+	wrappers/images/HasParentFilter.gif,
+	wrappers/images/HasSiblingFilter.gif,
+	wrappers/images/NodeClassFilter.gif, wrappers/images/OrFilter.gif,
+	wrappers/images/RegexFilter.gif, wrappers/images/TagNameFilter.gif,
+	wrappers/images/.xvpics/AndFilter.gif,
+	wrappers/images/.xvpics/HasAttributeFilter.gif,
+	wrappers/images/.xvpics/HasChildFilter.gif,
+	wrappers/images/.xvpics/HasParentFilter.gif,
+	wrappers/images/.xvpics/HasSiblingFilter.gif,
+	wrappers/images/.xvpics/NodeClassFilter.gif,
+	wrappers/images/.xvpics/NotFilter.gif,
+	wrappers/images/.xvpics/OrFilter.gif,
+	wrappers/images/.xvpics/RegexFilter.gif,
+	wrappers/images/.xvpics/StringFilter.gif,
+	wrappers/images/.xvpics/StringFilter2.gif,
+	wrappers/images/.xvpics/TagNameFilter.gif,
+	wrappers/images/NotFilter.gif, wrappers/images/StringFilter.gif,
+	images/.xvpics/delete.gif, images/.xvpics/copy.gif,
+	images/.xvpics/cut.gif, layouts/NullLayoutManager.java,
+	layouts/VerticalLayoutManager.java:
+
+	FilterBuilder
+	
+2005-02-13 15:36  derrickoswald
+
+	* src/org/htmlparser/filters/AndFilter.java,
+	src/org/htmlparser/filters/HasAttributeFilter.java,
+	src/org/htmlparser/filters/HasChildFilter.java,
+	src/org/htmlparser/filters/HasParentFilter.java,
+	src/org/htmlparser/filters/HasSiblingFilter.java,
+	src/org/htmlparser/filters/NodeClassFilter.java,
+	src/org/htmlparser/filters/NotFilter.java,
+	src/org/htmlparser/filters/OrFilter.java,
+	src/org/htmlparser/filters/RegexFilter.java,
+	src/org/htmlparser/filters/StringFilter.java,
+	src/org/htmlparser/filters/TagNameFilter.java,
+	src/org/htmlparser/lexerapplications/thumbelina/Thumbelina.java,
+	src/org/htmlparser/tags/TableRow.java,
+	src/org/htmlparser/tags/TableTag.java,
+	src/org/htmlparser/NodeFilter.java, src/org/htmlparser/Parser.java,
+	bin/filterbuilder, bin/filterbuilder.bat, bin/thumbelina,
+	bin/thumbelina.bat, src/org/htmlparser/tests/ParserTest.java,
+	src/org/htmlparser/tests/visitorsTests/HtmlPageTest.java,
+	build.xml, src/org/htmlparser/beans/BeanyBaby.java,
+	src/org/htmlparser/beans/FilterBean.java,
+	src/org/htmlparser/util/NodeList.java:
+
+	FilterBuilder
+
+	Implemented:
+    RFE #1000063    FilterBean
+    Task #93153	    filter builder tool
+	
+2005-01-09 19:43  derrickoswald
+
+	* docs/samples.html:
+
+	Fix link to StringExtractor.
+	
+2004-09-24 19:16  derrickoswald
+
+	* docs/contributors.html:
+
+	Update Alberto's contributor info.
+	
+2004-09-06 13:19  derrickoswald
+
+	* build.xml:
+
+	Provide for building with JDK 1.5 by adding source="1.3" to javac tasks.
+	
+2004-09-06 13:12  derrickoswald
+
+	* src/org/htmlparser/: tags/MetaTag.java, lexer/Page.java,
+	tests/ParserTest.java:
+
+	Incorporate patch #1004985 Page.java, by making getCharset() and findCharset() static.
+	
+2004-09-01 22:28  derrickoswald
+
+	* src/org/htmlparser/tests/scannersTests/JspScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/ScriptScannerTest.java,
+	src/org/htmlparser/Parser.java,
+	src/org/htmlparser/lexer/Lexer.java,
+	src/org/htmlparser/lexer/Page.java,
+	src/org/htmlparser/lexerapplications/thumbelina/ThumbelinaFrame.java,
+	src/org/htmlparser/tests/tagTests/ImageTagTest.java,
+	src/org/htmlparser/tests/tagTests/JspTagTest.java,
+	src/org/htmlparser/tests/tagTests/LinkTagTest.java,
+	src/org/htmlparser/tests/tagTests/ScriptTagTest.java,
+	src/org/htmlparser/tests/tagTests/TagTest.java,
+	src/org/htmlparser/http/ConnectionManager.java,
+	src/org/htmlparser/http/ConnectionMonitor.java,
+	src/org/htmlparser/http/Cookie.java,
+	src/org/htmlparser/http/package.html,
+	src/org/htmlparser/tests/parserHelperTests/StringParserTest.java,
+	build.xml,
+	src/org/htmlparser/tests/parserHelperTests/RemarkNodeParserTest.java:
+
+	Implemented:
+	RFE #1017249	HTML Client Doesn't Support Cookies but will follow redirect
+	RFE #1010586	Add support for password protected URL
+	and RFE #1000739	Add support for proxy scenario
+	A new http package is added, the primary class being Connectionmanager which
+	handles proxies, passwords and cookies. Some testing still needed.
+	Also removed some line separator cruft.
+	
+2004-08-27 05:56  anul
+
+	* src/org/htmlparser/tests/utilTests/HTMLParserUtilsTest.java:
+
+	
+	New tests added for:
+	bug fixing and trimAllTags method test.
+	
+2004-08-27 05:54  anul
+
+	* src/org/htmlparser/util/ParserUtils.java:
+
+	
+	Bug fixing and trimAllTags method added.
+	
+2004-08-24 23:36  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java, tests/ParserTest.java:
+
+	Fix bug #1005409 Input file not free by parser.
+	Files larger than 16K on Windows can now be explicitly closed with Page.close(),
+	or will be closed when the page is finalized.
+	
+2004-07-31 22:16  derrickoswald
+
+	* src/org/htmlparser/lexer/: Lexer.java, Page.java, PageIndex.java:
+
+	Speed optimizations based on profiling.
+	
+2004-07-31 12:42  derrickoswald
+
+	* src/org/htmlparser/: lexerapplications/thumbelina/Sequencer.java,
+	lexerapplications/thumbelina/Thumbelina.java,
+	lexerapplications/thumbelina/ThumbelinaFrame.java,
+	lexerapplications/thumbelina/TileSet.java, lexer/Cursor.java,
+	lexer/Lexer.java, lexer/Page.java, tests/lexerTests/KitTest.java,
+	tests/lexerTests/PageTests.java, tests/lexerTests/SourceTests.java,
+	tests/lexerTests/TagTests.java, tests/tagTests/FormTagTest.java,
+	tests/tagTests/ImageTagTest.java, tests/tagTests/LinkTagTest.java,
+	tests/tagTests/ObjectCollectionTest.java,
+	tests/tagTests/ScriptTagTest.java,
+	tests/tagTests/TableTagTest.java, tests/tagTests/TagTest.java,
+	scanners/CompositeTagScanner.java, scanners/ScriptScanner.java,
+	scanners/StyleScanner.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/utilTests/BeanTest.java,
+	tests/utilTests/CharacterTranslationTest.java,
+	tests/utilTests/SortTest.java, tests/FunctionalTests.java,
+	tests/InstanceofPerformanceTest.java, tests/ParserTest.java,
+	tests/ParserTestCase.java, tests/PerformanceTest.java,
+	tests/visitorsTests/ScriptCommentTest.java,
+	tests/visitorsTests/UrlModifyingVisitorTest.java,
+	util/CommandLine.java, util/IteratorImpl.java, util/NodeList.java,
+	util/Translate.java, filters/HasParentFilter.java,
+	lexerapplications/tabby/Tabby.java, tags/CompositeTag.java,
+	tags/LinkTag.java, tags/TableColumn.java, tags/TableHeader.java,
+	util/CharacterReference.java, util/LinkProcessor.java,
+	util/ParserUtils.java, Attribute.java,
+	PrototypicalNodeFactory.java, nodes/TagNode.java,
+	visitors/UrlModifyingVisitor.java:
+
+	Remove unused variables and other fixes exposed by turning on compiler warnings.
+	
+2004-07-30 21:22  derrickoswald
+
+	* src/org/htmlparser/tests/MemoryTest.java:
+
+	Changed test case MemoryTest.testBigFile () to check for characters recieved, not bytes.
+
 Integration Build 1.5 - 20040728
 --------------------------------
 

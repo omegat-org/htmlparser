@@ -43,7 +43,7 @@ public class NotFilter implements NodeFilter
      * Creates a new instance of a NotFilter.
      * With no predicates, this would always return <code>false</code>
      * from {@link #accept}.
-     * @see #setPredicates
+     * @see #setPredicate
      */
     public NotFilter ()
     {

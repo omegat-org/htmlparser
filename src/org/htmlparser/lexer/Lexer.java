@@ -140,7 +140,7 @@ public class Lexer
 
     /**
      * Set the page this lexer is working on.
-     * @return The page that nodes will be read from.
+     * @param page The page that nodes will be read from.
      */
     public void setPage (Page page)
     {
@@ -360,7 +360,7 @@ public class Lexer
      * Scan characters until "&lt;/", "&lt;%", "&lt;!" or &lt; followed by a
      * letter is encountered, or the input stream is exhausted, in which
      * case <code>null</code> is returned.
-     * @param cursor The position at which to start scanning.
+     * @param start The position at which to start scanning.
      * @param quotesmart If <code>true</code>, strings ignore quoted contents.
      */
     protected Node parseString (int start, boolean quotesmart)
@@ -574,7 +574,7 @@ public class Lexer
      * Attributes are stored in a <code>Vector</code> having
      * one slot for each whitespace or attribute/value pair.
      * The first slot is for attribute name (kind of like a standalone attribute).
-     * @param cursor The position at which to start scanning.
+     * @param start The position at which to start scanning.
      * @return The parsed tag.
      */
     protected Node parseTag (int start)
@@ -807,7 +807,7 @@ public class Lexer
      * All comment text (everything excluding the &lt; and &gt;), is included
      * in the remark text.
      * We allow terminators like --!&gt; even though this isn't part of the spec.
-     * @param cursor The position at which to start scanning.
+     * @param start The position at which to start scanning.
      * @param quotesmart If <code>true</code>, strings ignore quoted contents.
      */
     protected Node parseRemark (int start, boolean quotesmart)
@@ -912,7 +912,7 @@ public class Lexer
      * Parse a java server page node.
      * Scan characters until "%&gt;" is encountered, or the input stream is
      * exhausted, in which case <code>null</code> is returned.
-     * @param cursor The position at which to start scanning.
+     * @param start The position at which to start scanning.
      */
     protected Node parseJsp (int start)
         throws

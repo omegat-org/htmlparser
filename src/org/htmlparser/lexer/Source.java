@@ -219,7 +219,6 @@ public abstract class Source
      * @param buffer The buffer to append to.
      * @param offset The offset of the first character.
      * @param length The number of characters to retrieve.
-     * @return A string containing the <code>length</code> characters at <code>offset</code>.
      * @exception IOException If the source is closed or the offset or
      * (offset + length) is beyond {@link #offset()}.
      */

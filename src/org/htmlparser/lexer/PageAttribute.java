@@ -366,8 +366,7 @@ public class PageAttribute
      * Get the raw value of the attribute.
      * The part after the equals sign, or the text if it's just a whitepace
      * 'attribute'. This includes the quotes around the value if any.
-     * @return The value, or <code>null</code> if it's a stand-alone attribute,
-     * or the text if it's just a whitepace 'attribute'.
+     * @param buffer The string buffer to append the attribute value to.
      * @see #getRawValue()
      */
     public void getRawValue (StringBuffer buffer)

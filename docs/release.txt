@@ -1,4 +1,4 @@
-HTMLParser Version 1.5 (Integration Build Jul 28, 2004)
+HTMLParser Version 1.5 (Integration Build Feb 13, 2005)
 *********************************************
 
 Contents of the distribution
@@ -28,6 +28,9 @@ Changes since Version 1.4
 -------------------------
 New APIs
     Implement rudimentary sax parser. Currently exposes DOM parser via sax project 
+	A new http package is added, the primary class being Connectionmanager which
+	handles proxies, passwords and cookies. Some testing still needed.
+	Also removed some line separator cruft.
 Configuration Management
     Removed the need for the Translate class to be packaged with htmllexer.jar.
     This results in a lighter weight component.
@@ -47,17 +50,25 @@ Refactoring
     Added ObjectTag (like an applet tag).
     Added a real StringSource that reads directly from a String rather than
     creating a byte array. This avoids character encoding losses.
+    Incorporate patch #1004985 Page.java, by making getCharset() and findCharset() static.
+    Incorporated some speed optimizations based on profiling.
 Filters
     Added CssSelectorNodeFilter and RegExFilter.
+    Added the filter builder tool.
     
 Enhancement Requests
 --------------------
 943593 LinkProcessor.extract(link,base) weird behaviour?
 943197 Accept gzip / deflate content encodings
 874000 Remove specialized tag signatures from NodeVisitor
+1000063 FilterBean
+1017249	HTML Client Doesn't Support Cookies but will follow redirect
+1010586	Add support for password protected URL
+1000739	Add support for proxy scenario
 
 Bug Fixes
 ---------
+1005409 Input file not free by parser.
 998195 SiteCatpurer just crashed
 995703 Parser Crash
 988846 Linkbean getLinks() segmentation fault (duplicate of above)

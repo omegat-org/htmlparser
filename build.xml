@@ -453,7 +453,7 @@ Update the Web Site
     <delete file="${resources}/HtmlTaglet.class"/>
   </target>
 
-  <target name="release" depends="jar,thumbelina,javadoc" description="prepare the release files">
+  <target name="release" depends="jar,thumbelina,filterbuilder,javadoc" description="prepare the release files">
   </target>
 
   <!-- Prepare the sources zip, allowing folks to build the code -->
