@@ -16,8 +16,8 @@
   <property name="dist"  value="release/htmlparser${versionQualifier}"/>
   <property name="releaseDir" value="release"/>
   <property name="finalLoc" value="distribution"/>
-  <!-- location of junit.jar if there is no link to it in $JAVA_HOME/jre/lib/ext -->
-  <property name="junit.jar" value="../nonexistant_directory/junit.jar"/>
+  <property name="junit.jar" value="lib/junit.jar"/>
+  <property name="commons-logging.jar" value="lib/commons-logging.jar"/>
 
   <target name="init" description="initialize version properties">
     <echo message="**********************************"/>
@@ -125,7 +125,7 @@
     <echo message="**********************************"/>
 
     <!-- Compile the java code in ${src} -->
-    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" />
+    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" classpath=".:${commons-logging.jar}" />
   </target>
 
   <!-- Create the distribution of htmlparser.jar -->
@@ -171,6 +171,7 @@
     <javac srcdir="${src}" includes="org/htmlparser/tests/**" debug="on">
       <classpath>
         <pathelement location="${junit.jar}"/>
+        <pathelement location="${commons-logging.jar}"/>
       </classpath>
     </javac>
     <java classname="org.htmlparser.tests.AllTests" fork="yes" failonerror="yes">
@@ -178,6 +179,7 @@
         <pathelement location="${dist}/lib/htmlparser.jar"/>
         <pathelement location="${src}"/>
         <pathelement location="${junit.jar}"/>
+        <pathelement location="${commons-logging.jar}"/>
       </classpath>
       <arg value="-text"/>
     </java>
