@@ -136,10 +136,10 @@ public class ParserUtils
 
 	/**
 	 * Search given node and pick up any objects of given type, return
-	 * HTMLNode array.
+	 * Node array.
 	 * @param node
 	 * @param type
-	 * @return HTMLNode[]
+	 * @return Node[]
 	 */
 	public static Node[] findTypeInNode(Node node, Class type) {
 		NodeList nodeList = new NodeList();

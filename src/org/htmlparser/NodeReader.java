@@ -163,7 +163,7 @@ public class NodeReader extends BufferedReader
 	}
 	/**
 	 * Read the next element
-	 * @return HTMLNode - The next node
+	 * @return Node - The next node
  	 */
 	public Node readElement() throws ParserException
 	{

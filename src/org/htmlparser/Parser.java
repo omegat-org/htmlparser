@@ -91,7 +91,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * // In this example, we are registering all the common scanners
  * parser.registerScanners(); 
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
- *    HTMLNode node = (HTMLNode)e.nextElement();
+ *    Node node = (Node)e.nextElement();
  * 	  node.print();
  * }
  * </pre>
@@ -102,7 +102,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * // In this example, none of the scanners need to be registered
  * // as a string node is not a tag to be scanned for.
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
- *    HTMLNode node = (HTMLNode)e.nextElement();
+ *    Node node = (Node)e.nextElement();
  *    if (node instanceof HTMLStringNode) {
  *        HTMLStringNode stringNode = (HTMLStringNode)node;
  *        System.out.println(stringNode.getText());
@@ -116,7 +116,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * parser.addScanner(new HTMLLinkScanner("-l"));
  * for (Enumeration e = parser.elements();e.hasMoreElements();) {
- *    HTMLNode node = (HTMLNode)e.nextElement();
+ *    Node node = (Node)e.nextElement();
  *    if (node instanceof HTMLLinkTag) {
  *        HTMLLinkTag linkTag = (HTMLLinkTag)node;
  *        System.out.println(linkTag.getLink());
@@ -873,7 +873,7 @@ public class Parser
 	 * Parser parser = new Parser("http://www.yahoo.com");
 	 * parser.registerScanners();
 	 * for (HTMLEnumeration e = parser.elements();e.hasMoreElements();) {
-	 *    HTMLNode node = e.nextHTMLNode();
+	 *    Node node = e.nextHTMLNode();
 	 *    if (node instanceof HTMLStringNode) {
 	 *      // Downcasting to HTMLStringNode
 	 *      HTMLStringNode stringNode = (HTMLStringNode)node;

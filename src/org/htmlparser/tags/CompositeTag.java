@@ -210,7 +210,7 @@ public abstract class CompositeTag extends Tag {
 	/**
 	 * Get child at given index
 	 * @param index
-	 * @return HTMLNode
+	 * @return Node
 	 */
 	public Node childAt(int index) {
 		return childTags.elementAt(index);

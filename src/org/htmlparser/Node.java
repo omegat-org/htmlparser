@@ -36,7 +36,7 @@ import org.htmlparser.visitors.NodeVisitor;
 
 
 /**
- * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)
+ * A Node interface is implemented by all types of nodes (tags, string elements, etc)
  */
 public abstract class Node
     implements
@@ -56,7 +56,7 @@ public abstract class Node
 	 * Variable to store lineSeparator.
 	 * This is setup to read <code>line.separator</code> from the System property.
 	 * However it can also be changed using the mutator methods.
-	 * This will be used in the toHTML() methods in all the sub-classes of HTMLNode.
+	 * This will be used in the toHTML() methods in all the sub-classes of Node.
 	 */
     protected static String lineSeparator = System.getProperty ("line.separator", "\n");
 
@@ -86,9 +86,9 @@ public abstract class Node
 	 * of a web page, regardless of a node.<br>
 	 * Typical application code (for extracting only the text from a web page) would then be simplified to  :<br>
 	 * <pre>
-	 * HTMLNode node;
+	 * Node node;
 	 * for (Enumeration e = parser.elements();e.hasMoreElements();) {
-	 *    node = (HTMLNode)e.nextElement();
+	 *    node = (Node)e.nextElement();
 	 *    System.out.println(node.toPlainTextString()); // Or do whatever processing you wish with the plain text string
 	 * }
 	 * </pre>
@@ -124,7 +124,7 @@ public abstract class Node
 	 * like :
 	 * <pre>
 	 * NodeList collectionList = new NodeList(); 
-	 * HTMLNode node; 
+	 * Node node; 
 	 * String filter = HTMLLinkTag.LINK_TAG_FILTER; 
 	 * for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
 	 * 		node = e.nextNode();
@@ -159,7 +159,7 @@ public abstract class Node
 	 * like :
 	 * <pre>
 	 * NodeList collectionList = new NodeList(); 
-	 * HTMLNode node; 
+	 * Node node; 
 	 * for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
 	 * 		node = e.nextNode();
 	 * 		node.collectInto (collectionVector, HTMLLinkTag.class);

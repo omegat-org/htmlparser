@@ -350,7 +350,7 @@ public class Tag extends Node
 	 * A call to a tag's toHTML() method will render it in HTML
 	 * Most tags that do not have children and inherit from HTMLTag,
 	 * do not need to override toHTML().
-	 * @see org.htmlparser.HTMLNode#toHTML()
+	 * @see org.htmlparser.Node#toHTML()
 	 */
 	public String toHtml() {
 		StringBuffer sb = new StringBuffer();
@@ -413,7 +413,7 @@ public class Tag extends Node
      * filter. The match is based on the string object and not its contents,
      * so ensure that you are using static final filter strings provided
      * in the tag classes.
-     * @see org.htmlparser.HTMLNode#collectInto(Vector, String)
+     * @see org.htmlparser.Node#collectInto(Vector, String)
      */
 	public void collectInto(NodeList collectionList, String filter) {
 		if (thisScanner!=null && thisScanner.getFilter()==filter) 

@@ -71,10 +71,10 @@ public class LinkTag extends CompositeTag
 	 * <p>
 	 * The following code will get all the images inside a link tag.
 	 * <pre>
-	 * HTMLNode node ;
+	 * Node node ;
 	 * HTMLImageTag imageTag;
 	 * for (Enumeration e=linkTag.linkData();e.hasMoreElements();) {
-	 * 		node = (HTMLNode)e.nextElement();
+	 * 		node = (Node)e.nextElement();
 	 * 		if (node instanceof HTMLImageTag) {
 	 * 			imageTag = (HTMLImageTag)node;
 	 * 			// Process imageTag
@@ -84,7 +84,7 @@ public class LinkTag extends CompositeTag
 	 * There is another mechanism available that allows for uniform extraction of images. You could do this to
 	 * get all images from a web page : 
 	 * <pre>
-	 * HTMLNode node;
+	 * Node node;
 	 * Vector imageCollectionVector = new Vector();
 	 * for (HTMLEnumeration e = parser.elements();e.hasMoreNode();) {
 	 * 		node = e.nextHTMLNode();
