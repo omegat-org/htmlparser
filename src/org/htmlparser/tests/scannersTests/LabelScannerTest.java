@@ -116,7 +116,7 @@ public class LabelScannerTest extends ParserTestCase {
 	}
 	
 	public void testNestedLabels() throws ParserException {
-		createParser("<label>John Doe<label>Jane Doe</label>");
+		createParser("<label id=\"attr1\"><label>Jane Doe");
 		parser.registerScanners();
 		LabelScanner labelScanner = new LabelScanner("-l");
 		parser.addScanner(labelScanner);
@@ -125,12 +125,70 @@ public class LabelScannerTest extends ParserTestCase {
 		assertTrue(node[1] instanceof LabelTag);
 		
 		LabelTag labelTag = (LabelTag) node[0];
-		assertStringEquals("Label","<LABEL>John Doe</LABEL>",labelTag.toHtml());		
+		assertStringEquals("Label","<LABEL ID=\"attr1\" ></LABEL>",labelTag.toHtml());		
 		labelTag = (LabelTag) node[1];
 		assertStringEquals("Label","<LABEL>Jane Doe</LABEL>",labelTag.toHtml());
 		Hashtable attr = labelTag.getAttributes();
 		assertNull("ID",attr.get("id"));
 	}
+	
+	public void testNestedLabels2() throws ParserException {
+		String testHTML = new String(
+									"<LABEL value=\"Google Search\">Google</LABEL>" +
+									"<LABEL value=\"AltaVista Search\">AltaVista" +
+									"<LABEL value=\"Lycos Search\"></LABEL>" +
+									"<LABEL>Yahoo!</LABEL>" + 
+									"<LABEL>\nHotmail</LABEL>" +
+									"<LABEL value=\"ICQ Messenger\">" +
+									"<LABEL>Mailcity\n</LABEL>"+
+									"<LABEL>\nIndiatimes\n</LABEL>"+
+									"<LABEL>\nRediff\n</LABEL>\n"+
+									"<LABEL>Cricinfo" +
+									"<LABEL value=\"Microsoft Passport\">" +
+									"<LABEL value=\"AOL\"><SPAN>AOL</SPAN></LABEL>" +
+									"<LABEL value=\"Time Warner\">Time <B>Warner <SPAN>AOL </SPAN>Inc.</B>"
+									);
+		createParser(testHTML);
+		//parser.registerScanners();
+		LabelScanner labelScanner = new LabelScanner("-l");
+		parser.addScanner(labelScanner);
+		parseAndAssertNodeCount(13);
+		
+		for(int j=0;j<nodeCount;j++)
+		{
+			//assertTrue("Node " + j + " should be Label Tag",node[j] instanceof LabelTag);
+			System.out.println(node[j].getClass().getName());
+			System.out.println(node[j].toHtml());
+		}
+		
+		LabelTag LabelTag;
+		LabelTag = (LabelTag) node[0];
+		assertStringEquals("HTML String","<LABEL VALUE=\"Google Search\">Google</LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[1];
+		assertStringEquals("HTML String","<LABEL VALUE=\"AltaVista Search\">AltaVista</LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[2];
+		assertStringEquals("HTML String","<LABEL VALUE=\"Lycos Search\"></LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[3];
+		assertStringEquals("HTML String","<LABEL>Yahoo!</LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[4];
+		assertStringEquals("HTML String","<LABEL>\r\nHotmail</LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[5];
+		assertStringEquals("HTML String","<LABEL VALUE=\"ICQ Messenger\"></LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[6];
+		assertStringEquals("HTML String","<LABEL>Mailcity\r\n</LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[7];
+		assertStringEquals("HTML String","<LABEL>\r\nIndiatimes\r\n</LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[8];
+		assertStringEquals("HTML String","<LABEL>\r\nRediff\r\n</LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[9];
+		assertStringEquals("HTML String","<LABEL>Cricinfo</LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[10];
+		assertStringEquals("HTML String","<LABEL VALUE=\"Microsoft Passport\"></LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[11];
+		assertStringEquals("HTML String","<LABEL VALUE=\"AOL\"><SPAN>AOL</SPAN></LABEL>",LabelTag.toHtml());
+		LabelTag = (LabelTag) node[12];
+		assertStringEquals("HTML String","<LABEL value=\"Time Warner\">Time <B>Warner <SPAN>AOL </SPAN>Inc.</B>",LabelTag.toHtml());
+	}	
 	
 	public static TestSuite suite() {
 		return new TestSuite(LabelScannerTest.class);
