@@ -126,6 +126,20 @@ public class ScriptScanner extends CompositeTagScanner {
 					sameLine = false;
 			}
 			while (line!=null && !endTagFound);
+			if (endTag == null) {
+				// If end tag doesn't exist, create one
+				String endTagName = tag.getTagName();
+				int endTagBegin = reader.getLastReadPosition()+1 ;
+				int endTagEnd = endTagBegin + endTagName.length() + 2; 
+				endTag = new EndTag(
+					new TagData(
+						endTagBegin,
+						endTagEnd,
+						endTagName,
+						currLine
+					)
+				);
+			}
 			NodeList childrenNodeList = new NodeList();
 			childrenNodeList.add(
 				new StringNode(

@@ -535,4 +535,14 @@ public class ScriptScannerTest extends ParserTestCase
 		);
 	}
 	
+	/**
+	 * Tests a bug in ScriptScanner where a NPE would be thrown if the
+	 * script tag was not closed before the document ended.
+	 */ 
+	public void testScanNoEndTag() throws ParserException	{
+		createParser("<script>");
+		parser.addScanner(new ScriptScanner("-s"));
+		parseAndAssertNodeCount(1);
+	}
+	
 }
