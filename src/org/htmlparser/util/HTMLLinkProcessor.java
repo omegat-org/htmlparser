@@ -226,7 +226,7 @@ public class HTMLLinkProcessor {
 		}
 	public String removeFirstSlashIfFound(String link) {
 		if (link==null || link.length()==0) return null;
-		if (link.charAt(0)=='/')
+		if (link.charAt(0)=='/' || link.charAt(0)=='\\')
 		link=link.substring(1,link.length());
 		return link;
 	}

@@ -706,4 +706,32 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
 		assertEquals("Link","http://www.mysite.com/books/newpage.html",linkTag.getLink());
 	}
+	public void testBadImageInLinkBug() throws HTMLParserException {
+		String testHTML= "<a href=\"registration.asp?EventID=1272\"><img border=\"0\" src=\"\\images\\register.gif\"</a>";
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader = new HTMLReader(new BufferedReader(sr), "http://www.fedpage.com/Event.asp?EventID=1272");
+		HTMLParser parser = new HTMLParser(reader, new DefaultHTMLParserFeedback());
+		HTMLNode[] node = new HTMLNode[10];
+
+		parser.registerScanners();
+		
+		int i = 0;
+
+		for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertTrue("Node should be a HTMLLinkTag", node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+		// Get the image tag from the link
+
+		HTMLNode insideNodes [] = new HTMLNode[10];
+		int j =0 ;
+		for (Enumeration e = linkTag.linkData();e.hasMoreElements();) {
+			insideNodes[j++]= (HTMLNode)e.nextElement();
+		}
+		assertEquals("Number of contained internal nodes",1,j);
+		assertTrue(insideNodes[0] instanceof HTMLImageTag);
+		HTMLImageTag imageTag = (HTMLImageTag)insideNodes[0];
+		assertEquals("Image Tag Location","http://www.fedpage.com/images\\register.gif",imageTag.getImageLocation());
+	}
 }
