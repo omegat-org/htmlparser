@@ -883,6 +883,7 @@ public class ConnectionManager
     protected Vector addCookies (Vector cookies, String path, Vector list)
     {
         Cookie cookie;
+        Date expires;
         Date now;
 
         if (null != cookies)
@@ -891,18 +892,19 @@ public class ConnectionManager
             for (int i = 0; i < cookies.size (); i++)
             {
                 cookie = (Cookie)cookies.elementAt (i);
-                if (cookie.getExpiryDate ().before (now))
+                expires = cookie.getExpiryDate ();
+                if ((null != expires) && expires.before (now))
                 {
                     cookies.remove (i);
                     i--; // dick with the loop variable
                 }
                 else
-	                if (path.startsWith (cookie.getPath ()))
-	                {
-	                    if (null == list)
-	                        list = new Vector ();
-	                    list.addElement (cookie);
-	                }
+                    if (path.startsWith (cookie.getPath ()))
+                    {
+                        if (null == list)
+                            list = new Vector ();
+                        list.addElement (cookie);
+                    }
             }
         }
         
