@@ -448,4 +448,83 @@ public class FormTagTest extends ParserTestCase {
             formTag.toHtml()
         );
     }
+
+    /**
+     * From support request #772998 Cannot extract input tags
+     * The getFormInputs list was reporting zero size and textarea tags were
+     * in the inputs list.
+     * Neither of these was reproducible.
+     */
+    public void testTextArea () throws Exception
+    {
+        FormTag formTag;
+        NodeList nl;
+        InputTag inpTag;
+        TextareaTag texTag;
+        
+        String html = "<body onload=\"otextnloadHandler()\" onunload=\"closeAdvanced()\">\n" +
+            "	<form name=\"searchForm\" onsubmit=\"doSearch()\">\n" +
+            "		<table id=\"searchTable\" align=\"left\" valign=\"middle\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n" +
+            "			<tbody><tr nowrap=\"\" valign=\"middle\">\n" +
+            "				<td id=\"searchTD\">\n" +
+            "					<label id=\"searchLabel\" for=\"searchWord\">\n" +
+            "					 Search:\n" +
+            "					</label>\n" +
+            "				</td>\n" +
+            "\n" +
+            "				<td>\n" +
+            "					<input type=\"text\" id=\"searchWord\" name=\"searchWord\" value=\"\" size=\"24\" maxlength=\"256\" alt=\"Search Expression\">\n" +
+            "				</td>\n" +
+            // note: this was added as there weren't any textarea tags in the page referenced
+            "				<td>\n" +
+            "					<textarea name=\"mytextarea\" rows=\"1\" cols=\"12\" alt=\"Free Form Text\">\n" +
+            "					   The text.\n" +
+            "					</textarea>\n" +
+            "				</td>\n" +
+            "				<td>\n" +
+            "					 <input type=\"button\" onclick=\"this.blur();doSearch()\" value=\"GO\" id=\"go\" alt=\"GO\">\n" +
+            "					<input type=\"hidden\" name=\"maxHits\" value=\"500\">\n" +
+            "				</td>\n" +
+            "				<td nowrap=\"nowrap\">\n" +
+            "\n" +
+            "					<a id=\"scopeLabel\" href=\"javascript:openAdvanced();\" title=\"Search only the following topics\" alt=\"Search only the following topics\" onmouseover=\"window.status='Search only the following topics'; return true;\" onmouseout=\"window.status='';\">Search scope:</a>\n" +
+            "				</td>\n" +
+            "				<td nowrap=\"nowrap\">\n" +
+            "					<input type=\"hidden\" name=\"workingSet\" value=\"All topics\">\n" +
+            "					<div id=\"scope\">All topics</div>\n" +
+            "				</td>\n" +
+            "			</tr>\n" +
+            "\n" +
+            "		</tbody></table>\n" +
+            "	</form>\n" +
+            "\n" +
+            "</body>\n";
+        createParser (html);
+        formTag =
+            (FormTag)(parser.extractAllNodesThatAre (
+                FormTag.class
+            )[0]);
+        assertNotNull ("Should have found a form tag",formTag);
+        assertStringEquals ("name", "searchForm", formTag.getFormName ());
+        nl = formTag.getFormInputs ();
+        assertTrue ("4 inputs", 4 == nl.size ());
+        inpTag = (InputTag)nl.elementAt (0);
+        assertStringEquals ("name", "searchWord", inpTag.getAttribute ("name"));
+        assertStringEquals ("value", "", inpTag.getAttribute ("value"));
+        inpTag = (InputTag)nl.elementAt (1);
+        assertNull ("name", inpTag.getAttribute ("name"));
+        assertStringEquals ("value", "GO", inpTag.getAttribute ("value"));
+        inpTag = (InputTag)nl.elementAt (2);
+        assertStringEquals ("name", "maxHits", inpTag.getAttribute ("name"));
+        assertStringEquals ("value", "500", inpTag.getAttribute ("value"));
+        inpTag = (InputTag)nl.elementAt (3);
+        assertStringEquals ("name", "workingSet", inpTag.getAttribute ("name"));
+        assertStringEquals ("value", "All topics", inpTag.getAttribute ("value"));
+        nl = formTag.getFormTextareas ();
+        assertTrue ("1 textarea", 1 == nl.size ());
+        texTag = (TextareaTag)nl.elementAt (0);
+        assertStringEquals ("name", "mytextarea", texTag.getAttribute ("name"));
+        assertTrue ("only 1 child", 1 == texTag.getChildCount ());
+        assertStringEquals ("text contents", "\n					   The text.\n					", texTag.getChild (0).toHtml ());
+    }
 }
