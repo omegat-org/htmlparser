@@ -168,4 +168,20 @@ public class TableScannerTest extends ParserTestCase {
         String s = node[0].toHtml ();
         assertEquals ("Unclosed","<TABLE><TR><TD>blah blah</TD></TR><TR><TD>blah blah</TD></TR></TABLE>",s);
     }
+
+    /**
+     * See bug #750117 StackOverFlow while Node-Iteration
+     * Not reproducible.
+     */
+    public void testOverFlow () throws ParserException
+    {
+        Parser parser;
+        Node node;
+        
+        parser = new Parser("http://www.sec.gov/Archives/edgar/data/30554/000089322002000287/w57038e10-k.htm");
+        parser.addScanner(new TableScanner(parser));
+        for (NodeIterator e = parser.elements(); e.hasMoreNodes(); )
+            node = e.nextNode();
+    }
+
 }
