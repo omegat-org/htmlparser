@@ -15,9 +15,9 @@ import com.kizna.html.tags.HTMLTag;
  */
 public class HTMLParameterParser {
 	private final String delim = " \t\r\n\f=\"'>";
-	private final String doubleQuote = "\"";
-	private final String singleQuote = "\'";
-	private final String equalTo = "=";
+	private final char doubleQuote = '\"';
+	private final char singleQuote = '\'';
+	private final char equalTo = '=';
 	/**
 	* Method to break the tag into pieces.
 	* @param returns a Hastable with elements containing the
@@ -80,19 +80,19 @@ public class HTMLParameterParser {
             // First let's combine tokens that are inside "" or ''
             //
             if (isDoubleQuote || isSingleQuote) {
-                if (isDoubleQuote && currentToken.equals(doubleQuote)){                
+                if (isDoubleQuote && currentToken.charAt(0)==doubleQuote){                
                     isDoubleQuote= false;                                   
-                } else if (isSingleQuote && currentToken.equals(singleQuote)) {
+                } else if (isSingleQuote && currentToken.charAt(0)==singleQuote) {
                     isSingleQuote=false;
                 }else {               
                     tokenAccumulator += currentToken;   
                     continue;
                 }
-            } else if (currentToken.equals(doubleQuote)){                
+            } else if (currentToken.charAt(0)==doubleQuote){                
                 isDoubleQuote= true;
                 tokenAccumulator = "";
                 continue;
-            } else if (currentToken.equals(singleQuote)){
+            } else if (currentToken.charAt(0)==singleQuote){
                 isSingleQuote=true;
                 tokenAccumulator="";
                 continue;                
@@ -105,7 +105,7 @@ public class HTMLParameterParser {
             if (delim.indexOf(tokenAccumulator)>=0) {
                 // tokenAccumulator was a delimiter
                 if (waitingForValue) {
-                  if (tokenAccumulator.equals(equalTo)) {
+                  if (tokenAccumulator.charAt(0)==equalTo) {
                         // here set to receive next value of parameter
                         waitingForValue=false;
                         isValue=true;
