@@ -249,14 +249,18 @@ public class InputStreamSource
                         if (new_chars[i] != buffer[i])
                             throw new EncodingChangeException ("character mismatch (new: "
                             + new_chars[i]
-                            + " != old: "
+                            + " [0x"
+                            + Integer.toString (new_chars[i], 16)
+                            + "] != old: "
+                            + " [0x"
+                            + Integer.toString (buffer[i], 16)
                             + buffer[i]
-                            + ") for encoding change from "
+                            + "]) for encoding change from "
                             + encoding
                             + " to "
                             + character_set
                             + " at character offset "
-                            + offset);
+                            + i);
                 }
             }
             catch (IOException ioe)
