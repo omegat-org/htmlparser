@@ -52,9 +52,7 @@ public class TableColumnScanner extends CompositeTagScanner {
 		super(
 			filter, 
 			nameOfTagToMatch, 
-			new String[] {}, 
-			removeScanners, 
-			stringNodeIgnoreMode
+			new String[] {} 
 		);
 	}
 

@@ -39,11 +39,57 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
+/**
+ * To create your own scanner that can hold children, create a subclass of this class.
+ * The composite tag scanner can be configured with:<br>
+ * <ul>
+ * <li>Tags which will trigger a match</li>
+ * <li>Tags which when encountered before a legal end tag, should force a correction</li>
+ * <li>Preventing more tags of its own type to appear as children 
+ * </ul> 
+ * Here are examples of each:<BR>
+ * <B>Tags which will trigger a match</B>
+ * If we wish to recognize &lt;mytag&gt;,
+ * <pre>
+ * MyScanner extends CompositeTagScanner {
+ *   private static final String [] MATCH_IDS = { "MYTAG" };
+ *	 MyScanner() {
+ *		super(MATCH_IDS);
+ *	 }
+ *	 ...
+ * }
+ * </pre>
+ * <B>Tags which force correction</B>
+ * If we wish to insert end tags if we get a </BODY> or </HTML> without recieving
+ * &lt;/mytag&gt;
+ * <pre>
+ * MyScanner extends CompositeTagScanner {
+ *   private static final String [] MATCH_IDS = { "MYTAG" };
+ *   private static final String [] ENDERS = { "BODY", "HTML" };
+ *	 MyScanner() {
+ *		super(MATCH_IDS, ENDERS);
+ *	 }
+ *	 ...
+ * }
+ * </pre>
+ * <B>Preventing children of same type</B>
+ * This is useful when you know that a certain tag can never hold children of its own type.
+ * e.g. &lt;FORM&gt; can never have more form tags within it. If it does, it is an error and should 
+ * be corrected. The default behavior is to allow nesting.
+ * <pre>
+ * MyScanner extends CompositeTagScanner {
+ *   private static final String [] MATCH_IDS = { "FORM" };
+ *   private static final String [] ENDERS = { "BODY", "HTML" };
+ *	 MyScanner() {
+ *		super(MATCH_IDS, ENDERS,false);
+ *	 }
+ *	 ...
+ * }
+ * </pre>
+ * Inside the scanner, use createTag() to specify what tag needs to be created.
+ */
 public abstract class CompositeTagScanner extends TagScanner {
 	protected String [] nameOfTagToMatch;
-	private boolean removeScanners;
-	private boolean stringNodeIgnoreMode;
-	private TagScanner previousOpenScanner = null;
 	private boolean allowSelfChildren;
 	private Set enderSet;
 		
@@ -52,7 +98,11 @@ public abstract class CompositeTagScanner extends TagScanner {
 	}
 
 	public CompositeTagScanner(String [] nameOfTagToMatch, String [] enders) {
-		this("",nameOfTagToMatch,enders,false,false);
+		this("",nameOfTagToMatch,enders);
+	}
+
+	public CompositeTagScanner(String [] nameOfTagToMatch, String [] enders, boolean allowSelfChildren) {
+		this("",nameOfTagToMatch,enders,allowSelfChildren);
 	}
 
 	public CompositeTagScanner(String filter, String [] nameOfTagToMatch) {
@@ -68,19 +118,13 @@ public abstract class CompositeTagScanner extends TagScanner {
 		String [] nameOfTagToMatch, 
 		String [] enders, 
 		boolean allowSelfChildren) {
-		this(filter,nameOfTagToMatch,enders, false,false);
-		this.allowSelfChildren = allowSelfChildren;	
-	}
-
-	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, String [] enders, 
-		boolean removeScanners, boolean stringNodeIgnoreMode) {
 		super(filter);
 		this.nameOfTagToMatch = nameOfTagToMatch;
-		this.removeScanners = removeScanners;
-		this.stringNodeIgnoreMode = stringNodeIgnoreMode;
+		this.allowSelfChildren = allowSelfChildren;
 		this.enderSet = new HashSet();
 		for (int i=0;i<enders.length;i++)
 			enderSet.add(enders[i]);
+			
 	}
 	
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
@@ -89,19 +133,33 @@ public abstract class CompositeTagScanner extends TagScanner {
 		return helper.scan();
 	}
 
+	/**
+	 * Override this method if you wish to create any data structures or do anything
+	 * before the start of the scan. This is just after a tag has triggered the scanner
+	 * but before the scanner begins its processing. 
+	 */
 	public void beforeScanningStarts() {
 	}
 	
+	/**
+	 * This method is called everytime a child to the composite is found. It is useful when we 
+	 * need to store special children seperately. Though, all children are collected anyway into a node list.
+	 */
 	public void childNodeEncountered(Node node) {
 	}
 
+	/**
+ 	 * You must override this method to create the tag of your choice upon successful parsing. Data required
+ 	 * for construction of your tag can be found within tagData and compositeTagData
+	 */
 	public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
 
-	public boolean isTagToBeEndedFor(String tagName) {
+	
+	public final boolean isTagToBeEndedFor(String tagName) {
 		return enderSet.contains(tagName);
 	}
 
-	public boolean isAllowSelfChildren() {
+	public final boolean isAllowSelfChildren() {
 		return allowSelfChildren;
 	}
 
