@@ -36,6 +36,7 @@ import org.htmlparser.HTMLRenderer;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLLinkTagData;
 import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.visitors.HTMLVisitor;
 /**
  * Identifies a link tag 
  */
@@ -262,4 +263,9 @@ public class HTMLLinkTag extends HTMLCompositeTag
 	public Enumeration linkData() {
 		return children();
 	}
+	
+	public void accept(HTMLVisitor visitor) {
+		visitor.visitLinkTag(this);
+	}
+
 }

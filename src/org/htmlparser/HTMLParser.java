@@ -1112,4 +1112,10 @@ public class HTMLParser
 			new HTMLReader(new StringReader(inputHTML),"");
 		return new HTMLParser(reader);
 	}
+	
+	public static HTMLParser createLinkRecognizingParser(String inputHTML) {
+		HTMLParser parser = createParser(inputHTML);
+		parser.addScanner(new HTMLLinkScanner(HTMLLinkTag.LINK_TAG_FILTER));
+		return parser;
+	}
 }

@@ -31,4 +31,11 @@ public class StringFindingVisitorTest extends HTMLParserTestCase {
 		parser.visitAllNodesWith(visitor);
 		assertTrue("HTML should not have been found", !visitor.stringWasFound());
 	}
+
+	public void testStringFoundInSingleStringNode() throws Exception {
+		createParser("this is some text!");
+		StringFindingVisitor visitor = new StringFindingVisitor("text");
+		parser.visitAllNodesWith(visitor);
+		assertTrue("text should be found", visitor.stringWasFound());
+	}
 }

@@ -39,6 +39,8 @@ public class AllTests extends junit.framework.TestCase
 	public static TestSuite suite() {
 		TestSuite suite = new TestSuite("Utility Tests");
 		suite.addTestSuite(StringFindingVisitorTest.class);
+		suite.addTestSuite(TagFindingVisitorTest.class);
+		suite.addTestSuite(LinkFindingVisitorTest.class);
 		suite.addTestSuite(HTMLVisitorTest.class);
 		return suite;
 	} 

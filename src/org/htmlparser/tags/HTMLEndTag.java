@@ -30,6 +30,7 @@ package org.htmlparser.tags;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.visitors.HTMLVisitor;
 /**
  * HTMLEndTag can identify closing tags, like &lt;/A&gt;, &lt;/FORM&gt;, etc.
  */
@@ -119,4 +120,8 @@ public class HTMLEndTag extends HTMLTag
 		return "EndTag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 	
+	public void accept(HTMLVisitor visitor) {
+		visitor.visitEndTag(this);
+	}
+
 }
