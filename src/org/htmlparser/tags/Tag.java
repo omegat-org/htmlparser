@@ -224,8 +224,6 @@ public class Tag extends Node
 	 * Return the text contained in this tag
 	 */
 	public String getText() {
-//		if (isEmptyXmlTag())
-//			 return tagContents.toString()+"/"; else
 		return tagContents.toString();
 	}
 
@@ -452,7 +450,11 @@ public class Tag extends Node
 		return TYPE;
 	}
 
-
+	/**
+	 * Is this an empty xml tag of the form<br>
+	 * &lt;tag/&gt; 
+	 * @return boolean
+	 */
 	public boolean isEmptyXmlTag() {
 		return emptyXmlTag;
 	}
