@@ -240,8 +240,8 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			
 			if (mailto==0)
 			{
-				mailto = link.indexOf(":");
 				// yes it is
+				mailto = link.indexOf(":");
 				link = link.substring(mailto+1);
 				mailLink = true;			
 			} else if (javascript == 0) {

@@ -57,21 +57,23 @@ public class HTMLLinkTag extends HTMLTag
 	private java.util.Vector nodeVector;
 	private boolean mailLink;
 	private boolean javascriptLink;
-	private boolean ftpLink;
-	private boolean httpLink;
-	private boolean httpsLink;
+
 	
 	/**
 	 * Constructor creates an HTMLLinkNode object, which basically stores the location
 	 * where the link points to, and the text it contains.
+	 * <p>
+	 * In order to get the contents of the link tag, use the method linkData(), 
+	 * which returns an enumeration of nodes encapsulated within the link.
 	 * @link The URL to which the link points to
 	 * @linkText The text which is stored inside this link tag
 	 * @linkBegin The beginning position of the link tag
 	 * @linkEnd The ending position of the link tag
 	 * @param linkContents contains the data from the link element
 	 * @accessKey The accessKey element of the link tag (valid for Compact HTML - IMODE devices)
+	 * @see linkData()
 	 */
-	public HTMLLinkTag(String link,String linkText,int linkBegin, int linkEnd, String accessKey,String currentLine,Vector nodeVector,boolean mailLink,boolean javascriptLink,boolean ftpLink,boolean httpLink,boolean httpsLink,String tagContents,String linkContents)
+	public HTMLLinkTag(String link,String linkText,int linkBegin, int linkEnd, String accessKey,String currentLine,Vector nodeVector,boolean mailLink,boolean javascriptLink,String tagContents,String linkContents)
 	{
 		super(linkBegin,linkEnd,tagContents,currentLine);  // Kaarle Kaila 23.10.2001
 		this.link = link;
@@ -82,9 +84,7 @@ public class HTMLLinkTag extends HTMLTag
 		this.linkContents = linkContents;  // Kaarle Kaila 23.10.2001
 
 		this.javascriptLink = javascriptLink;
-		this.ftpLink = ftpLink;
-		this.httpLink = httpLink;
-		this.httpsLink = httpsLink;
+
 	}
 	/**
 	 * Returns the accesskey element if any inside this link tag
@@ -115,40 +115,38 @@ public class HTMLLinkTag extends HTMLTag
 	{
 		return tagContents + ">" + linkContents;
 	}
-/**
- * Insert the method's description here.
- * Creation date: (8/3/2001 1:49:31 AM)
- * @return boolean
- */
-public boolean isMailLink() {
-	return mailLink;
-}
+	/**
+	 * Is this a mail address
+	 * @return boolean true/false
+	 */
+	public boolean isMailLink() {
+		return mailLink;
+	}
 
-        /**
-	 * Tests if the link is a javascript code.
-	 *
+    /**
+	 * Tests if the link is javascript
 	 * @return flag indicating if the link is a javascript code
 	 */
         public boolean isJavascriptLink() {
 		return javascriptLink;
 	}
 
-        /**
+    /**
 	 * Tests if the link is an FTP link.
 	 *
 	 * @return flag indicating if this link is an FTP link
 	 */
-        public boolean isFTPLink() {
-		return ftpLink;
+    public boolean isFTPLink() {
+		return link.indexOf("ftp://")==0;
 	}
 
-        /**
+    /**
 	 * Tests if the link is an HTTP link.
 	 *
 	 * @return flag indicating if this link is an HTTP link
 	 */
-        public boolean isHTTPLink() {
-		return httpLink;
+    public boolean isHTTPLink() {
+		return link.indexOf("http://")==0;
 	}
 
 	/**
@@ -157,7 +155,7 @@ public boolean isMailLink() {
 	 * @return flag indicating if this link is an HTTPS link
 	 */
         public boolean isHTTPSLink() {
-                return httpsLink;
+                return link.indexOf("https://")==0;
         }
 
         /**
@@ -166,25 +164,24 @@ public boolean isMailLink() {
 	 * @return flag indicating if this link is an HTTP link or one of its variations (HTTPS, etc.)
 	 */
         public boolean isHTTPLikeLink() {
-                return httpLink || httpsLink;
+                return isHTTPLink() || isHTTPSLink();
         }
 
-/**
- * Insert the method's description here.
- * Creation date: (7/1/2001 4:40:58 PM)
- */
-public Enumeration linkData() 
-{
-	return nodeVector.elements();	
-}
-/**
- * Insert the method's description here.
- * Creation date: (8/3/2001 1:49:31 AM)
- * @param newMailLink boolean
- */
-public void setMailLink(boolean newMailLink) {
-	mailLink = newMailLink;
-}
+	/**
+	 * Returns an enumeration of nodes contained within the link tag.
+	 */
+	public Enumeration linkData() 
+	{
+		return nodeVector.elements();	
+	}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (8/3/2001 1:49:31 AM)
+	 * @param newMailLink boolean
+	 */
+	public void setMailLink(boolean newMailLink) {
+		mailLink = newMailLink;
+	}
 
 	/**
 	 * Set the link as a javascript link.
@@ -194,43 +191,14 @@ public void setMailLink(boolean newMailLink) {
 	public void setJavascriptLink(boolean newJavascriptLink) {
 		javascriptLink = newJavascriptLink;
 	}
-
 	/**
-	 * Set the link as an FTP link.
-	 * 
-	 * @param newFTPLink flag indicating if the link is an FTP link
+	 * Insert the method's description here.
+	 * Creation date: (7/1/2001 4:39:41 PM)
+	 * @param newNodeVector java.util.Vector
 	 */
-	public void setFTPLink(boolean newFTPLink) {
-		ftpLink = newFTPLink;
+	public void setNodeVector(java.util.Vector newNodeVector) {
+		nodeVector = newNodeVector;
 	}
-
-        /**
-	 * Set the link as an HTTP link.
-	 *
-	 * @param newHTTPLink flag indicating if the link is an HTTP link
-	 */
-        public void setHTTPLink(boolean newHTTPLink) {
-		httpLink = newHTTPLink;
-	}
-
-        /**
-	 * Set the link as an HTTPS link.
-	 *
-	 * @param newHTTPSLink flag indicating if the link is an HTTPS link
-	 */
-        public void setHTTPSLink(boolean newHTTPSLink) {
-		httpsLink = newHTTPSLink;
-	}
-
-
-/**
- * Insert the method's description here.
- * Creation date: (7/1/2001 4:39:41 PM)
- * @param newNodeVector java.util.Vector
- */
-public void setNodeVector(java.util.Vector newNodeVector) {
-	nodeVector = newNodeVector;
-}
 	public String toPlainTextString() {
 		StringBuffer sb = new StringBuffer();
 		HTMLNode node;
