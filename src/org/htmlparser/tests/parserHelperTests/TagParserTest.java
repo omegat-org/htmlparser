@@ -28,12 +28,20 @@
 
 
 package org.htmlparser.tests.parserHelperTests;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.htmlparser.Node;
+import org.htmlparser.Parser;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
 public class TagParserTest extends ParserTestCase {
-
+	private static final String TEST_HTML = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" +		"<!-- Server: sf-web2 -->" +		"<html lang=\"en\">" +		"  <head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://sourceforge.net/cssdef.php\">" +		"	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" +		"    <TITLE>SourceForge.net: Modify: 711073 - HTMLTagParser not threadsafe as a static variable in HTMLTag</TITLE>" +		"	<SCRIPT language=\"JavaScript\" type=\"text/javascript\">" +		"	<!--" +		"	function help_window(helpurl) {" +		"		HelpWin = window.open( 'http://sourceforge.net' + helpurl,'HelpWindow','scrollbars=yes,resizable=yes,toolbar=no,height=400,width=400');" +		"	}" +		"	// -->" +		"	</SCRIPT>" +		"		<link rel=\"SHORTCUT ICON\" href=\"/images/favicon.ico\">" +		"<!-- This is temp javascript for the jump button. If we could actually have a jump script on the server side that would be ideal -->" +		"<script language=\"JavaScript\" type=\"text/javascript\">" +		"<!--" +		"	function jump(targ,selObj,restore){ //v3.0" +		"	if (selObj.options[selObj.selectedIndex].value) " +		"		eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");" +		"	if (restore) selObj.selectedIndex=0;" +		"	}" +		"	//-->" +		"</script>" +		"<a href=\"http://normallink.com/sometext.html\">" +		"<style type=\"text/css\">" +		"<!--" +		"A:link { text-decoration:none }" +		"A:visited { text-decoration:none }" +		"A:active { text-decoration:none }" +		"A:hover { text-decoration:underline; color:#0066FF; }" +		"-->" +		"</style>" +		"</head>" +		"<body bgcolor=\"#FFFFFF\" text=\"#000000\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" link=\"#003399\" vlink=\"#003399\" alink=\"#003399\">";	private Map results;
+	private int testProgress;
+	
 	public TagParserTest(String name) {
 		super(name);
 	}
@@ -91,5 +99,123 @@ public class TagParserTest extends ParserTestCase {
 		Tag tag = (Tag)node[0];
 		assertStringEquals("html","<TAG ATT=\"a<b\">",tag.toHtml());
 		assertStringEquals("attribute","a<b",tag.getAttribute("att"));
+	}	
+	
+	public void testThreadSafety() throws Exception {
+		
+		String testHtml1 = "<a HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>" +
+							TEST_HTML;
+		
+		String testHtml2 = "<a href=\"http://normallink.com/sometext.html\">" +
+							TEST_HTML; 					
+		ParsingThread parsingThread [] = 
+			new ParsingThread[100];
+		results = new HashMap();
+		testProgress = 0;
+		for (int i=0;i<parsingThread.length;i++) {
+			if (i<5) 
+				parsingThread[i] = 
+					new ParsingThread(i,testHtml1);
+				else
+					parsingThread[i] = 
+						new ParsingThread(i,testHtml2);
+					
+			Thread thread = new Thread(parsingThread[i]);					
+			thread.start();
+		}
+		
+		int completionValue = computeCompletionValue(parsingThread.length);
+		
+		do {
+			try {
+				Thread.sleep(50);
+			}
+			catch (InterruptedException e) {
+			}
+		}	
+		while (testProgress!=completionValue);
+		for (int i=0;i<parsingThread.length;i++) {
+			if (!parsingThread[i].passed()) {
+				if (i<5) {
+					assertStringEquals(
+						"Thread "+i+", link 1:",
+						"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
+						parsingThread[i].getLink1()
+					);
+					assertStringEquals(
+						"Thread "+i+", link 2:",
+						"http://normallink.com/sometext.html",
+						parsingThread[i].getLink2()
+					);
+				} else {
+					assertStringEquals(
+						"Thread "+i+", link 1:",
+						"http://normallink.com/sometext.html",
+						parsingThread[i].getLink1()
+					);
+					assertStringEquals(
+						"Thread "+i+", link 2:",
+						"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
+						parsingThread[i].getLink2()
+					);
+				}				
+			}
+		}
+
+	}
+
+	private int computeCompletionValue(int numThreads) {
+		return numThreads * (numThreads - 1) / 2;
+	}
+	
+	class ParsingThread implements Runnable {
+		Parser parser;
+		int id;
+		LinkTag link1, link2;
+		boolean result;
+		
+		ParsingThread(int id, String testHtml) {
+			this.id = id;
+			this.parser = 
+				Parser.createParser(testHtml);
+			parser.registerScanners();
+		}
+		
+		public void run() {
+			try {
+				result = false;
+				Node linkTag [] = parser.extractAllNodesThatAre(LinkTag.class);
+				link1 = (LinkTag)linkTag[0];
+				link2 = (LinkTag)linkTag[1];
+				if (id<5) {
+					if (link1.getLink().equals("/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html") &&
+						link2.getLink().equals("http://normallink.com/sometext.html"))
+						result = true;
+				} else {
+					if (link1.getLink().equals("http://normallink.com/sometext.html") &&
+						link2.getLink().equals("http://normallink.com/sometext.html"))
+						result = true;
+				}
+			}
+			catch (ParserException e) {
+				System.err.println("Parser Exception");
+				e.printStackTrace();
+			}
+			finally {
+				testProgress += id;
+			}
+		}
+		
+		public String getLink1() {
+			return link1.getLink();
+		}
+		
+		public String getLink2() {
+			return link2.getLink();
+		}
+		
+		public boolean passed() {
+			return result;
+		}
 	}	
 }
