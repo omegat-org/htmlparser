@@ -579,13 +579,13 @@ public class Attribute
                         // uh-oh, we need to convert some quotes into character
                         // references, so convert all double quotes into &#34;
                         quote = '"';
-                        ref = Translate.encode (quote);
+                        ref = "&quot;"; // Translate.encode (quote);
                         // JDK 1.4: value = value.replaceAll ("\"", ref);
                         buffer = new StringBuffer (value.length() * 5);
                         for (int i = 0; i < value.length (); i++)
                         {
                             ch = value.charAt (i);
-                            if ('"' == ch)
+                            if (quote == ch)
                                 buffer.append (ref);
                             else
                                 buffer.append (ch);
