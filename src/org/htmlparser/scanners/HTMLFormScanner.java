@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021125 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021201 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -49,6 +49,7 @@ import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
+import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.tags.HTMLFormTag;
@@ -150,10 +151,8 @@ public class HTMLFormScanner extends HTMLTagScanner
 					}
 				}
 				else 
-				if (node instanceof HTMLTag) {
-					HTMLTag thisTag=(HTMLTag)node;
-					if (thisTag.getText().toUpperCase().indexOf("INPUT")==0)
-					inputVector.addElement(thisTag);
+				if (node instanceof HTMLInputTag) {
+					inputVector.addElement(node);
 				}
 				nodeVector.addElement(node);
 			}
