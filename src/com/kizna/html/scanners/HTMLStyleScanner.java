@@ -94,48 +94,7 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 	HTMLNode node = null;
 	boolean endStyleFound=false;
 	StringBuffer buff=new StringBuffer();
-	// Add the stuff after style to the current list of contents
-	/*do
-	{
-		if (line!=null)
-		{
-			node = HTMLEndTag.find(line,0);
-			if (node!=null) 
-			{
-				HTMLEndTag tempEndTag = (HTMLEndTag)node;
-				// A new end tag should only be created provided the same line is being parsed
-				if (!newLine)
-					endTag = new HTMLEndTag(tempEndTag.elementBegin()+tag.elementEnd()+1,tempEndTag.elementEnd()+tag.elementEnd()+1,tempEndTag.getContents());
-				else endTag = tempEndTag;
-				if (endTag.getContents().toUpperCase().equals("STYLE")) 
-				{
-					endStyleFound = true;
-					// Append the text prior to the end tag
-					String temp;
-					if (!newLine)
-					temp = line.substring(0,endTag.elementBegin()-tag.elementBegin()); else
-					temp = line.substring(0,endTag.elementBegin()); 
-					buff.append(temp);
-				}
-				else 
-				{
-					buff.append(line);
-					buff.append("\n");
-				}
-			} 
-			else 
-			{
-				buff.append(line);
-				buff.append("\n");
-			}
-			if (!endStyleFound)
-			line = reader.getNextLine();
-			newLine=true;
-		}
-
-	}
-	while (!endStyleFound && line!=null);*/
-
+	
 	do {
 		node = reader.readElement();
 		if (node instanceof HTMLEndTag) {

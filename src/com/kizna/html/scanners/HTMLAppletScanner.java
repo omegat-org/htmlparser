@@ -136,29 +136,19 @@ public com.kizna.html.HTMLNode scan(HTMLTag tag, String url, com.kizna.html.HTML
 	boolean endScriptFound=false;
 	Vector buff=new Vector();
 	Vector misc=new Vector();
-	do
-	{
-		line = reader.getNextLine();
-		if (line!=null)
-		{
-			node = HTMLEndTag.find(line,0);
-			if (node!=null) 
+
+	do {
+		node = reader.readElement();
+		if (node instanceof HTMLEndTag) {
+			endTag = (HTMLEndTag)node;
+			if (endTag.getContents().toUpperCase().equals("APPLET")) 
 			{
-				endTag = (HTMLEndTag)node;
-				if (endTag.getContents().toUpperCase().equals("APPLET")) 
-				{
-					endScriptFound = true; 
-				}
-			}
-			else 
-			{
-				node = HTMLTag.find(reader,line,0);
-				if (node!=null)
-				buff.addElement(node);
+				endScriptFound = true; 
 			}
 		}
+		else if (node!=null) buff.addElement(node);
 	}
-	while (!endScriptFound && line!=null);
+	while (!endScriptFound);
 	// buff may contain applet parameters.
 	Hashtable table = new Hashtable();
 	if (buff!=null)

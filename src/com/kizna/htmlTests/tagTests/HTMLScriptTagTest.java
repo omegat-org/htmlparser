@@ -11,7 +11,6 @@ import junit.framework.TestSuite;
 
 /**
  * Insert the type's description here.
- * Creation date: (6/4/2001 11:21:07 AM)
  * @author: Somik Raha - Indraprastha
  */
 public class HTMLScriptTagTest extends TestCase{
