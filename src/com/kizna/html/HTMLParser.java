@@ -136,11 +136,17 @@ public HTMLParser(HTMLReader reader)
 	 * Creates a HTMLParser object with the location of the resource (URL or file)
 	 * @param resourceLocn Either the URL or the filename (autodetects)
 	 */
-	public HTMLParser(String resourceLocn) 
+	public HTMLParser(String resourceLocn) throws HTMLParserException
 	{
-		this.resourceLocn = resourceLocn;
-		openConnection();
+		try {
+			this.resourceLocn = resourceLocn;
+			openConnection();
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("Error in constructing the parser object for resource "+resourceLocn,e);
+		}
 	}
+	
 /**
  * Add a new Tag Scanner.
  * In typical situations where you require a no-frills parser, use the registerScanners() method to add the most
@@ -279,16 +285,21 @@ public Enumeration getScanners() {
 			System.out.println("Parsing website "+args[0]);
 		else	
 		System.out.println("Parsing file "+args[0]+"...");
-		HTMLParser parser = new HTMLParser(args[0]);
-		parser.registerScanners();
 		try {
-			if (args.length==2)
-			{
-				parser.parse(args[1]);
-			} else
-			parser.parse(null);
+			HTMLParser parser = new HTMLParser(args[0]);
+			parser.registerScanners();
+			try {
+				if (args.length==2)
+				{
+					parser.parse(args[1]);
+				} else
+				parser.parse(null);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		catch (Exception e) {
+		catch (HTMLParserException e) {
 			e.printStackTrace();
 		}
 	}
@@ -296,34 +307,42 @@ public Enumeration getScanners() {
 	 * Opens the connection with the resource to begin reading, by creating a HTML reader
 	 * object.
 	 */
-	private void openConnection()
+	private void openConnection() throws HTMLParserException
 	{
 		try
 		{
 			if (HTMLLinkProcessor.isURL(resourceLocn))
 			{ 
-				// Its a web address
-				resourceLocn=HTMLLinkProcessor.removeEscapeCharacters(resourceLocn);
-				resourceLocn=checkEnding(resourceLocn);
-				URL url = new URL(resourceLocn);
-				URLConnection uc = url.openConnection();
-				reader = new HTMLReader(new BufferedReader(new InputStreamReader(uc.getInputStream(),"8859_4")),resourceLocn);
+				reader = openURLConnection();
 			}
 			else 
-			reader = new HTMLReader(new BufferedReader(new FileReader(resourceLocn)),resourceLocn);
+			reader = openFileConnection();
 			reader.setParser(this);
 		}
-		catch (FileNotFoundException e)
+		catch (Exception e)
 		{
-			System.err.println("Error! File "+resourceLocn+" not found!");
+			throw new HTMLParserException("HTMLParser.openConnection() : Error in opening a connection to "+resourceLocn,e);
 		}
-		catch (MalformedURLException e)
-		{
-			System.err.println("Error! URL "+resourceLocn+" Malformed!");
-		}			
-		catch (IOException e)
-		{
-			System.err.println("I/O Exception occured while reading "+resourceLocn);
+	}
+	private HTMLReader openFileConnection() throws HTMLParserException {
+		try {
+			return new HTMLReader(new BufferedReader(new FileReader(resourceLocn)),resourceLocn);
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLParser.openFileConnection() : Error in opening a file connection to "+resourceLocn,e);
+		}
+	}
+	private HTMLReader openURLConnection()	throws HTMLParserException {
+		try {
+			// Its a web address
+			resourceLocn=HTMLLinkProcessor.removeEscapeCharacters(resourceLocn);
+			resourceLocn=checkEnding(resourceLocn);
+			URL url = new URL(resourceLocn);
+			URLConnection uc = url.openConnection();
+			return new HTMLReader(new BufferedReader(new InputStreamReader(uc.getInputStream(),"8859_4")),resourceLocn);
+		}
+		catch (Exception e) {
+			throw new HTMLParserException("HTMLParser.openURLConnection() : Error in opening a URL connection to "+resourceLocn,e);
 		}
 	}
 	/**
