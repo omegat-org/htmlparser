@@ -26,7 +26,9 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.Node;
 import org.htmlparser.scanners.ScriptScanner;
+import org.htmlparser.util.SimpleNodeIterator;
 
 /**
  * A script tag.
@@ -135,28 +137,20 @@ public class ScriptTag extends CompositeTag
         setAttribute ("TYPE", type);
     }
 
-    /**
-     * Render the tag as HTML.
-     * @return The tag as an HTML fragment.
-     * @see org.htmlparser.Node#toHtml()
-     */
-    public String toHtml()
+    protected void putChildrenInto(StringBuffer sb)
     {
-        StringBuffer ret;
-        
-        ret = new StringBuffer ();
-        ret.append (super.toHtml ());
-        if (!isEmptyXmlTag ())
-        {
-            if (null != getScriptCode ())
-                ret.append (getScriptCode ());
-            else
-                putChildrenInto (ret);
-            if (null != getEndTag ())
-                putEndTagInto (ret);
-        }
+        Node node;
 
-        return (ret.toString());
+        if (null != getScriptCode ())
+            sb.append (getScriptCode ());
+        else
+            for (SimpleNodeIterator e = children (); e.hasMoreNodes ();)
+            {
+                node = e.nextNode ();
+                // eliminate virtual tags
+    //            if (!(node.getStartPosition () == node.getEndPosition ()))
+                    sb.append (node.toHtml ());
+            }
     }
 
     /**
