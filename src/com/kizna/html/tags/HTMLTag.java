@@ -206,7 +206,10 @@ public class HTMLTag implements HTMLNode
 */
 	
 	public String getParameter(String name){
-	    if (parsed == null) return null;
+	    if (parsed == null) {
+			System.out.println("parsed was null, parsing params");
+	    	parsed = parseParameters();
+	    } 
 	    return (String)parsed.get(name.toUpperCase());
 	}
 /*
@@ -216,7 +219,7 @@ public class HTMLTag implements HTMLNode
 * @author Kaarle Kaila 23.10.2001
 */
 	public String getTag(){
-	    if (parsed == null) return null;
+	    if (parsed == null) parsed=parseParameters();
 	    return (String)parsed.get(TAGNAME);
 	}
 /**
@@ -435,4 +438,20 @@ public java.lang.String getTagLine() {
 	public void append(char ch) {
 		tagContents.append(ch);
 	}
+	/**
+	 * Gets the parsed.
+	 * @return Returns a Hashtable
+	 */
+	public Hashtable getParsed() {
+		return parsed;
+	}
+
+	/**
+	 * Sets the parsed.
+	 * @param parsed The parsed to set
+	 */
+	public void setParsed(Hashtable parsed) {
+		this.parsed = parsed;
+	}
+
 }

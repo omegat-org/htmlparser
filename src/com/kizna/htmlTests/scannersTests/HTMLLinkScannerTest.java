@@ -277,4 +277,23 @@ public void testLinkSpacesBug() {
 	assertEquals("Link URL of link tag","http://www.kizna.com/servlets/SomeServlet?name=Sam Joseph",linkTag.getLink());
 	assertEquals("Link Text of link tag","Click Here",linkTag.getLinkText());
 }
+public void testAccessKey() {
+	String testHTML = new String("<a href=\"http://www.kizna.com/servlets/SomeServlet?name=Sam Joseph\" accessKey=1>Click Here</A>");
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	HTMLParser parser = new HTMLParser(reader);
+	parser.addScanner(new HTMLLinkScanner("-l"));
+	HTMLNode [] node = new HTMLNode[20];
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 1 node identified",1,i);
+	assertTrue("The node should be a link tag",node[0] instanceof HTMLLinkTag);
+	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+	assertEquals("Link URL of link tag","http://www.kizna.com/servlets/SomeServlet?name=Sam Joseph",linkTag.getLink());
+	assertEquals("Link Text of link tag","Click Here",linkTag.getLinkText());
+	assertEquals("Access key","1",linkTag.getAccessKey());	
+}
 }

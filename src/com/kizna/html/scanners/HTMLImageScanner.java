@@ -57,6 +57,7 @@ import com.kizna.html.util.HTMLLinkProcessor;
  */
 public class HTMLImageScanner extends HTMLTagScanner
 {
+	private Hashtable table;
 	/**
 	 * Overriding the default constructor
 	 */
@@ -115,7 +116,7 @@ public class HTMLImageScanner extends HTMLTagScanner
    */
 	public String extractImageLocn(HTMLTag tag,String url)
 	{
-		Hashtable table = tag.parseParameters();
+		table = tag.parseParameters();
 		String relativeLink =  (String)table.get("SRC");
 		if (relativeLink!=null) relativeLink = removeChars(relativeLink,'\n');
 		if (relativeLink==null) return ""; else
@@ -146,6 +147,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 		linkEnd = tag.elementEnd();
 		HTMLImageTag imageTag = new HTMLImageTag(link,linkBegin,linkEnd,currentLine);
 		imageTag.setThisScanner(this);
+		imageTag.setParsed(table);
 		return imageTag;
 	}
 }

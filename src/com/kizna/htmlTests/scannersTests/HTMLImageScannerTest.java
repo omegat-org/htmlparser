@@ -103,7 +103,6 @@ public void testEvaluate()
  */
 public void testExtractImageLocnInvertedCommasBug()
 {
-	System.out.println("testExtractImageLocnBug()");
 	HTMLTag tag = new HTMLTag(0,0,"img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo","");
 	String link = "img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo";
 	String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
@@ -111,11 +110,12 @@ public void testExtractImageLocnInvertedCommasBug()
 	assertEquals("Extracted Image Locn","http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif",scanner.extractImageLocn(tag,url));
 }
 /**
- * Insert the method's description here.
- * Creation date: (12/25/2001 12:45:41 PM)
+ * This test has been improved to check for params
+ * in the image tag, based on requirement by Annette Doyle.
+ * Thereby an important bug was detected.
  */
 public void testPlaceHolderImageScan() {
-	String testHTML = "<IMG width=1 height=1 alt=\"\">";
+	String testHTML = "<IMG width=1 height=1 alt=\"a\">";
 	StringReader sr = new StringReader(testHTML); 
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi?abcdefg");
 	HTMLParser parser = new HTMLParser(reader);
@@ -130,6 +130,9 @@ public void testPlaceHolderImageScan() {
 	assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 	HTMLImageTag imageTag = (HTMLImageTag)node[0];
 	assertEquals("Expected Image Locn","",imageTag.getImageLocation());		
+	assertEquals("Image width","1",imageTag.getParameter("WIDTH"));
+	assertEquals("Image height","1",imageTag.getParameter("HEIGHT"));
+	assertEquals("alt","a",imageTag.getParameter("ALT"));
 }
 /**
  * Insert the method's description here.
