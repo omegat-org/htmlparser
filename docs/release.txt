@@ -4,9 +4,15 @@ Nightly Build 1.2 - 20020503
 [2] Tags spread out on multiple lines, with blank lines in between are supported
 [3] Bug in HTMLStringNode fixed, so as to be able to parse tag characters < and >
 [4] Image tag parameters not being retrieved, bug fixed
+[5] Added HTMLFormScanner, HTMLFrameScanner, HTMLFormTag, HTMLFrameTag - but these
+are not yet integrated with the code, pending testcases.
 
-Production Release ver 1.1
---------------------------
+Please use this nightly build for testing purposes, in case any of the bugs listed
+above are causing you problems. This release will become a stable release
+after adequate testing.
+
+Production Release ver 1.1 (Stable)
+-----------------------------------
 [1] Added META and TITLE tag scanners
 [2] Fixed spaces bug in HTMLLinkScanner and HTMLImageScanner. The parser
 now supports links or urls with spaces in them. Functionality

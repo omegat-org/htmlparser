@@ -4,6 +4,8 @@ Nightly Build 1.2 - 20020503
 [2] Tags spread out on multiple lines, with blank lines in between are supported
 [3] Bug in HTMLStringNode fixed, so as to be able to parse tag characters < and >
 [4] Image tag parameters not being retrieved, bug fixed
+[5] Added HTMLFormScanner, HTMLFrameScanner, HTMLFormTag, HTMLFrameTag - but these
+are not yet integrated with the code, pending testcases.
 
 Production Release ver 1.1
 --------------------------
