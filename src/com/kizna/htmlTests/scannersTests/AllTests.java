@@ -69,6 +69,7 @@ public static TestSuite suite() {
 	suite.addTest(HTMLOptionTagScannerTest.suite());
 	suite.addTest(HTMLSelectTagScannerTest.suite());
 	suite.addTest(HTMLTextareaTagScannerTest.suite());
+	suite.addTest(HTMLBaseHREFScannerTest.suite());
 	return suite;
 }
 }

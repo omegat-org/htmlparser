@@ -416,8 +416,12 @@ public class HTMLParser
 			System.err.println("Other scanners already exist, hence this method call wont have any effect");
 			return;
 		}
-		addScanner(new HTMLLinkScanner("-l"));
-		addScanner(new HTMLImageScanner("-i"));
+		HTMLLinkScanner linkScanner = new HTMLLinkScanner("-l");
+		// Note - The BaseHREF and Image scanners share the same
+		// link processor - internally linked up with the factory
+		// method in the link scanner class
+		addScanner(linkScanner);
+		addScanner(linkScanner.createImageScanner("-i"));
 		addScanner(new HTMLScriptScanner("-s"));
 		addScanner(new HTMLStyleScanner("-t"));
 		addScanner(new HTMLJspScanner("-j"));
@@ -427,6 +431,7 @@ public class HTMLParser
 		addScanner(new HTMLDoctypeScanner("-d"));
 		addScanner(new HTMLFormScanner("-f"));
 		addScanner(new HTMLFrameSetScanner("-r"));	
+		addScanner(linkScanner.createBaseHREFScanner("-b"));
 	}
 	/**
 	 * Removes a specified scanner object.

@@ -38,6 +38,7 @@ import com.kizna.html.*;
 import com.kizna.html.tags.*;
 import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLLinkProcessor;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
 import java.io.StringReader;
@@ -85,7 +86,7 @@ public class HTMLImageTagTest extends TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-i"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -113,7 +114,7 @@ public class HTMLImageTagTest extends TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-i"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -141,7 +142,7 @@ public class HTMLImageTagTest extends TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-i"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -166,7 +167,7 @@ public class HTMLImageTagTest extends TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-i"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -193,7 +194,7 @@ public class HTMLImageTagTest extends TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-l"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -213,7 +214,7 @@ public class HTMLImageTagTest extends TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-i"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)

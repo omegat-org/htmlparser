@@ -42,6 +42,7 @@ import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLLinkProcessor;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.HTMLImageScanner;
 import junit.framework.TestSuite;
@@ -80,7 +81,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-l"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			node[i++] = (HTMLTag)e.nextHTMLNode();
@@ -96,7 +97,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	 */
 	public void testEvaluate() 
 	{
-		HTMLImageScanner scanner = new HTMLImageScanner("-i");
+		HTMLImageScanner scanner = new HTMLImageScanner("-i",new HTMLLinkProcessor());
 		boolean retVal = scanner.evaluate("   img ",null);
 		assertEquals("Evaluation of IMG tag",new Boolean(true),new Boolean(retVal));
 	}
@@ -109,7 +110,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLTag tag = new HTMLTag(0,0,"img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo","");
 		String link = "img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo";
 		String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
-		HTMLImageScanner scanner = new HTMLImageScanner("-i");
+		HTMLImageScanner scanner = new HTMLImageScanner("-i",new HTMLLinkProcessor());
 		assertEquals("Extracted Image Locn","http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif",scanner.extractImageLocn(tag,url));
 	}
 	/**
@@ -124,7 +125,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-i"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			node[i++] = (HTMLTag)e.nextHTMLNode();
@@ -148,7 +149,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-l"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			node[i++] = (HTMLTag)e.nextHTMLNode();
@@ -169,7 +170,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-l"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			node[i++] = (HTMLTag)e.nextHTMLNode();
@@ -190,7 +191,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-l"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			node[i++] = (HTMLTag)e.nextHTMLNode();
@@ -212,7 +213,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-l"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			node[i++] = (HTMLTag)e.nextHTMLNode();
@@ -231,7 +232,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		parser.setLineSeparator("\r\n");
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-l"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			node[i++] = (HTMLTag)e.nextHTMLNode();
@@ -255,7 +256,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLImageScanner("-i"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int i = 0;
 		HTMLNode thisNode;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {

@@ -344,8 +344,9 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLLinkScanner("-l"));
-		parser.addScanner(new HTMLImageScanner("-i"));	
+		HTMLLinkScanner linkScanner = new HTMLLinkScanner("-l");
+		parser.addScanner(linkScanner);
+		parser.addScanner(linkScanner.createImageScanner("-i"));	
 			
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -448,8 +449,9 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
-		parser.addScanner(new HTMLLinkScanner("-l"));
-		parser.addScanner(new HTMLImageScanner("-i"));
+		HTMLLinkScanner linkScanner = new HTMLLinkScanner("-l"); 
+		parser.addScanner(linkScanner);
+		parser.addScanner(linkScanner.createImageScanner("-i"));
 				
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -488,6 +490,32 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		assertEquals("Fifth Tag contents","font",endTag2.getText());
 		
 	}
+	public void testBaseRefLink() throws HTMLParserException {
+		String testHTML = "<html>\n"+
+		"<head>\n"+
+		"<TITLE>test page</TITLE>\n"+
+		"<BASE HREF=\"http://www.abc.com/\">\n"+
+		"<a href=\"home.cfm\">Home</a>\n"+
+		"...\n"+
+		"</html>";
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://transfer.go.com");
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		HTMLNode [] node = new HTMLNode[10];
+		// Register the image scanner
+		parser.registerScanners();			
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+		{
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should be 7 nodes identified",new Integer(7),new Integer(i));
+		assertTrue("Node 4 should be a link tag",node[4] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[4];
+		assertEquals("Resolved Link","http://www.abc.com/home.cfm",linkTag.getLink());
+		assertEquals("Resolved Link Text","Home",linkTag.getLinkText());
+	}
+	
 	public void assertStringEquals(String message,String s1,String s2) {
 		for (int i=0;i<s1.length();i++) {
 			if (s1.charAt(i)!=s2.charAt(i)) {
@@ -501,5 +529,6 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 					" \nComplete String 2 = "+s2,false);
 			}
 		}
-	}    		
+	} 
+	   		
 }

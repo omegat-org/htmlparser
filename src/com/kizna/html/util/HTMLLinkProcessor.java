@@ -37,11 +37,12 @@ import java.util.Vector;
  * Processor class for links, is present basically as a utility class.
  */
 public class HTMLLinkProcessor {
+	private String baseUrl;
 	/**
 	 * HTMLExtractor constructor comment.
 	 */
 	public HTMLLinkProcessor() {
-	
+		this.baseUrl=null;
 	}
 	/**
 	 * Parse a string and add all the directories found into a vector
@@ -84,6 +85,7 @@ public class HTMLLinkProcessor {
 			if (link.charAt(0)=='/') { 
 				link = processSlashIsFirstChar(link, url);
 			} else {
+				if (baseUrl!=null) link = baseUrl+"/"+link; else
 				link = processAppendRelativeLink(link, url);	
 			}
 		}
@@ -216,4 +218,20 @@ public class HTMLLinkProcessor {
 	public static boolean isURL(String resourceLocn) {
 		return resourceLocn.indexOf("http")==0 || resourceLocn.indexOf("www.")==0;
 	}	
+	/**
+	 * Returns the baseUrl.
+	 * @return String
+	 */
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	/**
+	 * Sets the baseUrl.
+	 * @param baseUrl The baseUrl to set
+	 */
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
 }

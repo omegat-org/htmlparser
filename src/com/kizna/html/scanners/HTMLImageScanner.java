@@ -71,10 +71,10 @@ public class HTMLImageScanner extends HTMLTagScanner
 	/**
 	 * Overriding the constructor to accept the filter 
 	 */	
-	public HTMLImageScanner(String filter)
+	public HTMLImageScanner(String filter,HTMLLinkProcessor processor)
 	{
 		super(filter);
-		processor = new HTMLLinkProcessor();
+		this.processor = processor;
 	}
 	/**
 	 * Template Method, used to decide if this scanner can handle the Image tag type. If 

@@ -275,4 +275,11 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		newLine += currentLine.substring(node.elementBegin(),currentLine.length());
 		return newLine;
 	}
+	// Creates a Base Ref Scanner sharing the same link processor
+	public HTMLBaseHREFScanner createBaseHREFScanner(String filter) {
+		return new HTMLBaseHREFScanner(filter,processor);
+	}
+	public HTMLImageScanner createImageScanner(String filter) {
+		return new HTMLImageScanner(filter,processor);
+	}
 }

@@ -42,6 +42,7 @@ import com.kizna.html.HTMLParser;
 import com.kizna.html.scanners.HTMLImageScanner;
 import com.kizna.html.tags.HTMLImageTag;
 import com.kizna.html.util.HTMLEnumeration;
+import com.kizna.html.util.HTMLLinkProcessor;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.util.DefaultHTMLParserFeedback;
 
@@ -95,7 +96,7 @@ public class FunctionalTests extends TestCase {
 	}
 	public int countImageTagsWithHTMLParser() throws HTMLParserException {
 		HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
-		parser.addScanner(new HTMLImageScanner("-i"));
+		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 		int parserImgTagCount = 0;
 		HTMLNode node;
 		for (HTMLEnumeration e= parser.elements();e.hasMoreNodes();) {
