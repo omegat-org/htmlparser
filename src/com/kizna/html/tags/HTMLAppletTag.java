@@ -118,41 +118,6 @@ public Enumeration getParameterNames()
 {
 	return appletParams.keys();	
 }
-	/**
-	 * Print the contents of the remark tag.
-	 */
-	public void print()
-	{
-		System.out.println("Applet Tag");
-		System.out.println("**********");
-		System.out.println("Class Name = "+appletClass);
-		System.out.println("Archive = "+archive);
-		System.out.println("Codebase = "+codeBase);
-		Enumeration params = appletParams.keys();
-		if (params==null)
-		System.out.println("No Params found.");
-		else
-		{
-			int cnt = 0;
-			for (;params.hasMoreElements();)
-			{
-				String paramName = (String)params.nextElement();
-				String paramValue = (String)appletParams.get(paramName);
-				System.out.println((cnt++)+": Parameter name = "+paramName+", Parameter value = "+paramValue);
-			}
-		}
-		if (misc.elements()==null)
-		System.out.println("No Miscellaneous items"); else
-		{
-			System.out.println("Miscellaneous items :");
-			for (Enumeration e = misc.elements();e.hasMoreElements();)
-			{
-				((HTMLTag)e.nextElement()).print();
-			}
-		}
-		System.out.println("End of Applet Tag");
-		System.out.println("*****************");
-	}
 /**
  * Insert the method's description here.
  * Creation date: (6/18/2001 2:01:56 AM)
@@ -193,4 +158,39 @@ public void setCodeBase(java.lang.String newCodeBase) {
 public void setMisc(java.util.Vector newMisc) {
 	misc = newMisc;
 }
+
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("Applet Tag\n");
+		sb.append("**********\n");
+		sb.append("Class Name = "+appletClass+"\n");
+		sb.append("Archive = "+archive+"\n");
+		sb.append("Codebase = "+codeBase+"\n");
+		Enumeration params = appletParams.keys();
+		if (params==null)
+		sb.append("No Params found.\n");
+		else
+		{
+			int cnt = 0;
+			for (;params.hasMoreElements();)
+			{
+				String paramName = (String)params.nextElement();
+				String paramValue = (String)appletParams.get(paramName);
+				sb.append((cnt++)+": Parameter name = "+paramName+", Parameter value = "+paramValue+"\n");
+			}
+		}
+		if (misc.elements()==null)
+		sb.append("No Miscellaneous items\n"); else
+		{
+			sb.append("Miscellaneous items :\n");
+			for (Enumeration e = misc.elements();e.hasMoreElements();)
+			{
+				((HTMLTag)e.nextElement()).print();
+			}
+		}
+		sb.append("End of Applet Tag\n");
+		sb.append("*****************\n");
+		return sb.toString();
+	}
 }

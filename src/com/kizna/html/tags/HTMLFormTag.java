@@ -112,10 +112,10 @@ public class HTMLFormTag extends HTMLTag
 	}
 
 	/**
-	 * Print the contents of the HTMLImageNode
+	 * Print the contents of the HTMLFormTag
 	 */
-	public void print()
+	public String toString()
 	{
-		//System.out.println("FORM TAG : Form at "+formURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd());
+		return "FORM TAG : Form at "+formURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 }

@@ -80,23 +80,6 @@ public java.lang.String getType() {
 	return type;
 }
 /**
- * Print the contents of the javascript node
- */
-public void print() 
-{
-	System.out.print("Script Node : ");
-	if (language.length()!=0 || type.length()!=0)
-	{
-		System.out.print("Properties -->");
-		if (language.length()!=0) System.out.print("[Language : "+language+"]");
-		if (type.length()!=0) System.out.print("[Type : "+type+"]");
-	}
-	System.out.println();
-	System.out.println("Code");
-	System.out.println("****");
-	System.out.println(tagContents);	
-}
-/**
  * Set the language of the javascript tag
  * @param newLanguage java.lang.String
  */
@@ -109,5 +92,25 @@ public void setLanguage(java.lang.String newLanguage) {
  */
 public void setType(java.lang.String newType) {
 	type = newType;
+}
+
+/**
+ * Print the contents of the javascript node
+ */
+public String toString() 
+{
+	StringBuffer sb = new StringBuffer();
+	sb.append("Script Node : \n");
+	if (language.length()!=0 || type.length()!=0)
+	{
+		sb.append("Properties -->\n");
+		if (language.length()!=0) sb.append("[Language : "+language+"]\n");
+		if (type.length()!=0) sb.append("[Type : "+type+"]\n");
+	}
+	sb.append("\n");
+	sb.append("Code\n");
+	sb.append("****\n");
+	sb.append(tagContents+"\n");
+	return sb.toString();
 }
 }

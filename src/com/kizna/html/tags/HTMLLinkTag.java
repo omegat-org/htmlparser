@@ -124,29 +124,6 @@ public Enumeration linkData()
 {
 	return nodeVector.elements();	
 }
-	/**
-	 * Print the contents of this Link Node
-	 */
-	public void print()
-	{
-		System.out.print("Link to : "+link + "; titled : "+linkText+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+ ", AccessKey=");
-		if (accessKey==null) System.out.println("null");
-		else System.out.println(accessKey);
-		if (linkData()!=null) 
-		{
-			System.out.println("  "+"LinkData");
-			System.out.println("  "+"--------");
-			
-			HTMLNode node;
-			int i = 0;
-			for (Enumeration e=linkData();e.hasMoreElements();)
-			{
-				node = (HTMLNode)e.nextElement();
-				System.out.print("   "+(i++)+":");
-				node.print();
-			}
-		}
-	}
 /**
  * Insert the method's description here.
  * Creation date: (8/3/2001 1:49:31 AM)
@@ -163,4 +140,30 @@ public void setMailLink(boolean newMailLink) {
 public void setNodeVector(java.util.Vector newNodeVector) {
 	nodeVector = newNodeVector;
 }
+
+	/**
+	 * Print the contents of this Link Node
+	 */
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("Link to : "+link + "; titled : "+linkText+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+ ", AccessKey=");
+		if (accessKey==null) sb.append("null\n");
+		else System.out.println(accessKey+"\n");
+		if (linkData()!=null) 
+		{
+			sb.append("  "+"LinkData\n");
+			sb.append("  "+"--------\n");
+			
+			HTMLNode node;
+			int i = 0;
+			for (Enumeration e=linkData();e.hasMoreElements();)
+			{
+				node = (HTMLNode)e.nextElement();
+				sb.append("   "+(i++)+":\n");
+				sb.append(node.toString());
+			}
+		}
+		return sb.toString();
+	}
 }

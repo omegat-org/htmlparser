@@ -71,11 +71,12 @@ public class HTMLDoctypeTag extends HTMLTag
 	{
 		return tagEnd;
 	}
+
 		/**
 	 * Print the contents of the remark tag.
 	 */
-	public void print()
+	public String toString()
 	{
-		System.out.println("Doctype Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd());
+		return "Doctype Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 }

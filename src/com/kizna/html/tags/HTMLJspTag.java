@@ -72,11 +72,12 @@ public class HTMLJspTag extends HTMLTag
 	{
 		return tagEnd;
 	}
+
 		/**
 	 * Print the contents of the remark tag.
 	 */
-	public void print()
+	public String toString()
 	{
-		System.out.println("JSP/ASP Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd());
+		return "JSP/ASP Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 }

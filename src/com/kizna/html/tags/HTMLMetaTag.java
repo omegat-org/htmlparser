@@ -41,9 +41,6 @@ public class HTMLMetaTag extends HTMLTag {
 		return metaTagName;
 	}
 
-	public void print() {
-		System.out.println(toString());
-	}
 	public String toString() {
 		return "META TAG\n"+
 				"--------\n"+

@@ -60,11 +60,9 @@ public class HTMLImageTag extends HTMLTag
 	{
 		return imageURL;
 	}
-	/**
-	 * Print the contents of the HTMLImageNode
-	 */
-	public void print()
+
+	public String toString()
 	{
-		System.out.println("IMAGE TAG : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd());
+		return "IMAGE TAG : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 }

@@ -53,15 +53,18 @@ public HTMLStyleTag(int tagBegin, int tagEnd, String styleCode,String tagLine) {
 public java.lang.String getStyleCode() {
 	return getText();
 }
+
 /**
  * Print the contents of the javascript node
  */
-public void print() 
+public String toString() 
 {
-	System.out.print("Style Node : ");
-	System.out.println();
-	System.out.println("Code");
-	System.out.println("****");
-	System.out.println(tagContents);	
+	StringBuffer sb = new StringBuffer();	
+	sb.append("Style Node : \n");
+	sb.append("\n");
+	sb.append("Code\n");
+	sb.append("****\n");
+	sb.append(tagContents+"\n");
+	return sb.toString();
 }
 }

@@ -69,11 +69,12 @@ public class HTMLFrameTag extends HTMLTag
 	{
 		return frameName;
 	}
+
 	/**
 	 * Print the contents of the HTMLImageNode
 	 */
-	public void print()
+	public String toString()
 	{
-		//System.out.println("FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd());
+		return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 }
