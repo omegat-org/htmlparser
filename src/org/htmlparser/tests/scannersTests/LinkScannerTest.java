@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030223 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030302 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -514,5 +514,19 @@ public class LinkScannerTest extends ParserTestCase
 			"/news/866201.asp?0sl=-32",
 			linkTag.getLink()
 		);		
+	}
+	
+	/**
+	 * Bug report by Cory Seefurth
+	 * @throws Exception
+	 */
+	public void _testLinkWithJSP() throws Exception {
+		createParser(
+			"<a href=\"<%=Application(\"sURL\")% " +			">/literature/index.htm\">Literature</a>" 		);	
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertType("should be link tag",LinkTag.class,node[0]);
+		LinkTag linkTag = (LinkTag)node[0];
+		assertStringEquals("expected link","<%=Application(\"sURL\")%>/literature/index.htm",linkTag.getLink());
 	}
 }

@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030223 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030302 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -31,7 +31,6 @@ package org.htmlparser;
 // Java Imports //
 //////////////////
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,11 +39,10 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLConnection;
 import java.util.Hashtable;
 
+import org.htmlparser.parserHelper.ParserHelper;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.AppletScanner;
 import org.htmlparser.scanners.DoctypeScanner;
@@ -63,12 +61,11 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.DefaultParserFeedback;
-import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.IteratorImpl;
-import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserFeedback;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
@@ -133,7 +130,7 @@ public class Parser
 	// Please don't change the formatting of the VERSION_STRING
 	// below. This is done so as to facilitate the ant script
 	public final static java.lang.String 
-	VERSION_STRING="1.3 (Integration Build Feb 23, 2003)"
+	VERSION_STRING="1.3 (Integration Build Mar 02, 2003)"
 	;
 	// End of formatting
 
@@ -187,6 +184,7 @@ public class Parser
      */
     public static ParserFeedback stdout = new DefaultParserFeedback ();
 
+	private ParserHelper parserHelper = new ParserHelper();
     //
     // Static methods
     //
@@ -199,92 +197,6 @@ public class Parser
 		Node.setLineSeparator(lineSeparator);	
 	}
 	
-    /**
-     * Opens a connection using the given url.
-     * @param url The url to open.
-     * @param feedback The ibject to use for messages or <code>null</code>.
-     * @exception ParserException if an i/o exception occurs accessing the url.
-     */
-    private static URLConnection openConnection (URL url, ParserFeedback feedback)
-        throws
-            ParserException
-    {
-        URLConnection ret;
-        
-        try
-        {
-            ret = url.openConnection ();
-        }
-        catch (IOException ioe)
-        {
-            String msg = "HTMLParser.openConnection() : Error in opening a connection to " + url.toExternalForm ();
-            ParserException ex = new ParserException (msg, ioe);
-            if (null != feedback)
-                feedback.error (msg, ex);
-            throw ex;
-        }
-        
-        return (ret);
-    }
-
-    /**
-     * Opens a connection based on a given string.
-     * The string is either a file, in which case <code>file://localhost</code>
-     * is prepended (with an intervening slash if required), or a url that
-     * begins with one of the known protocol strings, i.e. <code>http://</code>.
-     * @param string The name of a file or a url.
-     * @param feedback The object to use for messages or <code>null</code> for no feedback.
-     * @exception ParserException if the string is not a valid url or file.
-     */
-    private static URLConnection openConnection (String string, ParserFeedback feedback)
-        throws
-            ParserException
-    {
-        final String prefix = "file://localhost";
-        String resource;
-        URL url;
-        StringBuffer buffer;
-        URLConnection ret;
-
-        // for a while we warn people about spaces in their URL
-        resource = LinkProcessor.fixSpaces (string);
-        if (!resource.equals (string) && (null != feedback))
-            feedback.warning ("URL containing spaces was adjusted to \""
-                + resource
-                + "\", use HTMLLinkProcessor.fixSpaces()");
-
-        try
-        {
-            url = new URL (resource);
-            ret =  openConnection (url, feedback);
-        }
-        catch (MalformedURLException murle)
-        {   // try it as a file
-            buffer = new StringBuffer (prefix.length () + string.length () + 1);
-            buffer.append (prefix);
-            if (!string.startsWith (File.separator))
-                buffer.append ("/");
-            buffer.append (resource);
-            try
-            {
-                url = new URL (buffer.toString ());
-                ret = openConnection (url, feedback);
-                if (null != feedback)
-                    feedback.info (url.toExternalForm ());
-            }
-            catch (MalformedURLException murle2)
-            {
-                String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
-                ParserException ex = new ParserException (msg, murle2);
-                if (null != feedback)
-                    feedback.error (msg, ex);
-                throw ex;
-            }
-        }
-        
-        return (ret);
-    }
-
     //
     // Constructors
     //
@@ -362,7 +274,7 @@ public class Parser
 	 */
 	public Parser(String resourceLocn, ParserFeedback feedback) throws ParserException
 	{
-        this (openConnection (resourceLocn, feedback), feedback);
+        this (ParserHelper.openConnection (resourceLocn, feedback), feedback);
     }
 
 	/**
@@ -530,7 +442,7 @@ public class Parser
             ParserException
     {
         if ((null != url) && !"".equals (url))
-            setConnection (openConnection (url, getFeedback ()));
+            setConnection (ParserHelper.openConnection (url, getFeedback ()));
     }
 
     /**
@@ -711,69 +623,7 @@ public class Parser
         reader.setParser (this);
     }
 
-//    /**
-//     * Dump the HTTP header contents.
-//     */
-//    protected void dumpHeader ()
-//    {
-//        java.util.Map map = url_conn.getHeaderFields ();
-//        for (Iterator iterator = map.keySet ().iterator (); iterator.hasNext (); )
-//        {
-//            String key = (String)iterator.next ();
-//            feedback.info (key + "=" + map.get (key));
-//        }
-//    }
 
-    /**
-     * Lookup a character set name.
-     * <em>Vacuous for JVM's without <code>java.nio.charset</code>.</em>
-     * This uses reflection so the code will still run under prior JDK's but
-     * in that case the default is always returned.
-     * @param name The name to look up. One of the aliases for a character set.
-     * @param _default The name to return if the lookup fails.
-     */
-    protected String findCharset (String name, String _default)
-    {
-        String ret;
-        
-        try
-        {
-            Class cls;
-            java.lang.reflect.Method method;
-            Object object;
-            
-            cls = Class.forName ("java.nio.charset.Charset");
-            method = cls.getMethod ("forName", new Class[] { String.class });
-            object = method.invoke (null, new Object[] { name });
-            method = cls.getMethod ("name", new Class[] { });
-            object = method.invoke (object, new Object[] { });
-            ret = (String)object;
-        }
-        catch (ClassNotFoundException cnfe)
-        {
-            // for reflection exceptions, assume the name is correct
-            ret = name;
-        }
-        catch (NoSuchMethodException nsme)
-        {
-            // for reflection exceptions, assume the name is correct
-            ret = name;
-        }
-        catch (IllegalAccessException ia)
-        {
-            // for reflection exceptions, assume the name is correct
-            ret = name;
-        }
-        catch (java.lang.reflect.InvocationTargetException ita)
-        {
-            // java.nio.charset.IllegalCharsetNameException
-            // and java.nio.charset.UnsupportedCharsetException
-            // return the default
-            ret = _default;
-        }
-        
-        return (ret);
-    }
     
     /**
      * Try and extract the character set from the HTTP header.
@@ -829,7 +679,7 @@ public class Parser
                     content = content.substring (1).trim ();
                     if (-1 != (index = content.indexOf (";")))
                         content = content.substring (0, index);
-                    ret = findCharset (content, ret);
+                    ret = ParserHelper.findCharset (content, ret);
                     // Charset names are not case-sensitive;
                     // that is, case is always ignored when comparing charset names.
                     if (!ret.equalsIgnoreCase (content))
@@ -902,65 +752,78 @@ public class Parser
         remove_scanner = false;
         restart = false;
         ret = new IteratorImpl (reader, resourceLocn, feedback);
-        if (null != url_conn)
-            try
-            {
-                if (null == scanners.get ("-m"))
-                {
-                    addScanner (new MetaTagScanner ("-m"));
-                    remove_scanner = true;
-                }
-
-                /* pre-read up to </HEAD> looking for charset directive */
-                while (null != (node = ret.peek ()))
-                {
-                    if (node instanceof MetaTag)
-                    {   // check for charset on Content-Type
-                        meta = (MetaTag)node;
-                        httpEquiv = meta.getAttribute ("HTTP-EQUIV");
-                        if ("Content-Type".equalsIgnoreCase (httpEquiv))
-                        {
-                            charset = getCharset (meta.getAttribute ("CONTENT"));
-                            if (!charset.equalsIgnoreCase (character_set))
-                            {   // oops, different character set, restart
-                                character_set = charset;
-                                createReader ();
-                                ret = new IteratorImpl (reader, resourceLocn, feedback);
-                            }
-                            // once we see the Content-Type meta tag we're finished the pre-read
-                            break;
-                        }
-                    }
-                    else if (node instanceof EndTag)
-                    {
-                        end = (EndTag)node;
-                        if (end.getTagName ().equalsIgnoreCase ("HEAD"))
-                            // or, once we see the </HEAD> tag we're finished the pre-read
-                            break;
-                    }
-                }
-            }
-            catch (UnsupportedEncodingException uee)
-            {
-                String msg = "elements() : The content of " + url_conn.getURL ().toExternalForm () + " has an encoding which is not supported";
-                ParserException ex = new ParserException (msg, uee);
-                feedback.error (msg, ex);
-                throw ex;
-            }
-            catch (IOException ioe)
-            {
-                String msg = "elements() : Error in opening a connection to " + url_conn.getURL ().toExternalForm ();
-                ParserException ex = new ParserException (msg, ioe);
-                feedback.error (msg, ex);
-                throw ex;
-            }
-            finally
-            {
-                if (remove_scanner)
-                    scanners.remove ("-m");
-            }
+  		ret = createIteratorImpl(remove_scanner, ret);
 
         return (ret);
+	}
+
+	public IteratorImpl createIteratorImpl(
+		boolean remove_scanner,
+		IteratorImpl ret)
+		throws ParserException {
+		Node node;
+		MetaTag meta;
+		String httpEquiv;
+		String charset;
+		EndTag end;
+		  if (null != url_conn)
+		        try
+		        {
+		            if (null == scanners.get ("-m"))
+		            {
+		                addScanner (new MetaTagScanner ("-m"));
+		                remove_scanner = true;
+		            }
+		
+		            /* pre-read up to </HEAD> looking for charset directive */
+		            while (null != (node = ret.peek ()))
+		            {
+		                if (node instanceof MetaTag)
+		                {   // check for charset on Content-Type
+		                    meta = (MetaTag)node;
+		                    httpEquiv = meta.getAttribute ("HTTP-EQUIV");
+		                    if ("Content-Type".equalsIgnoreCase (httpEquiv))
+		                    {
+		                        charset = getCharset (meta.getAttribute ("CONTENT"));
+		                        if (!charset.equalsIgnoreCase (character_set))
+		                        {   // oops, different character set, restart
+		                            character_set = charset;
+		                            createReader ();
+		                            ret = new IteratorImpl (reader, resourceLocn, feedback);
+		                        }
+		                        // once we see the Content-Type meta tag we're finished the pre-read
+		                        break;
+		                    }
+		                }
+		                else if (node instanceof EndTag)
+		                {
+		                    end = (EndTag)node;
+		                    if (end.getTagName ().equalsIgnoreCase ("HEAD"))
+		                        // or, once we see the </HEAD> tag we're finished the pre-read
+		                        break;
+		                }
+		            }
+		        }
+		        catch (UnsupportedEncodingException uee)
+		        {
+		            String msg = "elements() : The content of " + url_conn.getURL ().toExternalForm () + " has an encoding which is not supported";
+		            ParserException ex = new ParserException (msg, uee);
+		            feedback.error (msg, ex);
+		            throw ex;
+		        }
+		        catch (IOException ioe)
+		        {
+		            String msg = "elements() : Error in opening a connection to " + url_conn.getURL ().toExternalForm ();
+		            ParserException ex = new ParserException (msg, ioe);
+		            feedback.error (msg, ex);
+		            throw ex;
+		        }
+		        finally
+		        {
+		            if (remove_scanner)
+		                scanners.remove ("-m");
+		        }
+		return ret;
 	}
 	
 	/**

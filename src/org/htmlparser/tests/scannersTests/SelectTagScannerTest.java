@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030223 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030302 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -85,4 +85,15 @@ public class SelectTagScannerTest extends ParserTestCase
 		assertEquals("option tag value","option1",optionTags[0].getValue());
 	}
 	
+	/**
+	 * Bug reproduction based on report by gumirov@ccfit.nsu.ru 
+	 */
+	public void testSelectTagWithComments() throws Exception {
+		createParser(
+			"<form>" +			"<select> " +			"<!-- 1 --><option selected>123 " +			"<option>345 " +			"</select> " +			"</form>"
+		);
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+			
+	}
 }
