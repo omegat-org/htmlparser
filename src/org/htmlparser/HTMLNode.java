@@ -165,6 +165,35 @@ public abstract class HTMLNode
 	public abstract void collectInto(NodeList collectionList,String filter);
 	
 	/**
+	 * Collect this node and its child nodes (if-applicable) into the collection parameter, provided the node
+	 * satisfies the filtering criteria. <P/>
+	 * 
+	 * This mechanism allows powerful filtering code to be written very easily, without bothering about collection
+	 * of embedded tags separately. e.g. when we try to get all the links on a page, it is not possible to get it
+	 * at the top-level, as many tags (like form tags), can contain links embedded in them. We could get the links
+	 * out by checking if the current node is a form tag, and going through its contents. However, this ties us down
+	 * to specific tags, and is not a very clean approach. <P/>
+	 * 
+	 * Using collectInto(), programs get a lot shorter. Now, the code to extract all links from a page would look 
+	 * like :
+	 * <pre>
+	 * NodeList collectionList = new NodeList(); 
+	 * HTMLNode node; 
+	 * for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+	 * 		node = e.nextNode();
+	 * 		node.collectInto (collectionVector, HTMLLinkTag.class);
+	 * }
+	 * </pre>
+	 * Thus, collectionList will hold all the link nodes, irrespective of how
+	 * deep the links are embedded. 
+	 */
+	public void collectInto(NodeList collectionList, Class nodeType) {
+		if (nodeType.getName().equals(this.getClass().getName())) {
+			collectionList.add(this);
+		}
+	}
+	
+	/**
 	 * Returns the beginning position of the tag.
 	 */
 	public int elementBegin()

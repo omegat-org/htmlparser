@@ -187,11 +187,18 @@ public abstract class CompositeTag extends HTMLTag {
 		super.collectInto(collectionList, filter);
 		HTMLNode node;
 		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
-			node = (HTMLNode)e.nextNode();
+			node = e.nextNode();
 			node.collectInto(collectionList,filter);
 		}
 	}
 
+	public void collectInto(NodeList collectionList, Class nodeType) {
+		super.collectInto(collectionList,nodeType);
+		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+			e.nextNode().collectInto(collectionList,nodeType);
+		}
+	}
+	
 	public String getChildrenHTML() {
 		StringBuffer buff = new StringBuffer();
 		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
@@ -214,5 +221,7 @@ public abstract class CompositeTag extends HTMLTag {
 			else
 				visitor.visitTag(this);
 	}
+
+
 
 }

@@ -7,22 +7,12 @@ import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.NodeList;
 
-public class ObjectSearchTest extends HTMLParserTestCase {
+public class ObjectCollectionTest extends HTMLParserTestCase {
 
-	public ObjectSearchTest(String name) {
+	public ObjectCollectionTest(String name) {
 		super(name);
-	}
-
-	public void testSimpleSearch() throws HTMLParserException {
-		createParser(
-			"<DIV>" +			"	<SPAN>The Refactoring Challenge</SPAN>" +			"	<SPAN>&#013;id: 6</SPAN>" +			"</DIV>"
-		);
-		parser.registerScanners();
-		parseAndAssertNodeCount(1);
-		Div div = (Div)node[0];
-		HTMLNode [] spans = div.searchFor(Span.class).toNodeArray();
-		assertSpanContent(spans);
 	}
 
 	private void assertSpanContent(HTMLNode[] spans) {
@@ -41,7 +31,32 @@ public class ObjectSearchTest extends HTMLParserTestCase {
 		);
 	}
 	
-	public void testNestedSearch() throws HTMLParserException {
+	public void testSimpleSearch() throws HTMLParserException {
+		createParser(
+			"<SPAN>The Refactoring Challenge</SPAN>" +
+			"<SPAN>&#013;id: 6</SPAN>" 
+		);
+		parser.registerScanners();
+		assertSpanContent(parser.extractAllNodesThatAre(Span.class));
+	}
+	
+	public void testOneLevelNesting() throws HTMLParserException {
+		createParser(
+			"<DIV>" +
+			"	<SPAN>The Refactoring Challenge</SPAN>" +
+			"	<SPAN>&#013;id: 6</SPAN>" +
+			"</DIV>"
+		);
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		Div div = (Div)node[0];
+		NodeList nodeList = new NodeList();
+		div.collectInto(nodeList,Span.class);
+		HTMLNode [] spans = nodeList.toNodeArray();
+		assertSpanContent(spans);
+	}
+
+	public void testTwoLevelNesting() throws HTMLParserException {
 		createParser(
 			"<table>" +			"	<DIV>" +
 			"		<SPAN>The Refactoring Challenge</SPAN>" +
@@ -52,8 +67,9 @@ public class ObjectSearchTest extends HTMLParserTestCase {
 		parser.addScanner(new TableScanner(parser));
 		parseAndAssertNodeCount(1);
 		TableTag tableTag = (TableTag)node[0];
-		HTMLNode [] spans = 
-			tableTag.searchFor(Span.class).toNodeArray();
+		NodeList nodeList = new NodeList();
+		tableTag.collectInto(nodeList,Span.class);
+		HTMLNode [] spans = nodeList.toNodeArray();
 		assertSpanContent(spans);
 	}
 }

@@ -122,4 +122,5 @@ public class HTMLParserUtils
 			plainText=plainText.substring(1);
 		return plainText;
 	}	
+	
 }

@@ -30,15 +30,35 @@ package org.htmlparser;
 //////////////////
 // Java Imports //
 //////////////////
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Hashtable;
 
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
 import org.htmlparser.parserHelper.TagParser;
-import org.htmlparser.scanners.*;
+import org.htmlparser.scanners.DivScanner;
+import org.htmlparser.scanners.HTMLAppletScanner;
+import org.htmlparser.scanners.HTMLDoctypeScanner;
+import org.htmlparser.scanners.HTMLFormScanner;
+import org.htmlparser.scanners.HTMLFrameSetScanner;
+import org.htmlparser.scanners.HTMLJspScanner;
+import org.htmlparser.scanners.HTMLLinkScanner;
+import org.htmlparser.scanners.HTMLMetaTagScanner;
+import org.htmlparser.scanners.HTMLScriptScanner;
+import org.htmlparser.scanners.HTMLStyleScanner;
+import org.htmlparser.scanners.HTMLTagScanner;
+import org.htmlparser.scanners.HTMLTitleScanner;
+import org.htmlparser.scanners.SpanScanner;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
@@ -50,7 +70,7 @@ import org.htmlparser.util.HTMLEnumerationImpl;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserFeedback;
-
+import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.HTMLVisitor;
 
 /**
@@ -1114,6 +1134,14 @@ public class HTMLParser
 		reader = new HTMLReader(new StringReader(inputHTML),"");      
 	  }
 	}	
+	
+	public HTMLNode [] extractAllNodesThatAre(Class nodeType) throws HTMLParserException {
+		NodeList nodeList = new NodeList();
+		for (HTMLEnumeration e = elements();e.hasMoreNodes();) {
+			e.nextNode().collectInto(nodeList,nodeType);
+		}
+		return nodeList.toNodeArray();
+	}
 	
 	/**
 	 * Creates the parser on an input string.
