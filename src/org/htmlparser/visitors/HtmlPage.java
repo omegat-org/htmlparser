@@ -74,10 +74,6 @@ public class HtmlPage extends NodeVisitor {
 		}
 	}
 
-	private boolean isTitle(Tag tag) {
-		return tag instanceof TitleTag;
-	}
-
 	private boolean isTable(Tag tag) {
 		return tag instanceof TableTag;
 	}

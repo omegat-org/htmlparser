@@ -40,9 +40,6 @@ import org.htmlparser.util.ParserException;
  */
 
 public class DoctypeScanner extends TagScanner {
-	private java.lang.String language;
-	private java.lang.String type;
-
 	public DoctypeScanner() {
 		super();
 	}

@@ -38,8 +38,6 @@ import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
 public class JspScanner extends TagScanner {
-	private String language;
-	private String type;
 
 	public JspScanner() {
 		super();

@@ -86,9 +86,4 @@ public class DecodingNode implements Node {
 	public String toHtml() {
 		return delegate.toHtml();
 	}
-
-	public String toHTML() {
-		return delegate.toHTML();
-	}
-
 }

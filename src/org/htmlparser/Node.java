@@ -128,10 +128,8 @@ public interface Node {
 	 */
 	public abstract int elementEnd();
 	public abstract void accept(NodeVisitor visitor);
-	/**
-	 * @deprecated - use toHtml() instead
-	 */
-	public abstract String toHTML();
+
+
 	/**
 	 * Get the parent of this tag
 	 * @return The parent of this node, if it's been set, <code>null</code> otherwise.

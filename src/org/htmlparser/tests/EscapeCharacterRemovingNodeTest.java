@@ -33,9 +33,9 @@ package org.htmlparser.tests;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
-public class DecodingNodeTest extends ParserTestCase {
+public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
 
-	public DecodingNodeTest(String name) {
+	public EscapeCharacterRemovingNodeTest(String name) {
 		super(name);
 	}
 
@@ -43,7 +43,7 @@ public class DecodingNodeTest extends ParserTestCase {
 		throws ParserException {
 		StringBuffer decodedContent = new StringBuffer();
 		createParser(STRING_TO_DECODE);
-		parser.setNodeDecoding(true);  // tell parser to decode StringNodes
+		parser.setEscapeCharacterRemoval(true);  
 		NodeIterator nodes = parser.elements();
 		
 		while (nodes.hasMoreNodes()) 
@@ -52,62 +52,52 @@ public class DecodingNodeTest extends ParserTestCase {
 		return decodedContent.toString();
 	}
 
-	public void testAmpersand() throws Exception {
+	public void testTab() throws Exception {
 		String ENCODED_WORKSHOP_TITLE =
-			"The Testing &amp; Refactoring Workshop";
+			"The Testing & Refactoring Workshop\tCreated by Industrial Logic, Inc.";
 			
 		String DECODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring Workshop";
+			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
 
 		assertEquals(
-			"ampersand in string",
+			"tab in string",
 			DECODED_WORKSHOP_TITLE,
 			parseToObtainDecodedResult(ENCODED_WORKSHOP_TITLE));
 	}
+	
+	public void testCarriageReturn() throws Exception {
+		String ENCODED_WORKSHOP_TITLE =
+			"The Testing & Refactoring Workshop\nCreated by Industrial Logic, Inc.\n";
+			
+		String DECODED_WORKSHOP_TITLE =
+			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
 
-	public void testNumericReference() throws Exception {
-		String ENCODED_DIVISION_SIGN =
-			"&#247; is the division sign.";
-			
-		String DECODED_DIVISION_SIGN =
-			"÷ is the division sign.";
-			
 		assertEquals(
-			"numeric reference for division sign",
-			DECODED_DIVISION_SIGN,
-			parseToObtainDecodedResult(ENCODED_DIVISION_SIGN));
-	}
+			"tab in string",
+			DECODED_WORKSHOP_TITLE,
+			parseToObtainDecodedResult(ENCODED_WORKSHOP_TITLE));
+	}	
 	
-	
-	public void testReferencesInString () throws Exception {
-		String ENCODED_REFERENCE_IN_STRING =
-			"Thus, the character entity reference &divide; is a more convenient" +
-			" form than &#247; for obtaining the division sign (÷)";
-		
-		String DECODED_REFERENCE_IN_STRING =
-			"Thus, the character entity reference ÷ is a more convenient" +
-			" form than ÷ for obtaining the division sign (÷)";
-		
-		assertEquals (
-			"character references within a string",
-			DECODED_REFERENCE_IN_STRING,
-			parseToObtainDecodedResult(ENCODED_REFERENCE_IN_STRING));
-	}
-
-	public void testBogusCharacterEntityReference() throws Exception {
-		
-		String ENCODED_BOGUS_CHARACTER_ENTITY = 
-			"The character entity reference &divode; is bogus";
+	public void testWithDecodingNodeDecorator() throws Exception {
+		String ENCODED_WORKSHOP_TITLE =
+			"The Testing &amp; Refactoring Workshop\nCreated by Industrial Logic, Inc.\n";
 			
-		String DECODED_BOGUS_CHARACTER_ENTITY =
-			"The character entity reference &divode; is bogus";
-		
-		assertEquals (
-			"bogus character entity reference",
-			DECODED_BOGUS_CHARACTER_ENTITY,
-			parseToObtainDecodedResult(ENCODED_BOGUS_CHARACTER_ENTITY));
-	}
-	
-	
+		String DECODED_WORKSHOP_TITLE =
+			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
 
+		StringBuffer decodedContent = new StringBuffer();
+		createParser(ENCODED_WORKSHOP_TITLE);
+		parser.setEscapeCharacterRemoval(true);
+		parser.setNodeDecoding(true);
+		NodeIterator nodes = parser.elements();
+		
+		while (nodes.hasMoreNodes()) 
+			decodedContent.append(nodes.nextNode().toPlainTextString());			
+
+		assertEquals(
+			"tab in string",
+			DECODED_WORKSHOP_TITLE,
+			decodedContent.toString());
+		
+	}
 }

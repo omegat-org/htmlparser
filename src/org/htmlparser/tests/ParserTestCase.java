@@ -39,7 +39,6 @@ import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
@@ -304,63 +303,6 @@ public class ParserTestCase extends TestCase {
 		}
 	}
 	
-
-	private void assertStringNodeEquals(
-		String displayMessage,
-		Node expectedNode,
-		Node actualNode) {
-		if (expectedNode instanceof StringNode) {
-			StringNode expectedString = 
-				(StringNode)expectedNode;
-			StringNode actualString = 
-				(StringNode)actualNode;
-			assertStringEquals(
-				displayMessage,
-				expectedString.getText(), 
-				actualString.getText()
-			);
-		}
-	}
-
-	private void assertTagEquals(
-		String displayMessage,
-		Node expectedNode,
-		Node actualNode,
-		NodeIterator actualEnumeration)
-		throws ParserException {
-		
-		if (expectedNode instanceof Tag) {
-			Tag expectedTag = (Tag)expectedNode;
-			Tag actualTag   = (Tag)actualNode;
-			if (isTagAnXmlEndTag(expectedTag)) {
-				if (!isTagAnXmlEndTag(actualTag)) {
-					assertAttributesMatch(displayMessage, expectedTag, actualTag);
-					Node tempNode =
-						actualEnumeration.nextNode();
-					assertTrue(
-						"should be an end tag but was "+
-						tempNode.getClass().getName(),
-						tempNode instanceof EndTag
-					);
-					actualTag = (EndTag)tempNode;
-					String expectedTagName = ParserUtils.removeChars(
-						expectedTag.getTagName(),'/'
-					);
-					assertEquals(
-						"expected end tag",
-						expectedTagName,
-						actualTag.getTagName()
-					);
-					
-				}
-			} else
-			assertAttributesMatch(displayMessage, expectedTag, actualTag);
-		}
-	}
-
-	private boolean isTagAnXmlEndTag(Tag expectedTag) {
-		return expectedTag.getText().lastIndexOf('/')==expectedTag.getText().length()-1;
-	}
 
 
 	private void assertAttributesMatch(String displayMessage, Tag expectedTag, Tag actualTag) {

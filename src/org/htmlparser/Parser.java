@@ -182,11 +182,17 @@ public class Parser
     protected static final String CHARSET_STRING = "charset";
 
 	/**
-	 * Flag to tell the parser to decode nodes while parsing.  
+	 * Flag to tell the parser to decode strings returned by StringNode's toPlainTextString.  
 	 * Decoding occurs via the method, org.htmlparser.util.Translate.decode()
 	 */
 	private boolean shouldDecodeNodes = false;
 
+
+	/**
+	 * Flag to tell the parser to remove escape characters, like \n and \t, returned by StringNode's toPlainTextString.  
+	 * Escape character removal occurs via the method, org.htmlparser.util.ParserUtils.removeEscapeCharacters()
+	 */
+	private boolean shouldRemoveEscapeCharacters = false;
 
 	/**
 	 * Feedback object.
@@ -242,8 +248,6 @@ public class Parser
      * Use this for output on <code>System.out</code>.
      */
     public static ParserFeedback stdout = new DefaultParserFeedback ();
-
-	private ParserHelper parserHelper = new ParserHelper();
 
     //
     // Static methods
@@ -1225,5 +1229,13 @@ public class Parser
 
 	public boolean shouldDecodeNodes() {
 		return shouldDecodeNodes;
+	}
+
+	public void setEscapeCharacterRemoval(boolean shouldRemoveEscapeCharacters) {
+		this.shouldRemoveEscapeCharacters = shouldRemoveEscapeCharacters;
+	}
+
+	public boolean shouldRemoveEscapeCharacters() {
+		return shouldRemoveEscapeCharacters;
 	}
 }

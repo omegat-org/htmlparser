@@ -139,6 +139,7 @@ public class StringParser {
 			}
 		}
 		return StringNode.createStringNode(textBuffer, textBegin, textEnd,
-				  						    reader.getParser().shouldDecodeNodes());
+				  						    reader.getParser().shouldDecodeNodes(),
+				  						    reader.getParser().shouldRemoveEscapeCharacters());
 	}
 }

@@ -143,16 +143,6 @@ public class CompositeTagScannerHelper {
 		);
 	}
 
-	private StringBuffer createModifiedLine(String endTagName, int endTagBegin) {
-		StringBuffer newLine = new StringBuffer();
-		newLine.append(currLine.substring(0,endTagBegin));
-		newLine.append("</");
-		newLine.append(endTagName);
-		newLine.append(">");
-		newLine.append(currLine.substring(endTagBegin,currLine.length()));
-		return newLine;
-	}
-
 	private Tag createTag() throws ParserException {
 		CompositeTag newTag = 
 		 	(CompositeTag)

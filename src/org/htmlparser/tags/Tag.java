@@ -58,12 +58,6 @@ public class Tag extends AbstractNode
 	 */
 	public final static String TAGNAME = "$<TAGNAME>$";
 	public final static String EMPTYTAG = "$<EMPTYTAG>$";
-	private final static int TAG_BEFORE_PARSING_STATE=1;
-	private final static int TAG_BEGIN_PARSING_STATE=2;
-	private final static int TAG_FINISHED_PARSING_STATE=3;
-	private final static int TAG_ILLEGAL_STATE=4;
-	private final static int TAG_IGNORE_DATA_STATE=5;
-	private final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
 	private final static String EMPTY_STRING="";
 	
 	private AttributeParser attributeParser;

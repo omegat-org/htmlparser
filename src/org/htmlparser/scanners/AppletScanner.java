@@ -39,9 +39,6 @@ import org.htmlparser.util.ParserException;
  */
 public class AppletScanner extends CompositeTagScanner {
 	private static String [] MATCH_STRING = {"APPLET"};
-	private java.lang.String className;
-	private java.lang.String archive;
-	private java.lang.String codebase;
 	
 	public AppletScanner() {
 		super(MATCH_STRING);
