@@ -636,7 +636,7 @@ public class SiteCapturer
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 null,
-                "http://htmlparser.sourceforge.net/docs");
+                "http://htmlparser.sourceforge.net/wiki");
             if (null != url)
                 worker.setSource (url);
             else

@@ -5,8 +5,8 @@ Build Procedure
 
 Release Procedure
 - cd htmlparser
-- delete the local Wiki pages with 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/*'
-  and 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/docs/images/*',
+- delete the local Wiki pages with 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/wiki/*'
+  and 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/wiki/images/*',
   of course any one else would have to adjust this and
   also the hard-coded path in WikiCapturer
 - 'javac -classpath lib/htmlparser.jar ../WikiCapturer/src/org/htmlparser/wikicapturer/CaptureWiki.java ../WikiCapturer/src/org/htmlparser/wikicapturer/PhpWikiVisitor.java'
@@ -22,8 +22,8 @@ Release Procedure
   a heading like "Integration Build 1.4 - 20040104"
 - 'ant versionSource' updates the version in Parser.java and release.txt
 - perform a CVS update on htmlparser to identify new and changed files
-- commit changed files (i.e. Parser.java, release.txt, docs/changes, docs/docs
-  and docs/docs/images) to the head revision using a reason of the form:
+- commit changed files (i.e. Parser.java, release.txt, docs/changes, docs/wiki
+  and docs/wiki/images) to the head revision using a reason of the form:
 Update version to 1.4-20040104.
 - use CVS to tag the current head revisions with a name like v1_4_20040104
 - use CVS to checkout everything with the tag used above
@@ -353,16 +353,18 @@ HTML Parser Integration Release 1.4-20040104
     <delete file="${resources}/HtmlTaglet.class"/>
   </target>
 
-  <target name="Release" depends="jar,thumbelina,javadoc" description="prepare the release files">
+  <target name="release" depends="jar,thumbelina,javadoc" description="prepare the release files">
   </target>
 
   <!-- Package the release -->
-  <target name="Package" depends="Release,sources"
+  <target name="package" depends="release,sources"
     description="glom the release and source files into the distribution zip file">
     <mkdir dir="${distribution}"/>
     <zip zipfile="${distribution}/htmlparser${versionTag}.zip">
-      <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}"/>
-      <zipfileset dir="${docs}" prefix="htmlparser${versionQualifier}/${docs}"/>
+      <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}" includes="*.bat"/>
+      <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}" includes="*" excludes="*.bat" filemode="755"/>
+      <zipfileset dir="${docs}" prefix="htmlparser${versionQualifier}/${docs}" excludes="docs/**,samples/**"/>
+      <zipfileset dir="${docs}/docs" prefix="htmlparser${versionQualifier}/${docs}/wiki"/>
       <zipfileset dir="${lib}" prefix="htmlparser${versionQualifier}/${lib}"/>
       <zipfileset dir="." prefix="htmlparser${versionQualifier}/" includes="src.zip"/>
       <!-- Copy the release notes as readme.txt in the base release directory -->
@@ -390,7 +392,7 @@ HTML Parser Integration Release 1.4-20040104
   </target>
 	
   <!-- Perform the htmlparser integration -->
-  <target name="htmlparser" depends="Package,clean" description="same as Package plus cleanup">
+  <target name="htmlparser" depends="package,clean" description="same as package plus cleanup">
   </target>
 	
 </project>

@@ -41,9 +41,7 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.ObjectFindingVisitor;
 
 /**
- * Extract strings from a URL.
- * @author Derrick Oswald
- * Created on December 23, 2002, 5:01 PM
+ * Extract links from a URL.
  */
 public class LinkBean extends Object implements Serializable
 {

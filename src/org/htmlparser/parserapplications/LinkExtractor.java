@@ -60,7 +60,7 @@ public class LinkExtractor
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 null,
-                "http://htmlparser.sourceforge.net/docs/");
+                "http://htmlparser.sourceforge.net/wiki/");
             if (null == url)
                 System.exit (1);
         }
