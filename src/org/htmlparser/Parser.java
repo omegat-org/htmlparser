@@ -1,4 +1,4 @@
-// HTMLParser Library v1_3_20030518 - A java-based parser for HTML
+// HTMLParser Library v1_3_20030525 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -149,14 +149,14 @@ public class Parser
      * The type of version.
      */
     public final static String
-    VERSION_TYPE = "Integration Build"
+    VERSION_TYPE = "Release Build"
     ;
 
     /**
      * The date of the version.
      */
     public final static String
-    VERSION_DATE = "May 18, 2003"
+    VERSION_DATE = "May 25, 2003"
     ;
 
     /**

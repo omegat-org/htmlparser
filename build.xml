@@ -6,7 +6,7 @@
        ant -DversionMinor=4 -DversionType=Release\ Build versionSource
   -->
   <property name="versionMajor" value="1"/>
-  <property name="versionMinor" value="3"/>
+  <property name="versionMinor" value="4"/>
   <property name="versionType" value="Integration Build"/>
   <property name="versionNumber" value="${versionMajor}.${versionMinor}"/>
   <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
