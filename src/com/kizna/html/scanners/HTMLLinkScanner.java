@@ -260,10 +260,14 @@ public class HTMLLinkScanner extends HTMLTagScanner
 				previousOpenLinkScanner = null;
 				return createLinkTag(currentLine, node, mailLink, link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
 			}
-			throw new HTMLParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
+			HTMLParserException ex = new HTMLParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
+			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);
+			throw ex;
 		}
 		catch (Exception e) {
-			throw new HTMLParserException("HTMLLinkScanner.scan() : Error while scanning a link tag, current line = "+currentLine,e);
+			HTMLParserException ex = new HTMLParserException("HTMLLinkScanner.scan() : Error while scanning a link tag, current line = "+currentLine,e);
+			feedback.error("HTMLLinkScanner.scan() : Error while scanning a link tag, current line = "+currentLine,ex);
+			throw ex;
 		}	
 	}
 	public String replaceFaultyTagWithEndTag(HTMLTag tag, String currentLine) {
