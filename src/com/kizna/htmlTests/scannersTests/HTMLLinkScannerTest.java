@@ -84,8 +84,54 @@ public void testErroneousLinkBug() {
  * <a href=s/7509>
  * </pre>
  */
-public void testErroneousLinkBugFromYahoo() {
+public void testErroneousLinkBugFromYahoo2() {
 	String testHTML = new String("<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img></td><td nowrap> &nbsp;\n"+
+	"<a href=s/7509><b>Yahoo! Movies</b></a>");
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
+	HTMLParser parser = new HTMLParser(reader);
+	parser.registerScanners();
+	HTMLNode [] node = new HTMLNode[10];
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 5 nodes identified",5,i);
+	// The first node should be a HTMLTag 
+	assertTrue("First node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
+	// The second node should be a HTMLStringNode
+	assertTrue("Fifth node should be a HTMLLinkTag",node[4] instanceof HTMLLinkTag);
+	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+	assertEquals("Link","http://www.yahoo.com/s/8741",linkTag.getLink());
+	// Verify the link data
+	assertEquals("Link Text","",linkTag.getLinkText());
+	// Verify the reconstruction html
+	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></A>",linkTag.toRawString());
+	// Verify the tags in between
+	assertTrue("Second node should be an end tag",node[1] instanceof HTMLEndTag);
+	assertTrue("Third node should be an HTMLTag",node[2] instanceof HTMLTag);		
+	assertTrue("Fourth node should be a string node",node[3] instanceof HTMLStringNode);
+	
+	// Verify their contents
+	HTMLEndTag endTag = (HTMLEndTag)node[1];
+	assertEquals("Second node","td",endTag.getContents());
+	HTMLTag tag = (HTMLTag)node[2];
+	assertEquals("Third node","td nowrap",tag.getText());
+	HTMLStringNode stringNode = (HTMLStringNode)node[3];
+	assertEquals("Fourth node"," &nbsp;",stringNode.getText());	
+}
+
+/**
+ * Test case based on a report by Raghavender Srimantula, of the parser giving out of memory exceptions. Found to occur
+ * on the following piece of html
+ * <pre>
+ * <a href=s/8741><img src="http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif" height=16 width=16 border=0></img>This is test
+ * <a href=s/7509>
+ * </pre>
+ */
+public void testErroneousLinkBugFromYahoo() {
+	String testHTML = new String("<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img>This is a test\n"+
 	"<a href=s/7509><b>Yahoo! Movies</b></a>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
@@ -105,10 +151,11 @@ public void testErroneousLinkBugFromYahoo() {
 	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
 	assertEquals("Link","http://www.yahoo.com/s/8741",linkTag.getLink());
 	// Verify the link data
-	assertEquals("Link Text"," &nbsp;",linkTag.getLinkText());
+	assertEquals("Link Text","This is a test",linkTag.getLinkText());
 	// Verify the reconstruction html
-	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img></td><td nowrap> &nbsp;</A>",linkTag.toRawString());
+	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>This is a test</A>",linkTag.toRawString());
 }
+
 /**
  * Insert the method's description here.
  * Creation date: (6/18/2001 2:23:14 AM)
@@ -299,7 +346,7 @@ public void testInsertEndTagBeforeTag() {
 	String currentLine = "<a href=s/7509><b>Yahoo! Movies</b></a>";
 	HTMLTag tag = new HTMLTag(0,14,"a href=s/7509",currentLine);
 	HTMLLinkScanner linkScanner = new HTMLLinkScanner();
-	String newLine = linkScanner.insertEndTagBeforeTag(tag,currentLine);
+	String newLine = linkScanner.insertEndTagBeforeNode(tag,currentLine);
 	assertEquals("Expected insertion","</A><a href=s/7509><b>Yahoo! Movies</b></a>",newLine);
 }
 

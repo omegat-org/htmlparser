@@ -217,5 +217,7 @@ public void setParser(HTMLParser newParser) {
 	public void setPreviousOpenScanner(HTMLTagScanner previousOpenScanner) {
 		this.previousOpenScanner = previousOpenScanner;
 	}
-
+	public String getCurrentLine() {
+		return line;
+	}
 }

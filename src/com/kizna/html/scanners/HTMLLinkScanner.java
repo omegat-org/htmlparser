@@ -161,7 +161,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			 else 
 			{
 				// Insert end tag
-				String newLine = insertEndTagBeforeTag(tag, currentLine);
+				String newLine = insertEndTagBeforeNode(tag, currentLine);
 				reader.changeLine(newLine);
 				return new HTMLEndTag(tag.elementBegin(),tag.elementBegin()+3,"A");
 			}
@@ -209,7 +209,21 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			    tmp = ((HTMLEndTag)node).getContents();
 			    linkContents += "</" + tmp  ;   // Kaarle Kaila 23.10.2001
 				char ch = tmp.charAt(0);
-				if (ch=='a' || ch=='A') endFlag=true; else endFlag=false;
+				if (ch=='a' || ch=='A') endFlag=true; else {
+					// This is the case that we found some wierd end tag inside
+					// a link tag.
+					endFlag=false;
+					// If this happens to be a td, or a tr tag,
+					// then we definitely dont want to treat it as part
+					// of the link tag. We would instead add the missing </A>
+					if (tmp.toUpperCase().indexOf("TD")!=-1 || tmp.toUpperCase().indexOf("TR")!=-1) {
+						// Yes, we need to assume that the link tag has ended here.
+						String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
+						reader.changeLine(newLine);
+						endFlag = true;
+						node = new HTMLEndTag(node.elementBegin(),node.elementBegin()+3,"A");
+					}
+				}
 			} 
 			else nodeVector.addElement(node);
 		}
@@ -232,10 +246,10 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	/**
 	 * Insert an EndTag in the currentLine, just before the occurence of the provided tag
 	 */
-	public String insertEndTagBeforeTag(HTMLTag tag, String currentLine) {
-		String newLine = currentLine.substring(0,tag.elementBegin());
+	public String insertEndTagBeforeNode(HTMLNode node, String currentLine) {
+		String newLine = currentLine.substring(0,node.elementBegin());
 		newLine += "</A>";
-		newLine += currentLine.substring(tag.elementBegin(),currentLine.length());
+		newLine += currentLine.substring(node.elementBegin(),currentLine.length());
 		return newLine;
 	}
 }
