@@ -350,4 +350,31 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		assertEquals("Image Location","http://www.cybergeo.presse.fr/images/lines/li065.jpg",imageTag.getImageLocation());
 		
 	}
+	/**
+	 * Based on a page submitted by Claude Duguya, the image tag has IMG SRC"somefile.jpg" - a missing equal 
+	 * to sign
+	 */
+	public void testMissingEqualTo() throws HTMLParserException {
+		String testHTML = "<img src\"/images/spacer.gif\" width=\"1\" height=\"1\" alt=\"\">";
+		StringReader sr = new StringReader(testHTML); 
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.htmlparser.org/subdir1/subdir2"); 
+
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[100];
+		// Register the image scanner
+		parser.registerScanners();
+		int i = 0;
+		HTMLNode thisNode;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = (HTMLNode)e.nextHTMLNode();
+		}	
+		assertEquals("Number of nodes identified should be 1",1,i);
+		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);	
+		HTMLImageTag imageTag = (HTMLImageTag)node[0];
+		assertEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageLocation());
+		assertEquals("Width","1",imageTag.getParameter("WIDTH"));
+		assertEquals("Height","1",imageTag.getParameter("HEIGHT"));
+		//assertEquals("Alt","",imageTag.getParameter("ALT"));
+		
+	}
 }

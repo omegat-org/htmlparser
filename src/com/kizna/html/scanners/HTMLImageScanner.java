@@ -100,6 +100,18 @@ public class HTMLImageScanner extends HTMLTagScanner
 			table = tag.parseParameters();
 			relativeLink =  (String)table.get("SRC");
 			if (relativeLink!=null) relativeLink = removeChars(relativeLink,'\n');
+			if (relativeLink==null || relativeLink.length()==0) {
+				// try fix
+				String tagText = tag.getText().toUpperCase();
+				int indexSrc = tagText.indexOf("SRC");
+				if (indexSrc != -1) {
+					// There is a missing equals.
+					tag.setText(tag.getText().substring(0,indexSrc+3)+"="+tag.getText().substring(indexSrc+3,tag.getText().length()));
+					table = tag.parseParameters();
+					relativeLink = (String) table.get("SRC");
+					
+				} 
+			}
 			if (relativeLink==null) return ""; else
 			return (new HTMLLinkProcessor()).extract(relativeLink,url);		
 		}
