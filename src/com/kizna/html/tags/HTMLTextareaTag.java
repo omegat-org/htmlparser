@@ -36,41 +36,40 @@ import com.kizna.html.util.*;
 
 public class HTMLTextareaTag extends HTMLTag
 {
-	private String mValue;
+	private String value;
 	
 	public HTMLTextareaTag(int pTagBegin, int pTagEnd, String pTagContents, 
-							String pValue, String pTagLine)
+							String value, String pTagLine)
 	{
 		super(pTagBegin,pTagEnd,pTagContents,pTagLine);
-		this.mValue = pValue;
+		this.value = value;
 	}
 	
 	public java.lang.String getValue() {
-		return mValue;
+		return value;
 	}
 
 	public void setValue(java.lang.String newValue) {
-		mValue = newValue;
+		value = newValue;
 	}
 
 	public String toHTML()
 	{
-		String lHTMLString = HTMLParserUtils.toHTML(this);
+		String htmlString = HTMLParserUtils.toHTML(this);
+		StringBuffer returnString = new StringBuffer(htmlString);
 		
-		StringBuffer lTextareaTag = new StringBuffer(lHTMLString);
+		if (value != null)
+			returnString.append(value);
 		
-		if (mValue != null)
-			lTextareaTag.append(mValue);
+		returnString.append("</TEXTAREA>");
 		
-		lTextareaTag.append("</TEXTAREA>");
-		
-		return lTextareaTag.toString();
+		return returnString.toString();
 	}
 	
 	public String toString() 
 	{
 		StringBuffer lString = new StringBuffer(HTMLParserUtils.toString(this));
-		lString.append("VALUE : ").append(mValue).append("\n");
+		lString.append("VALUE : ").append(value).append("\n");
 		
 		return lString.toString();
 	}

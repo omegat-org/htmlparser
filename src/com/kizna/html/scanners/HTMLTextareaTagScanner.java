@@ -19,50 +19,50 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 		super(pFilter);
 	}
 	
-	public HTMLTag scan(HTMLTag pTag, String pUrl, HTMLReader pReader, String pCurrLine)
+	public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader, String currLine)
 			throws HTMLParserException
 	{
 		try
 		{
-			HTMLEndTag lEndTag=null;
-			HTMLNode lNode = null;
+			HTMLEndTag endTag=null;
+			HTMLNode node = null;
 			boolean endTagFound=false;
-			StringBuffer lValue=new StringBuffer();
+			StringBuffer value=new StringBuffer();
 			
 			// Remove all existing scanners, so as to parse only till the end tag
-			HTMLNode lPrevNode=pTag;
+			HTMLNode prevNode=tag;
 			do 
 			{
-				lNode = pReader.readElement();
-				if (lNode instanceof HTMLEndTag)
+				node = reader.readElement();
+				if (node instanceof HTMLEndTag)
 				{
-					lEndTag = (HTMLEndTag)lNode;
-					if (lEndTag.getText().toUpperCase().equals("TEXTAREA")) 
+					endTag = (HTMLEndTag)node;
+					if (endTag.getText().toUpperCase().equals("TEXTAREA")) 
 					{
 						endTagFound = true;
 					}
 				}
 				else
 				{
-					if (lPrevNode!=null)
+					if (prevNode!=null)
 					{
-						if (lPrevNode.elementEnd() > lNode.elementBegin()) 
-							lValue.append(HTMLNode.getLineSeparator());
+						if (prevNode.elementEnd() > node.elementBegin()) 
+							value.append(HTMLNode.getLineSeparator());
 					}
-					lValue.append(lNode.toHTML());
+					value.append(node.toHTML());
 		
-					lPrevNode = lNode;
+					prevNode = node;
 				}
 			}
 			while (!endTagFound);
-			HTMLTextareaTag lTextareaTag = new HTMLTextareaTag(
-										0, lNode.elementEnd(), pTag.getText(), 
-										lValue.toString(), pCurrLine);
-			return lTextareaTag;
+			HTMLTextareaTag textareaTag = new HTMLTextareaTag(
+										0, node.elementEnd(), tag.getText(), 
+										value.toString(), currLine);
+			return textareaTag;
 		}
 		catch (Exception e) 
 		{
-			throw new HTMLParserException("HTMLTextareaTagScanner.scan() : Error while scanning textarea tags, current line = "+pCurrLine,e);
+			throw new HTMLParserException("HTMLTextareaTagScanner.scan() : Error while scanning textarea tags, current line = "+currLine,e);
 		}
 	}
 	

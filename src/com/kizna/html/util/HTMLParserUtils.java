@@ -17,42 +17,40 @@ public class HTMLParserUtils
 			return false;
 	}
 	
-	public static String toHTML(HTMLTag pTag)
+	public static String toHTML(HTMLTag tag)
 	{
-		StringBuffer lHTMLString = new StringBuffer();
+		StringBuffer htmlString = new StringBuffer();
 		
-		Hashtable lAttrs = pTag.getParsed();
-		String pTagName = pTag.getParameter(HTMLTag.TAGNAME);
-		lHTMLString.append("<").append(pTagName);
-		Enumeration e = lAttrs.keys();
-		while (e.hasMoreElements())
+		Hashtable attrs = tag.getParsed();
+		String pTagName = tag.getParameter(HTMLTag.TAGNAME);
+		htmlString.append("<").append(pTagName);
+		for (Enumeration e = attrs.keys();e.hasMoreElements();)
 		{
-			String lKey = (String)e.nextElement();
-			String lValue = (String)lAttrs.get(lKey);
-			if (!lKey.equalsIgnoreCase(HTMLTag.TAGNAME))
-				lHTMLString.append(" ").append(lKey).append("=\"").append(lValue).append("\"");
+			String key = (String)e.nextElement();
+			String value = (String)attrs.get(key);
+			if (!key.equalsIgnoreCase(HTMLTag.TAGNAME) && value.length()>0)
+				htmlString.append(" ").append(key).append("=\"").append(value).append("\"");
 		}
-		lHTMLString.append(">");
+		htmlString.append(">");
 		
-		return lHTMLString.toString();
+		return htmlString.toString();
 	}
 	
-	public static String toString(HTMLTag pTag)
+	public static String toString(HTMLTag tag)
 	{
-		String pTagName = pTag.getParameter(HTMLTag.TAGNAME);
-		Hashtable lAttrs = pTag.getParsed();
+		String tagName = tag.getParameter(HTMLTag.TAGNAME);
+		Hashtable attrs = tag.getParsed();
 		
-		StringBuffer lString = new StringBuffer(pTagName);
+		StringBuffer lString = new StringBuffer(tagName);
 		lString.append(" TAG\n");
 		lString.append("--------\n");
-			
-		Enumeration e = lAttrs.keys();
-		while (e.hasMoreElements())
+		
+		for (Enumeration e = attrs.keys();e.hasMoreElements();)
 		{
-			String lKey = (String)e.nextElement();
-			String lValue = (String)lAttrs.get(lKey);
-			if (!lKey.equalsIgnoreCase(HTMLTag.TAGNAME))
-				lString.append(lKey).append(" : ").append(lValue).append("\n");
+			String key = (String)e.nextElement();
+			String value = (String)attrs.get(key);
+			if (!key.equalsIgnoreCase(HTMLTag.TAGNAME) && value.length()>0)
+				lString.append(key).append(" : ").append(value).append("\n");
 		}
 		
 		return lString.toString();
