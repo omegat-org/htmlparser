@@ -28,11 +28,15 @@
 
 package org.htmlparser.tests.tagTests;
 
+import org.htmlparser.Node;
 import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.SimpleNodeIterator;
 
 public class ImageTagTest extends ParserTestCase 
 {
@@ -142,12 +146,57 @@ public class ImageTagTest extends ParserTestCase
 		parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
 			
 		parseAndAssertNodeCount(1);
-		// The node should be an HTMLImageTag
-		assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
+		// The node should be an ImageTag
+		assertTrue("Node should be a ImageTag",node[0] instanceof ImageTag);
 		ImageTag imageTag = (ImageTag)node[0];
 		assertStringEquals("The image locn","<IMG WIDTH=\"305\" ALT=\"Google\" SRC=\"../../goo/title_homepage4.gif\" HEIGHT=\"115\">",imageTag.toHtml());
 		assertEquals("Alt","Google",imageTag.getAttribute("alt"));
 		assertEquals("Height","115",imageTag.getAttribute("height"));
 		assertEquals("Width","305",imageTag.getAttribute("width"));
 	}
+    
+    /**
+     * See bug #753003 <IMG> within <A> missed when followed by <MAP>
+     * Not reproducible.
+     */
+    public ImageTag extractLinkImage (LinkTag link)
+    {
+        NodeList subElements = new NodeList ();
+        link.collectInto (subElements, ImageTag.class);
+         SimpleNodeIterator subScan = subElements.elements ();
+        while (subScan.hasMoreNodes ())
+        {
+            Node subNode = subScan.nextNode ();
+            if (subNode instanceof ImageTag)
+                return (ImageTag) subNode;
+        }
+        
+        return null;
+    }
+
+    /**
+     * See bug #753003 <IMG> within <A> missed when followed by <MAP>
+     * Not reproducible.
+     */
+    public void testMapFollowImg () throws ParserException
+    {
+        String html = "<a href=\"Biography/Biography.html\" "
+            + "onMouseOut=\"MM_swapImgRestore()\" "
+            + "onMouseOver=\"MM_swapImage('Image13','','Graphics/SchneiderPic1.gif',1)\">"
+            + "<img name=\"Image13\" border=\"0\" src=\"Graphics/SchneiderPic.gif\" "
+            + "width=\"127\" height=\"175\" usemap=\"#Image13Map\" "
+            + "alt=\"Graphics/SchneiderPic.gif\"> <map name=\"Image13Map\">"
+            + "<area shape=\"circle\" coords=\"67,88,66\" href=\"Biography/Biography.html\" "
+            + "onClick=\"newWindow('Biography/Biography.html','HTML','menubar=yes,scrollbars=yes,resizable=yes,left=0,top=0'); return false\" target=\"HTML\">"
+            + "</map>"
+            + "</a>";
+		createParser (html);
+		parser.registerScanners ();
+			
+		parseAndAssertNodeCount (1);
+		assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
+        LinkTag link = (LinkTag)node[0];
+        ImageTag img = extractLinkImage (link);
+        assertNotNull ("no image tag", img);
+    }
 }
