@@ -2,14 +2,21 @@ package org.htmlparser.scanners;
 
 import java.util.Stack;
 
-import org.htmlparser.NodeReader;
 import org.htmlparser.tags.Bullet;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
-
+/**
+ * This scanner is created by BulletListScanner. It shares a stack to maintain the parent-child relationship
+ * with BulletListScanner. The rules implemented are :<br>
+ * [1] A &lt;ul&gt; can have &lt;li&gt; under it<br>
+ * [2] A &lt;li&gt; can have &lt;ul&gt; under it<br>
+ * [3] A &lt;li&gt; cannot have &lt;li&gt; under it<br> 
+ * <p>
+ * These rules are implemented easily through the shared stack. 
+ */
 public class BulletScanner extends CompositeTagScanner {
 	private static final String [] MATCH_STRING = {"LI"};
 	private final static String ENDERS [] = { "BODY", "HTML" };
@@ -34,7 +41,10 @@ public class BulletScanner extends CompositeTagScanner {
 		return MATCH_STRING;
 	}
 	
-	public boolean shouldCreateEndTagAndExit(NodeReader reader, CompositeTagScanner scanner) {
+	/**
+	 * This is the logic that decides when a bullet tag can be allowed
+	 */
+	public boolean shouldCreateEndTagAndExit() {
 		if (ulli.size()==0) return false;
 		CompositeTagScanner parentScanner = (CompositeTagScanner)ulli.peek();
 		if (parentScanner == this) {

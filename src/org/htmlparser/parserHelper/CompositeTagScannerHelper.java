@@ -100,7 +100,7 @@ public class CompositeTagScannerHelper {
 	}
 
 	private boolean shouldCreateEndTagAndExit() {
-		return scanner.shouldCreateEndTagAndExit(reader,scanner);
+		return scanner.shouldCreateEndTagAndExit();
 	}
 
 	private Tag createEndTagAndRepositionReader() {

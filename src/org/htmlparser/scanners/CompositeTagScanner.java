@@ -66,9 +66,10 @@ import org.htmlparser.util.ParserException;
  * <pre>
  * MyScanner extends CompositeTagScanner {
  *   private static final String [] MATCH_IDS = { "MYTAG" };
- *   private static final String [] ENDERS = { "BODY", "HTML" };
+ *   private static final String [] ENDERS = {};
+ *   private static final String [] END_TAG_ENDERS = { "BODY", "HTML" };
  *	 MyScanner() {
- *		super(MATCH_IDS, ENDERS);
+ *		super(MATCH_IDS, ENDERS, END_TAG_ENDERS, true);
  *	 }
  *	 ...
  * }
@@ -80,9 +81,10 @@ import org.htmlparser.util.ParserException;
  * <pre>
  * MyScanner extends CompositeTagScanner {
  *   private static final String [] MATCH_IDS = { "FORM" };
- *   private static final String [] ENDERS = { "BODY", "HTML" };
+ *   private static final String [] ENDERS = {};
+ *   private static final String [] END_TAG_ENDERS = { "BODY", "HTML" };
  *	 MyScanner() {
- *		super(MATCH_IDS, ENDERS,false);
+ *		super(MATCH_IDS, ENDERS,END_TAG_ENDERS, false);
  *	 }
  *	 ...
  * }
@@ -167,7 +169,6 @@ public abstract class CompositeTagScanner extends TagScanner {
 	 */
 	public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
 
-	
 	public final boolean isTagToBeEndedFor(Tag tag) {
 		boolean isEndTag = tag instanceof EndTag; 
 		String tagName = tag.getTagName();
@@ -182,7 +183,13 @@ public abstract class CompositeTagScanner extends TagScanner {
 		return allowSelfChildren;
 	}
 
-	public boolean shouldCreateEndTagAndExit(NodeReader reader, CompositeTagScanner scanner) {
+	/**
+	 * Override this method to implement scanner logic that determines if the current scanner is 
+	 * to be allowed. This is useful when there are rules which dont allow recursive tags of the same
+	 * type. @see BulletScanner
+	 * @return boolean true/false
+	 */
+	public boolean shouldCreateEndTagAndExit() {
 		return false;
 	}
 
