@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021016 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021031 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -59,6 +59,11 @@ public class HTMLLinkTag extends HTMLTag
 	protected String accessKey;
 	private java.util.Vector nodeVector;
 	private boolean mailLink;
+	private boolean javascriptLink;
+	private boolean ftpLink;
+	private boolean httpLink;
+	private boolean httpsLink;
+	
 	/**
 	 * Constructor creates an HTMLLinkNode object, which basically stores the location
 	 * where the link points to, and the text it contains.
@@ -69,7 +74,7 @@ public class HTMLLinkTag extends HTMLTag
 	 * @param linkContents contains the data from the link element
 	 * @accessKey The accessKey element of the link tag (valid for Compact HTML - IMODE devices)
 	 */
-	public HTMLLinkTag(String link,String linkText,int linkBegin, int linkEnd, String accessKey,String currentLine,Vector nodeVector,boolean mailLink,String tagContents,String linkContents)
+	public HTMLLinkTag(String link,String linkText,int linkBegin, int linkEnd, String accessKey,String currentLine,Vector nodeVector,boolean mailLink,boolean javascriptLink,boolean ftpLink,boolean httpLink,boolean httpsLink,String tagContents,String linkContents)
 	{
 		super(linkBegin,linkEnd,tagContents,currentLine);  // Kaarle Kaila 23.10.2001
 		this.link = link;
@@ -78,7 +83,11 @@ public class HTMLLinkTag extends HTMLTag
 		this.nodeVector = nodeVector;
 		this.mailLink = mailLink;
 		this.linkContents = linkContents;  // Kaarle Kaila 23.10.2001
-	    
+
+		this.javascriptLink = javascriptLink;
+		this.ftpLink = ftpLink;
+		this.httpLink = httpLink;
+		this.httpsLink = httpsLink;
 	}
 	/**
 	 * Returns the accesskey element if any inside this link tag
@@ -117,6 +126,52 @@ public class HTMLLinkTag extends HTMLTag
 public boolean isMailLink() {
 	return mailLink;
 }
+
+        /**
+	 * Tests if the link is a javascript code.
+	 *
+	 * @return flag indicating if the link is a javascript code
+	 */
+        public boolean isJavascriptLink() {
+		return javascriptLink;
+	}
+
+        /**
+	 * Tests if the link is an FTP link.
+	 *
+	 * @return flag indicating if this link is an FTP link
+	 */
+        public boolean isFTPLink() {
+		return ftpLink;
+	}
+
+        /**
+	 * Tests if the link is an HTTP link.
+	 *
+	 * @return flag indicating if this link is an HTTP link
+	 */
+        public boolean isHTTPLink() {
+		return httpLink;
+	}
+
+	/**
+	 * Tests if the link is an HTTPS link.
+	 *
+	 * @return flag indicating if this link is an HTTPS link
+	 */
+        public boolean isHTTPSLink() {
+                return httpsLink;
+        }
+
+        /**
+	 * Tests if the link is an HTTP link or one of its variations (HTTPS, etc.).
+	 * 
+	 * @return flag indicating if this link is an HTTP link or one of its variations (HTTPS, etc.)
+	 */
+        public boolean isHTTPLikeLink() {
+                return httpLink || httpsLink;
+        }
+
 /**
  * Insert the method's description here.
  * Creation date: (7/1/2001 4:40:58 PM)
@@ -133,6 +188,44 @@ public Enumeration linkData()
 public void setMailLink(boolean newMailLink) {
 	mailLink = newMailLink;
 }
+
+	/**
+	 * Set the link as a javascript link.
+	 * 
+	 * @param newJavascriptLink flag indicating if the link is a javascript code
+	 */
+	public void setJavascriptLink(boolean newJavascriptLink) {
+		javascriptLink = newJavascriptLink;
+	}
+
+	/**
+	 * Set the link as an FTP link.
+	 * 
+	 * @param newFTPLink flag indicating if the link is an FTP link
+	 */
+	public void setFTPLink(boolean newFTPLink) {
+		ftpLink = newFTPLink;
+	}
+
+        /**
+	 * Set the link as an HTTP link.
+	 *
+	 * @param newHTTPLink flag indicating if the link is an HTTP link
+	 */
+        public void setHTTPLink(boolean newHTTPLink) {
+		httpLink = newHTTPLink;
+	}
+
+        /**
+	 * Set the link as an HTTPS link.
+	 *
+	 * @param newHTTPSLink flag indicating if the link is an HTTPS link
+	 */
+        public void setHTTPSLink(boolean newHTTPSLink) {
+		httpsLink = newHTTPSLink;
+	}
+
+
 /**
  * Insert the method's description here.
  * Creation date: (7/1/2001 4:39:41 PM)

@@ -45,14 +45,14 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		super(filter);
 		processor = new HTMLLinkProcessor();		
 	}
-	protected HTMLTag createLinkTag(String currentLine, HTMLNode node, boolean mailLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector) {
+	protected HTMLTag createLinkTag(String currentLine, HTMLNode node, boolean mailLink, boolean javascriptLink, boolean ftpLink, boolean httpLink, boolean httpsLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector) {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
 		// HTMLLinkNode Constructor got one extra parameter 
 		// Kaarle Kaila 23.10.2001
 		linkEnd = node.elementEnd();
-		HTMLLinkTag linkTag = new HTMLLinkTag(link,linkText,linkBegin,linkEnd,accessKey,currentLine,nodeVector,mailLink,tagContents,linkContents);
+		HTMLLinkTag linkTag = new HTMLLinkTag(link,linkText,linkBegin,linkEnd,accessKey,currentLine,nodeVector,mailLink,javascriptLink,ftpLink,httpLink,httpsLink,tagContents,linkContents);
 		linkTag.setThisScanner(this);
 		return linkTag;
 	}
@@ -191,6 +191,11 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			previousOpenLinkScanner = this;
 			HTMLNode node;
 			boolean mailLink = false;
+			boolean javascriptLink = false;
+			boolean ftpLink = false;
+			boolean httpLink = false;
+			boolean httpsLink = false;
+			
 			String link,linkText="",accessKey=null,tmp;
 			int linkBegin, linkEnd;
 			String tagContents =  tag.getText();
@@ -202,13 +207,28 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			//link = extractLink(tag.getText(),url);
 			// Check if its a mailto link
 			int mailto = link.indexOf("mailto");
+			int javascript = link.indexOf("javascript:");
+			int ftp = link.indexOf("ftp://");
+			int http = link.indexOf("http://");
+			int https = link.indexOf("https://");
+			
 			if (mailto==0)
 			{
 				mailto = link.indexOf(":");
 				// yes it is
 				link = link.substring(mailto+1);
 				mailLink = true;			
+			} else if (javascript == 0) {
+				link = link.substring(11); // this magic number is "javascript:".length()
+				javascriptLink = true;
+			} else if (ftp == 0) {
+				ftpLink = true;
+			} else if (http == 0) {
+				httpLink = true;
+			} else if (https == 0) {
+				httpsLink = true;
 			}
+			
 			accessKey = getAccessKey(tag.getText());
 			linkBegin = tag.elementBegin();
 			// Get the next element, which is string, till </a> is encountered
@@ -258,7 +278,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 					node = endTag;
 				}
 				previousOpenLinkScanner = null;
-				return createLinkTag(currentLine, node, mailLink, link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
+				return createLinkTag(currentLine, node, mailLink, javascriptLink, ftpLink, httpLink, httpsLink, link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
 			}
 			HTMLParserException ex = new HTMLParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
 			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);

@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021016 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021031 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -80,7 +80,7 @@ public class HTMLLinkProcessor {
 		if (link==null || link.length()==0) return "";
 		int slashLoc = link.indexOf("://");
 		int queryLoc = link.indexOf('?');
-		if ((slashLoc==-1 || (queryLoc!=-1 && queryLoc<slashLoc))  && link.indexOf("mailto:")==-1 && url != null)
+		if ((slashLoc==-1 || (queryLoc!=-1 && queryLoc<slashLoc)) && (link.indexOf("javascript:") == -1) && link.indexOf("mailto:")==-1 && url != null)
 		{
 			// Bug fix by Karem for relative links that
 			// begin with /

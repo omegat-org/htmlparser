@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021016 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021031 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -563,5 +563,132 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		HTMLTagTest.assertStringEquals("Resolved Link","http://transfer.go.com/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",linkTag.getLink());
 		assertEquals("Resolved Link Text","20020702 Report 1",linkTag.getLinkText());
 			
+	}
+
+	
+	public void testNotMailtoLink() throws HTMLParserException {
+		String testHTML = new String("<A HREF=\"mailto.html\">not@for.real</A>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader = new HTMLReader(new BufferedReader(sr), "http://www.cj.com/");
+		HTMLParser parser = new HTMLParser(reader, new DefaultHTMLParserFeedback());
+		HTMLNode[] node = new HTMLNode[10];
+
+		parser.addScanner(new HTMLLinkScanner("-l"));
+
+		int i = 0;
+
+		for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertTrue("Node should be a HTMLLinkTag", node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+
+		assertEquals("Link Plain Text", "not@for.real", linkTag.toPlainTextString());
+		assertTrue("Link is not a mail link", !linkTag.isMailLink());
+	}
+
+	public void testMailtoLink() throws HTMLParserException {
+		String testHTML = new String("<A HREF=\"mailto:this@is.real\">this@is.real</A>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader = new HTMLReader(new BufferedReader(sr), "http://www.cj.com/");
+		HTMLParser parser = new HTMLParser(reader, new DefaultHTMLParserFeedback());
+		HTMLNode[] node = new HTMLNode[10];
+
+		parser.addScanner(new HTMLLinkScanner("-l"));
+
+		int i = 0;
+
+		for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertTrue("Node should be a HTMLLinkTag", node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+
+		assertEquals("Link Plain Text", "this@is.real", linkTag.toPlainTextString());
+		assertTrue("Link is a mail link", linkTag.isMailLink());
+	}
+
+	public void testJavascriptLink() throws HTMLParserException {
+		String testHTML = new String("<A HREF=\"javascript:alert('hello');\">say hello</A>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader = new HTMLReader(new BufferedReader(sr), "http://www.cj.com/");
+		HTMLParser parser = new HTMLParser(reader, new DefaultHTMLParserFeedback());
+		HTMLNode[] node = new HTMLNode[10];
+
+		parser.addScanner(new HTMLLinkScanner("-l"));
+
+		int i = 0;
+
+		for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertTrue("Node should be a HTMLLinkTag", node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+
+		assertEquals("Link Plain Text", "say hello", linkTag.toPlainTextString());
+		assertTrue("Link is a Javascript command", linkTag.isJavascriptLink());
+	}
+
+	public void testNotJavascriptLink() throws HTMLParserException {
+		String testHTML = new String("<A HREF=\"javascript_not.html\">say hello</A>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader = new HTMLReader(new BufferedReader(sr), "http://www.cj.com/");
+		HTMLParser parser = new HTMLParser(reader, new DefaultHTMLParserFeedback());
+		HTMLNode[] node = new HTMLNode[10];
+
+		parser.addScanner(new HTMLLinkScanner("-l"));
+
+		int i = 0;
+
+		for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertTrue("Node should be a HTMLLinkTag", node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+
+		assertEquals("Link Plain Text", "say hello", linkTag.toPlainTextString());
+		assertTrue("Link is not a Javascript command", !linkTag.isJavascriptLink());
+	}
+
+	public void testFTPLink() throws HTMLParserException {
+		String testHTML = new String("<A HREF=\"ftp://some.where.it\">my ftp</A>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader = new HTMLReader(new BufferedReader(sr), "http://www.cj.com/");
+		HTMLParser parser = new HTMLParser(reader, new DefaultHTMLParserFeedback());
+		HTMLNode[] node = new HTMLNode[10];
+
+		parser.addScanner(new HTMLLinkScanner("-l"));
+
+		int i = 0;
+
+		for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertTrue("Node should be a HTMLLinkTag", node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+
+		assertEquals("Link Plain Text", "my ftp", linkTag.toPlainTextString());
+		assertTrue("Link is a FTP site", linkTag.isFTPLink());
+	}
+
+	public void testNotFTPLink() throws HTMLParserException {
+		String testHTML = new String("<A HREF=\"ftp.html\">my ftp</A>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader = new HTMLReader(new BufferedReader(sr), "http://www.cj.com/");
+		HTMLParser parser = new HTMLParser(reader, new DefaultHTMLParserFeedback());
+		HTMLNode[] node = new HTMLNode[10];
+
+		parser.addScanner(new HTMLLinkScanner("-l"));
+
+		int i = 0;
+
+		for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertTrue("Node should be a HTMLLinkTag", node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag) node[0];
+
+		assertEquals("Link Plain Text", "my ftp", linkTag.toPlainTextString());
+		assertTrue("Link is not a FTP site", !linkTag.isFTPLink());
 	}
 }
