@@ -66,7 +66,7 @@ public class FormScanner extends CompositeTagScanner
 	 */
 	public FormScanner(String filter, Parser parser)
 	{
-		super(filter,MATCH_ID,false);
+		super(filter,MATCH_ID,formTagEnders,false);
 		parser.addScanner(new InputTagScanner("-i"));
 		parser.addScanner(new TextareaTagScanner("-t"));
 		parser.addScanner(new SelectTagScanner("-select"));
@@ -179,11 +179,4 @@ public class FormScanner extends CompositeTagScanner
 		}	
 		return match;
 	}
-//
-//	public Tag scan(Tag tag, String url, NodeReader reader, String currLine)
-//		throws ParserException {
-//		// TODO Auto-generated method stub
-//		return super.scan(tag, url, reader, currLine);
-//	}
-
 }

@@ -54,9 +54,8 @@ public class LinkScanner extends CompositeTagScanner
 	public static final String LINK_SCANNER_ID = "A";
 	public static final String DIRTY_TAG_MESSAGE=" is a dirty link tag - the tag was not closed. \nWe encountered an open tag, before the previous end tag was found.\nCorrecting this..";
 	private LinkProcessor processor;
-	private String linkTagEnders [] = {"TD","TR","FORM","LI"
-	};
-
+	private final static String ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
+	
 	/**
 	 * Overriding the default constructor
 	 */
@@ -68,7 +67,7 @@ public class LinkScanner extends CompositeTagScanner
 	 * Overriding the constructor to accept the filter 
 	 */
 	public LinkScanner(String filter) {
-		super(filter,MATCH_NAME,false);
+		super(filter,MATCH_NAME,ENDERS, false);
 		processor = new LinkProcessor();		
 	}
 	
@@ -180,16 +179,6 @@ public class LinkScanner extends CompositeTagScanner
 	 */
 	public String [] getID() {
 		return MATCH_NAME;
-	}
-
-	public boolean isTagToBeEndedFor(String tmp) {
-		boolean match=false;
-		for (int i=0;i<linkTagEnders.length && !match;i++) {
-			if (tmp.toUpperCase().indexOf(linkTagEnders[i])!=-1)
-				match = true;
-		}	
-		return match;
-		
 	}
 
 }

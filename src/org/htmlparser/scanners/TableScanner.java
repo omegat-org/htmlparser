@@ -28,9 +28,6 @@
 
 package org.htmlparser.scanners;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.htmlparser.Parser;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
@@ -42,18 +39,16 @@ import org.htmlparser.util.NodeList;
 public class TableScanner extends CompositeTagScanner {
 	private final static String MATCH_STRING [] = { "TABLE" };
 	private final static String ENDERS [] = { "BODY", "HTML" };
-	private Set enderSet;
+
 	
 	public TableScanner(Parser parser) {
 		this(parser,"");
 	}
 
 	public TableScanner(Parser parser,String filter) {
-		super(filter, MATCH_STRING);
+		super(filter, MATCH_STRING, ENDERS);
 		parser.addScanner(new TableRowScanner(parser));
-		enderSet = new HashSet();
-		for (int i=0;i<ENDERS.length;i++)
-			enderSet.add(ENDERS[i]);
+		
 	}
 
 	public Tag createTag(
@@ -65,10 +60,6 @@ public class TableScanner extends CompositeTagScanner {
 
 	public String[] getID() {
 		return MATCH_STRING;
-	}
-
-	public boolean isTagToBeEndedFor(String tagName) {
-		return enderSet.contains(tagName);
 	}
 
 }

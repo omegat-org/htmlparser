@@ -47,17 +47,17 @@ import org.htmlparser.util.ParserException;
 public class ScriptScanner extends CompositeTagScanner {
 	private static final String SCRIPT_END_TAG = "</SCRIPT>";
 	private static final String MATCH_NAME [] = {"SCRIPT"};
-	
+	private static final String ENDERS [] = {"BODY", "HTML"};
 	public ScriptScanner() {
-		super("",MATCH_NAME,true,true);
+		super("",MATCH_NAME,ENDERS,true,true);
 	}
 
 	public ScriptScanner(String filter) {
-		super(filter,MATCH_NAME,true,true);
+		super(filter,MATCH_NAME,ENDERS,true,true);
 	}
 
 	public ScriptScanner(String filter, String[] nameOfTagToMatch) {
-		super(filter,nameOfTagToMatch,true,true);
+		super(filter,nameOfTagToMatch,ENDERS,true,true);
 	}
 	
 	public String [] getID() {

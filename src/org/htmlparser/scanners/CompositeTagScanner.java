@@ -28,6 +28,9 @@
 
 package org.htmlparser.scanners;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.parserHelper.CompositeTagScannerHelper;
@@ -42,25 +45,42 @@ public abstract class CompositeTagScanner extends TagScanner {
 	private boolean stringNodeIgnoreMode;
 	private TagScanner previousOpenScanner = null;
 	private boolean allowSelfChildren;
-	
+	private Set enderSet;
+		
 	public CompositeTagScanner(String [] nameOfTagToMatch) {
-		this("",nameOfTagToMatch,false,false);
+		this(nameOfTagToMatch,new String[] {});
+	}
+
+	public CompositeTagScanner(String [] nameOfTagToMatch, String [] enders) {
+		this("",nameOfTagToMatch,enders,false,false);
 	}
 
 	public CompositeTagScanner(String filter, String [] nameOfTagToMatch) {
-		this(filter,nameOfTagToMatch,true);
+		this(filter,nameOfTagToMatch,new String [] {},true);
 	}
 
-	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, boolean allowSelfChildren) {
-		this(filter,nameOfTagToMatch,false,false);
+	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, String [] enders) {
+		this(filter,nameOfTagToMatch,enders,true);
+	}
+
+	public CompositeTagScanner(
+		String filter, 
+		String [] nameOfTagToMatch, 
+		String [] enders, 
+		boolean allowSelfChildren) {
+		this(filter,nameOfTagToMatch,enders, false,false);
 		this.allowSelfChildren = allowSelfChildren;	
 	}
 
-	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, boolean removeScanners, boolean stringNodeIgnoreMode) {
+	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, String [] enders, 
+		boolean removeScanners, boolean stringNodeIgnoreMode) {
 		super(filter);
 		this.nameOfTagToMatch = nameOfTagToMatch;
 		this.removeScanners = removeScanners;
 		this.stringNodeIgnoreMode = stringNodeIgnoreMode;
+		this.enderSet = new HashSet();
+		for (int i=0;i<enders.length;i++)
+			enderSet.add(enders[i]);
 	}
 	
 	public Tag scan(Tag tag, String url, NodeReader reader,String currLine) throws ParserException {
@@ -78,7 +98,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 	public abstract Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException;
 
 	public boolean isTagToBeEndedFor(String tagName) {
-		return false;
+		return enderSet.contains(tagName);
 	}
 
 	public boolean isAllowSelfChildren() {

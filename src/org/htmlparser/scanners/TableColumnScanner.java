@@ -49,7 +49,13 @@ public class TableColumnScanner extends CompositeTagScanner {
 		String[] nameOfTagToMatch,
 		boolean removeScanners,
 		boolean stringNodeIgnoreMode) {
-		super(filter, nameOfTagToMatch, removeScanners, stringNodeIgnoreMode);
+		super(
+			filter, 
+			nameOfTagToMatch, 
+			new String[] {}, 
+			removeScanners, 
+			stringNodeIgnoreMode
+		);
 	}
 
 	public Tag createTag(

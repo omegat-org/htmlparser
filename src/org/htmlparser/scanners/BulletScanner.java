@@ -9,13 +9,14 @@ import org.htmlparser.util.ParserException;
 
 public class BulletScanner extends CompositeTagScanner {
 	private static final String [] MATCH_STRING = {"LI"};
+	private final static String ENDERS [] = { "BODY", "HTML" };
 	
 	public BulletScanner() {
 		super(MATCH_STRING);
 	}
 
 	public BulletScanner(String filter) {
-		super(filter, MATCH_STRING);
+		super(filter, MATCH_STRING, ENDERS);
 	}
 
 	public Tag createTag(TagData tagData, CompositeTagData compositeTagData)

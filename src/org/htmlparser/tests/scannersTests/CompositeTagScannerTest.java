@@ -452,7 +452,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		}
 		
 		public CustomScanner(boolean selfChildrenAllowed) { 
-			super("", MATCH_NAME, selfChildrenAllowed); 
+			super("", MATCH_NAME, new String[] {}, selfChildrenAllowed); 
 		}
 		
 		public String[] getID() { 
@@ -462,16 +462,12 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
 			return new CustomTag(tagData, compositeTagData);
 		}
-		
-		protected boolean isBrokenTag() {
-			return false;
-		}
 	}
 	
 	public static class AnotherScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "ANOTHER" };
 		public AnotherScanner() { 
-			super("", MATCH_NAME,true); 
+			super("", MATCH_NAME, new String[] {"CUSTOM"},true); 
 		}
 		
 		public String[] getID() { 
@@ -485,13 +481,6 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			return false;
 		}
 		
-		public boolean isTagToBeEndedFor(String tagName) {
-			if (tagName.equals("CUSTOM")) 
-				return true;
-			else 
-				return false;
-		}
-
 	}
 
 	public static class CustomTag extends CompositeTag {
