@@ -130,7 +130,7 @@ public class NodeList implements Serializable {
 	}
 	
 	public void remove(int index) {
-		System.arraycopy(nodeData, index+1, nodeData, index, size-index);		
+        System.arraycopy(nodeData, index+1, nodeData, index, size-index-1);		
 		size--;		
 	}
 	
