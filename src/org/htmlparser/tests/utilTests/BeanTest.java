@@ -404,11 +404,67 @@ public class BeanTest extends TestCase
 		
 		check (sb, "<body>"+sampleScript+"</body>", "");
 	}
-	
+
+    /*
+	 * Test output with pre and any tag.
+	 */
+	public void testOutputWithPreAndAnyTag()
+    {
+        StringBean sb;
+
+        sb = new StringBean ();
+        sb.setLinks (false);
+        sb.setReplaceNonBreakingSpaces (true);
+        sb.setCollapse (false);
+        check (sb, "<html><head></head><body><pre><hello></pre></body></html>", "");
+    }
+
+    /*
+	 * Test output with pre and any tag and text.
+	 */
+	public void testOutputWithPreAndAnyTagPlusText()
+    {
+        StringBean sb;
+
+        sb = new StringBean ();
+        sb.setLinks (false);
+        sb.setReplaceNonBreakingSpaces (true);
+        sb.setCollapse (false);
+        check (sb, "<html><head></head><body><pre><hello>dogfood</hello></pre></body></html>", "dogfood");
+    }
+
+    /*
+	 * Test output with pre and any tag and text.
+	 */
+	public void testOutputWithPreAndAnyTagPlusTextWithWhitespace()
+    {
+        StringBean sb;
+
+        sb = new StringBean ();
+        sb.setLinks (false);
+        sb.setReplaceNonBreakingSpaces (true);
+        sb.setCollapse (true);
+        check (sb, "<html><head></head><body><pre><hello>dog  food</hello></pre></body></html>", "dog  food");
+    }
+
+    /*
+	 * Test output without pre and any tag and text.
+	 */
+	public void testOutputWithoutPreAndAnyTagPlusTextWithWhitespace()
+    {
+        StringBean sb;
+
+        sb = new StringBean ();
+        sb.setLinks (false);
+        sb.setReplaceNonBreakingSpaces (true);
+        sb.setCollapse (true);
+        check (sb, "<html><head></head><body><hello>dog  food</hello></body></html>", "dog food");
+    }
+
 	/**
 	 * Test output with pre and script tags
 	 */
-	public void xtestOutputWithPreAndScriptTags() {
+	public void testOutputWithPreAndScriptTags() {
 		StringBean sb;
 		sb = new StringBean ();
 		
@@ -420,7 +476,7 @@ public class BeanTest extends TestCase
 		+ " document.write ('yyy');\r\n"
 		+ "</script>\r\n";
 		
-		check (sb, "<body><pre>"+sampleScript+"</pre></body>", sampleScript);
+		check (sb, "<body><pre>"+sampleScript+"</pre></body>", "");
 	}
     
 }
