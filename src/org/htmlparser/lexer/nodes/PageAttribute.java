@@ -239,7 +239,6 @@ public class PageAttribute extends Attribute
      */
     public String getAssignment ()
     {
-        int end;
         String ret;
 
         ret = super.getAssignment ();
@@ -247,10 +246,11 @@ public class PageAttribute extends Attribute
         {
             if ((null != mPage) && (0 <= mNameEnd) && (0 <= mValueStart))
             {
-                end = mValueStart;
-                if (0 != getQuote ())
-                    end--;
-                ret = mPage.getText (mNameEnd, end);
+                ret = mPage.getText (mNameEnd, mValueStart);
+                // remove a possible quote included in the assignment
+                // since mValueStart points at the real start of the value
+                if (ret.endsWith ("\"") || ret.endsWith ("'"))
+                    ret = ret.substring (0, ret.length () - 1);
                 setAssignment (ret); // cache the value
             }
         }
@@ -265,7 +265,8 @@ public class PageAttribute extends Attribute
      */
     public void getAssignment (StringBuffer buffer)
     {
-        int end;
+        int length;
+        char ch;
         String assignment;
 
         assignment = super.getAssignment ();
@@ -273,10 +274,13 @@ public class PageAttribute extends Attribute
         {
             if ((null != mPage) && (0 <= mNameEnd) && (0 <= mValueStart))
             {
-                end = mValueStart;
-                if (0 != getQuote ())
-                    end--;
-                mPage.getText (buffer, mNameEnd, end);
+                mPage.getText (buffer, mNameEnd, mValueStart);
+                // remove a possible quote included in the assignment
+                // since mValueStart points at the real start of the value
+                length = buffer.length () - 1;
+                ch = buffer.charAt (length);
+                if (('\'' == ch) || ('"' == ch))
+                    buffer.setLength (length);
             }
         }
         else
@@ -506,8 +510,12 @@ public class PageAttribute extends Attribute
      */
     public boolean isStandAlone ()
     {
-        return ((null != super.getName ()) && (null == super.getAssignment ())
-            || ((null != mPage) && (0 <= mNameEnd) && (0 > mValueStart)));
+        return (!isWhitespace () // not whitespace
+            && (null == super.getAssignment ()) // and no explicit assignment provided
+            && !isValued () // and has no value
+            && ((null == mPage) // and either its not coming from a page
+                // or it is coming from a page and it doesn't have an assignment part
+                || ((null != mPage) && (0 <= mNameEnd) && (0 > mValueStart))));
     }
 
     /**
@@ -517,8 +525,12 @@ public class PageAttribute extends Attribute
      */
     public boolean isEmpty ()
     {
-        return (((null != super.getAssignment ()) && (null == super.getValue ()))
-            || ((null != mPage) && ((0 <= mValueStart) && (0 > mValueEnd))));
+        return (!isWhitespace () // not whitespace
+            && !isStandAlone () // and not standalone
+            && (null == super.getValue ()) // and no explicit value provided
+            && ((null == mPage) // and either its not coming from a page
+                // or it is coming from a page and has no value
+                || ((null != mPage) && (0 > mValueEnd))));
     }
 
     /**
@@ -528,8 +540,9 @@ public class PageAttribute extends Attribute
      */
     public boolean isValued ()
     {
-        return ((null != super.getValue ())
-            || ((null != mPage) && ((0 <= mValueStart) && (0 <= mValueEnd))));
+        return ((null != super.getValue ()) // an explicit value provided
+            // or it is coming from a page and has a non-empty value
+            || ((null != mPage) && ((0 <= mValueStart) && (0 <= mValueEnd)) && (mValueStart != mValueEnd)));
     }
 
     /**

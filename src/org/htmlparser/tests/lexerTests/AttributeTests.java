@@ -625,4 +625,126 @@ public class AttributeTests extends ParserTestCase
         assertTrue ("bad alt", "".equals (img.getAttribute ("alt")));
         assertStringEquals ("toHtml()", html, img.toHtml ());
     }
+
+    /**
+     * see bug #911565 isValued() and isNull() don't work
+     */
+    public void testPredicates () throws ParserException
+    {
+        String html1 = "<img alt=\"\" src=\"images/third\" readonly>";
+        String html2 = "<img src=\"images/third\" readonly alt=\"\">";
+        String html3 = "<img readonly alt=\"\" src=\"images/third\">";
+        String htmls[] = { html1, html2, html3 };
+
+        for (int i = 0; i < htmls.length; i++)
+        {
+            createParser (htmls[i]);
+            parseAndAssertNodeCount (1);
+            assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+            ImageTag img = (ImageTag)node[0];
+            Attribute src = img.getAttributeEx ("src");
+            Attribute alt = img.getAttributeEx ("alt");
+            Attribute readonly = img.getAttributeEx ("readonly");
+            assertTrue ("src whitespace", !src.isWhitespace ());
+            assertTrue ("src not valued", src.isValued ());
+            assertTrue ("src empty", !src.isEmpty ());
+            assertTrue ("src standalone", !src.isStandAlone ());
+            assertTrue ("alt whitespace", !alt.isWhitespace ());
+            assertTrue ("alt valued", !alt.isValued ());
+            assertTrue ("alt empty", !alt.isEmpty ());
+            assertTrue ("alt standalone", !alt.isStandAlone ());
+            assertTrue ("readonly whitespace", !readonly.isWhitespace ());
+            assertTrue ("readonly valued", !readonly.isValued ());
+            assertTrue ("readonly empty", !readonly.isEmpty ());
+            assertTrue ("readonly not standalone", readonly.isStandAlone ());
+            // try assigning the name and checking again
+            src.setName ("SRC");
+            assertTrue ("setName() failed", "SRC=\"images/third\"".equals (src.toString ()));
+            assertTrue ("src whitespace", !src.isWhitespace ());
+            assertTrue ("src not valued", src.isValued ());
+            assertTrue ("src empty", !src.isEmpty ());
+            assertTrue ("src standalone", !src.isStandAlone ());
+            alt.setName ("ALT");
+            assertTrue ("setName() failed", "ALT=\"\"".equals (alt.toString ()));
+            assertTrue ("alt whitespace", !alt.isWhitespace ());
+            assertTrue ("alt valued", !alt.isValued ());
+            assertTrue ("alt empty", !alt.isEmpty ());
+            assertTrue ("alt standalone", !alt.isStandAlone ());
+            readonly.setName ("READONLY");
+            assertTrue ("setName() failed", "READONLY".equals (readonly.toString ()));
+            assertTrue ("readonly whitespace", !readonly.isWhitespace ());
+            assertTrue ("readonly valued", !readonly.isValued ());
+            assertTrue ("readonly empty", !readonly.isEmpty ());
+            assertTrue ("readonly not standalone", readonly.isStandAlone ());
+            // try assigning the assignment and checking again
+            src.setAssignment (" = ");
+            assertTrue ("setAssignment() failed", "SRC = \"images/third\"".equals (src.toString ()));
+            assertTrue ("src whitespace", !src.isWhitespace ());
+            assertTrue ("src not valued", src.isValued ());
+            assertTrue ("src empty", !src.isEmpty ());
+            assertTrue ("src standalone", !src.isStandAlone ());
+            alt.setAssignment (" = ");
+            assertTrue ("setAssignment() failed", "ALT = \"\"".equals (alt.toString ()));
+            assertTrue ("alt whitespace", !alt.isWhitespace ());
+            assertTrue ("alt valued", !alt.isValued ());
+            assertTrue ("alt empty", !alt.isEmpty ());
+            assertTrue ("alt standalone", !alt.isStandAlone ());
+            readonly.setAssignment ("=");
+            assertTrue ("setAssignment() failed", "READONLY=".equals (readonly.toString ()));
+            assertTrue ("readonly whitespace", !readonly.isWhitespace ());
+            assertTrue ("readonly valued", !readonly.isValued ());
+            assertTrue ("readonly not empty", readonly.isEmpty ());
+            assertTrue ("readonly standalone", !readonly.isStandAlone ());
+            // try assigning the value and checking again
+            createParser (htmls[i]);
+            parseAndAssertNodeCount (1);
+            assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+            img = (ImageTag)node[0];
+            src = img.getAttributeEx ("src");
+            alt = img.getAttributeEx ("alt");
+            readonly = img.getAttributeEx ("readonly");
+            src.setValue ("cgi-bin/redirect");
+            assertTrue ("setValue() failed", "src=\"cgi-bin/redirect\"".equals (src.toString ()));
+            assertTrue ("src whitespace", !src.isWhitespace ());
+            assertTrue ("src not valued", src.isValued ());
+            assertTrue ("src empty", !src.isEmpty ());
+            assertTrue ("src standalone", !src.isStandAlone ());
+            alt.setValue ("no image");
+            assertTrue ("setValue() failed", "alt=\"no image\"".equals (alt.toString ()));
+            assertTrue ("alt whitespace", !alt.isWhitespace ());
+            assertTrue ("alt not valued", alt.isValued ());
+            assertTrue ("alt empty", !alt.isEmpty ());
+            assertTrue ("alt standalone", !alt.isStandAlone ());
+            readonly.setValue ("true"); // this may be bogus, really need to set assignment too, see below
+            assertTrue ("setValue() failed", "readonlytrue".equals (readonly.toString ()));
+            assertTrue ("readonly whitespace", !readonly.isWhitespace ());
+            assertTrue ("readonly not valued", readonly.isValued ());
+            assertTrue ("readonly empty", !readonly.isEmpty ());
+            assertTrue ("readonly standalone", !readonly.isStandAlone ());
+            readonly.setAssignment ("=");
+            assertTrue ("setAssignment() failed", "readonly=true".equals (readonly.toString ()));
+            assertTrue ("readonly whitespace", !readonly.isWhitespace ());
+            assertTrue ("readonly not valued", readonly.isValued ());
+            assertTrue ("readonly empty", !readonly.isEmpty ());
+            assertTrue ("readonly standalone", !readonly.isStandAlone ());
+        }
+    }
+
+    /**
+     * see bug #911565 isValued() and isNull() don't work
+     */
+    public void testSetQuote () throws ParserException
+    {
+        String html = "<img alt=\"\" src=\"images/third\" toast>";
+
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+        ImageTag img = (ImageTag)node[0];
+        Attribute src = img.getAttributeEx ("src");
+        src.setQuote ('\0');
+        assertTrue ("setQuote('\\0') failed", "src=images/third".equals (src.toString ()));
+        src.setQuote ('\'');
+        assertTrue ("setQuote('\\'') failed", "src='images/third'".equals (src.toString ()));
+    }
 }
