@@ -11,6 +11,7 @@ created, and forcing of attribute parsing. HTMLEndTag
 is now a HTMLTag, hence there is more uniformity in the interface now.
 [4] Fixed bug in HTMLLinkScanner, enabling it to 
 parse broken links.
+[5] Title Tags linked to -T instead of -t (clashing earlier with style tags)
 
 Integration Build 1.2 - 20020623
 --------------------------------

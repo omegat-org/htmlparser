@@ -1,3 +1,18 @@
+Integration Build 1.2 - 20020630
+--------------------------------
+[1] Fixed bug in linking of meta and title tags
+with their scanners
+[2] Fixed bug in parsing broken tags
+[3] Refactored design - scan() returns a HTMLTag now, 
+and is called inside a template method createScannedNode()
+inside HTMLTagScanner. Scanner designers dont have to
+worry about making links with the scanner and the tag
+created, and forcing of attribute parsing. HTMLEndTag
+is now a HTMLTag, hence there is more uniformity in the interface now.
+[4] Fixed bug in HTMLLinkScanner, enabling it to 
+parse broken links.
+[5] Title Tags linked to -T instead of -t (clashing earlier with style tags)
+
 Integration Build 1.2 - 20020623
 --------------------------------
 [1] Refactored HTMLAppletScanner
