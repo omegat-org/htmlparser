@@ -864,7 +864,7 @@ public class FilterBuilder
                 out = new PrintWriter (new FileWriter (name), true);
                 try
                 {
-                    out.append (buffer.toString ());
+                    out.write (buffer.toString ());
                     out.flush ();
                 }
                 finally
