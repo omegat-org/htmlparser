@@ -26,7 +26,7 @@
     <echo message="displayVersion=${displayVersion}"/>
 
     <!-- set property VERSION_STRING to current display version -->
-    <loadproperties srcFile="${src}/org/htmlparser/HTMLParser.java">
+    <loadproperties srcFile="${src}/org/htmlparser/Parser.java">
       <filterchain>
         <linecontains>
           <contains value="VERSION_STRING"/>
@@ -38,7 +38,7 @@
     <echo message="Detected Previous Display Version = ${previousDisplayVersion}"/>
 
     <!-- set property previousVersion to current version -->
-    <loadfile srcFile="${src}/org/htmlparser/HTMLParser.java" property="previousVersion">
+    <loadfile srcFile="${src}/org/htmlparser/Parser.java" property="previousVersion">
       <filterchain>
         <headfilter lines="1"/>
     	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
@@ -64,7 +64,7 @@
 	  <include name="**/*.java"/>
 	  <replacefilter token="${previousVersion}"/>
 	</replace>
-  	<replace file="${src}/org/htmlparser/HTMLParser.java" token="${previousDisplayVersion}" value="${displayVersion}"/>
+  	<replace file="${src}/org/htmlparser/Parser.java" token="${previousDisplayVersion}" value="${displayVersion}"/>
   	<replace file="${docs}/release.txt" token="${previousDisplayVersion}" value="${displayVersion}"/>  	
   </target>
   
@@ -96,7 +96,7 @@
     <!-- Put everything in ${build} into the htmlparser.jar file -->
     <jar jarfile="${dist}/lib/htmlparser.jar" basedir="${build}" manifest="${resources}/Manifest.mf">
       <manifest>
-        <section name="org/htmlparser/HTMLParser.class">
+        <section name="org/htmlparser/Parser.class">
           <attribute name="Java-Bean" value="True"/>
         </section>
         <section name="org/htmlparser/beans/StringBean.class">
