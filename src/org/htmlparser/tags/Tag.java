@@ -136,6 +136,7 @@ public class Tag extends Node
 		this.tagContents = new StringBuffer();
 		this.tagContents.append(tagData.getTagContents());
 		this.tagLine = tagData.getTagLine();
+		this.emptyXmlTag = tagData.isEmptyXmlTag();
 	}
 
 	public void append(char ch) {

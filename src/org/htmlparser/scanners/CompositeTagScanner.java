@@ -83,9 +83,12 @@ public abstract class CompositeTagScanner extends TagScanner {
 				tempScanners = reader.getParser().getScanners();
 				reader.getParser().flushScanners();
 			}
+			boolean isXmlEndTag=false;
 			if (isXmlEndTag(tag)) {
-				endTag = tag; 
+				endTag = tag;
+				node = morphToEndTag(tag);
 				endTagFound=true;
+				isXmlEndTag = true;
 			}
 			while (!endTagFound && node!=null){
 				if (stringNodeIgnoreMode)
@@ -93,6 +96,13 @@ public abstract class CompositeTagScanner extends TagScanner {
 				node = reader.readElement();
 				if (stringNodeIgnoreMode)
 					reader.getStringParser().setIgnoreStateMode(false);
+				if (node instanceof Tag) {
+					Tag testTag = (Tag)node;
+					if (testTag.isEmptyXmlTag()) {
+						node = morphToEndTag(testTag);
+					}
+				}
+									
 				if (node instanceof EndTag) {
 					endTag = (Tag)node;
 					for (int i=0;i<nameOfTagToMatch.length && !endTagFound;i++) {
@@ -139,7 +149,8 @@ public abstract class CompositeTagScanner extends TagScanner {
 						endTag.elementEnd(),
 						startTag.getText(),
 						currLine,
-						url				
+						url,
+						isXmlEndTag				
 					), new CompositeTagData(
 						startTag,endTag,childVector
 					)
@@ -160,10 +171,14 @@ public abstract class CompositeTagScanner extends TagScanner {
 		}
 	}
 
+	public EndTag morphToEndTag(Tag testTag) {
+		return new EndTag(new TagData(testTag.elementBegin(),testTag.elementEnd(),testTag.getText(),testTag.getTagLine()));
+	}
+
 	public boolean isXmlEndTag(Tag tag) {
 		String tagText = tag.getText();
-		int firstSlash = tagText.indexOf("/");
-		return firstSlash == tagText.length()-1;
+		int lastSlash = tagText.lastIndexOf("/");
+		return (lastSlash == tagText.length()-1 || tag.isEmptyXmlTag()) && tag.getText().indexOf("://")==-1;
 	}
 	
 	protected void beforeScanningStarts() {

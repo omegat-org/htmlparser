@@ -34,22 +34,25 @@ public class TagData {
 	private String tagContents;
 	private String tagLine;
 	private String urlBeingParsed;
+	private boolean isXmlEndTag;
 	
 	public TagData(int tagBegin, int tagEnd, String tagContents,String tagLine) {
-		this.tagBegin = tagBegin;
-		this.tagEnd   = tagEnd;
-		this.tagContents = tagContents;
-		this.tagLine = tagLine;	
+		this(tagBegin, tagEnd, tagContents, tagLine, "", false);
 	}
 	
 	public TagData(int tagBegin, int tagEnd, String tagContents,String tagLine, String urlBeingParsed) {
+		this(tagBegin, tagEnd, tagContents, tagLine, urlBeingParsed, false);
+	}
+	
+	public TagData(int tagBegin, int tagEnd, String tagContents,String tagLine, String urlBeingParsed, boolean isXmlEndTag) {
 		this.tagBegin = tagBegin;
 		this.tagEnd   = tagEnd;
 		this.tagContents = tagContents;
 		this.tagLine = tagLine;	
 		this.urlBeingParsed = urlBeingParsed;
+		this.isXmlEndTag = isXmlEndTag;
 	}
-	
+
 	public int getTagBegin() {
 		return tagBegin;
 	}
@@ -76,6 +79,10 @@ public class TagData {
 
 	public void setUrlBeingParsed(String baseUrl) {
 		this.urlBeingParsed = baseUrl;
+	}
+	
+	public boolean isEmptyXmlTag() {
+		return isXmlEndTag;
 	}
 
 }

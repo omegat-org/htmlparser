@@ -1,14 +1,14 @@
 package org.htmlparser.tests.scannersTests;
 
-import junit.framework.TestCase;
-
 import org.htmlparser.scanners.CompositeTagScanner;
+import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class CompositeTagScannerTest extends TestCase {
+public class CompositeTagScannerTest extends ParserTestCase {
 	private CompositeTagScanner scanner;
 	
 	public CompositeTagScannerTest(String name) {
@@ -47,4 +47,43 @@ public class CompositeTagScannerTest extends TestCase {
 		);
 		assertFalse("should not be an xml end tag",scanner.isXmlEndTag(tag));
 	}
+	
+	public void testXmlTypeCompositeTags() throws ParserException {
+		createParser(
+			"<Custom>" +				"<Another name=\"subtag\"/>" +			"</Custom>" +			"<Custom/>"
+		);
+		parser.addScanner(new CustomScanner());
+		parser.addScanner(new AnotherScanner());
+		parseAndAssertNodeCount(2);
+		
+	}
+	
+	private static class CustomScanner extends CompositeTagScanner {
+	  private static final String MATCH_NAME [] = { "CUSTOM" };
+	  public CustomScanner() { super("", MATCH_NAME); }
+	  public String[] getID() { return MATCH_NAME; }
+	  protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new CustomTag(tagData, compositeTagData);
+	  }
+	}
+	private static class AnotherScanner extends CompositeTagScanner {
+	  private static final String MATCH_NAME [] = { "ANOTHER" };
+	  public AnotherScanner() { super("", MATCH_NAME); }
+	  public String[] getID() { return MATCH_NAME; }
+	  protected Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new AnotherTag(tagData, compositeTagData);
+	  }
+	}
+
+	// Custom Tags
+	private static class CustomTag extends CompositeTag {
+	  public CustomTag(TagData tagData, CompositeTagData compositeTagData) {
+		super(tagData,compositeTagData);
+	  }
+	}
+	private static class AnotherTag extends CompositeTag {
+	  public AnotherTag(TagData tagData, CompositeTagData compositeTagData) {
+		super(tagData,compositeTagData);
+	  }
+	}	
 }
