@@ -1,3 +1,12 @@
+Integration Build 1.2 - 20020804
+--------------------------------
+[1] Fixed bug 590250, problem in HTMLStringNode, by which a single
+character on the last line was causing a parser crash
+[2] Optimized and refactored HTMLParameterParaser.parseParameters()
+[3] Modified PerformanceTest to exclude first reading in average computation
+[4] Fixed bug in HTMLParameterParser.parseParameters(), due to which
+params with spaces before = were not being picked up
+
 Integration Build 1.2 - 20020728
 --------------------------------
 [1] Fixed bug in HTMLParser.openConnection(), mistaking 
