@@ -632,13 +632,22 @@ public class StringBean extends NodeVisitor implements Serializable
             carriage_return ();
     }
     
-//    /**
-//     * Unit test.
-//     */
-//    public static void main (String[] args)
-//    {
-//        StringBean sb = new StringBean ();
-//        sb.setURL ("http://cbc.ca");
-//        System.out.println (sb.getStrings ());
-//    }
+    /**
+     * Unit test.
+     * @param args Pass arg[0] as the URL to process.
+     */
+    public static void main (String[] args)
+    {
+        if (0 >= args.length)
+            System.out.println ("Usage: java -classpath htmlparser.jar org.htmlparser.beans.StringBean <http://whatever_url>");
+        else
+        {
+            StringBean sb = new StringBean ();
+            sb.setLinks (false);
+            sb.setReplaceNonBreakingSpaces (true);
+            sb.setCollapse (true);
+            sb.setURL (args[0]);
+            System.out.println (sb.getStrings ());
+        }
+    }
 }
