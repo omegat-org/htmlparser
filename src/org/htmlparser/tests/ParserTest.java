@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -105,8 +105,8 @@ public class ParserTest extends ParserTestCase {
             node[i++] = e.nextNode();
         }
         assertEquals("There should be "+cnt+" nodes identified (second call to parser.elements())",cnt,i);
-    }   
-    
+    }
+
     /**
      * Test the Parser(URLConnection) constructor.
      * This testcase needs you to be online.
@@ -114,42 +114,42 @@ public class ParserTest extends ParserTestCase {
      * <pre>
      * &lt;form NAME="SearchQuick" method="POST" action="cp_search_response-e.asp"
      *  onSubmit="return runSubmit();"&gt;
-     * 
+     *
      * &lt;!-- begin test hidden field code --&gt;
      *   &lt;input TYPE="Hidden" NAME="app_language" value="english"&gt;
-     * 
+     *
      *   &lt;input TYPE="Hidden" NAME="app_response_start_row_number" value="1"&gt;
      *   &lt;input TYPE="Hidden" NAME="app_response_rows_max" value="9"&gt;
-     * 
+     *
      *   &lt;input TYPE="Hidden" NAME="app_source" value="quick"&gt;
      *   &lt;input TYPE="Hidden" NAME="query_source" value="q"&gt;
-     * 
+     *
      *   &lt;input TYPE="Hidden" NAME="name" value&gt;
      *   &lt;input TYPE="Hidden" NAME="postal_code" value&gt;
      *   &lt;input TYPE="Hidden" NAME="directory_area_name" value&gt;
-     * 
+     *
      *   &lt;input TYPE="Hidden" NAME="delivery_mode" value&gt;
      *   &lt;input TYPE="Hidden" NAME="Suffix" value&gt;
-     * 
+     *
      *   &lt;input TYPE="Hidden" NAME="street_direction" value&gt;
      *   &lt;input TYPE="Hidden" NAME="installation_type" value&gt;
      *   &lt;input TYPE="Hidden" NAME="delivery_number" value&gt;
      *   &lt;input TYPE="Hidden" NAME="installation_name" value&gt;
      *   &lt;input TYPE="Hidden" NAME="unit_number" value&gt;
-     * 
+     *
      *   &lt;input TYPE="Hidden" NAME="app_state" value="production"&gt;
      * &lt;!-- end test hidden field code --&gt;
-     * 
+     *
      * &lt;p&gt;
      *   &lt;table border="0" cellpadding="0" width="90%" cellspacing="0"&gt;
-     * 
+     *
      *     &lt;tr&gt;
      *       &lt;td  class="tbltitle"&gt; Street Number: &lt;/td&gt;
      *       &lt;td class="tbltitle"&gt; Street Name: &lt;/td&gt;
      *       &lt;td class="tbltitle"&gt; Street Type:&lt;/td&gt;
      *     &lt;/tr&gt;
      *     &lt;tr&gt;
-     * 
+     *
      *       &lt;td&gt;
      *         &lt;input type="text" name="street_number" size="10" maxlength="10"&gt;
      *       &lt;/td&gt;
@@ -159,7 +159,7 @@ public class ParserTest extends ParserTestCase {
      *       &lt;/td&gt;
      *       &lt;td&gt;&lt;input type="text" name="test" size="10" maxlength="30"&gt;&lt;/td&gt;
      *     &lt;/tr&gt;
-     * 
+     *
      *   &lt;/table&gt;
      * &lt;p&gt;
      *   &lt;table border="0" cellpadding="0" width="90%" cellspacing="0"&gt;
@@ -170,7 +170,7 @@ public class ParserTest extends ParserTestCase {
      *       &lt;td class="tbltitle"&gt;
      *         Province:
      *       &lt;/td&gt;
-     * 
+     *
      *     &lt;/tr&gt;
      *     &lt;tr&gt;
      *       &lt;td&gt;
@@ -179,7 +179,7 @@ public class ParserTest extends ParserTestCase {
      *       &lt;td&gt;
      *         &lt;select size="1" name="prov"&gt;
      *           &lt;option selected value="NULL"&gt;Select&lt;/option&gt;&lt;option value="AB"&gt;AB - Alberta&lt;/option&gt;&lt;option value="BC"&gt;BC - British Columbia&lt;/option&gt;&lt;option value="MB"&gt;MB - Manitoba&lt;/option&gt;&lt;option value="NB"&gt;NB - New Brunswick&lt;/option&gt;&lt;option value="NL"&gt;NL - Newfoundland and Labrador&lt;/option&gt;&lt;option value="NS"&gt;NS - Nova Scotia&lt;/option&gt;&lt;option value="NT"&gt;NT - Northwest Territories&lt;/option&gt;&lt;option value="NU"&gt;NU - Nunavut&lt;/option&gt;&lt;option value="ON"&gt;ON - Ontario&lt;/option&gt;&lt;option value="PE"&gt;PE - Prince Edward Island&lt;/option&gt;&lt;option value="QC"&gt;QC - Quebec&lt;/option&gt;&lt;option value="SK"&gt;SK - Saskatchewan&lt;/option&gt;&lt;option value="YT"&gt;YT - Yukon&lt;/option&gt;
-     * 
+     *
      *         &lt;/select&gt;
      *       &lt;/td&gt;
      *     &lt;/tr&gt;
@@ -307,7 +307,7 @@ public class ParserTest extends ParserTestCase {
             }
         }
         assertTrue("POST operation failed.", pass);
-    }   
+    }
 
     /**
      * Tests the 'from file' Parser constructor.
@@ -321,7 +321,7 @@ public class ParserTest extends ParserTestCase {
         Node nodes[];
         int i;
         NodeIterator enumeration;
-        
+
         path = System.getProperty ("user.dir");
         if (!path.endsWith (File.separator))
             path += File.separator;
@@ -389,7 +389,7 @@ public class ParserTest extends ParserTestCase {
     {
         Parser parser;
         NodeIterator enumeration;
-        
+
         try
         {
             parser = new Parser("http://www.sony.co.jp", Parser.noFeedback);
@@ -414,7 +414,7 @@ public class ParserTest extends ParserTestCase {
         String url = "http://htmlparser.sourceforge.net/test/gb2312Charset.html";
         int i;
         Node[] nodes;
-        
+
         parser = new Parser(url);
         i = 0;
         nodes = new AbstractNode[30];
@@ -436,7 +436,7 @@ public class ParserTest extends ParserTestCase {
     {
         Parser parser;
         String url = "http://htmlparser.sourceforge.net/test/DoublequotedCharset.html";
-        
+
         parser = new Parser(url);
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
             e.nextNode();
@@ -456,7 +456,7 @@ public class ParserTest extends ParserTestCase {
     {
         Parser parser;
         String url = "http://htmlparser.sourceforge.net/test/SinglequotedCharset.html";
-        
+
         parser = new Parser(url);
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
             e.nextNode();
@@ -542,21 +542,21 @@ public class ParserTest extends ParserTestCase {
             assertTrue("Should have thrown an exception!",false);
         }
         catch (ParserException e) {
-            
+
         }
     }
-    
+
     public void testURLWithSpaces() throws ParserException{
         Parser parser;
         String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
-        
+
         parser = new Parser(url);
         Node node [] = new AbstractNode[30];
         int i = 0;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
             node[i] = e.nextNode();
             i++;
-            
+
         }
         assertEquals("Expected nodes",12,i);
     }
@@ -610,7 +610,7 @@ public class ParserTest extends ParserTestCase {
         "if (!hp.isHomePage('http://www.google.com/')) {document.write(\"<p><a href=\"/mgyhp.html\" onClick=\"style.behavior='url(#default#homepage)';setHomePage('http://www.google.com/');\">Make Google Your Homepage!</a>\");}\n"+
         "</script></font>\n"+
         "<p><font size=-2>&copy;2002 Google</font><font size=-2> - Searching 3,083,324,652 web pages</font></center></body></html>\n"
-        );      
+        );
         parser.registerScanners();
         NodeList collectionList = new NodeList();
 
@@ -666,7 +666,7 @@ public class ParserTest extends ParserTestCase {
         "<td><a href=\"nishi-hongwanji-lodging.html\"><img height=99 width=124 src=\"nishi-hongwanji-lodging-thumb.jpg\" border=0 ></a></td>\n"+
         "</tr></table></div>\n"+
         "</body>\n"+
-        "</html>");     
+        "</html>");
         parser.registerScanners();
         NodeList collectionList = new NodeList();
 
@@ -687,7 +687,7 @@ public class ParserTest extends ParserTestCase {
             ""
         );
         parser.registerScanners();
-        parser.removeScanner(new FormScanner("",parser)); 
+        parser.removeScanner(new FormScanner("",parser));
         Map scanners = parser.getScanners();
         TagScanner scanner = (TagScanner)scanners.get("FORM");
         assertNull("shouldnt have found scanner",scanner);
@@ -713,7 +713,7 @@ public class ParserTest extends ParserTestCase {
             e.nextNode();
         }
     }
-    
+
     /**
      * See bug #729368 Embedded quote and split tag
      */

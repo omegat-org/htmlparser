@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -57,10 +57,10 @@ public class TagScannerTest extends ParserTestCase
             "<MESSAGE>\n"+
             "Abhi\n"+
             "Sri\n"+
-            "</MESSAGE>"); 
+            "</MESSAGE>");
         Parser.setLineSeparator("\r\n");
-        NodeIterator e = parser.elements(); 
-    
+        NodeIterator e = parser.elements();
+
         Node node = e.nextNode();
         try {
             String result = TagScanner.extractXMLData(node,"MESSAGE",parser.getReader());
@@ -68,14 +68,14 @@ public class TagScannerTest extends ParserTestCase
         }
         catch (ParserException ex) {
             assertTrue(e.toString(),false);
-        }       
+        }
     }
 
     public void testExtractXMLDataSingle() throws ParserException {
         createParser(
             "<MESSAGE>Test</MESSAGE>");
-        NodeIterator e = parser.elements(); 
-    
+        NodeIterator e = parser.elements();
+
         Node node = (Node)e.nextNode();
         try {
             String result = TagScanner.extractXMLData(node,"MESSAGE",parser.getReader());
@@ -96,7 +96,7 @@ public class TagScannerTest extends ParserTestCase
 
     /**
      * Captures bug reported by Raghavender Srimantula
-     * Problem is in isXMLTag - when it uses equals() to 
+     * Problem is in isXMLTag - when it uses equals() to
      * find a match
      */
     public void testIsXMLTag() throws ParserException {
@@ -112,24 +112,24 @@ public class TagScannerTest extends ParserTestCase
         String result = ParserUtils.removeChars(test,'\n');
         assertEquals("Removing Chars","helloworld\tqsdsds",result);
     }
-    
+
     public void testRemoveChars2() {
         String test = "hello\r\nworld\r\n\tqsdsds";
-        TagScanner scanner = new TagScanner() { 
+        TagScanner scanner = new TagScanner() {
             public Tag scan(Tag tag,String url,NodeReader reader,String currLine) { return null;}
             public boolean evaluate(String s,TagScanner previousOpenScanner) { return false; }
             public String [] getID() {
                 return null;
             }
-    
+
         };
         String result = scanner.removeChars(test,"\r\n");
         assertEquals("Removing Chars","helloworld\tqsdsds",result);
     }
-    
+
     /**
      * Bug report by Cedric Rosa
-     * in absorbLeadingBlanks - crashes if the tag 
+     * in absorbLeadingBlanks - crashes if the tag
      * is empty
      */
     public void testAbsorbLeadingBlanksBlankTag() {

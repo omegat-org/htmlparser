@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -39,19 +39,19 @@ import org.htmlparser.util.ParserException;
 public class InputTagTest extends ParserTestCase {
     private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");
 
-    public InputTagTest(String name) 
+    public InputTagTest(String name)
     {
         super(name);
     }
-    
+
     protected void setUp() throws Exception
     {
         super.setUp();
         createParser(testHTML,"http://www.google.com/test/index.html");
         parser.addScanner(new InputTagScanner("-i"));
     }
-    
-    public void testToHTML() throws ParserException 
+
+    public void testToHTML() throws ParserException
     {
         parseAndAssertNodeCount(1);
         assertTrue("Node 1 should be INPUT Tag",node[0] instanceof InputTag);
@@ -59,8 +59,8 @@ public class InputTagTest extends ParserTestCase {
         InputTag = (InputTag) node[0];
         assertStringEquals ("HTML String","<INPUT NAME=\"Google\" TYPE=\"text\">",InputTag.toHtml());
     }
-    
-    public void testToString() throws ParserException 
+
+    public void testToString() throws ParserException
     {
         parseAndAssertNodeCount(1);
         assertTrue("Node 1 should be INPUT Tag",node[0] instanceof InputTag);
@@ -68,7 +68,7 @@ public class InputTagTest extends ParserTestCase {
         InputTag = (InputTag) node[0];
         assertEquals("HTML Raw String","INPUT TAG\n--------\nNAME : Google\nTYPE : text\n",InputTag.toString());
     }
-    
+
     /**
      * Reproduction of bug report 663038
      * @throws ParserException
@@ -81,13 +81,13 @@ public class InputTagTest extends ParserTestCase {
         parser.addScanner(new InputTagScanner("-i"));
 
         parseAndAssertNodeCount(1);
-        assertTrue("Node 1 should be INPUT Tag", 
+        assertTrue("Node 1 should be INPUT Tag",
             node[0] instanceof InputTag);
         InputTag InputTag;
         InputTag = (InputTag) node[0];
-        assertStringEquals("HTML String", 
+        assertStringEquals("HTML String",
             "<INPUT CHECKED NAME=\"cbCheck\" TYPE=\"checkbox\">",
             InputTag.toHtml());
     }
-    
+
 }

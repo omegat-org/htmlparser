@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -38,7 +38,7 @@ import org.htmlparser.visitors.NodeVisitor;
 public class RemarkNode extends AbstractNode
 {
     public final static String REMARK_NODE_FILTER="-r";
-    
+
     /**
      * Tag contents will have the contents of the comment tag.
      */
@@ -56,7 +56,7 @@ public class RemarkNode extends AbstractNode
         this.tagContents = tagContents;
     }
 
-    /** 
+    /**
      * Returns the text contents of the comment tag.
      */
     public String getText()

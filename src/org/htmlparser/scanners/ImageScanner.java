@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -40,7 +40,7 @@ import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 /**
- * Scans for the Image Tag. This is a subclass of TagScanner, and is called using a 
+ * Scans for the Image Tag. This is a subclass of TagScanner, and is called using a
  * variant of the template method. If the evaluate() method returns true, that means the
  * given string contains an image tag. Extraction is done by the scan method thereafter
  * by the user of this class.
@@ -59,8 +59,8 @@ public class ImageScanner extends TagScanner
         processor = new LinkProcessor();
     }
     /**
-     * Overriding the constructor to accept the filter 
-     */ 
+     * Overriding the constructor to accept the filter
+     */
     public ImageScanner(String filter,LinkProcessor processor)
     {
         super(filter);
@@ -91,17 +91,17 @@ public class ImageScanner extends TagScanner
                     tag.setText(tag.getText().substring(0,indexSrc+3)+"="+tag.getText().substring(indexSrc+3,tag.getText().length()));
                     table = tag.redoParseAttributes();
                     relativeLink = (String) table.get("SRC");
-                    
-                } 
+
+                }
             }
             if (relativeLink==null) return ""; else
-            return processor.extract(relativeLink,url);     
+            return processor.extract(relativeLink,url);
         }
         catch (Exception e) {
             throw new ParserException("HTMLImageScanner.extractImageLocn() : Error in extracting image location, relativeLink = "+relativeLink+", url = "+url,e);
         }
     }
-    
+
     public String [] getID() {
         String [] ids = new String[1];
         ids[0] = IMAGE_SCANNER_ID;

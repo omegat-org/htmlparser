@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 //
@@ -35,7 +35,7 @@ import java.io.FileFilter;
 import java.io.FileReader;
 
 public class LineCounter {
-    
+
     public int count(File file) {
         System.out.println("Handling "+file.getName());
         int count = 0;
@@ -50,7 +50,7 @@ public class LineCounter {
         return count;
     }
 
-    /** 
+    /**
      * Counts code excluding comments and blank lines in the given file
      * @param file
      * @return int
@@ -63,11 +63,11 @@ public class LineCounter {
             String line = null;
             do {
                 line = reader.readLine();
-                if (line!=null && 
-                    line.indexOf("*")==-1 && 
-                    line.indexOf("//")==-1 && 
+                if (line!=null &&
+                    line.indexOf("*")==-1 &&
+                    line.indexOf("//")==-1 &&
                     line.length()>0
-                ) count++; 
+                ) count++;
             }
             while (line!=null);
         }
@@ -81,7 +81,7 @@ public class LineCounter {
         File [] files = file.listFiles(new FileFilter() {
             public boolean accept(File file) {
                 if (file.getName().indexOf(".java")!=-1 || file.isDirectory()) {
-                    return true; 
+                    return true;
                 } else {
                     return false;
                 }
@@ -92,7 +92,7 @@ public class LineCounter {
         }
         return count;
     }
-    
+
     public static void main(String [] args) {
         LineCounter lc = new LineCounter();
         System.out.println("Line Count = "+lc.count(new File(args[0])));

@@ -90,6 +90,16 @@ HTML Parser Integration Release 1.4-20030824
   <property name="junit.jar" value="lib/junit.jar"/>
   <property name="commons-logging.jar" value="lib/commons-logging.jar"/>
 
+  <taskdef resource="checkstyletask.properties"
+           classpath="lib/checkstyle-all-3.1.jar"/>
+
+  <target name="checkstyle" description="check source code adheres to coding standards">
+    <checkstyle config="./htmlparser_checks.xml">
+      <fileset dir="src" includes="**/*.java"/>
+    </checkstyle>
+  </target>
+
+
   <target name="init" description="initialize version properties">
     <echo message="**********************************"/>
     <echo message="*  Initializing.....             *"/>

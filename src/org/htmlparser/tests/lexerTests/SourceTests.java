@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -68,7 +68,7 @@ public class SourceTests extends TestCase
     public void testNull () throws IOException
     {
         Source source;
-        
+
         source = new Source (null);
         assertTrue ("erroneous character", -1 == source.read ());
     }
@@ -79,7 +79,7 @@ public class SourceTests extends TestCase
     public void testEmpty () throws IOException
     {
         Source source;
-        
+
         source = new Source (new Stream (new ByteArrayInputStream (new byte[0])), null);
         assertTrue ("erroneous character", -1 == source.read ());
     }
@@ -90,7 +90,7 @@ public class SourceTests extends TestCase
     public void testOneByte () throws IOException
     {
         Source source;
-        
+
         source = new Source (new Stream (new ByteArrayInputStream (new byte[] { (byte)0x42 })), null);
         assertTrue ("erroneous character", 'B' == source.read ());
         assertTrue ("extra character", -1 == source.read ());
@@ -126,7 +126,7 @@ public class SourceTests extends TestCase
         Source source;
         StringBuffer buffer;
         int c;
-        
+
         reference = "Now is the time for all good men to come to the aid of the party";
         source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         buffer = new StringBuffer (reference.length ());
@@ -150,7 +150,7 @@ public class SourceTests extends TestCase
         Source source;
         StringBuffer buffer;
         int c;
-        
+
         reference = "Now is the time for all good men to come to the aid of the party";
         source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         buffer = new StringBuffer (reference.length ());
@@ -174,7 +174,7 @@ public class SourceTests extends TestCase
         Source source;
         StringBuffer buffer;
         int c;
-        
+
         reference = "Now is the time for all good men to come to the aid of the party";
         source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         assertTrue ("not markable", source.markSupported ());
@@ -203,7 +203,7 @@ public class SourceTests extends TestCase
         Source source;
         StringBuffer buffer;
         int c;
-       
+
         part1 = "Now is the time ";
         part2 = "for all good men ";
         part3 = "to come to the aid of the party";
@@ -227,7 +227,7 @@ public class SourceTests extends TestCase
         String reference;
         Source source;
         char[] buffer;
-        
+
         reference = "Now is the time for all good men to come to the aid of the party";
         source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         buffer = new char[reference.length ()];
@@ -250,7 +250,7 @@ public class SourceTests extends TestCase
         char[] buffer;
         int c;
         int length;
-       
+
         part1 = "Now is the time ";
         part2 = "for all good men ";
         part3 = "to come to the aid of the party";
@@ -275,7 +275,7 @@ public class SourceTests extends TestCase
     public void testReady () throws IOException
     {
         Source source;
-        
+
         source = new Source (new Stream (new ByteArrayInputStream (new byte[] { (byte)0x42, (byte)0x62 })), null);
         assertTrue ("ready?", !source.ready ());
         assertTrue ("erroneous character", 'B' == source.read ());

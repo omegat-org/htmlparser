@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -43,7 +43,7 @@ import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 /**
- * Scans for the Link Tag. This is a subclass of TagScanner, and is called using a 
+ * Scans for the Link Tag. This is a subclass of TagScanner, and is called using a
  * variant of the template method. If the evaluate() method returns true, that means the
  * given string contains an image tag. Extraction is done by the scan method thereafter
  * by the user of this class.
@@ -56,22 +56,22 @@ public class LinkScanner extends CompositeTagScanner
     private LinkProcessor processor;
     private final static String ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
     private final static String ENDTAG_ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
-    
+
     /**
      * Overriding the default constructor
      */
     public LinkScanner() {
         this("");
     }
-    
+
     /**
-     * Overriding the constructor to accept the filter 
+     * Overriding the constructor to accept the filter
      */
     public LinkScanner(String filter) {
         super(filter,MATCH_NAME,ENDERS,ENDTAG_ENDERS, false);
-        processor = new LinkProcessor();        
+        processor = new LinkProcessor();
     }
-    
+
     public Tag createTag(
         TagData tagData,
         CompositeTagData compositeTagData) throws ParserException {
@@ -84,17 +84,17 @@ public class LinkScanner extends CompositeTagScanner
             // yes it is
             mailto = link.indexOf(":");
             link = link.substring(mailto+1);
-            mailLink = true;            
-        } 
+            mailLink = true;
+        }
         int javascript = link.indexOf("javascript:");
         boolean javascriptLink = false;
         if (javascript == 0) {
             link = link.substring(11); // this magic number is "javascript:".length()
             javascriptLink = true;
-        }  
+        }
         String accessKey = getAccessKey(compositeTagData.getStartTag());
         String myLinkText = compositeTagData.getChildren().toString();
-        
+
         LinkTag linkTag = new LinkTag(
             tagData,
             compositeTagData,
@@ -109,9 +109,9 @@ public class LinkScanner extends CompositeTagScanner
         linkTag.setThisScanner(this);
         return linkTag;
     }
-    
+
     /**
-     * Template Method, used to decide if this scanner can handle the Link tag type. If 
+     * Template Method, used to decide if this scanner can handle the Link tag type. If
      * the evaluation returns true, the calling side makes a call to scan().
      * @param s The complete text contents of the Tag.
      * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
@@ -121,7 +121,7 @@ public class LinkScanner extends CompositeTagScanner
     {
         char ch;
         boolean ret;
-        
+
         // eat up leading blanks
         s = absorbLeadingBlanks (s);
         if (5 > s.length ())
@@ -139,27 +139,27 @@ public class LinkScanner extends CompositeTagScanner
     }
 
     /**
-     * Extract the link from the given string. The URL of the actual html page is also 
-     * provided.    
+     * Extract the link from the given string. The URL of the actual html page is also
+     * provided.
      */
     public String extractLink(Tag tag,String url) throws ParserException
     {
         try {
             Hashtable table = tag.getAttributes();
             String relativeLink =  (String)table.get("HREF");
-            if (relativeLink!=null) { 
+            if (relativeLink!=null) {
                 relativeLink = ParserUtils.removeChars(relativeLink,'\n');
                 relativeLink = ParserUtils.removeChars(relativeLink,'\r');
             }
             return processor.extract(relativeLink,url);
         }
         catch (Exception e) {
-            String msg; 
+            String msg;
             if (tag!=null) msg = tag.getText(); else msg="null";
             throw new ParserException("HTMLLinkScanner.extractLink() : Error while extracting link from tag "+msg+", url = "+url,e);
         }
     }
-    
+
     /**
      * Extract the access key from the given tag.
      * @param text Text to be parsed to pick out the access key.
@@ -168,15 +168,15 @@ public class LinkScanner extends CompositeTagScanner
     private String getAccessKey (Tag tag) {
         return tag.getAttribute("ACCESSKEY");
     }
-    
+
     public BaseHrefScanner createBaseHREFScanner(String filter) {
         return new BaseHrefScanner(filter,processor);
     }
-    
+
     public ImageScanner createImageScanner(String filter) {
         return new ImageScanner(filter,processor);
     }
-    
+
     /**
      * @see org.htmlparser.scanners.TagScanner#getID()
      */

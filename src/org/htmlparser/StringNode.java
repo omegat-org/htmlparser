@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -38,13 +38,13 @@ import org.htmlparser.visitors.NodeVisitor;
 public class StringNode extends AbstractNode
 {
     public static final String STRING_FILTER="-string";
-    
+
     /**
      * The text of the string.
-     */ 
+     */
     protected StringBuffer textBuffer;
 
-    /** 
+    /**
      * Constructor takes in the text string, beginning and ending posns.
      * @param text The contents of the string line
      * @param textBegin The beginning position of the string
@@ -70,19 +70,19 @@ public class StringNode extends AbstractNode
     {
         textBuffer = new StringBuffer (text);
     }
-    
+
     public String toPlainTextString() {
         return textBuffer.toString();
     }
-    
+
     public String toHtml() {
         return textBuffer.toString();
     }
-    
+
     public String toString() {
         return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
     }
-    
+
     public void collectInto(NodeList collectionList, String filter) {
         if (filter==STRING_FILTER) collectionList.add(this);
     }

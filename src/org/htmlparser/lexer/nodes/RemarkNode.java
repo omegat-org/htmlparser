@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -39,8 +39,8 @@ import org.htmlparser.util.NodeList;
 public class RemarkNode extends AbstractNode
 {
     public final static String REMARK_NODE_FILTER="-r";
-    
-    /** 
+
+    /**
      * Constructor takes in the text string, beginning and ending posns.
      * @param page The page this string is on.
      * @param start The beginning position of the string.
@@ -51,7 +51,7 @@ public class RemarkNode extends AbstractNode
         super (page, start, end);
     }
 
-    /** 
+    /**
      * Returns the text contents of the comment tag.
      * todo: this only works for the usual case.
      */
@@ -74,7 +74,7 @@ public class RemarkNode extends AbstractNode
     {
         Cursor start;
         Cursor end;
-        
+
         start = new Cursor (getPage (), elementBegin ());
         end = new Cursor (getPage (), elementEnd ());
         return ("Rem (" + start.toString () + "," + end.toString () + "): " + getText ());

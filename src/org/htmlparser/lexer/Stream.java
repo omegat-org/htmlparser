@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -34,7 +34,7 @@ import java.lang.Runnable;
 
 /**
  * Provides for asynchronous fetching from a stream.
- * 
+ *
  */
 public class Stream extends InputStream implements Runnable
 {
@@ -147,7 +147,7 @@ public class Stream extends InputStream implements Runnable
                     buffer = mBuffer;
                 }
                 else
-                {   
+                {
                     if (mBuffer.length - mLevel < BUFFER_SIZE / 2)
                         buffer = new byte[Math.max (mBuffer.length * 2, mBuffer.length + mIn.available ())];
                     else
@@ -258,10 +258,10 @@ public class Stream extends InputStream implements Runnable
             ret = mBuffer[mOffset++];
         else
             ret = EOF;
-        
+
         return (ret);
     }
-    
+
     /**
      * Returns the number of bytes that can be read (or skipped over) from
      * this input stream without blocking by the next caller of a method for
@@ -275,7 +275,7 @@ public class Stream extends InputStream implements Runnable
     {
         return (mLevel - mOffset);
     }
-    
+
     /**
      * Closes this input stream and releases any system resources associated
      * with the stream.
@@ -294,7 +294,7 @@ public class Stream extends InputStream implements Runnable
         mContentLength =0;
         mMark = -1;
     }
-    
+
     /**
      * Repositions this stream to the position at the time the
      * <code>mark</code> method was last called on this input stream.
@@ -344,7 +344,7 @@ public class Stream extends InputStream implements Runnable
         else
             mOffset = 0;
     }
-    
+
     /**
      * Tests if this input stream supports the <code>mark</code> and
      * <code>reset</code> methods. Whether or not <code>mark</code> and
@@ -361,7 +361,7 @@ public class Stream extends InputStream implements Runnable
     {
         return (true);
     }
-    
+
     /**
      * Marks the current position in this input stream. A subsequent call to
      * the <code>reset</code> method repositions this stream at the last marked

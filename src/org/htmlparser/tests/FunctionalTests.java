@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -55,7 +55,7 @@ public class FunctionalTests extends TestCase {
 
     /**
      * Based on a suspected bug report by Annette Doyle,
-     * to check if the no of image tags are correctly 
+     * to check if the no of image tags are correctly
      * identified by the parser
      */
     public void testNumImageTagsInYahooWithoutRegisteringScanners() throws ParserException {
@@ -64,12 +64,12 @@ public class FunctionalTests extends TestCase {
         imgTagCount = findImageTagCount();
         try {
             int parserImgTagCount = countImageTagsWithHTMLParser();
-            assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);  
+            assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);
         }
         catch (ParserException e) {
             throw new ParserException("Error thrown in call to countImageTagsWithHTMLParser()",e);
         }
-            
+
     }
 
     public int findImageTagCount() {
@@ -78,7 +78,7 @@ public class FunctionalTests extends TestCase {
             URL url = new URL("http://www.yahoo.com");
             InputStream is = url.openStream();
             BufferedReader reader;
-            reader = new BufferedReader(new InputStreamReader(is)); 
+            reader = new BufferedReader(new InputStreamReader(is));
             imgTagCount = countImageTagsWithoutHTMLParser(reader);
             is.close();
         }
@@ -99,8 +99,8 @@ public class FunctionalTests extends TestCase {
         for (NodeIterator e= parser.elements();e.hasMoreNodes();) {
             node = (Node)e.nextNode();
             if (node instanceof ImageTag) {
-                parserImgTagCount++;                
-            }       
+                parserImgTagCount++;
+            }
         }
         return parserImgTagCount;
     }

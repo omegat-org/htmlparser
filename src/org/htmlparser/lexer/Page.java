@@ -10,23 +10,23 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-// 
-// This class was contributed by 
+//
+// This class was contributed by
 // Derrick Oswald
 //
 
@@ -224,7 +224,7 @@ public class Page
                 {
                     i = mSource.read ();
                     if (-1 == i)
-                    { 
+                    {
                         // do nothing
                     }
                     else if ('\n' == (char)i)
@@ -268,7 +268,7 @@ public class Page
 
         String string;
         String ret;
-        
+
         ret = DEFAULT_CHARSET;
         string = connection.getHeaderField (CONTENT_TYPE_STRING);
         if (null != string)
@@ -311,7 +311,7 @@ public class Page
         if (null != content)
         {
             index = content.indexOf (CHARSET_STRING);
-            
+
             if (index != -1)
             {
                 content = content.substring (index + CHARSET_STRING.length ()).trim ();
@@ -361,7 +361,7 @@ public class Page
     public String findCharset (String name, String _default)
     {
         String ret;
-        
+
         try
         {
             Class cls;
@@ -402,7 +402,7 @@ public class Page
                 + " - using "
                 + _default);
         }
-        
+
         return (ret);
     }
 
@@ -438,10 +438,10 @@ public class Page
     public String getText (int start, int end)
     {
         StringBuffer ret;
-        
+
         ret = new StringBuffer (Math.abs (end - start));
         getText (ret, start, end);
-        
+
         return (ret.toString ());
     }
 
@@ -477,10 +477,10 @@ public class Page
     public String getText ()
     {
         StringBuffer ret;
-        
+
         ret = new StringBuffer (mSource.mOffset);
         getText (ret);
-        
+
         return (ret.toString ());
     }
 

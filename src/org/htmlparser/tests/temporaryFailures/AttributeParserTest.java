@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -46,7 +46,7 @@ public class AttributeParserTest extends ParserTestCase {
     private AttributeParser parser;
     private Tag tag;
     private Hashtable table;
-    
+
     public AttributeParserTest(String name) {
         super(name);
     }
@@ -54,13 +54,13 @@ public class AttributeParserTest extends ParserTestCase {
     protected void setUp() {
         parser = new AttributeParser();
     }
-    
+
     public void getParameterTableFor(String tagContents) {
         tag = new Tag(new TagData(0,0,tagContents,""));
         table = parser.parseAttributes(tag.getText ());
-        
+
     }
-    
+
     public void testParseParameters() {
         getParameterTableFor("a b = \"c\"");
         assertEquals("Value","c",table.get("B"));
@@ -70,41 +70,41 @@ public class AttributeParserTest extends ParserTestCase {
         getParameterTableFor("a b = \"'\"");
         assertEquals("Value","'",table.get("B"));
     }
-        
+
     public void testParseEmptyValues() {
         getParameterTableFor("a b = \"\"");
-        assertEquals("Value","",table.get("B"));        
+        assertEquals("Value","",table.get("B"));
     }
 
     public void testParseMissingEqual() {
         getParameterTableFor("a b\"c\"");
         assertEquals("ValueB",null,table.get("B"));
-                
+
     }
-        
+
     public void testTwoParams(){
         getParameterTableFor("PARAM NAME=\"Param1\" VALUE=\"Somik\">\n");
         assertEquals("Param1","Param1",table.get("NAME"));
-        assertEquals("Somik","Somik",table.get("VALUE"));                
+        assertEquals("Somik","Somik",table.get("VALUE"));
     }
 
     public void testPlainParams(){
         getParameterTableFor("PARAM NAME=Param1 VALUE=Somik");
         assertEquals("Param1","Param1",table.get("NAME"));
-        assertEquals("Somik","Somik",table.get("VALUE"));                
+        assertEquals("Somik","Somik",table.get("VALUE"));
     }
-    
+
     public void testValueMissing() {
         getParameterTableFor("INPUT type=\"checkbox\" name=\"Authorize\" value=\"Y\" checked");
         assertEquals("Name of Tag","INPUT",table.get(Tag.TAGNAME));
-        assertEquals("Type","checkbox",table.get("TYPE"));                
+        assertEquals("Type","checkbox",table.get("TYPE"));
         assertEquals("Name","Authorize",table.get("NAME"));
         assertEquals("Value","Y",table.get("VALUE"));
         assertEquals("Checked",null,table.get("CHECKED"));
     }
 
     /**
-     * This is a simulation of a bug reported by Dhaval Udani - wherein 
+     * This is a simulation of a bug reported by Dhaval Udani - wherein
      * a space before the end of the tag causes a problem - there is a key
      * in the table with just a space in it and an empty value
      */
@@ -123,9 +123,9 @@ public class AttributeParserTest extends ParserTestCase {
     public void testNullTag(){
         getParameterTableFor("INPUT type=");
         assertEquals("Name of Tag","INPUT",table.get(Tag.TAGNAME));
-        assertEquals("Type","",table.get("TYPE"));                
+        assertEquals("Type","",table.get("TYPE"));
     }
-    
+
     public void testAttributeWithSpuriousEqualTo() {
         getParameterTableFor(
             "a class=rlbA href=/news/866201.asp?0sl=-32"
@@ -136,7 +136,7 @@ public class AttributeParserTest extends ParserTestCase {
             (String)table.get("HREF")
         );
     }
-    
+
     public void testQuestionMarksInAttributes() {
         getParameterTableFor(
             "a href=\"mailto:sam@neurogrid.com?subject=Site Comments\""
@@ -186,7 +186,7 @@ public class AttributeParserTest extends ParserTestCase {
             );
         }
     }
-    
+
     /**
      * Test Script in attributes.
      * See feature request #725376 Handle script in attributes.
@@ -203,7 +203,7 @@ public class AttributeParserTest extends ParserTestCase {
             assertStringEquals ("parameter parsed incorrectly", "defaultStatus=''", value);
         }
     }
-    
+
     /**
      * Test that stand-alone attributes are kept that way, rather than being
      * given empty values.

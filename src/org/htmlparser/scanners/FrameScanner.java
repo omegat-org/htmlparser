@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -79,10 +79,10 @@ public class FrameScanner extends TagScanner
         catch (Exception e) {
             String msg;
             if (tag!=null) msg = tag.getText(); else msg = "null";
-            throw new ParserException("HTMLFrameScanner.extractFrameLocn() : Error in extracting frame location from tag "+msg,e); 
+            throw new ParserException("HTMLFrameScanner.extractFrameLocn() : Error in extracting frame location from tag "+msg,e);
         }
     }
-    
+
 
 
     public String extractFrameName(Tag tag,String url)  {
@@ -101,7 +101,7 @@ public class FrameScanner extends TagScanner
     protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
         String frameUrl = extractFrameLocn(tag,url);
         String frameName = extractFrameName(tag,url);
-        
+
         return new FrameTag(tagData,frameUrl,frameName);
     }
 

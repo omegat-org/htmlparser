@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -36,12 +36,12 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class RemarkNodeParserTest extends ParserTestCase 
+public class RemarkNodeParserTest extends ParserTestCase
 {
     public RemarkNodeParserTest(String name) {
         super(name);
     }
-    
+
     /**
      * The bug being reproduced is this : <BR>
      * &lt;!-- saved from url=(0022)http://internet.e-mail --&gt;
@@ -53,9 +53,9 @@ public class RemarkNodeParserTest extends ParserTestCase
      * --&gt;
      * &lt;TEST&gt;
      * &lt;/TEST&gt;
-     * 
+     *
      * The above line is incorrectly parsed - the remark is not correctly identified.
-     * This bug was reported by Serge Kruppa (2002-Feb-08). 
+     * This bug was reported by Serge Kruppa (2002-Feb-08).
      */
     public void testRemarkNodeBug() throws ParserException
     {
@@ -74,8 +74,8 @@ public class RemarkNodeParserTest extends ParserTestCase
         // The first node should be a HTMLRemarkNode
         assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
         RemarkNode remarkNode = (RemarkNode)node[0];
-        assertEquals("Text of the remarkNode #1"," saved from url=(0022)http://internet.e-mail ",remarkNode.getText()); 
-        // The sixth node should be a HTMLRemarkNode 
+        assertEquals("Text of the remarkNode #1"," saved from url=(0022)http://internet.e-mail ",remarkNode.getText());
+        // The sixth node should be a HTMLRemarkNode
         assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof RemarkNode);
         remarkNode = (RemarkNode)node[5];
         assertEquals("Text of the remarkNode #6","\r\n   Whats gonna happen now ?\r\n",remarkNode.getText());
@@ -97,12 +97,12 @@ public class RemarkNodeParserTest extends ParserTestCase
         // The first node should be a HTMLRemarkNode
         assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
         RemarkNode remarkNode = (RemarkNode)node[0];
-        assertEquals("Plain Text of the remarkNode #1"," saved from url=(0022)http://internet.e-mail ",remarkNode.toPlainTextString()); 
-        // The sixth node should be a HTMLRemarkNode 
+        assertEquals("Plain Text of the remarkNode #1"," saved from url=(0022)http://internet.e-mail ",remarkNode.toPlainTextString());
+        // The sixth node should be a HTMLRemarkNode
         assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof RemarkNode);
         remarkNode = (RemarkNode)node[5];
-        assertEquals("Plain Text of the remarkNode #6","\r\n   Whats gonna happen now ?\r\n",remarkNode.getText()); 
-        
+        assertEquals("Plain Text of the remarkNode #6","\r\n   Whats gonna happen now ?\r\n",remarkNode.getText());
+
     }
 
     public void testToRawString()  throws ParserException {
@@ -121,13 +121,13 @@ public class RemarkNodeParserTest extends ParserTestCase
         // The first node should be a HTMLRemarkNode
         assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
         RemarkNode remarkNode = (RemarkNode)node[0];
-        assertStringEquals("Raw String of the remarkNode #1","<!-- saved from url=(0022)http://internet.e-mail -->",remarkNode.toHtml());   
-        // The sixth node should be a HTMLRemarkNode 
+        assertStringEquals("Raw String of the remarkNode #1","<!-- saved from url=(0022)http://internet.e-mail -->",remarkNode.toHtml());
+        // The sixth node should be a HTMLRemarkNode
         assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof RemarkNode);
         remarkNode = (RemarkNode)node[5];
-        assertStringEquals("Raw String of the remarkNode #6","<!--\r\n   Whats gonna happen now ?\r\n-->",remarkNode.toHtml());         
+        assertStringEquals("Raw String of the remarkNode #6","<!--\r\n   Whats gonna happen now ?\r\n-->",remarkNode.toHtml());
     }
-    
+
     public void testNonRemarkNode() throws ParserException {
         createParser("&nbsp;<![endif]>");
         parseAndAssertNodeCount(2);
@@ -138,15 +138,15 @@ public class RemarkNodeParserTest extends ParserTestCase
         Tag tag = (Tag)node[1];
         assertEquals("Text contents","&nbsp;",stringNode.getText());
         assertEquals("Tag Contents","![endif]",tag.getText());
-        
+
     }
-    
+
     /**
      * This is the simulation of bug report 586756, submitted
      * by John Zook.
      * If all the comment contains is a blank line, it breaks
      * the state
-     */ 
+     */
     public void testRemarkNodeWithBlankLine() throws ParserException {
         createParser("<!--\n"+
         "\n"+
@@ -156,29 +156,29 @@ public class RemarkNodeParserTest extends ParserTestCase
         assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
         RemarkNode remarkNode = (RemarkNode)node[0];
         assertEquals("Expected contents","\r\n",remarkNode.getText());
-        
+
     }
-    
+
     /**
      * This is the simulation of a bug report submitted
      * by Claude Duguay.
      * If it is a comment with nothing in it, parser crashes
-     */ 
+     */
     public void testRemarkNodeWithNothing() throws ParserException {
         createParser("<!-->");
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
         RemarkNode remarkNode = (RemarkNode)node[0];
         assertEquals("Expected contents","",remarkNode.getText());
-        
-    }   
-    
+
+    }
+
     /**
      * Reproduction of bug reported by John Zook [594301]
      * When we have tags like :
      * &lt;!-- &lt;A&gt; --&gt;
      * it doesent get parsed correctly
-     */ 
+     */
     public void testTagWithinRemarkNode() throws ParserException {
         createParser("<!-- \n"+
         "<A>\n"+
@@ -188,9 +188,9 @@ public class RemarkNodeParserTest extends ParserTestCase
         assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
         RemarkNode remarkNode = (RemarkNode)node[0];
         assertStringEquals("Expected contents"," \n<A>\nbcd ",remarkNode.getText());
-                
+
     }
-    
+
     /**
      * Bug reported by John Zook [594301], invalid remark nodes are accepted as remark nodes.
      * &lt;<br>
@@ -214,7 +214,7 @@ public class RemarkNodeParserTest extends ParserTestCase
         "ssd --",tag.getText());
         Parser.setLineSeparator("\r\n");
     }
-    
+
     /**
      * Bug reported by John Zook [594301]
      * If dashes exist in a comment, they dont get added to the comment text
@@ -272,7 +272,7 @@ public class RemarkNodeParserTest extends ParserTestCase
         RemarkNode remarkNode = (RemarkNode)node[7];
         assertEquals("Remark Node contents"," Id: html-sgml.sgm,v 1.5 1995/05/26 21:29:50 connolly Exp  ",remarkNode.getText());
     }
-    
+
     /**
      * Test a comment declaration with two comments.
      */
@@ -365,5 +365,5 @@ public class RemarkNodeParserTest extends ParserTestCase
             );
         parseAndAssertNodeCount (10);
     }
-    
+
 }

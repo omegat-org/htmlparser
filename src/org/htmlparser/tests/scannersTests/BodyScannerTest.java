@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -55,7 +55,7 @@ public class BodyScannerTest extends ParserTestCase {
         assertEquals("Body","<BODY>This is a body tag</BODY>",bodyTag.toHtml());
         assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
-        
+
     public void testBodywithJsp() throws ParserException {
         createParser("<html><head><title>Test 1</title></head><body><%=BodyValue%></body></html>");
         parser.registerScanners();
@@ -68,7 +68,7 @@ public class BodyScannerTest extends ParserTestCase {
         assertStringEquals("Body","<BODY><%=BodyValue%></BODY>",bodyTag.toHtml());
         assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
-    
+
     public void testBodyMixed() throws ParserException {
         createParser("<html><head><title>Test 1</title></head><body>before jsp<%=BodyValue%>after jsp</body></html>");
         parser.registerScanners();
@@ -81,7 +81,7 @@ public class BodyScannerTest extends ParserTestCase {
         assertEquals("Body","<BODY>before jsp<%=BodyValue%>after jsp</BODY>",bodyTag.toHtml());
         assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
-    
+
     public void testBodyEnding() throws ParserException {
         createParser("<html><body>before jsp<%=BodyValue%>after jsp</html>");
         parser.registerScanners();
@@ -94,16 +94,16 @@ public class BodyScannerTest extends ParserTestCase {
         assertEquals("Body","<BODY>before jsp<%=BodyValue%>after jsp</BODY>",bodyTag.toHtml());
         assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
-        
-    public static TestSuite suite() 
+
+    public static TestSuite suite()
     {
         return new TestSuite(BodyScannerTest.class);
     }
-    
-    public static void main(String[] args) 
+
+    public static void main(String[] args)
     {
         new junit.awtui.TestRunner().start(new String[] {BodyScannerTest.class.getName()});
     }
-    
+
 
 }

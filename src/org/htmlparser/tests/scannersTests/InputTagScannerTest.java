@@ -17,12 +17,12 @@
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -33,25 +33,25 @@ import org.htmlparser.tags.InputTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class InputTagScannerTest extends ParserTestCase 
+public class InputTagScannerTest extends ParserTestCase
 {
-    
+
     private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");
     private InputTagScanner scanner;
-    
-    public InputTagScannerTest(String name) 
+
+    public InputTagScannerTest(String name)
     {
         super(name);
     }
-    
-    public void testScan() throws ParserException 
+
+    public void testScan() throws ParserException
     {
         scanner = new InputTagScanner("-i");
         createParser(testHTML,"http://www.google.com/test/index.html");
-        parser.addScanner(scanner);     
+        parser.addScanner(scanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof InputTag);
-        
+
         // check the input node
         InputTag inputTag = (InputTag) node[0];
         assertEquals("Input Scanner",scanner,inputTag.getThisScanner());

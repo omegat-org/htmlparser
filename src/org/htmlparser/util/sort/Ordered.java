@@ -10,23 +10,23 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-// 
-// This class was contributed by 
+//
+// This class was contributed by
 // Derrick Oswald
 //
 
@@ -61,13 +61,13 @@ public interface Ordered
      * Compares this object with another for order.
      * Returns a negative integer, zero, or a positive integer
      * as this object is less than, equal to, or greater
-     * than the second. 
+     * than the second.
      * <p>
      * The implementor must ensure that
      * <code>sgn(x.compare(y)) == -sgn(y.compare(x))</code>
      * for all x and y. (This implies that <code>x.compare(y)</code>
      * must throw an exception if and only if <code>y.compare(x)</code>
-     * throws an exception.) 
+     * throws an exception.)
      * <p>
      * The implementor must also ensure that the relation is transitive:
      * <code>((x.compare(y)>0) && (y.compare(z)>0))</code>

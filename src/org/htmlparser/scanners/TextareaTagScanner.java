@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -46,7 +46,7 @@ public class TextareaTagScanner extends CompositeTagScanner
     {
         this("", stack);
     }
-    
+
     public TextareaTagScanner(String filter, Stack stack)
     {
         super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
@@ -76,7 +76,7 @@ public class TextareaTagScanner extends CompositeTagScanner
     public boolean shouldCreateEndTagAndExit ()
     {
         boolean ret;
-        
+
         ret = false;
 
         if (0 != stack.size ())
@@ -92,7 +92,7 @@ public class TextareaTagScanner extends CompositeTagScanner
                 }
             }
         }
-        
+
         return (ret);
     }
 }

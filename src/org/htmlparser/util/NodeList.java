@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -41,7 +41,7 @@ public class NodeList implements Serializable {
     private int capacity;
     private int capacityIncrement;
     private int numberOfAdjustments;
-    
+
     public NodeList() {
         size = 0;
         capacity = INITIAL_CAPACITY;
@@ -49,9 +49,9 @@ public class NodeList implements Serializable {
         capacityIncrement = capacity*2;
         numberOfAdjustments = 0;
     }
-    
+
     public void add(Node node) {
-        if (size==capacity) 
+        if (size==capacity)
             adjustVectorCapacity();
         nodeData[size++]=node;
     }
@@ -72,7 +72,7 @@ public class NodeList implements Serializable {
      */
     public void prepend(Node node)
     {
-        if (size==capacity) 
+        if (size==capacity)
             adjustVectorCapacity();
         System.arraycopy (nodeData, 0, nodeData, 1, size);
         size++;
@@ -91,11 +91,11 @@ public class NodeList implements Serializable {
     private Node[] newNodeArrayFor(int capacity) {
         return new Node[capacity];
     }
-    
+
     public int size() {
         return size;
     }
-    
+
     public Node elementAt(int i) {
         return nodeData[i];
     }
@@ -103,15 +103,15 @@ public class NodeList implements Serializable {
     public int getNumberOfAdjustments() {
         return numberOfAdjustments;
     }
-    
+
     public SimpleNodeIterator elements() {
         return new SimpleNodeIterator() {
             int count = 0;
-    
+
             public boolean hasMoreNodes() {
                 return count < size;
             }
-    
+
             public Node nextNode() {
             synchronized (NodeList.this) {
                 if (count < size) {
@@ -122,32 +122,32 @@ public class NodeList implements Serializable {
             }
         };
     }
-    
+
     public Node [] toNodeArray() {
         Node [] nodeArray = newNodeArrayFor(size);
-        System.arraycopy(nodeData, 0, nodeArray, 0, size);      
+        System.arraycopy(nodeData, 0, nodeArray, 0, size);
         return nodeArray;
     }
-    
+
     public String asString() {
         StringBuffer buff = new StringBuffer();
-        for (int i=0;i<size;i++) 
-            buff.append(nodeData[i].toPlainTextString());   
+        for (int i=0;i<size;i++)
+            buff.append(nodeData[i].toPlainTextString());
         return buff.toString();
     }
-    
+
     public String asHtml() {
         StringBuffer buff = new StringBuffer();
-        for (int i=0;i<size;i++) 
-            buff.append(nodeData[i].toHtml());  
+        for (int i=0;i<size;i++)
+            buff.append(nodeData[i].toHtml());
         return buff.toString();
     }
-    
+
     public void remove(int index) {
-        System.arraycopy(nodeData, index+1, nodeData, index, size-index-1);     
-        size--;     
+        System.arraycopy(nodeData, index+1, nodeData, index, size-index-1);
+        size--;
     }
-    
+
     public void removeAll() {
         size = 0;
         capacity = INITIAL_CAPACITY;
@@ -155,7 +155,7 @@ public class NodeList implements Serializable {
         capacityIncrement = capacity*2;
         numberOfAdjustments = 0;
     }
-    
+
     public String toString() {
         StringBuffer text = new StringBuffer();
         for (int i=0;i<size;i++)
@@ -171,7 +171,7 @@ public class NodeList implements Serializable {
     {
         return (searchFor (classType, false));
     }
-    
+
     /**
      * Search for nodes of the given type recursively.
      * @param classType The class to search for.
@@ -183,7 +183,7 @@ public class NodeList implements Serializable {
         Node node;
         NodeList children;
         NodeList ret;
-        
+
         ret = new NodeList ();
         name = classType.getName ();
         for (int i = 0; i < size; i++)

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -38,12 +38,12 @@ public class StringExtractor
     /**
      * Construct a StringExtractor to read from the given resource.
      * @param resource Either a URL or a file name.
-     */ 
+     */
     public StringExtractor (String resource)
     {
         this.resource = resource;
     }
-    
+
     /**
      * Extract the text from a page.
      * @param links if <code>true</code> include hyperlinks in output.
@@ -54,7 +54,7 @@ public class StringExtractor
             ParserException
     {
         StringBean sb;
-        
+
         sb = new StringBean ();
         sb.setLinks (links);
         sb.setURL (resource);
@@ -71,7 +71,7 @@ public class StringExtractor
         boolean links;
         String url;
         StringExtractor se;
-        
+
         links = false;
         url = null;
         for (int i = 0; i < args.length; i++)

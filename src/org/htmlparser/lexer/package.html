@@ -18,22 +18,22 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  Lesser General Public License for more details.
- 
+
  You should have received a copy of the GNU Lesser General Public
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
  For any questions or suggestions, you can write to me at :
  Email :somik@industriallogic.com
- 
- Postal Address : 
+
+ Postal Address :
  Somik Raha
  Extreme Programmer & Coach
  Industrial Logic Corporation
- 2583 Cedar Street, Berkeley, 
+ 2583 Cedar Street, Berkeley,
  CA 94708, USA
  Website : http://www.industriallogic.com
- 
+
 -->
 <TITLE>Lexer Package</TITLE>
 </HEAD>
@@ -104,7 +104,7 @@ be performed.
 <DD>Besides complete coverage, the <B>nodes do not contain copies of the text</B>,
 but instead simply contain offsets into a single large buffer that contains the
 text read from the HTML source. Even within tags, the attributes list can
-contain whitespace, thus there is no lost whitespace or text formatting 
+contain whitespace, thus there is no lost whitespace or text formatting
 either outside or within tags. Upper and lower case text is preserved.
 <DT>Line Endings
 <DD><B>End of line characters are just whitespace.</B> There is no distinction
@@ -126,7 +126,7 @@ TagParser & AttributeParser):
 By integrating the four state machines into one, a single pass over the text is
 all that's needed for a low level parse of the HTML source. In previous
 implementations, the attributes were parsed on a second scan after the initial
-tag was extracted. 
+tag was extracted.
 <DT>Two Jars
 <DD>For elementary operations at the node level, a minimalist jar file containing
 <B>only the lexer and base tag classes</B> is split out from the larger <CODE>htmlparser.jar</CODE>.

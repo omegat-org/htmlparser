@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -40,8 +40,8 @@ import org.htmlparser.util.ParserException;
 public class StringNode extends AbstractNode
 {
     public static final String STRING_FILTER = "-string";
-    
-    /** 
+
+    /**
      * Constructor takes in the text string, beginning and ending posns.
      * @param page The page this string is on.
      * @param start The beginning position of the string.
@@ -76,34 +76,34 @@ public class StringNode extends AbstractNode
         {
         }
     }
-    
+
     public String toPlainTextString ()
     {
         return (toHtml ());
     }
-    
+
     public String toHtml ()
     {
         return (mPage.getText (elementBegin (), elementEnd ()));
     }
-    
+
     public String toString ()
     {
         Cursor start;
         Cursor end;
-        
+
         start = new Cursor (getPage (), elementBegin ());
         end = new Cursor (getPage (), elementEnd ());
         return ("Txt (" + start.toString () + "," + end.toString () + "): " + getText ());
     }
 
-    
+
     public void collectInto (NodeList collectionList, String filter)
     {
         if (STRING_FILTER == filter)
             collectionList.add (this);
     }
-    
+
     public void accept (Object visitor)
     {
     }

@@ -17,12 +17,12 @@
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -43,7 +43,7 @@ public class BaseHREFScannerTest extends ParserTestCase {
     public BaseHREFScannerTest(String arg0) {
         super(arg0);
     }
-    
+
     protected void setUp() {
         scanner=new BaseHrefScanner();
     }
@@ -56,14 +56,14 @@ public class BaseHREFScannerTest extends ParserTestCase {
         assertEquals("Url1","http://www.yahoo.com",modifiedUrl1);
         assertEquals("Url2","http://www.google.com",modifiedUrl2);
     }
-    
+
     public void testEvaluate() {
         String testData1 = "BASE HREF=\"http://www.abc.com/\"";
         assertTrue("Data 1 Should have evaluated true",scanner.evaluate(testData1,null));
         String testData2 = "Base href=\"http://www.abc.com/\"";
-        assertTrue("Data 2 Should have evaluated true",scanner.evaluate(testData2,null));       
+        assertTrue("Data 2 Should have evaluated true",scanner.evaluate(testData2,null));
     }
-    
+
     public void testScan() throws ParserException{
         createParser("<html><head><TITLE>test page</TITLE><BASE HREF=\"http://www.abc.com/\"><a href=\"home.cfm\">Home</a>...</html>","http://www.google.com/test/index.html");
         LinkScanner linkScanner = new LinkScanner("-l");
@@ -74,7 +74,7 @@ public class BaseHREFScannerTest extends ParserTestCase {
         //Base href tag should be the 4th tag
         assertTrue(node[3] instanceof BaseHrefTag);
         BaseHrefTag baseRefTag = (BaseHrefTag)node[3];
-        assertEquals("Base HREF Url","http://www.abc.com",baseRefTag.getBaseUrl()); 
+        assertEquals("Base HREF Url","http://www.abc.com",baseRefTag.getBaseUrl());
     }
-    
+
 }

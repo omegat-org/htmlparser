@@ -10,23 +10,23 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-// 
-// This class was contributed by 
+//
+// This class was contributed by
 // Derrick Oswald
 //
 
@@ -61,7 +61,7 @@ public class Generate
      * The working parser.
      */
     protected Parser parser;
-    
+
     /**
      * The system specific line separator string.
      */
@@ -89,15 +89,15 @@ public class Generate
      * page).
      * @param string The raw string.
      * @return The string with character references fixed.
-     */    
+     */
     public String translate (String string)
     {
         int index;
         int amp;
         StringBuffer ret;
-        
+
         ret = new StringBuffer (4096);
-        
+
         index = 0;
         while ((index < string.length ()) && (-1 != (amp = string.indexOf ('&', index))))
         {
@@ -146,13 +146,13 @@ public class Generate
             }
         }
         ret.append (string.substring (index));
-        
+
         return (ret.toString ());
     }
-    
+
     /**
      * Pull out text elements from the HTML.
-     */    
+     */
     public void parse ()
         throws
             ParserException
@@ -165,7 +165,7 @@ public class Generate
         for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
-            
+
             if (node instanceof StringNode)
             {
                 // Node is a plain string
@@ -203,7 +203,7 @@ public class Generate
                 System.out.println(node.toString());
             }
         }
-        
+
         String text = translate (buffer.toString ());
         sgml (text);
     }
@@ -231,7 +231,7 @@ public class Generate
 
         return (ret);
     }
-    
+
     /**
      * Rewrite the comment string.
      * In the sgml table, the comments are of the form:
@@ -248,7 +248,7 @@ public class Generate
         int index;
         int spaces;
         StringBuffer ret;
-        
+
         ret = new StringBuffer (string.length ());
 
         if (string.startsWith ("-- "))
@@ -265,21 +265,21 @@ public class Generate
         }
         if (index < string.length ())
             ret.append (string.substring (index));
-        
+
         return (ret.toString ());
     }
-    
+
     /**
      * Pretty up a comment string.
      * @param string The comment to operate on.
      * @return The beautiful comment string.
-     */    
+     */
     public String pretty (String string)
     {
         int index;
         int spaces;
         StringBuffer ret;
-        
+
         ret = new StringBuffer (string.length ());
 
         // newline instead of doublespaces
@@ -295,7 +295,7 @@ public class Generate
         }
         if (index < string.length ())
             ret.append ("        // " + string.substring (index));
-        
+
         return (ret.toString ());
     }
 
@@ -305,16 +305,16 @@ public class Generate
      * @param character The character to pad with.
      * @param length The size to pad to.
      * @return The padded string.
-     */    
+     */
     public String pad (String string, char character, int length)
     {
         StringBuffer ret;
-        
+
         ret = new StringBuffer (length);
         ret.append (string);
         while (length > ret.length ())
             ret.insert (0, character);
-        
+
         return (ret.toString ());
     }
 
@@ -323,11 +323,11 @@ public class Generate
      * @param string The numeric character reference (in quotes).
      * @return The character represented by the numeric character reference.
      *
-     */    
+     */
     public String unicode (String string)
     {
         int code;
-        
+
         if (string.startsWith ("\"&#") && string.endsWith (";\""))
         {
             string = string.substring (3, string.length () - 2);
@@ -353,7 +353,7 @@ public class Generate
      * numeric character as the value and comment the insertion
      * with the comment.
      * @param string The contents of the sgml declaration.
-     */    
+     */
     public void extract (String string)
     {
         int space;
@@ -411,7 +411,7 @@ public class Generate
         int index;
         int begin;
         int end;
-        
+
         index = 0;
         while (-1 != (begin = string.indexOf ("<", index)))
         {

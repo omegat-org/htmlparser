@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -30,15 +30,15 @@ package org.htmlparser.tests.visitorsTests;
 
 import junit.framework.TestSuite;
 
-public class AllTests extends junit.framework.TestCase 
+public class AllTests extends junit.framework.TestCase
 {
     public AllTests(String name) {
         super(name);
     }
-    
+
     public static TestSuite suite() {
         TestSuite suite = new TestSuite("Visitor Tests");
-        
+
         suite.addTestSuite(CompositeTagFindingVisitorTest.class);
         suite.addTestSuite(HtmlPageTest.class);
         suite.addTestSuite(LinkFindingVisitorTest.class);
@@ -49,7 +49,7 @@ public class AllTests extends junit.framework.TestCase
         suite.addTestSuite(UrlModifyingVisitorTest.class);
 
         return suite;
-    } 
+    }
 
     /**
      * Mainline for all suites of tests.
@@ -93,12 +93,12 @@ public class AllTests extends junit.framework.TestCase
         /*
          * from http://www.mail-archive.com/commons-user%40jakarta.apache.org/msg02958.html
          *
-         * The problem is within the UI test runners of JUnit. They bring 
-         * with them a custom classloader, which causes the 
-         * LogConfigurationException. Unfortunately Log4j doesn't work 
+         * The problem is within the UI test runners of JUnit. They bring
+         * with them a custom classloader, which causes the
+         * LogConfigurationException. Unfortunately Log4j doesn't work
          * either.
-         * 
-         * Solution: Disable "Reload classes every run" or start JUnit with 
+         *
+         * Solution: Disable "Reload classes every run" or start JUnit with
          * command line option -noloading before the name of the Testsuite.
          */
 

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -58,7 +58,7 @@ public class StreamTests extends TestCase
     public void testNull () throws IOException
     {
         Stream stream;
-        
+
         stream = new Stream (null);
         assertTrue ("erroneous character", -1 == stream.read ());
     }
@@ -69,7 +69,7 @@ public class StreamTests extends TestCase
     public void testEmpty () throws IOException
     {
         Stream stream;
-        
+
         stream = new Stream (new ByteArrayInputStream (new byte[0]));
         assertTrue ("erroneous character", -1 == stream.read ());
     }
@@ -80,7 +80,7 @@ public class StreamTests extends TestCase
     public void testOneByte () throws IOException
     {
         Stream stream;
-        
+
         stream = new Stream (new ByteArrayInputStream (new byte[] { (byte)0x42 }));
         assertTrue ("erroneous character", 0x42 == stream.read ());
         assertTrue ("erroneous character", -1 == stream.read ());
@@ -155,7 +155,7 @@ public class StreamTests extends TestCase
      * implementation to read ahead and then throttle back. The threaded Stream
      * though keeps reading while this delay is going on and hence gets a big
      * chunk of the file in memory. This advantage translates to a faster
-     * spin through the bytes after the delay. 
+     * spin through the bytes after the delay.
      */
     public void testThreaded () throws IOException
     {
@@ -306,14 +306,14 @@ public class StreamTests extends TestCase
                 b = stream.read ();
                 bytes2.add (new Byte ((byte)b));
             }
-            
+
             index = 0;
             while (index < bytes1.size ())
             {
                 assertEquals ("bytes differ at position " + index, bytes1.get (index), bytes2.get (index));
                 index++;
             }
-            
+
             bytes1.clear ();
             bytes2.clear ();
 
@@ -382,14 +382,14 @@ public class StreamTests extends TestCase
                 b = stream.read ();
                 bytes2.add (new Byte ((byte)b));
             }
-            
+
             index = 0;
             while (index < bytes1.size ())
             {
                 assertEquals ("bytes differ at position " + index, bytes1.get (index), bytes2.get (index));
                 index++;
             }
-            
+
             bytes1.clear ();
             bytes2.clear ();
 
@@ -426,7 +426,7 @@ public class StreamTests extends TestCase
     public void testClose () throws IOException
     {
         Stream stream;
-        
+
         stream = new Stream (new ByteArrayInputStream (new byte[] { (byte)0x42, (byte)0x78 }));
         assertTrue ("erroneous character", 0x42 == stream.read ());
         stream.close ();

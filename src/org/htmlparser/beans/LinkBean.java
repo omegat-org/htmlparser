@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -68,7 +68,7 @@ public class LinkBean extends Object implements Serializable
      * The strings extracted from the URL.
      */
     protected URL[] mLinks;
-    
+
     /**
      * The parser used to extract strings.
      */
@@ -92,7 +92,7 @@ public class LinkBean extends Object implements Serializable
         Vector vector;
         LinkTag link;
         URL[] ret;
-        
+
         parser = new Parser (url);
         parser.registerScanners ();
         ObjectFindingVisitor visitor = new ObjectFindingVisitor(LinkTag.class);
@@ -126,7 +126,7 @@ public class LinkBean extends Object implements Serializable
     protected boolean equivalent (URL[] array1, URL[] array2)
     {
         boolean ret;
-        
+
         ret = false;
         if ((null == array1) && (null == array2))
             ret = true;
@@ -138,7 +138,7 @@ public class LinkBean extends Object implements Serializable
                     if (!(array1[i] == array2[i]))
                         ret = false;
             }
-        
+
         return (ret);
     }
 
@@ -165,7 +165,7 @@ public class LinkBean extends Object implements Serializable
     {
         mPropertySupport.removePropertyChangeListener (listener);
     }
-    
+
     //
     // Properties
     //
@@ -217,7 +217,7 @@ public class LinkBean extends Object implements Serializable
         return (mLinks);
     }
 
-    
+
     /**
      * Getter for property URL.
      * @return Value of property URL.
@@ -226,7 +226,7 @@ public class LinkBean extends Object implements Serializable
     {
         return (mParser.getURL ());
     }
-    
+
     /**
      * Setter for property URL.
      * @param url New value of property URL.
@@ -234,7 +234,7 @@ public class LinkBean extends Object implements Serializable
     public void setURL (String url)
     {
         String old;
-        
+
         old = getURL ();
         if (((null == old) && (null != url)) || ((null != old) && !old.equals (url)))
         {
@@ -259,7 +259,7 @@ public class LinkBean extends Object implements Serializable
     {
         return (mParser.getConnection ());
     }
-    
+
     /**
      * Setter for property Connection.
      * @param connection New value of property Connection.

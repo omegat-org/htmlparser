@@ -17,12 +17,12 @@
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -45,11 +45,11 @@ import org.htmlparser.util.ParserException;
 
 public class ImageScannerTest extends ParserTestCase
 {
-    
+
     public ImageScannerTest(String name) {
         super(name);
     }
-    
+
     public void testDynamicRelativeImageScan() throws ParserException {
         createParser("<IMG SRC=\"../abc/def/mypic.jpg\">","http://www.yahoo.com/ghi?abcdefg");
         // Register the image scanner
@@ -59,14 +59,14 @@ public class ImageScannerTest extends ParserTestCase
         ImageTag imageTag = (ImageTag)node[0];
         assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageURL());
     }
-    
-    public void testEvaluate() 
+
+    public void testEvaluate()
     {
         ImageScanner scanner = new ImageScanner("-i",new LinkProcessor());
         boolean retVal = scanner.evaluate("   img ",null);
         assertEquals("Evaluation of IMG tag",new Boolean(true),new Boolean(retVal));
     }
-    
+
     /**
      * This is the reproduction of a bug which causes a null pointer exception
      */
@@ -77,7 +77,7 @@ public class ImageScannerTest extends ParserTestCase
         ImageScanner scanner = new ImageScanner("-i",new LinkProcessor());
         assertEquals("Extracted Image Locn","http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif",scanner.extractImageLocn(tag,url));
     }
-    
+
     /**
      * This test has been improved to check for params
      * in the image tag, based on requirement by Annette Doyle.
@@ -85,21 +85,21 @@ public class ImageScannerTest extends ParserTestCase
      */
     public void testPlaceHolderImageScan() throws ParserException {
         createParser("<IMG width=1 height=1 alt=\"a\">","http://www.yahoo.com/ghi?abcdefg");
-        
+
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
-        assertEquals("Expected Image Locn","",imageTag.getImageURL());      
+        assertEquals("Expected Image Locn","",imageTag.getImageURL());
         assertEquals("Image width","1",imageTag.getAttribute("WIDTH"));
         assertEquals("Image height","1",imageTag.getAttribute("HEIGHT"));
         assertEquals("alt","a",imageTag.getAttribute("ALT"));
     }
-    
+
     public void testRelativeImageScan() throws ParserException {
         createParser("<IMG SRC=\"mypic.jpg\">","http://www.yahoo.com");
-        
+
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
         parseAndAssertNodeCount(1);
@@ -107,7 +107,7 @@ public class ImageScannerTest extends ParserTestCase
         ImageTag imageTag = (ImageTag)node[0];
         assertEquals("Expected Link","http://www.yahoo.com/mypic.jpg",imageTag.getImageURL());
     }
-    
+
     public void testRelativeImageScan2() throws ParserException {
         createParser("<IMG SRC=\"abc/def/mypic.jpg\">","http://www.yahoo.com");     // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
@@ -116,7 +116,7 @@ public class ImageScannerTest extends ParserTestCase
         ImageTag imageTag = (ImageTag)node[0];
         assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageURL());
     }
-    
+
     public void testRelativeImageScan3() throws ParserException {
         createParser("<IMG SRC=\"../abc/def/mypic.jpg\">","http://www.yahoo.com/ghi");
         // Register the image scanner
@@ -126,7 +126,7 @@ public class ImageScannerTest extends ParserTestCase
         ImageTag imageTag = (ImageTag)node[0];
         assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageURL());
     }
-    
+
     /**
      * Test image url which contains spaces in it.
      * This was actually a bug reported by Sam Joseph (sam@neurogrid.net)
@@ -139,9 +139,9 @@ public class ImageScannerTest extends ParserTestCase
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
-        assertEquals("Expected Link","http://www.yahoo.com/abc/def/Hello World.jpg",imageTag.getImageURL());        
+        assertEquals("Expected Link","http://www.yahoo.com/abc/def/Hello World.jpg",imageTag.getImageURL());
     }
-    
+
     public void testImageWithNewLineChars() throws ParserException
     {
         createParser("<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">","http://www.yahoo.com/ghi");
@@ -153,9 +153,9 @@ public class ImageScannerTest extends ParserTestCase
         ImageTag imageTag = (ImageTag)node[0];
         String exp = new String("http://www.yahoo.com/abc/def/Hello World.jpg");
         //assertEquals("Length of image",exp.length(),imageTag.getImageLocation().length());
-        assertStringEquals("Expected Image",exp,imageTag.getImageURL());        
+        assertStringEquals("Expected Image",exp,imageTag.getImageURL());
     }
-    
+
     /**
      * Test case to reproduce bug reported by Annette
      */
@@ -172,17 +172,17 @@ public class ImageScannerTest extends ParserTestCase
             thisNode = (Node)e.nextNode();
             if (thisNode instanceof ImageTag)
                 node[i++] = thisNode;
-        }   
+        }
         assertEquals("Number of nodes identified should be 3",3,i);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
-        assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageURL());     
+        assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageURL());
         ImageTag imageTag2 = (ImageTag)node[1];
         assertEquals("Expected Image 2","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif",imageTag2.getImageURL());
         ImageTag imageTag3 = (ImageTag)node[2];
-        assertEquals("Expected Image 3","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif",imageTag3.getImageURL()); 
+        assertEquals("Expected Image 3","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif",imageTag3.getImageURL());
     }
-    
+
     /**
      * Test case to reproduce bug reported by Annette
      */
@@ -212,7 +212,7 @@ public class ImageScannerTest extends ParserTestCase
                 "</td>" +
             "</tr>","http://www.yahoo.com",30
         );
-    
+
         // Register the image scanner
         parser.registerScanners();
 //      parser.addScanner(new TableScanner(parser));
@@ -230,9 +230,9 @@ public class ImageScannerTest extends ParserTestCase
             "Expected Image",
             "http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",
             imageTag.getImageURL()
-        );      
+        );
     }
-    
+
     /**
      * This is the reproduction of a bug reported
      * by Annette Doyle
@@ -246,8 +246,8 @@ public class ImageScannerTest extends ParserTestCase
                 "width=241>" +
             "</td>",
             "http://www.cia.gov"
-        ); 
-    
+        );
+
         // Register the image scanner
         parser.registerScanners();
         parser.addScanner(new TableScanner(parser));
@@ -260,24 +260,24 @@ public class ImageScannerTest extends ParserTestCase
         // Get the data from the node
         assertEquals("Image location","http://www.cia.gov/graphics/images_home2/cia_banners_template3_01.gif",imageTag.getImageURL());
         assertEquals("Alt Value","Central Intelligence Agency, Director of Central Intelligence",imageTag.getAttribute("ALT"));
-        assertEquals("Width","241",imageTag.getAttribute("WIDTH")); 
+        assertEquals("Width","241",imageTag.getAttribute("WIDTH"));
         assertEquals("Height","49",imageTag.getAttribute("HEIGHT"));
     }
 
     public void testDirectRelativeLinks() throws ParserException {
-        createParser("<IMG SRC  = \"/images/lines/li065.jpg\">","http://www.cybergeo.presse.fr/REVGEO/ttsavoir/joly.htm"); 
-    
+        createParser("<IMG SRC  = \"/images/lines/li065.jpg\">","http://www.cybergeo.presse.fr/REVGEO/ttsavoir/joly.htm");
+
         // Register the image scanner
         parser.registerScanners();
         parseAndAssertNodeCount(1);
-        assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);   
+        assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
         assertEquals("Image Location","http://www.cybergeo.presse.fr/images/lines/li065.jpg",imageTag.getImageURL());
-        
+
     }
 
     /**
-     * Based on a page submitted by Claude Duguay, the image tag has IMG SRC"somefile.jpg" - a missing equal 
+     * Based on a page submitted by Claude Duguay, the image tag has IMG SRC"somefile.jpg" - a missing equal
      * to sign
      */
     public void testMissingEqualTo() throws ParserException {
@@ -286,7 +286,7 @@ public class ImageScannerTest extends ParserTestCase
         // Register the image scanner
         parser.registerScanners();
         parseAndAssertNodeCount(1);
-        assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);   
+        assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
         assertStringEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageURL());
         assertEquals("Width","1",imageTag.getAttribute("WIDTH"));

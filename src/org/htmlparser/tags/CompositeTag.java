@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -62,7 +62,7 @@ public abstract class CompositeTag extends Tag {
      */
     public Node getChild (int index)
     {
-        return (getChildren ().elementAt (index));  
+        return (getChildren ().elementAt (index));
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class CompositeTag extends Tag {
     {
         return (getChildren ().toNodeArray ());
     }
-    
+
     /**
      * Remove the child at the position given.
      * @param i The index of the child to remove.
@@ -112,7 +112,7 @@ public abstract class CompositeTag extends Tag {
             if (prevNode!=null) {
                 if (prevNode.elementEnd()>node.elementBegin()) {
                     // Its a new line
-                    sb.append(Parser.getLineSeparator());                   
+                    sb.append(Parser.getLineSeparator());
                 }
             }
             sb.append(node.toHtml());
@@ -154,13 +154,13 @@ public abstract class CompositeTag extends Tag {
                 if (nameAttribute!=null && nameAttribute.equals(name)) found=true;
             }
         }
-        if (found) 
+        if (found)
             return tag;
         else
             return null;
     }
 
-    /** 
+    /**
      * Searches for any node whose text representation contains the search
      * string. Collects all such nodes in a NodeList.
      * e.g. if you wish to find any textareas in a form tag containing "hello
@@ -181,18 +181,18 @@ public abstract class CompositeTag extends Tag {
         if (!caseSensitive) searchString = searchString.toUpperCase();
         for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
             node = e.nextNode();
-            String nodeTextString = node.toPlainTextString(); 
+            String nodeTextString = node.toPlainTextString();
             if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
             if (nodeTextString.indexOf(searchString)!=-1) {
                 foundList.add(node);
-            }   
+            }
         }
         return foundList;
     }
 
     /**
      * Collect all objects that are of a certain type
-     * Note that this will not check for parent types, and will not 
+     * Note that this will not check for parent types, and will not
      * recurse through child tags
      * @param classType
      * @return NodeList
@@ -201,7 +201,7 @@ public abstract class CompositeTag extends Tag {
     {
         return (getChildren ().searchFor (classType));
     }
-    /** 
+    /**
      * Searches for any node whose text representation contains the search
      * string. Collects all such nodes in a NodeList.
      * e.g. if you wish to find any textareas in a form tag containing "hello
@@ -219,7 +219,7 @@ public abstract class CompositeTag extends Tag {
     }
 
     /**
-     * Returns the node number of the string node containing the 
+     * Returns the node number of the string node containing the
      * given text. This can be useful to index into the composite tag
      * and get other children.
      * @param text
@@ -231,19 +231,19 @@ public abstract class CompositeTag extends Tag {
         for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
             node = e.nextNode();
             if (node.toPlainTextString().toUpperCase().indexOf(text.toUpperCase())!=-1) {
-                return loc;         
+                return loc;
             }
             loc++;
         }
         return -1;
     }
-    
+
     /**
      * Returns the node number of a child node given the node object.
-     * This would typically be used in conjuction with digUpStringNode, 
-     * after which the string node's parent can be used to find the 
-     * string node's position. Faster than calling findPositionOf(text) 
-     * again. Note that the position is at a linear level alone - there 
+     * This would typically be used in conjuction with digUpStringNode,
+     * after which the string node's parent can be used to find the
+     * string node's position. Faster than calling findPositionOf(text)
+     * again. Note that the position is at a linear level alone - there
      * is no recursion in this method.
      * @param searchNode The child node to find.
      * @return The offset of the child tag or -1 if it was not found.
@@ -254,13 +254,13 @@ public abstract class CompositeTag extends Tag {
         for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
             node = e.nextNode();
             if (node==searchNode) {
-                return loc;         
+                return loc;
             }
             loc++;
         }
         return -1;
     }
-    
+
     /**
      * Get child at given index
      * @param index
@@ -269,7 +269,7 @@ public abstract class CompositeTag extends Tag {
     public Node childAt(int index) {
         return (getChildren ().elementAt (index));
     }
-    
+
     public void collectInto(NodeList collectionList, String filter) {
         super.collectInto(collectionList, filter);
         Node node;
@@ -285,7 +285,7 @@ public abstract class CompositeTag extends Tag {
             e.nextNode().collectInto(collectionList,nodeType);
         }
     }
-    
+
     public String getChildrenHTML() {
         StringBuffer buff = new StringBuffer();
         for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
@@ -294,9 +294,9 @@ public abstract class CompositeTag extends Tag {
         }
         return buff.toString();
     }
-    
+
     public void accept(NodeVisitor visitor) {
-        if (visitor.shouldRecurseChildren()) { 
+        if (visitor.shouldRecurseChildren()) {
             startTag.accept(visitor);
             SimpleNodeIterator children = children();
             while (children.hasMoreNodes()) {
@@ -321,9 +321,9 @@ public abstract class CompositeTag extends Tag {
         return endTag;
     }
 
-    /** 
+    /**
      * Finds a string node, however embedded it might be, and returns
-     * it. The string node will retain links to its parents, so 
+     * it. The string node will retain links to its parents, so
      * further navigation is possible.
      * @param searchText
      * @return The list of string nodes (recursively) found.
@@ -340,7 +340,7 @@ public abstract class CompositeTag extends Tag {
                     CompositeTag ctag = (CompositeTag)node;
                     StringNode [] nodes = ctag.digupStringNode(searchText);
                     for (int j=0;j<nodes.length;j++)
-                        stringNodes.add(nodes[j]);                  
+                        stringNodes.add(nodes[j]);
                 }
             }
         }

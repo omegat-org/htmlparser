@@ -10,23 +10,23 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-// 
-// This class was contributed by 
+//
+// This class was contributed by
 // Derrick Oswald
 //
 
@@ -59,7 +59,7 @@ public interface Sortable
      * @param index The item number to get.
      * @param reuse If this argument is not null, it is an object
      * acquired from a previous fetch that is no longer needed and
-     * may be returned as the result if it makes mores sense to alter 
+     * may be returned as the result if it makes mores sense to alter
      * and return it than to fetch or create a new element. That is, the
      * reuse object is garbage and may be used to avoid allocating a new
      * object if that would normally be the strategy.

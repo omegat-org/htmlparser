@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -115,7 +115,7 @@ public class StringBean extends NodeVisitor implements Serializable
      * The strings extracted from the URL.
      */
     protected String mStrings;
-    
+
     /**
      * If <code>true</code> the link URLs are embedded in the text output.
      */
@@ -147,8 +147,8 @@ public class StringBean extends NodeVisitor implements Serializable
      * Set <code>true</code> when traversing a PRE tag.
      */
     protected boolean mIsPre;
-    
-    /** 
+
+    /**
      * Create a StringBean object.
      * Default property values are set to 'do the right thing':
      * <p><code>Links</code> is set <code>false</code> so text appears like a
@@ -182,14 +182,14 @@ public class StringBean extends NodeVisitor implements Serializable
     protected void carriage_return ()
     {
         int length;
-        
+
         length = mBuffer.length ();
         if (   (0 != length) // why bother appending newlines to the beginning of a buffer
         && (   (newline_size <= length) // not enough chars to hold a newline
         && (!mBuffer.substring (length - newline_size, length).equals (newline))))
             mBuffer.append (newline);
     }
-    
+
     /**
      * Add the given text collapsing whitespace.
      * Use a little finite state machine:
@@ -216,7 +216,7 @@ public class StringBean extends NodeVisitor implements Serializable
         int length;
         int state;
         char character;
-        
+
         chars = string.length ();
         if (0 != chars)
         {
@@ -268,7 +268,7 @@ public class StringBean extends NodeVisitor implements Serializable
         mParser.visitAllNodesWith (this);
         ret = mBuffer.toString ();
         mBuffer = null;
-        
+
         return (ret);
     }
 
@@ -360,7 +360,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         mPropertySupport.removePropertyChangeListener (listener);
     }
-    
+
     //
     // Properties
     //
@@ -387,7 +387,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         return (mLinks);
     }
-    
+
     /**
      * Set the 'include links' state.
      * If the setting is changed after the URL has been set, the text from the
@@ -405,7 +405,7 @@ public class StringBean extends NodeVisitor implements Serializable
             resetStrings ();
         }
     }
-    
+
     /**
      * Get the current URL.
      * @return The URL from which text has been extracted, or <code>null</code>
@@ -415,7 +415,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
          return ((null != mParser) ? mParser.getURL () : null);
     }
-    
+
     /**
      * Set the URL to extract strings from.
      * The text from the URL will be fetched, which may be expensive, so this
@@ -426,7 +426,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         String old;
         URLConnection conn;
-        
+
         old = getURL ();
         conn = getConnection ();
         if (((null == old) && (null != url)) || ((null != old) && !old.equals (url)))
@@ -458,7 +458,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         return (mReplaceSpace);
     }
-    
+
     /**
      * Set the 'replace non breaking spaces' state.
      * If the setting is changed after the URL has been set, the text from the
@@ -495,7 +495,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         return (mCollapse);
     }
-    
+
     /**
      * Set the current 'collapse whitespace' state.
      * If the setting is changed after the URL has been set, the text from the
@@ -523,7 +523,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         return ((null != mParser) ? mParser.getConnection () : null);
     }
-    
+
     /**
      * Set the parser's connection.
      * The text from the URL will be fetched, which may be expensive, so this
@@ -534,7 +534,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         String url;
         URLConnection conn;
-        
+
         url = getURL ();
         conn = getConnection ();
         if (((null == conn) && (null != connection)) || ((null != conn) && !conn.equals (connection)))
@@ -559,7 +559,7 @@ public class StringBean extends NodeVisitor implements Serializable
     //
     // NodeVisitor overrides
     //
-    
+
     /**
      * Appends the link as text between angle brackets to the output.
      * @param link The link to process.
@@ -612,7 +612,7 @@ public class StringBean extends NodeVisitor implements Serializable
         else if (name.equalsIgnoreCase ("SCRIPT"))
             mIsScript = false;
     }
-    
+
     /**
      * Appends a newline to the output if the tag breaks flow, and
      * possibly sets the state of the PRE and SCRIPT flags.
@@ -629,7 +629,7 @@ public class StringBean extends NodeVisitor implements Serializable
         if (tag.breaksFlow ())
             carriage_return ();
     }
-    
+
     /**
      * Unit test.
      * @param args Pass arg[0] as the URL to process.

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -56,7 +56,7 @@ import org.htmlparser.util.ParserException;
 
 public class LexerTests extends TestCase
 {
-    
+
     /**
      * Test the Lexer class.
      */
@@ -148,7 +148,7 @@ public class LexerTests extends TestCase
             "Hello world\n",
             "Hello world\r\n",
             "Hello world\r",
-            
+
         };
         String[] suffixes =
         {
@@ -234,7 +234,7 @@ public class LexerTests extends TestCase
         lexer = new Lexer (reference);
         node = (RemarkNode)lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
-        
+
         suffix = "<head>";
         reference = "<!-- This is a comment -->";
         lexer = new Lexer (reference + suffix);
@@ -334,7 +334,7 @@ public class LexerTests extends TestCase
         while (-1 != (i = source.read ()))
             buffer.append ((char)i);
         source.close ();
-        html = buffer.toString ();        
+        html = buffer.toString ();
         old_total = 0;
         new_total = 0;
         for (i = 0; i < 5; i++)
@@ -366,7 +366,7 @@ public class LexerTests extends TestCase
         assertTrue ("old parser is" + ((double)(new_total - old_total)/(double)old_total*100.0) + "% faster", new_total < old_total);
         System.out.println ("lexer is " + ((double)(old_total - new_total)/(double)old_total*100.0) + "% faster");
     }
-    
+
     /**
      * Test the relative speed reading from a string parsing tags too.
      */
@@ -399,7 +399,7 @@ public class LexerTests extends TestCase
         while (-1 != (i = source.read ()))
             buffer.append ((char)i);
         source.close ();
-        html = buffer.toString ();        
+        html = buffer.toString ();
         old_total = 0;
         new_total = 0;
         for (i = 0; i < 5; i++)
@@ -470,7 +470,7 @@ public class LexerTests extends TestCase
         while (-1 != (i = source.read ()))
             buffer.append ((char)i);
         source.close ();
-        html = buffer.toString ();        
+        html = buffer.toString ();
         old_total = 0;
         new_total = 0;
 
@@ -538,7 +538,7 @@ public class LexerTests extends TestCase
         while (-1 != (i = source.read ()))
             buffer.append ((char)i);
         source.close ();
-        html = buffer.toString ();        
+        html = buffer.toString ();
         old_total = 0;
         new_total = 0;
 

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -36,15 +36,15 @@ public class AssertXmlEqualsTest extends ParserTestCase {
     public AssertXmlEqualsTest(String name) {
         super(name);
     }
-    
+
     public void testNestedTagWithText() throws Exception {
         assertXmlEquals("nested with text","<hello>   <hi>My name is Nothing</hi></hello>","<hello><hi>My name is Nothing</hi>  </hello>");
     }
-    
+
     public void testThreeTagsDifferent() throws Exception {
         assertXmlEquals("two tags different","<someTag></someTag><someOtherTag>","<someTag/><someOtherTag>");
     }
-    
+
     public void testOneTag() throws Exception {
         assertXmlEquals("one tag","<someTag>","<someTag>");
     }
@@ -56,23 +56,23 @@ public class AssertXmlEqualsTest extends ParserTestCase {
     public void testTwoTagsDifferent() throws Exception {
         assertXmlEquals("two tags different","<someTag></someTag>","<someTag/>");
     }
-    
+
     public void testTwoTagsDifferent2() throws Exception {
         assertXmlEquals("two tags different","<someTag/>","<someTag></someTag>");
     }
-    
+
     public void testTwoTagsWithSameAttributes() throws Exception {
         assertXmlEquals("attributes","<tag name=\"John\" age=\"22\" sex=\"M\"/>","<tag sex=\"M\" name=\"John\" age=\"22\"/>");
     }
-    
+
     public void testTagWithText() throws Exception {
         assertXmlEquals("text","<hello>   My name is Nothing</hello>","<hello>My name is Nothing  </hello>");
     }
-    
+
     public void testStringWithLineBreaks() throws Exception {
         assertXmlEquals("string with line breaks","testing & refactoring","testing &\nrefactoring");
     }
-    
+
     public static TestSuite suite() {
         TestSuite suite = new TestSuite("XML Tests");
         suite.addTestSuite(AssertXmlEqualsTest.class);

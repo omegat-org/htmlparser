@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -41,7 +41,7 @@ public class NodeVisitorTest extends ParserTestCase {
     public NodeVisitorTest(String name) {
         super(name);
     }
-    
+
     public void testVisitTag() throws Exception {
         ParameterVisitor visitor = new ParameterVisitor();
         createParser(
@@ -51,22 +51,22 @@ public class NodeVisitorTest extends ParserTestCase {
             "</input>"
         );
         parser.visitAllNodesWith(visitor);
-        assertEquals("value of key1","value1",visitor.getValue("key1"));    
+        assertEquals("value of key1","value1",visitor.getValue("key1"));
         assertEquals("value of key2","value2",visitor.getValue("key2"));
     }
-    
+
     class ParameterVisitor extends NodeVisitor {
         Map paramsMap = new HashMap();
         String lastKeyVisited;
-        
+
         public String getValue(String key) {
             return (String)paramsMap.get(key);
         }
-        
+
         public void visitStringNode(StringNode stringNode) {
             paramsMap.put(lastKeyVisited,stringNode.getText());
         }
-        
+
         public void visitTag(Tag tag) {
             if (tag.getTagName().equals("PARAM")) {
                 lastKeyVisited = tag.getAttribute("NAME");

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -45,10 +45,10 @@ public class HTMLTagParserTest extends ParserTestCase {
         Tag tag = new Tag(new TagData(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">"));
         tagParser.correctTag(tag);
         assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
-    }   
+    }
 
     public void testInsertInvertedCommasCorrectly() {
-        StringBuffer test = new StringBuffer("a b=c d e = f"); 
+        StringBuffer test = new StringBuffer("a b=c d e = f");
         StringBuffer result = tagParser.insertInvertedCommasCorrectly(test);
         assertStringEquals("Expected Correction","a b=\"c d\" e=\"f\"",result.toString());
     }
@@ -56,9 +56,9 @@ public class HTMLTagParserTest extends ParserTestCase {
     public void testPruneSpaces() {
         String test = "  fdfdf dfdf   ";
         assertEquals("Expected Pruned string","fdfdf dfdf",TagParser.pruneSpaces(test));
-    }   
+    }
 
     protected void setUp() {
-        tagParser = new TagParser(new DefaultParserFeedback()); 
-    } 
+        tagParser = new TagParser(new DefaultParserFeedback());
+    }
 }

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -59,9 +59,9 @@ public class FormScannerTest extends ParserTestCase {
         "<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
         "<INPUT TYPE=\"submit\">\n"+
         "</FORM>";
-    
+
     public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\" METHOD=\""+FormTag.POST+"\">\r\n";
-    public static final String EXPECTED_FORM_HTML_REST_OF_FORM= 
+    public static final String EXPECTED_FORM_HTML_REST_OF_FORM=
         "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
         "<TR><TD ALIGN=\"center\"><FONT FACE=\"Arial, verdana\" SIZE=\"2\"><B>User Name</B></FONT></TD></TR>\r\n"+
         "<TR><TD ALIGN=\"center\"><INPUT NAME=\"name\" SIZE=\"20\" TYPE=\"text\"></TD></TR>\r\n"+
@@ -76,12 +76,12 @@ public class FormScannerTest extends ParserTestCase {
         "<INPUT TYPE=\"submit\">\r\n"+
         "</FORM>";
     public static final String EXPECTED_FORM_HTML = EXPECTED_FORM_HTML_FORMLINE+EXPECTED_FORM_HTML_REST_OF_FORM;
-            
+
     public FormScannerTest(String name) {
         super(name);
     }
-    
-    public void testEvaluate() {        
+
+    public void testEvaluate() {
         String line1="form method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
         String line2="FORM method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
         String line3="Form method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
@@ -90,7 +90,7 @@ public class FormScannerTest extends ParserTestCase {
         assertTrue("Line 2",formScanner.evaluate(line2,null));
         assertTrue("Line 3",formScanner.evaluate(line3,null));
     }
-    
+
     public void assertTypeNameSize(String description,String type,String name,String size,InputTag inputTag) {
         assertEquals(description+" type",type,inputTag.getAttribute("TYPE"));
         assertEquals(description+" name",name,inputTag.getAttribute("NAME"));
@@ -100,7 +100,7 @@ public class FormScannerTest extends ParserTestCase {
         assertEquals(description+" type",type,inputTag.getAttribute("TYPE"));
         assertEquals(description+" name",name,inputTag.getAttribute("NAME"));
         assertEquals(description+" value",value,inputTag.getAttribute("VALUE"));
-    }   
+    }
     public void testScan() throws ParserException {
         createParser(FORM_HTML,"http://www.google.com/test/index.html");
         parser.addScanner(new FormScanner("",parser));
@@ -109,7 +109,7 @@ public class FormScannerTest extends ParserTestCase {
         FormTag formTag = (FormTag)node[0];
         assertStringEquals("Method",FormTag.POST,formTag.getFormMethod());
         assertStringEquals("Location","http://www.google.com/test/do_login.php",formTag.getFormLocation());
-        assertStringEquals("Name","login_form",formTag.getFormName());      
+        assertStringEquals("Name","login_form",formTag.getFormName());
         InputTag nameTag = formTag.getInputTag("name");
         InputTag passwdTag = formTag.getInputTag("passwd");
         InputTag submitTag = formTag.getInputTag("submit");
@@ -118,19 +118,19 @@ public class FormScannerTest extends ParserTestCase {
         assertNotNull("Input Password Tag should not be null",passwdTag);
         assertNotNull("Input Submit Tag should not be null",submitTag);
         assertNull("Input dummy tag should be null",dummyTag);
-        
+
         assertTypeNameSize("Input Name Tag","text","name","20",nameTag);
         assertTypeNameSize("Input Password Tag","password","passwd","20",passwdTag);
         assertTypeNameValue("Input Submit Tag","submit","submit","Login",submitTag);
-        
+
         TextareaTag textAreaTag = formTag.getTextAreaTag("Description");
         assertNotNull("Text Area Tag should have been found",textAreaTag);
         assertEquals("Text Area Tag Contents","Contents of TextArea",textAreaTag.getValue());
         assertNull("Should have been null",formTag.getTextAreaTag("junk"));
-        
+
         assertStringEquals("toHTML",EXPECTED_FORM_HTML,formTag.toHtml());
     }
-    
+
     public void testScanFormWithNoEnding() throws Exception {
         createParser(
         "<TABLE>\n"+
@@ -145,12 +145,12 @@ public class FormScannerTest extends ParserTestCase {
         "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
         "<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
         "</TABLE>","http://www.google.com/test/index.html");
-        
+
         parser.addScanner(new FormScanner("",parser));
-        
+
         parseAndAssertNodeCount(2);
     }
-    /** 
+    /**
      * Bug reported by Pavan Podila - forms with links are not being parsed
      * Sample html is from google
      */
@@ -164,8 +164,8 @@ public class FormScannerTest extends ParserTestCase {
         "&nbsp;&#8226;&nbsp;<a href=/advanced_search?hl=en>Advanced&nbsp;Search</a><br>&nbsp;&#8226;"+
         "&nbsp;<a href=/preferences?hl=en>Preferences</a><br>&nbsp;&#8226;&nbsp;<a href=/"+
         "language_tools?hl=en>Language Tools</a></font></td></tr></table></form>"
-        );  
-        
+        );
+
         parser.addScanner(new FormScanner("",parser));
         parser.addScanner(new LinkScanner());
         parseAndAssertNodeCount(1);
@@ -176,7 +176,7 @@ public class FormScannerTest extends ParserTestCase {
         for (SimpleNodeIterator e=formTag.children();e.hasMoreNodes();) {
             Node formNode = e.nextNode();
             if (formNode instanceof LinkTag) {
-                linkTag[i++] = (LinkTag)formNode;       
+                linkTag[i++] = (LinkTag)formNode;
             }
         }
         assertEquals("Link Tag Count",3,i);
@@ -184,7 +184,7 @@ public class FormScannerTest extends ParserTestCase {
         assertEquals("Second Link Tag Text","Preferences",linkTag[1].getLinkText());
         assertEquals("Third Link Tag Text","Language Tools",linkTag[2].getLinkText());
     }
-    /** 
+    /**
      * Bug 652674 - forms with comments are not being parsed
      */
     public void testScanFormWithComments() throws ParserException {
@@ -198,8 +198,8 @@ public class FormScannerTest extends ParserTestCase {
         "&nbsp;&#8226;&nbsp;<a href=/advanced_search?hl=en>Advanced&nbsp;Search</a><br>&nbsp;&#8226;"+
         "&nbsp;<a href=/preferences?hl=en>Preferences</a><br>&nbsp;&#8226;&nbsp;<a href=/"+
         "language_tools?hl=en>Language Tools</a></font></td></tr></table></form>"
-        );  
-        
+        );
+
         parser.addScanner(new FormScanner("",parser));
         parseAndAssertNodeCount(1);
         assertTrue("Should be a HTMLFormTag",node[0] instanceof FormTag);
@@ -209,18 +209,18 @@ public class FormScannerTest extends ParserTestCase {
         for (SimpleNodeIterator e=formTag.children();e.hasMoreNodes();) {
             Node formNode = (Node)e.nextNode();
             if (formNode instanceof RemarkNode) {
-                remarkNode[i++] = (RemarkNode)formNode;     
+                remarkNode[i++] = (RemarkNode)formNode;
             }
         }
         assertEquals("Remark Node Count",1,i);
         assertEquals("First Remark Node"," Hello World ",remarkNode[0].toPlainTextString());
-    }   
-    /** 
+    }
+    /**
      * Bug 652674 - forms with comments are not being parsed
      */
     public void testScanFormWithComments2() throws ParserException {
         createParser(
-        "<FORM id=\"id\" name=\"name\" action=\"http://some.site/aPage.asp?id=97\" method=\"post\">\n"+         
+        "<FORM id=\"id\" name=\"name\" action=\"http://some.site/aPage.asp?id=97\" method=\"post\">\n"+
         "   <!--\n"+
         "   Just a Comment\n"+
         "   -->\n"+
@@ -234,12 +234,12 @@ public class FormScannerTest extends ParserTestCase {
         for (SimpleNodeIterator e=formTag.children();e.hasMoreNodes();) {
             Node formNode = (Node)e.nextNode();
             if (formNode instanceof RemarkNode) {
-                remarkNode[i++] = (RemarkNode)formNode;     
+                remarkNode[i++] = (RemarkNode)formNode;
             }
         }
         assertEquals("Remark Node Count",1,i);
-    }       
-    
+    }
+
     /**
      * Bug 656870 - a form tag with a previously open link causes infinite loop
      * on encounter
@@ -271,7 +271,7 @@ public class FormScannerTest extends ParserTestCase {
     }
 
     /**
-     * Bug 713907 reported by Dhaval Udani, erroneous 
+     * Bug 713907 reported by Dhaval Udani, erroneous
      * parsing of form tag (even when form scanner is not
      * registered)
      */
@@ -295,7 +295,7 @@ public class FormScannerTest extends ParserTestCase {
             nodes.length
         );
     }
-    
+
     /**
      * See bug #745566 StackOverflowError on select with too many unclosed options.
      * Under Windows this throws a stack overflow exception.
@@ -305,7 +305,7 @@ public class FormScannerTest extends ParserTestCase {
         String url = "http://htmlparser.sourceforge.net/test/overflowpage.html";
         int i;
         Node[] nodes;
-        
+
         parser = new Parser(url);
         parser.registerScanners ();
         i = 0;

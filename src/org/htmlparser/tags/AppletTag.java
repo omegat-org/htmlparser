@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -42,14 +42,14 @@ import org.htmlparser.util.SimpleNodeIterator;
  * It extends a basic tag by providing accessors to the class, codebase,
  * archive and parameters.
  */
-public class AppletTag extends CompositeTag 
+public class AppletTag extends CompositeTag
 {
     /**
      * Create a new AppletTag with the dats given.
      * @param tagData The data for this tag.
      * @param compositeTagData The data for this composite tag.
      */
-    public AppletTag (TagData tagData,CompositeTagData compositeTagData) 
+    public AppletTag (TagData tagData,CompositeTagData compositeTagData)
     {
         super(tagData,compositeTagData);
     }
@@ -70,7 +70,7 @@ public class AppletTag extends CompositeTag
         ret = new Hashtable ();
         kids = getChildren ();
         for (int i = 0; i < kids.size (); i++)
-        { 
+        {
             node = children.elementAt(i);
             if (node instanceof Tag)
             {
@@ -86,7 +86,7 @@ public class AppletTag extends CompositeTag
                 }
             }
         }
-        
+
         return (ret);
     }
 
@@ -107,7 +107,7 @@ public class AppletTag extends CompositeTag
     {
         return (createAppletParamsTable ());
     }
-    
+
     /**
      * Get the jar file of the applet.
      * @return The value of the <code>ARCHIVE</code> attribute, or <code>null</code> if it wasn't specified.
@@ -116,7 +116,7 @@ public class AppletTag extends CompositeTag
     {
         return (getAttribute ("ARCHIVE"));
     }
-    
+
     /**
      * Get the code base of the applet.
      * @return The value of the <code>CODEBASE</code> attribute, or <code>null</code> if it wasn't specified.
@@ -141,7 +141,7 @@ public class AppletTag extends CompositeTag
      * Get an enumeration over the (String) parameter names.
      * @return An enumeration of the <code>PARAM<code> tag <code>NAME<code> attributes.
      */
-    public Enumeration getParameterNames () 
+    public Enumeration getParameterNames ()
     {
         return (getAppletParams ().keys ());
     }
@@ -154,7 +154,7 @@ public class AppletTag extends CompositeTag
     {
         setAttribute ("CODE", newAppletClass);
     }
-    
+
     /**
      * Set the enclosed <code>PARM<code> children.
      * @param The new parameters.
@@ -168,7 +168,7 @@ public class AppletTag extends CompositeTag
         String paramValue;
         String s;
         TagData tagData;
-        
+
         kids = getChildren ();
         // erase appletParams from kids
         for (int i = 0; i < kids.size (); )
@@ -182,7 +182,7 @@ public class AppletTag extends CompositeTag
             else
                 i++;
         }
-        
+
         // add newAppletParams to kids
         for (Enumeration e = newAppletParams.keys (); e.hasMoreElements (); )
         {
@@ -192,11 +192,11 @@ public class AppletTag extends CompositeTag
             tagData = new TagData (0, 0, 0, 0, s, s, "", false); // what, no URL?
             kids.add (new Tag (tagData));
         }
-        
+
         //set kids as new children
         setChildren (kids);
     }
-    
+
     /**
      * Set the <code>ARCHIVE<code> attribute.
      * @param The new archive file.
@@ -205,7 +205,7 @@ public class AppletTag extends CompositeTag
     {
         setAttribute ("ARCHIVE", newArchive);
     }
-    
+
     /**
      * Set the <code>CODEBASE<code> attribute.
      * @param The new applet code base.
@@ -228,7 +228,7 @@ public class AppletTag extends CompositeTag
         boolean found;
         Node node;
         StringBuffer ret;
-        
+
         ret = new StringBuffer(500);
         ret.append ("Applet Tag\n");
         ret.append ("**********\n");

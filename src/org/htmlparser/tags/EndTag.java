@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -41,7 +41,7 @@ public class EndTag extends Tag
     public final static int ENDTAG_WAIT_FOR_SLASH_STATE=1;
     public final static int ENDTAG_BEGIN_PARSING_STATE=2;
     public final static int ENDTAG_FINISHED_PARSING_STATE=3;
-    
+
     /**
      * Constructor takes 3 arguments to construct an EndTag object.
      * @param tagData The data for this tag.
@@ -71,14 +71,14 @@ public class EndTag extends Tag
             {
                 state = ENDTAG_FINISHED_PARSING_STATE;
                 tagEnd = i;
-            }               
+            }
             if (state==ENDTAG_BEGIN_PARSING_STATE)
             {
                 tagContents.append(ch);
             }
             if (state==ENDTAG_WAIT_FOR_SLASH_STATE)
             {
-                if (ch=='/')            
+                if (ch=='/')
                 {
                     state = ENDTAG_BEGIN_PARSING_STATE;
                 }
@@ -96,7 +96,7 @@ public class EndTag extends Tag
                 else if (state==ENDTAG_BEGIN_PARSING_STATE)
                 {
                     state=ENDTAG_FINISHED_PARSING_STATE;
-                    tagEnd=i;           
+                    tagEnd=i;
                 }
             }
             else if (state == ENDTAG_BEFORE_PARSING_STATE)
@@ -107,10 +107,10 @@ public class EndTag extends Tag
         if (state==ENDTAG_BEGIN_PARSING_STATE) {
             tagEnd=i;
             state=ENDTAG_FINISHED_PARSING_STATE;
-        }       
+        }
         if (state==ENDTAG_FINISHED_PARSING_STATE)
         return new EndTag(new TagData(tagBegin,tagEnd,tagContents.toString(),input));
-        else return null;   
+        else return null;
     }
     public String toPlainTextString() {
         return "";
@@ -121,7 +121,7 @@ public class EndTag extends Tag
     public String toString() {
         return "EndTag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
     }
-    
+
     public void accept(NodeVisitor visitor) {
         visitor.visitEndTag(this);
     }

@@ -232,7 +232,7 @@ public class AttributeParser {
     private boolean isDelimeter(String token) {
         return delim.indexOf(tokenAccumulator)>=0;
     }
-    
+
     private boolean isCurrentTokenSingleQuote() {
         return currentToken.charAt(0)==SINGLE_QUOTE;
     }

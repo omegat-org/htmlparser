@@ -58,7 +58,7 @@ public class TagNode extends AbstractNode
     public final static String NULLVALUE = "$<NULL>$";
     public final static String NOTHING = "$<NOTHING>$";
     private final static String EMPTY_STRING="";
-    
+
     private boolean emptyXmlTag = false;
 
     /**
@@ -138,7 +138,7 @@ public class TagNode extends AbstractNode
      * Returns the value of an attribute.
      * @param name Name of attribute, case insensitive.
      * @return The value associated with the attribute or null if it does
-     * not exist, or is a stand-alone or 
+     * not exist, or is a stand-alone or
      */
     public String getAttribute (String name)
     {
@@ -147,7 +147,7 @@ public class TagNode extends AbstractNode
         Attribute attribute;
         String string;
         String ret;
-        
+
         ret = null;
 
         attributes = getAttributesEx ();
@@ -167,7 +167,7 @@ public class TagNode extends AbstractNode
                 }
             }
         }
-        
+
         return (ret);
     }
 
@@ -202,7 +202,7 @@ public class TagNode extends AbstractNode
             else if ('"' == ch)
                 doubleq = false;
         }
-        
+
         // now apply quoting
         if (needed)
         {
@@ -290,11 +290,11 @@ public class TagNode extends AbstractNode
     {
         return (getAttribute (name));
     }
-    
+
     /**
      * Gets the attributes in the tag.
      * NOTE: Values of the extended hashtable are two element arrays of String,
-     * with the first element being the original name (not uppercased), 
+     * with the first element being the original name (not uppercased),
      * and the second element being the value.
      * @return Returns a special hashtable of attributes in two element String arrays.
      */
@@ -314,7 +314,7 @@ public class TagNode extends AbstractNode
         String value;
         StringBuffer _value;
         Hashtable ret;
-        
+
         ret = new SpecialHashtable ();
         attributes = getAttributesEx ();
         if (0 < attributes.size ())
@@ -413,7 +413,7 @@ public class TagNode extends AbstractNode
         String value;
         char quote;
         Attribute attribute;
-        
+
         att = new Vector ();
         for (Enumeration e = attributes.keys (); e.hasMoreElements (); )
         {
@@ -440,7 +440,7 @@ public class TagNode extends AbstractNode
     /**
      * Sets the attributes.
      * NOTE: Values of the extended hashtable are two element arrays of String,
-     * with the first element being the original name (not uppercased), 
+     * with the first element being the original name (not uppercased),
      * and the second element being the value.
      * @param attribs The attribute collection to set.
      */
@@ -466,7 +466,7 @@ public class TagNode extends AbstractNode
     {
         return (nodeBegin);
     }
-    
+
     /**
      * Sets the nodeEnd.
      * @param tagEnd The nodeEnd to set
@@ -475,7 +475,7 @@ public class TagNode extends AbstractNode
     {
         nodeEnd = tagEnd;
     }
-    
+
     /**
      * Gets the nodeEnd.
      * @return The nodeEnd value.
@@ -612,7 +612,7 @@ public class TagNode extends AbstractNode
 
     /**
      * Is this an empty xml tag of the form<br>
-     * &lt;tag/&gt; 
+     * &lt;tag/&gt;
      * @return boolean
      */
     public boolean isEmptyXmlTag ()

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -38,7 +38,7 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
-public class ImageTagTest extends ParserTestCase 
+public class ImageTagTest extends ParserTestCase
 {
     public ImageTagTest(String name) {
         super(name);
@@ -56,7 +56,7 @@ public class ImageTagTest extends ParserTestCase
         createParser("<IMG alt=Google height=115 src=\"goo/title_homepage4.gif\" width=305>","http://www.google.com/test/index.html");
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-            
+
         parseAndAssertNodeCount(1);
         // The node should be an HTMLImageTag
         assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
@@ -76,7 +76,7 @@ public class ImageTagTest extends ParserTestCase
         createParser("<IMG alt=Google height=115 src=\"../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/");
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-            
+
         parseAndAssertNodeCount(1);
         // The node should be an HTMLImageTag
         assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
@@ -96,7 +96,7 @@ public class ImageTagTest extends ParserTestCase
         createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-            
+
         parseAndAssertNodeCount(1);
         // The node should be an HTMLImageTag
         assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
@@ -113,11 +113,11 @@ public class ImageTagTest extends ParserTestCase
         createParser("<IMG SRC='abcd.jpg'>","http://www.cj.com/");
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-            
+
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
-        assertEquals("Image incorrect","http://www.cj.com/abcd.jpg",imageTag.getImageURL());    
+        assertEquals("Image incorrect","http://www.cj.com/abcd.jpg",imageTag.getImageURL());
     }
 
     /**
@@ -132,7 +132,7 @@ public class ImageTagTest extends ParserTestCase
         createParser("<IMG SRC=>","http://www.google.com/test/index.html");
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-            
+
         parseAndAssertNodeCount(1);
         // The node should be an HTMLLinkTag
         assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
@@ -144,7 +144,7 @@ public class ImageTagTest extends ParserTestCase
         createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
-            
+
         parseAndAssertNodeCount(1);
         // The node should be an ImageTag
         assertTrue("Node should be a ImageTag",node[0] instanceof ImageTag);
@@ -154,7 +154,7 @@ public class ImageTagTest extends ParserTestCase
         assertEquals("Height","115",imageTag.getAttribute("height"));
         assertEquals("Width","305",imageTag.getAttribute("width"));
     }
-    
+
     /**
      * See bug #753003 <IMG> within <A> missed when followed by <MAP>
      * Not reproducible.
@@ -170,7 +170,7 @@ public class ImageTagTest extends ParserTestCase
             if (subNode instanceof ImageTag)
                 return (ImageTag) subNode;
         }
-        
+
         return null;
     }
 
@@ -192,7 +192,7 @@ public class ImageTagTest extends ParserTestCase
             + "</a>";
         createParser (html);
         parser.registerScanners ();
-            
+
         parseAndAssertNodeCount (1);
         assertTrue ("Node should be a LinkTag", node[0] instanceof LinkTag);
         LinkTag link = (LinkTag)node[0];
@@ -217,7 +217,7 @@ public class ImageTagTest extends ParserTestCase
         ImageTag img = (ImageTag)node[0];
         assertTrue ("bad source", "http://i.cnn.net/cnn/images/1.gif".equals (img.getImageURL ()));
     }
-    
+
     // see bug #778781  SRC-attribute suppression in IMG-tags
 //    HTML before parse:
 //    <img src="images/first" alt="first">

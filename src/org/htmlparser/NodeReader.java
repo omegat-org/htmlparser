@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -71,7 +71,7 @@ public class NodeReader extends BufferedReader
     {
         super(in, len);
         this.url = url;
-        this.parser = null;     
+        this.parser = null;
         this.lineCount = 1;
     }
     /**
@@ -94,7 +94,7 @@ public class NodeReader extends BufferedReader
     {
         this(in, 8192, url);
     }
-    
+
     /**
      * Get the url for this reader.
      * @return The url specified in the constructor;
@@ -105,14 +105,14 @@ public class NodeReader extends BufferedReader
     }
 
     /**
-     * This method is intended to be called only by scanners, when a situation of dirty html has arisen, 
+     * This method is intended to be called only by scanners, when a situation of dirty html has arisen,
      * and action has been taken to correct the parsed tags. For e.g. if we have html of the form :
      * <pre>
      * <a href="somelink.html"><img src=...><td><tr><a href="someotherlink.html">...</a>
      * </pre>
      * Now to salvage the first link, we'd probably like to insert an end tag somewhere (typically before the
      * second begin link tag). So that the parsing continues uninterrupted, we will need to change the existing
-     * line being parsed, to contain the end tag in it. 
+     * line being parsed, to contain the end tag in it.
      */
     public void changeLine(String line) {
         this.line = line;
@@ -123,7 +123,7 @@ public class NodeReader extends BufferedReader
     /**
      * Get the last line number that the reader has read
      * @return int last line number read by the reader
-     */ 
+     */
     public int getLastLineNumber() {
         return lineCount-1;
     }
@@ -185,9 +185,9 @@ public class NodeReader extends BufferedReader
     {
         char ch;
         boolean ret;
-        
+
         ret = false;
-        
+
         if (pos + 2 <= line.length ())
             if ('<' == line.charAt (pos))
             {
@@ -222,7 +222,7 @@ public class NodeReader extends BufferedReader
             if (nextParsedNode.size()>0) {
                 node = nextParsedNode.elementAt(0);
                 nextParsedNode.remove(0);
-                return node; 
+                return node;
             }
             if (readNextLine()) {
                 do
@@ -230,7 +230,7 @@ public class NodeReader extends BufferedReader
                     line = getNextLine();
                 }
                 while (line!=null && line.length()==0);
-    
+
             }
             else if (dontReadNextLine) {
                 dontReadNextLine = false;
@@ -238,7 +238,7 @@ public class NodeReader extends BufferedReader
                 posInLine = getLastReadPosition() + 1;
             if (line==null)
                 return null;
-            
+
             if (beginTag (line, posInLine))
             {
                 node = remarkNodeParser.find(this,line,posInLine);
@@ -254,12 +254,12 @@ public class NodeReader extends BufferedReader
                         return node;
                     }
                     catch (Exception e)
-                    {           
+                    {
                         StringBuffer msgBuffer = new StringBuffer();
                         msgBuffer.append(DECIPHER_ERROR+"\n" +
                             "    Tag being processed : "+tag.getTagName()+"\n" +
                             "    Current Tag Line : "+tag.getTagLine()
-                        ); 
+                        );
                         appendLineDetails(msgBuffer);
                         ParserException ex = new ParserException(msgBuffer.toString(),e);
 
@@ -276,7 +276,7 @@ public class NodeReader extends BufferedReader
                 node = stringParser.find (this, line, posInLine, balance_quotes);
                 if (node!=null) return node;
             }
-        
+
             return null;
         }
         catch (ParserException pe)
@@ -291,7 +291,7 @@ public class NodeReader extends BufferedReader
             msgBuffer.append("\n Caused by:\n").append(sw.getBuffer().toString ());
             ParserException ex = new ParserException(msgBuffer.toString(),e);
             parser.getFeedback().error(msgBuffer.toString(),ex);
-            throw ex;           
+            throw ex;
         }
     }
     public void appendLineDetails(StringBuffer msgBuffer) {
@@ -329,19 +329,19 @@ public class NodeReader extends BufferedReader
     public void setPreviousOpenScanner(TagScanner previousOpenScanner) {
         this.previousOpenScanner = previousOpenScanner;
     }
-    
+
     /**
      * @param lineSeparator New Line separator to be used
      */
     public static void setLineSeparator(String lineSeparator)
     {
-        Parser.setLineSeparator(lineSeparator); 
+        Parser.setLineSeparator(lineSeparator);
     }
-    
+
     /**
      * Gets the line seperator that is being used
      * @return String
-     */ 
+     */
     public static String getLineSeparator()
     {
         return (Parser.getLineSeparator());
@@ -404,9 +404,9 @@ public class NodeReader extends BufferedReader
      * @param nextParsedNode The node that will be returned next by the reader.
      */
     public void addNextParsedNode(Node nextParsedNode) {
-        this.nextParsedNode.prepend(nextParsedNode);        
+        this.nextParsedNode.prepend(nextParsedNode);
     }
-    
+
     public boolean isDontReadNextLine() {
         return dontReadNextLine;
     }

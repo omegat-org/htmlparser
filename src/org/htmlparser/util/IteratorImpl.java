@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -71,10 +71,10 @@ public class IteratorImpl implements PeekingIterator
                 feedback.error(msgBuffer.toString(),ex);
                 throw ex;
             }
-        
+
         return (ret);
     }
-    
+
     /**
      * Check if more nodes are available.
      * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
@@ -88,10 +88,10 @@ public class IteratorImpl implements PeekingIterator
             ret = true;
         else
             ret = !(null == peek ());
-        
+
         return (ret);
     }
-        
+
     /**
      * Get the next node.
      * @return The next node in the HTML stream, or null if there are no more nodes.
@@ -104,7 +104,7 @@ public class IteratorImpl implements PeekingIterator
         else
             // should perhaps throw an exception?
             ret = null;
-        
+
         return (ret);
     }
 }

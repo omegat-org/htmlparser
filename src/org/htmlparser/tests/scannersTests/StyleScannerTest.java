@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -39,7 +39,7 @@ public class StyleScannerTest extends ParserTestCase
         super(name);
     }
 
-    public void testEvaluate() 
+    public void testEvaluate()
     {
         StyleScanner scanner = new StyleScanner("-s");
         boolean retVal = scanner.evaluate("style ",null);
@@ -56,7 +56,7 @@ public class StyleScannerTest extends ParserTestCase
         }
         catch (ParserException e) {
 
-        }   
+        }
     }
 
     public void testScanBug() throws ParserException {
@@ -68,9 +68,9 @@ public class StyleScannerTest extends ParserTestCase
         StyleTag styleTag = (StyleTag)node[5];
         assertEquals("Style Code","a.h{background-color:#ffee99}",styleTag.getStyleCode());
     }
-    
+
     /**
-     * This is a bug reported by Kaarle Kaaila. 
+     * This is a bug reported by Kaarle Kaaila.
      */
     public void testScanBug2() throws ParserException {
         createParser("<STYLE TYPE=\"text/css\"><!--\n\n"+
@@ -102,5 +102,5 @@ public class StyleScannerTest extends ParserTestCase
         "//-->";
         assertStringEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
     }
-    
+
 }

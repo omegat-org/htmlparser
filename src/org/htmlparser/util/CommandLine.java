@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -73,12 +73,12 @@ public class CommandLine
     }
     parse(args);
   }
-  
+
   public CommandLine(String[] args)
   {
     parse(args);
   }
-  
+
   protected void parse(String[] args)
   {
     for (int i = 0; i < args.length; i++)
@@ -89,7 +89,7 @@ public class CommandLine
       {
         nextArg = args[i + 1];
       }
-      
+
       if (thisArg.startsWith("-"))
       {
         if (thisArg.length() > 2)
@@ -138,37 +138,37 @@ public class CommandLine
       }
     }
   }
-  
+
   public void addCommand(char command)
   {
     commands.add(new Character(command));
   }
-  
+
   public boolean hasValue(String key)
   {
     return values.containsKey(key);
   }
-  
+
   public String getValue(String key)
   {
     return (String)values.get(key);
   }
-  
+
   public boolean getFlag(String key)
   {
     return flags.contains(key);
   }
-  
+
   public int getNameCount()
   {
     return names.size();
   }
-  
+
   public String getName(int index)
   {
     return (String)names.get(index);
   }
-  
+
   public static void main(String[] args)
   {
     CommandLine cmd = new CommandLine("f", args);

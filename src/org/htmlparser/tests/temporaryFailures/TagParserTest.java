@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic, Inc.
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -81,15 +81,15 @@ public class TagParserTest extends ParserTestCase {
         "<body bgcolor=\"#FFFFFF\" text=\"#000000\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" link=\"#003399\" vlink=\"#003399\" alink=\"#003399\">";
     private Map results;
     private int testProgress;
-    
+
     public TagParserTest(String name) {
         super(name);
     }
-    
+
     public void testTagWithQuotes() throws Exception {
-        String testHtml = 
+        String testHtml =
         "<img src=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" width=87 height=20 border=0 alt=\"Marshall Field's\">";
-        
+
         createParser(testHtml);
         parseAndAssertNodeCount(1);
         assertType("should be Tag",Tag.class,node[0]);
@@ -101,7 +101,7 @@ public class TagParserTest extends ParserTestCase {
             tag.toHtml()
         );
     }
-    
+
     public void testEmptyTag() throws Exception {
         createParser("<custom/>");
         parseAndAssertNodeCount(1);
@@ -115,7 +115,7 @@ public class TagParserTest extends ParserTestCase {
             tag.toHtml()
         );
     }
-    
+
     public void testTagWithCloseTagSymbolInAttribute() throws ParserException {
         createParser("<tag att=\"a>b\">");
         parseAndAssertNodeCount(1);
@@ -123,7 +123,7 @@ public class TagParserTest extends ParserTestCase {
         Tag tag = (Tag)node[0];
         assertStringEquals("attribute","a>b",tag.getAttribute("att"));
     }
-    
+
     public void testTagWithOpenTagSymbolInAttribute() throws ParserException {
         createParser("<tag att=\"a<b\">");
         parseAndAssertNodeCount(1);
@@ -250,7 +250,7 @@ public class TagParserTest extends ParserTestCase {
             assertStringEquals ("attribute 2","foo>\r\nbar", attribute2);
         }
     }
-    
+
     /**
      * Test multiline split tag like attribute.
      * See feature request #725749 Handle < and > in multi-line attributes.
@@ -294,19 +294,19 @@ public class TagParserTest extends ParserTestCase {
 
             String testHtml2 = "<a href=\"http://normallink.com/sometext.html\">" +
                                 TEST_HTML;
-            ParsingThread parsingThread [] = 
+            ParsingThread parsingThread [] =
                 new ParsingThread[100];
             results = new HashMap();
             testProgress = 0;
             for (int i=0;i<parsingThread.length;i++) {
-                if (i<parsingThread.length/2) 
-                    parsingThread[i] = 
+                if (i<parsingThread.length/2)
+                    parsingThread[i] =
                         new ParsingThread(i,testHtml1,parsingThread.length);
                     else
-                        parsingThread[i] = 
+                        parsingThread[i] =
                             new ParsingThread(i,testHtml2,parsingThread.length);
 
-                Thread thread = new Thread(parsingThread[i]);                   
+                Thread thread = new Thread(parsingThread[i]);
                 thread.start();
             }
 
@@ -318,7 +318,7 @@ public class TagParserTest extends ParserTestCase {
                 }
                 catch (InterruptedException e) {
                 }
-            }   
+            }
             while (testProgress!=completionValue);
             for (int i=0;i<parsingThread.length;i++) {
                 if (!parsingThread[i].passed()) {
@@ -347,7 +347,7 @@ public class TagParserTest extends ParserTestCase {
                             "/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",
                             parsingThread[i].getLink2().getLink()
                         );
-                    }               
+                    }
                 }
             }
         }
@@ -357,22 +357,22 @@ public class TagParserTest extends ParserTestCase {
     private int computeCompletionValue(int numThreads) {
         return numThreads * (numThreads - 1) / 2;
     }
-    
+
     class ParsingThread implements Runnable {
         Parser parser;
         int id;
         LinkTag link1, link2;
         boolean result;
         int max;
-        
+
         ParsingThread(int id, String testHtml, int max) {
             this.id = id;
             this.max = max;
-            this.parser = 
+            this.parser =
                 Parser.createParser(testHtml);
             parser.registerScanners();
         }
-        
+
         public void run() {
             try {
                 result = false;
@@ -397,20 +397,20 @@ public class TagParserTest extends ParserTestCase {
                 testProgress += id;
             }
         }
-        
+
         public LinkTag getLink1() {
             return link1;
         }
-        
+
         public LinkTag getLink2() {
             return link2;
         }
-        
+
         public boolean passed() {
             return result;
         }
     }
-    
+
     /**
      * Test the toHTML method for a standalone attribute.
      */
@@ -423,7 +423,7 @@ public class TagParserTest extends ParserTestCase {
         String html = tag.toHtml ();
         assertStringEquals ("html","<INPUT DISABLED>", html);
     }
-    
+
     /**
      * Test the toHTML method for a missing value attribute.
      */
@@ -436,5 +436,5 @@ public class TagParserTest extends ParserTestCase {
         String html = tag.toHtml ();
         assertStringEquals ("html","<INPUT DISABLED=>", html);
     }
-    
+
 }

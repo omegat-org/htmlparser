@@ -17,12 +17,12 @@
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -49,19 +49,19 @@ public class JspScannerTest extends ParserTestCase {
         "<h1>\n"+
         "This is a <%=object%>\n"+
         "</h1>");
-        
+
         // Register the Jsp Scanner
-        parser.addScanner(new JspScanner("-j"));    
+        parser.addScanner(new JspScanner("-j"));
         parseAndAssertNodeCount(4);
         // The first node should be an HTMLJspTag
         assertTrue("Third should be an HTMLJspTag",node[2] instanceof JspTag);
         JspTag tag = (JspTag)node[2];
         assertEquals("tag contents","=object",tag.getText());
     }
-    
+
     /**
      * Testcase submitted by Johan Naudts, demonstrating bug
-     * 717573, <b>NullPointerException when unclosed HTML tag 
+     * 717573, <b>NullPointerException when unclosed HTML tag
      * inside JSP tag</b>
      * @throws ParserException
      */

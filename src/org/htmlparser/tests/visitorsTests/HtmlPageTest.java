@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -39,7 +39,7 @@ import org.htmlparser.visitors.HtmlPage;
 
 public class HtmlPageTest extends ParserTestCase {
 
-    private static final String SIMPLE_PAGE = 
+    private static final String SIMPLE_PAGE =
         "<html>" +
             "<head>" +
                 "<title>Welcome to the HTMLParser website</title>" +
@@ -49,7 +49,7 @@ public class HtmlPageTest extends ParserTestCase {
             "</body>" +
         "</html>";
 
-    private static final String PAGE_WITH_TABLE = 
+    private static final String PAGE_WITH_TABLE =
         "<html>" +
             "<head>" +
                 "<title>Welcome to the HTMLParser website</title>" +
@@ -64,13 +64,13 @@ public class HtmlPageTest extends ParserTestCase {
                 "</table>" +
             "</body>" +
         "</html>";
-            
+
     public HtmlPageTest(String name) {
         super(name);
     }
 
     public void testCreateSimplePage() throws Exception {
-        createParser(   
+        createParser(
             SIMPLE_PAGE
         );
         HtmlPage page = new HtmlPage(parser);
@@ -92,9 +92,9 @@ public class HtmlPageTest extends ParserTestCase {
             page.getBody().asString()
         );
     }
-    
+
     public void testCreatePageWithTables() throws Exception {
-        createParser(   
+        createParser(
             PAGE_WITH_TABLE
         );
         HtmlPage page = new HtmlPage(parser);
@@ -111,7 +111,7 @@ public class HtmlPageTest extends ParserTestCase {
                 "</tr>" +
             "</table>",
             bodyNodes.asHtml()
-        );          
+        );
         TableTag tables [] = page.getTables();
         assertEquals("number of tables",1,tables.length);
         assertEquals("number of rows",1,tables[0].getRowCount());

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -40,7 +40,7 @@ import org.htmlparser.util.ParserException;
 public class Robot {
   private org.htmlparser.Parser parser;
     /**
-     * Robot crawler - Provide the starting url 
+     * Robot crawler - Provide the starting url
      */
     public Robot(String resourceLocation) {
         try {
@@ -81,7 +81,7 @@ public class Robot {
           {
             if (!linkTag.isMailLink())
             {
-              if (linkTag.getLink().toUpperCase().indexOf("HTM")!=-1 || 
+              if (linkTag.getLink().toUpperCase().indexOf("HTM")!=-1 ||
                 linkTag.getLink().toUpperCase().indexOf("COM")!=-1 ||
                 linkTag.getLink().toUpperCase().indexOf("ORG")!=-1)
               {
@@ -100,7 +100,7 @@ public class Robot {
       }
     }
 
-    public static void main(String[] args) 
+    public static void main(String[] args)
     {
       System.out.println("Robot Crawler v" + Parser.getVersion ());
       if (args.length<2 || args[0].equals("-help"))
@@ -119,14 +119,14 @@ public class Robot {
         System.out.println();
         System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
         System.exit(-1);
-      } 
+      }
       String resourceLocation="";
       int crawlDepth = 1;
       if (args.length!=0) resourceLocation = args[0];
       if (args.length==2) crawlDepth=Integer.valueOf(args[1]).intValue();
-      
-        
-      Robot robot = new Robot(resourceLocation);    
+
+
+      Robot robot = new Robot(resourceLocation);
       System.out.println("Crawling Site "+resourceLocation);
       try {
           robot.crawl(crawlDepth);

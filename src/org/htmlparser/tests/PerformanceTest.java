@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -47,7 +47,7 @@ public class PerformanceTest {
      */
     public PerformanceTest(String file, int numTimes) {
         this.file = file;
-        this.numTimes = numTimes;       
+        this.numTimes = numTimes;
     }
 
     public void beginTestWithoutScanners() throws ParserException {
@@ -56,7 +56,7 @@ public class PerformanceTest {
         double avg=0;
         System.out.println("***************************************");
         System.out.println("*  Test Without Scanners Registered   *");
-        System.out.println("***************************************");              
+        System.out.println("***************************************");
         for (int i=0;i<=numTimes;i++) {
             // Create the parser object
             parser = new Parser(file,new DefaultParserFeedback());
@@ -84,7 +84,7 @@ public class PerformanceTest {
         double avg=0;
         System.out.println("***************************************");
         System.out.println("*    Test With Scanners Registered    *");
-        System.out.println("***************************************");                  
+        System.out.println("***************************************");
         for (int i=0;i<=numTimes;i++) {
             // Create the parser object
             parser = new Parser(file,new DefaultParserFeedback());
@@ -106,7 +106,7 @@ public class PerformanceTest {
         System.out.println("Average Time : "+avg+" ms");
         System.out.println("***************************************");
     }
-    
+
     public static void main(String[] args) {
         if (args.length<2) {
             System.err.println("Syntax Error.");

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -36,14 +36,14 @@ import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.SimpleNodeIterator;
 import org.htmlparser.visitors.NodeVisitor;
 /**
- * Identifies a link tag 
+ * Identifies a link tag
  */
 public class LinkTag extends CompositeTag
 {
     public static final String LINK_TAG_FILTER="-l";
     /**
      * The URL where the link points to
-     */ 
+     */
     protected String link;
     /**
      * The text of of the link element
@@ -56,12 +56,12 @@ public class LinkTag extends CompositeTag
     private boolean mailLink;
     private boolean javascriptLink;
 
-    
+
     /**
      * Constructor creates an HTMLLinkNode object, which basically stores the location
      * where the link points to, and the text it contains.
      * <p>
-     * In order to get the contents of the link tag, use the method linkData(), 
+     * In order to get the contents of the link tag, use the method linkData(),
      * which returns an enumeration of nodes encapsulated within the link.
      * <p>
      * The following code will get all the images inside a link tag.
@@ -77,7 +77,7 @@ public class LinkTag extends CompositeTag
      * }
      * </pre>
      * There is another mechanism available that allows for uniform extraction of images. You could do this to
-     * get all images from a web page : 
+     * get all images from a web page :
      * <pre>
      * Node node;
      * Vector imageCollectionVector = new Vector();
@@ -93,7 +93,7 @@ public class LinkTag extends CompositeTag
      * @see #linkData()
      */
     public LinkTag(TagData tagData,CompositeTagData compositeTagData,LinkData linkData) {
-        super(tagData,compositeTagData);  
+        super(tagData,compositeTagData);
         this.link = linkData.getLink();
         this.linkText = linkData.getLinkText();
         this.accessKey = linkData.getAccessKey();
@@ -183,7 +183,7 @@ public class LinkTag extends CompositeTag
 
         /**
      * Tests if the link is an HTTP link or one of its variations (HTTPS, etc.).
-     * 
+     *
      * @return flag indicating if this link is an HTTP link or one of its variations (HTTPS, etc.)
      */
         public boolean isHTTPLikeLink() {
@@ -202,7 +202,7 @@ public class LinkTag extends CompositeTag
 
     /**
      * Set the link as a javascript link.
-     * 
+     *
      * @param newJavascriptLink flag indicating if the link is a javascript code
      */
     public void setJavascriptLink(boolean newJavascriptLink) {
@@ -218,11 +218,11 @@ public class LinkTag extends CompositeTag
         sb.append("Link to : "+link + "; titled : "+linkText+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+ ", AccessKey=");
         if (accessKey==null) sb.append("null\n");
         else sb.append(accessKey+"\n");
-        if (children()!=null) 
+        if (children()!=null)
         {
             sb.append("  "+"LinkData\n");
             sb.append("  "+"--------\n");
-            
+
             Node node;
             int i = 0;
             for (SimpleNodeIterator e=children();e.hasMoreNodes();)
@@ -249,7 +249,7 @@ public class LinkTag extends CompositeTag
     public SimpleNodeIterator linkData() {
         return children();
     }
-    
+
     public void accept(NodeVisitor visitor) {
         visitor.visitLinkTag(this);
         super.accept(visitor);

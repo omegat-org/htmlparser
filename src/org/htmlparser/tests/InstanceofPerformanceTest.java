@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -55,19 +55,19 @@ public class InstanceofPerformanceTest {
             formChildren.addElement(se.nextNode());
         }
     }
-    
+
     public void doInstanceofTest(long [] time,int index, long numTimes) {
         System.out.println("doInstanceofTest("+index+")");
         long start = System.currentTimeMillis();
         for (long i=0;i<numTimes;i++) {
             for (Enumeration e = formChildren.elements();e.hasMoreElements();) {
-                Node node = (Node)e.nextElement();              
+                Node node = (Node)e.nextElement();
             }
         }
         long end = System.currentTimeMillis();
         time[index] = end-start;
     }
-    
+
     public void doGetTypeTest(long [] time,int index, long numTimes) {
         System.out.println("doGetTypeTest("+index+")");
         long start = System.currentTimeMillis();
@@ -82,15 +82,15 @@ public class InstanceofPerformanceTest {
 
     public void perform() {
         int numTimes = 30;
-        long time1[] = new long[numTimes], 
+        long time1[] = new long[numTimes],
         time2[] = new long[numTimes];
-        
+
         for (int i=0;i<numTimes;i++)
             doInstanceofTest(time1,i,i*10000);
-        
+
         for (int i=0;i<numTimes;i++)
             doGetTypeTest(time2,i,i*10000);
-        
+
         print(time1,time2);
     }
 
@@ -100,7 +100,7 @@ public class InstanceofPerformanceTest {
         }
     }
     public static void main(String [] args) throws Exception {
-        InstanceofPerformanceTest test = 
+        InstanceofPerformanceTest test =
             new InstanceofPerformanceTest();
         test.setUp();
         test.perform();

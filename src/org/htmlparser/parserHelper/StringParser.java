@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -33,9 +33,9 @@ import org.htmlparser.NodeReader;
 import org.htmlparser.Parser;
 
 public class StringParser {
-    private final static int BEFORE_PARSE_BEGINS_STATE=0;   
+    private final static int BEFORE_PARSE_BEGINS_STATE=0;
     private final static int PARSE_HAS_BEGUN_STATE=1;
-    private final static int PARSE_COMPLETED_STATE=2;   
+    private final static int PARSE_COMPLETED_STATE=2;
     private final static int PARSE_IGNORE_STATE=3;
 
     /**
@@ -49,9 +49,9 @@ public class StringParser {
     {
         char ch;
         boolean ret;
-        
+
         ret = false;
-        
+
         if (pos + 2 <= line.length ())
             if ('<' == line.charAt (pos))
             {
@@ -71,7 +71,7 @@ public class StringParser {
      * @param position Position to start parsing from
      * @param balance_quotes If <code>true</code> enter ignoring state on
      * encountering quotes.
-     */     
+     */
     public Node find(NodeReader reader,String input,int position, boolean balance_quotes)
     {
         StringBuffer textBuffer = new StringBuffer();
@@ -104,7 +104,7 @@ public class StringParser {
                     ignore_ender = ch;
                     state = PARSE_IGNORE_STATE;
                 }
-            }                   
+            }
             if (state==BEFORE_PARSE_BEGINS_STATE)
             {
                 state=PARSE_HAS_BEGUN_STATE;
@@ -112,7 +112,7 @@ public class StringParser {
             if (state==PARSE_HAS_BEGUN_STATE || state==PARSE_IGNORE_STATE)
             {
                 textBuffer.append(input.charAt(i));
-            }               
+            }
             // Patch by Cedric Rosa
             if (state==BEFORE_PARSE_BEGINS_STATE && i==inputLen-1)
                state=PARSE_HAS_BEGUN_STATE;
@@ -124,11 +124,11 @@ public class StringParser {
                         textBuffer.append(Parser.getLineSeparator());
                 }
                 while (input!=null && input.length()==0);
-                
+
                 if (input==null) {
                     textEnd=i;
                     state =PARSE_COMPLETED_STATE;
-                    
+
                 } else {
                     textBuffer.append(Parser.getLineSeparator());
                     inputLen = input.length();

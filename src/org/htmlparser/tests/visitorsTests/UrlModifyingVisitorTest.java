@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -33,27 +33,27 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.UrlModifyingVisitor;
 
 public class UrlModifyingVisitorTest extends ParserTestCase {
-    private static final String HTML_WITH_LINK = 
+    private static final String HTML_WITH_LINK =
     "<HTML><BODY>" +
         "<A HREF=\"mylink.html\"><IMG SRC=\"mypic.jpg\">" +
         "</A><IMG SRC=\"mysecondimage.gif\">" +
     "</BODY></HTML>";
-    
-    private static final String MODIFIED_HTML = 
+
+    private static final String MODIFIED_HTML =
     "<HTML><BODY>" +
         "<A HREF=\"localhost://mylink.html\">" +
         "<IMG SRC=\"localhost://mypic.jpg\"></A>" +
         "<IMG SRC=\"localhost://mysecondimage.gif\">" +
     "</BODY></HTML>";
-    
+
     public UrlModifyingVisitorTest(String name) {
         super(name);
     }
-    
+
     public void testUrlModificationWithVisitor() throws Exception {
         Parser parser = Parser.createParser(HTML_WITH_LINK);
-        UrlModifyingVisitor visitor = 
-            new UrlModifyingVisitor(parser, "localhost://");        
+        UrlModifyingVisitor visitor =
+            new UrlModifyingVisitor(parser, "localhost://");
         parser.visitAllNodesWith(visitor);
         assertStringEquals("Expected HTML",
             MODIFIED_HTML,

@@ -10,23 +10,23 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-// 
-// This class was contributed by 
+//
+// This class was contributed by
 // Derrick Oswald
 //
 
@@ -163,7 +163,7 @@ public class Lexer
         int begin;
         int end;
         StringNode ret;
-        
+
         cursor = mCursor.dup ();
         done = false;
         while (!done)
@@ -311,7 +311,7 @@ public class Lexer
         Vector attributes;
         int length;
         TagNode ret;
-        
+
         cursor = mCursor.dup ();
         // sanity check
         ch = mPage.getCharacter (cursor);
@@ -446,7 +446,7 @@ public class Lexer
      * &lt;!-- and so is this one,<p>
      *     which occupies more than one line --&gt;<p>
      * </code>
-     * White space is not permitted between the markup declaration 
+     * White space is not permitted between the markup declaration
      * open delimiter("&lt;!") and the comment open delimiter ("--"),
      * but is permitted between the comment close delimiter ("--") and
      * the markup declaration close delimiter ("&gt;").
@@ -480,7 +480,7 @@ public class Lexer
         int state;
         int length;
         RemarkNode ret;
-        
+
         cursor = mCursor.dup ();
         // sanity check
         ch = mPage.getCharacter (cursor);

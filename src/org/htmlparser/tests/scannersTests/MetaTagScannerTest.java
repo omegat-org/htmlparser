@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -53,7 +53,7 @@ public class MetaTagScannerTest extends ParserTestCase {
         "<META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">","http://www.google.com/test/index.html");
         MetaTagScanner scanner = new MetaTagScanner("-t");
         parser.addScanner(scanner);
-        
+
         parseAndAssertNodeCount(11);
         assertTrue("Node 5 should be End Tag",node[5] instanceof EndTag);
         assertTrue("Node 6 should be META Tag",node[6] instanceof MetaTag);
@@ -61,21 +61,21 @@ public class MetaTagScannerTest extends ParserTestCase {
         metaTag = (MetaTag) node[6];
         assertEquals("Meta Tag 6 Name","description",metaTag.getMetaTagName());
         assertEquals("Meta Tag 6 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaContent());
-        
+
         assertTrue("Node 7 should be META Tag",node[7] instanceof MetaTag);
         assertTrue("Node 8 should be META Tag",node[8] instanceof MetaTag);
         assertTrue("Node 9 should be META Tag",node[9] instanceof MetaTag);
-        
+
         metaTag = (MetaTag) node[7];
         assertEquals("Meta Tag 7 Name","keywords",metaTag.getMetaTagName());
         assertEquals("Meta Tag 7 Contents","SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns",metaTag.getMetaContent());
         assertNull("Meta Tag 7 Http-Equiv",metaTag.getHttpEquiv());
-        
+
         metaTag = (MetaTag) node[8];
         assertEquals("Meta Tag 8 Name","language",metaTag.getMetaTagName());
         assertEquals("Meta Tag 8 Contents","en",metaTag.getMetaContent());
         assertNull("Meta Tag 8 Http-Equiv",metaTag.getHttpEquiv());
-        
+
         metaTag = (MetaTag) node[9];
         assertEquals("Meta Tag 9 Name","owner",metaTag.getMetaTagName());
         assertEquals("Meta Tag 9 Contents","service@admin.spamcop.net",metaTag.getMetaContent());
@@ -102,7 +102,7 @@ public class MetaTagScannerTest extends ParserTestCase {
         assertEquals("Meta Tag Name","Description",metaTag.getMetaTagName());
         assertEquals("Content","Ethnoburb </I>versus Chinatown: Two Types of Urban Ethnic Communities in Los Angeles",metaTag.getMetaContent());
     }
-    
+
     /**
      * Tried to reproduce bug 707447 but test passes
      * @throws ParserException
@@ -121,7 +121,7 @@ public class MetaTagScannerTest extends ParserTestCase {
         parseAndAssertNodeCount(5);
         assertType("Meta Tag expected", MetaTag.class, node[2]);
         MetaTag metaTag = (MetaTag)node[2];
-        
+
         assertStringEquals("http-equiv","content-type",metaTag.getHttpEquiv());
         assertStringEquals("content","text/html; charset=windows-1252",metaTag.getMetaContent());
     }

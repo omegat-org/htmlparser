@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 //
@@ -54,12 +54,12 @@ public class SelectTagTest extends ParserTestCase
                                     "</select>"
                                     );
     private SelectTag selectTag;
-    
-    public SelectTagTest(String name) 
+
+    public SelectTagTest(String name)
     {
         super(name);
     }
-    
+
     protected void setUp() throws Exception{
         super.setUp();
         createParser(testHTML);
@@ -69,8 +69,8 @@ public class SelectTagTest extends ParserTestCase
         assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag);
         selectTag = (SelectTag) node[0];
     }
-    
-    public void testToHTML() throws ParserException 
+
+    public void testToHTML() throws ParserException
     {
         assertStringEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
                                     "<OPTION VALUE=\"Spouse\">Spouse</OPTION>\r\n"+
@@ -82,12 +82,12 @@ public class SelectTagTest extends ParserTestCase
                                     "<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>"+
                                     "</SELECT>",
                                     selectTag.toHtml());
-    }   
-    
-    
-    public void testToString() throws ParserException 
+    }
+
+
+    public void testToString() throws ParserException
     {
-        assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag); 
+        assertTrue("Node 1 should be Select Tag",node[0] instanceof SelectTag);
         SelectTag selectTag;
         selectTag = (SelectTag) node[0];
         assertStringEquals("HTML Raw String","SELECT TAG\n--------\nNAME : Nominees\n" +
@@ -107,8 +107,8 @@ public class SelectTagTest extends ParserTestCase
         assertEquals("option tag 1","Spouse",optionTags[0].getOptionText());
         assertEquals("option tag 7","Niece\r\n",optionTags[6].getOptionText());
     }
-        
-    public static void main(String[] args) 
+
+    public static void main(String[] args)
     {
         new junit.awtui.TestRunner().start(new String[] {SelectTagTest.class.getName()});
     }

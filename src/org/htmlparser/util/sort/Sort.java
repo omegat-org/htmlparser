@@ -10,23 +10,23 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-// 
-// This class was contributed by 
+//
+// This class was contributed by
 // Derrick Oswald
 //
 
@@ -355,7 +355,7 @@ public class Sort
     public static void QuickSort (Sortable sortable)
     {
         QuickSort (sortable, sortable.first (), sortable.last ());
-    }    
+    }
 
     /**
      * Sort a Hashtable.
@@ -405,13 +405,13 @@ public class Sort
         int half;
         int result;
         int ret;
-        
+
         ret = -1;
 
         num = (hi - lo) + 1;
         ordered = null;
         while ((-1 == ret) && (lo <= hi))
-        {   
+        {
             half = num / 2;
             mid = lo + ((0 != (num & 1)) ? half : half - 1);
             ordered = set.fetch (mid, ordered);
@@ -419,12 +419,12 @@ public class Sort
             if (0 == result)
                 ret = mid;
             else if (0 > result)
-            {   
+            {
                 hi = mid - 1;
                 num = ((0 != (num & 1)) ? half : half - 1);
             }
             else
-            {   
+            {
                 lo = mid + 1;
                 num = half;
             }
@@ -460,24 +460,24 @@ public class Sort
         int half;
         int result;
         int ret;
-        
+
         ret = -1;
 
         num = (hi - lo) + 1;
         while ((-1 == ret) && (lo <= hi))
-        {   
+        {
             half = num / 2;
             mid = lo + ((0 != (num & 1)) ? half : half - 1);
             result = ref.compare (vector.elementAt (mid));
             if (0 == result)
                 ret = mid;
             else if (0 > result)
-            {   
+            {
                 hi = mid - 1;
                 num = ((0 != (num & 1)) ? half : half - 1);
             }
             else
-            {   
+            {
                 lo = mid + 1;
                 num = half;
             }

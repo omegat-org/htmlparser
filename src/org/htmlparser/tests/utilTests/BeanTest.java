@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -63,7 +63,7 @@ public class BeanTest extends ParserTestCase
         ByteArrayOutputStream bos;
         ObjectOutputStream oos;
         byte[] ret;
-        
+
         bos = new ByteArrayOutputStream ();
         oos = new ObjectOutputStream (bos);
         oos.writeObject (object);
@@ -72,7 +72,7 @@ public class BeanTest extends ParserTestCase
 
         return (ret);
     }
-    
+
     protected Object unpickle (byte[] data)
         throws
             IOException,
@@ -86,7 +86,7 @@ public class BeanTest extends ParserTestCase
         ois = new ObjectInputStream (bis);
         ret = ois.readObject ();
         ois.close ();
-        
+
         return (ret);
     }
 
@@ -99,7 +99,7 @@ public class BeanTest extends ParserTestCase
         File file;
         PrintWriter out;
         String string;
-        
+
         path = System.getProperty ("user.dir");
         if (!path.endsWith (File.separator))
             path += File.separator;
@@ -132,12 +132,12 @@ public class BeanTest extends ParserTestCase
     {
         Parser parser;
         byte[] data;
-        
+
         parser = new Parser ();
         data = pickle (parser);
         parser = (Parser)unpickle (data);
     }
-        
+
     public void testSerializable ()
         throws
             IOException,
@@ -148,7 +148,7 @@ public class BeanTest extends ParserTestCase
         Vector vector;
         NodeIterator enumeration;
         byte[] data;
-        
+
         parser = new Parser ("http://htmlparser.sourceforge.net/test/example.html");
         enumeration = parser.elements ();
         vector = new Vector (50);
@@ -165,7 +165,7 @@ public class BeanTest extends ParserTestCase
                 ((Node)vector.remove (0)).toHtml (),
                 ((Node)enumeration.nextNode ()).toHtml ());
     }
-    
+
     public void testSerializableScanners ()
         throws
             IOException,
@@ -176,7 +176,7 @@ public class BeanTest extends ParserTestCase
         Vector vector;
         NodeIterator enumeration;
         byte[] data;
-        
+
         parser = new Parser ("http://htmlparser.sourceforge.net/test/example.html");
         parser.registerScanners ();
         enumeration = parser.elements ();
@@ -204,7 +204,7 @@ public class BeanTest extends ParserTestCase
         StringBean sb;
         String text;
         byte[] data;
-        
+
         sb = new StringBean ();
         sb.setURL ("http://htmlparser.sourceforge.net/test/example.html");
         text = sb.getStrings ();
@@ -228,7 +228,7 @@ public class BeanTest extends ParserTestCase
         URL[] links;
         byte[] data;
         URL[] links2;
-        
+
         lb = new LinkBean ();
         lb.setURL ("http://htmlparser.sourceforge.net/test/example.html");
         links = lb.getLinks ();
@@ -246,12 +246,12 @@ public class BeanTest extends ParserTestCase
                 links2[i]);
         }
     }
-    
+
     public void testStringBeanListener ()
     {
         final StringBean sb;
         final Boolean hit[] = new Boolean[1];
-        
+
         sb = new StringBean ();
         hit[0] = Boolean.FALSE;
         sb.addPropertyChangeListener (
@@ -282,7 +282,7 @@ public class BeanTest extends ParserTestCase
     {
         final LinkBean lb;
         final Boolean hit[] = new Boolean[1];
-        
+
         lb = new LinkBean ();
         hit[0] = Boolean.FALSE;
         lb.addPropertyChangeListener (
@@ -375,7 +375,7 @@ public class BeanTest extends ParserTestCase
         check (sb, "<html><head></head><body>\t \tx</body></html>", "x");
         check (sb, "<html><head></head><body>\t\t x</body></html>", "x");
     }
-    
+
     /**
      * Test text including a "pre" tag
      */
@@ -385,22 +385,22 @@ public class BeanTest extends ParserTestCase
         String sampleCode = "public class Product {}";
         check (sb, "<body><pre>"+sampleCode+"</pre></body>", sampleCode);
     }
-    
+
     /**
      * Test text including a "script" tag
      */
     public void testOutputWithScriptTags() {
         StringBean sb;
         sb = new StringBean ();
-        
+
         String sampleScript =
           "<script language=\"javascript\">\r\n"
-        + "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n" 
-        + " document.write ('xxx');\r\n" 
+        + "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"
+        + " document.write ('xxx');\r\n"
         + "else\r\n"
         + " document.write ('yyy');\r\n"
         + "</script>\r\n";
-        
+
         check (sb, "<body>"+sampleScript+"</body>", "");
     }
 
@@ -466,17 +466,17 @@ public class BeanTest extends ParserTestCase
     public void xtestOutputWithPreAndScriptTags() {
         StringBean sb;
         sb = new StringBean ();
-        
+
         String sampleScript =
           "<script language=\"javascript\">\r\n"
-        + "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n" 
-        + " document.write ('xxx');\r\n" 
+        + "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"
+        + " document.write ('xxx');\r\n"
         + "else\r\n"
         + " document.write ('yyy');\r\n"
         + "</script>\r\n";
-        
+
         check (sb, "<body><pre>"+sampleScript+"</pre></body>", sampleScript);
     }
-    
+
 }
 

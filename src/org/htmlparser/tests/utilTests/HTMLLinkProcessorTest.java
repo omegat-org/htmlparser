@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -45,12 +45,12 @@ public class HTMLLinkProcessorTest extends ParserTestCase {
 
     public void testIsURL() {
         String resourceLoc1 = "http://someurl.com";
-        String resourceLoc2 = "myfilehttp.dat";     
+        String resourceLoc2 = "myfilehttp.dat";
         assertTrue(resourceLoc1+" should be a url",LinkProcessor.isURL(resourceLoc1));
-        assertTrue(resourceLoc2+" should not be a url",!LinkProcessor.isURL(resourceLoc2)); 
+        assertTrue(resourceLoc2+" should not be a url",!LinkProcessor.isURL(resourceLoc2));
         String resourceLoc3 = "file://localhost/D:/java/jdk1.3/docs/api/overview-summary.html";
         assertTrue(resourceLoc3+" should be a url",LinkProcessor.isURL(resourceLoc3));
-        
+
     }
 
     public void testFixSpaces() {
@@ -81,7 +81,7 @@ public class HTMLLinkProcessorTest extends ParserTestCase {
     // Within an object with a well-defined base URI of
     static final String baseURI = "http://a/b/c/d;p?q";
     // the relative URI would be resolved as follows:
-    
+
     // C.1.  Normal Examples
     //  g:h           =  g:h
     //  g             =  http://a/b/c/g
@@ -195,7 +195,7 @@ public class HTMLLinkProcessorTest extends ParserTestCase {
     {
         assertEquals ("test22 failed", "http://a/g", (new LinkProcessor ()).extract ("../../g", baseURI));
     }
-    
+
     // C.2.  Abnormal Examples
     //   Although the following abnormal examples are unlikely to occur in
     //   normal practice, all URI parsers should be capable of resolving them

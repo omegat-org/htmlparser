@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -41,16 +41,16 @@ import org.htmlparser.util.ParserException;
  * with BulletListScanner. The rules implemented are :<br>
  * [1] A &lt;ul&gt; can have &lt;li&gt; under it<br>
  * [2] A &lt;li&gt; can have &lt;ul&gt; under it<br>
- * [3] A &lt;li&gt; cannot have &lt;li&gt; under it<br> 
+ * [3] A &lt;li&gt; cannot have &lt;li&gt; under it<br>
  * <p>
- * These rules are implemented easily through the shared stack. 
+ * These rules are implemented easily through the shared stack.
  */
 public class BulletScanner extends CompositeTagScanner {
     private static final String [] MATCH_STRING = {"LI"};
     private final static String ENDERS [] = { "BODY", "HTML" };
     private final static String END_TAG_ENDERS [] = { "UL" };
     private Stack ulli;
-    
+
     public BulletScanner(Stack ulli) {
         this("",ulli);
     }
@@ -68,7 +68,7 @@ public class BulletScanner extends CompositeTagScanner {
     public String[] getID() {
         return MATCH_STRING;
     }
-    
+
     /**
      * This is the logic that decides when a bullet tag can be allowed
      */
@@ -78,7 +78,7 @@ public class BulletScanner extends CompositeTagScanner {
         if (parentScanner == this) {
             ulli.pop();
             return true;
-        } else 
+        } else
             return false;
     }
 

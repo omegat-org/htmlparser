@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -50,7 +50,7 @@ import org.htmlparser.util.ParserException;
 public class FormScanner extends CompositeTagScanner
 {
     private static final String [] MATCH_ID = { "FORM" };
-    public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";  
+    public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";
     private boolean linkScannerAlreadyOpen=false;
     private static final String [] formTagEnders = {"HTML","BODY"
     };
@@ -72,7 +72,7 @@ public class FormScanner extends CompositeTagScanner
         parser.addScanner(new SelectTagScanner("-select", stack));
         parser.addScanner(new OptionTagScanner("-option",stack));
     }
-    
+
   /**
    * Extract the location of the image, given the string to be parsed, and the url
    * of the html page in which this tag exists.
@@ -144,7 +144,7 @@ public class FormScanner extends CompositeTagScanner
 
     public boolean evaluate(String s, TagScanner previousOpenScanner) {
         if (previousOpenScanner instanceof LinkScanner) {
-            linkScannerAlreadyOpen = true;          
+            linkScannerAlreadyOpen = true;
             StringBuffer msg= new StringBuffer();
                 msg.append("<");
                 msg.append(s);
@@ -152,12 +152,12 @@ public class FormScanner extends CompositeTagScanner
                 msg.append(PREVIOUS_DIRTY_LINK_MESSAGE);
                 feedback.warning(msg.toString());
                 // This is dirty HTML. Assume the current tag is
-                // not a new link tag - but an end tag. This is actually a really wild bug - 
+                // not a new link tag - but an end tag. This is actually a really wild bug -
                 // Internet Explorer actually parses such tags.
                 // So - we shall then proceed to fool the scanner into sending an endtag of type </A>
                 // For this - set the dirty flag to true and return
         }
-        else    
+        else
             linkScannerAlreadyOpen = false;
         return super.evaluate(s, previousOpenScanner);
     }
@@ -165,7 +165,7 @@ public class FormScanner extends CompositeTagScanner
     public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
         throws ParserException {
         String formUrl = extractFormLocn(compositeTagData.getStartTag(),tagData.getUrlBeingParsed());
-        if (formUrl!=null && formUrl.length()>0) 
+        if (formUrl!=null && formUrl.length()>0)
             compositeTagData.getStartTag().setAttribute("ACTION",formUrl);
         if (!stack.empty () && (this == stack.peek ()))
             stack.pop ();

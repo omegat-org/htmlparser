@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -54,7 +54,7 @@ public class FormTag extends CompositeTag
     protected String formMethod;
     protected NodeList formInputList;
     private NodeList textAreaList;
-    
+
     /**
      * Constructor takes in tagData, compositeTagData, formTagData
      * @param tagData
@@ -63,14 +63,14 @@ public class FormTag extends CompositeTag
     public FormTag(TagData tagData, CompositeTagData compositeTagData)
     {
         super(tagData,compositeTagData);
-        
+
         this.formURL = compositeTagData.getStartTag().getAttribute("ACTION");
         this.formName = compositeTagData.getStartTag().getAttribute("NAME");
         this.formMethod = compositeTagData.getStartTag().getAttribute("METHOD");
         this.formInputList = compositeTagData.getChildren().searchFor(InputTag.class, true);
         this.textAreaList = compositeTagData.getChildren().searchFor(TextareaTag.class, true);
     }
-    
+
     /**
      * Get the list of input fields.
      * @return Input elements in the form.
@@ -79,7 +79,7 @@ public class FormTag extends CompositeTag
     {
         return formInputList;
     }
-    
+
     /**
      * Get the list of text areas.
      * @return Textarea elements in the form
@@ -88,7 +88,7 @@ public class FormTag extends CompositeTag
     {
         return textAreaList;
     }
-    
+
     /**
      * @return String The url of the form
      */
@@ -96,19 +96,19 @@ public class FormTag extends CompositeTag
     {
         return formURL;
     }
-    
+
     /**
      * Returns the method of the form
      * @return String The method of the form (GET if nothing is specified)
      */
     public String getFormMethod() {
         if(formMethod==null)
-        {   
+        {
             formMethod = "GET";
         }
         return formMethod;
     }
-    
+
     /**
      * Get the input tag in the form corresponding to the given name
      * @param name The name of the input tag to be retrieved
@@ -127,16 +127,16 @@ public class FormTag extends CompositeTag
         if (found)
         return inputTag; else return null;
     }
-    
+
     /**
      * @return String The name of the form
      */
     public String getFormName() {
         return formName;
     }
-    
+
     /**
-     * Set the form location. Modification of this element will cause the HTML rendering 
+     * Set the form location. Modification of this element will cause the HTML rendering
      * to change as well (in a call to toHTML()).
      * @param formURL The new FORM location
      */
@@ -166,10 +166,10 @@ public class FormTag extends CompositeTag
                 found = true;
             }
         }
-        if (found) 
+        if (found)
             return textareaTag;
         else
             return null;
     }
-    
+
 }

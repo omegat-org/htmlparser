@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -48,13 +48,13 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 
 public class ParserTestCase extends TestCase {
-    
+
     static boolean mCaseInsensitiveComparisons = true;
     protected Parser parser;
     protected Node node [];
     protected int nodeCount;
     protected NodeReader reader;
-    
+
     public ParserTestCase(String name) {
         super(name);
     }
@@ -96,8 +96,8 @@ public class ParserTestCase extends TestCase {
         parser = new Parser(reader,new DefaultParserFeedback());
         node = new AbstractNode[numNodes];
     }
-    
-    public void assertStringEquals(String message, String expected, 
+
+    public void assertStringEquals(String message, String expected,
                                       String actual) {
         String mismatchInfo = "";
 
@@ -113,13 +113,13 @@ public class ParserTestCase extends TestCase {
             for (int i = actual.length(); i < expected.length(); i++) {
                 mismatchInfo += ("\nPosition : " + i + " , Code = " + (int) expected.charAt(i));
             }
-            
+
         }
-        for (int i = 0; i < expected.length(); i++) {       
+        for (int i = 0; i < expected.length(); i++) {
             if (
-                    (expected.length() != actual.length() && 
+                    (expected.length() != actual.length() &&
                         (
-                            i >= (expected.length()-1 ) || 
+                            i >= (expected.length()-1 ) ||
                             i >= (actual.length()-1 )
                         )
                     ) ||
@@ -128,43 +128,43 @@ public class ParserTestCase extends TestCase {
                 ) {
                     StringBuffer errorMsg = new StringBuffer();
                     errorMsg.append(
-                        message +mismatchInfo + " \nMismatch of strings at char posn " + i + 
-                        " \n\nString Expected upto mismatch = " + 
-                        expected.substring(0, i) + 
-                        " \n\nString Actual upto mismatch = " + 
+                        message +mismatchInfo + " \nMismatch of strings at char posn " + i +
+                        " \n\nString Expected upto mismatch = " +
+                        expected.substring(0, i) +
+                        " \n\nString Actual upto mismatch = " +
                         actual.substring(0, i)
                     );
-                    if (i<expected.length())                
+                    if (i<expected.length())
                        errorMsg.append(
-                            " \n\nString Expected MISMATCH CHARACTER = "+ 
+                            " \n\nString Expected MISMATCH CHARACTER = "+
                             expected.charAt(i) + ", code = " +
                             (int) expected.charAt(i)
-                        ); 
+                        );
 
                     if (i<actual.length())
                         errorMsg.append(
-                            " \n\nString Actual MISMATCH CHARACTER = " + 
-                            actual.charAt(i) + ", code = " + 
+                            " \n\nString Actual MISMATCH CHARACTER = " +
+                            actual.charAt(i) + ", code = " +
                             (int) actual.charAt(i)
-                        ); 
-                       
+                        );
+
                     errorMsg.append(
-                        " \n\n**** COMPLETE STRING EXPECTED ****\n" + 
-                        expected + 
+                        " \n\n**** COMPLETE STRING EXPECTED ****\n" +
+                        expected +
                         " \n\n**** COMPLETE STRING ACTUAL***\n" + actual
                     );
                     fail(errorMsg.toString());
             }
-            
+
         }
-    }   
+    }
 
     public void parseNodes() throws ParserException{
         nodeCount = 0;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
         {
             node[nodeCount++] = e.nextNode();
-        }   
+        }
     }
 
     public void assertNodeCount(int nodeCountExpected) {
@@ -184,18 +184,18 @@ public class ParserTestCase extends TestCase {
     public void assertSameType(String displayMessage, Node expected, Node actual) {
         String expectedNodeName = expected.getClass().getName();
         String actualNodeName = actual.getClass().getName();
-        displayMessage = 
+        displayMessage =
             "The types did not match: Expected "+
             expectedNodeName+" \nbut was "+
             actualNodeName+"\nEXPECTED XML:"+expected.toHtml()+"\n"+
             "ACTUAL XML:"+actual.toHtml()+displayMessage;
         assertStringEquals(displayMessage, expectedNodeName, actualNodeName);
     }
-    
+
     public void assertTagEquals(String displayMessage, Node expected, Node actual) {
         if (expected instanceof Tag) {
             Tag expectedTag = (Tag)expected;
-            Tag actualTag   = (Tag)actual; 
+            Tag actualTag   = (Tag)actual;
             assertTagNameMatches(displayMessage, expectedTag, actualTag);
             assertAttributesMatch(displayMessage, expectedTag, actualTag);
         }
@@ -210,26 +210,26 @@ public class ParserTestCase extends TestCase {
         displayMessage = "The tag names did not match: Expected "+expectedTagName+" \nbut was "+actualTagName+displayMessage;
         assertStringEquals(displayMessage, expectedTagName, actualTagName);
     }
-    
+
     public void assertXmlEquals(String displayMessage, String expected, String actual) throws Exception {
         expected = removeEscapeCharacters(expected);
         actual   = removeEscapeCharacters(actual);
-        
+
         Parser expectedParser = Parser.createParser(expected);
         Parser resultParser   = Parser.createParser(actual);
-        
+
         NodeIterator expectedIterator = expectedParser.elements();
         NodeIterator actualIterator =  resultParser.elements();
         displayMessage = createGenericFailureMessage(displayMessage, expected, actual);
-        
+
         Node nextExpectedNode = null, nextActualNode = null;
         do {
             nextExpectedNode = getNextNodeUsing(expectedIterator);
             nextActualNode = getNextNodeUsing(actualIterator);
-                        
+
             assertStringValueMatches(
-                displayMessage, 
-                nextExpectedNode, 
+                displayMessage,
+                nextExpectedNode,
                 nextActualNode
             );
             fixIfXmlEndTag(resultParser, nextActualNode);
@@ -257,14 +257,14 @@ public class ParserTestCase extends TestCase {
 
     private void assertStringValueMatches(
         String displayMessage, Node expectedNode,Node actualNode) {
-        
+
         String expected = expectedNode.toPlainTextString().trim();
         String actual = actualNode.toPlainTextString().trim();
         expected = expected.replace('\n', ' ');
         actual = actual.replace('\n',' ');
-        displayMessage = "String value mismatch\nEXPECTED:"+expected+"\nACTUAL:"+actual+displayMessage; 
+        displayMessage = "String value mismatch\nEXPECTED:"+expected+"\nACTUAL:"+actual+displayMessage;
         assertStringEquals(displayMessage,expected,actual);
-        
+
     }
 
     private void assertActualXmlHasNoMoreNodes(
@@ -277,7 +277,7 @@ public class ParserTestCase extends TestCase {
                 extraTags += actualIterator.nextNode().toHtml();
             }
             while (actualIterator.hasMoreNodes());
-            
+
             displayMessage = "Actual had more data than expected\n"+extraTags+displayMessage;
             fail(displayMessage);
         }
@@ -297,7 +297,7 @@ public class ParserTestCase extends TestCase {
                 // Add end tag
                 String currLine = parser.getReader().getCurrentLine();
                 int pos = parser.getReader().getLastReadPosition();
-                currLine = 
+                currLine =
                     currLine.substring(0,pos+1)+
                     "</"+tag.getTagName()+">"+
                     currLine.substring(pos+1,currLine.length());
@@ -305,7 +305,7 @@ public class ParserTestCase extends TestCase {
             }
         }
     }
-    
+
 
 
     private void assertAttributesMatch(String displayMessage, Tag expectedTag, Tag actualTag) {
@@ -317,13 +317,13 @@ public class ParserTestCase extends TestCase {
             assertActualTagHasNoExtraAttributes(displayMessage, expectedTag, actualTag);
         }
     }
-    
+
     private void assertActualTagHasNoExtraAttributes(String displayMessage, Tag expectedTag, Tag actualTag) {
         Iterator i = actualTag.getAttributes().keySet().iterator();
         while (i.hasNext()) {
             String key = (String)i.next();
             if (key=="/") continue;
-            String expectedValue = 
+            String expectedValue =
                 expectedTag.getAttribute(key);
             String actualValue =
                 actualTag.getAttribute(key);
@@ -333,14 +333,14 @@ public class ParserTestCase extends TestCase {
                 assertStringEquals(displayMessage+"\ntag name",actualValue,expectedValue);
                 continue;
             }
-        
+
             if (expectedValue==null)
                 fail(
                     "\nActual tag had extra key: "+key+displayMessage
                 );
-        }   
+        }
     }
-    
+
     private void assertAllExpectedTagAttributesFoundInActualTag(
         String displayMessage,
         Tag expectedTag,
@@ -349,7 +349,7 @@ public class ParserTestCase extends TestCase {
         while (i.hasNext()) {
             String key = (String)i.next();
             if (key=="/") continue;
-            String expectedValue = 
+            String expectedValue =
                 expectedTag.getAttribute(key);
             String actualValue =
                 actualTag.getAttribute(key);
@@ -359,7 +359,7 @@ public class ParserTestCase extends TestCase {
                 assertStringEquals(displayMessage+"\ntag name",expectedValue,actualValue);
                 continue;
             }
-                
+
             assertStringEquals(
                 "\nvalue for key "+key+" in tag "+expectedTag.getTagName()+" expected="+expectedValue+" but was "+actualValue+
                 "\n\nComplete Tag expected:\n"+expectedTag.toHtml()+
@@ -379,8 +379,8 @@ public class ParserTestCase extends TestCase {
     }
 
     public void assertType(
-        String message, 
-        Class expectedType, 
+        String message,
+        Class expectedType,
         Object object) {
         String expectedTypeName = expectedType.getName();
         String actualTypeName   = object.getClass().getName();
@@ -391,7 +391,7 @@ public class ParserTestCase extends TestCase {
                 " but was of type \n"+
                 actualTypeName+"\n and is :"+((Node)object).toHtml()
             );
-        } 
+        }
     }
 
     protected void assertHiddenIDTagPresent(FormTag formTag, String name, String inputTagValue) {
@@ -416,5 +416,5 @@ public class ParserTestCase extends TestCase {
             }
             fail(failMsg.toString());
         }
-    }   
+    }
 }

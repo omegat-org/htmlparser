@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -53,14 +53,14 @@ public class TitleTagTest extends ParserTestCase {
     }
     public void testToPlainTextString() throws ParserException {
         // check the title node
-        assertEquals("Title","Yahoo!",titleTag.toPlainTextString());                
+        assertEquals("Title","Yahoo!",titleTag.toPlainTextString());
     }
 
     public void testToHTML() throws ParserException {
-        assertStringEquals("Raw String","<TITLE>Yahoo!</TITLE>",titleTag.toHtml());             
+        assertStringEquals("Raw String","<TITLE>Yahoo!</TITLE>",titleTag.toHtml());
     }
 
     public void testToString() throws ParserException  {
-        assertEquals("Title","TITLE: Yahoo!",titleTag.toString());      
+        assertEquals("Title","TITLE: Yahoo!",titleTag.toString());
     }
 }

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -34,7 +34,7 @@ import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.TagFindingVisitor;
 
 public class TagFindingVisitorTest extends ParserTestCase {
-    private String html = 
+    private String html =
         "<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD>" +
         "<BODY>Hello World, this is an excellent parser</BODY>" +
         "<UL><LI><LI></UL>" +
@@ -44,7 +44,7 @@ public class TagFindingVisitorTest extends ParserTestCase {
     public TagFindingVisitorTest(String name) {
         super(name);
     }
-    
+
     public void setUp() {
         createParser(html);
     }
@@ -60,9 +60,9 @@ public class TagFindingVisitorTest extends ParserTestCase {
         parser.visitAllNodesWith(visitor);
         assertEquals("LI tags found", 2, visitor.getTagCount(0));
     }
-    
+
     public void testMultipleTags() throws Exception {
-        TagFindingVisitor visitor = 
+        TagFindingVisitor visitor =
             new TagFindingVisitor(
                 new String [] {
                     "LI","BODY","UL","A"
@@ -76,7 +76,7 @@ public class TagFindingVisitorTest extends ParserTestCase {
     }
 
     public void testEndTags() throws Exception {
-        TagFindingVisitor visitor = 
+        TagFindingVisitor visitor =
             new TagFindingVisitor(
                 new String [] {
                     "LI","BODY","UL","A"

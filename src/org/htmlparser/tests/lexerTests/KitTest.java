@@ -17,7 +17,7 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -66,7 +66,7 @@ public class KitTest extends ParserCallback
 {
     Vector mNodes;
     int mIndex;
-    
+
     /**
      * Creates a new instance of KitTest
      * @param nodes The list of lexemes from Lexer to compare with the kit lexemes.
@@ -87,7 +87,7 @@ public class KitTest extends ParserCallback
         int length;
         char ch;
         StringBuffer ret;
-        
+
         length = s.length ();
         ret = new StringBuffer (length);
         for (int i = 0; i < length; i++)
@@ -96,7 +96,7 @@ public class KitTest extends ParserCallback
             if (!Character.isWhitespace (ch) && !(160 == (int)ch))
                 ret.append (ch);
         }
-        
+
         return (ret.toString ());
     }
 
@@ -182,7 +182,7 @@ public class KitTest extends ParserCallback
             mIndex = match + 1;
         }
     }
-    
+
     /**
      * Callback for a remark lexeme.
      * @param data The text extracted from the page.
@@ -246,7 +246,7 @@ public class KitTest extends ParserCallback
             mIndex = match + 1;
         }
     }
-    
+
     /**
      * Callback for a start tag lexeme.
      * @param t The tag extracted from the page.
@@ -312,7 +312,7 @@ public class KitTest extends ParserCallback
             mIndex = match + 1;
         }
     }
-    
+
     /**
      * Callback for an end tag lexeme.
      * @param t The tag extracted from the page.
@@ -377,7 +377,7 @@ public class KitTest extends ParserCallback
             mIndex = match + 1;
         }
     }
-    
+
     /**
      * Callback for a non-composite tag.
      * @param t The tag extracted from the page.
@@ -449,7 +449,7 @@ public class KitTest extends ParserCallback
         }
     }
 
-    
+
     /**
      * Callback for an error condition.
      * @param errorMsg The error condition as a text message.
@@ -469,7 +469,7 @@ public class KitTest extends ParserCallback
     public void flush () throws BadLocationException
     {
     }
-    
+
     /**
      * This is invoked after the stream has been parsed, but before
      * <code>flush</code>. <code>eol</code> will be one of \n, \r
@@ -492,9 +492,9 @@ public class KitTest extends ParserCallback
 //        EditorKit kit;
 //        Document doc;
 //        Element[] ret;
-//                                                                                                                                
+//
 //        ret = null;
-//                                                                                                                                
+//
 //        // need this because HTMLEditorKit is not thread safe apparently
 //        synchronized (Boolean.TRUE)
 //        {
@@ -502,7 +502,7 @@ public class KitTest extends ParserCallback
 //            doc = kit.createDefaultDocument ();
 //            // the Document class does not yet handle charset's properly
 //            doc.putProperty ("IgnoreCharsetDirective", Boolean.TRUE);
-//                                                                                                                                
+//
 //            try
 //            {
 //                // parse the HTML
@@ -512,10 +512,10 @@ public class KitTest extends ParserCallback
 //            {
 //                throw new IOException ("parse error " + ble.getMessage ());
 //            }
-//                                                                                                                                
+//
 //            ret = doc.getRootElements ();
 //        }
-//                                                                                                                                
+//
 //        return (ret);
 //    }
 
@@ -526,7 +526,7 @@ public class KitTest extends ParserCallback
 //        String string;
 //        ElementIterator it;
 //        Element child;
-//        
+//
 //        if (element.isLeaf ())
 //        {
 //            start = element.getStartOffset ();
@@ -552,7 +552,7 @@ public class KitTest extends ParserCallback
         {
         }
 
-        public HTMLEditorKit.Parser getParser () 
+        public HTMLEditorKit.Parser getParser ()
         {
             return (super.getParser ());
         }
@@ -580,7 +580,7 @@ public class KitTest extends ParserCallback
         KitTest test;
         MyKit kit;
         Parser parser;
-        
+
         Element[] elements;
 
         if (0 == args.length)
@@ -607,6 +607,26 @@ public class KitTest extends ParserCallback
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.4  2003/09/10 03:38:24  derrickoswald
+ * Add style checking target to ant build script:
+ *     ant checkstyle
+ * It uses a jar from http://checkstyle.sourceforge.net which is dropped in the lib directory.
+ * The rules are in the file htmlparser_checks.xml in the src directory.
+ *
+ * Added lexerapplications package with Tabby as the first app. It performs whitespace manipulation
+ * on source files to follow the style rules. This reduced the number of style violations to roughly 14,000.
+ *
+ * There are a few issues with the style checker that need to be resolved before it should be taken too seriously.
+ * For example:
+ * It thinks all method arguments should be final, even if they are modified by the code (which the compiler frowns on).
+ * It complains about long lines, even when there is no possibility of wrapping the line, i.e. a URL in a comment
+ * that's more than 80 characters long.
+ * It considers all naked integers as 'magic numbers', even when they are obvious, i.e. the 4 corners of a box.
+ * It complains about whitespace following braces, even in array initializers, i.e. X[][] = { {a, b} { } }
+ *
+ * But it points out some really interesting things, even if you don't agree with the style guidelines,
+ * so it's worth a look.
+ *
  * Revision 1.3  2003/08/27 02:40:24  derrickoswald
  * Testing cvs keyword substitution.
  *

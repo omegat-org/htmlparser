@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -43,7 +43,7 @@ import java.io.UnsupportedEncodingException;
  * It differs from the above, in two ways:
  * <li>the fetching of bytes from the connection's input stream may be asynchronous</li>
  * <li>the character set may be changed, which resets the input stream</li>
- * 
+ *
  */
 public class Source extends Reader
 {
@@ -51,7 +51,7 @@ public class Source extends Reader
      * An initial buffer size.
      */
     public static int BUFFER_SIZE = 16384;
-    
+
     /**
      * Return value when no more characters are left.
      */
@@ -210,7 +210,7 @@ public class Source extends Reader
     public int read () throws IOException
     {
         int ret;
-        
+
         if (mLevel - mOffset < 1)
         {
             if (null == mStream) // mStream goes null on close()
@@ -223,10 +223,10 @@ public class Source extends Reader
         }
         else
             ret = mBuffer[mOffset++];
-        
+
         return (ret);
     }
-    
+
     /**
      * Read characters into a portion of an array.  This method will block
      * until some input is available, an I/O error occurs, or the end of the
@@ -258,7 +258,7 @@ public class Source extends Reader
             System.arraycopy (mBuffer, mOffset, cbuf, off, ret);
             mOffset += ret;
         }
-            
+
         return (ret);
     }
 
@@ -271,7 +271,7 @@ public class Source extends Reader
      * been reached.
      * @exception IOException If an I/O error occurs.
      */
-    
+
     public int read (char[] cbuf) throws IOException
     {
         return (read (cbuf, 0, cbuf.length));
@@ -298,16 +298,16 @@ public class Source extends Reader
         else
             mOffset = 0;
     }
-    
+
     /**
-     * Tell whether this stream supports the mark() operation. 
+     * Tell whether this stream supports the mark() operation.
      * @return <code>true</code> if and only if this stream supports the mark operation.
      */
     public boolean markSupported ()
     {
         return (true);
     }
-    
+
     /**
      * Mark the present position in the stream.  Subsequent calls to reset()
      * will attempt to reposition the stream to this point.  Not all
@@ -322,7 +322,7 @@ public class Source extends Reader
             throw new IOException ("reader is closed");
         mMark = mOffset;
     }
-    
+
     /**
      * Tell whether this stream is ready to be read.
      * @return <code>true</code> if the next read() is guaranteed not to block
@@ -336,7 +336,7 @@ public class Source extends Reader
             throw new IOException ("reader is closed");
         return (mOffset < mLevel);
     }
-    
+
     /**
      * Skip characters.
      * This method will block until some characters are available,
@@ -362,10 +362,10 @@ public class Source extends Reader
             ret = Math.min (mLevel - mOffset, n);
             mOffset += ret;
         }
-        
+
         return (ret);
     }
-    
+
     //
     // Methods not in your Daddy's Reader
     //

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -42,19 +42,19 @@ public class FrameSetTagTest extends ParserTestCase {
 
     public void testToHTML() throws ParserException{
         createParser(
-        "<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+ 
+        "<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+
             "<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"+
             "<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n"+
         "</frameset>");
 
         parser.addScanner(new FrameSetScanner(""));
         parser.addScanner(new FrameScanner(""));
-        
+
         parseAndAssertNodeCount(1);
         assertTrue("Node 0 should be End Tag",node[0] instanceof FrameSetTag);
         FrameSetTag frameSetTag = (FrameSetTag)node[0];
         assertStringEquals("HTML Contents",
-        "<FRAMESET BORDER=\"0\" ROWS=\"115,*\" FRAMESPACING=\"0\" FRAMEBORDER=\"NO\">\r\n"+ 
+        "<FRAMESET BORDER=\"0\" ROWS=\"115,*\" FRAMESPACING=\"0\" FRAMEBORDER=\"NO\">\r\n"+
             "<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE>\r\n"+
             "<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">\r\n"+
         "</FRAMESET>",

@@ -10,23 +10,23 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-// 
-// This class was contributed by 
+//
+// This class was contributed by
 // Derrick Oswald
 //
 
@@ -45,18 +45,18 @@ import org.htmlparser.util.sort.Sortable;
  * This class provides similar functionality to a Vector but
  * does not incur the overhead of an <code>Integer</code> object per element.
  */
-public class PageIndex implements Sortable 
+public class PageIndex implements Sortable
 {
     /**
      * Increment for allocations.
      */
     protected static final int mIncrement = 100;
-    
+
     /**
      * The number of valid elements.
      */
     protected int mCount;
-    
+
     /**
      * The elements.
      */
@@ -76,7 +76,7 @@ public class PageIndex implements Sortable
         mPage = page;
         mIndices = new int[mIncrement];
         mCount = 0;
-    }    
+    }
 
     /**
      * Create an index with the one element given.
@@ -88,7 +88,7 @@ public class PageIndex implements Sortable
         this (page);
         mIndices[0] = cursor;
         mCount = 1;
-    }    
+    }
 
     /**
      * Create an index with the elements given.
@@ -101,7 +101,7 @@ public class PageIndex implements Sortable
         mPage = page;
         mIndices = cursors;
         mCount = cursors.length;
-    }    
+    }
 
     /**
      * Get this index's page.
@@ -129,7 +129,7 @@ public class PageIndex implements Sortable
     {
         return (mIndices.length);
     }
-        
+
     /**
      * Add an element to the list
      * @param cursor The element to add.
@@ -148,9 +148,9 @@ public class PageIndex implements Sortable
         position = cursor.getPosition ();
         if (!((ret < size ()) && (position == mIndices[ret])))
             insertElementAt (position, ret);
-        
+
         return (ret);
-    }    
+    }
 
     /**
      * Add an element to the list
@@ -161,7 +161,7 @@ public class PageIndex implements Sortable
     public int add (int cursor)
     {
         return (add (new Cursor (getPage (), cursor)));
-    }    
+    }
 
     /**
      * Remove an element from the list
@@ -177,7 +177,7 @@ public class PageIndex implements Sortable
         // remove
         if ((i < size ()) && (cursor.getPosition () == mIndices[i]))
             removeElementAt (i);
-    }    
+    }
 
     /**
      * Remove an element from the list
@@ -186,7 +186,7 @@ public class PageIndex implements Sortable
     public void remove (int cursor)
     {
         remove (new Cursor (getPage (), cursor));
-    }    
+    }
 
     /**
      * Get an element from the list.
@@ -196,7 +196,7 @@ public class PageIndex implements Sortable
     public int elementAt (int index)
     {
         return (mIndices[index]);
-    }    
+    }
 
     /**
      * Get the line number for a cursor.
@@ -206,7 +206,7 @@ public class PageIndex implements Sortable
     public int row (Cursor cursor)
     {
         int ret;
-        
+
         ret = Sort.bsearch (this, cursor);
         // handle line transition, the search returns the index if it matches
         // exactly one of the line end positions, so we advance one line if
@@ -214,7 +214,7 @@ public class PageIndex implements Sortable
         // actually the beginning of the next line
         if ((ret < mCount) && (cursor.getPosition () == mIndices[ret]))
             ret++;
-        
+
         return (ret);
     }
 
@@ -243,7 +243,7 @@ public class PageIndex implements Sortable
             previous = this.elementAt (row - 1);
         else
             previous = 0;
-        
+
         return (cursor.getPosition () - previous);
     }
 
@@ -266,9 +266,9 @@ public class PageIndex implements Sortable
     {
         int[] ret = new int[size ()];
         System.arraycopy (mIndices, 0, ret, 0, size ());
-        
+
         return (ret);
-    }    
+    }
 
     /**
      * Binary search for the element.
@@ -278,7 +278,7 @@ public class PageIndex implements Sortable
     protected int bsearch (int cursor)
     {
         return (Sort.bsearch (this, new Cursor (getPage (), cursor)));
-    }    
+    }
 
     /**
      * Binary search for the element.
@@ -290,7 +290,7 @@ public class PageIndex implements Sortable
     protected int bsearch (int cursor, int first, int last)
     {
         return (Sort.bsearch (this, new Cursor (getPage (), cursor), first, last));
-    }    
+    }
 
     /**
      * Inserts an element into the list.
@@ -319,7 +319,7 @@ public class PageIndex implements Sortable
             System.arraycopy (mIndices, index, mIndices, index + 1, capacity () - (index + 1));
         mIndices[index] = cursor;
         mCount++;
-    }    
+    }
 
     /**
      * Remove an element from the list.
@@ -332,7 +332,7 @@ public class PageIndex implements Sortable
         mIndices[capacity() - 1] = 0;
         mCount--;
     }
-    
+
     //
     // Sortable interface
     //
@@ -344,7 +344,7 @@ public class PageIndex implements Sortable
     public int first ()
     {
         return (0);
-    }    
+    }
 
     /**
      * Returns the last index of the Sortable.
@@ -354,14 +354,14 @@ public class PageIndex implements Sortable
     public int last ()
     {
         return (mCount - 1);
-    }    
+    }
 
     /**
      * Fetch the object at the given index.
      * @param index The item number to get.
      * @param reuse If this argument is not null, it is an object
      * acquired from a previous fetch that is no longer needed and
-     * may be returned as the result if it makes mores sense to alter 
+     * may be returned as the result if it makes mores sense to alter
      * and return it than to fetch or create a new element. That is, the
      * reuse object is garbage and may be used to avoid allocating a new
      * object if that would normally be the strategy.
@@ -381,7 +381,7 @@ public class PageIndex implements Sortable
             ret = new Cursor (getPage (), mIndices[index]);
 
         return (ret);
-    }    
+    }
 
     /**
      * Swaps the elements at the given indicies.

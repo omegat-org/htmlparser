@@ -17,12 +17,12 @@
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@kizna.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Email : somik@industriallogic.com
 // Website : http://www.industriallogic.com

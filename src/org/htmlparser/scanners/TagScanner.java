@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -44,17 +44,17 @@ import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserFeedback;
 /**
- * TagScanner is an abstract superclass which is subclassed to create specific 
+ * TagScanner is an abstract superclass which is subclassed to create specific
  * scanners, that operate on a tag's strings, identify it, and can extract data from it.
  * <br>
  * If you wish to write your own scanner, then you must implement scan().
  * You MAY implement evaluate() as well, if your evaluation logic is not based on a simple text match.
  * You MUST implement getID() - which identifies your scanner uniquely in the hashtable of scanners.
- * 
+ *
  * <br>
  * Also, you have a feedback object provided to you, should you want to send log messages. This object is
  * instantiated by Parser when a scanner is added to its collection.
- * 
+ *
  */
 public abstract class TagScanner
     implements
@@ -68,13 +68,13 @@ public abstract class TagScanner
        * implementations of the parser.
        */
       protected String filter;
-      
+
       /**
        * HTMLParserFeedback object automatically initialized
        */
       protected ParserFeedback feedback;
       /**
-       * Default Constructor, automatically registers the scanner into a static array of 
+       * Default Constructor, automatically registers the scanner into a static array of
        * scanners inside Tag
        */
       public TagScanner()
@@ -83,7 +83,7 @@ public abstract class TagScanner
       }
       /**
        * This constructor automatically registers the scanner, and sets the filter for this
-       * tag. 
+       * tag.
        * @param filter The filter which will allow this tag to pass through.
        */
       public TagScanner(String filter)
@@ -101,13 +101,13 @@ public abstract class TagScanner
       if (index!=-1)    s=s.substring(index+1,s.length());
       return s;
     }
-    
+
     /**
      * Remove whitespace from the front of the given string.
      * @param s The string to trim.
      * @return Either the same string or a string with whitespace chopped off.
      */
-    public static String absorbLeadingBlanks (String s) 
+    public static String absorbLeadingBlanks (String s)
     {
         int length;
         int i;
@@ -130,7 +130,7 @@ public abstract class TagScanner
   /**
    * This method is used to decide if this scanner can handle this tag type. If the
    * evaluation returns true, the calling side makes a call to scan().
-   * <strong>This method has to be implemented meaningfully only if a first-word match with 
+   * <strong>This method has to be implemented meaningfully only if a first-word match with
    * the scanner id does not imply a match (or extra processing needs to be done).
    * Default returns true</strong>
    * @param tagContents The complete text contents of the Tag.
@@ -141,7 +141,7 @@ public abstract class TagScanner
     return true;
   }
   public static String extractXMLData(Node node, String tagName, NodeReader reader) throws ParserException{
-    try {     
+    try {
       String xmlData = "";
 
       boolean xmlTagFound = isXMLTagFound(node, tagName);
@@ -159,9 +159,9 @@ public abstract class TagScanner
         }
       }
       while (node instanceof StringNode);
-      
+
     }
-    
+
     catch (Exception e) {
         throw new ParserException("HTMLTagScanner.extractXMLData() : error while trying to find xml tag",e);
         }
@@ -170,11 +170,11 @@ public abstract class TagScanner
           if (node!=null) {
             if (node instanceof org.htmlparser.tags.EndTag) {
               org.htmlparser.tags.EndTag endTag = (org.htmlparser.tags.EndTag)node;
-              if (!endTag.getText().equals(tagName)) xmlTagFound = false;       
+              if (!endTag.getText().equals(tagName)) xmlTagFound = false;
             }
-          
+
           }
-    
+
       }
       if (xmlTagFound) return xmlData; else return null;
     }
@@ -197,17 +197,17 @@ public abstract class TagScanner
         }
         return xmlTagFound;
     }
-    
+
     public final Tag createScannedNode(Tag tag,String url,NodeReader reader,String currLine) throws ParserException {
         Tag thisTag = scan(tag,url,reader,currLine);
         thisTag.setThisScanner(this);
-        thisTag.setAttributesEx(tag.getAttributesEx());     
+        thisTag.setAttributesEx(tag.getAttributesEx());
         return thisTag;
     }
-    
-    /** 
-     * Scan the tag and extract the information related to this type. The url of the 
-     * initiating scan has to be provided in case relative links are found. The initial 
+
+    /**
+     * Scan the tag and extract the information related to this type. The url of the
+     * initiating scan has to be provided in case relative links are found. The initial
      * url is then prepended to it to give an absolute link.
      * The NodeReader is provided in order to do a lookahead operation. We assume that
      * the identification has already been performed using the evaluate() method.
@@ -217,13 +217,13 @@ public abstract class TagScanner
      */
     public Tag scan(Tag tag,String url,NodeReader reader,String currLine) throws ParserException {
         return createTag(new TagData(
-            tag.elementBegin(), 
-            tag.elementEnd(), 
+            tag.elementBegin(),
+            tag.elementEnd(),
             tag.getText(),
             currLine
         ), tag, url);
     }
-    
+
     public String removeChars(String s,String occur)  {
         StringBuffer newString = new StringBuffer();
         int index;
@@ -238,22 +238,22 @@ public abstract class TagScanner
         newString.append(s);
         return newString.toString();
     }
-      
+
     public abstract String [] getID();
-    
+
     public final void setFeedback(ParserFeedback feedback) {
         this.feedback = feedback;
     }
-    
-    public static Map adjustScanners(NodeReader reader) 
+
+    public static Map adjustScanners(NodeReader reader)
     {
         Map tempScanners= new Hashtable();
-        tempScanners = reader.getParser().getScanners();        
+        tempScanners = reader.getParser().getScanners();
         // Remove all existing scanners
         reader.getParser().flushScanners();
         return tempScanners;
     }
-    
+
     public static void restoreScanners(NodeReader pReader, Hashtable tempScanners)
     {
         // Flush the scanners
@@ -269,7 +269,7 @@ public abstract class TagScanner
         newLine += currentLine.substring(node.elementBegin(),currentLine.length());
         return newLine;
     }
-    
+
     /**
      * Override this method to create your own tag type
      * @param tagData
@@ -278,8 +278,8 @@ public abstract class TagScanner
      * @return Tag
      * @throws ParserException
      */
-    protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException { 
-        return null; 
+    protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
+        return null;
     }
 
 
@@ -301,7 +301,7 @@ public abstract class TagScanner
         String newLine = currentLine.substring(0,tag.elementBegin());
         newLine+="</"+tag.getTagName()+">";
         newLine+=currentLine.substring(tag.elementEnd()+1,currentLine.length());
-        
+
         return newLine;
     }
 
@@ -315,9 +315,9 @@ public abstract class TagScanner
                 tag.elementBegin()+3,
                 tag.getTagName(),
                 currentLine
-            )       
+            )
         );
     }
 
- 
+
 }

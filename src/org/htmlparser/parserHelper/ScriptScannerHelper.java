@@ -10,19 +10,19 @@
 //but WITHOUT ANY WARRANTY; without even the implied warranty of
 //MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //Lesser General Public License for more details.
-// 
+//
 //You should have received a copy of the GNU Lesser General Public
 //License along with this library; if not, write to the Free Software
 //Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //For any questions or suggestions, you can write to me at :
 //Email :somik@industriallogic.com
-// 
-//Postal Address : 
+//
+//Postal Address :
 //Somik Raha
 //Extreme Programmer & Coach
 //Industrial Logic, Inc.
-//2583 Cedar Street, Berkeley, 
+//2583 Cedar Street, Berkeley,
 //CA 94708, USA
 //Website : http://www.industriallogic.com
 package org.htmlparser.parserHelper;
@@ -49,7 +49,7 @@ public class ScriptScannerHelper {
     private Tag tag;
     private String url;
     private String currLine;
-    
+
     public ScriptScannerHelper(Tag tag, String url, NodeReader nodeReader, String currLine, ScriptScanner scriptScanner) {
         this.reader = nodeReader;
         this.scriptScanner = scriptScanner;
@@ -67,7 +67,7 @@ public class ScriptScannerHelper {
         }
         return createScriptTagUsing(url, currLine, startLine);
     }
-    
+
     private Tag createScriptTagUsing(String url, String currLine, int startLine) {
         return scriptScanner.createTag(
             new TagData(
@@ -101,7 +101,7 @@ public class ScriptScannerHelper {
         // If end tag doesn't exist, create one
         String endTagName = tag.getTagName();
         int endTagBegin = reader.getLastReadPosition()+1 ;
-        int endTagEnd = endTagBegin + endTagName.length() + 2; 
+        int endTagEnd = endTagBegin + endTagName.length() + 2;
         endTag = new EndTag(
             new TagData(
                 endTagBegin,
@@ -120,7 +120,7 @@ public class ScriptScannerHelper {
         String line = null;
         scriptContents = new StringBuffer();
         endTagFound = false;
-        
+
         endTag = null;
         line = currLine;
         sameLine = true;
@@ -131,7 +131,7 @@ public class ScriptScannerHelper {
                 line = reader.getNextLine();
                 startingPos = 0;
             }
-            if (sameLine) 
+            if (sameLine)
                 sameLine = false;
         }
         while (line!=null && !endTagFound);
@@ -140,7 +140,7 @@ public class ScriptScannerHelper {
     private void doExtractionOfScriptContentsFrom(String line) throws ParserException {
         endTagLoc = line.toUpperCase().indexOf(scriptScanner.getEndTag(),startingPos);
         findStartingAndEndingLocations(line);
-        
+
         if (endTagLoc!=-1) {
             extractEndTagFrom(line);
         } else {
@@ -149,7 +149,7 @@ public class ScriptScannerHelper {
     }
 
     private void continueParsing(String line) {
-        if (sameLine) 
+        if (sameLine)
             scriptContents.append(
                 line.substring(
                     startTag.elementEnd()+1
@@ -164,7 +164,7 @@ public class ScriptScannerHelper {
     private void extractEndTagFrom(String line) throws ParserException {
         endTagFound = true;
         endTag = (EndTag)EndTag.find(line,endTagLoc);
-        if (sameLine) 
+        if (sameLine)
             scriptContents.append(
                 getCodeBetweenStartAndEndTags(
                     line,
@@ -175,14 +175,14 @@ public class ScriptScannerHelper {
             scriptContents.append(Parser.getLineSeparator());
             scriptContents.append(line.substring(0,endTagLoc));
         }
-        
+
         reader.setPosInLine(endTag.elementEnd());
     }
 
     private void findStartingAndEndingLocations(String line) {
         while (endTagLoc>0 && isThisEndTagLocationFalseMatch(line, endTagLoc)) {
             startingPos = endTagLoc+scriptScanner.getEndTag().length();
-            endTagLoc = line.toUpperCase().indexOf(scriptScanner.getEndTag(), startingPos);     
+            endTagLoc = line.toUpperCase().indexOf(scriptScanner.getEndTag(), startingPos);
         }
     }
 
@@ -191,7 +191,7 @@ public class ScriptScannerHelper {
         Tag startTag,
         int endTagLoc) throws ParserException {
         try {
-            
+
             return line.substring(
                 startTag.elementEnd()+1,
                 endTagLoc
@@ -207,8 +207,8 @@ public class ScriptScannerHelper {
 
     private boolean isThisEndTagLocationFalseMatch(String line, int endTagLoc) {
         if (endTagLoc+scriptScanner.getEndTag().length() > line.length()-1) return false;
-        char charAfterSuspectedEndTag = 
-            line.charAt(endTagLoc+scriptScanner.getEndTag().length()); 
+        char charAfterSuspectedEndTag =
+            line.charAt(endTagLoc+scriptScanner.getEndTag().length());
         return charAfterSuspectedEndTag=='"' || charAfterSuspectedEndTag=='\'';
     }
 }

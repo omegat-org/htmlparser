@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -57,7 +57,7 @@ public class LinkScannerTest extends ParserTestCase
         LinkTag linkTag = (LinkTag)node[0];
         assertEquals("Link URL of link tag","http://www.kizna.com/servlets/SomeServlet?name=Sam Joseph",linkTag.getLink());
         assertEquals("Link Text of link tag","Click Here",linkTag.getLinkText());
-        assertEquals("Access key","1",linkTag.getAccessKey());  
+        assertEquals("Access key","1",linkTag.getAccessKey());
     }
 
     public void testErroneousLinkBug() throws ParserException {
@@ -70,14 +70,14 @@ public class LinkScannerTest extends ParserTestCase
         );
         parser.registerScanners();
         parseAndAssertNodeCount(6);
-        // The first node should be a Tag 
+        // The first node should be a Tag
         assertTrue("First node should be a Tag",node[0] instanceof Tag);
         // The second node should be a HTMLStringNode
         assertTrue("Second node should be a HTMLStringNode",node[1] instanceof StringNode);
         StringNode stringNode = (StringNode)node[1];
         assertEquals("Text of the StringNode","Site Comments?",stringNode.getText());
         assertTrue("Third node should be a tag",node[2] instanceof Tag);
-    
+
     }
 
     /**
@@ -99,7 +99,7 @@ public class LinkScannerTest extends ParserTestCase
             "</td>","http://www.yahoo.com");
         parser.registerScanners();
         Node linkNodes [] = parser.extractAllNodesThatAre(LinkTag.class);
-        
+
         assertEquals("number of links",2,linkNodes.length);
         LinkTag linkTag = (LinkTag)linkNodes[0];
         assertStringEquals("Link","http://www.yahoo.com/s/8741",linkTag.getLink());
@@ -108,7 +108,7 @@ public class LinkScannerTest extends ParserTestCase
         // Verify the reconstruction html
         assertStringEquals("toHTML","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></A>",linkTag.toHtml());
     }
-    
+
     /**
      * Test case based on a report by Raghavender Srimantula, of the parser giving out of memory exceptions. Found to occur
      * on the following piece of html
@@ -133,7 +133,7 @@ public class LinkScannerTest extends ParserTestCase
 
         parser.registerScanners();
         parseAndAssertNodeCount(2);
-        // The first node should be a Tag 
+        // The first node should be a Tag
         assertTrue("First node should be a HTMLLinkTag",node[0] instanceof LinkTag);
         // The second node should be a HTMLStringNode
         assertTrue("Second node should be a HTMLLinkTag",node[1] instanceof LinkTag);
@@ -144,8 +144,8 @@ public class LinkScannerTest extends ParserTestCase
         // Verify the reconstruction html
         assertStringEquals("toHTML()","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\">This is a test\r\n</A>",linkTag.toHtml());
     }
-    
-    public void testEvaluate() 
+
+    public void testEvaluate()
     {
         LinkScanner scanner = new LinkScanner("-l");
         boolean retVal = scanner.evaluate("   a href ",null);
@@ -255,11 +255,11 @@ public class LinkScannerTest extends ParserTestCase
         // Register the image scanner
         LinkScanner linkScanner = new LinkScanner("-l");
         parser.addScanner(linkScanner);
-        parser.addScanner(linkScanner.createImageScanner("-i"));    
-            
+        parser.addScanner(linkScanner.createImageScanner("-i"));
+
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a link node",node[0] instanceof LinkTag);
-    
+
         LinkTag linkTag = (LinkTag)node[0];
         // Get the link data and cross-check
         Node [] dataNode= new AbstractNode[10];
@@ -271,7 +271,7 @@ public class LinkScannerTest extends ParserTestCase
         assertEquals("Number of data nodes",new Integer(2),new Integer(i));
         assertTrue("First data node should be an Image Node",dataNode[0] instanceof ImageTag);
         assertTrue("Second data node shouls be a String Node",dataNode[1] instanceof StringNode);
-    
+
         // Check the contents of each data node
         ImageTag imageTag = (ImageTag)dataNode[0];
         assertEquals("Image URL","http://www.yahoo.com/abcd.jpg",imageTag.getImageURL());
@@ -296,7 +296,7 @@ public class LinkScannerTest extends ParserTestCase
     }
 
     /**
-     * A bug in the freshmeat page - really bad html 
+     * A bug in the freshmeat page - really bad html
      * tag - &lt;A&gt;Revision&lt;\a&gt;
      * Reported by Mazlan Mat
      */
@@ -304,7 +304,7 @@ public class LinkScannerTest extends ParserTestCase
         createParser("<a>Revision</a>","http://www.yahoo.com");
         // Register the image scanner
         parser.addScanner(new LinkScanner("-l"));
-            
+
         parseAndAssertNodeCount(3);
         assertTrue("Node 0 should be a tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
@@ -317,7 +317,7 @@ public class LinkScannerTest extends ParserTestCase
         assertEquals("End Tag Contents","a",endTag.getText());
     }
 
-    /** 
+    /**
      * Test suggested by Cedric Rosa
      * A really bad link tag sends parser into infinite loop
      */
@@ -335,20 +335,20 @@ public class LinkScannerTest extends ParserTestCase
         );
         // Register the image scanner
         parser.addScanner(new LinkScanner("-l"));
-                
+
         parseAndAssertNodeCount(1);
         assertTrue("Node 0 should be a link tag",node[0] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[0];
         assertNotNull(linkTag.toString());
-    }   
+    }
 
     public void testLinkDataContents() throws ParserException {
         createParser("<a href=\"http://transfer.go.com/cgi/atransfer.pl?goto=http://www.signs.movies.com&name=114332&srvc=nws&context=283&guid=4AD5723D-C802-4310-A388-0B24E1A79689\" target=\"_new\"><img src=\"http://ad.abcnews.com/ad/sponsors/buena_vista_pictures/bvpi-ban0003.gif\" width=468 height=60 border=\"0\" alt=\"See Signs in Theaters 8-2 - Starring Mel Gibson\" align=><font face=\"verdana,arial,helvetica\" SIZE=\"1\"><b></b></font></a>","http://transfer.go.com");
         // Register the image scanner
-        LinkScanner linkScanner = new LinkScanner("-l"); 
+        LinkScanner linkScanner = new LinkScanner("-l");
         parser.addScanner(linkScanner);
         parser.addScanner(linkScanner.createImageScanner("-i"));
-                
+
         parseAndAssertNodeCount(1);
         assertTrue("Node 0 should be a link tag",node[0] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[0];
@@ -373,13 +373,13 @@ public class LinkScannerTest extends ParserTestCase
         assertTrue("Third contained node should be Tag",containedNodes[2] instanceof Tag);
         Tag tag2 = (Tag)containedNodes[2];
         assertEquals("Tag Contents","b",tag2.getText());
-        assertTrue("Fourth contained node should be HTMLEndTag",containedNodes[3] instanceof EndTag);       
+        assertTrue("Fourth contained node should be HTMLEndTag",containedNodes[3] instanceof EndTag);
         EndTag endTag1 = (EndTag)containedNodes[3];
         assertEquals("Fourth Tag contents","b",endTag1.getText());
-        assertTrue("Fifth contained node should be HTMLEndTag",containedNodes[4] instanceof EndTag);        
+        assertTrue("Fifth contained node should be HTMLEndTag",containedNodes[4] instanceof EndTag);
         EndTag endTag2 = (EndTag)containedNodes[4];
         assertEquals("Fifth Tag contents","font",endTag2.getText());
-        
+
     }
 
     public void testBaseRefLink() throws ParserException {
@@ -391,39 +391,39 @@ public class LinkScannerTest extends ParserTestCase
         "...\n"+
         "</html>","http://transfer.go.com");
         // Register the image scanner
-        parser.registerScanners();          
+        parser.registerScanners();
         parseAndAssertNodeCount(7);
         assertTrue("Node 4 should be a link tag",node[4] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[4];
         assertEquals("Resolved Link","http://www.abc.com/home.cfm",linkTag.getLink());
         assertEquals("Resolved Link Text","Home",linkTag.getLinkText());
     }
-    
+
     /**
      * This is a reproduction of bug 617228, reported by
      * Stephen J. Harrington. When faced with a link like :
-     * &lt;A 
-     * HREF="/cgi-bin/view_search?query_text=postdate&gt;20020701&txt_clr=White&bg_clr=Red&url=http://loc 
-     * al 
-     * host/Testing/Report 
+     * &lt;A
+     * HREF="/cgi-bin/view_search?query_text=postdate&gt;20020701&txt_clr=White&bg_clr=Red&url=http://loc
+     * al
+     * host/Testing/Report
      * 1.html"&gt;20020702 Report 1&lt;/A&gt;
-     * 
-     * parser is unable to handle the link correctly due to the greater than 
+     *
+     * parser is unable to handle the link correctly due to the greater than
      * symbol being confused to be the end of the tag.
      */
     public void testQueryLink() throws ParserException {
         createParser("<A \n"+
         "HREF=\"/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html\">20020702 Report 1</A>","http://transfer.go.com");
         // Register the image scanner
-        parser.registerScanners();          
+        parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue("Node 1 should be a link tag",node[0] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[0];
         assertStringEquals("Resolved Link","http://transfer.go.com/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",linkTag.getLink());
         assertEquals("Resolved Link Text","20020702 Report 1",linkTag.getLinkText());
-            
+
     }
-    
+
     public void testNotMailtoLink() throws ParserException {
         createParser("<A HREF=\"mailto.html\">not@for.real</A>","http://www.cj.com/");
         parser.addScanner(new LinkScanner("-l"));
@@ -488,7 +488,7 @@ public class LinkScannerTest extends ParserTestCase
         assertEquals("Link Plain Text", "my ftp", linkTag.toPlainTextString());
         assertTrue("Link is not a FTP site", !linkTag.isFTPLink());
     }
-    
+
     public void testRelativeLinkNotHTMLBug() throws ParserException {
         createParser("<A HREF=\"newpage.html\">New Page</A>","http://www.mysite.com/books/some.asp");
         parser.addScanner(new LinkScanner("-l"));
@@ -516,9 +516,9 @@ public class LinkScannerTest extends ParserTestCase
         ImageTag imageTag = (ImageTag)insideNodes[0];
         assertEquals("Image Tag Location","http://www.fedpage.com/images\\register.gif",imageTag.getImageURL());
     }
-    
+
     /**
-     * This is an attempt to reproduce bug 677874 
+     * This is an attempt to reproduce bug 677874
      * reported by James Moliere. A link tag of the form
      * <code>
      * <a class=rlbA href=/news/866201.asp?0sl=-
@@ -545,9 +545,9 @@ public class LinkScannerTest extends ParserTestCase
             "link url",
             "/news/866201.asp?0sl=-32",
             linkTag.getLink()
-        );      
+        );
     }
-    
+
     /**
      * Bug report by Cory Seefurth
      * @throws Exception
@@ -555,20 +555,20 @@ public class LinkScannerTest extends ParserTestCase
     public void _testLinkWithJSP() throws Exception {
         createParser(
             "<a href=\"<%=Application(\"sURL\")% " +
-            ">/literature/index.htm\">Literature</a>" 
-        );  
+            ">/literature/index.htm\">Literature</a>"
+        );
         parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertType("should be link tag",LinkTag.class,node[0]);
         LinkTag linkTag = (LinkTag)node[0];
         assertStringEquals("expected link","<%=Application(\"sURL\")%>/literature/index.htm",linkTag.getLink());
     }
-    
+
     public void testLinkScannerFilter() throws Exception {
         LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
         assertEquals("linkscanner filter",LinkTag.LINK_TAG_FILTER,linkScanner.getFilter());
     }
-    
+
     public void testTagSymbolsInLinkText() throws Exception {
         createParser(
             "<a href=\"/cataclysm/Langy-AnEmpireReborn-Ch2.shtml#story\"" +

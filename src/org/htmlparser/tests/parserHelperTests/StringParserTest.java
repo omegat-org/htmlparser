@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -42,7 +42,7 @@ public class StringParserTest extends ParserTestCase {
     public StringParserTest(String name) {
         super(name);
     }
-    
+
     /**
      * The bug being reproduced is this : <BR>
      * &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Google&lt;/TITLE&gt; <BR>
@@ -59,7 +59,7 @@ public class StringParserTest extends ParserTestCase {
         StringNode stringNode = (StringNode)node[3];
         assertEquals("Text of the StringNode","Google",stringNode.getText());
     }
-    
+
     /**
      * Bug reported by Kaarle Kaila of Nokia<br>
      * For the following HTML :
@@ -70,13 +70,13 @@ public class StringParserTest extends ParserTestCase {
      */
     public void testStringNodeBug2() throws ParserException {
         // Register the link scanner
-        
+
         createParser("view these documents, you must have <A href='http://www.adobe.com'>Adobe \n"+
             "Acrobat Reader</A> installed on your computer.");
         Parser.setLineSeparator("\r\n");
         parser.addScanner(new LinkScanner("-l"));
         parseAndAssertNodeCount(3);
-        // The first node should be a HTMLStringNode-  with the text - view these documents, you must have 
+        // The first node should be a HTMLStringNode-  with the text - view these documents, you must have
         assertTrue("First node should be a HTMLStringNode",node[0] instanceof StringNode);
         StringNode stringNode = (StringNode)node[0];
         assertEquals("Text of the StringNode","view these documents, you must have ",stringNode.getText());
@@ -84,12 +84,12 @@ public class StringParserTest extends ParserTestCase {
         LinkTag linkNode = (LinkTag)node[1];
         assertEquals("Link is","http://www.adobe.com",linkNode.getLink());
         assertEquals("Link text is","Adobe \r\nAcrobat Reader",linkNode.getLinkText());
-    
+
         assertTrue("Third node should be a string node",node[2] instanceof StringNode);
         StringNode stringNode2 = (StringNode)node[2];
         assertEquals("Contents of third node"," installed on your computer.",stringNode2.getText());
     }
-    
+
     /**
      * Bug reported by Roger Sollberger<br>
      * For the following HTML :
@@ -105,7 +105,7 @@ public class StringParserTest extends ParserTestCase {
         assertEquals("[> ASGARD <]",linkTag.getLinkText());
         assertEquals("http://asgard.ch",linkTag.getLink());
     }
-    
+
     public void testToPlainTextString() throws ParserException {
         createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
         parseAndAssertNodeCount(10);
@@ -116,7 +116,7 @@ public class StringParserTest extends ParserTestCase {
         stringNode = (StringNode)node[7];
         assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toPlainTextString());
     }
-    
+
     public void testToHTML() throws ParserException {
         createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
         parseAndAssertNodeCount(10);
@@ -156,7 +156,7 @@ public class StringParserTest extends ParserTestCase {
         assertEquals("Second String node contents"," After Comment",stringNode2.getText());
         RemarkNode remarkNode = (RemarkNode)node[1];
         assertEquals("Remark Node contents"," Comment ",remarkNode.getText());
-            
+
     }
 
     /**
@@ -170,15 +170,15 @@ public class StringParserTest extends ParserTestCase {
         StringNode stringNode = (StringNode)node[0];
         assertEquals("First String node contents","a",stringNode.getText());
     }
-    
+
     public void testStringWithEmptyLine() throws ParserException {
         createParser("a\n\nb");
         parseAndAssertNodeCount(1);
         assertTrue("First node should be HTMLStringNode",node[0] instanceof StringNode);
         StringNode stringNode = (StringNode)node[0];
         assertStringEquals("First String node contents","a\r\n\r\nb",stringNode.getText());
-    }   
-    
+    }
+
     /**
      * An attempt to reproduce bug 677176, which passes.
      * @throws Exception
@@ -202,20 +202,20 @@ public class StringParserTest extends ParserTestCase {
             "</script>" +
             "<body>" +
             "</body>" +
-            "</html>" 
-        );  
+            "</html>"
+        );
         parser.registerScanners();
         parseAndAssertNodeCount(10);
         assertType("fourth node",MetaTag.class,node[4]);
         MetaTag metaTag = (MetaTag)node[4];
-        
+
         assertStringEquals(
             "content",
             "text/html; charset=iso-8859-1",
             metaTag.getAttribute("CONTENT")
         );
     }
-    
+
     public void testStringWithLineBreaks() throws Exception {
         createParser("Testing &\nRefactoring");
         parseAndAssertNodeCount(1);
@@ -223,5 +223,5 @@ public class StringParserTest extends ParserTestCase {
         StringNode stringNode = (StringNode)node[0];
         assertStringEquals("text","Testing &\r\nRefactoring",stringNode.toPlainTextString());
     }
-    
+
 }

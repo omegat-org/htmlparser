@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -33,19 +33,19 @@ public class RemarkNodeParser {
     public final static int REMARK_NODE_OPENING_ANGLE_BRACKET_STATE=1;
     public final static int REMARK_NODE_EXCLAMATION_RECEIVED_STATE=2;
     public final static int REMARK_NODE_FIRST_DASH_RECEIVED_STATE=3;
-    public final static int REMARK_NODE_ACCEPTING_STATE=4;      
-    public final static int REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE=5;    
-    public final static int REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE=6;       
-    public final static int REMARK_NODE_ACCEPTED_STATE=7;   
+    public final static int REMARK_NODE_ACCEPTING_STATE=4;
+    public final static int REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE=5;
+    public final static int REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE=6;
+    public final static int REMARK_NODE_ACCEPTED_STATE=7;
     public final static int REMARK_NODE_ILLEGAL_STATE=8;
-    public final static int REMARK_NODE_FINISHED_PARSING_STATE=2;   
-    
+    public final static int REMARK_NODE_FINISHED_PARSING_STATE=2;
+
     /**
      * Locate the remark tag withing the input string, by parsing from the given position
      * @param reader HTML reader to be provided so as to allow reading of next line
      * @param input Input String
      * @param position Position to start parsing from
-     */ 
+     */
     public RemarkNode find(NodeReader reader,String input,int position)
     {
         int state = REMARK_NODE_BEFORE_PARSING_STATE;
@@ -90,7 +90,7 @@ public class RemarkNodeParser {
                     state = REMARK_NODE_ACCEPTING_STATE;
                     tagContents.append(prevChar);
                 }
-            } 
+            }
             if (state==REMARK_NODE_ACCEPTING_STATE) {
                 if (ch == '-') {
                     state=REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE;
@@ -102,11 +102,11 @@ public class RemarkNodeParser {
             }
             if (state==REMARK_NODE_ACCEPTING_STATE)
             {
-                // We can append contents now       
+                // We can append contents now
                 tagContents.append(ch);
-            } 
+            }
 
-            
+
             if (state==REMARK_NODE_FIRST_DASH_RECEIVED_STATE)
             {
                 if (ch == '-') {
@@ -117,7 +117,7 @@ public class RemarkNodeParser {
                     }
                 }
                 else state=REMARK_NODE_ILLEGAL_STATE;
-            } 
+            }
             if (state==REMARK_NODE_EXCLAMATION_RECEIVED_STATE)
             {
                 if (ch == '-')
@@ -128,13 +128,13 @@ public class RemarkNodeParser {
                     tagEnd=i;
                 }
                 else state=REMARK_NODE_ILLEGAL_STATE;
-            } 
+            }
             if (state==REMARK_NODE_OPENING_ANGLE_BRACKET_STATE)
             {
                 if (ch == '!')
                 state=REMARK_NODE_EXCLAMATION_RECEIVED_STATE;
                 else state = REMARK_NODE_ILLEGAL_STATE; // This is not a remark tag
-            } 
+            }
             if (state == REMARK_NODE_BEFORE_PARSING_STATE)
             {
                 if (ch=='<') {
@@ -146,15 +146,15 @@ public class RemarkNodeParser {
                     // Its not a space, hence this is probably a string node, not a remark node
                     state = REMARK_NODE_ILLEGAL_STATE;
                 }
-            } 
+            }
 //          if (state > REMARK_NODE_OPENING_ANGLE_BRACKET_STATE && state < REMARK_NODE_ACCEPTED_STATE && i == input.length() - 1)
-            if (state >=REMARK_NODE_ACCEPTING_STATE  && state < REMARK_NODE_ACCEPTED_STATE && i == input.length() - 1)          
+            if (state >=REMARK_NODE_ACCEPTING_STATE  && state < REMARK_NODE_ACCEPTED_STATE && i == input.length() - 1)
             {
                 // We need to continue parsing to the next line
                 //input = reader.getNextLine();
                 tagContents.append(Parser.getLineSeparator());
                 do {
-                    input = reader.getNextLine();       
+                    input = reader.getNextLine();
                 }
                 while (input!=null && input.length()==0);
                 if (input!=null)
@@ -164,13 +164,13 @@ public class RemarkNodeParser {
             if (state==REMARK_NODE_ILLEGAL_STATE)
             {
                 return null;
-            }               
+            }
             i++;
             prevChar = ch;
         }
         if (state==REMARK_NODE_ACCEPTED_STATE)
         return new RemarkNode(tagBegin,tagEnd,tagContents.toString());
         else
-        return null;    
+        return null;
     }
 }

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 //
@@ -43,44 +43,44 @@ public class NonBreakingSpaceConvertingNodeTest extends ParserTestCase {
     private String parseToObtainDecodedResult(String STRING_TO_DECODE)
         throws ParserException {
         StringBuffer decodedContent = new StringBuffer();
-        
+
         StringNodeFactory stringNodeFactory = new StringNodeFactory();
         stringNodeFactory.setNonBreakSpaceConversion(true);
         createParser(STRING_TO_DECODE);
-        parser.setStringNodeFactory(stringNodeFactory); 
+        parser.setStringNodeFactory(stringNodeFactory);
 
         NodeIterator nodes = parser.elements();
-        
-        while (nodes.hasMoreNodes()) 
-            decodedContent.append(nodes.nextNode().toPlainTextString());            
+
+        while (nodes.hasMoreNodes())
+            decodedContent.append(nodes.nextNode().toPlainTextString());
 
         return decodedContent.toString();
     }
 
     public void testOneNonBreakingSpace() throws Exception {
-        String ENCODED_WITH_NON_BREAKING_SPACE = 
+        String ENCODED_WITH_NON_BREAKING_SPACE =
             "Here is string with \u00a0 inside of it.";
-            
+
         String DECODED_WITH_NON_BREAKING_SPACE =
             "Here is string with   inside of it.";
-        
+
         assertEquals (
             "\u00a0 was converted to a space correctly",
             DECODED_WITH_NON_BREAKING_SPACE,
             parseToObtainDecodedResult(ENCODED_WITH_NON_BREAKING_SPACE));
     }
-    
+
     public void testMultipleNonBreakingSpace() throws Exception {
-        String ENCODED_WITH_NON_BREAKING_SPACE = 
+        String ENCODED_WITH_NON_BREAKING_SPACE =
             "\u00a0Here is string with \u00a0 inside of it\u00a0.";
-            
+
         String DECODED_WITH_NON_BREAKING_SPACE =
             " Here is string with   inside of it .";
-        
+
         assertEquals (
             "\u00a0 was converted to a space correctly",
             DECODED_WITH_NON_BREAKING_SPACE,
             parseToObtainDecodedResult(ENCODED_WITH_NON_BREAKING_SPACE));
     }
-    
+
 }

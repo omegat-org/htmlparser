@@ -111,7 +111,7 @@ public class TagTest extends ParserTestCase
         createParser(lin1);
         NodeIterator en = parser.elements();
         Hashtable h;
-        
+
         try {
 
             if (en.hasMoreNodes()) {
@@ -324,7 +324,7 @@ public class TagTest extends ParserTestCase
      * up our parsing almost completely.
      */
     public void testStrictParsing() throws ParserException {
-        String testHTML = 
+        String testHTML =
         "<div align=\"center\">" +
             "<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">" +
                 "<a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+
@@ -624,7 +624,7 @@ public class TagTest extends ParserTestCase
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
         assertStringEquals("Expected HTML","Jane Doe",htmlTag.getLabel());
     }
-    
+
     /**
      * From oyoaha
      */
@@ -645,7 +645,7 @@ public class TagTest extends ParserTestCase
      */
     public void testHTMLOutputOfDifficultLinksWithRegisterScanners () throws ParserException
     {
-        // straight out of a real world example        
+        // straight out of a real world example
         createParser ("<a href=http://www.google.com/webhp?hl=en>");
         // register standard scanners (Very Important)
         parser.registerScanners ();
@@ -679,5 +679,5 @@ public class TagTest extends ParserTestCase
 
         String s = tag.toHtml ();
         assertEquals("HTML should be","<TABLE BORDER=\"1\">", s);
-    }   
+    }
 }

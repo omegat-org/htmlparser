@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 //
@@ -47,11 +47,11 @@ public class DecodingNodeTest extends ParserTestCase {
         StringNodeFactory stringNodeFactory = new StringNodeFactory();
         stringNodeFactory.setNodeDecoding(true);
         createParser(STRING_TO_DECODE);
-        parser.setStringNodeFactory(stringNodeFactory); 
+        parser.setStringNodeFactory(stringNodeFactory);
         NodeIterator nodes = parser.elements();
-        
-        while (nodes.hasMoreNodes()) 
-            decodedContent.append(nodes.nextNode().toPlainTextString());            
+
+        while (nodes.hasMoreNodes())
+            decodedContent.append(nodes.nextNode().toPlainTextString());
 
         return decodedContent.toString();
     }
@@ -59,7 +59,7 @@ public class DecodingNodeTest extends ParserTestCase {
     public void testAmpersand() throws Exception {
         String ENCODED_WORKSHOP_TITLE =
             "The Testing &amp; Refactoring Workshop";
-            
+
         String DECODED_WORKSHOP_TITLE =
             "The Testing & Refactoring Workshop";
 
@@ -72,26 +72,26 @@ public class DecodingNodeTest extends ParserTestCase {
     public void testNumericReference() throws Exception {
         String ENCODED_DIVISION_SIGN =
             "&#247; is the division sign.";
-            
+
         String DECODED_DIVISION_SIGN =
             "÷ is the division sign.";
-            
+
         assertEquals(
             "numeric reference for division sign",
             DECODED_DIVISION_SIGN,
             parseToObtainDecodedResult(ENCODED_DIVISION_SIGN));
     }
-    
-    
+
+
     public void testReferencesInString () throws Exception {
         String ENCODED_REFERENCE_IN_STRING =
             "Thus, the character entity reference &divide; is a more convenient" +
             " form than &#247; for obtaining the division sign (÷)";
-        
+
         String DECODED_REFERENCE_IN_STRING =
             "Thus, the character entity reference ÷ is a more convenient" +
             " form than ÷ for obtaining the division sign (÷)";
-        
+
         assertEquals (
             "character references within a string",
             DECODED_REFERENCE_IN_STRING,
@@ -99,33 +99,33 @@ public class DecodingNodeTest extends ParserTestCase {
     }
 
     public void testBogusCharacterEntityReference() throws Exception {
-        
-        String ENCODED_BOGUS_CHARACTER_ENTITY = 
+
+        String ENCODED_BOGUS_CHARACTER_ENTITY =
             "The character entity reference &divode; is bogus";
-            
+
         String DECODED_BOGUS_CHARACTER_ENTITY =
             "The character entity reference &divode; is bogus";
-        
+
         assertEquals (
             "bogus character entity reference",
             DECODED_BOGUS_CHARACTER_ENTITY,
             parseToObtainDecodedResult(ENCODED_BOGUS_CHARACTER_ENTITY));
     }
-    
+
     public void testDecodingNonBreakingSpaceDoesNotOccur() throws Exception {
-    
-        String ENCODED_WITH_NON_BREAKING_SPACE = 
+
+        String ENCODED_WITH_NON_BREAKING_SPACE =
             "Here is string with \u00a0.";
-            
+
         String DECODED_WITH_NON_BREAKING_SPACE =
             "Here is string with \u00a0.";
-        
+
         assertEquals (
             "bogus character entity reference",
             DECODED_WITH_NON_BREAKING_SPACE,
             parseToObtainDecodedResult(ENCODED_WITH_NON_BREAKING_SPACE));
     }
-    
-    
+
+
 
 }

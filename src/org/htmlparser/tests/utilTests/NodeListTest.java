@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -37,15 +37,15 @@ import org.htmlparser.util.SimpleNodeIterator;
 public class NodeListTest extends ParserTestCase {
     private NodeList nodeList;
     private Node[] testNodes;
-        
+
     public NodeListTest(String name) {
         super(name);
     }
 
     protected void setUp() {
-        nodeList = new NodeList();  
+        nodeList = new NodeList();
     }
-    
+
     public void testAddOneItem() {
         Node node = createHTMLNodeObject();
         nodeList.add(node);
@@ -62,46 +62,46 @@ public class NodeListTest extends ParserTestCase {
         assertTrue("First Element",node1==nodeList.elementAt(0));
         assertTrue("Second Element",node2==nodeList.elementAt(1));
     }
-    
+
     public void testAddTenItems() {
-        createTestDataAndPutInVector(10);   
+        createTestDataAndPutInVector(10);
         assertTestDataCouldBeExtractedFromVector(10);
     }
-    
+
     public void testAddElevenItems() {
         createTestDataAndPutInVector(11);
         assertTestDataCouldBeExtractedFromVector(11);
     }
-    
+
     public void testAddThirtyItems() {
         createTestDataAndPutInVector(30);
         assertTestDataCouldBeExtractedFromVector(30);
         assertEquals("Number of Adjustments",1,nodeList.getNumberOfAdjustments());
     }
-    
+
     public void testAddThirtyOneItems() {
         createTestDataAndPutInVector(31);
         assertTestDataCouldBeExtractedFromVector(31);
         assertEquals("Number of Adjustments",2,nodeList.getNumberOfAdjustments());
     }
-    
+
     public void testAddFiftyItems() {
         createTestDataAndPutInVector(50);
         assertTestDataCouldBeExtractedFromVector(50);
         assertEquals("Number of Adjustments",2,nodeList.getNumberOfAdjustments());
     }
-    
+
     public void testAddFiftyOneItems() {
         createTestDataAndPutInVector(51);
         assertTestDataCouldBeExtractedFromVector(51);
         assertEquals("Number of Adjustments",2,nodeList.getNumberOfAdjustments());
     }
-    
+
     public void testAddTwoHundredItems() {
         createTestDataAndPutInVector(200);
         assertEquals("Number of Adjustments",4,nodeList.getNumberOfAdjustments());
     }
-    
+
     public void testElements() throws Exception {
         createTestDataAndPutInVector(11);
         Node [] resultNodes = new AbstractNode[11];
@@ -111,9 +111,9 @@ public class NodeListTest extends ParserTestCase {
             assertTrue("Node "+i+" did not match",testNodes[i]==resultNodes[i]);
             i++;
         }
-        
+
     }
-    
+
     private Node createHTMLNodeObject() {
         Node node = new AbstractNode(10,20) {
             public void accept(Object visitor) {
@@ -121,15 +121,15 @@ public class NodeListTest extends ParserTestCase {
 
             public void collectInto(NodeList collectionList, String filter) {
             }
-    
+
             public String toHtml() {
                 return null;
             }
-    
+
             public String toPlainTextString() {
                 return null;
             }
-    
+
             public String toString() {
                 return "";
             }
@@ -138,7 +138,7 @@ public class NodeListTest extends ParserTestCase {
     }
 
     private void createTestDataAndPutInVector(int nodeCount) {
-        testNodes = new AbstractNode[nodeCount]; 
+        testNodes = new AbstractNode[nodeCount];
         for (int i=0;i<nodeCount;i++) {
             testNodes[i]= createHTMLNodeObject();
             nodeList.add(testNodes[i]);
@@ -150,7 +150,7 @@ public class NodeListTest extends ParserTestCase {
             assertTrue("Element "+i+" did not match",testNodes[i]==nodeList.elementAt(i));
         }
     }
-    
+
     public void testToNodeArray() {
         createTestDataAndPutInVector(387);
         Node nodes [] = nodeList.toNodeArray();
@@ -158,7 +158,7 @@ public class NodeListTest extends ParserTestCase {
         for (int i=0;i<nodes.length;i++)
             assertNotNull("node "+i+" should not be null",nodes[i]);
     }
-    
+
     public void testRemove() {
         Node node1 = createHTMLNodeObject();
         Node node2 = createHTMLNodeObject();
@@ -171,7 +171,7 @@ public class NodeListTest extends ParserTestCase {
         assertEquals("List Size",1,nodeList.size());
         assertTrue("First Element",node1==nodeList.elementAt(0));
     }
-    
+
     public void testRemoveAll() {
         Node node1 = createHTMLNodeObject();
         Node node2 = createHTMLNodeObject();
@@ -185,8 +185,8 @@ public class NodeListTest extends ParserTestCase {
         assertTrue("First Element",null==nodeList.elementAt(0));
         assertTrue("Second Element",null==nodeList.elementAt(1));
     }
-    
-    public static void main(String[] args) 
+
+    public static void main(String[] args)
     {
         new junit.awtui.TestRunner().start(new String[] {NodeListTest.class.getName()});
     }

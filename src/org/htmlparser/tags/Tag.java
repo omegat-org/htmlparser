@@ -62,7 +62,7 @@ public class Tag extends AbstractNode
     public final static String NULLVALUE = "$<NULL>$";
     public final static String NOTHING = "$<NOTHING>$";
     private final static String EMPTY_STRING="";
-    
+
     private static TagParser tagParser;
     /**
      * Tag contents will have the contents of the comment tag.
@@ -92,7 +92,7 @@ public class Tag extends AbstractNode
      * The line number on which this tag starts
      */
     private int startLine;
-  
+
     /**
      * Set of tags that breaks the flow.
      */
@@ -188,7 +188,7 @@ public class Tag extends AbstractNode
     {
         SpecialHashtable ht;
         Object ret;
-        
+
         ht = getAttributesEx();
         ret = ht.getRaw(name.toUpperCase());
         if (null != ret)
@@ -221,11 +221,11 @@ public class Tag extends AbstractNode
     public String getParameter(String name){
         return ((String[])getAttributesEx().get(name.toUpperCase()))[1];
     }
-    
+
     /**
      * Gets the attributes in the tag.
      * NOTE: Values of the extended hashtable are two element arrays of String,
-     * with the first element being the original name (not uppercased), 
+     * with the first element being the original name (not uppercased),
      * and the second element being the value.
      * @return Returns a special hashtable of attributes in two element String arrays.
      */
@@ -242,7 +242,7 @@ public class Tag extends AbstractNode
     public Hashtable getAttributes()
     {
         Hashtable ret;
-        
+
         ret = new SpecialHashtable ();
         for (Enumeration e = getAttributesEx ().keys(); e.hasMoreElements(); )
         {
@@ -315,7 +315,7 @@ public class Tag extends AbstractNode
 
         return (ret.toString ());
     }
-    
+
     /**
      * Scan the tag to see using the registered scanners, and attempt identification.
      * @param url URL at which HTML page is located
@@ -331,7 +331,7 @@ public class Tag extends AbstractNode
             String firstWord = extractWord(tagContents.toString());
             // Now, get the scanner associated with this.
             TagScanner scanner = (TagScanner)scanners.get(firstWord);
-            
+
             // Now do a deep check
             if (scanner != null &&
                     scanner.evaluate(
@@ -378,7 +378,7 @@ public class Tag extends AbstractNode
     /**
      * Sets the attributes.
      * NOTE: Values of the extended hashtable are two element arrays of String,
-     * with the first element being the original name (not uppercased), 
+     * with the first element being the original name (not uppercased),
      * and the second element being the value.
      * @param attributes The attribute collection to set.
      */
@@ -402,7 +402,7 @@ public class Tag extends AbstractNode
     public int getTagBegin() {
         return (nodeBegin);
     }
-    
+
     /**
      * Sets the tagEnd.
      * @param tagEnd The ending position of the tag.
@@ -410,7 +410,7 @@ public class Tag extends AbstractNode
     public void setTagEnd(int tagEnd) {
         this.nodeEnd = tagEnd;
     }
-    
+
     /**
      * Gets the tagEnd.
      * @return The ending position of the tag.
@@ -434,10 +434,10 @@ public class Tag extends AbstractNode
     public int getTagEndLine() {
         return startLine + tagLines.length - 1;
     }
-    
+
     public void setTagLine(java.lang.String newTagLine) {
         tagLine = newTagLine;
-        
+
         // Note: Incur the overhead of resizing each time (versus
         // preallocating a larger array), since the average tag
         // generally doesn't span multiple lines
@@ -473,7 +473,7 @@ public class Tag extends AbstractNode
         String key;
         String value[];
         String empty;
-        
+
         ret = new StringBuffer ();
         value = (String[])(getAttributesEx().getRaw (TAGNAME));
         ret.append ("<");
@@ -549,7 +549,7 @@ public class Tag extends AbstractNode
      * @see org.htmlparser.Node#collectInto(NodeList, String)
      */
     public void collectInto(NodeList collectionList, String filter) {
-        if (thisScanner!=null && thisScanner.getFilter()==filter) 
+        if (thisScanner!=null && thisScanner.getFilter()==filter)
             collectionList.add(this);
     }
 
@@ -598,7 +598,7 @@ public class Tag extends AbstractNode
 
     /**
      * Is this an empty xml tag of the form<br>
-     * &lt;tag/&gt; 
+     * &lt;tag/&gt;
      * @return boolean
      */
     public boolean isEmptyXmlTag() {

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -58,13 +58,13 @@ public class AppletTagTest extends ParserTestCase {
         assertTrue("Node should be an applet tag",node[0] instanceof AppletTag);
         // Check the data in the applet tag
         AppletTag appletTag = (AppletTag)node[0];
-        String expectedRawString = 
+        String expectedRawString =
         "<APPLET CODE=\"Myclass.class\" CODEBASE=\"www.kizna.com\" ARCHIVE=\"test.jar\">\r\n"+
-        "<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+     
+        "<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+
         "<PARAM VALUE=\"Somik\" NAME=\"Name\">\r\n"+
         "<PARAM VALUE=\"23\" NAME=\"Age\">\r\n"+
         "</APPLET>";
-        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());                
+        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());
     }
 
     public void testChangeCodebase() throws ParserException {
@@ -86,15 +86,15 @@ public class AppletTagTest extends ParserTestCase {
         AppletTag appletTag = (AppletTag)node[0];
         appletTag.setCodeBase ("htmlparser.sourceforge.net");
         // Check the data in the applet tag
-        String expectedRawString = 
+        String expectedRawString =
         "<APPLET CODE=\"Myclass.class\" CODEBASE=\"htmlparser.sourceforge.net\" ARCHIVE=\"test.jar\">\r\n"+
-        "<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+     
+        "<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+
         "<PARAM VALUE=\"Somik\" NAME=\"Name\">\r\n"+
         "<PARAM VALUE=\"23\" NAME=\"Age\">\r\n"+
         "</APPLET>";
-        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());                
+        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());
     }
-    
+
     public void testChangeArchive() throws ParserException {
         String [][]paramsData = {{"Param1","Value1"},{"Name","Somik"},{"Age","23"}};
         Hashtable paramsMap = new Hashtable();
@@ -114,13 +114,13 @@ public class AppletTagTest extends ParserTestCase {
         AppletTag appletTag = (AppletTag)node[0];
         appletTag.setArchive ("htmlparser.jar");
         // Check the data in the applet tag
-        String expectedRawString = 
+        String expectedRawString =
         "<APPLET CODE=\"Myclass.class\" CODEBASE=\"www.kizna.com\" ARCHIVE=\"htmlparser.jar\">\r\n"+
-        "<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+     
+        "<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+
         "<PARAM VALUE=\"Somik\" NAME=\"Name\">\r\n"+
         "<PARAM VALUE=\"23\" NAME=\"Age\">\r\n"+
         "</APPLET>";
-        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());                
+        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());
     }
 
     public void testChangeAppletClass() throws ParserException {
@@ -142,13 +142,13 @@ public class AppletTagTest extends ParserTestCase {
         AppletTag appletTag = (AppletTag)node[0];
         appletTag.setAppletClass ("MyOtherClass.class");
         // Check the data in the applet tag
-        String expectedRawString = 
+        String expectedRawString =
         "<APPLET CODE=\"MyOtherClass.class\" CODEBASE=\"www.kizna.com\" ARCHIVE=\"test.jar\">\r\n"+
-        "<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+     
+        "<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+
         "<PARAM VALUE=\"Somik\" NAME=\"Name\">\r\n"+
         "<PARAM VALUE=\"23\" NAME=\"Age\">\r\n"+
         "</APPLET>";
-        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());                
+        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());
     }
 
     public void testChangeAppletParams() throws ParserException {
@@ -176,12 +176,12 @@ public class AppletTagTest extends ParserTestCase {
         }
         appletTag.setAppletParams (paramsMap);
         // Check the data in the applet tag
-        String expectedRawString = 
+        String expectedRawString =
         "<APPLET CODE=\"Myclass.class\" CODEBASE=\"www.kizna.com\" ARCHIVE=\"test.jar\">\r\n"+
         "<PARAM VALUE=\"Two\" NAME=\"Second\">"+
-        "<PARAM VALUE=\"One\" NAME=\"First\">"+     
+        "<PARAM VALUE=\"One\" NAME=\"First\">"+
         "<PARAM VALUE=\"3\" NAME=\"Third\">"+
         "</APPLET>";
-        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());                
+        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());
     }
 }

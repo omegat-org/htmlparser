@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 //
@@ -38,13 +38,13 @@ import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class OptionTagTest extends ParserTestCase 
+public class OptionTagTest extends ParserTestCase
 {
     private String testHTML = new String(
                                     "<OPTION value=\"Google Search\">Google</OPTION>" +
                                     "<OPTION value=\"AltaVista Search\">AltaVista" +
                                     "<OPTION value=\"Lycos Search\"></OPTION>" +
-                                    "<OPTION>Yahoo!</OPTION>" + 
+                                    "<OPTION>Yahoo!</OPTION>" +
                                     "<OPTION>\nHotmail</OPTION>" +
                                     "<OPTION value=\"ICQ Messenger\">" +
                                     "<OPTION>Mailcity\n</OPTION>"+
@@ -55,20 +55,20 @@ public class OptionTagTest extends ParserTestCase
 //                                  "<OPTION value=\"AOL\"><SPAN>AOL</SPAN></OPTION>" +
 //                                  "<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL>"
                                     );
-    
-    public OptionTagTest(String name) 
+
+    public OptionTagTest(String name)
     {
         super(name);
     }
-    
+
     protected void setUp() throws Exception {
         super.setUp();
         createParser(testHTML);
         parser.addScanner(new OptionTagScanner("-option", new Stack ()));
         parseAndAssertNodeCount(11);
-    }   
-    
-    public void testToHTML() throws ParserException 
+    }
+
+    public void testToHTML() throws ParserException
     {
         for(int j=0;j<nodeCount;j++)
         {
@@ -103,9 +103,9 @@ public class OptionTagTest extends ParserTestCase
         assertStringEquals("HTML String","<OPTION VALUE=\"AOL\"><SPAN>AOL</SPAN></OPTION>",OptionTag.toHtml());
         OptionTag = (OptionTag) node[12];
         assertStringEquals("HTML String","<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL></OPTION>",OptionTag.toHtml());
-*/  }   
-    
-    public void testToString() throws ParserException 
+*/  }
+
+    public void testToString() throws ParserException
     {
         for(int j=0;j<11;j++)
         {
@@ -139,10 +139,10 @@ public class OptionTagTest extends ParserTestCase
         OptionTag = (OptionTag) node[12];
         assertEquals("HTML Raw String","OPTION VALUE: Time Warner TEXT: Time Warner AOL Inc.\n",OptionTag.toString());
 */  }
-    
-    public static void main(String[] args) 
+
+    public static void main(String[] args)
     {
         new junit.awtui.TestRunner().start(new String[] {OptionTagTest.class.getName()});
     }
-    
+
 }

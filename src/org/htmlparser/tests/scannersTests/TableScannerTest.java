@@ -1,28 +1,28 @@
 // HTMLParser Library v1_4_20030907 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-//  
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-// 
+//
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-//  
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -39,13 +39,13 @@ import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class TableScannerTest extends ParserTestCase {
-    
+
     public TableScannerTest(String name) {
         super(name);
     }
 
     private String createHtmlWithTable() {
-        return 
+        return
         "<table width=\"100.0%\" align=\"Center\" cellpadding=\"5.0\" cellspacing=\"0.0\" border=\"0.0\">"+
         "   <tr>" +
         "       <td border=\"0.0\" valign=\"Top\" colspan=\"5\">" +
@@ -57,7 +57,7 @@ public class TableScannerTest extends ParserTestCase {
         "   </tr>" +
         "</table>";
     }
-    
+
     public void testScan() throws Exception {
         createParser(createHtmlWithTable());
         parser.addScanner(new TableScanner(parser));
@@ -69,30 +69,30 @@ public class TableScannerTest extends ParserTestCase {
         assertEquals("columns in row 1",2,row.getColumnCount());
         assertEquals("table width","100.0%",tableTag.getAttribute("WIDTH"));
     }
-    
+
     public void testErroneousTables() throws ParserException {
         createParser(
-            "<HTML>\n"+ 
-                "<table border>\n"+ 
-                    "<tr>\n"+ 
-                        "<td>Head1</td>\n"+ 
-                        "<td>Val1</td>\n"+ 
-                    "</tr>\n"+ 
-                    "<tr>\n"+ 
-                        "<td>Head2</td>\n"+ 
-                        "<td>Val2</td>\n"+ 
-                    "</tr>\n"+ 
-                    "<tr>\n"+ 
-                        "<td>\n"+ 
-                            "<table border>\n"+ 
-                                "<tr>\n"+ 
-                                    "<td>table2 Head1</td>\n"+ 
-                                    "<td>table2 Val1</td>\n"+ 
-                                "</tr>\n"+ 
-                            "</table>\n"+ 
-                        "</td>\n"+ 
-                    "</tr>\n"+ 
-            "</BODY>\n"+ 
+            "<HTML>\n"+
+                "<table border>\n"+
+                    "<tr>\n"+
+                        "<td>Head1</td>\n"+
+                        "<td>Val1</td>\n"+
+                    "</tr>\n"+
+                    "<tr>\n"+
+                        "<td>Head2</td>\n"+
+                        "<td>Val2</td>\n"+
+                    "</tr>\n"+
+                    "<tr>\n"+
+                        "<td>\n"+
+                            "<table border>\n"+
+                                "<tr>\n"+
+                                    "<td>table2 Head1</td>\n"+
+                                    "<td>table2 Val1</td>\n"+
+                                "</tr>\n"+
+                            "</table>\n"+
+                        "</td>\n"+
+                    "</tr>\n"+
+            "</BODY>\n"+
             "</HTML>"
         );
         parser.registerScanners();
@@ -120,7 +120,7 @@ public class TableScannerTest extends ParserTestCase {
     {
         Parser parser;
         String url = "http://htmlparser.sourceforge.net/test/badtable2.html";
-        
+
         parser = new Parser (url);
         if (1.4 <= Parser.getVersionNumber ())
         {
@@ -156,7 +156,7 @@ public class TableScannerTest extends ParserTestCase {
         String s = node[0].toHtml ();
         assertEquals ("Unclosed","<TABLE><TR><TD></TD><TD></TD></TR></TABLE>",s);
     }
-    
+
     /**
      * See bug #742254 Nested <TR> &<TD> tags should not be allowed
      */
@@ -175,7 +175,7 @@ public class TableScannerTest extends ParserTestCase {
      */
     public void testOverFlow () throws ParserException
     {
-        Parser parser = 
+        Parser parser =
             new Parser(
                 "http://www.sec.gov/Archives/edgar/data/30554/000089322002000287/w57038e10-k.htm"
             );

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -76,11 +76,11 @@ public class MailRipper {
         System.out.println();
         System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
         System.exit(-1);
-      }     
+      }
       String resourceLocation = "http://htmlparser.sourceforge.net";
       if (args.length!=0) resourceLocation = args[0];
-    
-      MailRipper ripper = new MailRipper(resourceLocation); 
+
+      MailRipper ripper = new MailRipper(resourceLocation);
       System.out.println("Ripping Site "+resourceLocation);
       try {
           for (Enumeration e=ripper.rip();e.hasMoreElements();) {
@@ -108,6 +108,6 @@ public class MailRipper {
           if (linkTag.isMailLink()) mailAddresses.addElement(linkTag);
         }
       }
-      return mailAddresses.elements();  
+      return mailAddresses.elements();
     }
 }

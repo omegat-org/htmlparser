@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -34,7 +34,7 @@ import org.htmlparser.lexer.PageIndex;
 
 public class PageIndexTests extends TestCase
 {
-    
+
     /**
      * Test the end-of-line index class.
      */
@@ -48,16 +48,16 @@ public class PageIndexTests extends TestCase
         PageIndex index;
         int pos;
         int[] list;
-        
+
         index = new PageIndex (null);
-        
+
         for (int i = 0; i < 10000; i++)
         {
             pos = index.row (i);
             assertTrue ("append not at end", pos == i);
             assertTrue ("wrong position", pos == index.add (i));
         }
-        
+
         list = index.get ();
         for (int i = 0; i < 10000; i++)
             assertTrue ("wrong value", list[i] == i);
@@ -68,9 +68,9 @@ public class PageIndexTests extends TestCase
         PageIndex index;
         int pos;
         int[] list;
-        
+
         index = new PageIndex (null);
-        
+
         for (int i = 0; i < 10000; i++)
         {
             pos = index.row (i + 42);
@@ -88,9 +88,9 @@ public class PageIndexTests extends TestCase
         PageIndex index;
         int pos;
         int[] list;
-        
+
         index = new PageIndex (null);
-        
+
         for (int i = 0; i < 10000; i++)
         {
             pos = index.row (i * 42);
@@ -110,9 +110,9 @@ public class PageIndexTests extends TestCase
         int n;
         int pos;
         int[] list;
-        
+
         index = new PageIndex (null);
-        
+
         for (int i = 0; i < 10000; i++)
         {
             d = Math.random ();

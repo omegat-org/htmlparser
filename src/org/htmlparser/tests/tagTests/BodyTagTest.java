@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -44,7 +44,7 @@ public class BodyTagTest extends ParserTestCase {
     public BodyTagTest(String name) {
         super(name);
     }
-    
+
     protected void setUp() throws Exception {
         super.setUp();
         createParser("<html><head><title>body tag test</title></head><body>Yahoo!</body></html>");
@@ -54,26 +54,26 @@ public class BodyTagTest extends ParserTestCase {
         assertTrue(node[4] instanceof BodyTag);
         bodyTag = (BodyTag) node[4];
     }
-    
+
     public void testToPlainTextString() throws ParserException {
         // check the label node
-        assertEquals("Body","Yahoo!",bodyTag.toPlainTextString());              
+        assertEquals("Body","Yahoo!",bodyTag.toPlainTextString());
     }
 
     public void testToHTML() throws ParserException {
-        assertStringEquals("Raw String","<BODY>Yahoo!</BODY>",bodyTag.toHtml());                
+        assertStringEquals("Raw String","<BODY>Yahoo!</BODY>",bodyTag.toHtml());
     }
 
     public void testToString() throws ParserException  {
-        assertEquals("Body","BODY: Yahoo!",bodyTag.toString());     
+        assertEquals("Body","BODY: Yahoo!",bodyTag.toString());
     }
-    
+
     public void testAttributes ()
     {
         NodeIterator iterator;
         Node node;
         Hashtable attributes;
-        
+
         try
         {
             createParser("<body style=\"margin-top:4px; margin-left:20px;\" title=\"body\">");
@@ -100,13 +100,13 @@ public class BodyTagTest extends ParserTestCase {
             fail ("exception thrown " + pe.getMessage ());
         }
     }
-    
-    public static TestSuite suite() 
+
+    public static TestSuite suite()
     {
         return new TestSuite(BodyTagTest.class);
     }
-    
-    public static void main(String[] args) 
+
+    public static void main(String[] args)
     {
         new junit.awtui.TestRunner().start(new String[] {BodyTagTest.class.getName()});
     }

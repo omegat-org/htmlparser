@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -54,12 +54,12 @@ public class FormTagTest extends ParserTestCase {
         FormTag formTag = (FormTag)node[0];
 
         formTag.setFormLocation("http://www.yahoo.com/yahoo/do_not_login.jsp");
- 
+
         String expectedHTML = "<FORM ACTION=\"http://www.yahoo.com/yahoo/do_not_login.jsp\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\" METHOD=\""+FormTag.POST+"\">\r\n"+
         FormScannerTest.EXPECTED_FORM_HTML_REST_OF_FORM;
         assertStringEquals("Raw String",expectedHTML,formTag.toHtml());
     }
-    
+
     public void testToPlainTextString() throws ParserException {
         createParser(FormScannerTest.FORM_HTML);
 
@@ -69,7 +69,7 @@ public class FormTagTest extends ParserTestCase {
         FormTag formTag = (FormTag)node[0];
         assertStringEquals("Form Tag string representation","&nbsp;User NamePassword&nbsp;&nbsp;Contents of TextArea",formTag.toPlainTextString());
     }
-    
+
     public void testSearchFor() throws ParserException {
         createParser(FormScannerTest.FORM_HTML);
 
@@ -79,9 +79,9 @@ public class FormTagTest extends ParserTestCase {
         FormTag formTag = (FormTag)node[0];
         NodeList nodeList = formTag.searchFor("USER NAME");
         assertEquals("Should have found nodes",1,nodeList.size());
-        
+
         Node[] nodes = nodeList.toNodeArray();
-        
+
         assertEquals("Number of nodes found",1,nodes.length);
         assertType("search result node",StringNode.class,nodes[0]);
         StringNode stringNode = (StringNode)nodes[0];
@@ -97,12 +97,12 @@ public class FormTagTest extends ParserTestCase {
         FormTag formTag = (FormTag)node[0];
         NodeList nodeList = formTag.searchFor("USER NAME",true);
         assertEquals("Should have not found nodes",0,nodeList.size());
-    
+
         nodeList = formTag.searchFor("User Name",true);
         assertNotNull("Should have not found nodes",nodeList);
     }
 
-    
+
     public void testSearchByName() throws ParserException {
         createParser(FormScannerTest.FORM_HTML);
 
@@ -114,10 +114,10 @@ public class FormTagTest extends ParserTestCase {
         Tag tag= formTag.searchByName("passwd");
         assertNotNull("Should have found the password node",tag);
         assertType("tag found",InputTag.class,tag);
-    }   
-    
+    }
+
     /**
-     * Bug 713907 reported by Dhaval Udani, erroneous 
+     * Bug 713907 reported by Dhaval Udani, erroneous
      * attributes being reported.
      */
     public void testFormRendering() throws Exception {
@@ -129,7 +129,7 @@ public class FormTagTest extends ParserTestCase {
             testHTML
         );
         parser.registerScanners();
-        FormTag formTag = 
+        FormTag formTag =
             (FormTag)(parser.extractAllNodesThatAre(
                 FormTag.class
             )[0]);

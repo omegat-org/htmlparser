@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -35,7 +35,7 @@ import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class TextareaTagTest extends ParserTestCase 
+public class TextareaTagTest extends ParserTestCase
 {
     private String testHTML = new String(
                                     "<TEXTAREA name=\"Remarks\" >The intervention by the UN proved beneficial</TEXTAREA>" +
@@ -47,11 +47,11 @@ public class TextareaTagTest extends ParserTestCase
                                     "refused to intimidate the Tamilians\n</TEXTAREA>"
                                     );
 
-    public TextareaTagTest(String name) 
+    public TextareaTagTest(String name)
     {
         super(name);
     }
-    
+
     public void setUp() throws Exception
     {
         super.setUp();
@@ -59,8 +59,8 @@ public class TextareaTagTest extends ParserTestCase
         parser.addScanner(new TextareaTagScanner("-t", new Stack ()));
         parseAndAssertNodeCount(5);
     }
-    
-    public void testToHTML() throws ParserException 
+
+    public void testToHTML() throws ParserException
     {
         assertTrue("Node 1 should be Textarea Tag",node[0] instanceof TextareaTag);
         assertTrue("Node 2 should be Textarea Tag",node[1] instanceof TextareaTag);
@@ -81,10 +81,10 @@ public class TextareaTagTest extends ParserTestCase
         assertStringEquals("HTML String 5","<TEXTAREA NAME=\"Remarks\">The death threats of the LTTE\r\n" +
                                     "refused to intimidate the Tamilians\r\n</TEXTAREA>",textareaTag.toHtml());
 
-    }   
-    
-    
-    public void testToString() throws ParserException 
+    }
+
+
+    public void testToString() throws ParserException
     {
         assertTrue("Node 1 should be Textarea Tag",node[0] instanceof TextareaTag);
         assertTrue("Node 2 should be Textarea Tag",node[1] instanceof TextareaTag);
@@ -105,5 +105,5 @@ public class TextareaTagTest extends ParserTestCase
         assertStringEquals("HTML Raw String 5","TEXTAREA TAG\n--------\nNAME : Remarks\nVALUE : The death threats of the LTTE\r\n"+
                                         "refused to intimidate the Tamilians\r\n\n",textareaTag.toString());
     }
-    
+
 }

@@ -1,31 +1,31 @@
 // HTMLParser Library v1_4_20030907 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-//  
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-// 
+//
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-//  
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-// 
+//
 // This class was contributed by Dhaval Udani
 // dhaval.h.udani@orbitech.co.in
 
@@ -56,7 +56,7 @@ public class LabelScannerTest extends ParserTestCase {
         assertStringEquals("Label","<LABEL>This is a label tag</LABEL>",labelTag.toHtml());
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
-    
+
     public void testLabelWithJspTag() throws ParserException {
         createParser("<label><%=labelValue%></label>");
         parser.registerScanners();
@@ -69,7 +69,7 @@ public class LabelScannerTest extends ParserTestCase {
         assertStringEquals("Label","<LABEL><%=labelValue%></LABEL>",labelTag.toHtml());
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
-    
+
     public void testLabelWithOtherTags() throws ParserException {
         createParser("<label><span>Span within label</span></label>");
         parser.registerScanners();
@@ -83,7 +83,7 @@ public class LabelScannerTest extends ParserTestCase {
         assertStringEquals("Label","<LABEL><SPAN>Span within label</SPAN></LABEL>",labelTag.toHtml());
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
-    
+
     public void testLabelWithManyCompositeTags() throws ParserException {
         createParser("<label><span>Jane <b> Doe </b> Smith</span></label>");
         parser.registerScanners();
@@ -97,7 +97,7 @@ public class LabelScannerTest extends ParserTestCase {
         assertStringEquals("Label","<LABEL><SPAN>Jane <B> Doe </B> Smith</SPAN></LABEL>",labelTag.toHtml());
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
-    
+
 
     public void testLabelsID() throws ParserException {
         createParser("<label>John Doe</label>");
@@ -106,13 +106,13 @@ public class LabelScannerTest extends ParserTestCase {
         parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LabelTag);
-        
+
         LabelTag labelTag = (LabelTag) node[0];
         assertStringEquals("Label","<LABEL>John Doe</LABEL>",labelTag.toHtml());
         Hashtable attr = labelTag.getAttributes();
         assertNull("ID",attr.get("id"));
     }
-    
+
     public void testNestedLabels() throws ParserException {
         createParser("<label id=\"attr1\"><label>Jane Doe");
         parser.registerScanners();
@@ -121,21 +121,21 @@ public class LabelScannerTest extends ParserTestCase {
         parseAndAssertNodeCount(2);
         assertTrue(node[0] instanceof LabelTag);
         assertTrue(node[1] instanceof LabelTag);
-        
+
         LabelTag labelTag = (LabelTag) node[0];
-        assertStringEquals("Label","<LABEL ID=\"attr1\"></LABEL>",labelTag.toHtml());       
+        assertStringEquals("Label","<LABEL ID=\"attr1\"></LABEL>",labelTag.toHtml());
         labelTag = (LabelTag) node[1];
         assertStringEquals("Label","<LABEL>Jane Doe</LABEL>",labelTag.toHtml());
         Hashtable attr = labelTag.getAttributes();
         assertNull("ID",attr.get("id"));
     }
-    
+
     public void testNestedLabels2() throws ParserException {
         String testHTML = new String(
                                     "<LABEL value=\"Google Search\">Google</LABEL>" +
                                     "<LABEL value=\"AltaVista Search\">AltaVista" +
                                     "<LABEL value=\"Lycos Search\"></LABEL>" +
-                                    "<LABEL>Yahoo!</LABEL>" + 
+                                    "<LABEL>Yahoo!</LABEL>" +
                                     "<LABEL>\nHotmail</LABEL>" +
                                     "<LABEL value=\"ICQ Messenger\">" +
                                     "<LABEL>Mailcity\n</LABEL>"+
@@ -151,14 +151,14 @@ public class LabelScannerTest extends ParserTestCase {
         LabelScanner labelScanner = new LabelScanner("-l");
         parser.addScanner(labelScanner);
         parseAndAssertNodeCount(13);
-        
+
 //      for(int j=0;j<nodeCount;j++)
 //      {
 //          //assertTrue("Node " + j + " should be Label Tag",node[j] instanceof LabelTag);
 //          System.out.println(node[j].getClass().getName());
 //          System.out.println(node[j].toHtml());
 //      }
-        
+
         LabelTag LabelTag;
         LabelTag = (LabelTag) node[0];
         assertStringEquals("HTML String","<LABEL VALUE=\"Google Search\">Google</LABEL>",LabelTag.toHtml());
@@ -186,13 +186,13 @@ public class LabelScannerTest extends ParserTestCase {
         assertStringEquals("HTML String","<LABEL VALUE=\"AOL\"><SPAN>AOL</SPAN></LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[12];
         assertStringEquals("HTML String","<LABEL VALUE=\"Time Warner\">Time <B>Warner <SPAN>AOL </SPAN>Inc.</B></LABEL>",LabelTag.toHtml());
-    }   
-    
+    }
+
     public static TestSuite suite() {
         return new TestSuite(LabelScannerTest.class);
     }
-    
-    public static void main(String[] args) 
+
+    public static void main(String[] args)
     {
         new junit.awtui.TestRunner().start(new String[] {LabelScannerTest.class.getName()});
     }

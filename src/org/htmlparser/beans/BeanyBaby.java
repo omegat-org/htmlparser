@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -48,12 +48,12 @@ public class BeanyBaby
      * Bread crumb trail of visited URLs.
      */
     java.util.Vector mTrail;
-    
+
     /**
      * Current position on the bread crumb trail.
      */
     int mCrumb;
-    
+
     /** Creates new form BeanyBaby */
     public BeanyBaby ()
     {
@@ -94,7 +94,7 @@ public class BeanyBaby
     {
         Object source;
         String name;
-        
+
         source = event.getSource ();
         if (source == mLinkBean)
         {
@@ -169,9 +169,9 @@ public class BeanyBaby
                 }
             }
         }
-        
+
     }
-    
+
     //
     // MouseListener interface
     //
@@ -231,12 +231,12 @@ public class BeanyBaby
         else
             mTrail.setElementAt (url, mCrumb);
         mLinkBean.setURL (url);
-        
+
         // update navigation menu
         mBack.setEnabled (mCrumb > 0);
         mForward.setEnabled (mCrumb + 1 < mTrail.size ());
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -344,13 +344,13 @@ public class BeanyBaby
         setSize(new java.awt.Dimension(640, 480));
         setLocation((screenSize.width-640)/2,(screenSize.height-480)/2);
     }//GEN-END:initComponents
-    
+
     /** Exit the Application */
     private void exitForm (java.awt.event.WindowEvent evt)
     {//GEN-FIRST:event_exitForm
         System.exit (0);
     }//GEN-LAST:event_exitForm
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.htmlparser.beans.HTMLLinkBean mLinkBean;
     private javax.swing.JMenuItem mForward;

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -60,17 +60,17 @@ public class ObjectCollectionTest extends ParserTestCase {
             spans[1].toPlainTextString()
         );
     }
-    
+
     public void testSimpleSearch() throws ParserException {
         createParser(
             "<SPAN>The Refactoring Challenge</SPAN>" +
-            "<SPAN>&#013;id: 6</SPAN>" 
+            "<SPAN>&#013;id: 6</SPAN>"
         );
         parser.registerScanners();
         parser.addScanner(new SpanScanner());
         assertSpanContent(parser.extractAllNodesThatAre(Span.class));
     }
-    
+
     public void testOneLevelNesting() throws ParserException {
         createParser(
             "<DIV>" +

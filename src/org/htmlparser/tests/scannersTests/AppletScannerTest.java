@@ -17,12 +17,12 @@
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -41,8 +41,8 @@ public class AppletScannerTest extends ParserTestCase
     public AppletScannerTest(String name) {
         super(name);
     }
-    
-    public void testEvaluate() 
+
+    public void testEvaluate()
     {
         AppletScanner scanner = new AppletScanner("-a");
         boolean retVal = scanner.evaluate("   Applet ",null);
@@ -63,10 +63,10 @@ public class AppletScannerTest extends ParserTestCase
             "</APPLET>\n"+
             "</HTML>";
         createParser(testHTML);
-        
+
         // Register the applet scanner
         parser.addScanner(new AppletScanner("-a"));
-            
+
         parseAndAssertNodeCount(2);
         assertTrue("Node should be an applet tag",node[0] instanceof AppletTag);
         // Check the data in the applet tag

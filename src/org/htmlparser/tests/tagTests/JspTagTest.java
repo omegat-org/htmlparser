@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -71,17 +71,17 @@ public class JspTagTest extends ParserTestCase
             "            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
             "    else \n"+
             "        if(transfer.validate(request))\n"+
-            "            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
+            "            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
             "%>\n");
         Parser.setLineSeparator("\r\n");
         // Register the Jsp Scanner
-        parser.addScanner(new JspScanner("-j"));    
+        parser.addScanner(new JspScanner("-j"));
         parseAndAssertNodeCount(5);
         // The first node should be an HTMLJspTag
         assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof JspTag);
         JspTag tag = (JspTag)node[0];
         assertStringEquals("Contents of the tag","@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" ",tag.getText());
-    
+
         // The second node should be a normal tag
         assertTrue("Node 2 should be an Tag",node[1] instanceof Tag);
         Tag htag = (Tag)node[1];
@@ -100,9 +100,9 @@ public class JspTagTest extends ParserTestCase
             "        if(transfer.validate(request))\r\n"+
             "            ";
         assertEquals("Contents of the tag",expected,tag2.getText());
-        
+
     }
-    
+
     /**
      * Check if the JSP Tag is being correctly recognized.
      * Our test html is : <BR>
@@ -133,18 +133,18 @@ public class JspTagTest extends ParserTestCase
             "            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
             "    else \n"+
             "        if(transfer.validate(request))\n"+
-            "            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
+            "            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
             "%>\n");
         Parser.setLineSeparator("\r\n");
         // Register the Jsp Scanner
-        parser.addScanner(new JspScanner("-j"));    
+        parser.addScanner(new JspScanner("-j"));
         parseAndAssertNodeCount(5);
         // The first node should be an HTMLJspTag
         assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof JspTag);
         JspTag tag = (JspTag)node[0];
         assertEquals("Raw String of the first JSP tag","<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>",tag.toHtml());
-    
-    
+
+
         // The third node should be an HTMLJspTag
         assertTrue("Node 2 should be an HTMLJspTag",node[2] instanceof JspTag);
         JspTag tag2 = (JspTag)node[2];
@@ -160,23 +160,23 @@ public class JspTagTest extends ParserTestCase
         assertEquals("Raw String of the second JSP tag",expected,tag2.toHtml());
         assertTrue("Node 4 should be an HTMLJspTag",node[4] instanceof JspTag);
         JspTag tag4 = (JspTag)node[4];
-        expected = "<%\r\n"+ 
+        expected = "<%\r\n"+
             "%>";
         assertEquals("Raw String of the fourth JSP tag",expected,tag4.toHtml());
-        
+
     }
     public void testSpecialCharacters() throws ParserException {
-        StringBuffer sb1 = new StringBuffer(); 
-        sb1.append("<% for (i=0;i<j;i++);%>"); 
+        StringBuffer sb1 = new StringBuffer();
+        sb1.append("<% for (i=0;i<j;i++);%>");
         createParser(sb1.toString());
-        
-        // Register the jsp scanner 
-        parser.addScanner(new JspScanner("-j")); 
+
+        // Register the jsp scanner
+        parser.addScanner(new JspScanner("-j"));
         parseAndAssertNodeCount(1);
         //assertTrue("Node should be a jsp tag",node[1] instanceof HTMLJspTag);
-        JspTag jspTag = (JspTag)node[0]; 
+        JspTag jspTag = (JspTag)node[0];
         assertEquals("jsp toHTML()","<% for (i=0;i<j;i++);%>",jspTag.toHtml());
-    }   
+    }
 
 
     /**

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -45,7 +45,7 @@ import org.htmlparser.util.sort.Sortable;
  */
 public class SortTest extends TestCase
 {
-    
+
     /**
      * Creates a new instance of SortTest
      */
@@ -70,7 +70,7 @@ public class SortTest extends TestCase
         {
             return (mData.compareTo (((Item)o).mData));
         }
-        
+
         public String toString ()
         {
             return (mData);
@@ -85,7 +85,7 @@ public class SortTest extends TestCase
         List (String words)
         {
             StringTokenizer toks;
-            
+
             toks = new StringTokenizer (words);
             outer:
             while (toks.hasMoreTokens ())
@@ -96,7 +96,7 @@ public class SortTest extends TestCase
         //
         // Sortable interface
         //
-        
+
         public int first ()
         {
             return (0);
@@ -145,12 +145,12 @@ public class SortTest extends TestCase
                 ret = Integer.MAX_VALUE;
 
             return ((int)ret);
-        }                   
+        }
     }
 
     /**
      * Test the operation of the static quicksort algorithm.
-     */    
+     */
     public void testQuickSort ()
     {
         Item[] words =
@@ -166,7 +166,7 @@ public class SortTest extends TestCase
 
         Sort.QuickSort (words);
 
- 
+
         assertEquals ("element 0 wrong ", "Derrick", words[0].mData);
         assertEquals ("element 1 wrong ", "breast", words[1].mData);
         assertEquals ("element 2 wrong ", "caretaker", words[2].mData);
@@ -179,7 +179,7 @@ public class SortTest extends TestCase
 
     /**
      * Test the operation of quicksort on a sortable list.
-     */    
+     */
     public void testSortList ()
     {
         List list = new List (
@@ -199,12 +199,12 @@ public class SortTest extends TestCase
             + "brillig gimble gyre in mimsy mome outgrabe. "
             + "raths slithy the the the the toves wabe were",
             b.toString ());
-        
+
     }
-    
+
     /**
      * Test the operation of quicksort on a vector of ordered items.
-     */    
+     */
     public void testSortVector ()
     {
         // sort a directory by date (oldest first)
@@ -216,7 +216,7 @@ public class SortTest extends TestCase
             File f = new SortableFile (dir, listing[i]);
             if (f.isFile ())
                 directory.addElement (f);
-        }        
+        }
 
         Sort.QuickSort (directory);
 
