@@ -96,6 +96,24 @@ public abstract class CompositeTagScanner extends TagScanner {
 						if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch[i])) 
 							endTagFound = true;
 					}
+					if (!endTagFound) {
+						String tmp = endTag.getText();
+						if (isTagToBeEndedFor(tmp)) {
+							// Yes, we need to assume that the link tag has ended here.
+							String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
+							reader.changeLine(newLine);
+							endTagFound = true;
+							endTag = new EndTag(
+								new TagData(
+									node.elementBegin(),
+									node.elementBegin()+3,
+									"A",
+									newLine
+								)
+							);
+							node = endTag;
+						} 
+					}
 				} 
 				if (!endTagFound){
 					childVector.add(node);
@@ -150,6 +168,10 @@ public abstract class CompositeTagScanner extends TagScanner {
 				">"
 			)
 		);
+	}
+
+	protected boolean isTagToBeEndedFor(String tmp) {
+		return false;
 	}
 
 

@@ -248,7 +248,7 @@ public class LinkScanner extends CompositeTagScanner
 						// If this happens to be a td, or a tr tag,
 						// then we definitely dont want to treat it as part
 						// of the link tag. We would instead add the missing </A>
-						if (tmp.toUpperCase().indexOf("TD")!=-1 || tmp.toUpperCase().indexOf("TR")!=-1) {
+						if (isTagToBeEndedFor(tmp)) {
 							// Yes, we need to assume that the link tag has ended here.
 							String newLine = insertEndTagBeforeNode(node,reader.getCurrentLine());
 							reader.changeLine(newLine);
@@ -288,7 +288,6 @@ public class LinkScanner extends CompositeTagScanner
 			throw ex;
 		}	
 	}
-	
 	public BaseHrefScanner createBaseHREFScanner(String filter) {
 		return new BaseHrefScanner(filter,processor);
 	}
@@ -308,6 +307,10 @@ public class LinkScanner extends CompositeTagScanner
 		TagData tagData,
 		CompositeTagData compositeTagData) {
 		return null;
+	}
+
+	protected boolean isTagToBeEndedFor(String tmp) {
+		return tmp.toUpperCase().indexOf("TD")!=-1 || tmp.toUpperCase().indexOf("TR")!=-1;
 	}
 
 }
