@@ -44,9 +44,14 @@ public class PageIndex
         Sortable
 {
     /**
+     * Starting increment for allocations.
+     */
+    protected static final int mStartIncrement = 100;
+
+    /**
      * Increment for allocations.
      */
-    protected static final int mIncrement = 100;
+    protected int mIncrement;
 
     /**
      * The number of valid elements.
@@ -72,6 +77,7 @@ public class PageIndex
         mPage = page;
         mIndices = new int[mIncrement];
         mCount = 0;
+        mIncrement = mStartIncrement * 2;
     }
 
     /**
@@ -135,15 +141,36 @@ public class PageIndex
     public int add (Cursor cursor)
     {
         int position;
+        int last;
         int ret;
 
-        // find where it goes
-        ret = Sort.bsearch (this, cursor);
-
-        // insert, but not twice
         position = cursor.getPosition ();
-        if (!((ret < size ()) && (position == mIndices[ret])))
+        if (0 == mCount)
+        {
+            ret = 0;
             insertElementAt (position, ret);
+        }
+        else
+        {
+            last = mIndices[mCount - 1];
+            if (position == last)
+                ret = mCount - 1;
+            else
+                if (position > last)
+                {
+                    ret = mCount;
+                    insertElementAt (position, ret);
+                }
+                else
+                {
+        	        // find where it goes
+        	        ret = Sort.bsearch (this, cursor);
+
+	                // insert, but not twice
+	                if (!((ret < size ()) && (position == mIndices[ret])))
+	                    insertElementAt (position, ret);
+                }
+        }
 
         return (ret);
     }
@@ -303,6 +330,7 @@ public class PageIndex
         if ((index >= capacity ()) || (size () == capacity ()))
         {   // allocate more space
             int new_values[] = new int[Math.max (capacity () + mIncrement, index + 1)];
+            mIncrement *= 2;
             if (index < capacity ())
             {
                 // copy and shift up in two pieces

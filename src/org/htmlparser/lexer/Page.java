@@ -368,6 +368,7 @@ public class Page
             {
                 stream = new Stream (getConnection ().getInputStream ());
             }
+
             try
             {
                 mSource = new InputStreamSource (stream, charset);
@@ -951,19 +952,7 @@ public class Page
      */
     public String getText ()
     {
-        String ret;
-
-        try
-        {
-            ret = mSource.getString (0, mSource.offset ());
-        }
-        catch (IOException ioe)
-        {
-            throw new IllegalArgumentException (
-                "can't get all the previous characters - " + ioe.getMessage ());
-        }
-
-        return (ret);
+        return (getText (0, mSource.offset ()));
     }
 
     /**

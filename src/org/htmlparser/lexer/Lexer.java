@@ -244,7 +244,7 @@ public class Lexer
         throws
             ParserException
     {
-        Cursor probe;
+        int start;
         char ch;
         Node ret;
 
@@ -256,55 +256,55 @@ public class Lexer
             if (mDebugLineTrigger < lineno)
                 mDebugLineTrigger = lineno + 1; // trigger on subsequent lines too
         }
-        probe = mCursor.dup ();
-        ch = mPage.getCharacter (probe);
+        start = mCursor.getPosition ();
+        ch = mPage.getCharacter (mCursor);
         switch (ch)
         {
             case 0: // end of input
                 ret = null;
                 break;
             case '<':
-                ch = mPage.getCharacter (probe);
+                ch = mPage.getCharacter (mCursor);
                 if (0 == ch)
-                    ret = makeString (probe);
+                    ret = makeString (start, mCursor.getPosition ());
                 else if ('%' == ch)
                 {
-                    probe.retreat ();
-                    ret = parseJsp (probe);
+                    mCursor.retreat ();
+                    ret = parseJsp (start);
                 }
                 else if ('/' == ch || '%' == ch || Character.isLetter (ch))
                 {
-                    probe.retreat ();
-                    ret = parseTag (probe);
+                    mCursor.retreat ();
+                    ret = parseTag (start);
                 }
                 else if ('!' == ch)
                 {
-                    ch = mPage.getCharacter (probe);
+                    ch = mPage.getCharacter (mCursor);
                     if (0 == ch)
-                        ret = makeString (probe);
+                        ret = makeString (start, mCursor.getPosition ());
                     else
                     {
                         if ('>' == ch) // handle <!>
-                            ret = makeRemark (probe);
+                            ret = makeRemark (start, mCursor.getPosition ());
                         else
                         {
-                            probe.retreat (); // remark and tag need this character
+                            mCursor.retreat (); // remark and tag need this character
                             if ('-' == ch)
-                                ret = parseRemark (probe, quotesmart);
+                                ret = parseRemark (start, quotesmart);
                             else
                             {
-                                probe.retreat (); // tag needs the previous one too
-                                ret = parseTag (probe);
+                                mCursor.retreat (); // tag needs the previous one too
+                                ret = parseTag (start);
                             }
                         }
                     }
                 }
                 else
-                    ret = parseString (probe, quotesmart);
+                    ret = parseString (start, quotesmart);
                 break;
             default:
-                probe.retreat (); // string needs to see leading foreslash
-                ret = parseString (probe, quotesmart);
+                mCursor.retreat (); // string needs to see leading foreslash
+                ret = parseString (start, quotesmart);
                 break;
         }
 
@@ -363,7 +363,7 @@ public class Lexer
      * @param cursor The position at which to start scanning.
      * @param quotesmart If <code>true</code>, strings ignore quoted contents.
      */
-    protected Node parseString (Cursor cursor, boolean quotesmart)
+    protected Node parseString (int start, boolean quotesmart)
         throws
             ParserException
     {
@@ -375,40 +375,40 @@ public class Lexer
         quote = 0;
         while (!done)
         {
-            ch = mPage.getCharacter (cursor);
+            ch = mPage.getCharacter (mCursor);
             if (0 == ch)
                 done = true;
             else if (0x1b == ch) // escape
             {
-                ch = mPage.getCharacter (cursor);
+                ch = mPage.getCharacter (mCursor);
                 if (0 == ch)
                     done = true;
                 else if ('$' == ch)
                 {
-                    ch = mPage.getCharacter (cursor);
+                    ch = mPage.getCharacter (mCursor);
                     if (0 == ch)
                         done = true;
                     else if ('B' == ch)
-                        scanJIS (cursor);
+                        scanJIS (mCursor);
                     else
                     {
-                        cursor.retreat ();
-                        cursor.retreat ();
+                        mCursor.retreat ();
+                        mCursor.retreat ();
                     }
                 }
                 else
-                    cursor.retreat ();
+                    mCursor.retreat ();
             }
             else if (quotesmart && (0 == quote) && (('\'' == ch) || ('"' == ch)))
                 quote = ch; // enter quoted state
             // patch contributed by Gernot Fricke to handle escaped closing quote
             else if (quotesmart && (0 != quote) && ('\\' == ch))
             {
-                ch = mPage.getCharacter (cursor); //try to consume escaped character
+                ch = mPage.getCharacter (mCursor); //try to consume escaped character
                 if (  (ch != '\\') // escaped backslash
                     && (ch != quote)) // escaped quote character 
                        // ( reflects ["] or [']  whichever opened the quotation)
-                    cursor.retreat(); // unconsume char if character was not an escapable char.
+                    mCursor.retreat(); // unconsume char if character was not an escapable char.
             }
             else if (quotesmart && (ch == quote))
                 quote = 0; // exit quoted state
@@ -416,13 +416,13 @@ public class Lexer
             {
                 // handle multiline and double slash comments (with a quote) in script like:
                 // I can't handle single quotations.
-                ch = mPage.getCharacter (cursor);
+                ch = mPage.getCharacter (mCursor);
                 if (0 == ch)
                     done = true;
                 else if ('/' == ch)
                 {
                     do
-                        ch = mPage.getCharacter (cursor);
+                        ch = mPage.getCharacter (mCursor);
                     while ((ch != 0) && (ch != '\n'));
                 }
                 else if ('*' == ch)
@@ -430,59 +430,54 @@ public class Lexer
                     do
                     {
                         do
-                            ch = mPage.getCharacter (cursor);
+                            ch = mPage.getCharacter (mCursor);
                         while ((ch != 0) && (ch != '*'));
-                        ch = mPage.getCharacter (cursor);
+                        ch = mPage.getCharacter (mCursor);
                         if (ch == '*')
-                            cursor.retreat ();
+                            mCursor.retreat ();
                     }
                     while ((ch != 0) && (ch != '/'));
                 }
                 else
-                    cursor.retreat ();
+                    mCursor.retreat ();
             }
             else if ((0 == quote) && ('<' == ch))
             {
-                ch = mPage.getCharacter (cursor);
+                ch = mPage.getCharacter (mCursor);
                 if (0 == ch)
                     done = true;
                 // the order of these tests might be optimized for speed:
                 else if ('/' == ch || Character.isLetter (ch) || '!' == ch || '%' == ch)
                 {
                     done = true;
-                    cursor.retreat ();
-                    cursor.retreat ();
+                    mCursor.retreat ();
+                    mCursor.retreat ();
                 }
                 else
                 {
                     // it's not a tag, so keep going, but check for quotes
-                    cursor.retreat ();
+                    mCursor.retreat ();
                 }
             }
         }
 
-        return (makeString (cursor));
+        return (makeString (start, mCursor.getPosition ()));
     }
 
     /**
      * Create a string node based on the current cursor and the one provided.
      */
-    protected Node makeString (Cursor cursor)
+    protected Node makeString (int start, int end)
         throws
             ParserException
     {
         int length;
-        int begin;
-        int end;
         Node ret;
 
-        begin = mCursor.getPosition ();
-        end = cursor.getPosition ();
-        length = end - begin;
+        length = end - start;
         if (0 != length)
         {   // got some characters
-            mCursor = cursor;
-            ret = getNodeFactory ().createStringNode (this.getPage (), begin, end);
+            ret = getNodeFactory ().createStringNode (this.getPage (), start, end);
         }
         else
             ret = null;
@@ -582,7 +577,7 @@ public class Lexer
      * @param cursor The position at which to start scanning.
      * @return The parsed tag.
      */
-    protected Node parseTag (Cursor cursor)
+    protected Node parseTag (int start)
         throws
             ParserException
     {
@@ -596,11 +591,11 @@ public class Lexer
         attributes = new Vector ();
         state = 0;
         bookmarks = new int[8];
-        bookmarks[0] = cursor.getPosition ();
+        bookmarks[0] = mCursor.getPosition ();
         while (!done)
         {
-            bookmarks[state + 1] = cursor.getPosition ();
-            ch = mPage.getCharacter (cursor);
+            bookmarks[state + 1] = mCursor.getPosition ();
+            ch = mPage.getCharacter (mCursor);
             switch (state)
             {
                 case 0: // outside of any attribute
@@ -609,8 +604,8 @@ public class Lexer
                         if ('<' == ch)
                         {
                             // don't consume the opening angle
-                            cursor.retreat ();
-                            bookmarks[state + 1] = cursor.getPosition ();
+                            mCursor.retreat ();
+                            bookmarks[state + 1] = mCursor.getPosition ();
                         }
                         whitespace (attributes, bookmarks);
                         done = true;
@@ -627,8 +622,8 @@ public class Lexer
                         if ('<' == ch)
                         {
                             // don't consume the opening angle
-                            cursor.retreat ();
-                            bookmarks[state + 1] = cursor.getPosition ();
+                            mCursor.retreat ();
+                            bookmarks[state + 1] = mCursor.getPosition ();
                         }
                         standalone (attributes, bookmarks);
                         done = true;
@@ -717,7 +712,7 @@ public class Lexer
                         // same as last else clause
                         standalone (attributes, bookmarks);
                   	    bookmarks[0]=bookmarks[6];
-                  	    cursor.retreat();
+                  	    mCursor.retreat();
                   	    state=0;
                     }
                     else if (Character.isWhitespace (ch))
@@ -739,7 +734,7 @@ public class Lexer
                         // and restart scanning as whitespace attribute.
                   	    standalone (attributes, bookmarks);
                   	    bookmarks[0]=bookmarks[6];
-                  	    cursor.retreat();
+                  	    mCursor.retreat();
                   	    state=0;
                    	}
                     break;
@@ -748,31 +743,26 @@ public class Lexer
             }
         }
 
-        return (makeTag (cursor, attributes));
+        return (makeTag (start, mCursor.getPosition (), attributes));
     }
 
     /**
      * Create a tag node based on the current cursor and the one provided.
      */
-    protected Node makeTag (Cursor cursor, Vector attributes)
+    protected Node makeTag (int start, int end, Vector attributes)
         throws
             ParserException
     {
         int length;
-        int begin;
-        int end;
         Node ret;
 
-        begin = mCursor.getPosition ();
-        end = cursor.getPosition ();
-        length = end - begin;
+        length = end - start;
         if (0 != length)
         {   // return tag based on second character, '/', '%', Letter (ch), '!'
             if (2 > length)
                 // this is an error
-                return (makeString (cursor));
-            mCursor = cursor;
-            ret = getNodeFactory ().createTagNode (this.getPage (), begin, end, attributes);
+                return (makeString (start, end));
+            ret = getNodeFactory ().createTagNode (this.getPage (), start, end, attributes);
         }
         else
             ret = null;
@@ -820,7 +810,7 @@ public class Lexer
      * @param cursor The position at which to start scanning.
      * @param quotesmart If <code>true</code>, strings ignore quoted contents.
      */
-    protected Node parseRemark (Cursor cursor, boolean quotesmart)
+    protected Node parseRemark (int start, boolean quotesmart)
         throws
             ParserException
     {
@@ -832,7 +822,7 @@ public class Lexer
         state = 0;
         while (!done)
         {
-            ch = mPage.getCharacter (cursor);
+            ch = mPage.getCharacter (mCursor);
             if (0 == ch)
                 done = true;
             else
@@ -844,31 +834,31 @@ public class Lexer
                         if ('-' == ch)
                             state = 1;
                         else
-                            return (parseString (cursor, quotesmart));
+                            return (parseString (start, quotesmart));
                         break;
                     case 1: // prior to the second open delimiter
                         if ('-' == ch)
                         {
                             // handle <!--> because netscape does
-                            ch = mPage.getCharacter (cursor);
+                            ch = mPage.getCharacter (mCursor);
                             if (0 == ch)
                                 done = true;
                             else if ('>' == ch)
                                 done = true;
                             else
                             {
-                                cursor.retreat ();
+                                mCursor.retreat ();
                                 state = 2;
                             }                        
                         }
                         else
-                            return (parseString (cursor, quotesmart));
+                            return (parseString (start, quotesmart));
                         break;
                     case 2: // prior to the first closing delimiter
                         if ('-' == ch)
                             state = 3;
                         else if (0 == ch)
-                            return (parseString (cursor, quotesmart)); // no terminator
+                            return (parseString (start, quotesmart)); // no terminator
                         break;
                     case 3: // prior to the second closing delimiter
                         if ('-' == ch)
@@ -891,31 +881,26 @@ public class Lexer
                 }
         }
 
-        return (makeRemark (cursor));
+        return (makeRemark (start, mCursor.getPosition ()));
     }
 
     /**
      * Create a remark node based on the current cursor and the one provided.
      */
-    protected Node makeRemark (Cursor cursor)
+    protected Node makeRemark (int start, int end)
         throws
             ParserException
     {
         int length;
-        int begin;
-        int end;
         Node ret;
 
-        begin = mCursor.getPosition ();
-        end = cursor.getPosition ();
-        length = end - begin;
+        length = end - start;
         if (0 != length)
         {   // return tag based on second character, '/', '%', Letter (ch), '!'
             if (2 > length)
                 // this is an error
-                return (makeString (cursor));
-            mCursor = cursor;
-            ret = getNodeFactory ().createRemarkNode (this.getPage (), begin, end);
+                return (makeString (start, end));
+            ret = getNodeFactory ().createRemarkNode (this.getPage (), start, end);
         }
         else
             ret = null;
@@ -929,7 +914,7 @@ public class Lexer
      * exhausted, in which case <code>null</code> is returned.
      * @param cursor The position at which to start scanning.
      */
-    protected Node parseJsp (Cursor cursor)
+    protected Node parseJsp (int start)
         throws
             ParserException
     {
@@ -951,7 +936,7 @@ public class Lexer
         // 0122223d
         while (!done)
         {
-            ch = mPage.getCharacter (cursor);
+            ch = mPage.getCharacter (mCursor);
             switch (state)
             {
                 case 0: // prior to the percent
@@ -976,13 +961,13 @@ public class Lexer
                             break;
                         case '=': // <%=
                         case '@': // <%@
-                            code = cursor.getPosition ();
-                            attributes.addElement (new PageAttribute (mPage, mCursor.getPosition () + 1, code, -1, -1, (char)0));
+                            code = mCursor.getPosition ();
+                            attributes.addElement (new PageAttribute (mPage, start + 1, code, -1, -1, (char)0));
                             state = 2;
                             break;
                         default:  // <%x
-                            code = cursor.getPosition () - 1;
-                            attributes.addElement (new PageAttribute (mPage, mCursor.getPosition () + 1, code, -1, -1, (char)0));
+                            code = mCursor.getPosition () - 1;
+                            attributes.addElement (new PageAttribute (mPage, start + 1, code, -1, -1, (char)0));
                             state = 2;
                             break;
                     }
@@ -1055,7 +1040,7 @@ public class Lexer
         {
             if (0 != code)
             {
-                state = cursor.getPosition () - 2; // reuse state
+                state = mCursor.getPosition () - 2; // reuse state
                 attributes.addElement (new PageAttribute (mPage, code, state, -1, -1, (char)0));
                 attributes.addElement (new PageAttribute (mPage, state, state + 1, -1, -1, (char)0));
             }
@@ -1063,9 +1048,9 @@ public class Lexer
                 throw new IllegalStateException ("jsp with no code!");
         }
         else
-            return (parseString (cursor, true)); // hmmm, true?
+            return (parseString (start, true)); // hmmm, true?
 
-        return (makeTag (cursor, attributes));
+        return (makeTag (start, mCursor.getPosition (), attributes));
     }
 
     //
