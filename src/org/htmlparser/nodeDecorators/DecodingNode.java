@@ -28,8 +28,9 @@
 //
 // This class was contributed by Joshua Kerievsky
 
-package org.htmlparser;
+package org.htmlparser.nodeDecorators;
 
+import org.htmlparser.Node;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.Translate;
@@ -39,7 +40,7 @@ import org.htmlparser.visitors.NodeVisitor;
 public class DecodingNode implements Node {
 	private Node delegate; 
 
-	protected DecodingNode(Node node) {
+	public DecodingNode(Node node) {
 		delegate = node;
 	}
 

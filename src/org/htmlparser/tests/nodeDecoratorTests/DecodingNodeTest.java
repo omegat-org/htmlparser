@@ -28,14 +28,15 @@
 //
 // This test class produced by Joshua Kerievsky
 
-package org.htmlparser.tests;
+package org.htmlparser.tests.nodeDecoratorTests;
 
+import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
-public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
+public class DecodingNodeTest extends ParserTestCase {
 
-	public EscapeCharacterRemovingNodeTest(String name) {
+	public DecodingNodeTest(String name) {
 		super(name);
 	}
 
@@ -43,7 +44,7 @@ public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
 		throws ParserException {
 		StringBuffer decodedContent = new StringBuffer();
 		createParser(STRING_TO_DECODE);
-		parser.setEscapeCharacterRemoval(true);  
+		parser.setNodeDecoding(true);  // tell parser to decode StringNodes
 		NodeIterator nodes = parser.elements();
 		
 		while (nodes.hasMoreNodes()) 
@@ -52,52 +53,62 @@ public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
 		return decodedContent.toString();
 	}
 
-	public void testTab() throws Exception {
+	public void testAmpersand() throws Exception {
 		String ENCODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring Workshop\tCreated by Industrial Logic, Inc.";
+			"The Testing &amp; Refactoring Workshop";
 			
 		String DECODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
+			"The Testing & Refactoring Workshop";
 
 		assertEquals(
-			"tab in string",
+			"ampersand in string",
 			DECODED_WORKSHOP_TITLE,
 			parseToObtainDecodedResult(ENCODED_WORKSHOP_TITLE));
 	}
-	
-	public void testCarriageReturn() throws Exception {
-		String ENCODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring Workshop\nCreated by Industrial Logic, Inc.\n";
+
+	public void testNumericReference() throws Exception {
+		String ENCODED_DIVISION_SIGN =
+			"&#247; is the division sign.";
 			
-		String DECODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
-
-		assertEquals(
-			"tab in string",
-			DECODED_WORKSHOP_TITLE,
-			parseToObtainDecodedResult(ENCODED_WORKSHOP_TITLE));
-	}	
-	
-	public void testWithDecodingNodeDecorator() throws Exception {
-		String ENCODED_WORKSHOP_TITLE =
-			"The Testing &amp; Refactoring Workshop\nCreated by Industrial Logic, Inc.\n";
+		String DECODED_DIVISION_SIGN =
+			"÷ is the division sign.";
 			
-		String DECODED_WORKSHOP_TITLE =
-			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
-
-		StringBuffer decodedContent = new StringBuffer();
-		createParser(ENCODED_WORKSHOP_TITLE);
-		parser.setEscapeCharacterRemoval(true);
-		parser.setNodeDecoding(true);
-		NodeIterator nodes = parser.elements();
-		
-		while (nodes.hasMoreNodes()) 
-			decodedContent.append(nodes.nextNode().toPlainTextString());			
-
 		assertEquals(
-			"tab in string",
-			DECODED_WORKSHOP_TITLE,
-			decodedContent.toString());
-		
+			"numeric reference for division sign",
+			DECODED_DIVISION_SIGN,
+			parseToObtainDecodedResult(ENCODED_DIVISION_SIGN));
 	}
+	
+	
+	public void testReferencesInString () throws Exception {
+		String ENCODED_REFERENCE_IN_STRING =
+			"Thus, the character entity reference &divide; is a more convenient" +
+			" form than &#247; for obtaining the division sign (÷)";
+		
+		String DECODED_REFERENCE_IN_STRING =
+			"Thus, the character entity reference ÷ is a more convenient" +
+			" form than ÷ for obtaining the division sign (÷)";
+		
+		assertEquals (
+			"character references within a string",
+			DECODED_REFERENCE_IN_STRING,
+			parseToObtainDecodedResult(ENCODED_REFERENCE_IN_STRING));
+	}
+
+	public void testBogusCharacterEntityReference() throws Exception {
+		
+		String ENCODED_BOGUS_CHARACTER_ENTITY = 
+			"The character entity reference &divode; is bogus";
+			
+		String DECODED_BOGUS_CHARACTER_ENTITY =
+			"The character entity reference &divode; is bogus";
+		
+		assertEquals (
+			"bogus character entity reference",
+			DECODED_BOGUS_CHARACTER_ENTITY,
+			parseToObtainDecodedResult(ENCODED_BOGUS_CHARACTER_ENTITY));
+	}
+	
+	
+
 }

@@ -1,5 +1,6 @@
-package org.htmlparser;
+package org.htmlparser.nodeDecorators;
 
+import org.htmlparser.Node;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserUtils;
@@ -11,7 +12,6 @@ public class EscapeCharacterRemovingNode implements Node {
 	public EscapeCharacterRemovingNode(Node newDelegate) {
 		this.delegate = newDelegate;
 	}
-	
 
 	public void accept(NodeVisitor visitor) {
 		delegate.accept(visitor);

@@ -26,15 +26,21 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
-package org.htmlparser.tests;
+package org.htmlparser.tests.nodeDecoratorTests;
 
 import junit.framework.TestSuite;
 
 public class AllTests extends junit.framework.TestCase 
 {
-
 	public AllTests(String name) {
 		super(name);
+	}
+
+	public static TestSuite suite() {
+		TestSuite suite = new TestSuite("Node Decorator Tests");
+		suite.addTestSuite(DecodingNodeTest.class);
+		suite.addTestSuite(EscapeCharacterRemovingNodeTest.class);
+		return suite; 
 	}
 
     /**
@@ -48,7 +54,7 @@ public class AllTests extends junit.framework.TestCase
      * </pre>
      * All other options are passed on to the junit framework.
      */
-	public static void main(String[] args)
+    public static void main(String[] args)
     {
         String runner;
         int i;
@@ -79,7 +85,7 @@ public class AllTests extends junit.framework.TestCase
         // append the test class
         arguments = new String[args.length + 1];
         System.arraycopy (args, 0, arguments, 0, args.length);
-        arguments[args.length] = "org.htmlparser.tests.AllTests";
+        arguments[args.length] = "org.htmlparser.tests.nodeDecoratorTests.AllTests";
 
         // invoke main() of the test runner
         try
@@ -98,22 +104,5 @@ public class AllTests extends junit.framework.TestCase
                 + t.getMessage ()
                 + ")");
         }
-	}
-
-	public static TestSuite suite() {
-		TestSuite suite = new TestSuite("HTMLParser Tests");
-		TestSuite basic = new TestSuite("Basic Tests");
-		basic.addTestSuite(ParserTest.class);
-        suite.addTest(basic);
-		suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.utilTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.tagTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.visitorsTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.parserHelperTests.AllTests.suite());
-		suite.addTest(org.htmlparser.tests.nodeDecoratorTests.AllTests.suite());
-		suite.addTest(AssertXmlEqualsTest.suite());
-		suite.addTest(LineNumberAssignedByNodeReaderTest.suite());
-		return suite;
-	} 
+    }
 }
-

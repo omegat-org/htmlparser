@@ -29,6 +29,7 @@
 
 package org.htmlparser;
 
+import org.htmlparser.nodeDecorators.*;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.NodeVisitor;
 
@@ -54,7 +55,6 @@ public class StringNode extends AbstractNode
 	{
 		super(textBegin,textEnd);
 		this.textBuffer = textBuffer;
-		
 	}
 
 	public static Node createStringNode(
