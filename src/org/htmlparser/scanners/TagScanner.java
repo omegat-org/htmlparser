@@ -36,6 +36,7 @@ import java.util.Hashtable;
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.StringNode;
+import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
@@ -270,5 +271,61 @@ public abstract class TagScanner
 	 * @return Tag
 	 * @throws ParserException
 	 */
-	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException { return null; }  
+	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException { return null; }
+
+	/**
+	 * Checks if there is an existing scanner of the same
+	 * type that is open - indicating that we're now dealing
+	 * with a broken tag
+	 * @return Returns a boolean
+	 */
+	public boolean isPreviousLinkScannerOpen() {
+		return previousOpenScanner!=null;
+	}
+
+	protected Tag getReplacedEndTag(Tag tag, NodeReader reader, String currentLine) {
+		// Replace tag - it was a <A> tag - replace with </a>
+		String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
+		reader.changeLine(newLine);
+		return new EndTag(
+			new TagData(
+				tag.elementBegin(),
+				tag.elementBegin()+3,
+				tag.getTagName(),
+				currentLine
+			)
+		);
+	}
+
+	public String replaceFaultyTagWithEndTag(Tag tag, String currentLine) {
+		String newLine = currentLine.substring(0,tag.elementBegin());
+		newLine+="</"+tag.getTagName()+">";
+		newLine+=currentLine.substring(tag.elementEnd()+1,currentLine.length());
+		
+		return newLine;
+	}
+
+	protected Tag getInsertedEndTag(Tag tag, NodeReader reader, String currentLine) {
+		// Insert end tag
+		String newLine = insertEndTagBeforeNode(tag, currentLine);
+		reader.changeLine(newLine);
+		return new EndTag(
+			new TagData(
+				tag.elementBegin(),
+				tag.elementBegin()+3,
+				tag.getTagName(),
+				currentLine
+			)		
+		);
+	}
+
+	protected boolean isBrokenTag() {
+		return previousOpenScanner!=null;
+	}
+
+	protected boolean isTagFoundAtAll(Tag tag) {
+		return tag.getText().length()==1;
+	}
+
+	protected TagScanner previousOpenScanner=null;  
 }

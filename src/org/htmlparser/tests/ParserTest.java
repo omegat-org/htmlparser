@@ -447,7 +447,7 @@ public class ParserTest extends ParserTestCase {
 
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 			Node node = e.nextNode();
-			node.collectInto(collectionList,LinkTag.LINK_TAG_FILTER);
+			node.collectInto(collectionList,LinkTag.class);
 		}
 		assertEquals("Size of collection vector should be 11",11,collectionList.size());
 		// All items in collection vector should be links

@@ -53,18 +53,18 @@ import org.htmlparser.util.ParserUtils;
  * given string contains an image tag. Extraction is done by the scan method thereafter
  * by the user of this class.
  */
-public class LinkScanner extends TagScanner
+public class LinkScanner extends CompositeTagScanner
 {
-	public static final String LINK_SCANNER_ID="A";
+	private static final String MATCH_NAME [] = {"A"};
+	public static final String LINK_SCANNER_ID = "A";
 	public static final String DIRTY_TAG_MESSAGE=" is a dirty link tag - the tag was not closed. \nWe encountered an open tag, before the previous end tag was found.\nCorrecting this..";
-	private TagScanner previousOpenLinkScanner=null;
 	private LinkProcessor processor;
 	/**
 	 * Overriding the default constructor
 	 */
 	public LinkScanner()
 	{
-		super();
+		super(MATCH_NAME);
 		processor = new LinkProcessor();
 	}
 	/**
@@ -72,9 +72,10 @@ public class LinkScanner extends TagScanner
 	 */
 	public LinkScanner(String filter)
 	{
-		super(filter);
+		super(filter,MATCH_NAME);
 		processor = new LinkProcessor();		
 	}
+	
 	protected Tag createLinkTag(String currentLine, Node node, boolean mailLink, boolean javascriptLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) {
 		int linkEnd;
 		// The link has been completed
@@ -122,7 +123,7 @@ public class LinkScanner extends TagScanner
 		
 		// Is it a dirty html tag (should have been end tag but is begin)
 		if ((ch=='a' || ch=='A')) {
-			if (previousOpenLinkScanner!=null) {
+			if (previousOpenScanner!=null) {
 				StringBuffer msg= new StringBuffer();
 				msg.append("<");
 				msg.append(s);
@@ -176,57 +177,8 @@ public class LinkScanner extends TagScanner
 	 * @param text Text to be parsed to pick out the access key.
      * @return The value of the ACCESSKEY attribute.
 	 */
-	public String getAccessKey (String text) {
-		final String sub = "ACCESSKEY";
-        int n;
-        int length;
-        char ch;
-        StringBuffer buffer;
-		String ret;
-        
-        ret = null;
-		n = text.toUpperCase ().indexOf (sub);
-		if (-1 != n)
-		{
-			n += sub.length ();
-            length = text.length ();
-            ch = (char)0;
-			// parse the = sign
-            while ((n < length) && ('=' != (ch = text.charAt (n))))
-			{
-				if (Character.isWhitespace (ch))
-                    n++;
-                else
-                    n = length; // exit early
-			}
-
-            if ('=' == ch)
-            {
-                n++;
-                // skip whitespace
-                while ((n < length) && Character.isWhitespace (ch = text.charAt (n)))
-                    n++;
-
-                // start parsing for a number
-                buffer = new StringBuffer ();
-                while ((n < length) && Character.isDigit (ch = text.charAt (n)))
-                {
-                    buffer.append (ch);
-                    n++;
-                }
-                if (0 != buffer.length ())
-                    ret = buffer.toString ();
-			}
-		}
-        
-        return (ret);
-	}
-	/**
-	 * Gets the dirty.
-	 * @return Returns a boolean
-	 */
-	public boolean isPreviousLinkScannerOpen() {
-		return previousOpenLinkScanner!=null;
+	public String getAccessKey (Tag tag) {
+		return tag.getAttribute("ACCESSKEY");
 	}
 	/**
 	 * Scan the tag and extract the information relevant to the link tag.
@@ -238,38 +190,13 @@ public class LinkScanner extends TagScanner
 	public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
 	{
 		try {
-			if (previousOpenLinkScanner!=null) {
-				// Fool the reader into thinking this is an end tag (to handle dirty html, where there is 
-				// actually no end tag for the link
-				if (tag.getText().length()==1) {
-					// Replace tag - it was a <A> tag - replace with </a>
-					String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
-					reader.changeLine(newLine);
-					return new EndTag(
-						new TagData(
-							tag.elementBegin(),
-							tag.elementBegin()+3,
-							"A",
-							currentLine
-						)
-					);
-				}
-				 else 
-				{
-					// Insert end tag
-					String newLine = insertEndTagBeforeNode(tag, currentLine);
-					reader.changeLine(newLine);
-					return new EndTag(
-						new TagData(
-							tag.elementBegin(),
-							tag.elementBegin()+3,
-							"A",
-							currentLine
-						)		
-					);
-				}
+			if (isBrokenTag()) {
+				if (isTagFoundAtAll(tag)) 
+					return getReplacedEndTag(tag, reader, currentLine);
+				else 
+					return getInsertedEndTag(tag, reader, currentLine);
 			}
-			previousOpenLinkScanner = this;
+			previousOpenScanner = this;
 			Node node;
 			boolean mailLink = false;
 			boolean javascriptLink = false;
@@ -301,7 +228,7 @@ public class LinkScanner extends TagScanner
 				javascriptLink = true;
 			}  
 			
-			accessKey = getAccessKey(tag.getText());
+			accessKey = getAccessKey(tag);
 			linkBegin = tag.elementBegin();
 			// Get the next element, which is string, till </a> is encountered
 			boolean endFlag=false;
@@ -364,7 +291,7 @@ public class LinkScanner extends TagScanner
 			if (node instanceof EndTag)
 			{
 				
-				previousOpenLinkScanner = null;
+				previousOpenScanner = null;
 				return createLinkTag(currentLine, node, mailLink, javascriptLink,  link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
 			}
 			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
@@ -377,13 +304,7 @@ public class LinkScanner extends TagScanner
 			throw ex;
 		}	
 	}
-	public String replaceFaultyTagWithEndTag(Tag tag, String currentLine) {
-		String newLine = currentLine.substring(0,tag.elementBegin());
-		newLine+="</A>";
-		newLine+=currentLine.substring(tag.elementEnd()+1,currentLine.length());
-		
-		return newLine;
-	}
+	
 	public BaseHrefScanner createBaseHREFScanner(String filter) {
 		return new BaseHrefScanner(filter,processor);
 	}
@@ -394,9 +315,13 @@ public class LinkScanner extends TagScanner
 	 * @see org.htmlparser.scanners.TagScanner#getID()
 	 */
 	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = LINK_SCANNER_ID;
-		return ids;
+		return MATCH_NAME;
+	}
+
+	protected Tag createTag(
+		TagData tagData,
+		CompositeTagData compositeTagData) {
+		return null;
 	}
 
 }

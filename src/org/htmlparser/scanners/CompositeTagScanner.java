@@ -61,7 +61,12 @@ public abstract class CompositeTagScanner extends TagScanner {
 		throws ParserException {
 		Tag endTag=null; 
 		try {
-			
+			if (isBrokenTag()) {
+				if (isTagFoundAtAll(tag)) 
+					return getReplacedEndTag(tag, reader, currLine);
+				else  
+					return getInsertedEndTag(tag, reader, currLine);
+			}
 			beforeScanningStarts();
 			Tag startTag = tag;
 			endTag = null;

@@ -70,4 +70,7 @@ public class LinkData {
 		return mailLink;
 	}
 
+	public String toString() {
+		return "";
+	}
 }
