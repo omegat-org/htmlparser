@@ -34,6 +34,7 @@ import java.util.Vector;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.visitors.HTMLVisitor;
 
 public abstract class HTMLCompositeTag extends HTMLTag {
 	protected HTMLTag startTag, endTag;
@@ -153,4 +154,15 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 		}
 		return buff.toString();
 	}
+	
+	public void accept(HTMLVisitor visitor) {
+		startTag.accept(visitor);
+		Enumeration children = children();
+		while (children.hasMoreElements()) {
+			HTMLNode child = (HTMLNode)children.nextElement();
+			child.accept(visitor);
+		}
+		endTag.accept(visitor);
+	}
+
 }
