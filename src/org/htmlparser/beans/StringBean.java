@@ -76,12 +76,12 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Property name in event where the URL contents changes.
      */
-    public static final String PROP_STRINGS_PROPERTY = "Strings";
+    public static final String PROP_STRINGS_PROPERTY = "strings";
 
     /**
      * Property name in event where the 'embed links' state changes.
      */
-    public static final String PROP_LINKS_PROPERTY = "Links";
+    public static final String PROP_LINKS_PROPERTY = "links";
 
     /**
      * Property name in event where the URL changes.
@@ -91,17 +91,17 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Property name in event where the 'replace non-breaking spaces' state changes.
      */
-    public static final String PROP_REPLACE_SPACE_PROPERTY = "ReplaceSpace";
+    public static final String PROP_REPLACE_SPACE_PROPERTY = "replaceNonBreakingSpaces";
 
     /**
      * Property name in event where the 'collapse whitespace' state changes.
      */
-    public static final String PROP_COLLAPSE_PROPERTY = "Collapse";
+    public static final String PROP_COLLAPSE_PROPERTY = "collapse";
 
     /**
      * Property name in event where the connection changes.
      */
-    public static final String PROP_CONNECTION_PROPERTY = "Connection";
+    public static final String PROP_CONNECTION_PROPERTY = "connection";
 
     /**
      * A newline.

@@ -82,15 +82,15 @@ public class Thumbelina
     /**
      * Property name for current URL binding.
      */
-    public static final String PROP_CURRENT_URL_PROPERTY = "CurrentURL";
+    public static final String PROP_CURRENT_URL_PROPERTY = "currentURL";
     /**
      * Property name for queue size binding.
      */
-    public static final String PROP_URL_QUEUE_PROPERTY = "URLQueue";
+    public static final String PROP_URL_QUEUE_PROPERTY = "queueSize";
     /**
      * Property name for visited URL size binding.
      */
-    public static final String PROP_URL_VISITED_PROPERTY = "URLVisited";
+    public static final String PROP_URL_VISITED_PROPERTY = "visitedSize";
 
     /**
      * URL's to visit.
@@ -1453,6 +1453,11 @@ public class Thumbelina
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.4  2004/05/16 17:59:56  derrickoswald
+ * Alter bound property name constants to agree with section
+ * 8.8 Capitalization of inferred names.
+ * in the JavaBeans API specification.
+ *
  * Revision 1.3  2003/11/04 01:25:02  derrickoswald
  * Made visiting order the same order as on the page.
  * The 'shouldRecurseSelf' boolean of NodeVisitor could probably

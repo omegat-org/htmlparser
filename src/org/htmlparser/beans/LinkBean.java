@@ -49,7 +49,7 @@ public class LinkBean extends Object implements Serializable
     /**
      * Property name in event where the URL contents changes.
      */
-    public static final String PROP_LINKS_PROPERTY = "Links";
+    public static final String PROP_LINKS_PROPERTY = "links";
 
     /**
      * Property name in event where the URL changes.
