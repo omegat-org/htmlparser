@@ -28,9 +28,9 @@
 
 package org.htmlparser.tests.utilTests;
 
-import org.htmlparser.util.*;
-
 import junit.framework.TestCase;
+
+import org.htmlparser.util.Translate;
 
 public class CharacterTranslationTest extends TestCase
 {

@@ -32,15 +32,13 @@
 
 package org.htmlparser.util;
 
-import org.htmlparser.Parser;
 import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.util.NodeIterator;
-import org.htmlparser.util.ParserException;
+import org.htmlparser.tags.Tag;
 
 /**
  * Create a character reference translation class source file.

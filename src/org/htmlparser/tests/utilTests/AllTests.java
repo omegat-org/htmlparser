@@ -29,9 +29,9 @@
 package org.htmlparser.tests.utilTests;
 
 
-import org.htmlparser.tests.parserHelperTests.*;
-
 import junit.framework.TestSuite;
+
+import org.htmlparser.tests.parserHelperTests.AttributeParserTest;
 /**
  * Insert the type's description here.
  * Creation date: (6/17/2001 6:07:04 PM)

@@ -33,7 +33,7 @@ import java.util.StringTokenizer;
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.*;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserFeedback;
 
 public class TagParser {

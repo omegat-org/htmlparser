@@ -1,10 +1,10 @@
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.scanners.TitleScanner;
 import org.htmlparser.scanners.HtmlScanner;
-import org.htmlparser.tags.TitleTag;
+import org.htmlparser.scanners.TitleScanner;
 import org.htmlparser.tags.Html;
+import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 

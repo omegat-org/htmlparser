@@ -34,9 +34,9 @@ import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
-import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.NodeList;
 
 public class HtmlPage extends NodeVisitor {

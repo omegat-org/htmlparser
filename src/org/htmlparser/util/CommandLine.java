@@ -28,7 +28,10 @@
 
 package org.htmlparser.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Simple command like parser/handler.

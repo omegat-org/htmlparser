@@ -43,8 +43,8 @@ import org.htmlparser.Parser;
 import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.util.DefaultParserFeedback;
-import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class FunctionalTests extends TestCase {

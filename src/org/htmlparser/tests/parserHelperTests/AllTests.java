@@ -27,8 +27,6 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.parserHelperTests;
-import org.htmlparser.tests.parserHelperTests.*;
-
 import junit.framework.TestSuite;
 
 public class AllTests extends junit.framework.TestCase 

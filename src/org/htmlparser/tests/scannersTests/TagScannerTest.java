@@ -29,8 +29,8 @@
 
 package org.htmlparser.tests.scannersTests;
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 import org.htmlparser.NodeReader;
+import org.htmlparser.Parser;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;

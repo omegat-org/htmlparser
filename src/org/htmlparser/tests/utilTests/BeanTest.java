@@ -40,10 +40,10 @@ import java.util.Vector;
 
 import junit.framework.TestCase;
 
-import org.htmlparser.Parser;
 import org.htmlparser.Node;
-import org.htmlparser.beans.StringBean;
+import org.htmlparser.Parser;
 import org.htmlparser.beans.LinkBean;
+import org.htmlparser.beans.StringBean;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 

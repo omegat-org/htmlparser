@@ -8,8 +8,8 @@ import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.ParserTestCase;
-import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 public class ObjectCollectionTest extends ParserTestCase {
 

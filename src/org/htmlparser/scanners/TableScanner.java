@@ -33,9 +33,9 @@ import java.util.List;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 

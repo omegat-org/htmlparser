@@ -36,7 +36,6 @@ import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.visitors.NodeVisitor;
 
 public class UrlModifyingVisitor extends NodeVisitor {
 	private String linkPrefix;

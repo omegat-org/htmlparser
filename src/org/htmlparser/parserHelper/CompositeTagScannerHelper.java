@@ -50,7 +50,10 @@ public class CompositeTagScannerHelper {
 			doChildAndEndTagCheckOn(currentNode);					
 		}
 		while (currentNode!=null);
-		
+		return createTag();
+	}
+
+	private Tag createTag() throws ParserException {
 		return scanner.createTag(
 			new TagData(
 				0,endTag.elementEnd(),0,0,"","","",tag.isEmptyXmlTag()

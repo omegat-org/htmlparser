@@ -33,13 +33,13 @@ import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
-import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class ImageScannerTest extends ParserTestCase

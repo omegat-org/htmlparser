@@ -62,8 +62,10 @@ package org.htmlparser.util;
  * @author Claude Duguay
  **/
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChainedException
   extends Exception

@@ -32,16 +32,17 @@ package org.htmlparser;
 //////////////////
 // Java Imports //
 //////////////////
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringWriter;
 
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
-import org.htmlparser.tags.Tag;
+import org.htmlparser.parserHelper.StringParser;
+import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.util.ParserException;
-import org.htmlparser.parserHelper.*;
-import org.htmlparser.scanners.*;
 
 /**
  * NodeReader builds on the BufferedReader, providing methods to read one element

@@ -31,8 +31,8 @@
 
 package org.htmlparser.scanners;
 
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.LabelTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 

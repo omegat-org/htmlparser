@@ -28,7 +28,8 @@
 
 package org.htmlparser.tests.tagTests;
 
-import junit.framework.*;
+import junit.framework.TestSuite;
+
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tests.ParserTestCase;
