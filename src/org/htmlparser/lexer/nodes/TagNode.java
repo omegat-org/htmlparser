@@ -53,6 +53,8 @@ public class TagNode
     /**
      * The tag attributes.
      * Objects of type {@link Attribute}.
+     * The first element is the tag name, subsequent elements being either
+     * whitespace or real attributes.
      */
     protected Vector mAttributes;
 
@@ -279,6 +281,8 @@ public class TagNode
      * Sets the attributes.
      * @param attribs The attribute collection to set.
      * Each element is an {@link Attribute Attribute}.
+     * The first attribute in the list must be the tag name (
+     * <code>isStandalone()</code> returns <code>true</code>).
      */
     public void setAttributeEx (Attribute attribute)
     {
@@ -340,6 +344,8 @@ public class TagNode
     /**
      * Gets the attributes in the tag.
      * @return Returns the list of {@link Attribute Attributes} in the tag.
+     * The first element is the tag name, subsequent elements being either
+     * whitespace or real attributes.
      */
     public Vector getAttributesEx ()
     {
@@ -490,6 +496,8 @@ public class TagNode
 
     /**
      * Sets the attributes.
+     * A special entry with a key of SpecialHashtable.TAGNAME ("$<TAGNAME>$")
+     * sets the tag name.
      * @param attributes The attribute collection to set.
      */
     public void setAttributes (Hashtable attributes)
@@ -582,6 +590,10 @@ public class TagNode
         return (nodeEnd);
     }
 
+    /**
+     * Parses the given text to create the tag contents.
+     * @param text A string of the form &lt;TAGNAME xx="yy"&gt;.
+     */
     public void setText (String text)
     {
         Lexer lexer;
@@ -647,7 +659,8 @@ public class TagNode
     }
 
     /**
-     * Print the contents of the tag
+     * Print the contents of the tag.
+     * @return An string describing the tag. For text that looks like HTML use #toHtml().
      */
     public String toString ()
     {
