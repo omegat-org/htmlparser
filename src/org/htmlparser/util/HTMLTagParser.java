@@ -203,7 +203,7 @@ public class HTMLTagParser {
 		return token;
 	}	
 	private int toggleIgnoringState(int state, char ch) {
-		if (ch=='"') {
+		if (ch=='"' || ch=='\'') {
 			// State 4 is ignoring mode. In this mode, we cant exit upon recieving endtag character
 			// This is to avoid problems with end tags within inverted commas (occuring with JSP tags).
 			if (state==TAG_IGNORE_DATA_STATE) state = TAG_BEGIN_PARSING_STATE; else

@@ -126,6 +126,14 @@ public class HTMLTitleScannerTest extends HTMLParserTestCase {
 		catch (HTMLParserException e) {
 
 		}
-	 	
 	}	
+	
+	public void testTitleTagContainsJspTag() throws HTMLParserException {
+		createParser("<html><head><title><%=gTitleString%></title><base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
+		parser.registerScanners();
+		parseAndAssertNodeCount(7);
+		assertTrue(node[2] instanceof HTMLTitleTag);
+		HTMLTitleTag titleTag = (HTMLTitleTag) node[2];
+		assertStringEquals("HTML Rendering","<TITLE><%=gTitleString%></TITLE>",titleTag.toHTML());				
+	}
 }

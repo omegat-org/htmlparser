@@ -127,13 +127,13 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 		
 		
 		StringBuffer sb2 = new StringBuffer(); 
-		sb2.append("<script language=\"javascript\">\r\n"); 
+		sb2.append("<SCRIPT LANGUAGE=\"javascript\">\r\n"); 
 		sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
 		sb2.append(" document.write ('xxx');\r\n"); 
 		sb2.append("else\r\n"); 
 		sb2.append(" document.write ('yyy');\r\n"); 
 		sb2.append("</SCRIPT>"); 
-		String testHTML2 = new String(sb2.toString()); 
+		String expectedHTML = new String(sb2.toString()); 
 		
 		parseAndAssertNodeCount(2);
 		assertTrue("Node should be a script tag",node[1] 
@@ -141,7 +141,7 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 		// Check the data in the applet tag 
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node 
 		[1]; 
-		assertEquals("Expected Script Code",testHTML2,scriptTag.toHTML()); 
+		assertStringEquals("Expected Script Code",expectedHTML,scriptTag.toHTML()); 
 	} 
 	
 	public void testParamExtraction() throws HTMLParserException {
@@ -166,7 +166,7 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 	public void testVariableDeclarations() throws HTMLParserException {
 		StringBuffer sb1 = new StringBuffer(); 
 		sb1.append("<script language=\"javascript\">\n"); 
-		sb1.append("var lower = '<%=lowerValuel%>';\n"); 
+		sb1.append("var lower = '<%=lowerValue%>';\n"); 
 		sb1.append("</script>\n"); 
 		createParser(sb1.toString()); 
 		
@@ -178,4 +178,18 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0]; 
 		assertStringEquals("Script toHTML()","<SCRIPT LANGUAGE=\"javascript\">\r\nvar lower = '<%=lowerValue%>';\r\n</SCRIPT>\r\n",scriptTag.toHTML());
 	}	
+
+	public void testSingleApostropheParsingBug() throws HTMLParserException {
+		StringBuffer sb1 = new StringBuffer(); 
+		sb1.append("<script src='<%=sourceFileName%>'></script>"); 
+		createParser(sb1.toString()); 
+		
+		// Register the image scanner 
+		parser.addScanner(new HTMLScriptScanner("-s")); 
+		parseAndAssertNodeCount(1);
+		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
+		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0]; 
+		assertStringEquals("Script toHTML()","<SCRIPT SRC=\"<%=sourceFileName%>\"></SCRIPT>",scriptTag.toHTML());
+	}
+	
 }

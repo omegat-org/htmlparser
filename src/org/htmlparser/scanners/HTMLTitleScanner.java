@@ -30,6 +30,8 @@
 package org.htmlparser.scanners;
 
 import java.io.IOException;
+import java.util.Vector;
+
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTitleTag;
@@ -72,6 +74,7 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 			String tmp;
 			HTMLNode node;
 			HTMLEndTag endTag=null;
+			Vector titleTagChildren = new Vector();
 			do
 			{
 				node = reader.readElement();
@@ -87,13 +90,13 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 				    if (tmp.toUpperCase().equals("TITLE")) {
 				    	endFlag = true;
 				    }
-				} 
+				} else titleTagChildren.addElement(node);
 			}
 			while (endFlag==false && node!=null);
 			if (node==null && !endFlag) {
 				throw new HTMLParserException("HTMLTitleScanner.scan(): Error while scanning title tag, went into a potential infinite loop, currentLine = "+currLine+", title so far = "+title);
 			}
-			HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,tag.getText(),tag.getTagLine());
+			HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,titleTagChildren,tag.getText(),tag.getTagLine());
 			return titleTag;		
 		}
 		catch (Exception e) {

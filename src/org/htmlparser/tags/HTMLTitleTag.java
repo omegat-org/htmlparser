@@ -28,11 +28,17 @@
 
 package org.htmlparser.tags;
 
+import java.util.Enumeration;
+import java.util.Vector;
+
+import org.htmlparser.HTMLNode;
+
 /**
  * A Title Tag
  */
 public class HTMLTitleTag extends HTMLTag {
 	private String title;
+	private Vector titleTagChildren;
 	/**
 	 * Constructor for HTMLTitleTag.
 	 * @param nodeBegin
@@ -40,9 +46,10 @@ public class HTMLTitleTag extends HTMLTag {
 	 * @param tagContents
 	 * @param tagLine
 	 */
-	public HTMLTitleTag(int tagBegin,int tagEnd,String title,String tagContents,String tagLine) {
+	public HTMLTitleTag(int tagBegin,int tagEnd,String title,Vector titleTagChildren, String tagContents,String tagLine) {
 		super(tagBegin, tagEnd, tagContents, tagLine);
 		this.title = title;
+		this.titleTagChildren = titleTagChildren;
 	}
 	/**
 	 * Gets the title.
@@ -62,7 +69,13 @@ public class HTMLTitleTag extends HTMLTag {
 		return title;
 	}
 	public String toHTML() {
-		return "<TITLE>"+title+"</TITLE>";
+		HTMLNode node;
+		StringBuffer sb = new StringBuffer();
+		for (Enumeration e = titleTagChildren.elements();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			sb.append(node.toHTML());
+		}
+		return "<TITLE>"+sb.toString()+"</TITLE>";
 	}
 	public String toString() {
 		return "TITLE: "+title;
