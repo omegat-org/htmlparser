@@ -61,7 +61,7 @@ public class NodeReader extends BufferedReader
 	private String previousLine;
 	private StringParser stringParser = new StringParser();
 	private RemarkNodeParser remarkNodeParser = new RemarkNodeParser();
-
+	private Node nextParsedNode = null;
 	/**
 	 * The constructor takes in a reader object, it's length and the url to be read.
 	 */
@@ -177,6 +177,11 @@ public class NodeReader extends BufferedReader
 	public Node readElement() throws ParserException
 	{
 		try {
+			if (nextParsedNode!=null) {
+				node = nextParsedNode;
+				nextParsedNode = null;
+				return node; 
+			}
 			if (readNextLine())
 			{
 				do
@@ -337,5 +342,9 @@ public class NodeReader extends BufferedReader
 
 	public StringParser getStringParser() {
 		return stringParser;
+	}
+	
+	public void setNextParsedNode(Node nextParsedNode) {
+		this.nextParsedNode = nextParsedNode;		
 	}
 }

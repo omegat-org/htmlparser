@@ -33,7 +33,7 @@ package org.htmlparser.scanners;
 //////////////////
 import java.util.Vector;
 
-import org.htmlparser.NodeReader;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
@@ -58,15 +58,19 @@ public class FormScanner extends CompositeTagScanner
  	/**
 	 * HTMLFormScanner constructor comment.
 	 */
-	public FormScanner() {
-		this("");
+	public FormScanner(Parser parser) {
+		this("", parser);
 	}
 	/**
 	 * Overriding the constructor to accept the filter
 	 */
-	public FormScanner(String filter)
+	public FormScanner(String filter, Parser parser)
 	{
 		super(filter,MATCH_ID,false);
+		parser.addScanner(new InputTagScanner("-i"));
+		parser.addScanner(new TextareaTagScanner("-t"));
+		parser.addScanner(new SelectTagScanner("-select"));
+		parser.addScanner(new OptionTagScanner("-option"));
 	}
 	
   /**

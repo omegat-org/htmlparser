@@ -301,6 +301,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertFalse("custom tag should not be xml end tag",customTag.isEmptyXmlTag());
 		assertEquals("starting loc",0,customTag.getStartTag().elementBegin());
 		assertEquals("ending loc",7,customTag.getStartTag().elementEnd());
+		assertEquals("ending loc of custom tag",25,customTag.elementEnd());
 		assertEquals("starting line position",0,customTag.tagData.getStartLine());
 		assertEquals("ending line position",0,customTag.tagData.getEndLine());
 		assertStringEquals(
@@ -316,6 +317,30 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		);
 	}
 		
+	public void testCompositeTagWithErroneousAnotherTagAndLineBreak() throws ParserException {
+		createParser(
+			"<another>" +
+			"<custom>\n" +
+			"</custom>"
+		);
+		parser.addScanner(new AnotherScanner());
+		parser.addScanner(new CustomScanner());
+		parseAndAssertNodeCount(2);
+		AnotherTag anotherTag = (AnotherTag)node[0];
+		assertEquals("another tag child count",0,anotherTag.getChildCount());
+		
+		CustomTag customTag = (CustomTag)node[1];
+		int x = customTag.getChildCount();
+		assertEquals("child count",0,customTag.getChildCount());
+		assertFalse("custom tag should not be xml end tag",customTag.isEmptyXmlTag());
+		assertEquals("starting loc",9,customTag.getStartTag().elementBegin());
+		assertEquals("ending loc",16,customTag.getStartTag().elementEnd());
+		assertEquals("starting line position",0,customTag.tagData.getStartLine());
+		assertEquals("ending line position",0,customTag.tagData.getEndLine());
+		assertStringEquals("another tag html","<ANOTHER></ANOTHER>",anotherTag.toHtml());
+		assertStringEquals("custom tag html","<CUSTOM>\r\n</CUSTOM>",customTag.toHtml());		
+	}
+
 	public void testCompositeTagWithErroneousAnotherTag() throws ParserException {
 		createParser(
 			"<custom>" +				"<another>" +			"</custom>"
@@ -327,6 +352,8 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertFalse("custom tag should be xml end tag",customTag.isEmptyXmlTag());
 		assertEquals("starting loc",0,customTag.getStartTag().elementBegin());
 		assertEquals("ending loc",7,customTag.getStartTag().elementEnd());
+		AnotherTag anotherTag = (AnotherTag)customTag.childAt(0);
+		assertEquals("another tag ending loc",26,anotherTag.elementEnd());
 		assertEquals("starting line position",0,customTag.tagData.getStartLine());
 		assertEquals("ending line position",0,customTag.tagData.getEndLine());
 		assertStringEquals("html","<CUSTOM><ANOTHER></ANOTHER></CUSTOM>",customTag.toHtml());		
@@ -343,7 +370,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		CustomTag customTag = parseCustomTag(2);
 		int x = customTag.getChildCount();
 		assertEquals("child count",1,customTag.getChildCount());
-		assertFalse("custom tag should be xml end tag",customTag.isEmptyXmlTag());
+		assertFalse("custom tag should not be xml end tag",customTag.isEmptyXmlTag());
 		assertEquals("starting loc",0,customTag.getStartTag().elementBegin());
 		assertEquals("ending loc",7,customTag.getStartTag().elementEnd());
 		assertEquals("starting line position",0,customTag.tagData.getStartLine());
@@ -363,6 +390,26 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			customTag.toHtml()
 		);
 	}
+
+	public void testCompositeTagCorrectionWithSplitLines() throws ParserException {
+		createParser(
+			"<custom>" +
+				"<another><abcdefg>\n" +
+			"</custom>"
+		);
+		parser.addScanner(new AnotherScanner());
+		CustomTag customTag = parseCustomTag(1);
+		int x = customTag.getChildCount();
+		assertEquals("child count",1,customTag.getChildCount());
+		assertFalse("custom tag should not be xml end tag",customTag.isEmptyXmlTag());
+		assertEquals("starting loc",0,customTag.getStartTag().elementBegin());
+		assertEquals("ending loc",7,customTag.getStartTag().elementEnd());
+		AnotherTag anotherTag = (AnotherTag)customTag.childAt(0);
+		assertEquals("anotherTag child count",1,anotherTag.getChildCount());
+		assertEquals("anotherTag end loc",9,anotherTag.elementEnd());
+		assertEquals("custom end tag begin loc",10,customTag.getEndTag().elementBegin());
+		assertEquals("custom end tag end loc",8,customTag.getEndTag().elementEnd());
+	}	
 	
 	public void testCompositeTagWithSelfChildren() throws ParserException {
 		createParser(

@@ -582,7 +582,7 @@ public class ParserTest extends ParserTestCase {
 			""
 		);
 		parser.registerScanners();
-		parser.removeScanner(new FormScanner("")); 
+		parser.removeScanner(new FormScanner("",parser)); 
 		Map scanners = parser.getScanners();
 		TagScanner scanner = (TagScanner)scanners.get("FORM");
 		assertNull("shouldnt have found scanner",scanner);

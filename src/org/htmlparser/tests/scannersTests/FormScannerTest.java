@@ -29,8 +29,10 @@
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Node;
+import org.htmlparser.Parser;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.scanners.FormScanner;
+import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.LinkTag;
@@ -81,7 +83,7 @@ public class FormScannerTest extends ParserTestCase {
 		String line1="form method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
 		String line2="FORM method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
 		String line3="Form method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
-		FormScanner formScanner = new FormScanner("");
+		FormScanner formScanner = new FormScanner("",Parser.createParser(""));
 		assertTrue("Line 1",formScanner.evaluate(line1,null));
 		assertTrue("Line 2",formScanner.evaluate(line2,null));
 		assertTrue("Line 3",formScanner.evaluate(line3,null));
@@ -99,7 +101,7 @@ public class FormScannerTest extends ParserTestCase {
 	}	
 	public void testScan() throws ParserException {
 		createParser(FORM_HTML,"http://www.google.com/test/index.html");
-		parser.registerScanners();
+		parser.addScanner(new FormScanner("",parser));
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof FormTag);
 		FormTag formTag = (FormTag)node[0];
@@ -142,7 +144,7 @@ public class FormScannerTest extends ParserTestCase {
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
 		"</TABLE>","http://www.google.com/test/index.html");
 		
-		parser.addScanner(new FormScanner(""));
+		parser.addScanner(new FormScanner("",parser));
 		
 		parseAndAssertNodeCount(2);
 	}
@@ -162,7 +164,8 @@ public class FormScannerTest extends ParserTestCase {
 		"language_tools?hl=en>Language Tools</a></font></td></tr></table></form>"
 		);	
 		
-		parser.registerScanners();
+		parser.addScanner(new FormScanner("",parser));
+		parser.addScanner(new LinkScanner());
 		parseAndAssertNodeCount(1);
 		assertTrue("Should be a HTMLFormTag",node[0] instanceof FormTag);
 		FormTag formTag = (FormTag)node[0];
@@ -195,7 +198,7 @@ public class FormScannerTest extends ParserTestCase {
 		"language_tools?hl=en>Language Tools</a></font></td></tr></table></form>"
 		);	
 		
-		parser.registerScanners();
+		parser.addScanner(new FormScanner("",parser));
 		parseAndAssertNodeCount(1);
 		assertTrue("Should be a HTMLFormTag",node[0] instanceof FormTag);
 		FormTag formTag = (FormTag)node[0];
@@ -247,20 +250,21 @@ public class FormScannerTest extends ParserTestCase {
 			"<P>\n"+
 			"<A HREF=\"http://www.yahoo.com\">Yahoo!\n"+
 			"<FORM ACTION=\".\" METHOD=\"GET\">\n"+
-			"<INPUT TYPE=\"TEXT\">\n"+
-			"<BR>\n"+
-			"<A HREF=\"http://www.helpme.com\">Help</A> <INPUT TYPE=\"checkbox\">\n"+
-			"<P>\n"+
-			"<INPUT TYPE=\"SUBMIT\">\n"+
+				"<INPUT TYPE=\"TEXT\">\n"+
+				"<BR>\n"+
+				"<A HREF=\"http://www.helpme.com\">Help</A> " +				"<INPUT TYPE=\"checkbox\">\n"+
+				"<P>\n"+
+				"<INPUT TYPE=\"SUBMIT\">\n"+
 			"</FORM>"
 		);
-		parser.registerScanners();
+		parser.addScanner(new FormScanner("",parser));
+		parser.addScanner(new LinkScanner());
 		parseAndAssertNodeCount(6);
 		assertTrue("Fifth Node is a link",node[4] instanceof LinkTag);
 		LinkTag linkTag = (LinkTag)node[4];
 		assertEquals("Link Text","Yahoo!\r\n",linkTag.getLinkText());
 		assertEquals("Link URL","http://www.yahoo.com",linkTag.getLink());
-		assertTrue("Sixth Node is a form tag",node[5] instanceof FormTag);
+		assertType("Sixth Node",FormTag.class,node[5]);
 	}
 
 	/**
@@ -277,7 +281,7 @@ public class FormScannerTest extends ParserTestCase {
 			testHTML
 		);
 		parser.registerScanners();
-		parser.removeScanner(new FormScanner(""));
+		parser.removeScanner(new FormScanner("",parser));
 		Node [] nodes =
 			parser.extractAllNodesThatAre(
 				FormTag.class

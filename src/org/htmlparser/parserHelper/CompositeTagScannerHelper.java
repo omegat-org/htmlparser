@@ -71,9 +71,22 @@ public class CompositeTagScannerHelper {
 		String endTagName = tag.getTagName();
 		int endTagBegin = pos ;
 		int endTagEnd = endTagBegin + endTagName.length() + 2; 
-		StringBuffer newLine = createModifiedLine(endTagName, endTagBegin);
-		reader.changeLine(newLine.toString());
-		reader.setPosInLine(endTagEnd);
+		endTag = new EndTag(
+			new TagData(
+				endTagBegin,
+				endTagEnd,
+				endTagName,
+				currLine
+			)
+		);
+	}
+	
+	private void createCorrectionEndTagBefore(Tag possibleEndTagCauser) {
+		String endTagName = tag.getTagName();
+		int endTagBegin = possibleEndTagCauser.elementBegin();
+		int endTagEnd = endTagBegin + endTagName.length() + 2; 
+		possibleEndTagCauser.setTagBegin(endTagEnd+1);
+		reader.setNextParsedNode(possibleEndTagCauser);
 		endTag = new EndTag(
 			new TagData(
 				endTagBegin,
@@ -132,9 +145,10 @@ public class CompositeTagScannerHelper {
 		}
 	}
 
-	private void doForceCorrectionCheckOn(Tag possibleEndTag) {
-		if (isEndTagMissing(possibleEndTag)) {
-			createCorrectionEndTagBefore(possibleEndTag.elementBegin());
+	private void doForceCorrectionCheckOn(Tag possibleEndTagCauser) {
+		if (isEndTagMissing(possibleEndTagCauser)) {
+			createCorrectionEndTagBefore(possibleEndTagCauser);
+
 			endTagFound = true;			
 		}
 	}
