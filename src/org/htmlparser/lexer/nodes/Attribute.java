@@ -44,35 +44,72 @@ import org.htmlparser.lexer.Page;
  * <p>If Name is not null, and Value is something, and Quote is zero it's a naked attribute.
  * <p>If Name is not null, and Value is something, and Quote is ' it's a single quoted attribute.
  * <p>If Name is not null, and Value is something, and Quote is " it's a double quoted attribute.
+ * <p>All other states are illegal.
+ * <p>
+ * The attribute can be 'lazy loaded' by providing the page and cursor offsets
+ * into the page for the name and value. In this case if the starting offset is
+ * less than zero, the element is null. This is done for speed, since if the name
+ * and value are not been needed we can avoid the cost of creating the strings.
  */
 public class Attribute
 {
-    Page mPage;
-    int mNameStart;
-    int mNameEnd;
-    int mValueStart;
-    int mValueEnd;
+    /**
+     * The page this attribute is extracted from.
+     */
+    protected Page mPage;
+    
+    /**
+     * The starting offset of the name within the page.
+     * If negative, the name is considered <code>null</code>.
+     */
+    protected int mNameStart;
+
+    /**
+     * The ending offset of the name within the page.
+     */
+    protected int mNameEnd;
+
+    /**
+     * The starting offset of the value within the page.
+     * If negative, the value is considered <code>null</code>.
+     */
+    protected int mValueStart;
+
+    /**
+     * The ending offset of the name within the page.
+     */
+    protected int mValueEnd;
 
     /**
      * The name of this attribute.
      * The part before the equals sign, or the stand-alone attribute.
+     * This will be <code>null</code> if the name has not been extracted from
+     * the page, or the name starting offset is negative.
      */
-    String mName;
+    protected String mName;
     
     /**
      * The value of the attribute.
      * The part after the equals sign.
+     * This will be <code>null</code> if the value has not been extracted from
+     * the page, or the value starting offset is negative.
      */
-    String mValue;
+    protected String mValue;
     
     /**
      * The quote, if any, surrounding the value of the attribute, if any.
      */
-    char mQuote;
+    protected char mQuote;
 
     /**
      * Create an attribute.
-     * todo
+     * @param page The page containing the attribute.
+     * @param name_start The starting offset of the name within the page.
+     * If this is negative, the name is considered null.
+     * @param name_end The ending offset of the name within the page.
+     * @param value_start he starting offset of the value within the page.
+     * If this is negative, the value is considered null.
+     * @param value_end The ending offset of the value within the page.
      * @param quote The quote, if any, surrounding the value of the attribute,
      * (i.e. ' or "), or zero if none.
      */
@@ -110,7 +147,7 @@ public class Attribute
     public String getName ()
     {
         if (null == mName)
-            if (-1 != mNameStart)
+            if (0 <= mNameStart)
                 mName = mPage.getText (mNameStart, mNameEnd);
         return (mName);
     }
@@ -124,7 +161,7 @@ public class Attribute
     public String getValue ()
     {
         if (null == mValue)
-            if (-1 != mValueStart)
+            if (0 <= mValueStart)
                 mValue = mPage.getText (mValueStart, mValueEnd);
         return (mValue);
     }

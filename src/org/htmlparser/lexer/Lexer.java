@@ -25,10 +25,16 @@
 // 2583 Cedar Street, Berkeley, 
 // CA 94708, USA
 // Website : http://www.industriallogic.com
+// 
+// This class was contributed by 
+// Derrick Oswald
+//
 
 package org.htmlparser.lexer;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.Vector;
 
@@ -545,4 +551,30 @@ public class Lexer
         return (ret);
     }
 
+    /**
+     * Mainline for command line operation
+     */
+    public static void main (String[] args) throws IOException, ParserException
+    {
+        URL url;
+        Lexer lexer;
+        Node node;
+
+        if (0 >= args.length)
+            System.out.println ("usage: java -jar htmllexer.jar <url>");
+        else
+        {
+            url = new URL (args[0]);
+            try
+            {
+                lexer = new Lexer (url.openConnection ());
+                while (null != (node = lexer.nextNode ()))
+                    System.out.println (node.toString ());
+            }
+            catch (ParserException pe)
+            {
+                System.out.println (pe.getMessage ());
+            }
+        }
+    }
 }

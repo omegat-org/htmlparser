@@ -25,6 +25,10 @@
 // 2583 Cedar Street, Berkeley, 
 // CA 94708, USA
 // Website : http://www.industriallogic.com
+// 
+// This class was contributed by 
+// Derrick Oswald
+//
 
 package org.htmlparser.lexer;
 
@@ -38,9 +42,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.Random;
 
 import org.htmlparser.util.ParserException;
 
@@ -58,11 +60,6 @@ public class Page
      * Another alias is "8859_1".
      */
     public static final String DEFAULT_CHARSET = "ISO-8859-1";
-
-    /**
-     * The logging object.
-     */
-    protected static Log mLog = null;
 
     /**
      * The source of characters.
@@ -112,7 +109,9 @@ public class Page
         }
         catch (UnknownHostException uhe)
         {
-            throw new ParserException ("the host (" + connection.getURL ().getHost () + ") was not found", uhe);
+            Random number = new Random ();
+            int message = number.nextInt (mFourOhFour.length);
+            throw new ParserException (mFourOhFour[message], uhe);
         }
         catch (IOException ioe)
         {
@@ -347,7 +346,7 @@ public class Page
                     // that is, case is always ignored when comparing charset names.
                     if (!ret.equalsIgnoreCase (content))
 					{
-                        getLog ().info (
+                        System.out.println (
                             "detected charset \""
                             + content
                             + "\", using \""
@@ -407,12 +406,11 @@ public class Page
 			// and java.nio.charset.UnsupportedCharsetException
 			// return the default
 			ret = _default;
-            getLog ().debug (
+            System.out.println (
                 "unable to determine cannonical charset name for "
                 + name
                 + " - using "
-                + _default,
-                ita);
+                + _default);
 		}
         
 		return (ret);
@@ -505,19 +503,4 @@ public class Page
     {
         getText (buffer, 0, mSource.mOffset);
     }
-
-    //
-    // Bean patterns
-    //
-
-    public Log getLog ()
-    {
-        if (null == mLog)
-            mLog = LogFactory.getLog (this.getClass ());
-//        String name = this.getClass ().getName ();
-//        java.util.logging.Logger logger = java.util.logging.Logger.getLogger (name);
-//        logger.setLevel (java.util.logging.Level.FINEST);
-        return (mLog);
-    }
-
 }

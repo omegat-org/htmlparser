@@ -1,7 +1,7 @@
 <!--
 Build Procedure
 - cd htmlparser
-- 'ant jar' generates new htmlparser.jar in htmlparser/release/htmlparser1_4/lib
+- 'ant jars' generates new htmlparser.jar and htmllexer.jar in htmlparser/release/htmlparser1_4/lib
 
 Release Procedure
 - cd htmlparser
@@ -196,25 +196,25 @@ HTML Parser Integration Release 1.4-20030727
     <echo message="**********************************"/>
 
     <!-- Compile the java code in ${src} -->
-    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java,org/htmlparser/lexer/**" debug="on" classpath="src:${commons-logging.jar}" />
+    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" classpath="src:${commons-logging.jar}" />
   </target>
 
-  <!-- Create the distribution of htmlparser.jar -->
-  <target name="jar" depends="compile" description="create htmlparser.jar">
+  <!-- Create the distribution of htmlparser.jar and htmllexer.jar -->
+  <target name="jars" depends="compile" description="create htmlparser.jar and htmllexer.jar">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
     <echo message="**********************************"/>
     <echo message="*  Creating htmlparser.jar....   *"/>
     <echo message="**********************************"/>
-
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
 
     <!-- Put classes and images into the htmlparser.jar file -->
     <jar jarfile="${dist}/lib/htmlparser.jar"
       basedir="${src}"
       includes="**/*.class **/*.gif"
-      excludes="org/htmlparser/tests/**/*.class,org/htmlparser/util/Generate.class"
-      manifest="${resources}/Manifest.mf">
+      excludes="org/htmlparser/tests/**/*.class,org/htmlparser/util/Generate.class">
       <manifest>
+        <attribute name="Main-Class" value="org.htmlparser.Parser"/>
         <section name="org/htmlparser/Parser.class">
           <attribute name="Java-Bean" value="True"/>
         </section>
@@ -232,10 +232,31 @@ HTML Parser Integration Release 1.4-20030727
         </section>
       </manifest>
     </jar>
+
+    <echo message="**********************************"/>
+    <echo message="*  Creating htmllexer.jar....   *"/>
+    <echo message="**********************************"/>
+
+    <!-- Put classes and images into the htmllexer.jar file -->
+    <jar jarfile="${dist}/lib/htmllexer.jar"
+      basedir="${src}">
+      <include name="org/htmlparser/lexer/**/*.class"/>
+      <include name="org/htmlparser/AbstractNode.class"/>
+      <include name="org/htmlparser/Node.class"/>
+      <include name="org/htmlparser/util/ParserException.class"/>
+      <include name="org/htmlparser/util/ChainedException.class"/>
+      <include name="org/htmlparser/util/sort/**/*.class"/>
+      <!-- to be removed -->
+      <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
+      <manifest>
+        <attribute name="Main-Class" value="org.htmlparser.lexer.Lexer"/>
+      </manifest>
+    </jar>
+
   </target>
 
   <!-- Run the unit tests -->
-  <target name="test" depends="jar" description="run the JUnit tests">
+  <target name="test" depends="jars" description="run the JUnit tests">
     <echo message="**********************************"/>
     <echo message="*  Running unit tests....        *"/>
     <echo message="**********************************"/>
@@ -330,7 +351,7 @@ HTML Parser Integration Release 1.4-20030727
   </target>
 
   <!-- The release directory structuring finishes here -->
-  <target name="Release" depends="versionSource,jar,javadoc,CopyBatch" description="prepare the release files">
+  <target name="Release" depends="versionSource,jars,javadoc,CopyBatch" description="prepare the release files">
   </target>
 
   <!-- Package the release -->
