@@ -1,4 +1,4 @@
-HTMLParser Integration Release 1_2_20021125 (c3)
+HTMLParser Integration Release 1_2_20021201 (c4)
 ************************************************
 
 Q1. What are the contents of the distribution ? 
