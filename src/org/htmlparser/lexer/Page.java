@@ -115,12 +115,12 @@ public class Page
      * Construct a page reading from a URL connection.
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
-     * @exception IOException If an i/o exception occurs creating the
-     * source.
      * @exception ParserException An exception object wrapping a number of
      * possible error conditions, some of which are outlined below.
-     * UnsupportedEncodingException if the character set specified in the
-     * HTTP header is not supported.
+     * <li>IOException If an i/o exception occurs creating the
+     * source.</li>
+     * <li>UnsupportedEncodingException if the character set specified in the
+     * HTTP header is not supported.</li>
      */
     public Page (URLConnection connection) throws ParserException
     {

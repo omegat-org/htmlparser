@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+  <HEAD>
+    <TITLE>ToDo List for the HTML Parser Libraries</TITLE>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../stylesheet.css" TITLE="Style">
+  </HEAD>
+  <BODY>
+<ul>
+<li>
+It looks like there are enough bugs and requests to warrant another 1.3 point
+release with some patched files.
+I hate to work on a branch, but it may be the only way to get everyone off my
+back.
+</li>
+<li>
+Implement the new filtering mechanism for NodeList.searchFor ().
+</li>
+<li>
+As of now, it's more likely that the javadocs are lying to you than providing
+any helpful advice. This needs to be reworked completely.
+</li>
+<li>
+There are some changes needed in the lexer state machines to handle JSP
+constructs and also whitespace either side of attribute equals signs. Currently
+the latter is handled by a kludgy fixAttributes() method applied after a tag is
+parsed, but it would be better handled in the state machine initially. The
+former isn't handled at all, and would involve all nodes possibly having
+children (a remark or string node can have embedded JSP, i.e.
+&lt;!-- this remark, created on &lt;%@ date() %&gt;, needs to be handled --&gt;.
+So some design work needs to be done to analyze the state transitions and
+gating characters.
+</li>
+<li>
+toHtml(boolean verbatim/fixed) - one of the design goals for the new Lexer
+subsystem was to be able to regurgitate the original HTML via the toHtml()
+method, so the original page is unmodified except for any explicit user edits,
+i.e. link URL edits. But the parser fixes broken HTML without asking, so you
+can't get back an unadulterated page from toHtml(). A lot of test cases assume
+fixed HTML. Either a parameter on toHtml() or another method would be needed to
+provide the choice of the original HTML or the fixed HTML. There's some initial
+work on eliminating the added virtual end tags commented out in TagNode, but it
+will also require a way to remember broken tags,
+like:
+<pre>
+&lt;title&gt;The Title&lt;/title&lt;/head&gt;&lt;body&gt;...
+</pre>
+</li>
+<li>
+Some GUI based parser application showing the HTML parse tree in one panel and
+the HTML text in another, with the tree node selected being highlighted in the
+text, or the text cursor setting the tree node selected, would be really good. A
+filter builder tool to graphically construct a program to extract a snippet
+from an HTML page would blow people away.
+</li>
+<li>
+Rework all the applications for a better 'out of the box' experience for new
+and novice users. Fix all the scripts in /bin (for unix and windows) and add
+any others that don't exist already.
+</li>
+<li>
+The tag-enders and end-tag-enders lists are only a partial solution to the HTML
+specification for block and inline tags. By marking each tag as a block or
+inline tag and ensuring block tags don't overlap, a better parsing job could be
+done, i.e.
+<pre>
+   &lt;FORM&gt;    ....   &lt;TABLE&gt;   ...   &lt;/FORM&gt;&lt;/TABLE&gt;
+</pre>
+would be rearranged as
+<pre>
+   &lt;FORM&gt;    ....   &lt;TABLE&gt;   ...   &lt;/TABLE&gt;&lt;/FORM&gt;
+</pre>
+This needs some design work.
+</li>
+<li>
+The recursion that currently happens on the JVM stack can probably be done via a
+stack of open tags passed to the scanner. This would probably avoid the 'Stack
+overflow' exceptions observed on Windows and also allow for smarter tag closing
+(in conjuction with the end tag enders list).
+</li>
+<li>
+Change all the headers to match the new format. The integration process needs to
+be revamped to use the $Name: CVS substitution (via 'get label'), so a checkin
+isn't required every integration.
+</li>
+<li>
+The default is now the equivalent of the old 'RegisterDomTags', so the
+operation of the following mainlines needs to be revisited:
+<ol>
+<li>
+Generate
+</li>
+<li>
+Parser
+</li>
+<li>
+LinkBean
+</li>
+<li>
+Robot
+</li>
+<li>
+InstanceofPerformanceTest
+</li>
+<li>
+StringBean
+</li>
+<li>
+MailRipper
+</li>
+<li>
+LinkExtractor
+</li>
+<li>
+BeanyBaby
+</li>
+</ol>
+</li>
+<li>
+decode() can be optimized by introducing parameters for
+start and end in the convertToChar( String bigString, int startToLook,
+int endToLook) to eliminate the substring operations.
+</li>
+<li>
+Use <A href="http://trove4j.sourceforge.net/javadocs/gnu/trove/TObjectIntHashMap.html">
+TObjectIntHashMap</A> or use a sorted list similar to the newline index in PageIndex
+to avoid the HashMap and the 336 Character objects in Translate.
+</li>
+<li>
+Modify StingBean so it can be driven by a visitor externally.
+See
+<A
+href="http://sourceforge.net/mailarchive/forum.php?forum_id=2023&max_rows=25&style=flat&viewmonth=200311&viewday=12">StringBean.diff</A>.
+</li>
+</ul>
+  </BODY>
+</HTML>

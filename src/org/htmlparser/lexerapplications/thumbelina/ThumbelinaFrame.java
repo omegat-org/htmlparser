@@ -1056,8 +1056,6 @@ public class ThumbelinaFrame
      * worry about java version.
      * @param args The command line arguments.
      * Optionally, arg[0] can be the URL to preload the Thumeblina bean with.
-     * @throws MalformedURLException If there is a command line argument and it
-     * does not correspond to a valid URL.
      */
     public static void main (final String[] args)
     {

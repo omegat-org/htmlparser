@@ -38,7 +38,7 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 import org.htmlparser.visitors.NodeVisitor;
 
-/*
+/**
  * The base class for tags that have an end tag.
  * Provided extra accessors for the children above and beyond what the basic
  * {@link Tag} provides. Also handles the conversion of it's children for

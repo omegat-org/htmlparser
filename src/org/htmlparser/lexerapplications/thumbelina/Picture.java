@@ -186,8 +186,8 @@ public class Picture extends Rectangle
     }
 
     /**
-     * Create a string representation of the modifcation.
-     * @return A string that shows this picture.
+     * Create a string representation of the picture.
+     * @return A string that shows this picture URL and size.
      */
     public String toString ()
     {
@@ -213,6 +213,10 @@ public class Picture extends Rectangle
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.2  2003/12/16 02:29:56  derrickoswald
+ * Javadoc changes and additions. Stylesheet, overview, build instructions and todo list.
+ * Added HTMLTaglet, an inline Javadoc taglet for embedding HTML into javadocs.
+ *
  * Revision 1.1  2003/09/21 18:20:56  derrickoswald
  * Thumbelina
  * Created a lexer GUI application to extract images behind thumbnails.
