@@ -48,6 +48,7 @@ import org.htmlparser.nodeDecorators.DecodingNode;
 import org.htmlparser.nodeDecorators.EscapeCharacterRemovingNode;
 import org.htmlparser.nodeDecorators.NonBreakingSpaceConvertingNode;
 import org.htmlparser.scanners.AppletScanner;
+import org.htmlparser.scanners.BaseHrefScanner;
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.scanners.BulletListScanner;
 import org.htmlparser.scanners.DivScanner;
@@ -56,6 +57,7 @@ import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.scanners.FrameSetScanner;
 import org.htmlparser.scanners.HeadScanner;
 import org.htmlparser.scanners.HtmlScanner;
+import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.scanners.MetaTagScanner;
@@ -685,17 +687,19 @@ public class Parser
     /**
      * This method should be invoked in order to register some common scanners. The scanners that get added are : <br>
      * LinkScanner    (filter key "-l")<br>
-     * HTMLImageScanner   (filter key "-i")<br>
-     * HTMLScriptScanner  (filter key "-s") <br>
-     * HTMLStyleScanner   (filter key "-t") <br>
-     * HTMLJspScanner     (filter key "-j") <br>
-     * HTMLAppletScanner  (filter key "-a") <br>
-     * HTMLMetaTagScanner (filter key "-m") <br>
-     * HTMLTitleScanner   (filter key "-t") <br>
-     * HTMLDoctypeScanner (filter key "-d") <br>
-     * HTMLFormScanner    (filter key "-f") <br>
-     * HTMLFrameSetScanner(filter key "-r") <br>
-     * HTMLBaseHREFScanner(filter key "-b") <br>
+     * ImageScanner   (filter key "-i")<br>
+     * ScriptScanner  (filter key "-s") <br>
+     * StyleScanner   (filter key "-t") <br>
+     * JspScanner     (filter key "-j") <br>
+     * AppletScanner  (filter key "-a") <br>
+     * MetaTagScanner (filter key "-m") <br>
+     * TitleScanner   (filter key "-t") <br>
+     * DoctypeScanner (filter key "-d") <br>
+     * FormScanner    (filter key "-f") <br>
+     * FrameSetScanner(filter key "-r") <br>
+     * BulletListScanner(filter key "-bulletList") <br>
+     * DivScanner(filter key "-div") <br>
+     * TableScanner(filter key "") <br>
      * <br>
      * Call this method after creating the Parser object. e.g. <BR>
      * <pre>
@@ -709,12 +713,8 @@ public class Parser
             System.err.println("Other scanners already exist, hence this method call wont have any effect");
             return;
         }
-        LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
-        // Note - The BaseHREF and Image scanners share the same
-        // link processor - internally linked up with the factory
-        // method in the link scanner class
-        addScanner(linkScanner);
-        addScanner(linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
+        addScanner(new LinkScanner(LinkTag.LINK_TAG_FILTER));
+        addScanner(new ImageScanner(ImageTag.IMAGE_TAG_FILTER));
         addScanner(new ScriptScanner("-s"));
         addScanner(new StyleScanner("-t"));
         addScanner(new JspScanner("-j"));
@@ -724,7 +724,7 @@ public class Parser
         addScanner(new DoctypeScanner("-d"));
         addScanner(new FormScanner("-f",this));
         addScanner(new FrameSetScanner("-r"));
-        addScanner(linkScanner.createBaseHREFScanner("-b"));
+        addScanner(new BaseHrefScanner("-b"));
         addScanner(new BulletListScanner("-bulletList",this));
     //  addScanner(new SpanScanner("-p"));
         addScanner(new DivScanner("-div"));

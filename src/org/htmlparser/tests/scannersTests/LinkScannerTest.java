@@ -35,6 +35,7 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
@@ -268,9 +269,8 @@ public class LinkScannerTest extends ParserTestCase
     {
         createParser("<A HREF=\"mytest.html\"><IMG SRC=\"abcd.jpg\">Hello World</A>","http://www.yahoo.com");
         // Register the image scanner
-        LinkScanner linkScanner = new LinkScanner("-l");
-        parser.addScanner(linkScanner);
-        parser.addScanner(linkScanner.createImageScanner("-i"));
+        parser.addScanner(new LinkScanner("-l"));
+        parser.addScanner(new ImageScanner("-i"));
 
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a link node",node[0] instanceof LinkTag);
@@ -345,9 +345,8 @@ public class LinkScannerTest extends ParserTestCase
     public void testLinkDataContents() throws ParserException {
         createParser("<a href=\"http://transfer.go.com/cgi/atransfer.pl?goto=http://www.signs.movies.com&name=114332&srvc=nws&context=283&guid=4AD5723D-C802-4310-A388-0B24E1A79689\" target=\"_new\"><img src=\"http://ad.abcnews.com/ad/sponsors/buena_vista_pictures/bvpi-ban0003.gif\" width=468 height=60 border=\"0\" alt=\"See Signs in Theaters 8-2 - Starring Mel Gibson\" align=><font face=\"verdana,arial,helvetica\" SIZE=\"1\"><b></b></font></a>","http://transfer.go.com");
         // Register the image scanner
-        LinkScanner linkScanner = new LinkScanner("-l");
-        parser.addScanner(linkScanner);
-        parser.addScanner(linkScanner.createImageScanner("-i"));
+        parser.addScanner(new LinkScanner("-l"));
+        parser.addScanner(new ImageScanner("-i"));
 
         parseAndAssertNodeCount(1);
         assertTrue("Node 0 should be a link tag",node[0] instanceof LinkTag);

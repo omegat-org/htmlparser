@@ -29,6 +29,7 @@
 
 package org.htmlparser.tags;
 
+import java.util.Vector;
 import org.htmlparser.util.LinkProcessor;
 
 /**
@@ -68,5 +69,17 @@ public class BaseHrefTag extends Tag
         return "BASE TAG\n"+
                 "--------\n"+
                 "Name : "+getBaseUrl();
+    }
+
+    /**
+     * Override this because we need a trigger to set the base HREF on the page.
+     * NOTE: setting of the attributes is the last thing done on the tag
+     * after creation.
+     * @param attribs The new BASE tag attributes.
+     */
+    public void setAttributesEx (Vector attribs)
+    {
+        super.setAttributesEx (attribs);
+        getPage ().getLinkProcessor ().setBaseUrl (getBaseUrl ());
     }
 }

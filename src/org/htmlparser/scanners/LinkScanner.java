@@ -52,7 +52,6 @@ public class LinkScanner extends CompositeTagScanner
 {
     private static final String MATCH_NAME [] = {"A"};
     public static final String LINK_SCANNER_ID = "A";
-    public LinkProcessor processor;
     private final static String ENDERS [] = { "A","TD","TR","FORM","LI","BODY", "HTML" };
     private final static String ENDTAG_ENDERS [] = { "TD","TR","FORM","LI","BODY", "HTML" };
 
@@ -68,7 +67,6 @@ public class LinkScanner extends CompositeTagScanner
      */
     public LinkScanner(String filter) {
         super(filter,MATCH_NAME,ENDERS,ENDTAG_ENDERS);
-        processor = new LinkProcessor();
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
@@ -98,19 +96,10 @@ public class LinkScanner extends CompositeTagScanner
         return (null != tag.getAttributeEx ("HREF"));
     }
 
-    public BaseHrefScanner createBaseHREFScanner(String filter) {
-        return new BaseHrefScanner(filter,processor);
-    }
-
-    public ImageScanner createImageScanner(String filter) {
-        return new ImageScanner(filter,processor);
-    }
-
     /**
      * @see org.htmlparser.scanners.TagScanner#getID()
      */
     public String [] getID() {
         return MATCH_NAME;
     }
-
 }

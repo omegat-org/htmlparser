@@ -31,7 +31,6 @@ package org.htmlparser.tags;
 
 import org.htmlparser.Node;
 import org.htmlparser.scanners.LinkScanner;
-import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserUtils;
 import org.htmlparser.util.SimpleNodeIterator;
 import org.htmlparser.visitors.NodeVisitor;
@@ -306,7 +305,6 @@ public class LinkTag extends CompositeTag
             relativeLink = ParserUtils.removeChars(relativeLink,'\n');
             relativeLink = ParserUtils.removeChars(relativeLink,'\r');
         }
-        LinkProcessor processor = ((LinkScanner)getThisScanner ()).processor;
-        return (processor.extract(relativeLink,getPage ().getUrl ()));
+        return (getPage ().getLinkProcessor ().extract (relativeLink, getPage ().getUrl ()));
     }
 }

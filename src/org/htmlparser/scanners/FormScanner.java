@@ -69,39 +69,6 @@ public class FormScanner extends CompositeTagScanner
     }
 
     /**
-     * Extract the location of the image, given the tag, and the url
-     * of the html page in which this tag exists.
-     * @param tag The form tag with the 'ACTION' attribute.
-     * @param url URL of web page being parsed.
-     */
-    public String extractFormLocn(Tag tag,String url) throws ParserException
-    {
-        try {
-            String formURL= tag.getAttribute("ACTION");
-            if (formURL==null) return ""; else
-            return (new LinkProcessor()).extract(formURL, url);
-        }
-        catch (Exception e) {
-            String msg;
-            if (tag!=null) msg=  tag.getText(); else msg="";
-            throw new ParserException("HTMLFormScanner.extractFormLocn() : Error in extracting form location, tag = "+msg+", url = "+url,e);
-        }
-    }
-
-    public String extractFormName(Tag tag)
-    {
-        return tag.getAttribute("NAME");
-    }
-
-    public String extractFormMethod(Tag tag)
-    {
-        String method = tag.getAttribute("METHOD");
-        if (method==null) method = FormTag.GET;
-        return method.toUpperCase();
-
-    }
-
-    /**
      * @see org.htmlparser.scanners.TagScanner#getID()
      */
     public String [] getID()
@@ -121,12 +88,6 @@ public class FormScanner extends CompositeTagScanner
         ret.setStartTag (startTag);
         ret.setEndTag (endTag);
         ret.setChildren (children);
-
-        // special step here...
-        // ... is it true that without an ACTION the default is to send it back to the same page?
-        String formUrl = extractFormLocn(startTag, page.getUrl ());
-        if (formUrl!=null && formUrl.length()>0)
-            startTag.setAttribute("ACTION",formUrl);
 
         return (ret);
     }

@@ -194,4 +194,19 @@ public class ImageTag extends Tag
         super.accept (visitor);
     }
 
+    /**
+     * Override this because we need a trigger to set the image URL.
+     * Need to update the imageURL string in the this tag,
+     * but not the SRC attribute so toHtml() outputs the right thing.
+     * NOTE: setting of the attributes is the last thing done on the tag
+     * after creation.
+     * @param attribs The new IMG tag attributes.
+     */
+    public void setAttributesEx (Vector attribs)
+    {
+        String src;
+
+        super.setAttributesEx (attribs);
+        imageURL = getPage ().getLinkProcessor ().extract (getImageURL (), getPage().getUrl ());
+    }
 }

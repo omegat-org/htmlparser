@@ -98,7 +98,7 @@ public class FunctionalTests extends ParserTestCase {
 
     public int countImageTagsWithHTMLParser() throws ParserException {
         Parser parser = new Parser("http://education.yahoo.com/",new DefaultParserFeedback());
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         int parserImgTagCount = 0;
         Node node;
         for (NodeIterator e= parser.elements();e.hasMoreNodes();) {

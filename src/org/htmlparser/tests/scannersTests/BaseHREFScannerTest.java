@@ -64,10 +64,9 @@ public class BaseHREFScannerTest extends ParserTestCase {
 
     public void testScan() throws ParserException{
         createParser("<html><head><TITLE>test page</TITLE><BASE HREF=\"http://www.abc.com/\"><a href=\"home.cfm\">Home</a>...</html>","http://www.google.com/test/index.html");
-        LinkScanner linkScanner = new LinkScanner("-l");
-        parser.addScanner(linkScanner);
+        parser.addScanner(new LinkScanner("-l"));
         parser.addScanner(new TitleScanner("-t"));
-        parser.addScanner(linkScanner.createBaseHREFScanner("-b"));
+        parser.addScanner(new BaseHrefScanner("-b"));
         parseAndAssertNodeCount(7);
         //Base href tag should be the 4th tag
         assertTrue(node[3] instanceof BaseHrefTag);

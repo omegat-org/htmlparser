@@ -60,7 +60,7 @@ public class ImageTagTest extends ParserTestCase
     {
         createParser("<IMG alt=Google height=115 src=\"goo/title_homepage4.gif\" width=305>","http://www.google.com/test/index.html");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
 
         parseAndAssertNodeCount(1);
         // The node should be an HTMLImageTag
@@ -80,7 +80,7 @@ public class ImageTagTest extends ParserTestCase
     {
         createParser("<IMG alt=Google height=115 src=\"../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
 
         parseAndAssertNodeCount(1);
         // The node should be an HTMLImageTag
@@ -100,7 +100,7 @@ public class ImageTagTest extends ParserTestCase
     {
         createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
 
         parseAndAssertNodeCount(1);
         // The node should be an HTMLImageTag
@@ -117,7 +117,7 @@ public class ImageTagTest extends ParserTestCase
     {
         createParser("<IMG SRC='abcd.jpg'>","http://www.cj.com/");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
 
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
@@ -136,7 +136,7 @@ public class ImageTagTest extends ParserTestCase
     {
         createParser("<IMG SRC=>","http://www.google.com/test/index.html");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
 
         parseAndAssertNodeCount(1);
         // The node should be an HTMLLinkTag
@@ -149,7 +149,7 @@ public class ImageTagTest extends ParserTestCase
         String img = "<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>";
         createParser(img,"http://www.google.com/test/test/index.html");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
 
         parseAndAssertNodeCount(1);
         // The node should be an ImageTag

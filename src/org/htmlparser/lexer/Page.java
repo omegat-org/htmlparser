@@ -39,6 +39,7 @@ import java.lang.reflect.*;
 import java.net.*;
 
 import org.htmlparser.util.*;
+import org.htmlparser.util.LinkProcessor;
 
 /**
  * Represents the contents of an HTML page.
@@ -78,6 +79,12 @@ public class Page
      * The connection this page is coming from or <code>null</code>.
      */
     protected transient URLConnection mConnection;
+
+    /**
+     * The processor of relative links on this page.
+     * Holds any overridden base HREF.
+     */
+    protected LinkProcessor mProcessor;
 
     /**
      * Messages for page not there (404).
@@ -120,6 +127,7 @@ public class Page
         if (null == connection)
             throw new IllegalArgumentException ("connection cannot be null");
         setConnection (connection);
+        mProcessor = null;
     }
 
     /**
@@ -141,6 +149,7 @@ public class Page
         mIndex = new PageIndex (this);
         mConnection = null;
         mUrl = null;
+        mProcessor = null;
     }
 
     public Page (String text)
@@ -162,6 +171,7 @@ public class Page
         }
         mConnection = null;
         mUrl = null;
+        mProcessor = null;
     }
 
     //
@@ -659,6 +669,27 @@ public class Page
         {
             throw new ParserException (ioe.getMessage (), ioe);
         }
+    }
+
+    /**
+     * Get the link processor associated with this page.
+     * @return The link processor that has the base HREF.
+     */
+    public LinkProcessor getLinkProcessor ()
+    {
+        if (null == mProcessor)
+            mProcessor = new LinkProcessor ();
+        
+        return (mProcessor);
+    }
+
+    /**
+     * Set the link processor associated with this page.
+     * @param processor The new link processor for this page.
+     */
+    public void setLinkProcessor (LinkProcessor processor)
+    {
+        mProcessor = processor;
     }
 
     /**

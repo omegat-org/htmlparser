@@ -38,9 +38,9 @@ import org.htmlparser.lexer.nodes.Attribute;
 
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
+
 /**
  * Scans for the Image Tag. This is a subclass of TagScanner, and is called using a
  * variant of the template method. If the evaluate() method returns true, that means the
@@ -50,22 +50,21 @@ import org.htmlparser.util.ParserUtils;
 public class ImageScanner extends TagScanner
 {
     public static final String IMAGE_SCANNER_ID = "IMG";
-    private LinkProcessor processor;
+
     /**
      * Overriding the default constructor
      */
     public ImageScanner()
     {
         super();
-        processor = new LinkProcessor();
     }
+
     /**
      * Overriding the constructor to accept the filter
      */
-    public ImageScanner(String filter,LinkProcessor processor)
+    public ImageScanner(String filter)
     {
         super(filter);
-        this.processor = processor;
     }
 
     public String [] getID() {
@@ -83,19 +82,6 @@ public class ImageScanner extends TagScanner
         ret.setStartPosition (start);
         ret.setEndPosition (end);
         ret.setAttributesEx (attributes);
-
-        // special step here...
-        // Need to update the imageURL string in the image tag,
-        // but not the SRC attribute which it does when you set the ImageURL
-        // property. Can't do it in the tag, because the tag doesn't have the
-        // current link processor object which might have a BASE href different
-        // than the page.
-        String src = ret.getAttribute ("SRC");
-        ret.setImageURL (processor.extract (ret.getImageURL (), page.getUrl ()));
-        if (null == src)
-            ret.removeAttribute ("SRC");
-        else
-            ret.setAttribute ("SRC", src);
 
         return (ret);
     }

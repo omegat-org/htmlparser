@@ -31,6 +31,7 @@
 package org.htmlparser.visitors;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
+import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
@@ -44,13 +45,8 @@ public class UrlModifyingVisitor extends NodeVisitor {
     public UrlModifyingVisitor(Parser parser, String linkPrefix) {
         super(true,false);
         this.parser = parser;
-        LinkScanner linkScanner = new LinkScanner();
-        parser.addScanner(linkScanner);
-        parser.addScanner(
-            linkScanner.createImageScanner(
-                ImageTag.IMAGE_TAG_FILTER
-            )
-        );
+        parser.addScanner(new LinkScanner());
+        parser.addScanner(new ImageScanner(ImageTag.IMAGE_TAG_FILTER));
         this.linkPrefix =linkPrefix;
         modifiedResult = new StringBuffer();
     }

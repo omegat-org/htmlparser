@@ -30,6 +30,7 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
 /**
@@ -160,5 +161,40 @@ public class FormTag extends CompositeTag
     public String toString()
     {
         return "FORM TAG : Form at "+getFormLocation()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    }
+    
+    /**
+     * Extract the location of the image, given the tag, and the url
+     * of the html page in which this tag exists.
+     * @param tag The form tag with the 'ACTION' attribute.
+     * @param url URL of web page being parsed.
+     */
+    public String extractFormLocn(String url)// throws ParserException
+    {
+        String formURL;
+        
+        formURL = getAttribute("ACTION");
+        if (null == formURL)
+            return "";
+        else
+            return (getPage ().getLinkProcessor ().extract (formURL, url));
+    }
+
+    /**
+     * Override this because we need a trigger to set the ACTION attribute.
+     * NOTE: setting of the children is the last thing done on the tag
+     * after creation.
+     * @param children The new list of children this node contains.
+     */
+    public void setChildren (NodeList children)
+    {
+        String url;
+
+        super.setChildren (children);
+
+        // ... is it true that without an ACTION the default is to send it back to the same page?
+        url = extractFormLocn(getPage ().getUrl ());
+        if (null != url && 0 < url.length())
+            setAttribute ("ACTION",url);
     }
 }

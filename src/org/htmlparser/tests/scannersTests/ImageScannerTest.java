@@ -58,7 +58,7 @@ public class ImageScannerTest extends ParserTestCase
     public void testDynamicRelativeImageScan() throws ParserException {
         createParser("<IMG SRC=\"../abc/def/mypic.jpg\">","http://www.yahoo.com/ghi?abcdefg");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
@@ -67,7 +67,7 @@ public class ImageScannerTest extends ParserTestCase
 
     public void testEvaluate()
     {
-        ImageScanner scanner = new ImageScanner("-i",new LinkProcessor());
+        ImageScanner scanner = new ImageScanner("-i");
         Tag tag = new Tag ();
         tag.setTagName ("img");
         boolean retVal = scanner.evaluate (tag ,null);
@@ -82,7 +82,7 @@ public class ImageScannerTest extends ParserTestCase
         String locn = "http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif";
         createParser ("<img width=638 height=53 border=0 usemap=\"#m\" src=" + locn + " alt=Yahoo>");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
@@ -98,7 +98,7 @@ public class ImageScannerTest extends ParserTestCase
         createParser("<IMG width=1 height=1 alt=\"a\">","http://www.yahoo.com/ghi?abcdefg");
 
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
@@ -112,7 +112,7 @@ public class ImageScannerTest extends ParserTestCase
         createParser("<IMG SRC=\"mypic.jpg\">","http://www.yahoo.com");
 
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
@@ -121,7 +121,7 @@ public class ImageScannerTest extends ParserTestCase
 
     public void testRelativeImageScan2() throws ParserException {
         createParser("<IMG SRC=\"abc/def/mypic.jpg\">","http://www.yahoo.com");     // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
@@ -131,7 +131,7 @@ public class ImageScannerTest extends ParserTestCase
     public void testRelativeImageScan3() throws ParserException {
         createParser("<IMG SRC=\"../abc/def/mypic.jpg\">","http://www.yahoo.com/ghi");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
@@ -146,7 +146,7 @@ public class ImageScannerTest extends ParserTestCase
     {
         createParser("<IMG SRC=\"../abc/def/Hello World.jpg\">","http://www.yahoo.com/ghi");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
@@ -158,7 +158,7 @@ public class ImageScannerTest extends ParserTestCase
         createParser("<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">","http://www.yahoo.com/ghi");
         Parser.setLineSeparator("\r\n");
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
@@ -176,7 +176,7 @@ public class ImageScannerTest extends ParserTestCase
         "<input type=submit value=Search> <a href=r/so>advanced search</a></td></tr></table><table border=0 cellspacing=0 cellpadding=3 width=640><tr><td nowrap align=center><table border=0 cellspacing=0 cellpadding=0><tr><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif\" width=20 height=20 border=0></a></td><td> &nbsp; &nbsp; <a href=s/1048><b>Yahooligans!</b></a> - <a href=s/5282>Eet & Ern</a>, <a href=s/5283>Games</a>, <a href=s/5284>Science</a>, <a href=s/5285>Sports</a>, <a href=s/5286>Movies</a>, <a href=s/1048>more</a> &nbsp; &nbsp; </td><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif\" width=20 height=20 border=0></a></td></tr></table></td></tr><tr><td nowrap align=center><small><b>Shop</b>&nbsp;\n","http://www.yahoo.com");
         Node [] node = new AbstractNode[10];
         // Register the image scanner
-        parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
+        parser.addScanner(new ImageScanner("-i"));
         int i = 0;
         Node thisNode;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();) {

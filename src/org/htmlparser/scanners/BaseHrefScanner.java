@@ -32,7 +32,6 @@ import java.util.Vector;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -42,17 +41,14 @@ import org.htmlparser.util.ParserException;
  */
 public class BaseHrefScanner extends TagScanner
 {
-    private LinkProcessor processor;
-
     public BaseHrefScanner()
     {
         super();
     }
 
-    public BaseHrefScanner(String filter,LinkProcessor processor)
+    public BaseHrefScanner(String filter)
     {
         super(filter);
-        this.processor = processor;
     }
 
     public String [] getID()
@@ -72,11 +68,6 @@ public class BaseHrefScanner extends TagScanner
         ret.setEndPosition (end);
         ret.setAttributesEx (attributes);
         
-        // special step here
-        // Need to set the base url for the current link processor,
-        // which can't be done in the tag because it doesn't have it.
-        processor.setBaseUrl (ret.getBaseUrl ());
-
         return (ret);
     }
 }
