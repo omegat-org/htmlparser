@@ -79,7 +79,7 @@ public class DecodingNodeTest extends ParserTestCase {
             "&#247; is the division sign.";
 
         String DECODED_DIVISION_SIGN =
-            "÷ is the division sign.";
+            "\u00f7 is the division sign.";
 
         assertEquals(
             "numeric reference for division sign",
@@ -91,11 +91,11 @@ public class DecodingNodeTest extends ParserTestCase {
     public void testReferencesInString () throws Exception {
         String ENCODED_REFERENCE_IN_STRING =
             "Thus, the character entity reference &divide; is a more convenient" +
-            " form than &#247; for obtaining the division sign (÷)";
+            " form than &#247; for obtaining the division sign (\u00f7)";
 
         String DECODED_REFERENCE_IN_STRING =
-            "Thus, the character entity reference ÷ is a more convenient" +
-            " form than ÷ for obtaining the division sign (÷)";
+            "Thus, the character entity reference \u00f7 is a more convenient" +
+            " form than \u00f7 for obtaining the division sign (\u00f7)";
 
         assertEquals (
             "character references within a string",

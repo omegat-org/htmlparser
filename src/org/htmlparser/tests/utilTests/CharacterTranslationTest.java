@@ -47,7 +47,7 @@ public class CharacterTranslationTest extends ParserTestCase
     {
         assertEquals (
             "character entity reference at start of string doesn't work",
-            "÷ is the division sign.",
+            "\u00f7 is the division sign.",
             Translate.decode ("&divide; is the division sign."));
     }
 
@@ -55,7 +55,7 @@ public class CharacterTranslationTest extends ParserTestCase
     {
         assertEquals (
             "numeric character reference at start of string doesn't work",
-            "÷ is the division sign.",
+            "\u00f7 is the division sign.",
             Translate.decode ("&#247; is the division sign."));
     }
 
@@ -63,7 +63,7 @@ public class CharacterTranslationTest extends ParserTestCase
     {
         assertEquals (
             "character entity reference without a semicolon at start of string doesn't work",
-            "÷ is the division sign.",
+            "\u00f7 is the division sign.",
             Translate.decode ("&divide; is the division sign."));
     }
 
@@ -71,7 +71,7 @@ public class CharacterTranslationTest extends ParserTestCase
     {
         assertEquals (
             "numeric character reference without a semicolon at start of string doesn't work",
-            "÷ is the division sign.",
+            "\u00f7 is the division sign.",
             Translate.decode ("&#247; is the division sign."));
     }
 
@@ -79,40 +79,40 @@ public class CharacterTranslationTest extends ParserTestCase
     {
         assertEquals (
             "character entity reference at end of string doesn't work",
-            "The division sign (÷) is ÷",
-            Translate.decode ("The division sign (÷) is &divide;"));
+            "The division sign (\u00f7) is \u00f7",
+            Translate.decode ("The division sign (\u00f7) is &divide;"));
     }
 
     public void testFinalNumericCharacterReference ()
     {
         assertEquals (
             "numeric character reference at end of string doesn't work",
-            "The division sign (÷) is ÷",
-            Translate.decode ("The division sign (÷) is &#247;"));
+            "The division sign (\u00f7) is \u00f7",
+            Translate.decode ("The division sign (\u00f7) is &#247;"));
     }
 
     public void testFinalCharacterEntityReferenceWithoutSemi ()
     {
         assertEquals (
             "character entity reference without a semicolon at end of string doesn't work",
-            "The division sign (÷) is ÷",
-            Translate.decode ("The division sign (÷) is &divide"));
+            "The division sign (\u00f7) is \u00f7",
+            Translate.decode ("The division sign (\u00f7) is &divide"));
     }
 
     public void testFinalNumericCharacterReferenceWithoutSemi ()
     {
         assertEquals (
             "numeric character reference without a semicolon at end of string doesn't work",
-            "The division sign (÷) is ÷",
-            Translate.decode ("The division sign (÷) is &#247"));
+            "The division sign (\u00f7) is \u00f7",
+            Translate.decode ("The division sign (\u00f7) is &#247"));
     }
 
     public void testReferencesInString ()
     {
         assertEquals (
             "character references within a string don't work",
-            "Thus, the character entity reference ÷ is a more convenient form than ÷ for obtaining the division sign (÷)",
-            Translate.decode ("Thus, the character entity reference &divide; is a more convenient form than &#247; for obtaining the division sign (÷)"));
+            "Thus, the character entity reference \u00f7 is a more convenient form than \u00f7 for obtaining the division sign (\u00f7)",
+            Translate.decode ("Thus, the character entity reference &divide; is a more convenient form than &#247; for obtaining the division sign (\u00f7)"));
     }
 
     public void testBogusCharacterEntityReference ()
@@ -136,7 +136,7 @@ public class CharacterTranslationTest extends ParserTestCase
         assertEquals (
             "encode doesn't work",
             "Character entity reference: &divide;, another: &nbsp;, numeric character reference: &#9831;.",
-            Translate.encode ("Character entity reference: ÷, another: \u00a0, numeric character reference: \u2667."));
+            Translate.encode ("Character entity reference: \u00f7, another: \u00a0, numeric character reference: \u2667."));
     }
 
     public void testEncodeLink ()

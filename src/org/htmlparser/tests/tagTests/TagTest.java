@@ -487,7 +487,7 @@ public class TagTest extends ParserTestCase
     }
 
     public void testIncorrectInvertedCommas2() throws ParserException {
-        String guts = "META NAME=\"Keywords\" CONTENT=Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\"";
+        String guts = "META NAME=\"Keywords\" CONTENT=Moscou, modernisation, politique urbaine, sp\u00e9cificit\u00e9s culturelles, municipalit\u00e9, Moscou, modernisation, urban politics, cultural specificities, municipality\"";
         String testHTML = "<" + guts + ">";
         createParser(testHTML);
         parseAndAssertNodeCount(1);
@@ -497,12 +497,12 @@ public class TagTest extends ParserTestCase
     }
 
     public void testIncorrectInvertedCommas3() throws ParserException {
-        String testHTML = new String("<meta name=\"description\" content=\"Une base de données sur les thèses de g\"ographie soutenues en France \">");
+        String testHTML = new String("<meta name=\"description\" content=\"Une base de donn\u00e9es sur les th\u00e8ses de g\"ographie soutenues en France \">");
         createParser(testHTML);
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
-        assertEquals("Node contents","meta name=\"description\" content=\"Une base de données sur les thèses de g\"ographie soutenues en France \"",tag.getText());
+        assertEquals("Node contents","meta name=\"description\" content=\"Une base de donn\u00e9es sur les th\u00e8ses de g\"ographie soutenues en France \"",tag.getText());
     }
 
     /**
