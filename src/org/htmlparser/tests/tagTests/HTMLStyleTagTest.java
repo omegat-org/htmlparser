@@ -64,7 +64,7 @@ public class HTMLStyleTagTest extends HTMLParserTestCase {
 	 	parseAndAssertNodeCount(1);
 		assertTrue(node[0] instanceof HTMLStyleTag);
 		HTMLStyleTag styleTag = (HTMLStyleTag)node[0];
-		assertStringEquals("Raw String","<STYLE TYPE=\"text/css\">"+
+		assertStringEquals("Raw String","<STYLE TYPE=\"text/css\">\r\n"+
 		"<!--\r\n"+
 		"{something....something}\r\n"+
 		"-->"+

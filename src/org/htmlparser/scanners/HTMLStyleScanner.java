@@ -30,6 +30,8 @@ package org.htmlparser.scanners;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
+import java.util.Vector;
+
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLEndTag;
@@ -71,11 +73,12 @@ public class HTMLStyleScanner extends HTMLTagScanner {
 			// We know we have style stuff. 
 			// Parse on till the end tag </style> is found
 			String line;
-			HTMLEndTag endTag=null;
+			HTMLTag startTag = tag;
+			HTMLTag endTag=null;
 			HTMLNode node = null;
 			boolean endStyleFound=false;
 			StringBuffer buff=new StringBuffer();
-			
+			Vector childNodes = new Vector();
 			do {
 				node = reader.readElement();
 				if (node instanceof HTMLEndTag) {
@@ -83,14 +86,17 @@ public class HTMLStyleScanner extends HTMLTagScanner {
 					if (endTag.getText().toUpperCase().equals("STYLE")) {
 						endStyleFound = true;
 					}
-				} else buff.append(node.toHTML());
+				} else {
+					buff.append(node.toHTML());
+					childNodes.addElement(node);
+				} 
 			}
 			while (!endStyleFound && node!=null);
 			if (node==null && !endStyleFound) {
 				throw new HTMLParserException("HTMLStyleScanner.scan() : Went into a potential infinite loop, could not create syle tag.\n"+
 				"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
 			}
-			HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine);
+			HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine,childNodes,startTag,endTag);
 			styleTag.setParsed(tag.getParsed());
 			return styleTag;
 		}

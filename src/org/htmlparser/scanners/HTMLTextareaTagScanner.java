@@ -84,7 +84,7 @@ public class HTMLTextareaTagScanner extends HTMLTagScanner
 							value.append(HTMLNode.getLineSeparator());
 					}
 					value.append(node.toHTML());
-					childVector.add(node);
+					childVector.addElement(node);
 					prevNode = node;
 				}
 			}

@@ -28,12 +28,12 @@
 
 package org.htmlparser.tags;
 
-import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * A HTMLStyleTag represents a &lt;style&gt; tag
  */
-public class HTMLStyleTag extends HTMLTag {
+public class HTMLStyleTag extends HTMLCompositeTag {
 	/**
 	 * The HTMLStyleTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.
@@ -42,8 +42,8 @@ public class HTMLStyleTag extends HTMLTag {
 	 * @param styleCode The style code b/w the tags
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public HTMLStyleTag(int tagBegin, int tagEnd, String styleCode,String tagLine) {
-		super(tagBegin,tagEnd,styleCode,tagLine);
+	public HTMLStyleTag(int tagBegin, int tagEnd, String styleCode,String tagLine,Vector childNodes,HTMLTag startTag, HTMLTag endTag) {
+		super(tagBegin,tagEnd,styleCode,tagLine,childNodes,startTag,endTag);
 	}
 	/**
 	 * Get the javascript code in this tag
@@ -65,26 +65,4 @@ public class HTMLStyleTag extends HTMLTag {
 		sb.append(tagContents+"\n");
 		return sb.toString();
 	}
-
-	/**
-	 * @see HTMLNode#toRawString()
-	 */
-	public String toHTML() {
-		StringBuffer retData = new StringBuffer();
-		retData.append("<STYLE");
-		String key,value;
-		if (parsed!=null)
-		for (Enumeration e =parsed.keys();e.hasMoreElements();) {
-			key = (String)e.nextElement();
-			if (key!=HTMLTag.TAGNAME) {
-				value = (String)parsed.get(key);
-				retData.append(" "+key+"=\""+value+"\"");
-			}
-		}
-		retData.append(">");
-		retData.append(getStyleCode());
-		retData.append("</STYLE>");
-		return retData.toString();
-	}
-
 }
