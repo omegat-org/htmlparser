@@ -4,6 +4,9 @@ Integration Build 1.2 - 20020623
 [2] Refactored HTMLScriptScanner
 [3] Added testcases for script scanner
 [4] Refactored HTMLTagScanner (removed extractField)
+[5] Fixed bug in HTMLLinkScanner - would crash on freshmeat.net,
+bcos of <a>Revision</a>. Now this is being treated as three
+seperate nodes(tag, string node, end tag)
 
 Integration Build 1.2 - 20020616
 --------------------------------
