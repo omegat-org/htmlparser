@@ -119,7 +119,7 @@ public String toString()
 	sb.append("\n");
 	sb.append("Code\n");
 	sb.append("****\n");
-	sb.append(tagContents+"\n");
+	sb.append(getScriptCode()+"\n");
 	return sb.toString();
 }
 }

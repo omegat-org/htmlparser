@@ -34,6 +34,9 @@ package com.kizna.html.scanners;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
+import java.util.Enumeration;
+import java.util.Vector;
+
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLStringNode;
@@ -131,7 +134,8 @@ public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLin
 	HTMLNode node = null;
 	boolean endScriptFound=false;
 	StringBuffer buff=new StringBuffer();
-
+	// Remove all existing scanners, so as to parse only till the end tag
+	Vector tempScannerVector = adjustScanners(reader);	
 	HTMLNode prevNode=tag;
 	do {
 		node = reader.readElement();
@@ -153,7 +157,7 @@ public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLin
 	}
 	while (!endScriptFound);
 	HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
-
+	restoreScanners(reader, tempScannerVector);
 	return scriptTag; 
 }
 /**
@@ -172,4 +176,21 @@ public void setLanguage(java.lang.String newLanguage) {
 public void setType(java.lang.String newType) {
 	type = newType;
 }
+	public Vector adjustScanners(HTMLReader reader) {
+		Vector tempScannerVector = new Vector();
+		for (Enumeration e=reader.getParser().getScanners();e.hasMoreElements();) {
+			tempScannerVector.addElement(e.nextElement());
+		}
+		// Remove all existing scanners
+		reader.getParser().flushScanners();
+		return tempScannerVector;
+	}
+	public void restoreScanners(HTMLReader reader, Vector tempScannerVector) {
+		// Flush the scanners
+		reader.getParser().flushScanners();
+		// Add all the original scanners back
+		for (Enumeration e = tempScannerVector.elements();e.hasMoreElements();) {
+			reader.getParser().addScanner((HTMLTagScanner)e.nextElement());
+		}
+	}	
 }
