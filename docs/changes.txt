@@ -12,7 +12,57 @@
 *                                                                             *
 *******************************************************************************
 
-Integration Build 1.4 - 20030325
+Integration Build 1.4 - 20030601
+--------------------------------
+
+2003-05-31 13:48  derrickoswald
+
+	* src/org/htmlparser/: tests/scannersTests/AllTests.java,
+	tests/scannersTests/BulletListScannerTest.java,
+	tests/scannersTests/FormScannerTest.java,
+	tests/scannersTests/OptionTagScannerTest.java,
+	tests/scannersTests/SelectTagScannerTest.java,
+	tests/scannersTests/TextareaTagScannerTest.java,
+	tests/tagTests/OptionTagTest.java,
+	tests/tagTests/SelectTagTest.java, scanners/BulletListScanner.java,
+	scanners/CompositeTagScanner.java, scanners/FormScanner.java,
+	scanners/OptionTagScanner.java, scanners/SelectTagScanner.java,
+	scanners/TextareaTagScanner.java, scanners/TitleScanner.java,
+	tests/tagTests/TextareaTagTest.java:
+
+	Fixed bug #745566 StackOverflowError on select with too many unclosed options.
+	Replicated the missing end tag detection of the bullet list scanner into the form scanners.
+	This isn't ideal, but it seems to work.
+	
+	Added test case testUnclosedOptions in FormScannerTest that reads
+	http://htmlparser.sourceforge.net/test/overflowpage.html.
+	Note: this test only failed on Windows, prior to the fix.
+	
+	Picked up missing scanner tests in AllTests.
+	The HtmlTest file showed that title tags weren't being scanned, which I fixed with a kludge.
+	
+	Added order list types to BulletListScanner match tags.
+	
+2003-05-30 22:01  derrickoswald
+
+	* src/org/htmlparser/parserHelper/ParserHelper.java:
+
+	Fixed bug #744610 getLink() Erroneous for Relative Links from Files on Windows.
+	Inserted the extra slash if needed.
+	
+2003-05-28 13:02  polarys
+
+	* src/org/htmlparser/tests/scannersTests/ScriptScannerTest.java:
+
+	Checking in some new tests for ScriptScanner, currently broken
+	
+2003-05-27 13:19  polarys
+
+	* build.xml:
+
+	Moving 'clean' into its own Ant target instead of built into htmlparser target
+	
+Integration Build 1.4 - 20030525
 --------------------------------
 
 This is the same as Release Build 1.3 except the default minor version is 4.

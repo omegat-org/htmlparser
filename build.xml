@@ -179,7 +179,7 @@
         <pathelement location="${src}"/>
         <pathelement location="${junit.jar}"/>
       </classpath>
-      <!-- arg value="-text"/ don't use until JUnit bug 660115 is resolved -->
+      <arg value="-text"/>
     </java>
   </target>
 
