@@ -1,3 +1,8 @@
+Integration build 1.3 - 20030201
+--------------------------------
+[1] Renamed HTMLCompositeTagScanner to CompositeTagScanner
+[2] Renamed HTMLTag.getParameter() to HTMLTag.getAttribute()
+
 Integration build 1.3 - 20030125
 --------------------------------
 [1] HTMLCompositeTagScanner now takes an array of match strings
