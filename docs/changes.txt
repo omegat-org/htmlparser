@@ -1,4 +1,10 @@
-Integration Build 1.2 - 20021018
+Integration Build 1.2 - 20021031
+--------------------------------
+[1] Changed string creation to static strings in HTMLTagParser
+[2] HTMLLinkProcessor can handle urls beginning with file://
+[3]
+
+Integration Build 1.2 - 20021016
 --------------------------------
 [1] Fixed bug 621117 - JSP tags not recognized if within string node
 [2] Fixed bug 617228 - Links with > symbol in query strings were not
@@ -6,6 +12,7 @@ being recognized.
 [3] build.xml completely automatic - no manual changes needed before running
 [4] build.xml included in release package, inside src.zip
 [5] Refactored HTMLTag - design modified, introduced HTMLTagParser helper class
+[6] Optimized scanning process - 20% faster now
 
 Integration Build 1.2 - 20021002
 --------------------------------
