@@ -43,6 +43,7 @@ import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -713,5 +714,32 @@ public class ParserTest extends ParserTestCase {
         {
 			Node node = e.nextNode();
 		}
+    }
+    
+    /**
+     * See bug #729368 Embedded quote and split tag
+     */
+    public void testEmbeddedQuoteSplit () throws Exception
+    {
+        createParser (
+            "<html><head></head>\n"
+            + "<body>\n"
+            + "<table>\n"
+            + "<tr><td><img src=\"x\" alt=\"f's b\"><font\n"
+            + "size=1>blah</font></td></tr>\n"
+            + "</table>\n"
+            + "</body></html>");
+		int i = 0;
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+        {
+			Node node = e.nextNode();
+            if (7 == i)
+            {
+                assertTrue ("not a tag", node instanceof Tag);
+                assertTrue ("ALT attribute incorrect", ((Tag)node).getAttribute ("ALT").equals ("f's b"));
+            }
+			i++;
+		}
+		assertEquals("Expected nodes",16,i);
     }
 }

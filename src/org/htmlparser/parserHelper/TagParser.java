@@ -57,6 +57,7 @@ public class TagParser {
 		int state = TAG_BEFORE_PARSING_STATE;
 		int i=position;
 		char ch;
+        char[] ignorechar = new char[1]; // holds the character we're looking for when in TAG_IGNORE_DATA_STATE
 		Tag tag = new Tag(new TagData(0,0,"",input));
 		Bool encounteredQuery = new Bool(false);
 		while (i<tag.getTagLine().length() && 
@@ -65,7 +66,7 @@ public class TagParser {
 			)
 		{
 			ch = tag.getTagLine().charAt(i);
-			state = automataInput(encounteredQuery, i, state, ch, tag, i);
+			state = automataInput(encounteredQuery, i, state, ch, tag, i, ignorechar);
 			i = incrementCounter(i, reader, state, tag);
 		}
 		if (state==TAG_FINISHED_PARSING_STATE) {
@@ -80,10 +81,10 @@ public class TagParser {
 		return null;	
 	}
 
-	private int automataInput(Bool encounteredQuery, int i, int state,char ch, Tag tag, int pos) {
+	private int automataInput(Bool encounteredQuery, int i, int state,char ch, Tag tag, int pos, char[] ignorechar) {
 		state = checkIllegalState(i, state, ch, tag);
 		state = checkFinishedState(encounteredQuery, i, state, ch, tag, pos);
-		state = toggleIgnoringState(state, ch);
+		state = toggleIgnoringState(state, ch, ignorechar);
 		if (state==TAG_BEFORE_PARSING_STATE && ch!='<') {
             state= TAG_ILLEGAL_STATE;
         }
@@ -238,43 +239,30 @@ public class TagParser {
 		}			
 		return token;
 	}	
-	private int toggleIgnoringState(int state, char ch) {
-		if (ch=='"' ) {
-			// State 4 is ignoring mode. In this mode, we cant exit upon recieving endtag character
-			// This is to avoid problems with end tags within inverted commas (occuring with JSP tags).
-			if (state==TAG_IGNORE_DATA_STATE) {
-				state = TAG_BEGIN_PARSING_STATE;
-				
-			} else
-			if (state==TAG_BEGIN_PARSING_STATE) 
-				state = TAG_IGNORE_DATA_STATE;
-		}
-		else 
-		if (state==TAG_IGNORE_DATA_STATE && ch=='\'') {
-				state = TAG_BEGIN_PARSING_STATE;
-		} else
-		if (state!=TAG_IGNORE_DATA_STATE && (ch=='\'' || ch=='"')) {
-			state = TAG_IGNORE_DATA_STATE;
-		}
-		
-		return state;
-		
-	}	
-	private int _toggleIgnoringState(int state, char ch) {
-		if (ch=='"' ||ch=='\'' ) {
-			// State 4 is ignoring mode. In this mode, we cant exit upon recieving endtag character
-			// This is to avoid problems with end tags within inverted commas (occuring with JSP tags).
-			if (state==TAG_IGNORE_DATA_STATE) {
-				state = TAG_BEGIN_PARSING_STATE;
-			
-			} else
-			if (state==TAG_BEGIN_PARSING_STATE) 
-				state = TAG_IGNORE_DATA_STATE;
-		}
-		return state;
-	
-	}	
 
+    /**
+     * Check for quote character (" or ') and switch to TAG_IGNORE_DATA_STATE
+     * or back out to TAG_BEGIN_PARSING_STATE.
+     * @param state The current state.
+     * @param ch The character to test.
+     * @param ignorechar The character that caused entry to TAG_IGNORE_DATA_STATE.
+     */
+    private int toggleIgnoringState(int state, char ch, char[] ignorechar)
+    {
+        if (state==TAG_IGNORE_DATA_STATE)
+        {
+            if (ch == ignorechar[0])
+                state = TAG_BEGIN_PARSING_STATE;
+        }
+        else if (state == TAG_BEGIN_PARSING_STATE)
+            if (ch == '"' || ch == '\'')
+            {
+                state = TAG_IGNORE_DATA_STATE;
+                ignorechar[0] = ch;
+            }
+
+        return (state);
+	}	
 	
 	public int incrementCounter(int i, NodeReader reader, int state, Tag tag) {
 		String nextLine = null;
