@@ -611,8 +611,6 @@ public class StringBean extends NodeVisitor implements Serializable
             mIsPre = false;
         else if (name.equalsIgnoreCase ("SCRIPT"))
             mIsScript = false;
-		if (end.breaksFlow ())
-			carriage_return ();            
     }
     
     /**
