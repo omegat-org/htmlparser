@@ -42,7 +42,7 @@ public class HTMLStringNode extends HTMLNode
   	private final static int PARSE_HAS_BEGUN_STATE=1;
   	private final static int PARSE_COMPLETED_STATE=2;	
   	private final static int PARSE_IGNORE_STATE=3;
-  	
+  	private static boolean ignoreStateMode=false;
 	public static final String STRING_FILTER="-string";
 	/**
 	 * The text of the string.
@@ -61,13 +61,20 @@ public class HTMLStringNode extends HTMLNode
 		this.textBuffer = textBuffer;
 		
 	}
+	
+	public static HTMLNode find(HTMLReader reader,String input,int position) {
+		return find(reader, input, position, ignoreStateMode);	
+	}
+	
 	/**
 	 * Locate the StringNode within the input string, by parsing from the given position
 	 * @param reader HTML reader to be provided so as to allow reading of next line
 	 * @param input Input String
 	 * @param position Position to start parsing from
+	 * @param ignoreStateMode enter ignoring state - if set, will enter ignoring
+	 * state on encountering apostrophes
 	 */		
-	public static HTMLNode find(HTMLReader reader,String input,int position)
+	public static HTMLNode find(HTMLReader reader,String input,int position, boolean ignoreStateMode)
 	{
 		StringBuffer textBuffer = new StringBuffer();
 		int state = BEFORE_PARSE_BEGINS_STATE;
@@ -98,7 +105,7 @@ public class HTMLStringNode extends HTMLNode
 					}
 				}
 			}
-			if (ch=='\'') {
+			if (ignoreStateMode && ch=='\'') {
 				if (state==PARSE_IGNORE_STATE) state=PARSE_HAS_BEGUN_STATE;
 				else {
 					if (input.charAt(i+1)=='<')
@@ -158,6 +165,14 @@ public class HTMLStringNode extends HTMLNode
 
 	public void accept(HTMLVisitor visitor) {
 		visitor.visitStringNode(this);
+	}
+
+	public static boolean isIgnoreStateMode() {
+		return ignoreStateMode;
+	}
+
+	public static void setIgnoreStateMode(boolean ignoreStateMode) {
+		HTMLStringNode.ignoreStateMode = ignoreStateMode;
 	}
 
 }

@@ -364,12 +364,12 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		HTMLParser parser;
 		try
         {
-			parser = new HTMLParser("http://www.ibm.co.jp", HTMLParser.noFeedback);
+			parser = new HTMLParser("http://www.ibm.com/jp/", HTMLParser.noFeedback);
 			assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
 		}
 		catch (HTMLParserException e)
         {
-            fail ("could not open http://www.ibm.co.jp");
+            fail ("could not open http://www.ibm.com/jp/");
 		}
     }
 

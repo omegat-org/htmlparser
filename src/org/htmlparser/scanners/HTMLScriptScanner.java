@@ -35,6 +35,7 @@ import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLScriptTag;
 import org.htmlparser.tags.HTMLTag;
@@ -123,8 +124,11 @@ public class HTMLScriptScanner extends HTMLTagScanner {
 			Hashtable tempScanners = reader.getParser().getScanners();
 			reader.getParser().flushScanners();
 			HTMLNode prevNode=tag;
+			
 			do {
+				HTMLStringNode.setIgnoreStateMode(true);
 				node = reader.readElement();
+				HTMLStringNode.setIgnoreStateMode(false);
 				if (node instanceof HTMLEndTag) {
 					endTag = (HTMLEndTag)node;
 					if (endTag.getText().toUpperCase().equals("SCRIPT")) 
