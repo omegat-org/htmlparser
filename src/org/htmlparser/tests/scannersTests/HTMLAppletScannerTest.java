@@ -33,6 +33,7 @@ import java.util.Hashtable;
 import java.io.StringReader;
 
 import org.htmlparser.tags.HTMLAppletTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -40,85 +41,61 @@ import org.htmlparser.*;
 import org.htmlparser.scanners.HTMLAppletScanner;
 
 import junit.framework.TestSuite;
-/**
- * Insert the type's description here.
- * Creation date: (6/18/2001 2:20:43 AM)
- * @author: Administrator
- */
-public class HTMLAppletScannerTest extends junit.framework.TestCase 
+
+public class HTMLAppletScannerTest extends HTMLParserTestCase
 {
-/**
- * HTMLAppletScannerTest constructor comment.
- * @param name java.lang.String
- */
-public HTMLAppletScannerTest(String name) {
-	super(name);
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/4/2001 11:22:36 AM)
- * @return junit.framework.TestSuite
- */
-public static TestSuite suite() 
-{
-	TestSuite suite = new TestSuite(HTMLAppletScannerTest.class);
-	return suite;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:23:14 AM)
- */
-public void testEvaluate() 
-{
-	HTMLAppletScanner scanner = new HTMLAppletScanner("-a");
-	boolean retVal = scanner.evaluate("   Applet ",null);
-	assertEquals("Evaluation of APPLET tag",new Boolean(true),new Boolean(retVal));
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:26:41 AM)
- */
-public void testScan() throws HTMLParserException
-{
-	String [][]paramsData = {{"Param1","Value1"},{"Name","Somik"},{"Age","23"}};
-	Hashtable paramsMap = new Hashtable();
-	String testHTML = new String("<APPLET CODE=Myclass.class ARCHIVE=test.jar CODEBASE=www.kizna.com>\n");
-	for (int i = 0;i<paramsData.length;i++)
-	{
-		testHTML+="<PARAM NAME=\""+paramsData[i][0]+"\" VALUE=\""+paramsData[i][1]+"\">\n";
-		paramsMap.put(paramsData[i][0],paramsData[i][1]);
+
+	public HTMLAppletScannerTest(String name) {
+		super(name);
 	}
-	testHTML+=
-		"</APPLET>\n"+
-		"</HTML>";
-	StringReader sr = new StringReader(testHTML);
-	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-	HTMLNode [] node = new HTMLNode[10];
-	// Register the image scanner
-	parser.addScanner(new HTMLAppletScanner("-a"));
+	
+	public static TestSuite suite() 
+	{
+		TestSuite suite = new TestSuite(HTMLAppletScannerTest.class);
+		return suite;
+	}
+	
+	public void testEvaluate() 
+	{
+		HTMLAppletScanner scanner = new HTMLAppletScanner("-a");
+		boolean retVal = scanner.evaluate("   Applet ",null);
+		assertEquals("Evaluation of APPLET tag",new Boolean(true),new Boolean(retVal));
+	}
+
+	public void testScan() throws HTMLParserException
+	{
+		String [][]paramsData = {{"Param1","Value1"},{"Name","Somik"},{"Age","23"}};
+		Hashtable paramsMap = new Hashtable();
+		String testHTML = new String("<APPLET CODE=Myclass.class ARCHIVE=test.jar CODEBASE=www.kizna.com>\n");
+		for (int i = 0;i<paramsData.length;i++)
+		{
+			testHTML+="<PARAM NAME=\""+paramsData[i][0]+"\" VALUE=\""+paramsData[i][1]+"\">\n";
+			paramsMap.put(paramsData[i][0],paramsData[i][1]);
+		}
+		testHTML+=
+			"</APPLET>\n"+
+			"</HTML>";
+		createParser(testHTML);
 		
-	int i = 0;
-	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-	{
-		node[i++] = e.nextHTMLNode();
+		// Register the applet scanner
+		parser.addScanner(new HTMLAppletScanner("-a"));
+			
+		parseAndAssertNodeCount(2);
+		assertTrue("Node should be an applet tag",node[0] instanceof HTMLAppletTag);
+		// Check the data in the applet tag
+		HTMLAppletTag appletTag = (HTMLAppletTag)node[0];
+		assertEquals("Class Name","Myclass.class",appletTag.getAppletClass());
+		assertEquals("Archive","test.jar",appletTag.getArchive());
+		assertEquals("Codebase","www.kizna.com",appletTag.getCodeBase());
+		// Check the params data
+		int cnt = 0;
+		for (Enumeration e = appletTag.getParameterNames();e.hasMoreElements();)
+		{
+			String paramName = (String)e.nextElement();
+			String paramValue = appletTag.getParameter(paramName);
+			assertEquals("Param "+cnt+" value",paramsMap.get(paramName),paramValue);
+			cnt++;
+		}
+		assertEquals("Number of params",new Integer(paramsData.length),new Integer(cnt));
 	}
-	assertEquals("There should be 2 node identified",new Integer(2),new Integer(i));	
-	assertTrue("Node should be an applet tag",node[0] instanceof HTMLAppletTag);
-	// Check the data in the applet tag
-	HTMLAppletTag appletTag = (HTMLAppletTag)node[0];
-	assertEquals("Class Name","Myclass.class",appletTag.getAppletClass());
-	assertEquals("Archive","test.jar",appletTag.getArchive());
-	assertEquals("Codebase","www.kizna.com",appletTag.getCodeBase());
-	// Check the params data
-	int cnt = 0;
-	for (Enumeration e = appletTag.getParameterNames();e.hasMoreElements();)
-	{
-		String paramName = (String)e.nextElement();
-		String paramValue = appletTag.getParameter(paramName);
-		assertEquals("Param "+cnt+" value",paramsMap.get(paramName),paramValue);
-		cnt++;
-	}
-	assertEquals("Number of params",new Integer(paramsData.length),new Integer(cnt));
-}
 }
