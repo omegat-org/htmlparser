@@ -36,6 +36,7 @@ import java.util.Vector;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.scanners.HTMLFormScanner;	
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLFormTag;
@@ -189,4 +190,35 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		assertEquals("Second Link Tag Text","Preferences",linkTag[1].getLinkText());
 		assertEquals("Third Link Tag Text","Language Tools",linkTag[2].getLinkText());
 	}
+	/** 
+	 * Bug 652674 - forms with comments are not being parsed
+	 */
+	public void testScanFormWithComments() throws HTMLParserException {
+		createParser(
+		"<form action=\"/search\" name=f><table cellspacing=0 cellpadding=0><tr><td width=75>&nbsp;"+
+		"</td><td align=center><input type=hidden name=hl value=en><input type=hidden name=ie "+
+		"value=\"UTF-8\"><input type=hidden name=oe value=\"UTF-8\"><!-- Hello World -->"+
+		"<input maxLength=256 size=55"+
+		" name=q value=\"\"><br><input type=submit value=\"Google Search\" name=btnG><input type="+
+		"submit value=\"I'm Feeling Lucky\" name=btnI></td><td valign=top nowrap><font size=-2>"+
+		"&nbsp;&#8226;&nbsp;<a href=/advanced_search?hl=en>Advanced&nbsp;Search</a><br>&nbsp;&#8226;"+
+		"&nbsp;<a href=/preferences?hl=en>Preferences</a><br>&nbsp;&#8226;&nbsp;<a href=/"+
+		"language_tools?hl=en>Language Tools</a></font></td></tr></table></form>"
+		);	
+		
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Should be a HTMLFormTag",node[0] instanceof HTMLFormTag);
+		HTMLFormTag formTag = (HTMLFormTag)node[0];
+		HTMLRemarkNode [] remarkNode = new HTMLRemarkNode[10];
+		int i = 0;
+		for (Enumeration e=formTag.getAllNodesVector().elements();e.hasMoreElements();) {
+			HTMLNode formNode = (HTMLNode)e.nextElement();
+			if (formNode instanceof HTMLRemarkNode) {
+				remarkNode[i++] = (HTMLRemarkNode)formNode;		
+			}
+		}
+		assertEquals("Remark Node Count",1,i);
+		assertEquals("First Remark Node"," Hello World ",remarkNode[0].toPlainTextString());
+	}	
 }
