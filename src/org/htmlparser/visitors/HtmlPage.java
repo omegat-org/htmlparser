@@ -18,6 +18,7 @@ public class HtmlPage extends HTMLVisitor {
 	private boolean bodyTagBegin;
 	
 	public HtmlPage(HTMLParser parser) {
+		super(false);
 		parser.registerScanners();
 		parser.addScanner(new TableScanner(parser));
 		nodesInBody = new NodeList();

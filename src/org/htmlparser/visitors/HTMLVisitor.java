@@ -8,6 +8,16 @@ import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
 
 public abstract class HTMLVisitor {
+	private boolean recurseChildren;
+	
+	public HTMLVisitor() {
+		this(true);	
+	}
+	
+	public HTMLVisitor(boolean recurseChildren) {
+		this.recurseChildren = recurseChildren;	
+	}
+	
 	public void visitTag(HTMLTag tag) {
 		
 	}
@@ -29,4 +39,8 @@ public abstract class HTMLVisitor {
 		
 	}
 	
+	public boolean shouldRecurseChildren() {
+		return recurseChildren;
+	}
+
 }

@@ -204,17 +204,17 @@ public abstract class CompositeTag extends HTMLTag {
 	}
 	
 	public void accept(HTMLVisitor visitor) {
-		startTag.accept(visitor);
-		SimpleEnumeration children = children();
-		while (children.hasMoreNodes()) {
-			HTMLNode child = (HTMLNode)children.nextNode();
-			child.accept(visitor);
+		if (visitor.shouldRecurseChildren()) { 
+			startTag.accept(visitor);
+			SimpleEnumeration children = children();
+			while (children.hasMoreNodes()) {
+				HTMLNode child = (HTMLNode)children.nextNode();
+				child.accept(visitor);
+			}
+			endTag.accept(visitor);
 		}
-		endTag.accept(visitor);
-	}
-
-	public void acceptWithoutRecursing(HTMLVisitor visitor) {
-		visitor.visitTag(this);
+			else
+				visitor.visitTag(this);
 	}
 
 }
