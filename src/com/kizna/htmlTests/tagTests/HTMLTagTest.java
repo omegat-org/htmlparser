@@ -517,4 +517,28 @@ public void testToHTML() {
 		assertEquals("StyleSheet Source","af.css",tag.getParameter("src"));
 
     }    
+    /**
+     * Bug report by Cedric Rosa, causing null pointer exceptions when encountering a broken tag,
+     * and if this has no further lines to parse
+     */
+    public void testBrokenTag() {
+     	String testHTML1 = new String("<br"); 
+		
+		StringReader sr = new StringReader(testHTML1); 
+		HTMLReader reader = new HTMLReader(new 
+		BufferedReader(sr),"http://www.google.com/test/index.html"); 
+		HTMLParser parser = new HTMLParser(reader); 
+		HTMLNode [] node = new HTMLNode[10]; 
+				
+		int i = 0; 
+		for (Enumeration e = parser.elements();e.hasMoreElements();) 
+		{ 
+			node[i++] = (HTMLNode)e.nextElement(); 
+		} 
+		
+		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
+		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
+		HTMLTag tag = (HTMLTag)node[0];
+		assertEquals("Node contents","br",tag.getText());    	
+    }
 }

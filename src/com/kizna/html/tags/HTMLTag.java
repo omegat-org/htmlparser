@@ -278,12 +278,21 @@ public java.lang.String getTagLine() {
 		{
 			// The while loop below is a bug fix contributed by
 			// Annette Doyle - see testcase HTMLImageScannerTest.testImageTagOnMultipleLines()
-			while ((nextLine = reader.getNextLine()).length() == 0);
+			// Further modified by Somik Raha, to remove bug - HTMLTagTest.testBrokenTag
+			do {
+				nextLine = reader.getNextLine();		
+			}
+			while (nextLine!=null && nextLine.length()==0);
+			if (nextLine==null) {
+				// This means we have a broken tag. Fill in an end tag symbol here.
+				nextLine = ">";
+			} else {
+				// This means this is just a new line, hence add the new line character
+				tag.append('\n');
+			}
+
 			// We need to continue parsing to the next line
 			tag.setTagLine(nextLine);
-			// convert the end of line to a space
-			// The following line masked by Somik Raha, 15 Apr 2002, to fix space bug in links
-			tag.append('\n');
 			i=-1;
 		}		
 		return ++i;
