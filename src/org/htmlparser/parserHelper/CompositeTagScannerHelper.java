@@ -24,6 +24,7 @@ public class CompositeTagScannerHelper {
 	private String currLine;
 	private Tag endTag;
 	private NodeList nodeList;
+	private Node currentNode;
 	
 	public CompositeTagScannerHelper(
 		CompositeTagScanner scanner,
@@ -38,27 +39,27 @@ public class CompositeTagScannerHelper {
 		this.reader = reader;
 		this.currLine = currLine;	
 		this.endTag = tag;
-		this.nodeList = new NodeList();	
+		this.nodeList = new NodeList();
+		this.currentNode = null;	
 	}
 		
 	public Tag scan() throws ParserException {
-		Node node = null;
 		do {
-			node = reader.readElement();
-			if (node==null) continue;
-			if (node instanceof Tag) {
-				Tag possibleEndTag = (Tag)node;
+			currentNode = reader.readElement();
+			if (currentNode==null) continue;
+			if (currentNode instanceof Tag) {
+				Tag possibleEndTag = (Tag)currentNode;
 				if (tag.isEmptyXmlTag()) {
 					endTag = possibleEndTag;
-					node = endTag;					
+					currentNode = endTag;					
 				}
 			}
-			if (node instanceof EndTag)
-				endTag = (Tag)node;
+			if (currentNode instanceof EndTag)
+				endTag = (Tag)currentNode;
 			else 
-				nodeList.add(node);						
+				nodeList.add(currentNode);						
 		}
-		while (node!=null);
+		while (currentNode!=null);
 		
 		return scanner.createTag(
 			new TagData(
