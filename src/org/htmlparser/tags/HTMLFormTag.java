@@ -110,7 +110,7 @@ public class HTMLFormTag extends HTMLCompositeTag
 		for (Enumeration e = formInputVector.elements();e.hasMoreElements() && !found;) {
 			inputTag = (HTMLInputTag)e.nextElement();
 			String inputTagName = inputTag.getParameter("NAME");
-			if (inputTagName!=null && inputTagName.equals(name)) {
+			if (inputTagName!=null && inputTagName.equalsIgnoreCase(name)) {
 				found=true;
 			}
 		}
