@@ -60,7 +60,7 @@ public class DivScannerTest extends ParserTestCase {
      */
 	public void testInputInDiv() throws ParserException
 	{
-		createParser("<div><INPUT type=\"text\" name=\"X\"></div>");
+		createParser("<div><INPUT type=\"text\" name=\"X\">Hello</INPUT></div>");
 		parser.addScanner(new DivScanner());
 		parser.addScanner(new InputTagScanner());
 		parseAndAssertNodeCount(1);
