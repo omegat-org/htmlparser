@@ -131,7 +131,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 			int linkBegin=-1, linkEnd=-1;
 	
 			link = extractFormLocn(tag,url);
-			tag.getParsed().put("ACTION",link);
+			tag.getAttributes().put("ACTION",link);
 	    	name = extractFormName(tag);
 		    method = extractFormMethod(tag);
 			linkBegin = tag.elementBegin();

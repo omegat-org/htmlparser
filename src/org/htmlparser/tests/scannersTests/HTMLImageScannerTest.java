@@ -250,7 +250,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);	
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageURL());
+		assertStringEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageURL());
 		assertEquals("Width","1",imageTag.getParameter("WIDTH"));
 		assertEquals("Height","1",imageTag.getParameter("HEIGHT"));
 		assertEquals("Alt","",imageTag.getParameter("ALT"));

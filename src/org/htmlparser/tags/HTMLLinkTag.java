@@ -253,7 +253,7 @@ public class HTMLLinkTag extends HTMLCompositeTag
 
 	public void setLink(String link) {
 		this.link = link;
-		parsed.put("HREF",link);
+		attributes.put("HREF",link);
 	}
 
 	public void collectInto(Vector collectionVector, String filter) {

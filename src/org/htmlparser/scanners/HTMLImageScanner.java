@@ -76,7 +76,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 	{
 		String relativeLink=null;
 		try {
-			table = tag.parseParameters();
+			table = tag.getAttributes();
 			relativeLink =  (String)table.get("SRC");
 			if (relativeLink!=null) {
 				relativeLink = removeChars(relativeLink,'\n');
@@ -89,7 +89,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 				if (indexSrc != -1) {
 					// There is a missing equals.
 					tag.setText(tag.getText().substring(0,indexSrc+3)+"="+tag.getText().substring(indexSrc+3,tag.getText().length()));
-					table = tag.parseParameters();
+					table = tag.redoParseAttributes();
 					relativeLink = (String) table.get("SRC");
 					
 				} 

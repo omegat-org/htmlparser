@@ -78,7 +78,7 @@ public class HTMLScriptScannerTest extends HTMLParserTestCase
 		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
 		// Check the data in the applet tag
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0];
-		Hashtable table = scriptTag.parseParameters();
+		Hashtable table = scriptTag.getAttributes();
 		String srcExpected = (String)table.get("SRC");
 		assertEquals("Expected SRC value","../js/DetermineBrowser.js",srcExpected);
 	}

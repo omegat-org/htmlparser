@@ -133,7 +133,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	public String extractLink(HTMLTag tag,String url) throws HTMLParserException
 	{
 		try {
-			Hashtable table = tag.parseParameters();
+			Hashtable table = tag.getAttributes();
 			String relativeLink =  (String)table.get("HREF");
 			if (relativeLink!=null) { 
 				relativeLink = removeChars(relativeLink,'\n');

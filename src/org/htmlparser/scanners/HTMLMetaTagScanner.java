@@ -50,7 +50,7 @@ public class HTMLMetaTagScanner extends HTMLTagScanner {
 		try {
 			// Since its a simple tag, all META TAG info will 
 			// be in the tag itself
-			Hashtable table = tag.getParsed();
+			Hashtable table = tag.getAttributes();
 			String metaTagName = (String)table.get("NAME");					
 			String metaTagContents = (String)table.get("CONTENT");
 			String httpEquiv = (String)table.get("HTTP-EQUIV");

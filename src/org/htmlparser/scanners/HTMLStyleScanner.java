@@ -97,7 +97,7 @@ public class HTMLStyleScanner extends HTMLTagScanner {
 				"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
 			}
 			HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine,childNodes,startTag,endTag);
-			styleTag.setParsed(tag.getParsed());
+			styleTag.setAttributes(tag.getAttributes());
 			return styleTag;
 		}
 		catch (Exception e) {

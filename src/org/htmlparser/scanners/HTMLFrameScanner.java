@@ -72,7 +72,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 	public String extractFrameLocn(HTMLTag tag,String url) throws HTMLParserException
 	{
 		try {
-			Hashtable table = tag.parseParameters();
+			Hashtable table = tag.getAttributes();
 			String relativeFrame =  (String)table.get("SRC");
 			if (relativeFrame==null) return ""; else
 			return (new HTMLLinkProcessor()).extract(relativeFrame,url);

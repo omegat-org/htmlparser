@@ -71,7 +71,7 @@ public class HTMLImageTag extends HTMLTag
 
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
-		parsed.put("SRC",imageURL);
+		attributes.put("SRC",imageURL);
 	}
 
 }

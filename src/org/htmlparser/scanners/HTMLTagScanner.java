@@ -188,7 +188,7 @@ public abstract class HTMLTagScanner
 	public final HTMLTag createScannedNode(HTMLTag tag,String url,HTMLReader reader,String currLine) throws HTMLParserException {
 		HTMLTag thisTag = scan(tag,url,reader,currLine);
 		thisTag.setThisScanner(this);
-		thisTag.setParsed(tag.getParsed());		
+		thisTag.setAttributes(tag.getAttributes());		
 		return thisTag;
 	}
 	

@@ -121,7 +121,7 @@ public class HTMLTagTest extends HTMLParserTestCase
                 node = en.nextHTMLNode();        
                 
                 tag = (HTMLTag)node;     
-                h = tag.getParsed();
+                h = tag.getAttributes();
 				String classValue= (String)h.get("CLASS");
                 assertEquals ("The class value should be ","userData",classValue);
             }
@@ -155,7 +155,7 @@ public class HTMLTagTest extends HTMLParserTestCase
                 node = en.nextHTMLNode();        
                 
                 tag = (HTMLTag)node;     
-                h = tag.getParsed();
+                h = tag.getAttributes();
                 a = (String)h.get(HTMLTag.TAGNAME);                
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
@@ -226,7 +226,7 @@ public class HTMLTagTest extends HTMLParserTestCase
                 node = en.nextHTMLNode();        
                 
                 tag = (HTMLTag)node;     
-                h = tag.getParsed();
+                h = tag.getAttributes();
                 a = (String)h.get(HTMLTag.TAGNAME);                
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
@@ -295,7 +295,7 @@ public class HTMLTagTest extends HTMLParserTestCase
                 node = en.nextHTMLNode();        
                 
                 tag = (HTMLTag)node;     
-                h = tag.parseParameters();
+                h = tag.getAttributes();
                 a = (String)h.get(HTMLTag.TAGNAME);                
                 nice = (String)h.get("YOURPARAMETER");
                 assertEquals ("Link tag (A)",a,"A");
@@ -350,7 +350,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		tag = (HTMLTag)node[1];
 		assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
 		// Try to parse the parameters from this tag.
-		Hashtable table = tag.getParsed();
+		Hashtable table = tag.getAttributes();
 		assertNotNull("Parameters table",table);
 		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
 		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
@@ -446,7 +446,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
 		assertStringEquals("Node contents","META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"",tag.getText()); 
-		Hashtable table = tag.getParsed();
+		Hashtable table = tag.getAttributes();
 		assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getParameter("CONTENT"));
     	
     }    

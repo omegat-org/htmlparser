@@ -50,7 +50,7 @@ public class HTMLParameterParserTest extends TestCase {
 	
 	public void getParameterTableFor(String tagContents) {
 		tag = new HTMLTag(0,0,tagContents,"");
-		table = parser.parseParameters(tag);
+		table = parser.parseAttributes(tag);
 		
 	}
 	

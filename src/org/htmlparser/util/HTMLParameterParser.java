@@ -91,7 +91,7 @@ public class HTMLParameterParser {
 	* @version 7 AUG 2001
 	*/
     
-   public Hashtable parseParameters(HTMLTag tag){
+   public Hashtable parseAttributes(HTMLTag tag){
         Hashtable h = new Hashtable();
         String element,name,value,nextPart=null;     
         
