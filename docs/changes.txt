@@ -1,4 +1,16 @@
-Integration build 1.3 - 20030211
+Integration build 1.3 - 20030223
+--------------------------------
+[1] Modification of documentation packaging
+	- the new documentation is actually produced
+	by a tiny program that coverts wiki pages
+	into documentation (works with PhpWiki)
+[2] Inclusion of BodyScanner, BodyTag
+[3] HTMLVisitor is now NodeVisitor - and has an extra param to 
+	visit itself
+[4] HTMLParser is now Parser. No class has HTML prefix anymore.
+[5] HTMLEnumeration is now NodeIterator, SimpleEnumeration is SimpleIterator
+
+Integration build 1.3 - 20030215
 --------------------------------
 [1] Added HtmlScanner
 [2] Removed Table, Div and Span from registry of scanners,

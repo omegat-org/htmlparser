@@ -1,0 +1,107 @@
+<html><head><title>Web Crawler</title></head><body><DIV CLASS="wikitext"><P><B>Web Crawler (aka Spider)</B></P><P>A crawler is a program that picks up a page and follows all the links on the page. Crawlers are used in search engines to index all the pages on a website, starting only from the first page (as long as it is linked).</P><P>There are several crawlers out there, but few are good quality open-source crawlers. The problem is most crawlers could fail if the parser they use is not powerful. Using HTMLParser, it is possible to crawl through dirty html - with great speed.</P><P>There are two types of crawlers:</P><UL><LI>Breadth First</LI><LI>Depth First</LI></UL><P><B>Breadth First crawlers</B> use the BFS (Breadth-First Search) algorithm. Here's a brief description :</P><P>Get all links from the starting page and add to the queue
+Pick first link from queue, get all links on this page, and add to queue
+Repeat Step 2, until queue is empty</P><P><B>Depth First crawlers</B> use the DFS (Depth-First Search) algorithm. Here's a brief description :</P><P>Get first link that has not yet been visited, from the starting page.
+Visit link and get first non-visited link
+Repeat Step 2, until there are no further non-visited links.
+Go to next non-visited link in the previous level of recursion, and repeat step 2, until no more non-visited links are present
+BFS crawlers are simple to write. DFS can be slightly more involved, so we shall present a simple DFS crawler program below. This is a basic program, and is included in the <I>org.htmlparser.parserapplications</I> package - <I>Robot.java</I>. Feel free to modify it or add functionality to it.</P><PRE>import org.htmlparser.Parser;
+
+public class Robot {
+  private Parser parser;
+  /**
+   * Robot crawler - Provide the starting url
+   */
+  public Robot(String resourceLocation) {
+    try {
+      parser = new Parser(resourceLocation,new DefaultParserFeedback());
+      parser.registerScanners();
+    }
+    catch (ParserException e) {
+      System.err.println("Error, could not create parser object");
+      e.printStackTrace();
+    }
+  }
+  /**
+   * Crawl using a given crawl depth.
+   * @param crawlDepth Depth of crawling
+   */
+  public void crawl(int crawlDepth) throws ParserException
+  {
+    try {
+      crawl(parser,crawlDepth);
+    }
+    catch (ParserException e) {
+      throw new ParserException("ParserException at crawl("+crawlDepth+")",e);
+    }
+  }
+  /**
+   * Crawl using a given parser object, and a given crawl depth.
+   * @param parser Parser object
+   * @param crawlDepth Depth of crawling
+   */
+  public void crawl(Parser parser,int crawlDepth) throws ParserException {
+    System.out.println(" crawlDepth = "+crawlDepth);
+    for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+    {
+      Node node = e.nextNode();
+      if (node instanceof LinkTag)
+      {
+        LinkTag linkTag = (LinkTag)node;
+        {
+          if (!linkTag.isMailLink())
+          {
+            if (linkTag.getLink().toUpperCase().indexOf("HTM")!=-1 ||
+              linkTag.getLink().toUpperCase().indexOf("COM")!=-1 ||
+              linkTag.getLink().toUpperCase().indexOf("ORG")!=-1)
+            {
+              if (crawlDepth&gt;0)
+              {
+                Parser newParser = new Parser(linkTag.getLink(),new DefaultParserFeedback());
+                newParser.registerScanners();
+                System.out.print("Crawling to "+linkTag.getLink());
+                crawl(newParser,crawlDepth-1);
+              }
+              else System.out.println(linkTag.getLink());
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public static void main(String[] args)
+  {
+    System.out.println("Robot Crawler v"+Parser.VERSION_STRING);
+    if (args.length&lt;2 || args[0].equals("-help"))
+    {
+      System.out.println();
+      System.out.println("Syntax : java -classpath htmlparser.jar org.htmlparser.parserapplications.Robot &lt;resourceLocn/website&gt; &lt;depth&gt;");
+      System.out.println();
+      System.out.println("   &lt;resourceLocn&gt; the name of the file to be parsed (with complete path ");
+      System.out.println("                  if not in current directory)");
+      System.out.println("   &lt;depth&gt; No of links to be followed from each link");
+      System.out.println("   -help This screen");
+      System.out.println();
+      System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
+      System.out.println();
+      System.out.println("Example : java -classpath htmlparser.jar com.kizna.parserapplications.Robot http://www.google.com 3");
+      System.out.println();
+      System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
+      System.exit(-1);
+    }
+    String resourceLocation="";
+    int crawlDepth = 1;
+    if (args.length!=0) resourceLocation = args[0];
+    if (args.length==2) crawlDepth=Integer.valueOf(args[1]).intValue();
+
+
+    Robot robot = new Robot(resourceLocation);
+    System.out.println("Crawling Site "+resourceLocation);
+    try {
+      robot.crawl(crawlDepth);
+    }
+    catch (ParserException e) {
+      e.printStackTrace();
+    }
+  }
+}</PRE><P>The method that does the crawling is the recursive method crawl(parser,depth). The crawler goes about creating multiple parsers and moving through sites using the DFS approach.</P><P>You have to be careful of the depth provided to the crawler. Studying the time taken to map all the links is itself an interesting research project. A word of caution, some sites dont like crawlers going through them. They would have a file called robots.txt in the root directory which should be accessed to know the rules and honor them. Read more about this. The above program is only a demonstration program. Please note that it will only follow links that have ".com", ".htm" or ".org" ending. In real-life situations, you'd also want to support dynamic links.</P><P>Before you set out to design an open-source or commercia crawler, please study what others have already researched in this area.</P><P><B>Some Useful Links on Crawlers</B></P><UL><LI><A CLASS="namedurl" HREF="http://dollar.biz.uiowa.edu/%7Efil/IS/"><SPAN STYLE="white-space: nowrap">InfoSpiders</SPAN></A></LI><LI><A CLASS="namedurl" HREF="http://www.searchtools.com/robots/robots-articles.html"><SPAN STYLE="white-space: nowrap">Collection</SPAN> of Crawler Links</A></LI></UL><P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A>, Sunday, February 16, 2003 2:13:46 pm.</P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:30:30 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>

@@ -1,0 +1,7 @@
+<html><head><title>External Iterators</title></head><body><DIV CLASS="wikitext"><P><B>External Iterators</B></P><P>You can use external iterators to drive the entire parsing process like so :</P><PRE>  for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
+     Node node = e.nextNode();
+     if (node instanceof LinkTag) {
+     }
+     if (node instanceof ImageTag) {
+     }
+  }</PRE><P>You should think of this only when you want to conduct a really quick search, and the moment you've found what you've wanted, you want to stop parsing. The iterator here drives the parsing.</P><P>--<A CLASS="wiki" HREF="SomikRaha.html">SomikRaha</A></P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Sunday, February 23, 2003  5:36:09 pm.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
