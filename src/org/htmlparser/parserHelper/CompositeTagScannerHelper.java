@@ -47,10 +47,7 @@ public class CompositeTagScannerHelper {
 			currentNode = reader.readElement();
 			if (currentNode==null) continue;
 			doEmptyXmlTagCheckOn(currentNode);
-			if (currentNode instanceof EndTag)
-				endTag = (Tag)currentNode;
-			else 
-				nodeList.add(currentNode);						
+			doChildAndEndTagCheckOn(currentNode);					
 		}
 		while (currentNode!=null);
 		
@@ -62,6 +59,13 @@ public class CompositeTagScannerHelper {
 				tag,endTag,nodeList
 			)
 		);
+	}
+
+	private void doChildAndEndTagCheckOn(Node currentNode) {
+		if (currentNode instanceof EndTag)
+			endTag = (Tag)currentNode;
+		else 
+			nodeList.add(currentNode);	
 	}
 
 	private void doEmptyXmlTagCheckOn(Node currentNode) {
