@@ -76,7 +76,7 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createLinkTag(String url, String currentLine, Node node, boolean mailLink, boolean javascriptLink, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) throws ParserException {
+	protected Tag createLinkTag(String url, String currentLine, Node node, boolean mailLink, String linkText, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) throws ParserException {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
@@ -93,6 +93,14 @@ public class LinkScanner extends CompositeTagScanner
 			myLink = myLink.substring(mailto+1);
 			mailLink = true;			
 		} 
+		int javascript = myLink.indexOf("javascript:");
+		boolean javascriptLink = false;
+		if (javascript == 0) {
+			myLink = myLink.substring(11); // this magic number is "javascript:".length()
+			javascriptLink = true;
+		}  
+		String accessKey = getAccessKey(startTag);
+			
 		LinkTag linkTag = new LinkTag(
 			new TagData(
 				linkBegin,
@@ -225,16 +233,10 @@ public class LinkScanner extends CompositeTagScanner
 			//link = extractLink(tag.getText(),url);
 			// Check if its a mailto link
 			int mailto = link.indexOf("mailto");
-			int javascript = link.indexOf("javascript:");
 			int http = link.indexOf("http://");
 			int https = link.indexOf("https://");
 			
-			if (javascript == 0) {
-				link = link.substring(11); // this magic number is "javascript:".length()
-				javascriptLink = true;
-			}  
 			
-			accessKey = getAccessKey(tag);
 			linkBegin = tag.elementBegin();
 			// Get the next element, which is string, till </a> is encountered
 			boolean endFlag=false;
@@ -298,7 +300,7 @@ public class LinkScanner extends CompositeTagScanner
 			{
 				
 				previousOpenScanner = null;
-				return createLinkTag(url,currentLine, node, mailLink, javascriptLink,  linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
+				return createLinkTag(url,currentLine, node, mailLink, linkText, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
 			}
 			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
 			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);
