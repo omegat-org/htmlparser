@@ -5,6 +5,7 @@ Integration Build 1.3 - 20030420
 [2] add checking in Translate to eliminate bug #722835 StringIndexOutOfBoundsException exception
 [3] added line-break condition in assertXmlEquals
 [4] added fit testing framework
+[5] added parent association for each node
 
 Integration Build 1.3 - 20030413
 --------------------------------
