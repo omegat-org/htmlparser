@@ -27,6 +27,7 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.Attribute;
+import org.htmlparser.lexer.Page;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.ParserException;
 
@@ -114,7 +115,7 @@ public class MetaTag
         httpEquiv = getHttpEquiv ();
         if ("Content-Type".equalsIgnoreCase (httpEquiv))
         {
-            charset = getPage ().getCharset (getAttribute ("CONTENT"));
+            charset = Page.getCharset (getAttribute ("CONTENT"));
             getPage ().setEncoding (charset);
         }
     }

@@ -539,80 +539,39 @@ public class ParserTest extends ParserTestCase
         assertTrue ("Wrong encoding", parser.getEncoding ().equals ("UTF-8"));
     }
 
-    /**
-     * Test a bogus comma delimited charset specification in the HTTP header.
-     * See bug #722941.
-     * A comma delimted charset in the HTTP header does not meet the HTTP/1.1
-     * specification in RFC 2068. In this case that I believe
-     * that some idiot has misconfigured the HTTP server, but since it's
-     * AOL it would be nice to handle this case.
-     */
-    public void testCommaListCharset () throws ParserException
-    {
-        URL url;
-        URLConnection connection;
-        Page page;
-        Parser parser;
-        String idiots = "http://users.aol.com/geinster/rej.htm";
-
-        try
-        {
-            url = new URL (idiots);
-            connection = url.openConnection ();
-            // this little subclass just gets around normal JDK 1.4 processing
-            // that filters out bogus character sets
-            page = new Page ("")
-            {
-                public String getCharset(String content)
-                {
-                    final String CHARSET_STRING = "charset";
-                    int index;
-                    String ret;
-
-                    ret = DEFAULT_CHARSET;
-                    if (null != content)
-                    {
-                        index = content.indexOf (CHARSET_STRING);
-
-                        if (index != -1)
-                        {
-                            content = content.substring (index + CHARSET_STRING.length ()).trim ();
-                            if (content.startsWith ("="))
-                            {
-                                content = content.substring (1).trim ();
-                                index = content.indexOf (";");
-                                if (index != -1)
-                                    content = content.substring (0, index);
-
-                                //remove any double quotes from around charset string
-                                if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
-                                    content = content.substring (1, content.length () - 1);
-
-                                //remove any single quote from around charset string
-                                if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
-                                    content = content.substring (1, content.length () - 1);
-
-                                ret = content; // short circuit findCharset() processing
-                            }
-                        }
-                    }
-
-                    return (ret);
-                }
-            };
-            page.setConnection (connection);
-            parser = new Parser (new Lexer (page));
-            // must be the default
-            assertTrue ("Wrong encoding", parser.getEncoding ().equals ("ISO-8859-1"));
-            for (NodeIterator e = parser.elements();e.hasMoreNodes();)
-                e.nextNode();
-            assertTrue ("Wrong encoding", parser.getEncoding ().equals ("windows-1252"));
-        }
-        catch (Exception e)
-        {
-            fail (e.getMessage ());
-        }
-    }
+    // This test is commented out because the URL no longer has a comma delimited character set.
+    // Reinstate when a suitable URL is discovered, or the unit tests set up their own HTTP server.
+//    /**
+//     * Test a bogus comma delimited charset specification in the HTTP header.
+//     * See bug #722941.
+//     * A comma delimted charset in the HTTP header does not meet the HTTP/1.1
+//     * specification in RFC 2068. In this case that I believe
+//     * that some idiot has misconfigured the HTTP server, but since it's
+//     * AOL it would be nice to handle this case.
+//     */
+//    public void testCommaListCharset () throws ParserException
+//    {
+//        URL url;
+//        URLConnection connection;
+//        Parser parser;
+//        String bogus = "http://users.aol.com/geinster/rej.htm";
+//
+//        try
+//        {
+//            url = new URL (bogus);
+//            connection = url.openConnection ();
+//            parser = new Parser (new Lexer (new Page (connection)));
+//            // must be the default
+//            assertTrue ("Wrong encoding", parser.getEncoding ().equals ("ISO-8859-1"));
+//            for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+//                e.nextNode();
+//            assertTrue ("Wrong encoding", parser.getEncoding ().equals ("windows-1252"));
+//        }
+//        catch (Exception e)
+//        {
+//            fail (e.getMessage ());
+//        }
+//    }
 
     public void testNullUrl() {
         try
@@ -622,7 +581,7 @@ public class ParserTest extends ParserTestCase
         }
         catch (ParserException e)
         {
-
+            // expected outcome
         }
     }
 

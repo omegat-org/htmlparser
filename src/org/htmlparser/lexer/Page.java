@@ -201,6 +201,135 @@ public class Page
         mConnectionManager = manager;
     }
 
+    /**
+     * Get a CharacterSet name corresponding to a charset parameter.
+     * @param content A text line of the form:
+     * <pre>
+     * text/html; charset=Shift_JIS
+     * </pre>
+     * which is applicable both to the HTTP header field Content-Type and
+     * the meta tag http-equiv="Content-Type".
+     * Note this method also handles non-compliant quoted charset directives such as:
+     * <pre>
+     * text/html; charset="UTF-8"
+     * </pre>
+     * and
+     * <pre>
+     * text/html; charset='UTF-8'
+     * </pre>
+     * @return The character set name to use when reading the input stream.
+     * For JDKs that have the Charset class this is qualified by passing
+     * the name to findCharset() to render it into canonical form.
+     * If the charset parameter is not found in the given string, the default
+     * character set is returned.
+     * @see #findCharset
+     * @see #DEFAULT_CHARSET
+     */
+    public static String getCharset (String content)
+    {
+        final String CHARSET_STRING = "charset";
+        int index;
+        String ret;
+
+        ret = DEFAULT_CHARSET;
+        if (null != content)
+        {
+            index = content.indexOf (CHARSET_STRING);
+
+            if (index != -1)
+            {
+                content = content.substring (index + CHARSET_STRING.length ()).trim ();
+                if (content.startsWith ("="))
+                {
+                    content = content.substring (1).trim ();
+                    index = content.indexOf (";");
+                    if (index != -1)
+                        content = content.substring (0, index);
+
+                    //remove any double quotes from around charset string
+                    if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
+                        content = content.substring (1, content.length () - 1);
+
+                    //remove any single quote from around charset string
+                    if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
+                        content = content.substring (1, content.length () - 1);
+
+                    ret = findCharset (content, ret);
+
+                    // Charset names are not case-sensitive;
+                    // that is, case is always ignored when comparing charset names.
+//                    if (!ret.equalsIgnoreCase (content))
+//                    {
+//                        System.out.println (
+//                            "detected charset \""
+//                            + content
+//                            + "\", using \""
+//                            + ret
+//                            + "\"");
+//                    }
+                }
+            }
+        }
+
+        return (ret);
+    }
+
+    /**
+     * Lookup a character set name.
+     * <em>Vacuous for JVM's without <code>java.nio.charset</code>.</em>
+     * This uses reflection so the code will still run under prior JDK's but
+     * in that case the default is always returned.
+     * @param name The name to look up. One of the aliases for a character set.
+     * @param _default The name to return if the lookup fails.
+     */
+    public static String findCharset (String name, String _default)
+    {
+        String ret;
+
+        try
+        {
+            Class cls;
+            Method method;
+            Object object;
+
+            cls = Class.forName ("java.nio.charset.Charset");
+            method = cls.getMethod ("forName", new Class[] { String.class });
+            object = method.invoke (null, new Object[] { name });
+            method = cls.getMethod ("name", new Class[] { });
+            object = method.invoke (object, new Object[] { });
+            ret = (String)object;
+        }
+        catch (ClassNotFoundException cnfe)
+        {
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (NoSuchMethodException nsme)
+        {
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (IllegalAccessException ia)
+        {
+            // for reflection exceptions, assume the name is correct
+            ret = name;
+        }
+        catch (InvocationTargetException ita)
+        {
+            // java.nio.charset.IllegalCharsetNameException
+            // and java.nio.charset.UnsupportedCharsetException
+            // return the default
+            ret = _default;
+            System.out.println (
+                "unable to determine cannonical charset name for "
+                + name
+                + " - using "
+                + _default);
+        }
+
+        return (ret);
+    }
+
     //
     // Serialization support
     //
@@ -596,135 +725,6 @@ public class Page
         if ('\n' == ret)
             // update the EOL index in any case
             mIndex.add (cursor);
-
-        return (ret);
-    }
-
-    /**
-     * Get a CharacterSet name corresponding to a charset parameter.
-     * @param content A text line of the form:
-     * <pre>
-     * text/html; charset=Shift_JIS
-     * </pre>
-     * which is applicable both to the HTTP header field Content-Type and
-     * the meta tag http-equiv="Content-Type".
-     * Note this method also handles non-compliant quoted charset directives such as:
-     * <pre>
-     * text/html; charset="UTF-8"
-     * </pre>
-     * and
-     * <pre>
-     * text/html; charset='UTF-8'
-     * </pre>
-     * @return The character set name to use when reading the input stream.
-     * For JDKs that have the Charset class this is qualified by passing
-     * the name to findCharset() to render it into canonical form.
-     * If the charset parameter is not found in the given string, the default
-     * character set is returned.
-     * @see #findCharset
-     * @see #DEFAULT_CHARSET
-     */
-    public String getCharset (String content)
-    {
-        final String CHARSET_STRING = "charset";
-        int index;
-        String ret;
-
-        ret = DEFAULT_CHARSET;
-        if (null != content)
-        {
-            index = content.indexOf (CHARSET_STRING);
-
-            if (index != -1)
-            {
-                content = content.substring (index + CHARSET_STRING.length ()).trim ();
-                if (content.startsWith ("="))
-                {
-                    content = content.substring (1).trim ();
-                    index = content.indexOf (";");
-                    if (index != -1)
-                        content = content.substring (0, index);
-
-                    //remove any double quotes from around charset string
-                    if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
-                        content = content.substring (1, content.length () - 1);
-
-                    //remove any single quote from around charset string
-                    if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
-                        content = content.substring (1, content.length () - 1);
-
-                    ret = findCharset (content, ret);
-
-                    // Charset names are not case-sensitive;
-                    // that is, case is always ignored when comparing charset names.
-//                    if (!ret.equalsIgnoreCase (content))
-//                    {
-//                        System.out.println (
-//                            "detected charset \""
-//                            + content
-//                            + "\", using \""
-//                            + ret
-//                            + "\"");
-//                    }
-                }
-            }
-        }
-
-        return (ret);
-    }
-
-    /**
-     * Lookup a character set name.
-     * <em>Vacuous for JVM's without <code>java.nio.charset</code>.</em>
-     * This uses reflection so the code will still run under prior JDK's but
-     * in that case the default is always returned.
-     * @param name The name to look up. One of the aliases for a character set.
-     * @param _default The name to return if the lookup fails.
-     */
-    public String findCharset (String name, String _default)
-    {
-        String ret;
-
-        try
-        {
-            Class cls;
-            Method method;
-            Object object;
-
-            cls = Class.forName ("java.nio.charset.Charset");
-            method = cls.getMethod ("forName", new Class[] { String.class });
-            object = method.invoke (null, new Object[] { name });
-            method = cls.getMethod ("name", new Class[] { });
-            object = method.invoke (object, new Object[] { });
-            ret = (String)object;
-        }
-        catch (ClassNotFoundException cnfe)
-        {
-            // for reflection exceptions, assume the name is correct
-            ret = name;
-        }
-        catch (NoSuchMethodException nsme)
-        {
-            // for reflection exceptions, assume the name is correct
-            ret = name;
-        }
-        catch (IllegalAccessException ia)
-        {
-            // for reflection exceptions, assume the name is correct
-            ret = name;
-        }
-        catch (InvocationTargetException ita)
-        {
-            // java.nio.charset.IllegalCharsetNameException
-            // and java.nio.charset.UnsupportedCharsetException
-            // return the default
-            ret = _default;
-            System.out.println (
-                "unable to determine cannonical charset name for "
-                + name
-                + " - using "
-                + _default);
-        }
 
         return (ret);
     }
