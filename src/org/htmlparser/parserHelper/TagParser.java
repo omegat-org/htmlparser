@@ -280,7 +280,8 @@ public class TagParser {
 		String nextLine = null;
 		if (
 			(state==TAG_BEGIN_PARSING_STATE || 
-			 state==TAG_IGNORE_DATA_STATE
+			 state==TAG_IGNORE_DATA_STATE ||
+             state==TAG_IGNORE_BEGIN_TAG_STATE
 			) && 
 			i==tag.getTagLine().length()-1)
 		{
