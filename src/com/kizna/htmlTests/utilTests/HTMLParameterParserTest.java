@@ -71,6 +71,11 @@ public class HTMLParameterParserTest extends TestCase {
             assertEquals("Value","Y",table.get("VALUE"));
             assertEquals("Checked","",table.get("CHECKED"));
         }
+        /**
+         * This is a simulation of a bug reported by Dhaval Udani - wherein 
+         * a space before the end of the tag causes a problem - there is a key
+         * in the table with just a space in it and an empty value
+         */
         public void testIncorrectSpaceKeyBug() {
             HTMLParameterParser parser = new HTMLParameterParser();
             HTMLTag tag = new HTMLTag(0,0,"TEXTAREA name=\"Remarks\" ","");
