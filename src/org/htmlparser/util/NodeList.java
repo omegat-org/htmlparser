@@ -28,12 +28,12 @@
 
 package org.htmlparser.util;
 
-import java.net.URL;
+import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 import org.htmlparser.HTMLNode;
 
-public class NodeList {
+public class NodeList implements Serializable {
 	private static final int INITIAL_CAPACITY=10;
 	//private static final int CAPACITY_INCREMENT=20;
 	private HTMLNode nodeData[];

@@ -28,6 +28,7 @@
 
 package org.htmlparser.tests.scannersTests;
 
+
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLStringNode;
@@ -81,32 +82,19 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 	 * </pre>
 	 */
 	public void testErroneousLinkBugFromYahoo2() throws HTMLParserException {
-		createParser("<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img></td><td nowrap> &nbsp;\n"+
-		"<a href=s/7509><b>Yahoo! Movies</b></a>","http://www.yahoo.com");
+		createParser(
+			"<td>" +				"<a href=s/8741>" +				"<img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>" +				"</img>" +			"</td>" +			"<td nowrap> &nbsp;\n"+
+				"<a href=s/7509><b>Yahoo! Movies</b></a>" +			"</td>","http://www.yahoo.com");
 		parser.registerScanners();
-		parseAndAssertNodeCount(5);
-		// The first node should be a HTMLTag 
-		assertTrue("First node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
-		// The second node should be a HTMLStringNode
-		assertTrue("Fifth node should be a HTMLLinkTag",node[4] instanceof HTMLLinkTag);
-		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		HTMLNode linkNodes [] = parser.extractAllNodesThatAre(HTMLLinkTag.class);
+		
+		assertEquals("number of links",2,linkNodes.length);
+		HTMLLinkTag linkTag = (HTMLLinkTag)linkNodes[0];
 		assertEquals("Link","http://www.yahoo.com/s/8741",linkTag.getLink());
 		// Verify the link data
 		assertEquals("Link Text","",linkTag.getLinkText());
 		// Verify the reconstruction html
 		assertStringEquals("toHTML","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></IMG></A>",linkTag.toHTML());
-		// Verify the tags in between
-		assertTrue("Second node should be an end tag",node[1] instanceof HTMLEndTag);
-		assertTrue("Third node should be an HTMLTag",node[2] instanceof HTMLTag);		
-		assertTrue("Fourth node should be a string node",node[3] instanceof HTMLStringNode);
-		
-		// Verify their contents
-		HTMLEndTag endTag = (HTMLEndTag)node[1];
-		assertEquals("Second node","td",endTag.getText());
-		HTMLTag tag = (HTMLTag)node[2];
-		assertEquals("Third node","td nowrap",tag.getText());
-		HTMLStringNode stringNode = (HTMLStringNode)node[3];
-		assertEquals("Fourth node"," &nbsp;\r\n",stringNode.getText());	
 	}
 	
 	/**

@@ -33,12 +33,13 @@ import org.htmlparser.scanners.HTMLImageScanner;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.TableColumn;
+import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.util.SimpleEnumeration;
 
 public class HTMLImageScannerTest extends HTMLParserTestCase
 {
@@ -186,22 +187,27 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 	 */
 	public void testImageTagsFromYahooWithAllScannersRegistered() throws HTMLParserException
 	{
-		createParser("<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n","http://www.yahoo.com",30);
+		createParser(
+			"<tr>" +				"<td>" +				"	<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, " +					"<a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small>" +				"</td>" +				"<td align=center>" +					"<a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=" +					"2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" " +					"target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/" +					"columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a>" +				"</td>" +				"<td nowrap align=center width=215>" +					"Find your match on<br><a href=s/2734>" +					"<b>Yahoo! Personals</b></a>" +				"</td>" +			"</tr>" +			"<tr>" +				"<td colspan=3 align=center>" +					"<input size=30 " +					"name=p>\n" +				"</td>" +			"</tr>","http://www.yahoo.com",30
+		);
 	
 		// Register the image scanner
 		parser.registerScanners();
-		parseAndAssertNodeCount(22);
-		assertTrue("Node identified should be HTMLLinkTag",node[11] instanceof HTMLLinkTag);
-		HTMLLinkTag linkTag = (HTMLLinkTag)node[11];
-		HTMLNode [] node2 = new HTMLNode[10];
-		int j = 0;
-		for (SimpleEnumeration e = linkTag.children();e.hasMoreNodes();) {
-			node2[j++] = e.nextNode();
-		}
-		assertEquals("Number of tags within the link",1,j);
-		assertTrue("Tag within link should be an image tag",node2[0] instanceof HTMLImageTag);
-		HTMLImageTag imageTag = (HTMLImageTag)node2[0];
-		assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageURL());		
+		parseAndAssertNodeCount(2);
+		assertType("first node type",TableRow.class,node[0]);
+		TableRow row = (TableRow)node[0];
+		TableColumn col = row.getColumns()[1];
+		HTMLNode node = col.children().nextNode();
+		assertType("Node identified should be HTMLLinkTag",HTMLLinkTag.class,node);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node;
+		HTMLNode nodeInsideLink = linkTag.children().nextNode();
+		assertType("Tag within link should be an image tag",HTMLImageTag.class,nodeInsideLink);
+		HTMLImageTag imageTag = (HTMLImageTag)nodeInsideLink;
+		assertStringEquals(
+			"Expected Image",
+			"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",
+			imageTag.getImageURL()
+		);		
 	}
 	
 	/**
@@ -209,16 +215,22 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 	 * by Annette Doyle
 	 */
 	public void testImageTagOnMultipleLines() throws HTMLParserException {
-		createParser("<td rowspan=3><img height=49 \n\n"+
-	      "alt=\"Central Intelligence Agency, Director of Central Intelligence\" \n\n"+
-	      "src=\"graphics/images_home2/cia_banners_template3_01.gif\" \n\n"+
-	      "width=241></td>","http://www.cia.gov"); 
+		createParser(
+			"<td rowspan=3>" +				"<img height=49 \n\n"+
+	      		"alt=\"Central Intelligence Agency, Director of Central Intelligence\" \n\n"+
+	      		"src=\"graphics/images_home2/cia_banners_template3_01.gif\" \n\n"+
+	      		"width=241>" +	      	"</td>",
+			"http://www.cia.gov"
+		); 
 	
 		// Register the image scanner
 		parser.registerScanners();
-		parseAndAssertNodeCount(3);
-		assertTrue("Node identified should be HTMLImageTag",node[1] instanceof HTMLImageTag);
-		HTMLImageTag imageTag = (HTMLImageTag)node[1];
+		parseAndAssertNodeCount(1);
+		assertType("node should be", TableColumn.class, node[0]);
+		TableColumn col = (TableColumn)node[0];
+		HTMLNode node = col.children().nextNode();
+		assertType("node inside column",HTMLImageTag.class,node);
+		HTMLImageTag imageTag = (HTMLImageTag)node;
 		// Get the data from the node
 		assertEquals("Image location","http://www.cia.gov/graphics/images_home2/cia_banners_template3_01.gif",imageTag.getImageURL());
 		assertEquals("Alt Value","Central Intelligence Agency, Director of Central Intelligence",imageTag.getAttribute("ALT"));

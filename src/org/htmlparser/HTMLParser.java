@@ -59,6 +59,7 @@ import org.htmlparser.scanners.HTMLStyleScanner;
 import org.htmlparser.scanners.HTMLTagScanner;
 import org.htmlparser.scanners.HTMLTitleScanner;
 import org.htmlparser.scanners.SpanScanner;
+import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
@@ -417,8 +418,9 @@ public class HTMLParser
             IOException
     {
         if ((null == getConnection ()) || /*redundant*/(null == getURL ()))
-            if (null != getReader ())
-                throw new IOException ("can only serialize parsers with a URL");
+            if (null != getReader ());
+//	commented out by Somik - why are we not allowed to serialize parsers without url
+//                throw new IOException ("can only serialize parsers with a URL");
         out.defaultWriteObject ();
     }
 
@@ -1057,7 +1059,7 @@ public class HTMLParser
 		addScanner(linkScanner.createBaseHREFScanner("-b"));
 		addScanner(new SpanScanner("-p"));
 		addScanner(new DivScanner("-div"));
-		//addScanner(new TableScanner(this));
+		addScanner(new TableScanner(this));
 	}
 	
 	/**
