@@ -1,1 +1,1 @@
-java -jar ..\lib\htmlparser.jar org.htmlparser.parserapplications.StringExtractor %1 %2
+java -classpath ..\lib\htmlparser.jar org.htmlparser.parserapplications.StringExtractor %1 %2

@@ -1,1 +1,1 @@
-java -jar ..\lib\htmlparser.jar %1 %2
+java -classpath ..\lib\htmlparser.jar org.htmlparser.Parser %1 %2
