@@ -53,11 +53,12 @@ public class InputTagTest extends ParserTestCase {
 
     public void testToHTML() throws ParserException
     {
+        String testHTML = "<INPUT type=\"text\" name=\"Google\">";
         parseAndAssertNodeCount(1);
         assertTrue("Node 1 should be INPUT Tag",node[0] instanceof InputTag);
         InputTag InputTag;
         InputTag = (InputTag) node[0];
-        assertStringEquals ("HTML String","<INPUT NAME=\"Google\" TYPE=\"text\">",InputTag.toHtml());
+        assertStringEquals ("HTML String",testHTML,InputTag.toHtml());
     }
 
     public void testToString() throws ParserException
@@ -66,7 +67,7 @@ public class InputTagTest extends ParserTestCase {
         assertTrue("Node 1 should be INPUT Tag",node[0] instanceof InputTag);
         InputTag InputTag;
         InputTag = (InputTag) node[0];
-        assertEquals("HTML Raw String","INPUT TAG\n--------\nNAME : Google\nTYPE : text\n",InputTag.toString());
+        assertEquals("HTML Raw String","INPUT TAG\n--------\nNAME : \"Google\"\nTYPE : \"text\"\n",InputTag.toString());
     }
 
     /**
@@ -75,8 +76,8 @@ public class InputTagTest extends ParserTestCase {
      */
     public void testToHTML2() throws ParserException
     {
-        String testHTML = new String("<INPUT type=\"checkbox\" "
-            +"name=\"cbCheck\" checked>");
+        String testHTML ="<INPUT type=\"checkbox\" "
+            +"name=\"cbCheck\" checked>";
         createParser(testHTML);
         parser.addScanner(new InputTagScanner("-i"));
 
@@ -85,9 +86,7 @@ public class InputTagTest extends ParserTestCase {
             node[0] instanceof InputTag);
         InputTag InputTag;
         InputTag = (InputTag) node[0];
-        assertStringEquals("HTML String",
-            "<INPUT CHECKED NAME=\"cbCheck\" TYPE=\"checkbox\">",
-            InputTag.toHtml());
+        assertStringEquals("HTML String", testHTML, InputTag.toHtml());
     }
 
 }

@@ -54,8 +54,8 @@ public class StringParserTest extends ParserTestCase {
     public void testStringNodeBug1() throws ParserException {
         createParser("<HTML><HEAD><TITLE>Google</TITLE>");
         parseAndAssertNodeCount(5);
-        // The fourth node should be a HTMLStringNode-  with the text - Google
-        assertTrue("Fourth node should be a HTMLStringNode",node[3] instanceof StringNode);
+        // The fourth node should be a StringNode-  with the text - Google
+        assertTrue("Fourth node should be a StringNode",node[3] instanceof StringNode);
         StringNode stringNode = (StringNode)node[3];
         assertEquals("Text of the StringNode","Google",stringNode.getText());
     }
@@ -76,8 +76,8 @@ public class StringParserTest extends ParserTestCase {
         Parser.setLineSeparator("\r\n");
         parser.addScanner(new LinkScanner("-l"));
         parseAndAssertNodeCount(3);
-        // The first node should be a HTMLStringNode-  with the text - view these documents, you must have
-        assertTrue("First node should be a HTMLStringNode",node[0] instanceof StringNode);
+        // The first node should be a StringNode-  with the text - view these documents, you must have
+        assertTrue("First node should be a StringNode",node[0] instanceof StringNode);
         StringNode stringNode = (StringNode)node[0];
         assertEquals("Text of the StringNode","view these documents, you must have ",stringNode.getText());
         assertTrue("Second node should be a link node",node[1] instanceof LinkTag);
@@ -147,9 +147,9 @@ public class StringParserTest extends ParserTestCase {
         "Before Comment <!-- Comment --> After Comment"
         );
         parseAndAssertNodeCount(3);
-        assertTrue("First node should be HTMLStringNode",node[0] instanceof StringNode);
-        assertTrue("Second node should be HTMLRemarkNode",node[1] instanceof RemarkNode);
-        assertTrue("Third node should be HTMLStringNode",node[2] instanceof StringNode);
+        assertTrue("First node should be StringNode",node[0] instanceof StringNode);
+        assertTrue("Second node should be RemarkNode",node[1] instanceof RemarkNode);
+        assertTrue("Third node should be StringNode",node[2] instanceof StringNode);
         StringNode stringNode = (StringNode)node[0];
         assertEquals("First String node contents","Before Comment ",stringNode.getText());
         StringNode stringNode2 = (StringNode)node[2];
@@ -166,17 +166,18 @@ public class StringParserTest extends ParserTestCase {
     public void testLastLineWithOneChar() throws ParserException {
         createParser("a");
         parseAndAssertNodeCount(1);
-        assertTrue("First node should be HTMLStringNode",node[0] instanceof StringNode);
+        assertTrue("First node should be StringNode",node[0] instanceof StringNode);
         StringNode stringNode = (StringNode)node[0];
         assertEquals("First String node contents","a",stringNode.getText());
     }
 
     public void testStringWithEmptyLine() throws ParserException {
-        createParser("a\n\nb");
+        String text = "a\n\nb";
+        createParser(text);
         parseAndAssertNodeCount(1);
-        assertTrue("First node should be HTMLStringNode",node[0] instanceof StringNode);
+        assertTrue("First node should be StringNode",node[0] instanceof StringNode);
         StringNode stringNode = (StringNode)node[0];
-        assertStringEquals("First String node contents","a\r\n\r\nb",stringNode.getText());
+        assertStringEquals("First String node contents",text,stringNode.getText());
     }
 
     /**
@@ -217,11 +218,12 @@ public class StringParserTest extends ParserTestCase {
     }
 
     public void testStringWithLineBreaks() throws Exception {
-        createParser("Testing &\nRefactoring");
+        String text = "Testing &\nRefactoring";
+        createParser(text);
         parseAndAssertNodeCount(1);
         assertType("first node",StringNode.class,node[0]);
         StringNode stringNode = (StringNode)node[0];
-        assertStringEquals("text","Testing &\r\nRefactoring",stringNode.toPlainTextString());
+        assertStringEquals("text",text,stringNode.toPlainTextString());
     }
 
 }

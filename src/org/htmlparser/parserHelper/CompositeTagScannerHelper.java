@@ -44,13 +44,11 @@ import org.htmlparser.util.ParserException;
 
 public class CompositeTagScannerHelper {
     private CompositeTagScanner scanner;
-    private Tag tag;
+    private Tag mTag;
     private Lexer mLexer;
     private Tag endTag;
     private NodeList nodeList;
     private boolean endTagFound;
-    private int startingLineNumber;
-    private int endingLineNumber;
     private boolean balance_quotes;
 
     public CompositeTagScannerHelper(
@@ -60,7 +58,7 @@ public class CompositeTagScannerHelper {
         boolean balance_quotes) {
 
         this.scanner = scanner;
-        this.tag = tag;
+        mTag = tag;
         mLexer = lexer;
         this.endTag = null;
         this.nodeList = new NodeList();
@@ -69,12 +67,11 @@ public class CompositeTagScannerHelper {
     }
 
     public Tag scan() throws ParserException {
-        startingLineNumber = mLexer.getCurrentLineNumber ();
         if (shouldCreateEndTagAndExit()) {
             return createEndTagAndRepositionReader();
         }
         scanner.beforeScanningStarts();
-        Node currentNode = tag;
+        Node currentNode = mTag;
 
         doEmptyXmlTagCheckOn(currentNode);
         if (!endTagFound) {
@@ -83,7 +80,20 @@ public class CompositeTagScannerHelper {
                 if (currentNode==null)
                     continue;
                 if (currentNode instanceof Tag)
-                    doForceCorrectionCheckOn((Tag)currentNode);
+                {
+                    Tag possibleEndTag = (Tag)currentNode;
+                    if (scanner.isTagToBeEndedFor(possibleEndTag) ||
+                        (
+                            !(possibleEndTag.isEndTag ()) &&
+                            !scanner.isAllowSelfChildren() &&
+                            possibleEndTag.getTagName().equals(mTag.getTagName())            
+                        ))
+                    {
+                        createCorrectionEndTagBefore(possibleEndTag.elementBegin());
+                        mLexer.setPosition (possibleEndTag.elementBegin ());
+                        endTagFound = true;
+                    }
+                }
 
                 doEmptyXmlTagCheckOn(currentNode);
                 if (!endTagFound)
@@ -94,7 +104,6 @@ public class CompositeTagScannerHelper {
         if (endTag==null)
             createCorrectionEndTagBefore (mLexer.getCursor ().getPosition ());
 
-        endingLineNumber = mLexer.getCurrentLineNumber ();
         return createTag();
     }
 
@@ -103,14 +112,14 @@ public class CompositeTagScannerHelper {
     }
 
     private Tag createEndTagAndRepositionReader() {
-        createCorrectionEndTagBefore (tag.elementBegin ());
-        mLexer.setPosition (tag.elementBegin ());
+        createCorrectionEndTagBefore (mTag.elementBegin ());
+        mLexer.setPosition (mTag.elementBegin ());
         return endTag;
     }
 
     private void createCorrectionEndTagBefore(int position)
     {
-        String endTagName = "/" + tag.getTagName();
+        String endTagName = "/" + mTag.getRawTagName();
         Vector attributes = new Vector ();
         attributes.addElement (new Attribute (endTagName, (String)null, (char)0));
         TagData data = new TagData(
@@ -122,22 +131,22 @@ public class CompositeTagScannerHelper {
         endTag = new Tag (data);
     }
 
-    private void createCorrectionEndTagBefore(Tag possibleEndTagCauser) {
-        String endTagName = "/" + tag.getTagName();
-        int endTagBegin = possibleEndTagCauser.elementBegin();
-        int endTagEnd = endTagBegin + endTagName.length() + 2;
-        possibleEndTagCauser.setTagBegin(endTagEnd+1);
-        Vector attributes = new Vector ();
-        attributes.addElement (new Attribute (endTagName, (String)null, (char)0));
-        TagData data = new TagData(
-                endTagName,
-                endTagBegin,
-                attributes,
-                mLexer.getPage ().getUrl (),
-                false);
-
-        endTag = new Tag(data);
-    }
+//    private void createCorrectionEndTagBefore(Tag possibleEndTagCauser) {
+//        String endTagName = "/" + tag.getTagName();
+//        int endTagBegin = possibleEndTagCauser.elementBegin();
+//        int endTagEnd = endTagBegin + endTagName.length() + 2;
+//        possibleEndTagCauser.setTagBegin(endTagEnd+1);
+//        Vector attributes = new Vector ();
+//        attributes.addElement (new Attribute (endTagName, (String)null, (char)0));
+//        TagData data = new TagData(
+//                endTagName,
+//                endTagBegin,
+//                attributes,
+//                mLexer.getPage ().getUrl (),
+//                false);
+//
+//        endTag = new Tag(data);
+//    }
 
     private Tag createTag() throws ParserException
     {
@@ -145,15 +154,15 @@ public class CompositeTagScannerHelper {
         
         data =  new TagData(
             mLexer.getPage (),
-            tag.elementBegin(),
+            mTag.elementBegin(),
             endTag.elementEnd(),
-            tag.getAttributesEx (),
+            mTag.getAttributesEx (),
             mLexer.getPage ().getUrl (),
-            tag.isEmptyXmlTag ());
+            mTag.isEmptyXmlTag ());
 
         CompositeTag newTag = (CompositeTag)scanner.createTag (data,
             new CompositeTagData(
-                tag,endTag,nodeList
+                mTag,endTag,nodeList
             )
         );
         for (int i=0;i<newTag.getChildCount();i++) {
@@ -186,44 +195,35 @@ public class CompositeTagScannerHelper {
 
     private boolean isExpectedEndTag (TagNode possibleEndTag)
     {
-        return (possibleEndTag.getTagName().equals (tag.getTagName ()));
+        return (possibleEndTag.getTagName().equals (mTag.getTagName ()));
     }
 
     private void doEmptyXmlTagCheckOn(Node currentNode) {
         if (currentNode instanceof Tag) {
             Tag possibleEndTag = (Tag)currentNode;
-            if (isXmlEndTag(tag)) {
+            if (mTag.isEmptyXmlTag ()) {
                 endTag = possibleEndTag;
                 endTagFound = true;
             }
         }
     }
 
-    private void doForceCorrectionCheckOn(Tag possibleEndTagCauser) {
-        if (isEndTagMissing(possibleEndTagCauser)) {
-            createCorrectionEndTagBefore(possibleEndTagCauser);
+//    private void doForceCorrectionCheckOn(Tag possibleEndTag) {
+//    }
 
-            endTagFound = true;
-        }
-    }
+//    private boolean isEndTagMissing(Tag possibleEndTag) {
+//        return
+//            scanner.isTagToBeEndedFor(possibleEndTag) ||
+//            (
+//                !(possibleEndTag.isEndTag ()) &&
+//                !scanner.isAllowSelfChildren() &&
+//                possibleEndTag.getTagName().equals(tag.getTagName())            
+//            );
+//    }
 
-    private boolean isEndTagMissing(Tag possibleEndTag) {
-        return
-            scanner.isTagToBeEndedFor(possibleEndTag) ||
-            isSelfChildTagRecievedIncorrectly(possibleEndTag);
-    }
-
-    private boolean isSelfChildTagRecievedIncorrectly(Tag possibleEndTag) {
-        return (
-            !(possibleEndTag.isEndTag ()) &&
-            !scanner.isAllowSelfChildren() &&
-            possibleEndTag.getTagName().equals(tag.getTagName())
-        );
-    }
-
-    public boolean isXmlEndTag(Tag tag) {
-        String tagText = tag.getText();
-        int lastSlash = tagText.lastIndexOf("/");
-        return (lastSlash == tagText.length()-1 || tag.isEmptyXmlTag()) && tag.getText().indexOf("://")==-1;
-    }
+//    public boolean isXmlEndTag(Tag tag) {
+//        String tagText = tag.getText();
+//        int lastSlash = tagText.lastIndexOf("/");
+//        return (lastSlash == tagText.length()-1 || tag.isEmptyXmlTag()) && tag.getText().indexOf("://")==-1;
+//    }
 }

@@ -58,7 +58,8 @@ public class LabelScannerTest extends ParserTestCase {
     }
 
     public void testLabelWithJspTag() throws ParserException {
-        createParser("<label><%=labelValue%></label>");
+        String label = "<label><%=labelValue%></label>";
+        createParser(label);
         parser.registerScanners();
         LabelScanner labelScanner = new LabelScanner("-l");
         parser.addScanner(labelScanner);
@@ -66,7 +67,7 @@ public class LabelScannerTest extends ParserTestCase {
         assertTrue(node[0] instanceof LabelTag);
         //  check the title node
         LabelTag labelTag = (LabelTag) node[0];
-        assertStringEquals("Label","<LABEL><%=labelValue%></LABEL>",labelTag.toHtml());
+        assertStringEquals("Label",label,labelTag.toHtml());
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
@@ -85,16 +86,18 @@ public class LabelScannerTest extends ParserTestCase {
     }
 
     public void testLabelWithManyCompositeTags() throws ParserException {
-        createParser("<label><span>Jane <b> Doe </b> Smith</span></label>");
+        String guts = "<span>Jane <b> Doe </b> Smith</span>";
+        String html = "<label>" + guts + "</label>";
+        createParser(html);
         parser.registerScanners();
         LabelScanner labelScanner = new LabelScanner("-l");
         parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LabelTag);
         LabelTag labelTag = (LabelTag) node[0];
-        assertEquals("Label value","<SPAN>Jane <B> Doe </B> Smith</SPAN>",labelTag.getChildrenHTML());
+        assertEquals("Label value",guts,labelTag.getChildrenHTML());
         assertEquals("Label value","Jane  Doe  Smith",labelTag.getLabel());
-        assertStringEquals("Label","<LABEL><SPAN>Jane <B> Doe </B> Smith</SPAN></LABEL>",labelTag.toHtml());
+        assertStringEquals("Label",html,labelTag.toHtml());
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
@@ -169,15 +172,15 @@ public class LabelScannerTest extends ParserTestCase {
         LabelTag = (LabelTag) node[3];
         assertStringEquals("HTML String","<LABEL>Yahoo!</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[4];
-        assertStringEquals("HTML String","<LABEL>\r\nHotmail</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String","<LABEL>\nHotmail</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[5];
         assertStringEquals("HTML String","<LABEL VALUE=\"ICQ Messenger\"></LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[6];
-        assertStringEquals("HTML String","<LABEL>Mailcity\r\n</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String","<LABEL>Mailcity\n</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[7];
-        assertStringEquals("HTML String","<LABEL>\r\nIndiatimes\r\n</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String","<LABEL>\nIndiatimes\n</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[8];
-        assertStringEquals("HTML String","<LABEL>\r\nRediff\r\n</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String","<LABEL>\nRediff\n</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[9];
         assertStringEquals("HTML String","<LABEL>Cricinfo</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[10];

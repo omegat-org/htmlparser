@@ -138,7 +138,7 @@ public class ScriptTagTest extends ParserTestCase{
 
         // Register the image scanner
         parser.addScanner(new ScriptScanner("-s"));
-        parseAndAssertNodeCount(1);
+        parseAndAssertNodeCount(2);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
         assertEquals("Script Src","/adb.js",scriptTag.getAttribute("src"));
@@ -162,16 +162,15 @@ public class ScriptTagTest extends ParserTestCase{
     }
 
     public void testSingleApostropheParsingBug() throws ParserException {
-        StringBuffer sb1 = new StringBuffer();
-        sb1.append("<script src='<%=sourceFileName%>'></script>");
-        createParser(sb1.toString());
+        String script = "<script src='<%=sourceFileName%>'></script>";
+        createParser(script);
 
         // Register the image scanner
         parser.addScanner(new ScriptScanner("-s"));
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
-        assertStringEquals("Script toHTML()","<SCRIPT SRC=\"<%=sourceFileName%>\"></SCRIPT>",scriptTag.toHtml());
+        assertStringEquals("Script toHTML()",script,scriptTag.toHtml());
     }
 
 }

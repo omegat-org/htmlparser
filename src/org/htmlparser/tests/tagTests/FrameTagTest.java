@@ -40,22 +40,24 @@ public class FrameTagTest extends ParserTestCase {
     }
 
     public void testToHTML() throws ParserException {
+        String frame1 = "<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">";
+        String frame2 = "<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">";
         createParser(
         "<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+
-            "<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"+
-            "<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n"+
+            frame1 + "\n"+
+            frame2 + "\n"+
         "</frameset>");
         parser.addScanner(new FrameScanner(""));
 
-        parseAndAssertNodeCount(4);
-        assertTrue("Node 1 should be Frame Tag",node[1] instanceof FrameTag);
-        assertTrue("Node 2 should be Frame Tag",node[2] instanceof FrameTag);
+        parseAndAssertNodeCount(7);
+        assertTrue("Node 3 should be Frame Tag",node[2] instanceof FrameTag);
+        assertTrue("Node 5 should be Frame Tag",node[4] instanceof FrameTag);
 
-        FrameTag frameTag1 = (FrameTag)node[1];
-        FrameTag frameTag2 = (FrameTag)node[2];
+        FrameTag frameTag1 = (FrameTag)node[2];
+        FrameTag frameTag2 = (FrameTag)node[4];
 
-        assertStringEquals("Frame 1 toHTML()","<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE>",frameTag1.toHtml());
-        assertStringEquals("Frame 2 toHTML()","<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">",frameTag2.toHtml());
+        assertStringEquals("Frame 1 toHTML()",frame1,frameTag1.toHtml());
+        assertStringEquals("Frame 2 toHTML()",frame2,frameTag2.toHtml());
     }
 }
 

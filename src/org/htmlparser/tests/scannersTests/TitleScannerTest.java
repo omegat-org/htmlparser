@@ -88,8 +88,7 @@ public class TitleScannerTest extends ParserTestCase {
         parseAndAssertNodeCount(8);
         assertTrue("Third tag should be a title tag",node[2] instanceof TitleTag);
         TitleTag titleTag = (TitleTag)node[2];
-        assertEquals("Title","Double tags can hang the code\r\n",titleTag.getTitle());
-
+        assertEquals("Title","\nDouble tags can hang the code\n",titleTag.getTitle());
     }
 
     /**
@@ -107,11 +106,12 @@ public class TitleScannerTest extends ParserTestCase {
     }
 
     public void testTitleTagContainsJspTag() throws ParserException {
-        createParser("<html><head><title><%=gTitleString%></title><base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
+        String title = "<title><%=gTitleString%></title>";
+        createParser("<html><head>" + title + "<base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
         parser.registerScanners();
         parseAndAssertNodeCount(7);
         assertTrue(node[2] instanceof TitleTag);
         TitleTag titleTag = (TitleTag) node[2];
-        assertStringEquals("HTML Rendering","<TITLE><%=gTitleString%></TITLE>",titleTag.toHtml());
+        assertStringEquals("HTML Rendering",title,titleTag.toHtml());
     }
 }

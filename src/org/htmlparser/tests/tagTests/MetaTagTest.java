@@ -39,12 +39,15 @@ public class MetaTagTest extends ParserTestCase {
     }
 
     public void testToHTML() throws ParserException {
+        String description = "\"description\"";
+        String content = "\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\"";
+        String tag = "<META name=" + description + " content=" + content + ">";
         createParser(
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
         "<html>\n"+
         "<head><title>SpamCop - Welcome to SpamCop\n"+
         "</title>\n"+
-        "<META name=\"description\" content=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\">\n"+
+        tag + "\n"+
         "<META name=\"keywords\" content=\"SpamCop spam cop email filter abuse header headers parse parser utility script net net-abuse filter mail program system trace traceroute dns\">\n"+
         "<META name=\"language\" content=\"en\">\n"+
         "<META name=\"owner\" content=\"service@admin.spamcop.net\">\n"+
@@ -56,8 +59,8 @@ public class MetaTagTest extends ParserTestCase {
         assertTrue("Node 8 should be META Tag",node[7] instanceof MetaTag);
         MetaTag metaTag;
         metaTag = (MetaTag) node[7];
-        assertStringEquals("Meta Tag 7 Name","description",metaTag.getMetaTagName());
-        assertStringEquals("Meta Tag 7 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaContent());
-        assertStringEquals("toHTML()","<META name=\"description\" content=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\">",metaTag.toHtml());
+        assertStringEquals("Meta Tag 7 Name",description,metaTag.getMetaTagName());
+        assertStringEquals("Meta Tag 7 Contents",content,metaTag.getMetaContent());
+        assertStringEquals("toHTML()",tag,metaTag.toHtml());
     }
 }

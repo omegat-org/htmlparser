@@ -96,9 +96,9 @@ public class TableScannerTest extends ParserTestCase {
             "</HTML>"
         );
         parser.registerScanners();
-        parseAndAssertNodeCount(4);
-        assertType("second tag",TableTag.class,node[1]);
-        TableTag table = (TableTag)node[1];
+        parseAndAssertNodeCount(6);
+        assertType("third tag",TableTag.class,node[2]);
+        TableTag table = (TableTag)node[2];
         assertEquals("rows",3,table.getRowCount());
         TableRow tr = table.getRow(2);
         assertEquals("columns",1,tr.getColumnCount());

@@ -60,23 +60,23 @@ public class FormScannerTest extends ParserTestCase {
         "<INPUT TYPE=\"submit\">\n"+
         "</FORM>";
 
-    public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\" METHOD=\""+FormTag.POST+"\">\r\n";
-    public static final String EXPECTED_FORM_HTML_REST_OF_FORM=
-        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-        "<TR><TD ALIGN=\"center\"><FONT FACE=\"Arial, verdana\" SIZE=\"2\"><B>User Name</B></FONT></TD></TR>\r\n"+
-        "<TR><TD ALIGN=\"center\"><INPUT NAME=\"name\" SIZE=\"20\" TYPE=\"text\"></TD></TR>\r\n"+
-        "<TR><TD ALIGN=\"center\"><FONT FACE=\"Arial, verdana\" SIZE=\"2\"><B>Password</B></FONT></TD></TR>\r\n"+
-        "<TR><TD ALIGN=\"center\"><INPUT NAME=\"passwd\" SIZE=\"20\" TYPE=\"password\"></TD></TR>\r\n"+
-        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-        "<TR><TD ALIGN=\"center\"><INPUT VALUE=\"Login\" NAME=\"submit\" TYPE=\"submit\"></TD></TR>\r\n"+
-        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-        "<TEXTAREA TABINDEX=\"5\" ROWS=\"15\" COLS=\"55\" CLASS=\"composef\" NAME=\"Description\" WRAP=\"virtual\">Contents of TextArea</TEXTAREA>\r\n"+
-//      "<TEXTAREA TABINDEX=\"5\" ROWS=\"15\" COLS=\"55\" CLASS=\"composef\" NAME=\"AnotherDescription\" WRAP=\"virtual\">\r\n"+
-        "<INPUT NAME=\"password\" SIZE=\"20\" TYPE=\"hidden\">\r\n"+
-        "<INPUT TYPE=\"submit\">\r\n"+
-        "</FORM>";
-    public static final String EXPECTED_FORM_HTML = EXPECTED_FORM_HTML_FORMLINE+EXPECTED_FORM_HTML_REST_OF_FORM;
-
+//    public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\" METHOD=\""+FormTag.POST+"\">\r\n";
+//    public static final String EXPECTED_FORM_HTML_REST_OF_FORM=
+//        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+//        "<TR><TD ALIGN=\"center\"><FONT FACE=\"Arial, verdana\" SIZE=\"2\"><B>User Name</B></FONT></TD></TR>\r\n"+
+//        "<TR><TD ALIGN=\"center\"><INPUT NAME=\"name\" SIZE=\"20\" TYPE=\"text\"></TD></TR>\r\n"+
+//        "<TR><TD ALIGN=\"center\"><FONT FACE=\"Arial, verdana\" SIZE=\"2\"><B>Password</B></FONT></TD></TR>\r\n"+
+//        "<TR><TD ALIGN=\"center\"><INPUT NAME=\"passwd\" SIZE=\"20\" TYPE=\"password\"></TD></TR>\r\n"+
+//        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+//        "<TR><TD ALIGN=\"center\"><INPUT VALUE=\"Login\" NAME=\"submit\" TYPE=\"submit\"></TD></TR>\r\n"+
+//        "<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+//        "<TEXTAREA TABINDEX=\"5\" ROWS=\"15\" COLS=\"55\" CLASS=\"composef\" NAME=\"Description\" WRAP=\"virtual\">Contents of TextArea</TEXTAREA>\r\n"+
+////      "<TEXTAREA TABINDEX=\"5\" ROWS=\"15\" COLS=\"55\" CLASS=\"composef\" NAME=\"AnotherDescription\" WRAP=\"virtual\">\r\n"+
+//        "<INPUT NAME=\"password\" SIZE=\"20\" TYPE=\"hidden\">\r\n"+
+//        "<INPUT TYPE=\"submit\">\r\n"+
+//        "</FORM>";
+//    public static final String EXPECTED_FORM_HTML = EXPECTED_FORM_HTML_FORMLINE+EXPECTED_FORM_HTML_REST_OF_FORM;
+//
     public FormScannerTest(String name) {
         super(name);
     }
@@ -128,7 +128,11 @@ public class FormScannerTest extends ParserTestCase {
         assertEquals("Text Area Tag Contents","Contents of TextArea",textAreaTag.getValue());
         assertNull("Should have been null",formTag.getTextAreaTag("junk"));
 
-        assertStringEquals("toHTML",EXPECTED_FORM_HTML,formTag.toHtml());
+        String expected = 
+            FORM_HTML.substring (0, FORM_HTML.indexOf ("\"do_login.php\""))
+            + "http://www.google.com/test/do_login.php"
+            + FORM_HTML.substring (FORM_HTML.indexOf ("\"do_login.php\"") + 14);
+        assertStringEquals("toHTML",expected,formTag.toHtml());
     }
 
     public void testScanFormWithNoEnding() throws Exception {
@@ -312,6 +316,6 @@ public class FormScannerTest extends ParserTestCase {
         nodes = new AbstractNode[50];
         for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
             nodes[i++] = e.nextNode();
-        assertEquals ("Expected nodes", 39, i);
+        assertEquals ("Expected nodes", 40, i);
     }
 }

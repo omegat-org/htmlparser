@@ -40,34 +40,32 @@ public class StyleTagTest extends ParserTestCase {
     }
 
     public void testToHTML() throws ParserException {
-        createParser("<style>a.h{background-color:#ffee99}</style>");
+        String html = "<style>a.h{background-color:#ffee99}</style>";
+        createParser(html);
         parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof StyleTag);
         StyleTag styleTag = (StyleTag)node[0];
-        assertEquals("Raw String","<STYLE>a.h{background-color:#ffee99}</STYLE>",styleTag.toHtml());
+        assertEquals("Raw String",html,styleTag.toHtml());
     }
 
     /**
      * Reproducing a bug reported by Dhaval Udani relating to
      * style tag attributes being missed
      */
-    public void testToHTML_Attriubtes() throws ParserException {
-        createParser("<STYLE type=\"text/css\">\n"+
+    public void testToHtmlAttributes() throws ParserException {
+        String style = "<STYLE type=\"text/css\">\n"+
         "<!--"+
         "{something....something}"+
         "-->"+
-        "</STYLE>");
+        "</STYLE>";
+        createParser(style);
 
         Parser.setLineSeparator("\r\n");
         parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof StyleTag);
         StyleTag styleTag = (StyleTag)node[0];
-        assertStringEquals("Raw String","<STYLE TYPE=\"text/css\">\r\n"+
-        "<!--"+
-        "{something....something}"+
-        "-->"+
-        "</STYLE>",styleTag.toHtml());
+        assertStringEquals("toHtml",style,styleTag.toHtml());
     }
 }

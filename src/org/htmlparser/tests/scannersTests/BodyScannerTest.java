@@ -52,12 +52,13 @@ public class BodyScannerTest extends ParserTestCase {
         // check the body node
         BodyTag bodyTag = (BodyTag) node[4];
         assertEquals("Body","This is a body tag",bodyTag.getBody());
-        assertEquals("Body","<BODY>This is a body tag</BODY>",bodyTag.toHtml());
+        assertEquals("Body","<body>This is a body tag</body>",bodyTag.toHtml());
         assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
 
     public void testBodywithJsp() throws ParserException {
-        createParser("<html><head><title>Test 1</title></head><body><%=BodyValue%></body></html>");
+        String body = "<body><%=BodyValue%></body>";
+        createParser("<html><head><title>Test 1</title></head>" + body + "</html>");
         parser.registerScanners();
         BodyScanner bodyScanner = new BodyScanner("-b");
         parser.addScanner(bodyScanner);
@@ -65,12 +66,13 @@ public class BodyScannerTest extends ParserTestCase {
         assertTrue(node[4] instanceof BodyTag);
         // check the body node
         BodyTag bodyTag = (BodyTag) node[4];
-        assertStringEquals("Body","<BODY><%=BodyValue%></BODY>",bodyTag.toHtml());
+        assertStringEquals("Body",body,bodyTag.toHtml());
         assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
 
     public void testBodyMixed() throws ParserException {
-        createParser("<html><head><title>Test 1</title></head><body>before jsp<%=BodyValue%>after jsp</body></html>");
+        String body = "<body>before jsp<%=BodyValue%>after jsp</body>";
+        createParser("<html><head><title>Test 1</title></head>" + body + "</html>");
         parser.registerScanners();
         BodyScanner bodyScanner = new BodyScanner("-b");
         parser.addScanner(bodyScanner);
@@ -78,12 +80,13 @@ public class BodyScannerTest extends ParserTestCase {
         assertTrue(node[4] instanceof BodyTag);
         // check the body node
         BodyTag bodyTag = (BodyTag) node[4];
-        assertEquals("Body","<BODY>before jsp<%=BodyValue%>after jsp</BODY>",bodyTag.toHtml());
+        assertEquals("Body",body,bodyTag.toHtml());
         assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
 
     public void testBodyEnding() throws ParserException {
-        createParser("<html><body>before jsp<%=BodyValue%>after jsp</html>");
+        String body = "<body>before jsp<%=BodyValue%>after jsp";
+        createParser("<html>" + body + "</html>");
         parser.registerScanners();
         BodyScanner bodyScanner = new BodyScanner("-b");
         parser.addScanner(bodyScanner);
@@ -91,7 +94,7 @@ public class BodyScannerTest extends ParserTestCase {
         assertTrue(node[1] instanceof BodyTag);
         // check the body node
         BodyTag bodyTag = (BodyTag) node[1];
-        assertEquals("Body","<BODY>before jsp<%=BodyValue%>after jsp</BODY>",bodyTag.toHtml());
+        assertEquals("Body",body + "</body>",bodyTag.toHtml());
         assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
     }
 

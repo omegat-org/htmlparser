@@ -36,7 +36,7 @@ import org.htmlparser.tags.data.TagData;
 public class JspTag extends Tag
 {
     /**
-     * The HTMLJspTag is constructed by providing the beginning posn, ending posn
+     * The JspTag is constructed by providing the beginning posn, ending posn
      * and the tag contents.
      * @param tagData The data for this tag.
      */
@@ -46,7 +46,7 @@ public class JspTag extends Tag
     }
 
     public String toHtml() {
-        return "<%"+getTagContents()+"%>";
+        return "<"+getTagContents()+">";
     }
 
     /**

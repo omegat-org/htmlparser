@@ -54,10 +54,11 @@ public class FormTagTest extends ParserTestCase {
         FormTag formTag = (FormTag)node[0];
 
         formTag.setFormLocation("http://www.yahoo.com/yahoo/do_not_login.jsp");
-
-        String expectedHTML = "<FORM ACTION=\"http://www.yahoo.com/yahoo/do_not_login.jsp\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\" METHOD=\""+FormTag.POST+"\">\r\n"+
-        FormScannerTest.EXPECTED_FORM_HTML_REST_OF_FORM;
-        assertStringEquals("Raw String",expectedHTML,formTag.toHtml());
+        String expected = 
+            FormScannerTest.FORM_HTML.substring (0, FormScannerTest.FORM_HTML.indexOf ("\"do_login.php\""))
+            + "http://www.google.com/test/do_login.php"
+            + FormScannerTest.FORM_HTML.substring (FormScannerTest.FORM_HTML.indexOf ("\"do_login.php\"") + 14);
+        assertStringEquals("Raw String",expected,formTag.toHtml());
     }
 
     public void testToPlainTextString() throws ParserException {
@@ -67,7 +68,7 @@ public class FormTagTest extends ParserTestCase {
         parseAndAssertNodeCount(1);
         assertTrue("Node 0 should be Form Tag",node[0] instanceof FormTag);
         FormTag formTag = (FormTag)node[0];
-        assertStringEquals("Form Tag string representation","&nbsp;User NamePassword&nbsp;&nbsp;Contents of TextArea",formTag.toPlainTextString());
+        assertStringEquals("Form Tag string representation","\n&nbsp;\nUser Name\n\nPassword\n\n&nbsp;\n\n&nbsp;\nContents of TextArea\n\n\n", formTag.toPlainTextString());
     }
 
     public void testSearchFor() throws ParserException {

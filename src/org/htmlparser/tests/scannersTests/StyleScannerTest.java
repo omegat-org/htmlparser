@@ -46,17 +46,12 @@ public class StyleScannerTest extends ParserTestCase
         assertEquals("Evaluation of STYLE tag",new Boolean(true),new Boolean(retVal));
     }
 
-    public void testScan() {
+    public void testScan() throws ParserException
+    {
         createParser("<STYLE TYPE=\"text/css\"><!--\n\n"+
         "</STYLE>","http://www.yle.fi/");
         parser.addScanner(new StyleScanner("-s"));
-        try {
-            parseAndAssertNodeCount(1);
-            assertTrue("Should've thrown exception",false);
-        }
-        catch (ParserException e) {
-
-        }
+        parseAndAssertNodeCount(1);
     }
 
     public void testScanBug() throws ParserException {
@@ -91,15 +86,14 @@ public class StyleScannerTest extends ParserTestCase
      * This is a bug reported by Dr. Wes Munsil, with the parser crashing on Google
      */
     public void testScanBug3() throws ParserException {
-        createParser("<html><head><META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\"><title>Google</title><style><!--\n"+
-        "body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\n"+
-        "//--></style>","http://www.yle.fi/");
+        String expectedCode = "<!--\nbody,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\n//-->";
+        createParser("<html><head><META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\"><title>Google</title><style>"+
+        expectedCode+
+        "</style>","http://www.yle.fi/");
         parser.registerScanners();
         parseAndAssertNodeCount(5);
         assertTrue(node[4] instanceof StyleTag);
         StyleTag styleTag = (StyleTag)node[4];
-        String expectedCode = "<!--\r\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\r\n"+
-        "//-->";
         assertStringEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
     }
 

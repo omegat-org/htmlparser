@@ -141,7 +141,8 @@ public class ImageTagTest extends ParserTestCase
     }
 
     public void testToHTML() throws ParserException {
-        createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
+        String img = "<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>";
+        createParser(img,"http://www.google.com/test/test/index.html");
         // Register the image scanner
         parser.addScanner(new ImageScanner("-i",new LinkProcessor()));
 
@@ -149,7 +150,7 @@ public class ImageTagTest extends ParserTestCase
         // The node should be an ImageTag
         assertTrue("Node should be a ImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];
-        assertStringEquals("The image locn","<IMG WIDTH=\"305\" ALT=\"Google\" SRC=\"../../goo/title_homepage4.gif\" HEIGHT=\"115\">",imageTag.toHtml());
+        assertStringEquals("toHtml",img,imageTag.toHtml());
         assertEquals("Alt","Google",imageTag.getAttribute("alt"));
         assertEquals("Height","115",imageTag.getAttribute("height"));
         assertEquals("Width","305",imageTag.getAttribute("width"));

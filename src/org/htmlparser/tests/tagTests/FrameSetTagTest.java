@@ -41,24 +41,19 @@ public class FrameSetTagTest extends ParserTestCase {
     }
 
     public void testToHTML() throws ParserException{
-        createParser(
-        "<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+
+        String html = "<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"+
             "<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"+
             "<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n"+
-        "</frameset>");
+        "</frameset>";
+        createParser(html);
 
         parser.addScanner(new FrameSetScanner(""));
         parser.addScanner(new FrameScanner(""));
 
         parseAndAssertNodeCount(1);
-        assertTrue("Node 0 should be End Tag",node[0] instanceof FrameSetTag);
+        assertTrue("Node 0 should be a FrameSetTag",node[0] instanceof FrameSetTag);
         FrameSetTag frameSetTag = (FrameSetTag)node[0];
-        assertStringEquals("HTML Contents",
-        "<FRAMESET BORDER=\"0\" ROWS=\"115,*\" FRAMESPACING=\"0\" FRAMEBORDER=\"NO\">\r\n"+
-            "<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE>\r\n"+
-            "<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">\r\n"+
-        "</FRAMESET>",
-        frameSetTag.toHtml());
+        assertStringEquals("HTML Contents", html, frameSetTag.toHtml());
     }
 }
 

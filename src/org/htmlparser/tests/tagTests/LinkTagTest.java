@@ -28,6 +28,7 @@
 
 package org.htmlparser.tests.tagTests;
 
+import java.util.Vector;
 import org.htmlparser.Parser;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.tags.LinkTag;
@@ -123,25 +124,23 @@ public class LinkTagTest extends ParserTestCase {
 
     public void testLinkNodeBug5() throws ParserException
     {
-        createParser("<a href=http://note.kimo.com.tw/>筆記</a>&nbsp; <a \n"+
-        "href=http://photo.kimo.com.tw/>相簿</a>&nbsp; <a\n"+
-        "href=http://address.kimo.com.tw/>通訊錄</a>&nbsp;&nbsp;","http://www.cj.com");
+        String link1 = "http://note.kimo.com.tw/";
+        String link2 = "http://photo.kimo.com.tw/";
+        String link3 = "http://address.kimo.com.tw/";
+        createParser("<a href=" + link1 + ">筆記</a>&nbsp; <a \n"+
+        "href=" + link2 + ">相簿</a>&nbsp; <a\n"+
+        "href=" + link3 + ">通訊錄</a>&nbsp;&nbsp;","http://www.cj.com");
         Parser.setLineSeparator("\r\n");
         // Register the image scanner
         parser.addScanner(new LinkScanner("-l"));
 
         parseAndAssertNodeCount(6);
-        // The node should be an LinkTag
-        assertTrue("Node should be a LinkTag",node[0] instanceof LinkTag);
+        assertTrue("Node should be a LinkTag",node[2] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[2];
-        assertStringEquals("Link incorrect!!","http://photo.kimo.com.tw",linkNode.getLink());
-        assertEquals("Link beginning",new Integer(48),new Integer(linkNode.elementBegin()));
-        assertEquals("Link ending",new Integer(38),new Integer(linkNode.elementEnd()));
-
-            LinkTag linkNode2 = (LinkTag)node[4];
-        assertStringEquals("Link incorrect!!","http://address.kimo.com.tw",linkNode2.getLink());
-        assertEquals("Link beginning",new Integer(46),new Integer(linkNode2.elementBegin()));
-        assertEquals("Link ending",new Integer(42),new Integer(linkNode2.elementEnd()));
+        assertStringEquals("Link incorrect!!",link2,linkNode.getLink());
+        assertTrue("Node should be a LinkTag",node[4] instanceof LinkTag);
+        LinkTag linkNode2 = (LinkTag)node[4];
+        assertStringEquals("Link incorrect!!",link3,linkNode2.getLink());
     }
 
     /**
@@ -267,10 +266,13 @@ public class LinkTagTest extends ParserTestCase {
     }
 
     public void testToHTML() throws ParserException {
-        createParser("<A HREF='mailto:somik@yahoo.com'>hello</A>\n"+
-            "<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font><a \n"+
+        String link1 = "<A HREF='mailto:somik@yahoo.com'>hello</A>";
+        String link2 = "<a \n"+
             "href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
-            "nical.html\"> Journalism 3.0</a> by Rajesh Jain","http://www.cj.com/");
+            "nical.html\"> Journalism 3.0</a>";
+        createParser(link1 + "\n"+
+            "<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font>" +
+            link2 + " by Rajesh Jain","http://www.cj.com/");
         Parser.setLineSeparator("\r\n");
         // Register the image scanner
         parser.addScanner(new LinkScanner("-l"));
@@ -278,86 +280,81 @@ public class LinkTagTest extends ParserTestCase {
         parseAndAssertNodeCount(10);
         assertTrue("First Node should be a LinkTag",node[0] instanceof LinkTag);
         LinkTag linkTag = (LinkTag)node[0];
-        assertStringEquals("Link Raw Text","<A HREF=\"mailto:somik@yahoo.com\">hello</A>",linkTag.toHtml());
+        assertStringEquals("Link Raw Text",link1,linkTag.toHtml());
         assertTrue("Ninth Node should be a HTMLLinkTag",node[8] instanceof LinkTag);
         linkTag = (LinkTag)node[8];
-        assertStringEquals("Link Raw Text","<A HREF=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\nnical.html\"> Journalism 3.0</A>",linkTag.toHtml());
+        assertStringEquals("Link Raw Text",link2,linkTag.toHtml());
     }
 
     public void testTypeHttps() throws ParserException{
-        fail ("not implemented");
-//        LinkTag linkTag =
-//        new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("https://www.someurl.com","","",false,false)
-//        );
-//        assertTrue("This is a https link",linkTag.isHTTPSLink());
+        LinkTag linkTag =
+        new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("https://www.someurl.com","","",false,false)
+        );
+        assertTrue("This is a https link",linkTag.isHTTPSLink());
     }
 
     public void testTypeFtp() throws ParserException{
-        fail ("not implemented");
-//        LinkTag linkTag =
-//        new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("ftp://www.someurl.com","","",false,false)
-//        );
-//        assertTrue("This is an ftp link",linkTag.isFTPLink());
+        LinkTag linkTag =
+        new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("ftp://www.someurl.com","","",false,false)
+        );
+        assertTrue("This is an ftp link",linkTag.isFTPLink());
     }
 
     public void testTypeJavaScript() throws ParserException {
-        fail ("not implemented");
-//        LinkTag linkTag =
-//        new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("javascript://www.someurl.com","","",false,true)
-//        );
-//        assertTrue("This is a javascript link",linkTag.isJavascriptLink());
+        LinkTag linkTag =
+        new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("javascript://www.someurl.com","","",false,true)
+        );
+        assertTrue("This is a javascript link",linkTag.isJavascriptLink());
     }
 
     public void testTypeHttpLink() throws ParserException {
-        fail ("not implemented");
-//        LinkTag linkTag =
-//        new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("http://www.someurl.com","","",false,false)
-//        );
-//        assertTrue("This is a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-//        linkTag =
-//        new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("somePage.html","","",false,false)
-//        );
-//        assertTrue("This relative link is alsp a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
-//        linkTag =
-//        new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("ftp://somePage.html","","",false,false)
-//        );
-//        assertTrue("This is not a http link : "+linkTag.getLink(),!linkTag.isHTTPLink());
+        LinkTag linkTag =
+        new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("http://www.someurl.com","","",false,false)
+        );
+        assertTrue("This is a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
+        linkTag =
+        new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("somePage.html","","",false,false)
+        );
+        assertTrue("This relative link is alsp a http link : "+linkTag.getLink(),linkTag.isHTTPLink());
+        linkTag =
+        new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("ftp://somePage.html","","",false,false)
+        );
+        assertTrue("This is not a http link : "+linkTag.getLink(),!linkTag.isHTTPLink());
     }
 
     public void testTypeHttpLikeLink() throws ParserException {
-        fail ("not implemented");
-//        LinkTag linkTag =
-//        new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("http://","","",false,false)
-//        );
-//        assertTrue("This is a http link",linkTag.isHTTPLikeLink());
-//        LinkTag linkTag2 =
-//        new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("https://www.someurl.com","","",false,false)
-//        );
-//        assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
+        LinkTag linkTag =
+        new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("http://","","",false,false)
+        );
+        assertTrue("This is a http link",linkTag.isHTTPLikeLink());
+        LinkTag linkTag2 =
+        new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("https://www.someurl.com","","",false,false)
+        );
+        assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
     }
 
     /**
@@ -383,14 +380,13 @@ public class LinkTagTest extends ParserTestCase {
      */
     public void testIrcIsNotAHTTPLink () throws ParserException
     {
-        fail ("not implemented");
-//        LinkTag link;
-//
-//        link = new LinkTag(
-//            new TagData(0,0,"",""),
-//            new CompositeTagData(null,null,null),
-//            new LinkData("irc://server/channel","","",false,false)
-//        );
-//        assertTrue("This is not a http link", !link.isHTTPLikeLink ());
+        LinkTag link;
+
+        link = new LinkTag(
+            new TagData("A", 0, new Vector (), "http://www.someurl.com", false),
+            new CompositeTagData(null,null,null),
+            new LinkData("irc://server/channel","","",false,false)
+        );
+        assertTrue("This is not a http link", !link.isHTTPLikeLink ());
     }
 }

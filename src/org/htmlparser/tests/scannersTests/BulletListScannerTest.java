@@ -86,7 +86,7 @@ public class BulletListScannerTest extends ParserTestCase {
         );
         assertStringEquals(
             "expected text",
-            "Energy supply\r\n" +
+            "Energy supply\n" +
             " (Campbell)  ",
             firstNodeInFirstBullet.toPlainTextString()
         );

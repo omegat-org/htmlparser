@@ -124,7 +124,7 @@ public class TagTest extends ParserTestCase
                 tag = (Tag)node;
                 h = tag.getAttributes();
                 String classValue= (String)h.get("CLASS");
-                assertEquals ("The class value should be ","userData",classValue);
+                assertEquals ("The class value should be ","\"userData\"",classValue);
             }
 
         }
@@ -161,22 +161,22 @@ public class TagTest extends ParserTestCase
                 myValue = (String)h.get("MYPARAMETER");
                 nice = (String)h.get("YOURPARAMETER");
                 assertEquals ("Link tag (A)","A",a);
-                assertEquals ("href value","http://www.iki.fi/kaila",href);
+                assertEquals ("href value","\"http://www.iki.fi/kaila\"",href);
                 assertEquals ("myparameter value",null,myValue);
-                assertEquals ("yourparameter value","Kaarle Kaaila",nice);
+                assertEquals ("yourparameter value","\"Kaarle Kaaila\"",nice);
             }
             if (!(node instanceof LinkTag)) {
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreNodes()) {
                     node = en.nextNode();
                     snode = (StringNode)node;
-                    assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
+                    assertEquals("Value of element","Kaarle's homepage",snode.getText());
                 }
 
                 if (en.hasMoreNodes()) {
                     node = en.nextNode();
                     etag = (Tag)node;
-                    assertEquals("endtag of link",etag.getText(),"A");
+                    assertEquals("endtag of link","/A", etag.getText());
                 }
             }
             // testing rest
@@ -189,12 +189,12 @@ public class TagTest extends ParserTestCase
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
                 snode = (StringNode)node;
-                assertEquals("paragraph contents",snode.getText(),"Paragraph");
+                assertEquals("paragraph contents","Paragraph",snode.getText());
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
                 etag = (Tag)node;
-                assertEquals("paragrapg endtag",etag.getText(),"p");
+                assertEquals("paragrapg endtag","/p",etag.getText());
             }
 
         }
@@ -231,7 +231,7 @@ public class TagTest extends ParserTestCase
                 myValue = (String)h.get("MYPARAMETER");
                 nice = (String)h.get("YOURPARAMETER");
                 assertEquals ("The tagname should be G",a,"G");
-                assertEquals ("Check the http address",href,"http://www.iki.fi/kaila");
+                assertEquals ("Check the http address",href,"\"http://www.iki.fi/kaila\"");
                 assertEquals ("myValue is not null",myValue,null);
                 assertEquals ("The second parameter value",nice,"Kaila");
             }
@@ -244,24 +244,24 @@ public class TagTest extends ParserTestCase
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
                 etag = (Tag)node;
-                assertEquals("Endtag is G",etag.getText(),"G");
+                assertEquals("Endtag is G","/G", etag.getText());
             }
             // testing rest
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
 
                 tag = (Tag)node;
-                assertEquals("Follow up by p-tag",tag.getText(),"p");
+                assertEquals("Follow up by p-tag","p", tag.getText());
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
                 snode = (StringNode)node;
-                assertEquals("Verify the paragraph text",snode.getText(),"Paragraph");
+                assertEquals("Verify the paragraph text","Paragraph", snode.getText());
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
                 etag = (Tag)node;
-                assertEquals("Still patragraph endtag",etag.getText(),"p");
+                assertEquals("Still patragraph endtag","/p", etag.getText());
             }
 
         } catch (ClassCastException ce) {
@@ -304,13 +304,13 @@ public class TagTest extends ParserTestCase
                 if ( en.hasMoreNodes()) {
                     node = en.nextNode();
                     snode = (StringNode)node;
-                    assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
+                    assertEquals("Value of element","Kaarle's homepage",snode.getText());
                 }
 
                 if (en.hasMoreNodes()) {
                     node = en.nextNode();
                     etag = (Tag)node;
-                    assertEquals("Still patragraph endtag",etag.getText(),"A");
+                    assertEquals("Still patragraph endtag","/A",etag.getText());
                 }
             }
             // testing rest
@@ -387,21 +387,16 @@ public class TagTest extends ParserTestCase
      * This test just wants the text in the element
      */
     public void testWithoutParseParameter() throws ParserException{
-        Node node=null;
+        Node node;
         String testHTML = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle\">Kaarle's homepage</A><p>Paragraph</p>";
         createParser(testHTML);
         NodeIterator en = parser.elements();
         String result="";
-        try {
-            while (en.hasMoreNodes()) {
-                node = en.nextNode();
-                result += node.toHtml();
-            }
-            String expected = "<A YOURPARAMETER=\"Kaarle\" MYPARAMETER HREF=\"http://www.iki.fi/kaila\">Kaarle's homepage</A><P>Paragraph</P>";
-            assertStringEquals("Check collected contents to original", expected, result);
-        } catch (ClassCastException ce) {
-            fail("Bad class element = " + node.getClass().getName());
+        while (en.hasMoreNodes()) {
+            node = en.nextNode();
+            result += node.toHtml();
         }
+        assertStringEquals("Check collected contents to original", testHTML, result);
     }
 
     /**
@@ -410,23 +405,17 @@ public class TagTest extends ParserTestCase
     * This test just wants the text in the element
     */
    public void testEmptyTagParseParameter() throws ParserException{
-       Node node=null;
+       Node node;
        String testHTML = "<INPUT name=\"foo\" value=\"foobar\" type=\"text\" />";
 
        createParser(testHTML);
        NodeIterator en = parser.elements();
        String result="";
-       try {
-           while (en.hasMoreNodes()) {
-               node = en.nextNode();
-               result = node.toHtml();
-           }
-           String expected = "<INPUT VALUE=\"foobar\" NAME=\"foo\" TYPE=\"text\"/>";
-           assertStringEquals("Check collected contents to original", expected, result);
-       } catch (ClassCastException ce) {
-
-           fail("Bad class element = " + node.getClass().getName());
+       while (en.hasMoreNodes()) {
+           node = en.nextNode();
+           result = node.toHtml();
        }
+       assertStringEquals("Check collected contents to original", testHTML, result);
     }
 
 
@@ -464,23 +453,26 @@ public class TagTest extends ParserTestCase
     }
 
     public void testIncorrectInvertedCommas() throws ParserException {
-        String testHTML = new String("<META NAME=\"Author\" CONTENT = \"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"\">");
+        String content = "\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"";
+        String guts = "META NAME=\"Author\" CONTENT = " + content + " \"";
+        String testHTML = "<" + guts + ">";
         createParser(testHTML);
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
-        assertStringEquals("Node contents","META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"",tag.getText());
-        assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getAttribute("CONTENT"));
+        assertStringEquals("Node contents",guts,tag.getText());
+        assertEquals("Meta Content",content,tag.getAttribute("CONTENT"));
 
     }
 
     public void testIncorrectInvertedCommas2() throws ParserException {
-        String testHTML = new String("<META NAME=\"Keywords\" CONTENT=Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\">");
+        String guts = "META NAME=\"Keywords\" CONTENT=Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\"";
+        String testHTML = "<" + guts + ">";
         createParser(testHTML);
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a tag",node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
-        assertStringEquals("Node contents","META NAME=\"Keywords\" CONTENT=\"Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\"",tag.getText());
+        assertStringEquals("Node contents",guts,tag.getText());
     }
 
     public void testIncorrectInvertedCommas3() throws ParserException {
@@ -543,7 +535,7 @@ public class TagTest extends ParserTestCase
         assertTrue("Third node should be a string node",node[2] instanceof StringNode);
         StringNode stringNode = (StringNode)node[2];
         String actual = stringNode.getText();
-        assertEquals("Third node has incorrect text","text\r\n<>text",actual);
+        assertEquals("Third node has incorrect text","text\n<>text",actual);
     }
 
     /**
@@ -558,7 +550,7 @@ public class TagTest extends ParserTestCase
         assertTrue("Third node should be a string node",node[2] instanceof StringNode);
         StringNode stringNode = (StringNode)node[2];
         String actual = stringNode.getText();
-        assertEquals("Third node has incorrect text","text<\r\n>text",actual);
+        assertEquals("Third node has incorrect text","text<\n>text",actual);
     }
 
     /**
@@ -573,16 +565,16 @@ public class TagTest extends ParserTestCase
         assertTrue("Third node should be a string node",node[2] instanceof StringNode);
         StringNode stringNode = (StringNode)node[2];
         String actual = stringNode.getText();
-        assertEquals("Third node has incorrect text","text<>\r\ntext",actual);
+        assertEquals("Third node has incorrect text","text<>\ntext",actual);
     }
 
     public void testAttributesReconstruction() throws ParserException {
-        String testHTML = "<TEXTAREA name=\"JohnDoe\" ></TEXTAREA>";
+        String expectedHTML = "<TEXTAREA name=\"JohnDoe\" >";
+        String testHTML = expectedHTML + "</TEXTAREA>";
         createParser(testHTML);
         parseAndAssertNodeCount(2);
         assertTrue("First node should be an HTMLtag",node[0] instanceof Tag);
         Tag htmlTag = (Tag)node[0];
-        String expectedHTML = "<TEXTAREA NAME=\"JohnDoe\">";
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
     }
     public void testIgnoreState() throws ParserException {
@@ -652,7 +644,8 @@ public class TagTest extends ParserTestCase
     public void testHTMLOutputOfDifficultLinksWithRegisterScanners () throws ParserException
     {
         // straight out of a real world example
-        createParser ("<a href=http://www.google.com/webhp?hl=en>");
+        String html = "<a href=http://www.google.com/webhp?hl=en>";
+        createParser (html);
         // register standard scanners (Very Important)
         parser.registerScanners ();
         String temp = null;
@@ -662,9 +655,7 @@ public class TagTest extends ParserTestCase
             temp = newNode.toHtml();
         }
         assertNotNull ("No nodes", temp);
-        assertStringEquals ("Incorrect HTML output: ",
-            "<A HREF=\"http://www.google.com/webhp?hl=en\"></A>",
-            temp);
+        assertStringEquals ("Incorrect HTML output: ", html + "</a>", temp);
     }
 
     /**
