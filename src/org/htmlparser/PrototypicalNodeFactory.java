@@ -35,7 +35,36 @@ import java.util.Vector;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.NodeFactory;
-import org.htmlparser.tags.*; // import everything for now
+import org.htmlparser.tags.AppletTag;
+import org.htmlparser.tags.BaseHrefTag;
+import org.htmlparser.tags.BodyTag;
+import org.htmlparser.tags.Bullet;
+import org.htmlparser.tags.BulletList;
+import org.htmlparser.tags.Div;
+import org.htmlparser.tags.DoctypeTag;
+import org.htmlparser.tags.FormTag;
+import org.htmlparser.tags.FrameSetTag;
+import org.htmlparser.tags.FrameTag;
+import org.htmlparser.tags.HeadTag;
+import org.htmlparser.tags.Html;
+import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.InputTag;
+import org.htmlparser.tags.JspTag;
+import org.htmlparser.tags.LabelTag;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.MetaTag;
+import org.htmlparser.tags.OptionTag;
+import org.htmlparser.tags.ScriptTag;
+import org.htmlparser.tags.SelectTag;
+import org.htmlparser.tags.Span;
+import org.htmlparser.tags.StyleTag;
+import org.htmlparser.tags.TableColumn;
+import org.htmlparser.tags.TableHeader;
+import org.htmlparser.tags.TableRow;
+import org.htmlparser.tags.TableTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.TextareaTag;
+import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.ParserException;
 
 /**

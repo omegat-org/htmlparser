@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Vector;
 
 import org.htmlparser.AbstractNode;
+import org.htmlparser.Tag;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
@@ -46,6 +47,8 @@ import org.htmlparser.util.Translate;
 public class TagNode
     extends
         AbstractNode
+    implements
+        Tag
 {
     /**
      * The tag attributes.
@@ -270,6 +273,16 @@ public class TagNode
         }
 
         return (ret);
+    }
+
+    /*
+     * Sets the attributes.
+     * @param attribs The attribute collection to set.
+     * Each element is an {@link Attribute Attribute}.
+     */
+    public void setAttributeEx (Attribute attribute)
+    {
+        setAttribute (attribute);
     }
 
     /**
