@@ -59,7 +59,7 @@ public static TestSuite suite() {
 	
 	suite.addTestSuite(BeanTest.class);
 	suite.addTestSuite(HTMLLinkProcessorTest.class);
-	suite.addTestSuite(ParameterParserTest.class);	
+	suite.addTestSuite(AttributeParserTest.class);	
 	suite.addTestSuite(HTMLTagParserTest.class);
 	suite.addTestSuite(CharacterTranslationTest.class);
 	suite.addTestSuite(NodeListTest.class);

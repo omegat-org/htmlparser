@@ -34,7 +34,7 @@ import java.util.Hashtable;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
-import org.htmlparser.parserHelper.ParameterParser;
+import org.htmlparser.parserHelper.AttributeParser;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.HTMLTagScanner;
 import org.htmlparser.tags.data.TagData;
@@ -65,7 +65,7 @@ public class HTMLTag extends HTMLNode
 	private final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
 	private final static String EMPTY_STRING="";
 
-	private static ParameterParser paramParser = new ParameterParser();
+	private static AttributeParser paramParser = new AttributeParser();
 	private static TagParser tagParser;
 	/**
 	 * Tag contents will have the contents of the comment tag.

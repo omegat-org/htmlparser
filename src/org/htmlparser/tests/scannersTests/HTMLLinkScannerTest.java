@@ -485,4 +485,34 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		HTMLImageTag imageTag = (HTMLImageTag)insideNodes[0];
 		assertEquals("Image Tag Location","http://www.fedpage.com/images\\register.gif",imageTag.getImageURL());
 	}
+	
+	/**
+	 * This is an attempt to reproduce bug 677874 
+	 * reported by James Moliere. A link tag of the form
+	 * <code>
+	 * <a class=rlbA href=/news/866201.asp?0sl=-
+	 * 32>Shoe bomber handed life sentence</a>
+	 * </code>
+	 * is not parsed correctly. The second '=' sign in the link causes
+	 * the parser to treat it as a seperate attribute
+	 */
+	public void testLinkContainsEqualTo() throws Exception {
+		createParser(
+			"<a class=rlbA href=/news/866201.asp?0sl=-" +			"32>Shoe bomber handed life sentence</a>"
+		);
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertType("node type",HTMLLinkTag.class,node[0]);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		assertStringEquals(
+			"link text",
+			"Shoe bomber handed life sentence",
+			linkTag.getLinkText()
+		);
+		assertStringEquals(
+			"link url",
+			"/news/866201.asp?0sl=-32",
+			linkTag.getLink()
+		);		
+	}
 }

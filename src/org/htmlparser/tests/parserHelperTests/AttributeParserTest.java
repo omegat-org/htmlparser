@@ -30,23 +30,22 @@ package org.htmlparser.tests.parserHelperTests;
 
 import java.util.Hashtable;
 
-import org.htmlparser.parserHelper.ParameterParser;
+import org.htmlparser.parserHelper.AttributeParser;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.tests.HTMLParserTestCase;
 
-import junit.framework.TestCase;
-
-public class ParameterParserTest extends TestCase {
-	private ParameterParser parser;
+public class AttributeParserTest extends HTMLParserTestCase {
+	private AttributeParser parser;
 	private HTMLTag tag;
 	private Hashtable table;
 	
-	public ParameterParserTest(String name) {
+	public AttributeParserTest(String name) {
 		super(name);
 	}
 
 	protected void setUp() {
-		parser = new ParameterParser();
+		parser = new AttributeParser();
 	}
 	
 	public void getParameterTableFor(String tagContents) {
@@ -118,6 +117,16 @@ public class ParameterParserTest extends TestCase {
         getParameterTableFor("INPUT type=");
         assertEquals("Name of Tag","INPUT",table.get(HTMLTag.TAGNAME));
         assertEquals("Type","",table.get("TYPE"));                
-
+    }
+    
+    public void testAttributeWithSpuriousEqualTo() {
+    	getParameterTableFor(
+			"a class=rlbA href=/news/866201.asp?0sl=-32"
+		);
+		assertStringEquals(
+			"href",
+			"/news/866201.asp?0sl=-23",
+			(String)table.get("HREF")
+		);
     }
 }

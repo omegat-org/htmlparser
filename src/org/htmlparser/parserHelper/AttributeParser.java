@@ -42,7 +42,7 @@ import org.htmlparser.tags.HTMLTag;
  * @author Somik Raha, Kaarle Kaila
  * @version 7 AUG 2001
  */
-public class ParameterParser {
+public class AttributeParser {
     private final String delim = " \t\r\n\f=\"'>";
     private final char doubleQuote = '\"';
     private final char singleQuote = '\'';
