@@ -94,7 +94,7 @@ public class MailRipper {
 	}
 	/**
 	 * Rip all mail addresses from the given url, and return an enumeration of such mail addresses.
-	 * @return Enumeration of mail addresses (a vector of HTMLLinkTag)
+	 * @return Enumeration of mail addresses (a vector of LinkTag)
 	 */
 	public Enumeration rip() throws ParserException {
 	  Node node;

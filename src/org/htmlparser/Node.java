@@ -125,7 +125,7 @@ public abstract class Node
 	 * <pre>
 	 * NodeList collectionList = new NodeList(); 
 	 * Node node; 
-	 * String filter = HTMLLinkTag.LINK_TAG_FILTER; 
+	 * String filter = LinkTag.LINK_TAG_FILTER; 
 	 * for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
 	 * 		node = e.nextNode();
 	 * 		node.collectInto (collectionVector, filter); 
@@ -139,7 +139,7 @@ public abstract class Node
 	 * the internal matching occurs with the pre-existing filter string object (in the relevant class). i.e. do not
 	 * make calls like : 
 	 * <I>collectInto(collectionList,"-l")</I>, instead, make calls only like :
-	 * <I>collectInto(collectionList,HTMLLinkTag.LINK_TAG_FILTER)</I>.<P/>
+	 * <I>collectInto(collectionList,LinkTag.LINK_TAG_FILTER)</I>.<P/>
 	 * 
 	 * To find out if your desired tag has filtering support, check the API of the tag.
 	 */
@@ -162,7 +162,7 @@ public abstract class Node
 	 * Node node; 
 	 * for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
 	 * 		node = e.nextNode();
-	 * 		node.collectInto (collectionVector, HTMLLinkTag.class);
+	 * 		node.collectInto (collectionVector, LinkTag.class);
 	 * }
 	 * </pre>
 	 * Thus, collectionList will hold all the link nodes, irrespective of how

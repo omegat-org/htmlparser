@@ -161,7 +161,7 @@ public class StringParserTest extends ParserTestCase {
 
 	/**
 	 * Based on a bug report submitted by Cedric Rosa, if the last line contains a single character,
-	 * HTMLStringNode does not return the string node correctly.
+	 * StringNode does not return the string node correctly.
 	 */
 	public void testLastLineWithOneChar() throws ParserException {
 		createParser("a");

@@ -90,23 +90,24 @@ import org.htmlparser.visitors.NodeVisitor;
  * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * // In this example, we are registering all the common scanners
  * parser.registerScanners(); 
- * for (Enumeration e = parser.elements();e.hasMoreElements();) {
- *    Node node = (Node)e.nextElement();
- * 	  node.print();
+ * for (NodeIterator i = parser.elements();e.hasMoreNodes();) {
+ * 	Node node = i.nextNode();
+ *	node.print();
  * }
- * </pre>
- * Below is some sample code to parse Yahoo.com and print only the text information. This scanning
- * will run faster, as there are no scanners registered here.
+ * </pre> Below is some sample code to parse Yahoo.com and print only the text
+ * information. This scanning will run faster, as there are no scanners
+ * registered here.
  * <pre>
  * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * // In this example, none of the scanners need to be registered
  * // as a string node is not a tag to be scanned for.
- * for (Enumeration e = parser.elements();e.hasMoreElements();) {
- *    Node node = (Node)e.nextElement();
- *    if (node instanceof HTMLStringNode) {
- *        HTMLStringNode stringNode = (HTMLStringNode)node;
- *        System.out.println(stringNode.getText());
- *    }
+ * for (NodeIterator i = parser.elements();e.hasMoreNodes();) {
+ *	Node node = i.nextNode();
+ *	if (node instanceof StringNode) {        	
+ * 		StringNode stringNode =
+ *		(StringNode)node;        
+ * 		System.out.println(stringNode.getText());    
+ * 	} 
  * }
  * </pre>
  * The above snippet will print out only the text contents in the html document.<br>
@@ -115,12 +116,12 @@ import org.htmlparser.visitors.NodeVisitor;
  * <pre>
  * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * parser.addScanner(new HTMLLinkScanner("-l"));
- * for (Enumeration e = parser.elements();e.hasMoreElements();) {
- *    Node node = (Node)e.nextElement();
- *    if (node instanceof HTMLLinkTag) {
- *        HTMLLinkTag linkTag = (HTMLLinkTag)node;
- *        System.out.println(linkTag.getLink());
- *    }
+ * for (NodeIterator i = parser.elements();e.hasMoreNodes();) {
+ * 	Node node = i.nextNode();    
+ * 	if (node instanceof LinkTag) {
+ * 		LinkTag linkTag = (LinkTag)node;        
+ * 		System.out.println(linkTag.getLink());    
+ * 	} 
  * }
  * </pre>
  *  @see Parser#elements() 
@@ -874,9 +875,9 @@ public class Parser
 	 * parser.registerScanners();
 	 * for (HTMLEnumeration e = parser.elements();e.hasMoreElements();) {
 	 *    Node node = e.nextHTMLNode();
-	 *    if (node instanceof HTMLStringNode) {
-	 *      // Downcasting to HTMLStringNode
-	 *      HTMLStringNode stringNode = (HTMLStringNode)node;
+	 *    if (node instanceof StringNode) {
+	 *      // Downcasting to StringNode
+	 *      StringNode stringNode = (StringNode)node;
 	 *      // Do whatever processing you want with the string node
 	 *      System.out.println(stringNode.getText());
 	 *    }
