@@ -284,7 +284,7 @@ public void testImageTagsFromYahooWithAllScannersRegistered()
 	for (Enumeration e = parser.elements();e.hasMoreElements();) {
 		node[i++] = (HTMLNode)e.nextElement();
 	}	
-	assertEquals("Number of nodes identified should be 3",22,i);
+	assertEquals("Number of nodes identified should be 22",22,i);
 	assertTrue("Node identified should be HTMLLinkTag",node[11] instanceof HTMLLinkTag);
 	HTMLLinkTag linkTag = (HTMLLinkTag)node[11];
 	HTMLNode [] node2 = new HTMLNode[10];
@@ -297,5 +297,34 @@ public void testImageTagsFromYahooWithAllScannersRegistered()
 	HTMLImageTag imageTag = (HTMLImageTag)node2[0];
 	assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageLocation());		
 }
+/**
+ * This is the reproduction of a bug reported
+ * by Annette Doyle
+ */
+public void testImageTagOnThreeLines() {
+	String testHTML = "<td rowspan=3><img height=49 \n"+
+      "alt=\"Central Intelligence Agency, Director of Central Intelligence\" \n"+
+      "src=\"graphics/images_home2/cia_banners_template3_01.gif\" \n"+
+      "width=241></td>"; 
 
+	StringReader sr = new StringReader(testHTML); 
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[100];
+	// Register the image scanner
+	parser.registerScanners();
+	int i = 0;
+	HTMLNode thisNode;
+	for (Enumeration e = parser.elements();e.hasMoreElements();) {
+		node[i++] = (HTMLNode)e.nextElement();
+	}	
+	assertEquals("Number of nodes identified should be 3",3,i);
+	assertTrue("Node identified should be HTMLImageTag",node[1] instanceof HTMLImageTag);
+	HTMLImageTag imageTag = (HTMLImageTag)node[1];
+	// Get the data from the node
+	assertEquals("Image location","http://www.cia.gov/graphics/images_home2/cia_banners_template3_01.gif",imageTag.getImageLocation());
+	assertEquals("Alt Value","Central Intelligence Agency, Director of Central Intelligence",imageTag.getParameter("ALT"));
+	assertEquals("Width","241",imageTag.getParameter("WIDTH"));	
+	assertEquals("Height","49",imageTag.getParameter("HEIGHT"));
+}
 }
