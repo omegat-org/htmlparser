@@ -29,17 +29,16 @@
 
 package org.htmlparser.tags;
 
-import java.util.Enumeration;
-
 import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLLinkTagData;
 import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.util.SimpleEnumeration;
 import org.htmlparser.visitors.HTMLVisitor;
 /**
  * Identifies a link tag 
  */
-public class HTMLLinkTag extends HTMLCompositeTag
+public class HTMLLinkTag extends CompositeTag
 {
 	public static final String LINK_TAG_FILTER="-l";
 	/**
@@ -224,9 +223,9 @@ public class HTMLLinkTag extends HTMLCompositeTag
 			
 			HTMLNode node;
 			int i = 0;
-			for (Enumeration e=children();e.hasMoreElements();)
+			for (SimpleEnumeration e=children();e.hasMoreNodes();)
 			{
-				node = (HTMLNode)e.nextElement();
+				node = (HTMLNode)e.nextNode();
 				sb.append("   "+(i++)+ " ");
 				sb.append(node.toString()+"\n");
 			}
@@ -245,7 +244,7 @@ public class HTMLLinkTag extends HTMLCompositeTag
 	 * @return Enumeration
 	 * @deprecated Use children() instead.
 	 */
-	public Enumeration linkData() {
+	public SimpleEnumeration linkData() {
 		return children();
 	}
 	

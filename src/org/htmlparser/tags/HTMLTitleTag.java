@@ -34,7 +34,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 /**
  * A Title Tag
  */
-public class HTMLTitleTag extends HTMLCompositeTag {
+public class HTMLTitleTag extends CompositeTag {
 	
 	public HTMLTitleTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
 		super(tagData,compositeTagData);

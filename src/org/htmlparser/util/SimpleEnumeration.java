@@ -37,7 +37,7 @@ import org.htmlparser.HTMLNode;
  * manner, without needing to do class casts for HTMLNode.
  * @author Somik Raha
  */
-public interface HTMLSimpleEnumeration {
+public interface SimpleEnumeration {
 	/**
 	 * Check if more nodes are available.
 	 * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will
@@ -50,5 +50,5 @@ public interface HTMLSimpleEnumeration {
 	 * @return The next node in the HTML stream, or null if there are no more
 	 * nodes. 
 	 */
-	public HTMLNode nextHTMLNode();
+	public HTMLNode nextNode();
 }

@@ -34,7 +34,7 @@ import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserUtils;
 
-public class HTMLSelectTag extends HTMLCompositeTag
+public class HTMLSelectTag extends CompositeTag
 {
 	private HTMLOptionTag[] optionTags=null;
 	private List optionTagList;

@@ -28,8 +28,6 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.util.Enumeration;
-
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLStringNode;
@@ -41,6 +39,7 @@ import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.SimpleEnumeration;
 
 public class HTMLLinkScannerTest extends HTMLParserTestCase
 {
@@ -255,9 +254,9 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		// Get the link data and cross-check
 		HTMLNode [] dataNode= new HTMLNode[10];
 		int i = 0;
-		for (Enumeration e = linkTag.children();e.hasMoreElements();)
+		for (SimpleEnumeration e = linkTag.children();e.hasMoreNodes();)
 		{
-			dataNode[i++] = (HTMLNode)e.nextElement();
+			dataNode[i++] = (HTMLNode)e.nextNode();
 		}
 		assertEquals("Number of data nodes",new Integer(2),new Integer(i));
 		assertTrue("First data node should be an Image Node",dataNode[0] instanceof HTMLImageTag);
@@ -338,8 +337,8 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		assertEquals("Link Text","",linkTag.getLinkText());
 		HTMLNode [] containedNodes = new HTMLNode[10];
 		int i=0;
-		for (Enumeration e = linkTag.children();e.hasMoreElements();) {
-			containedNodes[i++] = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = linkTag.children();e.hasMoreNodes();) {
+			containedNodes[i++] = e.nextNode();
 		}
 		assertEquals("There should be 5 contained nodes in the link tag",5,i);
 		assertTrue("First contained node should be an image tag",containedNodes[0] instanceof HTMLImageTag);
@@ -490,8 +489,8 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 
 		HTMLNode insideNodes [] = new HTMLNode[10];
 		int j =0 ;
-		for (Enumeration e = linkTag.children();e.hasMoreElements();) {
-			insideNodes[j++]= (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = linkTag.children();e.hasMoreNodes();) {
+			insideNodes[j++]= (HTMLNode)e.nextNode();
 		}
 		assertEquals("Number of contained internal nodes",1,j);
 		assertTrue(insideNodes[0] instanceof HTMLImageTag);

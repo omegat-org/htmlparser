@@ -32,7 +32,7 @@ import java.util.NoSuchElementException;
 
 import org.htmlparser.HTMLNode;
 
-public class HTMLVector {
+public class NodeList {
 	private static final int INITIAL_CAPACITY=10;
 	//private static final int CAPACITY_INCREMENT=20;
 	private HTMLNode nodeData[];
@@ -41,7 +41,7 @@ public class HTMLVector {
 	private int capacityIncrement;
 	private int numberOfAdjustments;
 	
-	public HTMLVector() {
+	public NodeList() {
 		size = 0;
 		capacity = INITIAL_CAPACITY;
 		nodeData = new HTMLNode[capacity];
@@ -75,16 +75,17 @@ public class HTMLVector {
 	public int getNumberOfAdjustments() {
 		return numberOfAdjustments;
 	}
-	public HTMLSimpleEnumeration elements() {
-		return new HTMLSimpleEnumeration() {
+	
+	public SimpleEnumeration elements() {
+		return new SimpleEnumeration() {
 			int count = 0;
 	
 			public boolean hasMoreNodes() {
 				return count < size;
 			}
 	
-			public HTMLNode nextHTMLNode() {
-			synchronized (HTMLVector.this) {
+			public HTMLNode nextNode() {
+			synchronized (NodeList.this) {
 				if (count < size) {
 				return nodeData[count++];
 				}

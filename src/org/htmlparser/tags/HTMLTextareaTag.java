@@ -32,7 +32,7 @@ import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.util.HTMLParserUtils;
 
-public class HTMLTextareaTag extends HTMLCompositeTag
+public class HTMLTextareaTag extends CompositeTag
 {
 	public HTMLTextareaTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData)
 	{

@@ -34,7 +34,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 /**
  * A HTMLScriptTag represents a JavaScript node
  */
-public class HTMLScriptTag extends HTMLCompositeTag {
+public class HTMLScriptTag extends CompositeTag {
 	private java.lang.String language;
 	private java.lang.String type;
 	private String scriptCode;

@@ -34,7 +34,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 /**
  * A HTMLStyleTag represents a &lt;style&gt; tag
  */
-public class HTMLStyleTag extends HTMLCompositeTag {
+public class HTMLStyleTag extends CompositeTag {
 	/**
 	 * The HTMLStyleTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.

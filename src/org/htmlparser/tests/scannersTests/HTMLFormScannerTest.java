@@ -28,8 +28,6 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.util.Enumeration;
-
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.scanners.HTMLFormScanner;
@@ -39,6 +37,7 @@ import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTextareaTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.SimpleEnumeration;
 
 public class HTMLFormScannerTest extends HTMLParserTestCase {
 	public static final String FORM_HTML =
@@ -174,8 +173,8 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		HTMLLinkTag [] linkTag = new HTMLLinkTag[10];
 		int i = 0;
-		for (Enumeration e=formTag.children();e.hasMoreElements();) {
-			HTMLNode formNode = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e=formTag.children();e.hasMoreNodes();) {
+			HTMLNode formNode = e.nextNode();
 			if (formNode instanceof HTMLLinkTag) {
 				linkTag[i++] = (HTMLLinkTag)formNode;		
 			}
@@ -207,8 +206,8 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		HTMLRemarkNode [] remarkNode = new HTMLRemarkNode[10];
 		int i = 0;
-		for (Enumeration e=formTag.children();e.hasMoreElements();) {
-			HTMLNode formNode = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e=formTag.children();e.hasMoreNodes();) {
+			HTMLNode formNode = (HTMLNode)e.nextNode();
 			if (formNode instanceof HTMLRemarkNode) {
 				remarkNode[i++] = (HTMLRemarkNode)formNode;		
 			}
@@ -232,8 +231,8 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		HTMLRemarkNode [] remarkNode = new HTMLRemarkNode[10];
 		int i = 0;
-		for (Enumeration e=formTag.children();e.hasMoreElements();) {
-			HTMLNode formNode = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e=formTag.children();e.hasMoreNodes();) {
+			HTMLNode formNode = (HTMLNode)e.nextNode();
 			if (formNode instanceof HTMLRemarkNode) {
 				remarkNode[i++] = (HTMLRemarkNode)formNode;		
 			}

@@ -27,8 +27,6 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests.scannersTests;
-import java.util.Enumeration;
-
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.scanners.HTMLImageScanner;
@@ -40,6 +38,7 @@ import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.SimpleEnumeration;
 
 public class HTMLImageScannerTest extends HTMLParserTestCase
 {
@@ -196,8 +195,8 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[11];
 		HTMLNode [] node2 = new HTMLNode[10];
 		int j = 0;
-		for (Enumeration e = linkTag.children();e.hasMoreElements();) {
-			node2[j++] = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = linkTag.children();e.hasMoreNodes();) {
+			node2[j++] = e.nextNode();
 		}
 		assertEquals("Number of tags within the link",1,j);
 		assertTrue("Tag within link should be an image tag",node2[0] instanceof HTMLImageTag);

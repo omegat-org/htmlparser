@@ -39,7 +39,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 /**
  * Represents a FORM tag.
  */
-public class HTMLFormTag extends HTMLCompositeTag
+public class HTMLFormTag extends CompositeTag
 {
 	public static final String POST="POST";
 	public static final String GET="GET";

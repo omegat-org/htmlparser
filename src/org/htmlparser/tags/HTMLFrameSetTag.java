@@ -28,23 +28,22 @@
 
 package org.htmlparser.tags;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.SimpleEnumeration;
 
 /**
  * Identifies an frame tag
  */
-public class HTMLFrameSetTag extends HTMLCompositeTag
+public class HTMLFrameSetTag extends CompositeTag
 {
 	/**
 	 * The URL where the image is stored.
 	 */
 	protected String frameURL;
    	protected String frameName;
-   	protected Vector frames;
+   	protected NodeList frames;
 	public HTMLFrameSetTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData) {
 		super(tagData,compositeTagData);
       	this.frames = compositeTagData.getChildren();
@@ -72,15 +71,15 @@ public class HTMLFrameSetTag extends HTMLCompositeTag
 	 * Returns the frames.
 	 * @return Vector
 	 */
-	public Vector getFrames() {
+	public NodeList getFrames() {
 		return frames;
 	}
 
 	public HTMLFrameTag getFrame(String frameName) {
 		boolean found = false;
 		HTMLFrameTag frameTag=null;
-		for (Enumeration e=frames.elements();e.hasMoreElements() && !found;) {
-			frameTag = (HTMLFrameTag)e.nextElement();
+		for (SimpleEnumeration e=frames.elements();e.hasMoreNodes() && !found;) {
+			frameTag = (HTMLFrameTag)e.nextNode();
 			if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase())) found = true;
 		}
 		if (found)
@@ -90,7 +89,7 @@ public class HTMLFrameSetTag extends HTMLCompositeTag
 	 * Sets the frames.
 	 * @param frames The frames to set
 	 */
-	public void setFrames(Vector frames) {
+	public void setFrames(NodeList frames) {
 		this.frames = frames;
 	}
 }

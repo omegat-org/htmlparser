@@ -33,10 +33,11 @@ import java.util.Hashtable;
 
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.util.SimpleEnumeration;
 /**
  * HTMLAppletTag represents an &lt;Applet&gt; tag
  */
-public class HTMLAppletTag extends HTMLCompositeTag 
+public class HTMLAppletTag extends CompositeTag 
 {
 	private java.lang.String codeBase;
 	private java.lang.String archive;
@@ -126,9 +127,9 @@ public class HTMLAppletTag extends HTMLCompositeTag
 		sb.append("No Miscellaneous items\n"); else
 		{
 			sb.append("Miscellaneous items :\n");
-			for (Enumeration e = children();e.hasMoreElements();)
+			for (SimpleEnumeration e = children();e.hasMoreNodes();)
 			{
-				((HTMLTag)e.nextElement()).print();
+				((HTMLTag)e.nextNode()).print();
 			}
 		}
 		sb.append("End of Applet Tag\n");

@@ -28,35 +28,34 @@
 
 package org.htmlparser.tags;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.SimpleEnumeration;
 import org.htmlparser.visitors.HTMLVisitor;
 
-public abstract class HTMLCompositeTag extends HTMLTag {
+public abstract class CompositeTag extends HTMLTag {
 	protected HTMLTag startTag, endTag;
-	protected Vector childTags; 
+	protected NodeList childTags; 
 
-	public HTMLCompositeTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
+	public CompositeTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
 		super(tagData);
 		this.childTags = compositeTagData.getChildren();
 		this.startTag  = compositeTagData.getStartTag();
 		this.endTag    = compositeTagData.getEndTag();
 	}
 	
-	public Enumeration children() {
+	public SimpleEnumeration children() {
 		return childTags.elements();
 	}
 
 	public String toPlainTextString() {
 		StringBuffer stringRepresentation = new StringBuffer();
-		HTMLNode node;
-		for (Enumeration e=children();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();		
-			stringRepresentation.append(node.toPlainTextString());
+		for (SimpleEnumeration e=children();e.hasMoreNodes();) {
+			stringRepresentation.append(e.nextNode().toPlainTextString());
 		}
 		return stringRepresentation.toString();
 	}
@@ -67,8 +66,8 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 
 	protected void putChildrenInto(StringBuffer sb) {
 		HTMLNode node,prevNode=startTag;
-		for (Enumeration e=children();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e=children();e.hasMoreNodes();) {
+			node = e.nextNode();
 			if (prevNode!=null) {
 				if (prevNode.elementEnd()>node.elementBegin()) {
 					// Its a new line
@@ -99,8 +98,8 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 		HTMLNode node;
 		HTMLTag tag=null;
 		boolean found = false;
-		for (Enumeration e = children();e.hasMoreElements() && !found;) {
-			node = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = children();e.hasMoreNodes() && !found;) {
+			node = (HTMLNode)e.nextNode();
 			if (node instanceof HTMLTag) {
 				tag = (HTMLTag)node;
 				String nameAttribute = tag.getParameter("NAME");
@@ -117,8 +116,8 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 		Vector foundVector = new Vector();
 		HTMLNode node;
 		if (!caseSensitive) searchString = searchString.toUpperCase();
-		for (Enumeration e = children();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+			node = (HTMLNode)e.nextNode();
 			String nodeTextString = node.toPlainTextString(); 
 			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
 			if (nodeTextString.indexOf(searchString)!=-1) {
@@ -140,16 +139,16 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 	public void collectInto(Vector collectionVector, String filter) {
 		super.collectInto(collectionVector, filter);
 		HTMLNode node;
-		for (Enumeration e = children();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+			node = (HTMLNode)e.nextNode();
 			node.collectInto(collectionVector,filter);
 		}
 	}
 
 	public String getChildrenHTML() {
 		StringBuffer buff = new StringBuffer();
-		for (Enumeration e = children();e.hasMoreElements();) {
-			HTMLNode node = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+			HTMLNode node = (HTMLNode)e.nextNode();
 			buff.append(node.toHTML());
 		}
 		return buff.toString();
@@ -157,9 +156,9 @@ public abstract class HTMLCompositeTag extends HTMLTag {
 	
 	public void accept(HTMLVisitor visitor) {
 		startTag.accept(visitor);
-		Enumeration children = children();
-		while (children.hasMoreElements()) {
-			HTMLNode child = (HTMLNode)children.nextElement();
+		SimpleEnumeration children = children();
+		while (children.hasMoreNodes()) {
+			HTMLNode child = (HTMLNode)children.nextNode();
 			child.accept(visitor);
 		}
 		endTag.accept(visitor);
