@@ -35,7 +35,7 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 		HTMLTag startTag = tag;
 		HTMLTag endTag = null;
 		boolean endTagFound = false;
-		HTMLNode node;
+		HTMLNode node=tag;
 		
 		Vector childVector = new Vector();
 		
@@ -44,14 +44,17 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 			tempScanners = reader.getParser().getScanners();
 			reader.getParser().flushScanners();
 		}
-		
-		do {
+		if (isXmlEndTag(tag)) {
+			endTag = tag; 
+			endTagFound=true;
+		}
+		while (!endTagFound && node!=null){
 			if (stringNodeIgnoreMode)
 				reader.getStringParser().setIgnoreStateMode(true);
 			node = reader.readElement();
 			if (stringNodeIgnoreMode)
 				reader.getStringParser().setIgnoreStateMode(false);
-			if (node!=null && node.getType()==HTMLEndTag.TYPE) {
+			if (node instanceof HTMLEndTag) {
 				endTag = (HTMLTag)node;
 				for (int i=0;i<nameOfTagToMatch.length && !endTagFound;i++) {
 					if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch[i])) 
@@ -63,7 +66,7 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 				childNodeEncountered(node);
 			}
 		}
-		while (endTagFound==false && node!=null);
+		
 		if (removeScanners)
 			reader.getParser().setScanners(tempScanners);
 		return createTag(new TagData(
@@ -76,6 +79,12 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 			)
 		);
 	}
+
+	public boolean isXmlEndTag(HTMLTag tag) {
+		String tagText = tag.getText();
+		return tagText.charAt(tagText.length()-1)=='/';
+	}
+	
 	protected void beforeScanningStarts() {
 	}
 	
