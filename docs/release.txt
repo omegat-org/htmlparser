@@ -1,3 +1,19 @@
+Integration Build 1.2 - 20020728
+--------------------------------
+[1] Fixed bug in HTMLParser.openConnection(), mistaking 
+files for urls if they contain "http" or "www" anywhere.
+[2] Updated HTMLEndTag, this was accidentally left out in the 
+previous release.
+[3] Fixed Bug 586062 - relative links bug - if first char is a 
+slash, then the subdirectories of the url need to be ignored.
+[4] Fixed Bug 586222 - HTMLRemarkNode bug - if a line with a remark 
+ndoe contains a string before it, the string is ignored.
+[5] Fixed major bug - allowing auto-correction
+of malformed tags. Current code is very robust. Fix allowed removal of 
+strictness vector concept, making the design simpler.
+[6] Fixed bug 586756 - in HTMLRemarkNode, if there are empty lines only, the 
+finite state machine would crash
+
 Integration Build 1.2 - 20020721
 --------------------------------
 [1] Fixed HTMLStringNode bug, whereby it wasnt able to 
