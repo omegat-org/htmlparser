@@ -35,11 +35,13 @@ import java.net.URLConnection;
 import java.util.Vector;
 
 import org.htmlparser.Node;
+import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.EncodingChangeException;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
-import org.htmlparser.visitors.ObjectFindingVisitor;
 
 /**
  * Extract links from a URL.
@@ -83,32 +85,30 @@ public class LinkBean extends Object implements Serializable
     // internals
     //
 
-    protected URL[] extractLinks (String url) throws ParserException
+    protected URL[] extractLinks () throws ParserException
     {
-        Parser parser;
-        ObjectFindingVisitor visitor;
+        NodeFilter filter;
+        NodeList list;
         Vector vector;
         LinkTag link;
         URL[] ret;
 
-        parser = new Parser (url);
-        visitor = new ObjectFindingVisitor (LinkTag.class);
+        mParser.reset ();
+        filter = new NodeClassFilter (LinkTag.class);
         try
         {
-            parser.visitAllNodesWith (visitor);
+            list = mParser.extractAllNodesThatMatch (filter);
         }
         catch (EncodingChangeException ece)
         {
-            parser.reset ();
-            visitor = new ObjectFindingVisitor (LinkTag.class);
-            parser.visitAllNodesWith (visitor);
+            mParser.reset ();
+            list = mParser.extractAllNodesThatMatch (filter);
         }
-        Node [] nodes = visitor.getTags();
         vector = new Vector();
-        for (int i = 0; i < nodes.length; i++)
+        for (int i = 0; i < list.size (); i++)
             try
             {
-                link = (LinkTag)nodes[i];
+                link = (LinkTag)list.elementAt (i);
                 vector.add(new URL (link.getLink ()));
             }
             catch (MalformedURLException murle)
@@ -189,7 +189,7 @@ public class LinkBean extends Object implements Serializable
         if (null != url)
             try
             {
-                urls = extractLinks (getURL ());
+                urls = extractLinks ();
                 if (!equivalent (mLinks, urls))
                 {
                     oldValue = mLinks;
@@ -212,7 +212,7 @@ public class LinkBean extends Object implements Serializable
         if (null == mLinks)
             try
             {
-                mLinks = extractLinks (getURL ());
+                mLinks = extractLinks ();
                 mPropertySupport.firePropertyChange (PROP_LINKS_PROPERTY, null, mLinks);
             }
             catch (ParserException hpe)

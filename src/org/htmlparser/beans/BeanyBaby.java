@@ -84,7 +84,7 @@ public class BeanyBaby
     /**
      * This method ties the two beans together on the same connection.
      * Whenever a property changes on one bean, make sure the URL properties
-     * agree by setting the connection from one to the other.
+     * agree by setting the URL from one to the other.
      * @param event The event describing the event source
      * and the property that has changed.
      */
@@ -97,12 +97,12 @@ public class BeanyBaby
         if (source == mLinkBean)
         {
             if (!mLinkBean.getURL ().equals (mStringBean.getURL ()))
-                mStringBean.setConnection (mLinkBean.getConnection ());
+                mStringBean.setURL (mLinkBean.getURL ());
         }
         else if (source == mStringBean)
         {
             if (!mStringBean.getURL ().equals (mLinkBean.getURL ()))
-                mLinkBean.setConnection (mStringBean.getConnection ());
+                mLinkBean.setURL (mStringBean.getURL ());
             // check for menu status changes
             name = event.getPropertyName ();
             if (name.equals (StringBean.PROP_LINKS_PROPERTY))
@@ -368,6 +368,9 @@ public class BeanyBaby
     {
         BeanyBaby bb = new BeanyBaby ();
         bb.setVisible (true);
-        bb.setURL ("http://www.slashdot.org");
+        if (0 >= args.length)
+            bb.setURL ("http://www.slashdot.org");
+        else
+            bb.setURL (args[0]);
     }
 }
