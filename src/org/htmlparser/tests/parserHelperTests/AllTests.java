@@ -42,6 +42,7 @@ public class AllTests extends junit.framework.TestCase
 		suite.addTestSuite(RemarkNodeParserTest.class);
 		suite.addTestSuite(StringParserTest.class);
 		suite.addTestSuite(TagParserTest.class);
+		suite.addTestSuite(CompositeTagScannerHelperTest.class);
         return suite;
 	} 
 }

@@ -35,24 +35,6 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			};
 	}
 
-	public void testIsXmlEndTagForRealXml() { 
-		Tag tag = new Tag(
-			new TagData(
-				0,0,"something/",""
-			)
-		);
-		assertTrue("should be an xml end tag",scanner.isXmlEndTag(tag));
-	}
-
-	public void testIsXmlEndTagForFalseMatches() { 
-		Tag tag = new Tag(
-			new TagData(
-				0,0,"a href=http://someurl.com/",""
-			)
-		);
-		assertFalse("should not be an xml end tag",scanner.isXmlEndTag(tag));
-	}
-	
 	private CustomTag parseCustomTag(int expectedNodeCount) throws ParserException {
 		parser.addScanner(new CustomScanner());
 		parseAndAssertNodeCount(expectedNodeCount);

@@ -138,7 +138,7 @@ public class CompositeTagScannerHelper {
 	private void doEmptyXmlTagCheckOn(Node currentNode) {
 		if (currentNode instanceof Tag) {
 			Tag possibleEndTag = (Tag)currentNode;
-			if (tag.isEmptyXmlTag()) {
+			if (isXmlEndTag(tag)) {
 				endTag = possibleEndTag;
 				endTagFound = true;			
 			} 
@@ -165,5 +165,11 @@ public class CompositeTagScannerHelper {
 			!scanner.isAllowSelfChildren() && 
 			possibleEndTag.getTagName().equals(tag.getTagName())
 		);
+	}
+	
+	public boolean isXmlEndTag(Tag tag) {
+		String tagText = tag.getText();
+		int lastSlash = tagText.lastIndexOf("/");
+		return (lastSlash == tagText.length()-1 || tag.isEmptyXmlTag()) && tag.getText().indexOf("://")==-1;
 	}
 }

@@ -195,12 +195,6 @@ public abstract class CompositeTagScanner extends TagScanner {
 		return new EndTag(new TagData(testTag.elementBegin(),testTag.elementEnd(),testTag.getText(),testTag.getTagLine()));
 	}
 
-	public boolean isXmlEndTag(Tag tag) {
-		String tagText = tag.getText();
-		int lastSlash = tagText.lastIndexOf("/");
-		return (lastSlash == tagText.length()-1 || tag.isEmptyXmlTag()) && tag.getText().indexOf("://")==-1;
-	}
-	
 	public void beforeScanningStarts() {
 	}
 	
