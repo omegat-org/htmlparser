@@ -52,26 +52,19 @@ public class ScriptTagTest extends ParserTestCase{
         scriptScanner = new ScriptScanner();
     }
 
-    public void testCreation() {
-        fail ("not implemented");
-//        StringNode stringNode =
-//            new StringNode(new StringBuffer("Script Code"),0,0);
-//        NodeList childVector = new NodeList();
-//        childVector.add(stringNode);
-//        ScriptTag scriptTag =
-//        new ScriptTag(
-//            new TagData(0,10,"Tag Contents","tagline"),
-//            new CompositeTagData(null,null,childVector)
-//        );
-//
-//        assertNotNull("Script Tag object creation",scriptTag);
-//        assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
-//        assertEquals("Script Tag End",10,scriptTag.elementEnd());
-//        assertEquals("Script Tag Contents","Tag Contents",scriptTag.getText());
-//        assertEquals("Script Tag Code","Script Code",scriptTag.getScriptCode());
-//        assertEquals("Script Tag Line","tagline",scriptTag.getTagLine());
+    public void testCreation() throws ParserException
+    {
+        String testHtml = "<SCRIPT>Script Code</SCRIPT>";
+        createParser(testHtml,"http://localhost/index.html");
+        // Register the script scanner
+        parser.addScanner(new ScriptScanner("-s"));
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
+        ScriptTag scriptTag = (ScriptTag)node[0];
+        assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
+        assertEquals("Script Tag End",28,scriptTag.elementEnd());
+        assertEquals("Script Tag Code","Script Code",scriptTag.getScriptCode());
     }
-
 
     public void testToHTML() throws ParserException {
         createParser("<SCRIPT>document.write(d+\".com\")</SCRIPT>");

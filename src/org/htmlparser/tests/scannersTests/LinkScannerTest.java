@@ -163,8 +163,8 @@ public class LinkScannerTest extends ParserTestCase
     {
         String link = "r/anorth/top.html";
         Vector attributes = new Vector ();
-        attributes.addElement (new Attribute ("A"));
-        attributes.addElement (new Attribute ("HREF", link, (char)0));
+        attributes.addElement (new Attribute ("A", null));
+        attributes.addElement (new Attribute ("HREF", link));
         Tag tag = new Tag(null, 0, 0, attributes);
         String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
         LinkScanner scanner = new LinkScanner();

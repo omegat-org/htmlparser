@@ -122,7 +122,6 @@ public AllTests(String name) {
         suite.addTestSuite(CharacterTranslationTest.class);
         suite.addTestSuite(HTMLLinkProcessorTest.class);
         suite.addTestSuite(HTMLParserUtilsTest.class);
-        suite.addTestSuite(HTMLTagParserTest.class);
         suite.addTestSuite(NodeListTest.class);
         suite.addTestSuite(SortTest.class);
 

@@ -34,6 +34,8 @@ import junit.framework.TestSuite;
 import org.htmlparser.Node;
 
 import org.htmlparser.Parser;
+import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.lexer.nodes.PageAttribute;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
@@ -84,6 +86,174 @@ public class AttributeTests extends ParserTestCase
         {
             fail (pe.getMessage ());
         }
+    }
+
+    /**
+     * Test constructors.
+     */
+    public void testConstructors ()
+    {
+        Vector attributes;
+        String html;
+
+        attributes = new Vector ();
+         // String, null
+        attributes.add (new Attribute ("wombat", null));
+        // String
+        attributes.add (new Attribute (" "));
+        // String, String
+        attributes.add (new Attribute ("label", "The civil war."));
+        attributes.add (new Attribute (" "));
+        // String, String, String
+        attributes.add (new Attribute ("frameborder", "= ", "no"));
+        attributes.add (new Attribute (" "));
+        // String String, String, char
+        attributes.add (new Attribute ("name", "=", "topFrame", '"'));
+        tag = new Tag (null, 0, 0, attributes);
+        html = "<wombat label=\"The civil war.\" frameborder= no name=\"topFrame\">";
+        assertStringEquals ("tag contents", html, tag.toHtml ());
+    }
+
+    /**
+     * Test bean properties.
+     */
+    public void testProperties ()
+    {
+        Attribute attribute;
+        Attribute space;
+        Vector attributes;
+        String html;
+
+        attributes = new Vector ();
+        attribute = new Attribute ();
+        attribute.setName ("wombat");
+        assertTrue ("should be standalone", attribute.isStandAlone ());
+        assertTrue ("should not be whitespace", !attribute.isWhitespace ());
+        assertTrue ("should not be valued", !attribute.isValued ());
+        assertTrue ("should not be empty", !attribute.isEmpty ());
+        attributes.add (attribute);
+        space = new Attribute ();
+        space.setValue (" ");
+        assertTrue ("should not be standalone", !space.isStandAlone ());
+        assertTrue ("should be whitespace", space.isWhitespace ());
+        assertTrue ("should be valued", space.isValued ());
+        assertTrue ("should not be empty", !space.isEmpty ());
+        attributes.add (space);
+        attribute = new Attribute ();
+        attribute.setName ("label");
+        attribute.setAssignment ("=");
+        attribute.setRawValue ("The civil war.");
+        assertTrue ("should not be standalone", !attribute.isStandAlone ());
+        assertTrue ("should not be whitespace", !attribute.isWhitespace ());
+        assertTrue ("should be valued", attribute.isValued ());
+        assertTrue ("should not be empty", !attribute.isEmpty ());
+        attributes.add (attribute);
+        attributes.add (space);
+        attribute = new Attribute ();
+        attribute.setName ("frameborder");
+        attribute.setAssignment ("= ");
+        attribute.setRawValue ("no");
+        attributes.add (attribute);
+        attributes.add (space);
+        attribute = new Attribute ();
+        attribute.setName ("name");
+        attribute.setAssignment ("=");
+        attribute.setValue ("topFrame");
+        attribute.setQuote ('"');
+        assertTrue ("should not be standalone", !attribute.isStandAlone ());
+        assertTrue ("should not be whitespace", !attribute.isWhitespace ());
+        assertTrue ("should be valued", attribute.isValued ());
+        assertTrue ("should not be empty", !attribute.isEmpty ());
+        attributes.add (attribute);
+        tag = new Tag (null, 0, 0, attributes);
+        html = "<wombat label=\"The civil war.\" frameborder= no name=\"topFrame\">";
+        assertStringEquals ("tag contents", html, tag.toHtml ());
+    }
+
+    /**
+     * Test constructors.
+     */
+    public void testConstructors2 ()
+    {
+        Vector attributes;
+        String html;
+
+        attributes = new Vector ();
+         // String, null
+        attributes.add (new PageAttribute ("wombat", null));
+        // String
+        attributes.add (new PageAttribute (" "));
+        // String, String
+        attributes.add (new PageAttribute ("label", "The civil war."));
+        attributes.add (new PageAttribute (" "));
+        // String, String, String
+        attributes.add (new PageAttribute ("frameborder", "= ", "no"));
+        attributes.add (new PageAttribute (" "));
+        // String String, String, char
+        attributes.add (new PageAttribute ("name", "=", "topFrame", '"'));
+        tag = new Tag (null, 0, 0, attributes);
+        html = "<wombat label=\"The civil war.\" frameborder= no name=\"topFrame\">";
+        assertStringEquals ("tag contents", html, tag.toHtml ());
+    }
+
+    /**
+     * Test bean properties.
+     */
+    public void testProperties2 ()
+    {
+        Attribute attribute;
+        Attribute space;
+        Vector attributes;
+        String html;
+
+        attributes = new Vector ();
+        attribute = new PageAttribute ();
+        attribute.setName ("wombat");
+        assertTrue ("should be standalone", attribute.isStandAlone ());
+        assertTrue ("should not be whitespace", !attribute.isWhitespace ());
+        assertTrue ("should not be valued", !attribute.isValued ());
+        assertTrue ("should not be empty", !attribute.isEmpty ());
+        attributes.add (attribute);
+        space = new PageAttribute ();
+        space.setValue (" ");
+        assertTrue ("should not be standalone", !space.isStandAlone ());
+        assertTrue ("should be whitespace", space.isWhitespace ());
+        assertTrue ("should be valued", space.isValued ());
+        assertTrue ("should not be empty", !space.isEmpty ());
+        attributes.add (space);
+        attribute = new PageAttribute ();
+        attribute.setName ("label");
+        attribute.setAssignment ("=");
+        attribute.setRawValue ("The civil war.");
+        assertTrue ("should not be standalone", !attribute.isStandAlone ());
+        assertTrue ("should not be whitespace", !attribute.isWhitespace ());
+        assertTrue ("should be valued", attribute.isValued ());
+        assertTrue ("should not be empty", !attribute.isEmpty ());
+        attributes.add (attribute);
+        attributes.add (space);
+        attribute = new PageAttribute ();
+        attribute.setName ("frameborder");
+        attribute.setAssignment ("= ");
+        attribute.setRawValue ("no");
+        assertTrue ("should not be standalone", !attribute.isStandAlone ());
+        assertTrue ("should not be whitespace", !attribute.isWhitespace ());
+        assertTrue ("should be valued", attribute.isValued ());
+        assertTrue ("should not be empty", !attribute.isEmpty ());
+         attributes.add (attribute);
+        attributes.add (space);
+        attribute = new PageAttribute ();
+        attribute.setName ("name");
+        attribute.setAssignment ("=");
+        attribute.setValue ("topFrame");
+        attribute.setQuote ('"');
+        assertTrue ("should not be standalone", !attribute.isStandAlone ());
+        assertTrue ("should not be whitespace", !attribute.isWhitespace ());
+        assertTrue ("should be valued", attribute.isValued ());
+        assertTrue ("should not be empty", !attribute.isEmpty ());
+         attributes.add (attribute);
+        tag = new Tag (null, 0, 0, attributes);
+        html = "<wombat label=\"The civil war.\" frameborder= no name=\"topFrame\">";
+        assertStringEquals ("tag contents", html, tag.toHtml ());
     }
 
     /**

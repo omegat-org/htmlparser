@@ -121,7 +121,7 @@ public class CompositeTagScannerHelper {
     {
         String endTagName = "/" + mTag.getRawTagName();
         Vector attributes = new Vector ();
-        attributes.addElement (new Attribute (endTagName, (String)null, (char)0));
+        attributes.addElement (new Attribute (endTagName, (String)null));
         TagData data = new TagData(
                 endTagName,
                 position,
@@ -137,7 +137,7 @@ public class CompositeTagScannerHelper {
 //        int endTagEnd = endTagBegin + endTagName.length() + 2;
 //        possibleEndTagCauser.setTagBegin(endTagEnd+1);
 //        Vector attributes = new Vector ();
-//        attributes.addElement (new Attribute (endTagName, (String)null, (char)0));
+//        attributes.addElement (new Attribute (endTagName, (String)null));
 //        TagData data = new TagData(
 //                endTagName,
 //                endTagBegin,

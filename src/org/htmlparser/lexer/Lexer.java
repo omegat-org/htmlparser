@@ -41,7 +41,7 @@ import java.util.Vector;
 
 import org.htmlparser.Node;
 import org.htmlparser.lexer.nodes.AbstractNode;
-import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.lexer.nodes.PageAttribute;
 import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.lexer.nodes.RemarkNode;
 import org.htmlparser.lexer.nodes.StringNode;
@@ -373,38 +373,32 @@ public class Lexer
     private void whitespace (Vector attributes, int[] bookmarks)
     {
         if (bookmarks[1] > bookmarks[0])
-            attributes.addElement (new Attribute (mPage, -1, -1, bookmarks[0], bookmarks[1], (char)0));
-            //attributes.addElement (new Attribute (null, mPage.getText (bookmarks[0], bookmarks[1]), (char)0));
+            attributes.addElement (new PageAttribute (mPage, -1, -1, bookmarks[0], bookmarks[1], (char)0));
     }
 
     private void standalone (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], -1, -1, (char)0));
-        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), null, (char)0));
+        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], -1, -1, (char)0));
     }
 
     private void empty (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[2] + 1, -1, (char)0));
-        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), "", (char)0));
+        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], bookmarks[2] + 1, -1, (char)0));
     }
 
     private void naked (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[3], bookmarks[4], (char)0));
-        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[3], bookmarks[4]), (char)0));
+        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], bookmarks[3], bookmarks[4], (char)0));
     }
 
     private void single_quote (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[4] + 1, bookmarks[5], '\''));
-        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[4] + 1, bookmarks[5]), '\''));
+        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], bookmarks[4] + 1, bookmarks[5], '\''));
     }
 
     private void double_quote (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[5] + 1, bookmarks[6], '"'));
-        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[5] + 1, bookmarks[6]), '"'));
+        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], bookmarks[5] + 1, bookmarks[6], '"'));
     }
 
     /**
@@ -540,7 +534,7 @@ public class Lexer
                         state = 3;
                     break;
                 case 3: // within naked attribute value
-                    if ('>' == ch)
+                    if ((0 == ch) || ('>' == ch))
                     {
                         naked (attributes, bookmarks);
                         done = true;
@@ -630,12 +624,12 @@ public class Lexer
      */
     protected void fixAttributes (Vector attributes) throws ParserException
     {
-        Attribute attribute;
+        PageAttribute attribute;
         Cursor cursor;
         char ch1; // name starting character
         char ch2; // name ending character
-        Attribute prev1; // attribute prior to the current
-        Attribute prev2; // attribute prior but one to the current
+        PageAttribute prev1; // attribute prior to the current
+        PageAttribute prev2; // attribute prior but one to the current
         char quote;
 
         cursor = new Cursor (getPage (), 0);
@@ -644,7 +638,7 @@ public class Lexer
         // leave the name alone & start with second attribute
         for (int i = 2; i < attributes.size (); )
         {
-            attribute = (Attribute)attributes.elementAt (i);
+            attribute = (PageAttribute)attributes.elementAt (i);
             if (!attribute.isWhitespace ())
             {
                 cursor.setPosition (attribute.getNameStartPosition ());

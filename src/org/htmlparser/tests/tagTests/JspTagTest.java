@@ -61,10 +61,9 @@ public class JspTagTest extends ParserTestCase
      */
     public void testJspTag() throws ParserException
     {
-        createParser(
-            "<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
-            "<jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/>\n"+
-            "<%\n"+
+        String contents = "jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/";
+        String jsp = "<" + contents + ">";
+        String contents2 = "%\n"+
             "    org.apache.struts.util.BeanUtils.populate(transfer, request);\n"+
             "    if(request.getParameter(\"marker\") == null)\n"+
             "        // initialize a pseudo-property\n"+
@@ -72,8 +71,12 @@ public class JspTagTest extends ParserTestCase
             "            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\n"+
             "    else \n"+
             "        if(transfer.validate(request))\n"+
-            "            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
-            "%>\n");
+            "            %";
+        createParser(
+            "<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
+            jsp + "\n" +
+            "<" + contents2 + ">\n<jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
+            "%>");
         Parser.setLineSeparator("\r\n");
         // Register the Jsp Scanner
         parser.addScanner(new JspScanner("-j"));
@@ -86,21 +89,12 @@ public class JspTagTest extends ParserTestCase
         // The second node should be a normal tag
         assertTrue("Node 3 should be a normal Tag",node[2] instanceof Tag);
         Tag htag = (Tag)node[2];
-        assertStringEquals("Contents of the tag","jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"",htag.getText());
-        assertStringEquals("html","<JSP:USEBEAN ID=\"transfer\" SCOPE=\"session\" CLASS=\"com.bank.PageBean\"/>",htag.toHtml());
+        assertStringEquals("Contents of the tag",contents,htag.getText());
+        assertStringEquals("html",jsp,htag.toHtml());
         // The third node should be an JspTag
         assertTrue("Node 5 should be an JspTag",node[4] instanceof JspTag);
         JspTag tag2 = (JspTag)node[4];
-        String expected = "\r\n"+
-            "    org.apache.struts.util.BeanUtils.populate(transfer, request);\r\n"+
-            "    if(request.getParameter(\"marker\") == null)\r\n"+
-            "        // initialize a pseudo-property\r\n"+
-            "        transfer.set(\"days\", java.util.Arrays.asList(\r\n"+
-            "            new String[] {\"1\", \"2\", \"3\", \"4\", \"31\"}));\r\n"+
-            "    else \r\n"+
-            "        if(transfer.validate(request))\r\n"+
-            "            ";
-        assertEquals("Contents of the tag",expected,tag2.getText());
+        assertEquals("Contents of the tag",contents2,tag2.getText());
 
     }
 

@@ -587,30 +587,18 @@ public class TagTest extends ParserTestCase
         Tag htmlTag = (Tag)node[0];
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
     }
-    public void testIgnoreState() throws ParserException {
-        fail ("not implemented");
-//        String testHTML = "<A \n"+
-//        "HREF=\"/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
-//        createParser(testHTML);
-//        Node node = Tag.find(parser.getReader(),testHTML,0);
-//        assertTrue("Node should be a tag",node instanceof Tag);
-//        Tag tag = (Tag)node;
-//        String href = tag.getAttribute("HREF");
-//        assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
 
-    }
-    public void testExtractWord() {
-        fail ("not implemented");
-//        String line = "Abc DEF GHHI";
-//        assertEquals("Word expected","ABC",Tag.extractWord(line));
-//        String line2= "%\n ";
-//        assertEquals("Word expected for line 2","%",Tag.extractWord(line2));
-//        String line3 = "%\n%>";
-//        assertEquals("Word expected for line 3","%",Tag.extractWord(line3));
-//        String line4 = "%=abc%>";
-//        assertEquals("Word expected for line 4","%",Tag.extractWord(line4));
-//        String line5 = "OPTION";
-//        assertEquals("Word expected for line 5","OPTION",Tag.extractWord(line5));
+    public void testIgnoreState() throws ParserException
+    {
+        String testHTML = "<A \n"+
+        "HREF=\"/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html\">20020702 Report 1</A>";
+        createParser(testHTML);
+        parser.registerScanners ();
+        parseAndAssertNodeCount(1);
+        assertTrue("Node should be a tag",node[0] instanceof Tag);
+        Tag tag = (Tag)node[0];
+        String href = tag.getAttribute("HREF");
+        assertStringEquals("Resolved Link","/a?b=c>d&e=f&g=h&i=http://localhost/Testing/Report1.html",href);
     }
 
     /**

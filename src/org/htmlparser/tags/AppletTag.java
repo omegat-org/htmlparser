@@ -30,8 +30,11 @@ package org.htmlparser.tags;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import org.htmlparser.Node;
+import org.htmlparser.StringNode;
+import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
@@ -166,8 +169,9 @@ public class AppletTag extends CompositeTag
         Tag tag;
         String paramName;
         String paramValue;
-        String s;
-        TagData tagData;
+        Vector attributes;
+        Attribute attribute;
+        StringNode string;
 
         kids = getChildren ();
         // erase appletParams from kids
@@ -176,7 +180,20 @@ public class AppletTag extends CompositeTag
             node = kids.elementAt (i);
             if (node instanceof Tag)
                 if (((Tag)node).getTagName ().equals ("PARAM"))
+                {
                     kids.remove (i);
+                    // remove whitespace too
+                    if (i < kids.size ())
+                    {
+                        node = kids.elementAt (i);
+                        if (node instanceof StringNode)
+                        {
+                            string = (StringNode)node;
+                            if (0 == string.getText ().trim ().length ())
+                                kids.remove (i);
+                        }   
+                    }
+                }
                 else
                     i++;
             else
@@ -186,12 +203,23 @@ public class AppletTag extends CompositeTag
         // add newAppletParams to kids
         for (Enumeration e = newAppletParams.keys (); e.hasMoreElements (); )
         {
+            attributes = new Vector (); // should the tag copy the attributes?
             paramName = (String)e.nextElement ();
             paramValue = (String)newAppletParams.get (paramName);
-            s = "PARAM VALUE=\"" + paramValue + "\" NAME=\"" + paramName + "\"";
-            throw new IllegalStateException ("not implemented");
-//            tagData = new TagData (0, 0, 0, 0, s, s, "", false); // what, no URL?
-//            kids.add (new Tag (tagData));
+            attribute = new Attribute ("PARAM", null);
+            System.out.println (attribute);
+            attributes.addElement (attribute);
+            attributes.addElement (new Attribute (" "));
+            attribute = new Attribute ("VALUE", paramValue, '"');
+            System.out.println (attribute);
+            attributes.addElement (attribute);
+            attributes.addElement (new Attribute (" "));
+            attribute = new Attribute ("NAME", paramName, '"');
+            System.out.println (attribute);
+            attributes.addElement (attribute);
+            tag = new Tag (null, 0, 0, attributes);
+            System.out.println (tag.toHtml ());
+            kids.add (tag);
         }
 
         //set kids as new children

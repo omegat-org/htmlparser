@@ -284,7 +284,7 @@ public class TagNode
         {
             // add whitespace between attributes
             if (!((Attribute)attributes.elementAt (length - 1)).isWhitespace ())
-                attributes.addElement (new Attribute ((String)null, " ", (char)0));
+                attributes.addElement (new Attribute (" "));
             attributes.addElement (attribute);
         }
     }
@@ -485,7 +485,7 @@ public class TagNode
             else
             {
                 // add whitespace between attributes
-                attribute = new Attribute ((String)null, " ", (char)0);
+                attribute = new Attribute (" ");
                 att.addElement (attribute);
                 attribute = new Attribute (key, value, quote);
                 att.addElement (attribute);
@@ -724,7 +724,7 @@ public class TagNode
                                 // where no whitespace separates the slash
                                 // from the previous attribute
                                 name = name.substring (0, length - 1);
-                                attribute = new Attribute (name);
+                                attribute = new Attribute (name, null);
                                 attributes.removeElementAt (size - 1);
                                 attributes.addElement (attribute);
                             }
@@ -734,9 +734,9 @@ public class TagNode
                         // ends with attribute, add whitespace + slash if requested
                         if (emptyXmlTag)
                         {
-                            attribute = new Attribute ((String)null, " ", (char)0);
+                            attribute = new Attribute (" ");
                             attributes.addElement (attribute);
-                            attribute = new Attribute ("/");
+                            attribute = new Attribute ("/", null);
                             attributes.addElement (attribute);
                         }
                     }
@@ -745,9 +745,9 @@ public class TagNode
                     // some valued attribute, add whitespace + slash if requested
                     if (emptyXmlTag)
                     {
-                        attribute = new Attribute ((String)null, " ", (char)0);
+                        attribute = new Attribute (" ");
                         attributes.addElement (attribute);
-                        attribute = new Attribute ("/");
+                        attribute = new Attribute ("/", null);
                         attributes.addElement (attribute);
                     }
                 }
@@ -757,7 +757,7 @@ public class TagNode
                 // ends with whitespace, add if requested
                 if (emptyXmlTag)
                 {
-                    attribute = new Attribute ("/");
+                    attribute = new Attribute ("/", null);
                     attributes.addElement (attribute);
                 }
             }
@@ -766,7 +766,7 @@ public class TagNode
             // nothing there, add if requested
             if (emptyXmlTag)
             {
-                attribute = new Attribute ("/");
+                attribute = new Attribute ("/", null);
                 attributes.addElement (attribute);
             }
     }

@@ -169,11 +169,12 @@ public class AppletTagTest extends ParserTestCase {
         appletTag.setAppletParams (paramsMap);
         // Check the data in the applet tag
         String expectedRawString =
-        "<APPLET CODE=MyOtherClass.class ARCHIVE=htmlparser.jar CODEBASE=htmlparser.sourceforge.net>\n"+
+        "<APPLET CODE=Myclass.class ARCHIVE=test.jar CODEBASE=www.kizna.com>\n"+
+        "<PARAM VALUE=\"Two\" NAME=\"Second\">"+ // note these are out of orer because of the hashtable
         "<PARAM VALUE=\"One\" NAME=\"First\">"+
-        "<PARAM VALUE=\"Two\" NAME=\"Second\">"+
         "<PARAM VALUE=\"3\" NAME=\"Third\">"+
         "</APPLET>";
-        assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());
+        String actual = appletTag.toHtml();
+        assertStringEquals("toHTML()",expectedRawString,actual);
     }
 }

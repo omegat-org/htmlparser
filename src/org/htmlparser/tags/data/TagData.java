@@ -74,7 +74,7 @@ public class TagData {
             urlBeingParsed,
             isXmlEndTag);
         if (null != name && (0 == attributes.size ()))
-            attributes.insertElementAt (new Attribute (name), 0);
+            attributes.insertElementAt (new Attribute (name, null), 0);
             
     }
     
