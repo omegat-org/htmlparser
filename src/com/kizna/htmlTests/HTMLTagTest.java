@@ -415,4 +415,37 @@ public void testNestedTags() {
             fail("Bad class element = " + o.getClass().getName());
         }
     }
+    /**
+     * Reproduction of a bug reported by Annette Doyle
+     * This is actually a pretty good example of dirty html - we are in a fix 
+     * here, bcos the font tag (the first one) has an erroneous inverted comma. In HTMLTag,
+     * we ignore anything in inverted commas, and dont if its outside. This kind of messes
+     * up our parsing almost completely.
+     * 
+     */
+    public void testParsing() {
+		String testHTML = "<div align=\"center\"><font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"><a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+ 
+        "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
+        "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
+        "<a href=\"/cia/notices.html#sec\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Security</font></a>\n"+
+        "<a href=\"/cia/contact.htm\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Contact Us</font></a>\n"+
+        "<a href=\"/cia/sitemap.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Site Map</font></a>\n"+
+        "<a href=\"/cia/siteindex.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Index</font></a>\n"+
+        "<a href=\"/search\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Search</font></a>\n"+
+        "</font></div>"; 
+	
+		StringReader sr = new StringReader(testHTML); 
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[100];
+		// Register the image scanner
+		parser.registerScanners();
+		int i = 0;
+		HTMLNode thisNode;
+		for (Enumeration e = parser.elements();e.hasMoreElements();) {
+			node[i++] = (HTMLNode)e.nextElement();
+		}	    	
+		assertEquals("Number of nodes found",12,i);
+		
+    }
 }
