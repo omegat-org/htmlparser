@@ -50,13 +50,15 @@ public class BaseHrefTagTest extends ParserTestCase {
         assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
     }
 
-    public void testNotHREFBaseTag() throws ParserException {
-        createParser("<base target=\"_top\">");
+    public void testNotHREFBaseTag() throws ParserException
+    {
+        String html = "<base target=\"_top\">";
+        createParser(html);
         parser.registerScanners();
         parseAndAssertNodeCount(1);
         assertTrue("Should be a base tag but was "+node[0].getClass().getName(),node[0] instanceof BaseHrefTag);
         BaseHrefTag baseTag = (BaseHrefTag)node[0];
-        assertStringEquals("Base Tag HTML","<BASE TARGET=\"_top\">",baseTag.toHtml());
+        assertStringEquals("Base Tag HTML", html, baseTag.toHtml());
     }
 
 }

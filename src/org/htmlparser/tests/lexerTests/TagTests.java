@@ -102,8 +102,10 @@ public class TagTests extends ParserTestCase {
         );
     }
 
-    public void testEmptyTag() throws Exception {
-        createParser("<custom/>");
+    public void testEmptyTag() throws Exception 
+    {
+        String html = "<custom/>";
+        createParser(html);
         parseAndAssertNodeCount(1);
         assertType("should be Tag",Tag.class,node[0]);
         Tag tag = (Tag)node[0];
@@ -111,7 +113,7 @@ public class TagTests extends ParserTestCase {
         assertTrue("empty tag",tag.isEmptyXmlTag());
         assertStringEquals(
             "html",
-            "<CUSTOM/>",
+            html,
             tag.toHtml()
         );
     }
@@ -399,12 +401,12 @@ public class TagTests extends ParserTestCase {
      */
     public void testStandAloneToHTML () throws ParserException
     {
-        createParser("<input disabled>");
+        String html = "<input disabled>";
+        createParser(html);
         parseAndAssertNodeCount (1);
         assertType ("should be Tag", Tag.class, node[0]);
         Tag tag = (Tag)node[0];
-        String html = tag.toHtml ();
-        assertStringEquals ("html","<INPUT DISABLED>", html);
+        assertStringEquals ("html", html, tag.toHtml ());
     }
 
     /**
@@ -412,11 +414,11 @@ public class TagTests extends ParserTestCase {
      */
     public void testMissingValueToHTML () throws ParserException
     {
-        createParser("<input disabled=>");
+        String html = "<input disabled=>";
+        createParser(html);
         parseAndAssertNodeCount (1);
         assertType ("should be Tag", Tag.class, node[0]);
         Tag tag = (Tag)node[0];
-        String html = tag.toHtml ();
-        assertStringEquals ("html","<INPUT DISABLED=>", html);
+        assertStringEquals ("html", html, tag.toHtml ());
     }
 }

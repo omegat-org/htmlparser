@@ -48,8 +48,10 @@ public class LabelScannerTest extends ParserTestCase {
     public LabelScannerTest(String name) {
         super(name);
     }
-    public void testSimpleLabels() throws ParserException {
-        createParser("<label>This is a label tag</label>");
+    public void testSimpleLabels() throws ParserException
+    {
+        String html = "<label>This is a label tag</label>";
+        createParser(html);
         LabelScanner labelScanner = new LabelScanner("-l");
         parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
@@ -58,7 +60,7 @@ public class LabelScannerTest extends ParserTestCase {
         LabelTag labelTag = (LabelTag) node[0];
         assertEquals("Label","This is a label tag",labelTag.getChildrenHTML());
         assertEquals("Label","This is a label tag",labelTag.getLabel());
-        assertStringEquals("Label","<LABEL>This is a label tag</LABEL>",labelTag.toHtml());
+        assertStringEquals("Label", html, labelTag.toHtml());
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
@@ -76,8 +78,10 @@ public class LabelScannerTest extends ParserTestCase {
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
-    public void testLabelWithOtherTags() throws ParserException {
-        createParser("<label><span>Span within label</span></label>");
+    public void testLabelWithOtherTags() throws ParserException
+    {
+        String html = "<label><span>Span within label</span></label>";
+        createParser(html);
         parser.registerScanners();
         LabelScanner labelScanner = new LabelScanner("-l");
         parser.addScanner(labelScanner);
@@ -86,7 +90,7 @@ public class LabelScannerTest extends ParserTestCase {
         //  check the title node
         LabelTag labelTag = (LabelTag) node[0];
         assertEquals("Label value","Span within label",labelTag.getLabel());
-        assertStringEquals("Label","<LABEL><SPAN>Span within label</SPAN></LABEL>",labelTag.toHtml());
+        assertStringEquals("Label", html, labelTag.toHtml());
         assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
     }
 
@@ -107,93 +111,89 @@ public class LabelScannerTest extends ParserTestCase {
     }
 
 
-    public void testLabelsID() throws ParserException {
-        createParser("<label>John Doe</label>");
+    public void testLabelsID() throws ParserException
+    {
+        String html = "<label>John Doe</label>";
+        createParser(html);
         parser.registerScanners();
         LabelScanner labelScanner = new LabelScanner("-l");
         parser.addScanner(labelScanner);
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof LabelTag);
-
         LabelTag labelTag = (LabelTag) node[0];
-        assertStringEquals("Label","<LABEL>John Doe</LABEL>",labelTag.toHtml());
+        assertStringEquals("Label", html, labelTag.toHtml());
         Hashtable attr = labelTag.getAttributes();
         assertNull("ID",attr.get("id"));
     }
 
-    public void testNestedLabels() throws ParserException {
-        createParser("<label id=\"attr1\"><label>Jane Doe");
+    public void testNestedLabels() throws ParserException
+    {
+        String label1 = "<label id=\"attr1\">";
+        String label2 = "<label>Jane Doe";
+        createParser(label1 + label2);
         parser.registerScanners();
         LabelScanner labelScanner = new LabelScanner("-l");
         parser.addScanner(labelScanner);
         parseAndAssertNodeCount(2);
         assertTrue(node[0] instanceof LabelTag);
         assertTrue(node[1] instanceof LabelTag);
-
         LabelTag labelTag = (LabelTag) node[0];
-        assertStringEquals("Label","<LABEL ID=\"attr1\"></LABEL>",labelTag.toHtml());
+        assertStringEquals("Label", label1 + "</label>", labelTag.toHtml());
         labelTag = (LabelTag) node[1];
-        assertStringEquals("Label","<LABEL>Jane Doe</LABEL>",labelTag.toHtml());
+        assertStringEquals("Label", label2 + "</label>",labelTag.toHtml());
         Hashtable attr = labelTag.getAttributes();
         assertNull("ID",attr.get("id"));
     }
 
-    public void testNestedLabels2() throws ParserException {
-        String testHTML = new String(
-                                    "<LABEL value=\"Google Search\">Google</LABEL>" +
-                                    "<LABEL value=\"AltaVista Search\">AltaVista" +
-                                    "<LABEL value=\"Lycos Search\"></LABEL>" +
-                                    "<LABEL>Yahoo!</LABEL>" +
-                                    "<LABEL>\nHotmail</LABEL>" +
-                                    "<LABEL value=\"ICQ Messenger\">" +
-                                    "<LABEL>Mailcity\n</LABEL>"+
-                                    "<LABEL>\nIndiatimes\n</LABEL>"+
-                                    "<LABEL>\nRediff\n</LABEL>"+
-                                    "<LABEL>Cricinfo" +
-                                    "<LABEL value=\"Microsoft Passport\">" +
-                                    "<LABEL value=\"AOL\"><SPAN>AOL</SPAN></LABEL>" +
-                                    "<LABEL value=\"Time Warner\">Time <B>Warner <SPAN>AOL </SPAN>Inc.</B>"
-                                    );
+    public void testNestedLabels2() throws ParserException
+    {
+        String label1 = "<LABEL value=\"Google Search\">Google</LABEL>";
+        String label2 = "<LABEL value=\"AltaVista Search\">AltaVista";
+        String label3 = "<LABEL value=\"Lycos Search\"></LABEL>";
+        String label4 = "<LABEL>Yahoo!</LABEL>";
+        String label5 = "<LABEL>\nHotmail</LABEL>";
+        String label6 = "<LABEL value=\"ICQ Messenger\">";
+        String label7 = "<LABEL>Mailcity\n</LABEL>";
+        String label8 = "<LABEL>\nIndiatimes\n</LABEL>";
+        String label9 = "<LABEL>\nRediff\n</LABEL>";
+        String label10 = "<LABEL>Cricinfo";
+        String label11 = "<LABEL value=\"Microsoft Passport\">";
+        String label12 = "<LABEL value=\"AOL\"><SPAN>AOL</SPAN></LABEL>";
+        String label13 = "<LABEL value=\"Time Warner\">Time <B>Warner <SPAN>AOL </SPAN>Inc.</B>";
+        String testHTML = label1 + label2 + label3 + label4 + label5 + label6 
+            + label7 + label8 + label9 + label10 + label11 + label12 + label13;
         createParser(testHTML);
         //parser.registerScanners();
         LabelScanner labelScanner = new LabelScanner("-l");
         parser.addScanner(labelScanner);
         parseAndAssertNodeCount(13);
-
-//      for(int j=0;j<nodeCount;j++)
-//      {
-//          //assertTrue("Node " + j + " should be Label Tag",node[j] instanceof LabelTag);
-//          System.out.println(node[j].getClass().getName());
-//          System.out.println(node[j].toHtml());
-//      }
-
         LabelTag LabelTag;
         LabelTag = (LabelTag) node[0];
-        assertStringEquals("HTML String","<LABEL VALUE=\"Google Search\">Google</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label1, LabelTag.toHtml());
         LabelTag = (LabelTag) node[1];
-        assertStringEquals("HTML String","<LABEL VALUE=\"AltaVista Search\">AltaVista</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label2 + "</LABEL>", LabelTag.toHtml());
         LabelTag = (LabelTag) node[2];
-        assertStringEquals("HTML String","<LABEL VALUE=\"Lycos Search\"></LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label3, LabelTag.toHtml());
         LabelTag = (LabelTag) node[3];
-        assertStringEquals("HTML String","<LABEL>Yahoo!</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label4, LabelTag.toHtml());
         LabelTag = (LabelTag) node[4];
-        assertStringEquals("HTML String","<LABEL>\nHotmail</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label5, LabelTag.toHtml());
         LabelTag = (LabelTag) node[5];
-        assertStringEquals("HTML String","<LABEL VALUE=\"ICQ Messenger\"></LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label6 + "</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[6];
-        assertStringEquals("HTML String","<LABEL>Mailcity\n</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label7, LabelTag.toHtml());
         LabelTag = (LabelTag) node[7];
-        assertStringEquals("HTML String","<LABEL>\nIndiatimes\n</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label8, LabelTag.toHtml());
         LabelTag = (LabelTag) node[8];
-        assertStringEquals("HTML String","<LABEL>\nRediff\n</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label9, LabelTag.toHtml());
         LabelTag = (LabelTag) node[9];
-        assertStringEquals("HTML String","<LABEL>Cricinfo</LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label10 + "</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[10];
-        assertStringEquals("HTML String","<LABEL VALUE=\"Microsoft Passport\"></LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label11 + "</LABEL>",LabelTag.toHtml());
         LabelTag = (LabelTag) node[11];
-        assertStringEquals("HTML String","<LABEL VALUE=\"AOL\"><SPAN>AOL</SPAN></LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label12, LabelTag.toHtml());
         LabelTag = (LabelTag) node[12];
-        assertStringEquals("HTML String","<LABEL VALUE=\"Time Warner\">Time <B>Warner <SPAN>AOL </SPAN>Inc.</B></LABEL>",LabelTag.toHtml());
+        assertStringEquals("HTML String", label13 + "</LABEL>",LabelTag.toHtml());
     }
 
     public static TestSuite suite() {

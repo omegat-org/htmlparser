@@ -46,6 +46,7 @@ public class BodyTagTest extends ParserTestCase {
     }
 
     private BodyTag bodyTag;
+    private String html = "<body>Yahoo!</body>";
 
     public BodyTagTest(String name) {
         super(name);
@@ -53,7 +54,7 @@ public class BodyTagTest extends ParserTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        createParser("<html><head><title>body tag test</title></head><body>Yahoo!</body></html>");
+        createParser("<html><head><title>body tag test</title></head>" + html + "</html>");
         parser.registerScanners();
         parser.addScanner(new BodyScanner("-b"));
         parseAndAssertNodeCount(6);
@@ -67,7 +68,7 @@ public class BodyTagTest extends ParserTestCase {
     }
 
     public void testToHTML() throws ParserException {
-        assertStringEquals("Raw String","<BODY>Yahoo!</BODY>",bodyTag.toHtml());
+        assertStringEquals("Raw String", html, bodyTag.toHtml());
     }
 
     public void testToString() throws ParserException  {

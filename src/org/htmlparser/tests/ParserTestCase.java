@@ -55,7 +55,7 @@ import org.htmlparser.util.SpecialHashtable;
 
 public class ParserTestCase extends TestCase {
 
-    static boolean mCaseInsensitiveComparisons = true;
+    static boolean mCaseInsensitiveComparisons = false;
     protected Parser parser;
     protected Node node [];
     protected int nodeCount;

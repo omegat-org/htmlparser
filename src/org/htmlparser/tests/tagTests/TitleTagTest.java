@@ -43,13 +43,19 @@ public class TitleTagTest extends ParserTestCase {
     }
 
     private TitleTag titleTag;
+    private String prefix = "<html><head>";
+    private String tag1 = "<title>Yahoo!</title>";
+    private String tag2 = "<base href=http://www.yahoo.com/ target=_top>";
+    private String tag3 = "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'>";
+    private String tag4 = "<style>a.h{background-color:#ffee99}</style>";
+    private String suffix = "</head>";
 
     public TitleTagTest(String name) {
         super(name);
     }
     protected void setUp() throws Exception {
         super.setUp();
-        createParser("<html><head><title>Yahoo!</title><base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
+        createParser(prefix + tag1 + tag2 + tag3 + tag4 + suffix);
         parser.addScanner(new TitleScanner("-t"));
         parser.addScanner(new StyleScanner("-s"));
         parser.addScanner(new MetaTagScanner("-m"));
@@ -63,7 +69,7 @@ public class TitleTagTest extends ParserTestCase {
     }
 
     public void testToHTML() throws ParserException {
-        assertStringEquals("Raw String","<TITLE>Yahoo!</TITLE>",titleTag.toHtml());
+        assertStringEquals("Raw String",tag1,titleTag.toHtml());
     }
 
     public void testToString() throws ParserException  {

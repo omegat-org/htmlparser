@@ -43,21 +43,21 @@ public class OptionTagTest extends ParserTestCase
         System.setProperty ("org.htmlparser.tests.tagTests.OptionTagTest", "OptionTagTest");
     }
 
-    private String testHTML = new String(
-                                    "<OPTION value=\"Google Search\">Google</OPTION>" +
-                                    "<OPTION value=\"AltaVista Search\">AltaVista" +
-                                    "<OPTION value=\"Lycos Search\"></OPTION>" +
-                                    "<OPTION>Yahoo!</OPTION>" +
-                                    "<OPTION>\nHotmail</OPTION>" +
-                                    "<OPTION value=\"ICQ Messenger\">" +
-                                    "<OPTION>Mailcity\n</OPTION>"+
-                                    "<OPTION>\nIndiatimes\n</OPTION>"+
-                                    "<OPTION>\nRediff\n</OPTION>"+
-                                    "<OPTION>Cricinfo" +
-                                    "<OPTION value=\"Microsoft Passport\">"+
-                                    "<OPTION value=\"AOL\"><SPAN>AOL</SPAN></OPTION>" +
-                                    "<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL>"
-                                    );
+    private String option1 = "<OPTION value=\"Google Search\">Google</OPTION>";
+    private String option2 = "<OPTION value=\"AltaVista Search\">AltaVista";
+    private String option3 = "<OPTION value=\"Lycos Search\"></OPTION>";
+    private String option4 = "<OPTION>Yahoo!</OPTION>";
+    private String option5 = "<OPTION>\nHotmail</OPTION>";
+    private String option6 = "<OPTION value=\"ICQ Messenger\">";
+    private String option7 = "<OPTION>Mailcity\n</OPTION>";
+    private String option8 = "<OPTION>\nIndiatimes\n</OPTION>";
+    private String option9 = "<OPTION>\nRediff\n</OPTION>";
+    private String option10 = "<OPTION>Cricinfo";
+    private String option11 = "<OPTION value=\"Microsoft Passport\">";
+    private String option12 = "<OPTION value=\"AOL\"><SPAN>AOL</SPAN></OPTION>";
+    private String option13 = "<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL></OPTION>";
+    private String testHTML = option1 + option2 + option3 + option4 + option5 + option6 
+        + option7 + option8 + option9 + option10 + option11 + option12 + option13;
 
     public OptionTagTest(String name)
     {
@@ -81,31 +81,31 @@ public class OptionTagTest extends ParserTestCase
         }
         OptionTag OptionTag;
         OptionTag = (OptionTag) node[0];
-        assertStringEquals("HTML String","<OPTION VALUE=\"Google Search\">Google</OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option1, OptionTag.toHtml());
         OptionTag = (OptionTag) node[1];
-        assertStringEquals("HTML String","<OPTION VALUE=\"AltaVista Search\">AltaVista</OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option2 + "</OPTION>", OptionTag.toHtml());
         OptionTag = (OptionTag) node[2];
-        assertStringEquals("HTML String","<OPTION VALUE=\"Lycos Search\"></OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option3, OptionTag.toHtml());
         OptionTag = (OptionTag) node[3];
-        assertStringEquals("HTML String","<OPTION>Yahoo!</OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option4, OptionTag.toHtml());
         OptionTag = (OptionTag) node[4];
-        assertStringEquals("HTML String","<OPTION>\nHotmail</OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option5, OptionTag.toHtml());
         OptionTag = (OptionTag) node[5];
-        assertStringEquals("HTML String","<OPTION VALUE=\"ICQ Messenger\"></OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option6 + "</OPTION>",OptionTag.toHtml());
         OptionTag = (OptionTag) node[6];
-        assertStringEquals("HTML String","<OPTION>Mailcity\n</OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option7, OptionTag.toHtml());
         OptionTag = (OptionTag) node[7];
-        assertStringEquals("HTML String","<OPTION>\nIndiatimes\n</OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option8, OptionTag.toHtml());
         OptionTag = (OptionTag) node[8];
-        assertStringEquals("HTML String","<OPTION>\nRediff\n</OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option9, OptionTag.toHtml());
         OptionTag = (OptionTag) node[9];
-        assertStringEquals("HTML String","<OPTION>Cricinfo</OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option10 + "</OPTION>",OptionTag.toHtml());
         OptionTag = (OptionTag) node[10];
-        assertStringEquals("HTML String","<OPTION VALUE=\"Microsoft Passport\"></OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option11 + "</OPTION>",OptionTag.toHtml());
         OptionTag = (OptionTag) node[11];
-        assertStringEquals("HTML String","<OPTION VALUE=\"AOL\"><SPAN>AOL</SPAN></OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option12,OptionTag.toHtml());
         OptionTag = (OptionTag) node[12];
-        assertStringEquals("HTML String","<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL></OPTION>",OptionTag.toHtml());
+        assertStringEquals("HTML String", option13, OptionTag.toHtml());
     }
 
     public void testToString() throws ParserException

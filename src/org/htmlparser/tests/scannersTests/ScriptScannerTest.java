@@ -532,12 +532,13 @@ public class ScriptScannerTest extends ParserTestCase
     /**
      * See bug #741769 ScriptScanner doesn't handle quoted </script> tags
      */
-    public void testScanQuotedEndTag() throws ParserException   {
-        createParser("<SCRIPT language=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>");
+    public void testScanQuotedEndTag() throws ParserException
+    {
+        String html = "<SCRIPT language=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>";
+        createParser(html);
         parser.addScanner(new ScriptScanner("-s"));
         parseAndAssertNodeCount(1);
-        String s = node[0].toHtml ();
-        assertStringEquals ("Parse error","<SCRIPT LANGUAGE=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>",s);
+        assertStringEquals ("Parse error", html, node[0].toHtml ());
     }
 
 
