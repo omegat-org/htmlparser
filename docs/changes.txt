@@ -1,3 +1,9 @@
+Integration Build 1.3 - 20030504
+--------------------------------
+[1] Fixed bug #728609 - Stack Overflow error. Caused composite tag scanner 
+	design to evolve further. Ul-Li scanner relationship can be interesting
+	study model for designing other scanner relationships.
+
 Integration Build 1.3 - 20030427
 --------------------------------
 [1] Fixed bug #722941 encoding not supported
