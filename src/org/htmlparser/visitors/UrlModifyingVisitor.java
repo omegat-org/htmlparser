@@ -32,6 +32,7 @@ package org.htmlparser.visitors;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.ImageTag;
@@ -58,8 +59,14 @@ public class UrlModifyingVisitor extends NodeVisitor {
         imageTag.setImageURL(linkPrefix + imageTag.getImageURL());
     }
 
-    public void visitStringNode(StringNode stringNode) {
-        modifiedResult.append(stringNode.toHtml());
+    public void visitRemarkNode (RemarkNode remarkNode)
+    {
+        modifiedResult.append (remarkNode.toHtml());
+    }
+
+    public void visitStringNode(StringNode stringNode)
+    {
+        modifiedResult.append (stringNode.toHtml());
     }
 
     public void visitTag(Tag tag)
