@@ -79,8 +79,8 @@ public class HTMLTag extends HTMLNode
 	private boolean endOfLineCharState;
 	/**
 	 * Set the HTMLTag with the beginning posn, ending posn and tag contents
-	 * @param tagBegin Beginning position of the tag
-	 * @param tagEnd Ending positiong of the tag
+	 * @param nodeBegin Beginning position of the tag
+	 * @param nodeEnd Ending positiong of the tag
 	 * @param tagContents The contents of the tag
 	 * @param tagLine The current line being parsed, where the tag was found
 	 */
@@ -258,18 +258,18 @@ public class HTMLTag extends HTMLNode
 		HTMLTag.strictTags = strictTags;
 	}
 	/**
-	 * Sets the tagBegin.
-	 * @param tagBegin The tagBegin to set
+	 * Sets the nodeBegin.
+	 * @param nodeBegin The nodeBegin to set
 	 */
 	public void setTagBegin(int tagBegin) {
-		this.tagBegin = tagBegin;
+		this.nodeBegin = tagBegin;
 	}
 	/**
-	 * Sets the tagEnd.
-	 * @param tagEnd The tagEnd to set
+	 * Sets the nodeEnd.
+	 * @param nodeEnd The nodeEnd to set
 	 */
 	public void setTagEnd(int tagEnd) {
-		this.tagEnd = tagEnd;
+		this.nodeEnd = tagEnd;
 	}
     /**
     * Insert the method's description here.

@@ -51,8 +51,8 @@ public class HTMLRemarkNode extends HTMLNode
 	/**
 	 * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.
-	 * @param tagBegin beginning position of the tag
-	 * @param tagEnd ending position of the tag
+	 * @param nodeBegin beginning position of the tag
+	 * @param nodeEnd ending position of the tag
 	 * @param tagContents contents of the remark tag
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
@@ -83,7 +83,7 @@ public class HTMLRemarkNode extends HTMLNode
 			/*if (state == REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE && ch == '>')
 			{
 				state=REMARK_NODE_ACCEPTED_STATE;
-				tagEnd=i;
+				nodeEnd=i;
 			}*/ 
 			if (state == REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE) {
  				if (ch == '>')

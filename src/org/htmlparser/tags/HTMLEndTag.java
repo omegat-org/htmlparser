@@ -41,8 +41,8 @@ public class HTMLEndTag extends HTMLTag
 	
 	/**
 	 * Constructor takes 3 arguments to construct an HTMLEndTag object.
-	 * @param tagBegin Beginning position of the end tag
-	 * @param tagEnd Ending position of the end tag
+	 * @param nodeBegin Beginning position of the end tag
+	 * @param nodeEnd Ending position of the end tag
 	 * @param tagContents Text contents of the tag
 	 */
 	public HTMLEndTag(int tagBegin, int tagEnd, String tagContents,String tagLine)

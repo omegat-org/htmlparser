@@ -43,8 +43,8 @@ public class HTMLAppletTag extends HTMLTag
 	private java.util.Vector misc;
 /**
  * HTMLAppletTag constructor comment.
- * @param tagBegin int
- * @param tagEnd int
+ * @param nodeBegin int
+ * @param nodeEnd int
  * @param tagContents java.lang.String
  * @param tagLine java.lang.String
  */

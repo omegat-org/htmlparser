@@ -35,8 +35,8 @@ public class HTMLTitleTag extends HTMLTag {
 	private String title;
 	/**
 	 * Constructor for HTMLTitleTag.
-	 * @param tagBegin
-	 * @param tagEnd
+	 * @param nodeBegin
+	 * @param nodeEnd
 	 * @param tagContents
 	 * @param tagLine
 	 */

@@ -37,8 +37,8 @@ public class HTMLStyleTag extends HTMLTag {
 	/**
 	 * The HTMLStyleTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.
-	 * @param tagBegin beginning position of the tag
-	 * @param tagEnd ending position of the tag
+	 * @param nodeBegin beginning position of the tag
+	 * @param nodeEnd ending position of the tag
 	 * @param styleCode The style code b/w the tags
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */

@@ -38,12 +38,12 @@ public abstract class HTMLNode
 	/** 
 	 * The beginning position of the tag in the line
 	 */
-	protected int tagBegin;
+	protected int nodeBegin;
 
 	/**
 	 * The ending position of the tag in the line
 	 */
-	protected int tagEnd;
+	protected int nodeEnd;
 
 	/**
 	 * Variable to store lineSeparator.<br>
@@ -56,8 +56,8 @@ public abstract class HTMLNode
 						new sun.security.action.GetPropertyAction("line.separator"));
 	
 	public HTMLNode(int nodeBegin, int nodeEnd) {
-		this.tagBegin = nodeBegin;
-		this.tagEnd = nodeEnd;
+		this.nodeBegin = nodeBegin;
+		this.nodeEnd = nodeEnd;
 	}
 	/**
 	 * @param lineSeparator New Line separator to be used
@@ -169,7 +169,7 @@ public abstract class HTMLNode
 	 */
 	public int elementBegin()
 	{
-		return tagBegin;
+		return nodeBegin;
 	}
 
 
@@ -178,7 +178,7 @@ public abstract class HTMLNode
 	 */
 	public int elementEnd()
 	{
-		return tagEnd;
+		return nodeEnd;
 	}
 
 
