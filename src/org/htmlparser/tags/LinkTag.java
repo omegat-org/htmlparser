@@ -246,9 +246,4 @@ public class LinkTag extends CompositeTag
 		visitor.visitLinkTag(this);
 		super.accept(visitor);
 	}
-	
-	public void removeChild(int i) {
-		childTags.remove(i);
-	}
-
 }

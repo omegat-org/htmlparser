@@ -43,7 +43,7 @@ public abstract class AbstractNodeDecorator implements Node {
 		this.delegate = delegate;
 	}
 
-	public void accept(NodeVisitor visitor) {
+	public void accept(Object visitor) {
 		delegate.accept(visitor);
 	}
 
@@ -67,7 +67,7 @@ public abstract class AbstractNodeDecorator implements Node {
 		return delegate.equals(arg0);
 	}
 
-	public CompositeTag getParent() {
+	public Node getParent() {
 		return delegate.getParent();
 	}
 
@@ -75,9 +75,27 @@ public abstract class AbstractNodeDecorator implements Node {
 		return delegate.getText();
 	}
 
-	public void setParent(CompositeTag tag) {
-		delegate.setParent(tag);
+	public void setParent(Node node) {
+		delegate.setParent(node);
 	}
+
+    /**
+     * Get the children of this node.
+     * @return The list of children contained by this node, if it's been set, <code>null</code> otherwise.
+     */
+	public NodeList getChildren ()
+    {
+        return (delegate.getChildren ());
+    }
+
+    /**
+     * Set the children of this node.
+     * @param children The new list of children this node contains.
+     */
+	public void setChildren (NodeList children)
+    {
+        delegate.setChildren (children);
+    }
 
 	public void setText(String text) {
 		delegate.setText(text);

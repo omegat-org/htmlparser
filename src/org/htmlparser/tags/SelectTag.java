@@ -61,10 +61,14 @@ public class SelectTag extends CompositeTag
 	
 	public String toString() 
 	{
-		StringBuffer lString = new StringBuffer(ParserUtils.toString(this));
-		for(int i=0;i<childTags.size(); i++)
+		StringBuffer lString;
+        NodeList children;
+        
+        lString = new StringBuffer(ParserUtils.toString(this));
+        children = getChildren ();
+		for(int i=0;i<children.size(); i++)
 		{
-			OptionTag optionTag = (OptionTag)childTags.elementAt(i);
+			OptionTag optionTag = (OptionTag)children.elementAt(i);
 			lString.append(optionTag.toString()).append("\n");
 		}
 		

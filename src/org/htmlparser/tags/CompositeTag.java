@@ -38,29 +38,49 @@ import org.htmlparser.visitors.NodeVisitor;
 
 public abstract class CompositeTag extends Tag {
 	protected Tag startTag, endTag;
-	protected NodeList childTags; 
 
 	public CompositeTag(TagData tagData, CompositeTagData compositeTagData) {
 		super(tagData);
-		this.childTags = compositeTagData.getChildren();
 		this.startTag  = compositeTagData.getStartTag();
 		this.endTag    = compositeTagData.getEndTag();
-	}
-	
-	public SimpleNodeIterator children() {
-		return childTags.elements();
+		setChildren (compositeTagData.getChildren());
 	}
 
-	public Node getChild(int index) {
-		return childTags.elementAt(index);	
+    /**
+     * Get an iterator over the children of this node.
+     * @return Am iterator over the children of this node.
+     */
+	public SimpleNodeIterator children ()
+    {
+		return (getChildren ().elements ());
+	}
+
+    /**
+     * Get the child of this node at the given position.
+     * @param index The in the node list of the child.
+     * @return The child at that index.
+     */
+	public Node getChild (int index)
+    {
+		return (getChildren ().elementAt (index));	
+	}
+
+    /**
+     * Get the children as an array of <code>Node</code> objects.
+     * @return The children in an array.
+     */
+	public Node [] getChildrenAsNodeArray ()
+    {
+		return (getChildren ().toNodeArray ());
 	}
 	
-	public Node [] getChildrenAsNodeArray() {
-		return childTags.toNodeArray();
-	}
-	
-	public NodeList getChildren() {
-		return childTags;
+    /**
+     * Remove the child at the position given.
+     * @param i The index of the child to remove.
+     */
+	public void removeChild (int i)
+    {
+		getChildren ().remove (i);
 	}
 
     /**
@@ -177,8 +197,9 @@ public abstract class CompositeTag extends Tag {
 	 * @param classType
 	 * @return NodeList
 	 */
-	public NodeList searchFor(Class classType) {
-		return childTags.searchFor(classType);
+	public NodeList searchFor(Class classType)
+    {
+		return (getChildren ().searchFor (classType));
 	}
 	/** 
 	 * Searches for any node whose text representation contains the search
@@ -246,7 +267,7 @@ public abstract class CompositeTag extends Tag {
 	 * @return Node
 	 */
 	public Node childAt(int index) {
-		return childTags.elementAt(index);
+		return (getChildren ().elementAt (index));
 	}
 	
 	public void collectInto(NodeList collectionList, String filter) {
@@ -289,7 +310,7 @@ public abstract class CompositeTag extends Tag {
 	}
 
 	public int getChildCount() {
-		return childTags.size();
+		return (getChildren ().size ());
 	}
 
 	public Tag getStartTag() {

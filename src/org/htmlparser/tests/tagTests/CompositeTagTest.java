@@ -60,7 +60,7 @@ public class CompositeTagTest extends ParserTestCase {
 			
 		assertEquals("number of string nodes",1,stringNode.length);
 		assertNotNull("should have found string node",stringNode);
-		CompositeTag parent = stringNode[0].getParent();
+		Node parent = stringNode[0].getParent();
 		assertType("should be column",TableColumn.class,parent);
 		parent = parent.getParent();
 		assertType("should be row",TableRow.class,parent);
@@ -92,7 +92,7 @@ public class CompositeTagTest extends ParserTestCase {
 			
 		assertEquals("number of string nodes",1,stringNode.length);
 		assertNotNull("should have found string node",stringNode);
-		CompositeTag parent = stringNode[0].getParent();
+		CompositeTag parent = (CompositeTag)stringNode[0].getParent();
 		int pos = parent.findPositionOf(stringNode[0]);
 		assertEquals("position",5,pos);
 	}	

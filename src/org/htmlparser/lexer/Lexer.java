@@ -106,7 +106,7 @@ public class Lexer
 
     /**
      * Get the next node from the source.
-     * @return A RemarkNode, StringNode or Tag, or <code>null</code> if no
+     * @return A RemarkNode, StringNode or TagNode, or <code>null</code> if no
      * more lexemes are present.
      * @exception ParserException If there is a problem with the underlying page.
      */
@@ -574,6 +574,8 @@ public class Lexer
             catch (ParserException pe)
             {
                 System.out.println (pe.getMessage ());
+                if (null != pe.getThrowable ())
+                    System.out.println (pe.getThrowable ().getMessage ());
             }
         }
     }

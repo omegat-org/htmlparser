@@ -29,7 +29,6 @@
 package org.htmlparser.parserHelper;
 
 import java.util.Hashtable;
-import org.htmlparser.tags.Tag;
 
 /**
  * Acts like a regular HashTable, except some values are translated in get(String).
@@ -74,9 +73,9 @@ public class SpecialHashtable extends Hashtable
         Object ret;
 
         ret = getRaw (key);
-        if (Tag.NULLVALUE == ret)
+        if ("$<NULL>$" == ret)
             ret = null;
-        else if (Tag.NOTHING == ret)
+        else if ("$<NOTHING>$" == ret)
             ret = "";
 
         return (ret);

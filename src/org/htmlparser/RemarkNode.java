@@ -82,8 +82,8 @@ public class RemarkNode extends AbstractNode
 		if (filter==REMARK_NODE_FILTER) collectionList.add(this);
 	}
 
-	public void accept(NodeVisitor visitor) {
-		visitor.visitRemarkNode(this);
+	public void accept(Object visitor) {
+		((NodeVisitor)visitor).visitRemarkNode(this);
 	}
 
 }

@@ -32,7 +32,6 @@ import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 import org.htmlparser.Node;
-import org.htmlparser.tags.CompositeTag;
 
 public class NodeList implements Serializable {
 	private static final int INITIAL_CAPACITY=10;
@@ -182,6 +181,7 @@ public class NodeList implements Serializable {
     {
         String name;
         Node node;
+        NodeList children;
         NodeList ret;
         
         ret = new NodeList ();
@@ -191,8 +191,12 @@ public class NodeList implements Serializable {
             node = nodeData[i];
             if (node.getClass ().getName ().equals (name))
                 ret.add (node);
-            if (recursive && node instanceof CompositeTag)
-                ret.add (((CompositeTag)node).getChildren ().searchFor (classType, recursive));
+            if (recursive)
+            {
+                children = node.getChildren ();
+                if (null != children)
+                    ret.add (children.searchFor (classType, recursive));
+            }
         }
 
         return (ret);

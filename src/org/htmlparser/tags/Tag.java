@@ -578,6 +578,16 @@ public class Tag extends AbstractNode
 		return (getAttributes ());
 	}
 
+    /**
+     * Handle a visitor.
+     * <em>NOTE: This currently defers to accept(NodeVisitor), but eventually
+     * subclasses of Node should be overriding accept(Object) directly.</em>
+     * @param visitor The <code>NodeVisitor</code> object.
+     */
+	public void accept(Object visitor) {
+		accept ((NodeVisitor)visitor);
+	}
+
 	public void accept(NodeVisitor visitor) {
 		visitor.visitTag(this);
 	}

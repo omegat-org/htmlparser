@@ -28,11 +28,9 @@
 
 package org.htmlparser;
 
-import java.io.*;
+import java.io.Serializable;
 
-import org.htmlparser.tags.*;
-import org.htmlparser.util.*;
-import org.htmlparser.visitors.*;
+import org.htmlparser.util.NodeList;
 
 /**
  * AbstractNode, which implements the Node interface, is the base class for all types of nodes, including tags, string elements, etc
@@ -49,13 +47,25 @@ public abstract class AbstractNode implements Node, Serializable {
 	protected int nodeEnd;
 
 	/**
-	 * If parent of this tag
+	 * The parent of this node.
 	 */
-	protected CompositeTag parent = null;
-	
-	public AbstractNode(int nodeBegin, int nodeEnd) {
-		this.nodeBegin = nodeBegin;
-		this.nodeEnd   = nodeEnd;
+	protected Node parent;
+
+    /**
+     * The children of this node.
+     */
+    protected NodeList children; 
+
+    /**
+     * Create an abstract node with the page positions given.
+     * @param begin The starting position of the node.
+     * @param end The ending position of the node.
+     */
+	public AbstractNode (int begin, int end)
+    {
+		nodeBegin = begin;
+		nodeEnd   = end;
+        parent = null;
 	}
 
 	/**
@@ -165,7 +175,7 @@ public abstract class AbstractNode implements Node, Serializable {
 		return nodeEnd;
 	}
 
-	public abstract void accept(NodeVisitor visitor);
+	public abstract void accept(Object visitor);
 
 	/**
 	 * @deprecated - use toHtml() instead
@@ -175,22 +185,45 @@ public abstract class AbstractNode implements Node, Serializable {
 	}
 	
 	/**
-	 * Get the parent of this tag
+	 * Get the parent of this node.
+     * This will always return null when parsing without scanners,
+     * i.e. if semantic parsing was not performed.
+     * The object returned from this method can be safely cast to a <code>CompositeTag</code>.
 	 * @return The parent of this node, if it's been set, <code>null</code> otherwise.
 	 */
-	public CompositeTag getParent() {
-		return parent;
+	public Node getParent ()
+    {
+		return (parent);
 	}
 
-	/**
-	 * Sets the parent of this tag
-	 * @param tag
+    /**
+	 * Sets the parent of this node.
+	 * @param node The node that contains this node. Must be a <code>CompositeTag</code>.
 	 */
-	public void setParent(CompositeTag tag) {
-		parent = tag;
+	public void setParent (Node node)
+    {
+		parent = node;
 	}
 	
-	/**
+    /**
+     * Get the children of this node.
+     * @return The list of children contained by this node, if it's been set, <code>null</code> otherwise.
+     */
+	public NodeList getChildren ()
+    {
+        return (children);
+    }
+
+    /**
+     * Set the children of this node.
+     * @param children The new list of children this node contains.
+     */
+	public void setChildren (NodeList children)
+    {
+        this.children = children;
+    }
+
+    /**
 	 * Returns the text of the string line
 	 */
 	public String getText() {

@@ -33,7 +33,6 @@ import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
-import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * Normal text in the HTML document is represented by this class.
@@ -105,9 +104,7 @@ public class StringNode extends AbstractNode
             collectionList.add (this);
     }
     
-    public void accept (NodeVisitor visitor)
+    public void accept (Object visitor)
     {
-// todo: fix this
-//        visitor.visitStringNode (this);
     }
 }

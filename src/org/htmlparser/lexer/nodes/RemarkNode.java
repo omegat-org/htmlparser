@@ -32,7 +32,6 @@ package org.htmlparser.lexer.nodes;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * The remark tag is identified and represented by this class.
@@ -85,8 +84,6 @@ public class RemarkNode extends AbstractNode
 		if (filter==REMARK_NODE_FILTER) collectionList.add(this);
 	}
 
-	public void accept(NodeVisitor visitor) {
-// todo: fix this
-//		visitor.visitRemarkNode(this);
+	public void accept(Object visitor) {
 	}
 }

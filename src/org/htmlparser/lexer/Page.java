@@ -109,8 +109,7 @@ public class Page
         }
         catch (UnknownHostException uhe)
         {
-            Random number = new Random ();
-            int message = number.nextInt (mFourOhFour.length);
+            int message = (int)(Math.random () * mFourOhFour.length);
             throw new ParserException (mFourOhFour[message], uhe);
         }
         catch (IOException ioe)

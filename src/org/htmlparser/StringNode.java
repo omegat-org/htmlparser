@@ -87,7 +87,7 @@ public class StringNode extends AbstractNode
 		if (filter==STRING_FILTER) collectionList.add(this);
 	}
 
-	public void accept(NodeVisitor visitor) {
-		visitor.visitStringNode(this);
+	public void accept(Object visitor) {
+		((NodeVisitor)visitor).visitStringNode(this);
 	}
 }

@@ -507,7 +507,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 	
 		Node firstChild = customTag.childAt(0);
 		assertType("firstChild",StringNode.class,firstChild);
-		CompositeTag parent = firstChild.getParent();
+		Node parent = firstChild.getParent();
 		assertNotNull("first child parent should not be null",parent);
 		assertSame("parent and custom tag should be the same",customTag,parent);
 		

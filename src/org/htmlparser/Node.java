@@ -30,9 +30,7 @@
 
 package org.htmlparser;
 
-import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.visitors.NodeVisitor;
 
 public interface Node {
 	/**
@@ -127,20 +125,36 @@ public interface Node {
 	 * Returns the ending position fo the tag
 	 */
 	public abstract int elementEnd();
-	public abstract void accept(NodeVisitor visitor);
-
+    
+	public abstract void accept(Object visitor);
 
 	/**
-	 * Get the parent of this tag
+	 * Get the parent of this node.
+     * This will always return null when parsing without scanners,
+     * i.e. if semantic parsing was not performed.
+     * The object returned from this method can be safely cast to a <code>CompositeTag</code>.
 	 * @return The parent of this node, if it's been set, <code>null</code> otherwise.
 	 */
-	public abstract CompositeTag getParent();
-	/**
-	 * Sets the parent of this tag
-	 * @param tag
+	public abstract Node getParent ();
+
+    /**
+	 * Sets the parent of this node.
+	 * @param node The node that contains this node. Must be a <code>CompositeTag</code>.
 	 */
-	public abstract void setParent(CompositeTag tag);
-	
+	public abstract void setParent (Node node);
+
+    /**
+     * Get the children of this node.
+     * @return The list of children contained by this node, if it's been set, <code>null</code> otherwise.
+     */
+	public abstract NodeList getChildren ();
+
+    /**
+     * Set the children of this node.
+     * @param children The new list of children this node contains.
+     */
+	public abstract void setChildren (NodeList children);
+
 	/**
 	 * Returns the text of the string line
 	 */

@@ -29,21 +29,17 @@
 package org.htmlparser.lexer.nodes;
 
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.Vector;
-
 import org.htmlparser.lexer.Cursor;
+
 import org.htmlparser.lexer.Page;
 import org.htmlparser.parserHelper.SpecialHashtable;
-import org.htmlparser.parserHelper.TagParser;
-import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
-import org.htmlparser.visitors.NodeVisitor;
+
 /**
- * Tag represents a generic tag. This class allows users to register specific
+ * TagNode represents a generic tag. This class allows users to register specific
  * tag scanners, which can identify links, or image references. This tag asks the
  * scanners to run over the text, and identify. It can be used to dynamically
  * configure a parser.
@@ -62,7 +58,6 @@ public class TagNode extends AbstractNode
     public final static String NOTHING = "$<NOTHING>$";
 	private final static String EMPTY_STRING="";
 	
-	private static TagParser tagParser;
 	private boolean emptyXmlTag = false;
 
     /**
@@ -71,49 +66,43 @@ public class TagNode extends AbstractNode
 	 */
 	protected Vector mAttributes;
 
-	/**
-	 * Scanner associated with this tag (useful for extraction of filtering data from a
-	 * HTML node)
-	 */
-	protected TagScanner thisScanner = null;
-
     /**
      * Set of tags that breaks the flow.
      */
-    protected static HashSet breakTags;
+    protected static Hashtable breakTags;
     static
     {
-        breakTags = new HashSet (30);
-        breakTags.add ("BLOCKQUOTE");
-        breakTags.add ("BODY");
-        breakTags.add ("BR");
-        breakTags.add ("CENTER");
-        breakTags.add ("DD");
-        breakTags.add ("DIR");
-        breakTags.add ("DIV");
-        breakTags.add ("DL");
-        breakTags.add ("DT");
-        breakTags.add ("FORM");
-        breakTags.add ("H1");
-        breakTags.add ("H2");
-        breakTags.add ("H3");
-        breakTags.add ("H4");
-        breakTags.add ("H5");
-        breakTags.add ("H6");
-        breakTags.add ("HEAD");
-        breakTags.add ("HR");
-        breakTags.add ("HTML");
-        breakTags.add ("ISINDEX");
-        breakTags.add ("LI");
-        breakTags.add ("MENU");
-        breakTags.add ("NOFRAMES");
-        breakTags.add ("OL");
-        breakTags.add ("P");
-        breakTags.add ("PRE");
-        breakTags.add ("TD");
-        breakTags.add ("TH");
-        breakTags.add ("TITLE");
-        breakTags.add ("UL");
+        breakTags = new Hashtable (30);
+        breakTags.put ("BLOCKQUOTE", Boolean.TRUE);
+        breakTags.put ("BODY", Boolean.TRUE);
+        breakTags.put ("BR", Boolean.TRUE);
+        breakTags.put ("CENTER", Boolean.TRUE);
+        breakTags.put ("DD", Boolean.TRUE);
+        breakTags.put ("DIR", Boolean.TRUE);
+        breakTags.put ("DIV", Boolean.TRUE);
+        breakTags.put ("DL", Boolean.TRUE);
+        breakTags.put ("DT", Boolean.TRUE);
+        breakTags.put ("FORM", Boolean.TRUE);
+        breakTags.put ("H1", Boolean.TRUE);
+        breakTags.put ("H2", Boolean.TRUE);
+        breakTags.put ("H3", Boolean.TRUE);
+        breakTags.put ("H4", Boolean.TRUE);
+        breakTags.put ("H5", Boolean.TRUE);
+        breakTags.put ("H6", Boolean.TRUE);
+        breakTags.put ("HEAD", Boolean.TRUE);
+        breakTags.put ("HR", Boolean.TRUE);
+        breakTags.put ("HTML", Boolean.TRUE);
+        breakTags.put ("ISINDEX", Boolean.TRUE);
+        breakTags.put ("LI", Boolean.TRUE);
+        breakTags.put ("MENU", Boolean.TRUE);
+        breakTags.put ("NOFRAMES", Boolean.TRUE);
+        breakTags.put ("OL", Boolean.TRUE);
+        breakTags.put ("P", Boolean.TRUE);
+        breakTags.put ("PRE", Boolean.TRUE);
+        breakTags.put ("TD", Boolean.TRUE);
+        breakTags.put ("TH", Boolean.TRUE);
+        breakTags.put ("TITLE", Boolean.TRUE);
+        breakTags.put ("UL", Boolean.TRUE);
     }
 
 	/**
@@ -129,16 +118,6 @@ public class TagNode extends AbstractNode
 		super (page, start, end);
         mAttributes = attributes;
 	}
-
-	/**
-	 * Locate the tag withing the input string, by parsing from the given position
-	 * @param reader HTML reader to be provided so as to allow reading of next line
-	 * @param input Input String
-	 * @param position Position to start parsing from
-	 */
-//	public static Tag find(NodeReader reader,String input,int position) {
-//		return tagParser.find(reader,input,position);
-//	}
 
 	/**
 	 * In case the tag is parsed at the scan method this will return value of a
@@ -201,7 +180,7 @@ public class TagNode extends AbstractNode
         {
             // special handling for the node name
             attribute = (Attribute)attributes.elementAt (0);
-            ret.put (org.htmlparser.tags.Tag.TAGNAME, attribute.getName ().toUpperCase ());
+            ret.put (TAGNAME, attribute.getName ().toUpperCase ());
             // the rest
             for (int i = 1; i < attributes.size (); i++)
             {
@@ -234,7 +213,7 @@ public class TagNode extends AbstractNode
             }
         }
         else
-            ret.put (org.htmlparser.tags.Tag.TAGNAME, "");
+            ret.put (TAGNAME, "");
 
         return (ret);
 	}
@@ -250,86 +229,6 @@ public class TagNode extends AbstractNode
     {
 		return (mPage.getText (elementBegin () + 1, elementEnd () - 1));
 	}
-
-	/**
-	 * Return the scanner associated with this tag.
-	 */
-	public TagScanner getThisScanner()
-	{
-		return thisScanner;
-	}
-
-    /**
-     * Extract the first word from the given string.
-     * Words are delimited by whitespace or equals signs.
-     * @param s The string to get the word from.
-     * @return The first word.
-     */
-//    public static String extractWord (String s)
-//    {
-//        int length;
-//        boolean parse;
-//        char ch;
-//        StringBuffer ret;
-//
-//        length = s.length ();
-//        ret = new StringBuffer (length);
-//		parse = true;
-//		for (int i = 0; i < length && parse; i++)
-//        {
-//			ch = s.charAt (i);
-//			if (Character.isWhitespace (ch) || ch == '=')
-//                parse = false;
-//            else
-//                ret.append (Character.toUpperCase (ch));
-//		}
-//
-//		return (ret.toString ());
-//	}
-	
-	/**
-	 * Scan the tag to see using the registered scanners, and attempt identification.
-	 * @param url URL at which HTML page is located
-	 * @param reader The NodeReader that is to be used for reading the url
-	 */
-//	public AbstractNode scan(Map scanners,String url,NodeReader reader) throws ParserException
-//	{
-//		if (tagContents.length()==0) return this;
-//		try {
-//			boolean found=false;
-//			AbstractNode retVal=null;
-//			// Find the first word in the scanners
-//			String firstWord = extractWord(tagContents.toString());
-//			// Now, get the scanner associated with this.
-//			TagScanner scanner = (TagScanner)scanners.get(firstWord);
-//			
-//			// Now do a deep check
-//			if (scanner != null &&
-//					scanner.evaluate(
-//						tagContents.toString(),
-//						reader.getPreviousOpenScanner()
-//					)
-//				)
-//			{
-//				found=true;
-//                TagScanner save;
-//                save = reader.getPreviousOpenScanner ();
-//				reader.setPreviousOpenScanner(scanner);
-//				retVal=scanner.createScannedNode(this,url,reader,tagLine);
-//				reader.setPreviousOpenScanner(save);
-//			}
-//
-//			if (!found) return this;
-//			else {
-//			    return retVal;
-//			}
-//		}
-//		catch (Exception e) {
-//			String errorMsg;
-//			if (tagContents!=null) errorMsg = tagContents.toString(); else errorMsg="null";
-//			throw new ParserException("Tag.scan() : Error while scanning tag, tag contents = "+errorMsg+", tagLine = "+tagLine,e);
-//		}
-//	}
 
 	/**
 	 * Sets the attributes.
@@ -422,19 +321,13 @@ public class TagNode extends AbstractNode
         {
         }
     }
-	public void setThisScanner(TagScanner scanner)
-	{
-		thisScanner = scanner;
-	}
 
-	public String toPlainTextString() {
+    public String toPlainTextString() {
 		return EMPTY_STRING;
 	}
 
 	/**
-	 * A call to a tag's toHTML() method will render it in HTML
-	 * Most tags that do not have children and inherit from Tag,
-	 * do not need to override toHTML().
+	 * A call to a tag's toHTML() method will render it in HTML.
 	 * @see org.htmlparser.Node#toHtml()
 	 */
 	public String toHtml()
@@ -486,21 +379,13 @@ public class TagNode extends AbstractNode
 	}
 
     /**
-	 * Sets the tagParser.
-	 * @param tagParser The tagParser to set
-	 */
-	public static void setTagParser(TagParser tagParser) {
-//todo: fix this		Tag.tagParser = tagParser;
-	}
-
-    /**
      * Determines if the given tag breaks the flow of text.
      * @return <code>true</code> if following text would start on a new line,
      * <code>false</code> otherwise.
      */
     public boolean breaksFlow ()
     {
-        return (breakTags.contains (getText ().toUpperCase ()));
+        return (breakTags.containsKey (getText ().toUpperCase ()));
     }
 
     /**
@@ -510,9 +395,8 @@ public class TagNode extends AbstractNode
      * in the tag classes.
      * @see org.htmlparser.Node#collectInto(NodeList, String)
      */
-	public void collectInto(NodeList collectionList, String filter) {
-		if (thisScanner!=null && thisScanner.getFilter()==filter) 
-			collectionList.add(this);
+	public void collectInto(NodeList collectionList, String filter)
+    {
 	}
 
 	/**
@@ -540,8 +424,7 @@ public class TagNode extends AbstractNode
 		return (getAttributes ());
 	}
 
-	public void accept(NodeVisitor visitor) {
-// todo: fix this		visitor.visitTag(this);
+	public void accept(Object visitor) {
 	}
 
 	public String getType() {
