@@ -5,6 +5,10 @@ in style tag
 [2] HTMLFormTag bug fixed - allows changing of internal form attributes,
 and is reflected in toHTML()
 [3] HTMLFormScanner included in lineup of standard scanners
+[4] Added default parser feedback object constructor in HTMLParser
+[5] Only single LinkProcessor object created now for link and image 
+scanners - leading to better performance
+
 
 Integration Build 1.2 - 20020831
 --------------------------------
