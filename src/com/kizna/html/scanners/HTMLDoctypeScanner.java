@@ -50,7 +50,7 @@ public class HTMLDoctypeScanner extends HTMLTagScanner {
 	private java.lang.String language;
 	private java.lang.String type;
 	/**
-	 * HTMLScriptScanner constructor comment.
+	 * HTMLDoctypeScanner constructor 
 	 */
 	public HTMLDoctypeScanner() {
 		super();

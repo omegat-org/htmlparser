@@ -65,7 +65,12 @@ import com.kizna.html.tags.HTMLFormTag;
  */
 public class HTMLFormScanner extends HTMLTagScanner
 {
- 
+ 	/**
+	 * HTMLFormScanner constructor comment.
+	 */
+	public HTMLFormScanner() {
+		super();
+	}
 	/**
 	 * Overriding the constructor to accept the filter
 	 */
