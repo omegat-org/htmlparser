@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -32,6 +32,7 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 import org.htmlparser.tags.HTMLTag;
+
 
 /**
  * To change this generated comment edit the template variable "typecomment":
@@ -47,12 +48,12 @@ public class HTMLParameterParser {
     private final char singleQuote = '\'';
 
 
-        
-        
+
+
 	/**
 	* Method to break the tag into pieces.
 	* @param returns a Hastable with elements containing the
-	* pieces of the tag. The tag-name has the value field set to 
+	* pieces of the tag. The tag-name has the value field set to
 	* the constant HTMLTag.TAGNAME. In addition the tag-name is
 	* stored into the Hashtable with the name HTMLTag.TAGNAME
 	* where the value is the name of the tag.
@@ -63,7 +64,7 @@ public class HTMLParameterParser {
 	* names converted into UPPERCASE to the Hastable
 	* E.g extract the href values from A-tag's and print them
 	* <pre>
-	*    
+	*
     *    HTMLTag tag;
 	*    Hashtable h;
 	*    String tmp;
@@ -76,7 +77,7 @@ public class HTMLParameterParser {
     *                tag = (HTMLTag)en.nextElement();
     *                h = tag.parseParameters();
     *                tmp = (String)h.get(tag.TAGNAME);
-    *                if (tmp != null && tmp.equalsIgnoreCase("A")) {;    
+    *                if (tmp != null && tmp.equalsIgnoreCase("A")) {;
     *                    System.out.println("URL is :" + h.get("HREF"));
     *                }
     *            } catch (ClassCastException ce){}
@@ -90,17 +91,17 @@ public class HTMLParameterParser {
 	*/
    public Hashtable parseAttributes(HTMLTag tag){
         Hashtable h = new Hashtable();
-        String element,name,value,nextPart=null;     
-        
+        String element,name,value,nextPart=null;
+        String empty=null;
         name=null;
         value=null;
         element=null;
         boolean waitingForEqual=false;
-        
+
         StringTokenizer tokenizer = new StringTokenizer(tag.getText(),delim,true);
         while (true) {
             nextPart=getNextPart(tokenizer);
-            
+
             if (element==null && nextPart != null && !nextPart.equals("=")){
                 element = nextPart;
                 putDataIntoTable(h,element,null,true);
@@ -115,40 +116,44 @@ public class HTMLParameterParser {
                     }
                     else {
                         if (waitingForEqual){
-                            if (nextPart.equals("=")) {                                                    
-                                waitingForEqual=false;                                            
+                            if (nextPart.equals("=")) {
+                                waitingForEqual=false;
                             }
-                            else {                                                    
-                                 putDataIntoTable(h,name,"",false);         
+                            else {
+                                 putDataIntoTable(h,name,"",false);
                                  name=nextPart;
                                  value=null;
                             }
                         }
                         if (!waitingForEqual && !nextPart.equals("=")) {
                             value=nextPart;
-                            putDataIntoTable(h,name,value,false);                            
+                            putDataIntoTable(h,name,value,false);
                             name=null;
-                            value=null;                                                                                        
+                            value=null;
                         }
                     }
                 }
                 else {
                     if (name != null) {
-                        putDataIntoTable(h,name,"",false);                                                   
-                        name=null;
-                        value=null;
+                      if (name.equals("/")) {
+                        putDataIntoTable(h,HTMLTag.EMPTYTAG,"",false);
+                      } else {
+                        putDataIntoTable(h,name,"",false);
+                      }
+                      name=null;
+                      value=null;
                     }
                     break;
-                }                
+                }
             }
         }
         return h;
     }
-    
+
     private String getNextPart(StringTokenizer tokenizer){
         String tokenAccumulator=null;
         boolean isDoubleQuote=false;
-        boolean isSingleQuote=false;        
+        boolean isSingleQuote=false;
         boolean isDataReady=false;
         String currentToken;
         while (isDataReady == false && tokenizer.hasMoreTokens()) {
@@ -157,55 +162,55 @@ public class HTMLParameterParser {
             // First let's combine tokens that are inside "" or ''
             //
             if (isDoubleQuote || isSingleQuote) {
-                if (isDoubleQuote && currentToken.charAt(0)==doubleQuote){                
-                    isDoubleQuote= false;                                   
+                if (isDoubleQuote && currentToken.charAt(0)==doubleQuote){
+                    isDoubleQuote= false;
                     isDataReady=true;
                 } else if (isSingleQuote && currentToken.charAt(0)==singleQuote) {
                     isSingleQuote=false;
                     isDataReady=true;
-                }else {               
-                    tokenAccumulator += currentToken;   
+                }else {
+                    tokenAccumulator += currentToken;
                     continue;
                 }
-            } else if (currentToken.charAt(0)==doubleQuote){                
+            } else if (currentToken.charAt(0)==doubleQuote){
                 isDoubleQuote= true;
                 tokenAccumulator = "";
                 continue;
             } else if (currentToken.charAt(0)==singleQuote){
                 isSingleQuote=true;
                 tokenAccumulator="";
-                continue;                
+                continue;
             } else tokenAccumulator = currentToken;
-            
-            if (tokenAccumulator.equals(currentToken)) {            
-                
+
+            if (tokenAccumulator.equals(currentToken)) {
+
                 if (delim.indexOf(tokenAccumulator)>=0) {
                     if (tokenAccumulator.equals("=")){
                         isDataReady=true;
                     }
                 }
                 else {
-                    
+
                     isDataReady=true;
-                }                
-            }      
+                }
+            }
             else isDataReady=true;
 
         }
-        return tokenAccumulator;                
+        return tokenAccumulator;
     }
-    
-    
+
+
     private void putDataIntoTable(Hashtable h,String name,String value,boolean isName) {
         if (isName && value == null) value=HTMLTag.TAGNAME;
         else if (value==null) value = ""; // Hashtable does not accept nulls
         if (isName) {
-            // store tagname as tag.TAGNAME,tag                        
-            h.put(value,name.toUpperCase());  
-        } 
-        else {                   
+            // store tagname as tag.TAGNAME,tag
+            h.put(value,name.toUpperCase());
+        }
+        else {
             // store tag parameters as NAME, value
-            h.put(name.toUpperCase(),value);  
+            h.put(name.toUpperCase(),value);
         }
     }
 }

@@ -10,19 +10,19 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@industriallogic.com
-// 
-// Postal Address : 
+//
+// Postal Address :
 // Somik Raha
 // Extreme Programmer & Coach
 // Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley, 
+// 2583 Cedar Street, Berkeley,
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
@@ -41,7 +41,7 @@ import org.htmlparser.HTMLReader;
 /**
  * HTMLTag represents a generic tag. This class allows users to register specific
  * tag scanners, which can identify links, or image references. This tag asks the
- * scanners to run over the text, and identify. It can be used to dynamically 
+ * scanners to run over the text, and identify. It can be used to dynamically
  * configure a parser.
  * @author Kaarle Kaila 23.10.2001
  */
@@ -51,15 +51,16 @@ public class HTMLTag extends HTMLNode
     * Constant used as value for the value of the tag name
     * in parseParameters  (Kaarle Kaila 3.8.2001)
     */
-    public final static String TAGNAME = "$<TAGNAME>$";    
+    public final static String TAGNAME = "$<TAGNAME>$";
+    public final static String EMPTYTAG = "$<EMPTYTAG>$";
 	private final static int TAG_BEFORE_PARSING_STATE=1;
     private final static int TAG_BEGIN_PARSING_STATE=2;
     private final static int TAG_FINISHED_PARSING_STATE=3;
 	private final static int TAG_ILLEGAL_STATE=4;
-	private final static int TAG_IGNORE_DATA_STATE=5;	    
+	private final static int TAG_IGNORE_DATA_STATE=5;
 	private final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
 	private final static String EMPTY_STRING="";
-	
+
 	private static HTMLParameterParser paramParser = new HTMLParameterParser();
 	private static HTMLTagParser tagParser;
 	/**
@@ -72,7 +73,7 @@ public class HTMLTag extends HTMLNode
 	* added by Kaarle Kaila 23.10.2001
 	*/
 	protected Hashtable attributes=null;
-	
+
 	/**
 	 * Scanner associated with this tag (useful for extraction of filtering data from a
 	 * HTML node)
@@ -131,30 +132,30 @@ public class HTMLTag extends HTMLNode
 		this.tagContents.append(tagData.getTagContents());
 		this.tagLine = tagData.getTagLine();
 	}
-	
+
 	public void append(char ch) {
 		tagContents.append(ch);
 	}
-	
+
 	public void append(String ch) {
 		tagContents.append(ch);
 	}
-	
+
 	/**
 	 * Locate the tag withing the input string, by parsing from the given position
 	 * @param reader HTML reader to be provided so as to allow reading of next line
 	 * @param input Input String
 	 * @param position Position to start parsing from
-	 */			
+	 */
 	public static HTMLTag find(HTMLReader reader,String input,int position)
 	{
 		return tagParser.find(reader,input,position);
 	}
-	
+
 	/**
-	 * This method is not to be called by any scanner or tag. It is 
+	 * This method is not to be called by any scanner or tag. It is
 	 * an expensive method, hence it has been made private. However,
-	 * there might be some circumstances when a scanner wishes to force 
+	 * there might be some circumstances when a scanner wishes to force
 	 * parsing of attributes over and above what has already been parsed.
 	 * To make the choice clear - we have a method - redoParseAttributes(),
 	 * which can be used.
@@ -163,7 +164,7 @@ public class HTMLTag extends HTMLNode
 	private Hashtable parseAttributes(){
 	 	return paramParser.parseAttributes(this);
 	}
-	
+
 	/**
 	 * In case the tag is parsed at the scan method this will return value of a
 	 * parameter not implemented yet
@@ -172,18 +173,18 @@ public class HTMLTag extends HTMLNode
 	public String getParameter(String name){
 	    return (String)getAttributes().get(name.toUpperCase());
 	}
-	
+
 	/**
 	 * Gets the attributes in the tag.
-	 * @return Returns a Hashtable of attributes 
+	 * @return Returns a Hashtable of attributes
 	 */
 	public Hashtable getAttributes() {
 		if (attributes == null) {
 	    	attributes = parseAttributes();
-	    } 		
+	    }
 		return attributes;
 	}
-	
+
 	public String getTagName(){
 	    return (String)getAttributes().get(TAGNAME);
 	}
@@ -195,7 +196,7 @@ public class HTMLTag extends HTMLNode
 	public java.lang.String getTagLine() {
 		return tagLine;
 	}
-	
+
 	/**
 	 * Return the text contained in this tag
 	 */
@@ -203,7 +204,7 @@ public class HTMLTag extends HTMLNode
 	{
 		return tagContents.toString();
 	}
-	
+
 	/**
 	 * Return the scanner associated with this tag.
 	 */
@@ -211,7 +212,7 @@ public class HTMLTag extends HTMLNode
 	{
 		return thisScanner;
 	}
-		
+
 	public static String extractWord(String s) {
 		String word = "";
 		boolean parse=true;
@@ -222,7 +223,7 @@ public class HTMLTag extends HTMLNode
 		word = word.toUpperCase();
 		return word;
 	}
-	
+
 	/**
 	 * Scan the tag to see using the registered scanners, and attempt identification.
 	 * @param url URL at which HTML page is located
@@ -239,7 +240,7 @@ public class HTMLTag extends HTMLNode
 			// Now, get the scanner associated with this.
 			HTMLTagScanner scanner = (HTMLTagScanner)scanners.get(firstWord);
 			// Now do a deep check
-			if (scanner != null && 
+			if (scanner != null &&
 					scanner.evaluate(
 						tagContents.toString(),
 						reader.getPreviousOpenScanner()
@@ -251,9 +252,9 @@ public class HTMLTag extends HTMLNode
 				retVal=scanner.createScannedNode(this,url,reader,tagLine);
 				reader.setPreviousOpenScanner(null);
 			}
-			
+
 			if (!found) return this;
-			else {   			
+			else {
 			    return retVal;
 			}
 		}
@@ -263,7 +264,7 @@ public class HTMLTag extends HTMLNode
 			throw new HTMLParserException("HTMLTag.scan() : Error while scanning tag, tag contents = "+errorMsg+", tagLine = "+tagLine,e);
 		}
 	}
-	
+
 	/**
 	 * Sets the parsed.
 	 * @param parsed The parsed to set
@@ -279,7 +280,7 @@ public class HTMLTag extends HTMLNode
 	public void setTagBegin(int tagBegin) {
 		this.nodeBegin = tagBegin;
 	}
-	
+
 	/**
 	 * Sets the nodeEnd.
 	 * @param nodeEnd The nodeEnd to set
@@ -287,24 +288,24 @@ public class HTMLTag extends HTMLNode
 	public void setTagEnd(int tagEnd) {
 		this.nodeEnd = tagEnd;
 	}
-    
+
     public void setTagLine(java.lang.String newTagLine) {
 	    tagLine = newTagLine;
     }
-	
+
 	public void setText(String text) {
 		tagContents = new StringBuffer(text);
 	}
-	
+
 	public void setThisScanner(HTMLTagScanner scanner)
 	{
 		thisScanner = scanner;
 	}
-	
+
 	public String toPlainTextString() {
 		return EMPTY_STRING;
 	}
-	
+
 	/**
 	 * A call to a tag's toHTML() method will render it in HTML
 	 * Most tags that do not have children and inherit from HTMLTag,
@@ -317,24 +318,30 @@ public class HTMLTag extends HTMLNode
 		sb.append(getTagName());
 		if (containsMoreThanOneKey()) sb.append(" ");
 		String key,value;
+                String empty=null;
 		int i=0;
 		for (Enumeration e = attributes.keys();e.hasMoreElements();) {
 			key = (String)e.nextElement();
 			i++;
-			if (key!=TAGNAME) {
+			if (!key.equals(TAGNAME)) {
+                          if (key.equals(EMPTYTAG)){
+                            empty="/";
+                          } else {
 				value = getParameter(key);
 				sb.append(key+"=\""+value+"\"");
 				if (i<attributes.size()) sb.append(" ");
+                          }
 			}
 		}
+                if (empty != null) sb.append(empty);
 		sb.append(">");
-		return sb.toString();	
+		return sb.toString();
 	}
-	
+
 	private boolean containsMoreThanOneKey() {
 		return attributes.keySet().size()>1;
 	}
-	
+
 	/**
 	 * Print the contents of the tag
 	 */
@@ -342,7 +349,7 @@ public class HTMLTag extends HTMLNode
 	{
 		return "Begin Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
-	
+
 	/**
 	 * Sets the tagParser.
 	 * @param tagParser The tagParser to set
@@ -360,9 +367,9 @@ public class HTMLTag extends HTMLNode
     {
         return (breakTags.contains (getText ().toUpperCase ()));
     }
-    
+
     /**
-     * This method verifies that the current tag matches the provided 
+     * This method verifies that the current tag matches the provided
      * filter. The match is based on the string object and not its contents,
      * so ensure that you are using static final filter strings provided
      * in the tag classes.
@@ -371,9 +378,9 @@ public class HTMLTag extends HTMLNode
 	public void collectInto(Vector collectionVector, String filter) {
 		if (thisScanner!=null && thisScanner.getFilter()==filter) collectionVector.add(this);
 	}
-	
+
 	/**
-	 * Returns table of attributes in the tag 
+	 * Returns table of attributes in the tag
 	 * @return Hashtable
 	 * @deprecated This method is deprecated. Use getAttributes() instead.
 	 */
@@ -386,14 +393,14 @@ public class HTMLTag extends HTMLNode
 	 * attributes in a tag. This may happen when there is some correction
 	 * activity. An example of its usage can be found in HTMLImageTag.
 	 * <br>
-	 * <B>Note:<B> This is an intensive task, hence call only when 
+	 * <B>Note:<B> This is an intensive task, hence call only when
 	 * really necessary
 	 * @return Hashtable
 	 */
 	public Hashtable redoParseAttributes() {
 		return parseAttributes();
 	}
-	
+
 	public void accept(HTMLVisitor visitor) {
 		visitor.visitTag(this);
 	}
