@@ -225,7 +225,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 					}
 				}
 			} 
-			else nodeVector.addElement(node);
+			else if (node!=null) nodeVector.addElement(node);
 		}
 		while (endFlag==false && node!=null);
 		if (node instanceof HTMLEndTag || node==null)

@@ -431,7 +431,8 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 			node[i++] = (HTMLNode)e.nextElement();
 		}
 		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
-		assertTrue("Node 0 should be a tag",node[0] instanceof HTMLTag);
-		HTMLTag tag = (HTMLTag)node[0];
+		assertTrue("Node 0 should be a link tag",node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		assertNotNull(linkTag.toString());
 	}	
 }
