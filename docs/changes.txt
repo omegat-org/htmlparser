@@ -10,7 +10,9 @@ Integration build 1.3 - 20021228
 	(v) HTMLTitleTag
 	(vi) HTMLTextAreaTag 
 	(vii) HTMLStyleTag
-
+	(viii) HTMLScriptTag
+	(ix) HTMLAppletTag
+	
 Production Release 1.2
 ----------------------
 [1] Rewrote HTMLLinkProcessor.extract() so URL class does all the heavy lifting
