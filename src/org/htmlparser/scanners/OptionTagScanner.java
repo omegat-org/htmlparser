@@ -28,95 +28,31 @@
 
 package org.htmlparser.scanners;
 
-import java.util.Map;
-
-import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
-import org.htmlparser.StringNode;
-import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.util.ParserException;
-import org.htmlparser.util.ParserUtils;
 
-public class OptionTagScanner extends TagScanner
+public class OptionTagScanner extends CompositeTagScanner
 {
-	public OptionTagScanner()
-	{
-		super();
-	}
-	
-	public OptionTagScanner(String filter)
-	{
-		super(filter);
-	}
-	
-	public Tag scan(Tag tag, String pUrl, NodeReader reader, String currLine)
-			throws ParserException
-	{
-		try
-		{
-			EndTag endTag=null;
-			Node node = null;
-			Node prevNode = tag;
-			boolean endTagFound=false;
-			StringBuffer text=new StringBuffer("");
-			// Remove all existing scanners, so as to parse only till the end tag
-			Map tempScanners = ParserUtils.adjustScanners(reader);	
+	private static final String MATCH_NAME [] = {"OPTION"};
+	private static final String [] ENDERS = { "SELECT" };
 
-			do 
-			{
-				node = reader.readElement();
-				if (node instanceof EndTag)
-				{
-					endTag = (EndTag)node;
-					String endTagString = endTag.getText().toUpperCase();
-					if (endTagString.equals("OPTION") || endTagString.equals("SELECT")) 
-					{
-						endTagFound = true;
-						if (endTagString.equals("SELECT"))
-						{
-							node = prevNode;
-						}
-					}
-				}
-				else if (node instanceof StringNode)
-				{
-					text.append(node.toHtml());
-				}
-				else 
-				{
-					endTagFound = true;
-					node = prevNode;
-				}
-				prevNode = node;
-			}
-			while (!endTagFound);
-			OptionTag lOptionTag = 
-			new OptionTag(
-				new TagData(
-					0, node.elementEnd(), tag.getText(),currLine
-				), 
-				text.toString()
-			);
-			ParserUtils.restoreScanners(reader, tempScanners);
-			return lOptionTag;										
-		}
-		catch (Exception e) 
-		{
-			throw new ParserException("HTMLOptionTagScanner.scan() : Error while scanning option tags, current line = "+currLine,e);
-		}
+	public OptionTagScanner() {
+		super(MATCH_NAME, ENDERS, false);
 	}
 	
-	
-	
-	/**
-	 * @see org.htmlparser.scanners.TagScanner#getID()
-	 */
+	public OptionTagScanner(String filter) {
+		super(filter, MATCH_NAME, ENDERS, false);
+	}
+
 	public String [] getID() {
-		String [] ids = new String[1];
-		ids[0] = "OPTION";
-		return ids;
+		return MATCH_NAME;
+	}
+	
+	public Tag createTag(
+		TagData tagData,
+		CompositeTagData compositeTagData) {
+		return new OptionTag(tagData,compositeTagData);
 	}
 }

@@ -28,46 +28,36 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserUtils;
 
-public class OptionTag extends Tag
+public class OptionTag extends CompositeTag
 {
 	private String value;
 	
-	public OptionTag(TagData tagData, String text)
+	public OptionTag(TagData tagData, CompositeTagData compositeTagData)
 	{
-		super(tagData);
-		this.value = text;
+		super(tagData, compositeTagData);
+		this.value = (String)this.getAttribute("VALUE");
 	}
 	
 	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public String toHtml()
-	{
-		String lHTMLString = ParserUtils.toHTML(this);
-		
-		StringBuffer lOptionTag = new StringBuffer(lHTMLString);
-
-		if (value != null)
-			lOptionTag.append(value);
-		
-		lOptionTag.append("</OPTION>");
-		
-		return lOptionTag.toString();
+		return this.value;
 	}
 	
-	public String toString() 
-	{
-		StringBuffer lString = new StringBuffer(ParserUtils.toString(this));
-		lString.append("TEXT : ").append(value).append("\n");
-		
-		return lString.toString();
+	public void setValue(String value) {
+		this.value = value;
+		this.setAttribute("VALUE",value);
 	}
+	
+	public String getOptionText() {
+		return toPlainTextString();
+	}
+	
+	public String toString() {
+		String output = "OPTION VALUE: " + value + " TEXT: "+getOptionText()+"\n";
+		return output;
+	}
+
 }

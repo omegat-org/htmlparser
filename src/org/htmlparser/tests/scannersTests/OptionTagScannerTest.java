@@ -70,4 +70,9 @@ public class OptionTagScannerTest extends ParserTestCase
 			assertEquals("Option Scanner",scanner,OptionTag.getThisScanner());
 		}
 	}
+	public static void main(String[] args) 
+	{
+		new junit.awtui.TestRunner().start(new String[] {OptionTagScannerTest.class.getName()});
+	}
+
 }

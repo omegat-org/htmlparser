@@ -40,8 +40,12 @@ public class SelectTagScannerTest extends ParserTestCase
 {
 	
 	private String testHTML = new String(
-									"<Select name=\"Remarks\">" +										"<option value='option1'>option1</option>" +									"</Select>" +
-									"<Select name=\"something\">" +										"<option value='option2'>option2</option>" +									"</Select>" +
+									"<Select name=\"Remarks\">" +
+										"<option value='option1'>option1</option>" +
+									"</Select>" +
+									"<Select name=\"something\">" +
+										"<option value='option2'>option2</option>" +
+									"</Select>" +
 									"<Select></Select>" +
 									"<Select name=\"Remarks\">The death threats of the organization\n" +
 									"refused to intimidate the soldiers</Select>" +
@@ -82,7 +86,7 @@ public class SelectTagScannerTest extends ParserTestCase
 		SelectTag selectTag = (SelectTag)node[0];
 		OptionTag [] optionTags = selectTag.getOptionTags();
 		assertEquals("option tag array length",1,optionTags.length);
-		assertEquals("option tag value","option1",optionTags[0].getValue());
+		assertEquals("option tag value","option1",optionTags[0].getOptionText());
 	}
 	
 	/**
@@ -90,7 +94,12 @@ public class SelectTagScannerTest extends ParserTestCase
 	 */
 	public void testSelectTagWithComments() throws Exception {
 		createParser(
-			"<form>" +			"<select> " +			"<!-- 1 --><option selected>123 " +			"<option>345 " +			"</select> " +			"</form>"
+			"<form>" +
+			"<select> " +
+			"<!-- 1 --><option selected>123 " +
+			"<option>345 " +
+			"</select> " +
+			"</form>"
 		);
 		parser.registerScanners();
 		parseAndAssertNodeCount(1);

@@ -102,8 +102,13 @@ public class SelectTagTest extends ParserTestCase
 	public void testGetOptionTags() {
 		OptionTag [] optionTags = selectTag.getOptionTags();
 		assertEquals("option tag array length",7,optionTags.length);
-		assertEquals("option tag 1","Spouse",optionTags[0].getValue());
-		assertEquals("option tag 7","Niece\r\n",optionTags[6].getValue());
+		assertEquals("option tag 1","Spouse",optionTags[0].getOptionText());
+		assertEquals("option tag 7","Niece\r\n",optionTags[6].getOptionText());
 	}
 		
+	public static void main(String[] args) 
+	{
+		new junit.awtui.TestRunner().start(new String[] {SelectTagTest.class.getName()});
+	}
+
 }

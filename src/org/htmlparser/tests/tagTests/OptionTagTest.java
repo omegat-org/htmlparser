@@ -50,6 +50,8 @@ public class OptionTagTest extends ParserTestCase
 									"<OPTION>\nRediff\n</OPTION>\n"+
 									"<OPTION>Cricinfo" +
 									"<OPTION value=\"Microsoft Passport\">"
+//									"<OPTION value=\"AOL\"><SPAN>AOL</SPAN></OPTION>" +
+//									"<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL>"
 									);
 	
 	public OptionTagTest(String name) 
@@ -60,7 +62,7 @@ public class OptionTagTest extends ParserTestCase
 	protected void setUp() throws Exception {
 		super.setUp();
 		createParser(testHTML);
-		parser.addScanner(new OptionTagScanner("-i"));
+		parser.addScanner(new OptionTagScanner("-option"));
 		parseAndAssertNodeCount(11);
 	}	
 	
@@ -68,7 +70,9 @@ public class OptionTagTest extends ParserTestCase
 	{
 		for(int j=0;j<nodeCount;j++)
 		{
-			assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
+			//assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
+			System.out.println(node[j].getClass().getName());
+			System.out.println(node[j].toHtml());
 		}
 		OptionTag OptionTag;
 		OptionTag = (OptionTag) node[0];
@@ -80,50 +84,63 @@ public class OptionTagTest extends ParserTestCase
 		OptionTag = (OptionTag) node[3];
 		assertStringEquals("HTML String","<OPTION>Yahoo!</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[4];
-		assertStringEquals("HTML String","<OPTION>Hotmail</OPTION>",OptionTag.toHtml());
+		assertStringEquals("HTML String","<OPTION>\r\nHotmail</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[5];
 		assertStringEquals("HTML String","<OPTION VALUE=\"ICQ Messenger\"></OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[6];
 		assertStringEquals("HTML String","<OPTION>Mailcity\r\n</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[7];
-		assertStringEquals("HTML String","<OPTION>Indiatimes\r\n</OPTION>",OptionTag.toHtml());
+		assertStringEquals("HTML String","<OPTION>\r\nIndiatimes\r\n</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[8];
-		assertStringEquals("HTML String","<OPTION>Rediff\r\n</OPTION>",OptionTag.toHtml());
+		assertStringEquals("HTML String","<OPTION>\r\nRediff\r\n</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[9];
 		assertStringEquals("HTML String","<OPTION>Cricinfo</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[10];
 		assertStringEquals("HTML String","<OPTION VALUE=\"Microsoft Passport\"></OPTION>",OptionTag.toHtml());
-	}	
+/*		OptionTag = (OptionTag) node[11];
+		assertStringEquals("HTML String","<OPTION VALUE=\"AOL\"><SPAN>AOL</SPAN></OPTION>",OptionTag.toHtml());
+		OptionTag = (OptionTag) node[12];
+		assertStringEquals("HTML String","<OPTION value=\"Time Warner\">Time <LABEL>Warner <SPAN>AOL </SPAN>Inc.</LABEL></OPTION>",OptionTag.toHtml());
+*/	}	
 	
 	public void testToString() throws ParserException 
 	{
-		for(int j=0;j<nodeCount;j++)
+		for(int j=0;j<11;j++)
 		{
 			assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
 		}
 		OptionTag OptionTag;
 		OptionTag = (OptionTag) node[0];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nVALUE : Google Search\nTEXT : Google\n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: Google Search TEXT: Google\n",OptionTag.toString());
 		OptionTag = (OptionTag) node[1];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nVALUE : AltaVista Search\nTEXT : AltaVista\n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: AltaVista Search TEXT: AltaVista\n",OptionTag.toString());
 		OptionTag = (OptionTag) node[2];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nVALUE : Lycos Search\nTEXT : \n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: Lycos Search TEXT: \n",OptionTag.toString());
 		OptionTag = (OptionTag) node[3];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nTEXT : Yahoo!\n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Yahoo!\n",OptionTag.toString());
 		OptionTag = (OptionTag) node[4];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nTEXT : Hotmail\n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Hotmail\n",OptionTag.toString());
 		OptionTag = (OptionTag) node[5];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nVALUE : ICQ Messenger\nTEXT : \n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: ICQ Messenger TEXT: \n",OptionTag.toString());
 		OptionTag = (OptionTag) node[6];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nTEXT : Mailcity\r\n\n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Mailcity\r\n\n",OptionTag.toString());
 		OptionTag = (OptionTag) node[7];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nTEXT : Indiatimes\r\n\n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Indiatimes\r\n\n",OptionTag.toString());
 		OptionTag = (OptionTag) node[8];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nTEXT : Rediff\r\n\n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Rediff\r\n\n",OptionTag.toString());
 		OptionTag = (OptionTag) node[9];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nTEXT : Cricinfo\n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: null TEXT: Cricinfo\n",OptionTag.toString());
 		OptionTag = (OptionTag) node[10];
-		assertEquals("HTML Raw String","OPTION TAG\n--------\nVALUE : Microsoft Passport\nTEXT : \n",OptionTag.toString());
+		assertEquals("HTML Raw String","OPTION VALUE: Microsoft Passport TEXT: \n",OptionTag.toString());
+/*		OptionTag = (OptionTag) node[11];
+		assertEquals("HTML Raw String","OPTION VALUE: AOL TEXT: AOL\n",OptionTag.toString());
+		OptionTag = (OptionTag) node[12];
+		assertEquals("HTML Raw String","OPTION VALUE: Time Warner TEXT: Time Warner AOL Inc.\n",OptionTag.toString());
+*/	}
+	
+	public static void main(String[] args) 
+	{
+		new junit.awtui.TestRunner().start(new String[] {OptionTagTest.class.getName()});
 	}
 	
 }
