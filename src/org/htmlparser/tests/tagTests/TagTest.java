@@ -676,4 +676,24 @@ public class TagTest extends ParserTestCase
             "<A HREF=\"http://www.google.com/webhp?hl=en\"></A>",
             temp);
     }
+
+    /**
+     * See bug #740411 setParsed() has no effect on output.
+     */
+    public void testParameterChange() throws ParserException
+    {
+		createParser("<TABLE BORDER=0>");
+		parseAndAssertNodeCount(1);
+		// the node should be an HTMLTag
+		assertTrue("Node should be a HTMLTag",node[0] instanceof Tag);
+		Tag tag = (Tag)node[0];
+		assertEquals("Initial text should be","TABLE BORDER=0",tag.getText ());
+
+		Hashtable tempHash = tag.getAttributes ();
+		tempHash.put ("BORDER","1");
+		tag.setAttributes (tempHash);
+
+        String s = tag.toHtml ();
+		assertEquals("HTML should be","<TABLE BORDER=\"1\" >", s);
+    }	
 }
