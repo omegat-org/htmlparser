@@ -1,6 +1,6 @@
 // HTMLParser Library $Name$ - A java-based parser for HTML
 // http://sourceforge.org/projects/htmlparser
-// Copyright (C) 2003 Somik Raha
+// Copyright (C) 2003 Derrick Oswald
 //
 // Revision Control Information
 //
@@ -26,48 +26,29 @@
 
 package org.htmlparser.scanners;
 
-import java.io.Serializable;
-
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
- * TagScanner is an abstract superclass, subclassed to create specific scanners.
- * When asked to scan the tag, this class does nothing other than perform the
- * tag's semantic action.
- * Use TagScanner when you have a meta task to do like setting the BASE url for
- * the page when a BASE tag is encountered.
- * If you want to match end tags and handle special syntax between tags,
- * then you'll probably want to subclass {@link CompositeTagScanner} instead.
+ * Generic interface for scanning.
+ * Tags needing specialized operations can provide an object that implements
+ * this interface via getThisScanner().
+ * By default non-composite tags simply perform the semantic action and
+ * return while composite tags will gather their children.
  */
-public class TagScanner
-    implements
-        Scanner,
-        Serializable
+public interface Scanner
 {
     /**
-     * Create a (non-composite) tag scanner.
-     */
-    public TagScanner ()
-    {
-    }
-
-    /**
      * Scan the tag.
-     * For this implementation, the only operation is to perform the tag's
-     * semantic action.
-     * @param tag The tag to scan.
+     * The Lexer is provided in order to do a lookahead operation.
+     * @param tag HTML tag to be scanned for identification.
      * @param lexer Provides html page access.
      * @param stack The parse stack. May contain pending tags that enclose
-     * this tag.
+     * this tag. Nodes on the stack should be considered incomplete.
      * @return The resultant tag (may be unchanged).
+     * @exception ParserException if an unrecoverable problem occurs.
      */
-    public Tag scan (Tag tag, Lexer lexer, NodeList stack) throws ParserException
-    {
-        tag.doSemanticAction ();
-
-        return (tag);
-    }
+    public Tag scan (Tag tag, Lexer lexer, NodeList stack) throws ParserException;
 }

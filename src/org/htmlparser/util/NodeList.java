@@ -157,10 +157,13 @@ public class NodeList implements Serializable {
         return buff.toString();
     }
 
-    public void remove(int index) {
+    public Node remove(int index) {
+        Node ret;
+        ret = nodeData[index];
         System.arraycopy(nodeData, index+1, nodeData, index, size-index-1);
         nodeData[size-1] = null;
         size--;
+        return (ret);
     }
 
     public void removeAll() {

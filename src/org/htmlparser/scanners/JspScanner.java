@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031207 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Somik Raha
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,64 +16,26 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
-
 
 package org.htmlparser.scanners;
 
-import java.util.Vector;
-import org.htmlparser.lexer.Page;
-/////////////////////////
-// HTML Parser Imports //
-/////////////////////////
-import org.htmlparser.tags.JspTag;
-import org.htmlparser.tags.Tag;
-import org.htmlparser.util.ParserException;
-
-public class JspScanner extends TagScanner {
-
-    public JspScanner() {
-        super();
-    }
-
-    public JspScanner(String filter) {
-        super(filter);
-    }
-
-    public String [] getID() {
-        String [] ids = new String[3];
-        ids[0] = "%";
-        ids[1] = "%=";
-        ids[2] = "%@";
-        return ids;
-    }
-
-    public Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+/**
+ * Placeholder for <em>yet to be written</em> scanner for JSP tags.
+ * This vacuous class does nothing special at the moment.
+ */
+public class JspScanner extends TagScanner
+{
+    /**
+     * Create a new JspScanner.
+     */
+    public JspScanner ()
     {
-        JspTag ret;
-        
-        ret = new JspTag ();
-        ret.setPage (page);
-        ret.setStartPosition (start);
-        ret.setEndPosition (end);
-        ret.setAttributesEx (attributes);
-        
-        return (ret);
     }
 }

@@ -73,12 +73,6 @@ would be rearranged as
 This needs some design work.
 </li>
 <li>
-The recursion that currently happens on the JVM stack can probably be done via a
-stack of open tags passed to the scanner. This would probably avoid the 'Stack
-overflow' exceptions observed on Windows and also allow for smarter tag closing
-(in conjuction with the end tag enders list).
-</li>
-<li>
 Change all the headers to match the new format. The integration process needs to
 be revamped to use the $Name: CVS substitution (via 'get label'), so a checkin
 isn't required every integration.

@@ -30,6 +30,9 @@ import java.util.Vector;
 
 import org.htmlparser.Node;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.scanners.Scanner;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.util.NodeList;
 
 /**
  * @deprecated shouldn't need to pre-read tags.
@@ -49,6 +52,10 @@ public class PeekingIteratorImpl implements PeekingIterator
 
     public Node peek () throws ParserException
     {
+        Tag tag;
+        String name;
+        Scanner scanner;
+        NodeList stack;
         Node ret;
 
         if (null == mLexer)
@@ -62,17 +69,17 @@ public class PeekingIteratorImpl implements PeekingIterator
                     // kick off recursion for the top level node
                     if (ret instanceof org.htmlparser.tags.Tag)
                     {
-                        org.htmlparser.tags.Tag tag;
-                        String name;
-                        org.htmlparser.scanners.TagScanner scanner;
 
                         tag = (org.htmlparser.tags.Tag)ret;
                         if (!tag.isEndTag ())
                         {
                             // now recurse if there is a scanner for this type of tag
                             scanner = tag.getThisScanner ();
-                            if ((null != scanner) && scanner.evaluate (tag, null))
-                                ret = scanner.scan (tag, mLexer.getPage ().getUrl (), mLexer);
+                            if (null != scanner)
+                            {
+                                stack = new NodeList ();
+                                ret = scanner.scan (tag, mLexer, stack);
+                            }
                         }
                     }
 

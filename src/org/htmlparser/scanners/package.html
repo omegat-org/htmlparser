@@ -2,53 +2,50 @@
 <html>
 <head>
 <!--
+HTMLParser Library $Name$ - A java-based parser for HTML
+http://sourceforge.org/projects/htmlparser
+Copyright (C) 2003 Somik Raha
 
-  @(#)package.html  1.60 98/01/27
+Revision Control Information
 
- HTMLParser Library v1_4_20031207 - A java-based parser for HTML
- Copyright (C) Dec 31, 2000 Somik Raha
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 2.1 of the License, or (at your option) any later version.
-
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General Public
- License along with this library; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
- For any questions or suggestions, you can write to me at :
- Email :somik@industriallogic.com
-
- Postal Address :
- Somik Raha
- Extreme Programmer & Coach
- Industrial Logic Corporation
- 2583 Cedar Street, Berkeley,
- CA 94708, USA
- Website : http://www.industriallogic.com
-
+$Source$
+$Author$
+$Date$
+$Revision$
+//
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+//
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+//
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+//
 -->
 </head>
 <body bgcolor="white">
-The scanners package contains scanners that can be fired automatically upon the identification of tags.
-Developers should familiarize themselves with this package, as extension to this framework will be mostly in the form of
-addition of custom scanners.
-
-
-<h2>Related Documentation</h2>
-
-For overviews, tutorials, examples, guides, and tool documentation, please see:
-<ul>
-  <li><a href="http://htmlparser.sourceforge.net">HTML Parser Home Page</a>
-</ul>
-
-<!-- Put @see and @since tags down here. -->
-
+The scanners package contains classes responsible for the tertiary
+identification of tags. The lower level classes in the {@link
+org.htmlparser.lexer.Lexer lexer} package convert
+byte streams to characters and characters to nodes (via the {@link
+org.htmlparser.lexer.nodes.NodeFactory NodeFactory}). In the case of tags, the
+scanners in this package can then complete the tag or override the current tag
+and return an augmented tag. The existing implementation of the {@link
+org.htmlparser.scanners.CompositeTagScanner composite tag
+scanner}, for example, gathers the children of composite tags, identifying the
+nested structure of HTML documents. The {@link
+org.htmlparser.scanners.ScriptScanner script scanner} overrides the nodes
+returned by the lexer and creates a tag containing a single string that is the
+script code.<br>
+You might need to create a scanner (that implements the {@link Scanner Scanner} interface) if
+the text you are trying to parse doesn't look like HTML, as is the case for the
+script scanner, or the normal processing of tags by nesting their structure is
+inadequate.
 </body>
 </html>

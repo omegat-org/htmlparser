@@ -1,5 +1,13 @@
-// HTMLParser Library v1_4_20031207 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// http://sourceforge.org/projects/htmlparser
+// Copyright (C) 2003 Somik Raha
+//
+// Revision Control Information
+//
+// $Source$
+// $Author$
+// $Date$
+// $Revision$
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -8,23 +16,13 @@
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-// For any questions or suggestions, you can write to me at :
-// Email :somik@industriallogic.com
-//
-// Postal Address :
-// Somik Raha
-// Extreme Programmer & Coach
-// Industrial Logic Corporation
-// 2583 Cedar Street, Berkeley,
-// CA 94708, USA
-// Website : http://www.industriallogic.com
 
 package org.htmlparser.scanners;
 
@@ -52,45 +50,24 @@ public class ScriptScanner
     extends
         CompositeTagScanner
 {
-    private static final String SCRIPT_END_TAG = "</SCRIPT>";
-    private static final String MATCH_NAME [] = {"SCRIPT"};
-    private static final String ENDERS [] = {"BODY", "HTML"};
-
-    public ScriptScanner() {
-        super("",ENDERS);
-    }
-
-    public ScriptScanner(String filter) {
-        super(filter,ENDERS);
-    }
-
-    public String [] getID() {
-        return MATCH_NAME;
-    }
-
-    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    /**
+     * Create a script scanner.
+     */
+    public ScriptScanner()
     {
-        ScriptTag ret;
-
-        ret = new ScriptTag ();
-        ret.setPage (page);
-        ret.setStartPosition (start);
-        ret.setEndPosition (end);
-        ret.setAttributesEx (attributes);
-        ret.setEndTag (endTag);
-        ret.setChildren (children);
-
-        return (ret);
     }
 
     /**
      * Scan for script.
      * Accumulates nodes returned from the lexer, until &lt;/SCRIPT&gt;,
      * &lt;BODY&gt; or &lt;HTML&gt; is encountered. Replaces the node factory
-     * in the lexer with a new Parser to avoid other scanners missing their 
-     * end tags and accumulating even the &lt;/SCRIPT&gt;.
+     * in the lexer with a new (empty) one to avoid other scanners missing their 
+     * end tags and accumulating even the &lt;/SCRIPT&gt; tag.
+     * @param tag The tag this scanner is responsible for.
+     * @param lexer The source of subsequent nodes.
+     * @param stack The parse stack, <em>not used</em>.
      */
-    public Tag scan (Tag tag, String url, Lexer lexer)
+    public Tag scan (Tag tag, Lexer lexer, NodeList stack)
         throws ParserException
     {
         Node node;
@@ -117,7 +94,7 @@ public class ScriptScanner
                 else
                     if (node instanceof Tag)
                         if (   ((Tag)node).isEndTag ()
-                            && ((Tag)node).getTagName ().equals (MATCH_NAME[0]))
+                            && ((Tag)node).getTagName ().equals (tag.getIds ()[0]))
                         {
                             end = (Tag)node;
                             done = true;
@@ -180,15 +157,5 @@ public class ScriptScanner
         }
 
         return (ret);
-    }
-
-    /**
-     * Gets the end tag that the scanner uses to stop scanning. Subclasses of
-     * <code>ScriptScanner</code> you should override this method.
-     * @return String containing the end tag to search for, i.e. &lt;/SCRIPT&gt;
-     */
-    public String getEndTag()
-    {
-        return SCRIPT_END_TAG;
     }
 }

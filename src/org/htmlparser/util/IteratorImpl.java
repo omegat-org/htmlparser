@@ -31,7 +31,7 @@ package org.htmlparser.util;
 import org.htmlparser.Node;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.scanners.TagScanner;
+import org.htmlparser.scanners.Scanner;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeIterator;
 
@@ -68,6 +68,10 @@ public class IteratorImpl implements NodeIterator
      */
     public Node nextNode() throws ParserException
     {
+        Tag tag;
+        String name;
+        Scanner scanner;
+        NodeList stack;
         Node ret;
 
         try
@@ -78,17 +82,16 @@ public class IteratorImpl implements NodeIterator
                 // kick off recursion for the top level node
                 if (ret instanceof Tag)
                 {
-                    Tag tag;
-                    String name;
-                    TagScanner scanner;
-
                     tag = (Tag)ret;
                     if (!tag.isEndTag ())
                     {
                         // now recurse if there is a scanner for this type of tag
                         scanner = tag.getThisScanner ();
-                        if ((null != scanner) && scanner.evaluate (tag, null))
-                            ret = scanner.scan (tag, mLexer.getPage ().getUrl (), mLexer);
+                        if (null != scanner)
+                        {
+                            stack = new NodeList ();
+                            ret = scanner.scan (tag, mLexer, stack);
+                        }
                     }
                 }
             }

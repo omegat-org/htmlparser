@@ -36,6 +36,11 @@ import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.tags.CompositeTag;
+import org.htmlparser.tags.Div;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.TableColumn;
+import org.htmlparser.tags.TableRow;
+import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
@@ -755,5 +760,43 @@ public class CompositeTagScannerTest extends ParserTestCase {
         {
             return (mEndTagEnders);
         }
+    }
+
+    /**
+     * Extracted from "http://scores.nba.com/games/20031029/scoreboard.html"
+     * which has a lot of table columns with unclosed DIV tags because the
+     * closing DIV doesn't have a slash.
+     * This caused java.lang.StackOverflowError on Windows.
+     * Tests the new non-recursive CompositeTagScanner with the walk back
+     * through the parse stack.
+     * See also Bug #750117 StackOverFlow while Node-Iteration and
+     * others.
+     */
+    public void testInvalidNesting () throws ParserException
+    {
+        String html = "<table cellspacing=\"2\" cellpadding=\"0\" border=\"0\" width=\"600\">\n"
+            + "<tr>\n"
+            + "<td><div class=\"ScoreBoardSec\">&nbsp;<a  target=\"_parent\" class=\"ScoreBoardSec\" href=\"http://www.nba.com/heat/\">Heat</a><div></td>\n"
+            + "</tr>\n"
+            + "</table>";
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertType ("table", TableTag.class, node[0]);
+        TableTag table = (TableTag)node[0];
+        assertTrue ("table should have 3 nodes", 3 == table.getChildCount ());
+        assertType ("row", TableRow.class, table.childAt (1));
+        TableRow row = (TableRow)table.childAt (1);
+        assertTrue ("row should have 3 nodes", 3 == row.getChildCount ());
+        assertType ("column", TableColumn.class, row.childAt (1));
+        TableColumn column = (TableColumn)row.childAt (1);
+        assertTrue ("column should have 1 node", 1 == column.getChildCount ());
+        assertType ("element", Div.class, column.childAt (0));
+        Div div = (Div)column.childAt (0);
+        assertTrue ("div should have 3 nodes", 3 == div.getChildCount ());
+        assertType ("link", LinkTag.class, div.childAt (1));
+        LinkTag link = (LinkTag)div.childAt (1);
+        assertTrue ("link contents", link.getLink ().equals ("http://www.nba.com/heat/"));
+        assertType ("bogus div", Div.class, div.childAt (2));
+        assertTrue ("bogus div should have no children", 0 == ((Div)div.childAt (2)).getChildCount ());
     }
 }

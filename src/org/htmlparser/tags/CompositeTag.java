@@ -373,8 +373,13 @@ public class CompositeTag extends Tag
         }
     }
 
-    public int getChildCount() {
-        return (getChildren ().size ());
+    public int getChildCount()
+    {
+        NodeList children;
+        
+        children = getChildren ();
+
+        return ((null == children) ? 0 : children.size ());
     }
 
     /**
@@ -479,13 +484,15 @@ public class CompositeTag extends Tag
                 buffer.append (System.getProperty ("line.separator"));
             }
         }
-        // eliminate virtual tags
-//        if (!(getEndTag ().getStartPosition () == getEndTag ().getEndPosition ()))
-        {
-            for (int i = 0; i <= level; i++)
-                buffer.append ("  ");
-            buffer.append (getEndTag ().toString ());
-            buffer.append (System.getProperty ("line.separator"));
-        }
+        
+        if (null != getEndTag ())
+            // eliminate virtual tags
+//            if (!(getEndTag ().getStartPosition () == getEndTag ().getEndPosition ()))
+            {
+                for (int i = 0; i <= level; i++)
+                    buffer.append ("  ");
+                buffer.append (getEndTag ().toString ());
+                buffer.append (System.getProperty ("line.separator"));
+            }
     }
 }
