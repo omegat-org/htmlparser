@@ -158,13 +158,17 @@ public class ParserTestCase extends TestCase {
                         " \n\n**** COMPLETE STRING ACTUAL***\n" + actual
                     );
                     System.out.println ("string differs, expected \"" + expected + "\", actual \"" + actual + "\"");
-                    fail(errorMsg.toString());
+                    failWithMessage(errorMsg.toString());
             }
 
         }
     }
 
-    public void parseNodes() throws ParserException{
+    public void failWithMessage(String message) {
+    	fail(message);
+	}
+
+	public void parseNodes() throws ParserException{
         nodeCount = 0;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
         {
