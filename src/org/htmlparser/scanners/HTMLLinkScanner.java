@@ -153,36 +153,54 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	}
 	/**
 	 * Extract the access key from the given text.
-	 * @param text Text to be parsed to pick out the access key
+	 * @param text Text to be parsed to pick out the access key.
+     * @return The value of the ACCESSKEY attribute.
 	 */
-	public String getAccessKey(String text)
+	public String getAccessKey (String text)
 	{
-		// Find the occurence of ACCESSKEY in given 
-		String sub = "ACCESSKEY";
-		String accessKey=null;
-		int n = text.toUpperCase().indexOf(sub);
-		if (n!=-1)
+		final String sub = "ACCESSKEY";
+        int n;
+        int length;
+        char ch;
+        StringBuffer buffer;
+		String ret;
+        
+        ret = null;
+		n = text.toUpperCase ().indexOf (sub);
+		if (-1 != n)
 		{
-			n+=sub.length();
-			// Parse the = sign
-			char ch;
-			do
+			n += sub.length ();
+            length = text.length ();
+            ch = (char)0;
+			// parse the = sign
+            while ((n < length) && ('=' != (ch = text.charAt (n))))
 			{
-				ch = text.charAt(n);
-				n++;
+				if (Character.isWhitespace (ch))
+                    n++;
+                else
+                    n = length; // exit early
 			}
-			while (ch!='=');
-			// Start parsing for a number
-			accessKey = "";
-			do
-			{
-				ch = text.charAt(n);
-				if (ch>='0' && ch<='9') accessKey+=ch;
-				n++;
+
+            if ('=' == ch)
+            {
+                n++;
+                // skip whitespace
+                while ((n < length) && Character.isWhitespace (ch = text.charAt (n)))
+                    n++;
+
+                // start parsing for a number
+                buffer = new StringBuffer ();
+                while ((n < length) && Character.isDigit (ch = text.charAt (n)))
+                {
+                    buffer.append (ch);
+                    n++;
+                }
+                if (0 != buffer.length ())
+                    ret = buffer.toString ();
 			}
-			while (ch>='0' && ch<='9' && n<text.length());
-			return accessKey;
-		} else return null;
+		}
+        
+        return (ret);
 	}
 	/**
 	 * Gets the dirty.
