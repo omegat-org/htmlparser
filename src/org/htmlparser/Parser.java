@@ -73,7 +73,7 @@ public class Parser
      * The floating point version number.
      */
     public final static double
-    VERSION_NUMBER = 1.41
+    VERSION_NUMBER = 1.42
     ;
 
     /**
@@ -87,7 +87,7 @@ public class Parser
      * The date of the version.
      */
     public final static String
-    VERSION_DATE = "May 22, 2004"
+    VERSION_DATE = "Jul 27, 2004"
     ;
 
     /**

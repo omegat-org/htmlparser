@@ -12,6 +12,30 @@
 *                                                                             *
 *******************************************************************************
 
+Release Build 1.42 - 20040727
+--------------------------------
+
+2004-07-27 07:56  derrickoswald
+
+	* src/org/htmlparser/parserapplications/SiteCapturer.java (v1_41):
+
+	Fix bug #998195 SiteCatpurer just crashed
+	After EncodingChangeException try again with the encoding now set correctly.
+	
+2004-07-27 07:32  derrickoswald
+
+	* src/org/htmlparser/util/LinkProcessor.java (v1_41):
+
+	Avoid bug #995744 Translate.decode(String)
+	don't apply translation to URLs
+	
+2004-07-27 07:15  derrickoswald
+
+	* src/org/htmlparser/lexer/Page.java (v1_41):
+
+	Avoid bug #995703 Parser Crash and also #988846 Linkbean getLinks() segmentation fault
+	by not testing for content type "text/XXXX"
+
 Release Build 1.41 - 20040522
 --------------------------------
 

@@ -1,4 +1,4 @@
-HTMLParser Version 1.41 (Release Build May 22, 2004)
+HTMLParser Version 1.42 (Release Build Jul 27, 2004)
 *********************************************
 
 Contents of the distribution
@@ -17,6 +17,16 @@ Contents of the distribution
       Batch files assume that java 1.2 (or upwards) is visible in your path.
 
   (v) this file
+
+Changes since Version 1.41
+-------------------------
+
+Bug Fixes
+---------
+#998195 SiteCatpurer just crashed
+#995744 Translate.decode(String)
+#995703 Parser Crash
+#988846 Linkbean getLinks() segmentation fault (duplicate of above)
 
 Changes since Version 1.4
 -------------------------
