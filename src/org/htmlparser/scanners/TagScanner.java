@@ -102,19 +102,29 @@ public abstract class TagScanner
 	}
 	
 	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/18/2001 2:15:02 AM)
-	 * @return java.lang.String
+	 * Remove whitespace from the front of the given string.
+     * @param s The string to trim.
+	 * @return Either the same string or a string with whitespace chopped off.
 	 */
-	public static String absorbLeadingBlanks(String s) 
-	{
-	  String temp = new String(s);
-	  while (temp.length()!=0 && temp.charAt(0)==' ')
-	  {
-	    temp = temp.substring(1,temp.length());
-	  }
-	  return temp;
-	}
+    public static String absorbLeadingBlanks (String s) 
+    {
+        int length;
+        int i;
+        String ret;
+
+        i = 0;
+        length = s.length ();
+        while (i < length && Character.isWhitespace (s.charAt (i)))
+            i++;
+        if (0 == i)
+            ret = s;
+        else if (length == i)
+            ret = "";
+        else
+            ret = s.substring (i);
+
+        return (ret);
+    }
 
   /**
    * This method is used to decide if this scanner can handle this tag type. If the

@@ -237,15 +237,32 @@ public class Tag extends Node
 		return thisScanner;
 	}
 
-	public static String extractWord(String s) {
-		String word = "";
-		boolean parse=true;
-		for (int i=0;i<s.length() && parse==true;i++) {
-			char ch = s.charAt(i);
-			if (ch==' ' || ch=='\r' || ch=='\n' || ch=='=') parse = false; else word +=ch;
+    /**
+     * Extract the first word from the given string.
+     * Words are delimited by whitespace or equals signs.
+     * @param s The string to get the word from.
+     * @return The first word.
+     */
+    public static String extractWord (String s)
+    {
+        int length;
+        boolean parse;
+        char ch;
+        StringBuffer ret;
+
+        length = s.length ();
+        ret = new StringBuffer (length);
+		parse = true;
+		for (int i = 0; i < length && parse; i++)
+        {
+			ch = s.charAt (i);
+			if (Character.isWhitespace (ch) || ch == '=')
+                parse = false;
+            else
+                ret.append (Character.toUpperCase (ch));
 		}
-		word = word.toUpperCase();
-		return word;
+
+		return (ret.toString ());
 	}
 
 	/**

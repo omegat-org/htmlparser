@@ -640,4 +640,19 @@ public class TagTest extends ParserTestCase
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
         assertStringEquals("Expected HTML","Jane Doe",htmlTag.getLabel());
     }
+    
+    /**
+     * From oyoaha
+     */
+    public void testTabText () throws ParserException
+    {
+        String testHTML = "<a\thref=\"http://cbc.ca\">";
+        createParser (testHTML);
+        parser.registerScanners ();
+        parseAndAssertNodeCount (1);
+		assertTrue("Node should be a LinkTag", node[0] instanceof LinkTag);
+		LinkTag tag = (LinkTag)node[0];
+		String href = tag.getAttribute ("HREF");
+		assertStringEquals("Resolved Link","http://cbc.ca", href);
+    }
 }

@@ -117,25 +117,27 @@ public class LinkScanner extends CompositeTagScanner
 	 * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
 	 * scan has begun, and hence allows us to write scanners that can work with dirty html
 	 */
-	public boolean evaluate(String s,TagScanner previousOpenScanner)
-	{
-		// Eat up leading blanks
-		s = absorbLeadingBlanks(s);		
-		boolean retVal;
-		char ch = s.charAt(0);
-		
-		if (s.length()<5) retVal = false; else
-		if ((ch=='a' || ch=='A') && (s.charAt(1)==' ' || s.charAt(1)=='\n' || s.charAt(1)=='\r')) retVal = true; else retVal = false;
+    public boolean evaluate (String s, TagScanner previousOpenScanner)
+    {
+        char ch;
+        boolean ret;
+        
+        // eat up leading blanks
+        s = absorbLeadingBlanks (s);
+        if (5 > s.length ())
+            ret = false;
+        else
+        {
+            ch = s.charAt (0);
+            if ((ch=='a' || ch=='A') && Character.isWhitespace (s.charAt (1)))
+                ret = -1 != s.toUpperCase().indexOf ("HREF");
+            else
+                ret = false;
+        }
 
-		if (retVal)
-		{
-			if (s.toUpperCase().indexOf("HREF")==-1)
-				retVal=false;
-		} 
+        return (ret);
+    }
 
-		return retVal;
-	
-	}
     /**
      * Extract the link from the given string. The URL of the actual html page is also 
      * provided.    
