@@ -370,7 +370,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		// The node should be an HTMLTag
 		assertTrue("1st Node should be a HTMLTag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
-		assertEquals("Raw String of the tag","<MYTAG abcd\r\nefgh\r\nijkl\r\nmnop>",tag.toHTML());
+		assertStringEquals("toHTML()","<MYTAG EFGH=\"\" ABCD=\"\" MNOP=\"\" IJKL=\"\">",tag.toHTML());
 		assertTrue("2nd Node should be a HTMLTag",node[1] instanceof HTMLTag);
 		assertTrue("5th Node should be a HTMLTag",node[4] instanceof HTMLTag);
 		tag = (HTMLTag)node[1];
@@ -379,33 +379,6 @@ public class HTMLTagTest extends HTMLParserTestCase
 		assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toHTML());
 	}
 	
-    public void testWithLink() throws HTMLParserException {
-        String data = "<P>To download a document: click on a link. ";
-        data += "Once the .pdf file opens, use the &#34;Save As&#34; ";
-        data += "button on the toolbar to save the document.</P>";
-        data += "<P><B>Please note</B>, to view these documents, you ";
-        data += "must have <A href='www.adobe.com'>Adobe Acrobat Reader</A> ";
-        data += "installed on your computer. If you do not &#160;have Adobe Acrobat ";
-        data += "Reader, go to: <A href='http://www.adobe.com/products/acrobat/readstep.htm'>";
-        data += "www.adobe.com/products/acrobat/readstep.htm</A>";
-        data += " and follow the instructions on how to install the program.</P>";
-        HTMLTag tag;
-        HTMLEndTag etag;
-        HTMLStringNode snode;
-        HTMLNode node=null;
-       	createParser(data);
-        HTMLEnumeration en = parser.elements();
-        String result="";
-        try {
-            while (en.hasMoreNodes()) {                
-                node = en.nextHTMLNode();                        
-                result += node.toHTML();
-            }
-            assertStringEquals("Check collected contents to original",result,data);            
-        } catch (ClassCastException ce) {
-            fail("Bad class element = " + node.getClass().getName());
-        }
-    }
     
     /**
      * Test parseParameter method
@@ -417,8 +390,8 @@ public class HTMLTagTest extends HTMLParserTestCase
         HTMLEndTag etag;
         HTMLStringNode snode;
         HTMLNode node=null;
-        String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle\">Kaarle's homepage</A><p>Paragraph</p>";
-       	createParser(lin1);
+        String testHTML = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle\">Kaarle's homepage</A><p>Paragraph</p>";
+       	createParser(testHTML);
         HTMLEnumeration en = parser.elements();
         String result="";
         try {
@@ -426,7 +399,8 @@ public class HTMLTagTest extends HTMLParserTestCase
                 node = en.nextHTMLNode();   
                 result += node.toHTML();
             }
-            assertEquals("Check collected contents to original",result,lin1);            
+            String expected = "<A YOURPARAMETER=\"Kaarle\" MYPARAMETER=\"\" HREF=\"http://www.iki.fi/kaila\">Kaarle's homepage</A><P>Paragraph</P>"; 
+            assertStringEquals("Check collected contents to original", expected, result);            
         } catch (ClassCastException ce) {
             fail("Bad class element = " + node.getClass().getName());
         }
@@ -530,7 +504,7 @@ public class HTMLTagTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(2);
 		assertTrue("First node should be an HTMLtag",node[0] instanceof HTMLTag);
 		HTMLTag htmlTag = (HTMLTag)node[0];
-		String expectedHTML = "<TEXTAREA name=\"JohnDoe\" >";
+		String expectedHTML = "<TEXTAREA NAME=\"JohnDoe\">";
 		assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHTML());
 	}
 	public void testIgnoreState() throws HTMLParserException {

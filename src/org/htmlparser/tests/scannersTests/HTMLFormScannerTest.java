@@ -60,9 +60,9 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 	public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\" METHOD=\""+HTMLFormTag.POST+"\">\r\n";
 	public static final String EXPECTED_FORM_HTML_REST_OF_FORM=	
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><FONT FACE=\"Arial, verdana\" SIZE=\"2\"><B>User Name</B></FONT></TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\"><INPUT NAME=\"name\" SIZE=\"20\" TYPE=\"text\"></TD></TR>\r\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><FONT FACE=\"Arial, verdana\" SIZE=\"2\"><B>Password</B></FONT></TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\"><INPUT NAME=\"passwd\" SIZE=\"20\" TYPE=\"password\"></TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\"><INPUT VALUE=\"Login\" NAME=\"submit\" TYPE=\"submit\"></TD></TR>\r\n"+

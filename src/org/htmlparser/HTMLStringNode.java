@@ -39,7 +39,8 @@ public class HTMLStringNode extends HTMLNode
   	private final static int BEFORE_PARSE_BEGINS_STATE=0;	
   	private final static int PARSE_HAS_BEGUN_STATE=1;
   	private final static int PARSE_COMPLETED_STATE=2;	
-  	  	
+  	private final static int PARSE_IGNORE_STATE=3;
+  	
 	public static final String STRING_FILTER="-string";
 	/**
 	 * The text of the string.
@@ -83,7 +84,7 @@ public class HTMLStringNode extends HTMLNode
 			// The following conditionals are a bug fix
 			// done by Roger Sollberger. They correspond to a
 			// testcase in HTMLStringNodeTest (testTagCharsInStringNode)
-			if (ch=='<') {
+			if (ch=='<' && state!=PARSE_IGNORE_STATE) {
 				if ((i+1)<input.length()) {
 					char nextChar = input.charAt(i+1);
 					if  (((nextChar>='A') && (nextChar<='Z')) || // next char must be A-Z 
@@ -95,13 +96,20 @@ public class HTMLStringNode extends HTMLNode
 					}
 				}
 			}
-						
+			if (ch=='\'') {
+				if (state==PARSE_IGNORE_STATE) state=PARSE_HAS_BEGUN_STATE;
+				else {
+					if (input.charAt(i+1)=='<')
+						state = PARSE_IGNORE_STATE;
+				}
+				
+			}					
 			if (state==BEFORE_PARSE_BEGINS_STATE)
 			{
 				if (ch!=' ') state=PARSE_HAS_BEGUN_STATE;
 				else textBuffer.append(input.charAt(i));
 			}
-			if (state==PARSE_HAS_BEGUN_STATE)
+			if (state==PARSE_HAS_BEGUN_STATE || state==PARSE_IGNORE_STATE)
 			{
 				textBuffer.append(input.charAt(i));
 			}				

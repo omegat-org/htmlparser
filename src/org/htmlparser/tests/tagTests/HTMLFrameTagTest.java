@@ -54,8 +54,8 @@ public class HTMLFrameTagTest extends HTMLParserTestCase {
 		HTMLFrameTag frameTag1 = (HTMLFrameTag)node[1];
 		HTMLFrameTag frameTag2 = (HTMLFrameTag)node[2];		
 		
-		assertEquals("Frame 1 Raw String","<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">",frameTag1.toHTML());
-		assertEquals("Frame 2 Raw String","<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">",frameTag2.toHTML());		
+		assertStringEquals("Frame 1 toHTML()","<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE=\"\">",frameTag1.toHTML());
+		assertStringEquals("Frame 2 toHTML()","<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">",frameTag2.toHTML());		
 	}
 }
 

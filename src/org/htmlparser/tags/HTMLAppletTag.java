@@ -34,127 +34,71 @@ import java.util.Vector;
 /**
  * HTMLAppletTag represents an &lt;Applet&gt; tag
  */
-public class HTMLAppletTag extends HTMLTag 
+public class HTMLAppletTag extends HTMLCompositeTag 
 {
 	private java.lang.String codeBase;
 	private java.lang.String archive;
 	private java.lang.String appletClass;
 	private Hashtable appletParams;
-	private java.util.Vector misc;
-/**
- * HTMLAppletTag constructor comment.
- * @param nodeBegin int
- * @param nodeEnd int
- * @param tagContents java.lang.String
- * @param tagLine java.lang.String
- */
-public HTMLAppletTag(int tagBegin, int tagEnd, String tagContents, String tagLine, String appletClass,String archive,String codeBase,Hashtable appletParams,Vector misc) 
-{
-	super(tagBegin, tagEnd, tagContents, tagLine);
-	this.appletClass = appletClass;
-	this.codeBase = codeBase;
-	this.archive = archive;
-	this.appletParams = appletParams;
-	this.misc = misc;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:01:56 AM)
- * @return java.lang.String
- */
-public java.lang.String getAppletClass() {
-	return appletClass;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:03:26 AM)
- * @return java.util.Vector
- */
-public Hashtable getAppletParams() {
-	return appletParams;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:01:42 AM)
- * @return java.lang.String
- */
-public java.lang.String getArchive() {
-	return archive;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:01:28 AM)
- * @return java.lang.String
- */
-public java.lang.String getCodeBase() {
-	return codeBase;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:15:57 PM)
- * @return java.util.Vector
- */
-public java.util.Vector getMisc() {
-	return misc;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:06:20 AM)
- * @return java.lang.String
- * @param key java.lang.String
- */
-public String getParameter(String key)
-{
-	return (String)appletParams.get(key);
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:05:34 AM)
- */
-public Enumeration getParameterNames() 
-{
-	return appletParams.keys();	
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:01:56 AM)
- * @param newAppletClass java.lang.String
- */
-public void setAppletClass(java.lang.String newAppletClass) {
-	appletClass = newAppletClass;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:03:26 AM)
- * @param newAppletParams java.util.Vector
- */
-public void setAppletParams(Hashtable newAppletParams) {
-	appletParams = newAppletParams;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:01:42 AM)
- * @param newArchive java.lang.String
- */
-public void setArchive(java.lang.String newArchive) {
-	archive = newArchive;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:01:28 AM)
- * @param newCodeBase java.lang.String
- */
-public void setCodeBase(java.lang.String newCodeBase) {
-	codeBase = newCodeBase;
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/18/2001 2:15:57 PM)
- * @param newMisc java.util.Vector
- */
-public void setMisc(java.util.Vector newMisc) {
-	misc = newMisc;
-}
+
+	/**
+	 * HTMLAppletTag constructor comment.
+	 * @param nodeBegin int
+	 * @param nodeEnd int
+	 * @param tagContents java.lang.String
+	 * @param tagLine java.lang.String
+	 */
+	public HTMLAppletTag(int tagBegin, int tagEnd, String tagContents, String tagLine, String appletClass,String archive,String codeBase,Hashtable appletParams,Vector childNodeVector,HTMLTag startTag, HTMLTag endTag) 
+	{
+		super(tagBegin, tagEnd, tagContents, tagLine, childNodeVector,startTag, endTag);
+		this.appletClass = appletClass;
+		this.codeBase = codeBase;
+		this.archive = archive;
+		this.appletParams = appletParams;
+	}
+	
+	public java.lang.String getAppletClass() {
+		return appletClass;
+	}
+	
+	public Hashtable getAppletParams() {
+		return appletParams;
+	}
+	
+	public java.lang.String getArchive() {
+		return archive;
+	}
+	
+	public java.lang.String getCodeBase() {
+		return codeBase;
+	}
+	
+	public String getParameter(String key)
+	{
+		return (String)appletParams.get(key);
+	}
+	
+	public Enumeration getParameterNames() 
+	{
+		return appletParams.keys();	
+	}
+	
+	public void setAppletClass(java.lang.String newAppletClass) {
+		appletClass = newAppletClass;
+	}
+	
+	public void setAppletParams(Hashtable newAppletParams) {
+		appletParams = newAppletParams;
+	}
+	
+	public void setArchive(java.lang.String newArchive) {
+		archive = newArchive;
+	}
+	
+	public void setCodeBase(java.lang.String newCodeBase) {
+		codeBase = newCodeBase;
+	}
+	
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
@@ -176,11 +120,11 @@ public void setMisc(java.util.Vector newMisc) {
 				sb.append((cnt++)+": Parameter name = "+paramName+", Parameter value = "+paramValue+"\n");
 			}
 		}
-		if (misc.elements()==null)
+		if (children()==null)
 		sb.append("No Miscellaneous items\n"); else
 		{
 			sb.append("Miscellaneous items :\n");
-			for (Enumeration e = misc.elements();e.hasMoreElements();)
+			for (Enumeration e = children();e.hasMoreElements();)
 			{
 				((HTMLTag)e.nextElement()).print();
 			}
@@ -189,20 +133,4 @@ public void setMisc(java.util.Vector newMisc) {
 		sb.append("*****************\n");
 		return sb.toString();
 	}
-
-	/**
-	 * @see HTMLNode#toRawString()
-	 */
-	public String toHTML() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(super.toHTML()+lineSeparator);
-		for (Enumeration e = getParameterNames();e.hasMoreElements();) {
-			String paramName = (String)e.nextElement();
-			String paramValue = getParameter(paramName);
-			sb.append("<PARAM NAME=\""+paramName+"\" VALUE=\""+paramValue+"\">").append(lineSeparator);
-		}
-		sb.append("</APPLET>");
-		return sb.toString();
-	}
-
 }

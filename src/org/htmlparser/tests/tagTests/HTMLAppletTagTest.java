@@ -60,11 +60,11 @@ public class HTMLAppletTagTest extends HTMLParserTestCase {
 		// Check the data in the applet tag
 		HTMLAppletTag appletTag = (HTMLAppletTag)node[0];
 		String expectedRawString = 
-		"<APPLET CODE=Myclass.class ARCHIVE=test.jar CODEBASE=www.kizna.com>\r\n"+
-		"<PARAM NAME=\"Name\" VALUE=\"Somik\">\r\n"+
-		"<PARAM NAME=\"Param1\" VALUE=\"Value1\">\r\n"+
-		"<PARAM NAME=\"Age\" VALUE=\"23\">\r\n"+
+		"<APPLET CODE=\"Myclass.class\" CODEBASE=\"www.kizna.com\" ARCHIVE=\"test.jar\">\r\n"+
+		"<PARAM VALUE=\"Value1\" NAME=\"Param1\">\r\n"+		
+		"<PARAM VALUE=\"Somik\" NAME=\"Name\">\r\n"+
+		"<PARAM VALUE=\"23\" NAME=\"Age\">\r\n"+
 		"</APPLET>";
-		assertEquals("Raw String",expectedRawString,appletTag.toHTML());				
+		assertStringEquals("toHTML()",expectedRawString,appletTag.toHTML());				
 	}
 }

@@ -320,9 +320,30 @@ public class HTMLTag extends HTMLNode
 		return "";
 	}
 	public String toHTML() {
-		if (endOfLineCharState) return "<"+tagContents+">" + lineSeparator; else
-		return "<"+tagContents+">";
+		StringBuffer sb = new StringBuffer();
+		sb.append("<");
+		sb.append(getTagName());
+		if (containsMoreThanOneKey()) sb.append(" ");
+		String key,value;
+		int i=0;
+		for (Enumeration e = parsed.keys();e.hasMoreElements();) {
+			key = (String)e.nextElement();
+			i++;
+			if (key!=TAGNAME) {
+				value = getParameter(key);
+				sb.append(key+"=\""+value+"\"");
+				if (i<parsed.size()) sb.append(" ");
+			}
+		}
+		sb.append(">");
+		if (endOfLineCharState) sb.append(lineSeparator);
+		return sb.toString();	
 	}
+	
+	public boolean containsMoreThanOneKey() {
+		return parsed.keySet().size()>1;
+	}
+	
 	/**
 	 * Print the contents of the tag
 	 */

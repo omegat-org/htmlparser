@@ -68,30 +68,19 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 	    archive = tag.getParameter("ARCHIVE");
 	    codebase = tag.getParameter("CODEBASE");
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/18/2001 2:34:38 AM)
-	 * @return java.lang.String
-	 */
-	public java.lang.String getArchive() {
+	
+	public String getArchive() {
 		return archive;
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/18/2001 2:33:08 AM)
-	 * @return java.lang.String
-	 */
-	public java.lang.String getClassName() {
+	
+	private String getClassName() {
 		return className;
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/18/2001 2:34:53 AM)
-	 * @return java.lang.String
-	 */
-	public java.lang.String getCodebase() {
+	
+	private String getCodebase() {
 		return codebase;
 	}
+	
 	/** 
 	 * Scan the tag and extract the information related to this type. The url of the 
 	 * initiating scan has to be provided in case relative links are found. The initial 
@@ -110,20 +99,19 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 			extractFields(tag);
 		
 			String line;
-			HTMLEndTag endTag=null;
+			HTMLTag startTag = tag;
+			HTMLTag endTag=null;
 			HTMLNode node = null;
 			boolean endScriptFound=false;
-			Vector buff=new Vector();
-			Vector misc=new Vector();
+			Vector childrenVector=new Vector();
 			Hashtable table = new Hashtable();
-		
 			do {
 				node = reader.readElement();
 				if (node instanceof HTMLEndTag) {
 					endTag = (HTMLEndTag)node;
 					if (endTag.getText().toUpperCase().equals("APPLET")) 
 					{
-						endScriptFound = true; 
+						endScriptFound = true;
 					}
 				}
 				else if (node instanceof HTMLTag) {
@@ -134,11 +122,8 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 						String paramValue = htag.getParameter("VALUE");
 						table.put(paramName,paramValue);
 					}
-					else
-					{
-						misc.addElement(htag);
-					}
 				}
+				if (!endScriptFound) childrenVector.addElement(node);
 			}
 			while (!endScriptFound && node!=null);
 			if (node==null && endScriptFound==false) {
@@ -150,7 +135,7 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 				throw new HTMLParserException("HTMLAppletScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
 				"Table contents : "+msg.toString());
 			}	
-			HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,misc);
+			HTMLAppletTag appTag = new HTMLAppletTag(node.elementBegin(),node.elementEnd(),tag.getText(),currLine,className,archive,codebase,table,childrenVector,startTag,endTag);
 			return appTag;
 		}
 		catch (Exception e) {

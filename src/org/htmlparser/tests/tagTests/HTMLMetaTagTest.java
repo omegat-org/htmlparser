@@ -56,8 +56,8 @@ public class HTMLMetaTagTest extends HTMLParserTestCase {
 		assertTrue("Node 5 should be META Tag",node[4] instanceof HTMLMetaTag);
 		HTMLMetaTag metaTag;
 		metaTag = (HTMLMetaTag) node[4];
-		assertEquals("Meta Tag 4 Name","description",metaTag.getMetaTagName());
-		assertEquals("Meta Tag 4 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaTagContents());
-		assertEquals("Raw String","<META name=\"description\" content=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\">",metaTag.toHTML());
+		assertStringEquals("Meta Tag 4 Name","description",metaTag.getMetaTagName());
+		assertStringEquals("Meta Tag 4 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaTagContents());
+		assertStringEquals("toHTML()","<META CONTENT=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\" NAME=\"description\">",metaTag.toHTML());
 	}
 }

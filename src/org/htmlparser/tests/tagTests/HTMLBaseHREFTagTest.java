@@ -37,17 +37,19 @@ public class HTMLBaseHREFTagTest extends HTMLParserTestCase {
 	public HTMLBaseHREFTagTest(String name) {
 		super(name);
 	}
+	
 	public void testConstruction() {
 		HTMLBaseHREFTag baseRefTag = new HTMLBaseHREFTag(0,0,"","http://www.abc.com","");
 		assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
 	}
+	
 	public void testNotHREFBaseTag() throws HTMLParserException {
 		createParser("<base target=\"_top\">");
 		parser.registerScanners();
 		parseAndAssertNodeCount(1);
 		assertTrue("Should be a base tag but was "+node[0].getClass().getName(),node[0] instanceof HTMLBaseHREFTag);
 		HTMLBaseHREFTag baseTag = (HTMLBaseHREFTag)node[0];
-		assertEquals("Base Tag HTML","<base target=\"_top\">",baseTag.toHTML());
+		assertStringEquals("Base Tag HTML","<BASE TARGET=\"_top\">",baseTag.toHTML());
 	}
 
 }
