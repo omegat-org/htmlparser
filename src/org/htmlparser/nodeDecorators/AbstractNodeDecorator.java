@@ -12,7 +12,6 @@ public abstract class AbstractNodeDecorator implements Node {
 	protected AbstractNodeDecorator(Node delegate) {
 		this.delegate = delegate;
 	}
-	
 
 	public void accept(NodeVisitor visitor) {
 		delegate.accept(visitor);

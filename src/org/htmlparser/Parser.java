@@ -138,7 +138,7 @@ public class Parser
 	// Please don't change the formatting of the version variables below.
 	// This is done so as to facilitate ant script processing.
 
-    /**
+	/**
      * The floating point version number.
      */
     public final static double
@@ -181,24 +181,12 @@ public class Parser
      */
     protected static final String CHARSET_STRING = "charset";
 
-	/**
-	 * Flag to tell the parser to decode strings returned by StringNode's toPlainTextString.  
-	 * Decoding occurs via the method, org.htmlparser.util.Translate.decode()
-	 */
-	private boolean shouldDecodeNodes = false;
-
 
 	/**
-	 * Flag to tell the parser to remove escape characters, like \n and \t, returned by StringNode's toPlainTextString.  
-	 * Escape character removal occurs via the method, org.htmlparser.util.ParserUtils.removeEscapeCharacters()
+	 * This object is used by the StringParser to create new StringNodes at runtime, based on 
+	 * use configurations of the factory
 	 */
-	private boolean shouldRemoveEscapeCharacters = false;
-	
-	/**
-	 * Flag to tell the parser to convert non breaking space 
-	 * (i.e. \u00a0) to a space (" ").  If true, this will happen inside StringNode's toPlainTextString.  
-	 */
-	private boolean shouldConvertNonBreakingSpace = false;	
+	private StringNodeFactory stringNodeFactory;
 
 	/**
 	 * Feedback object.
@@ -1226,31 +1214,13 @@ public class Parser
 		return lineSeparator;
 	}
 
-	/**
-	 * Tells the parser to decode nodes using org.htmlparser.util.Translate.decode()
-	 */
-	public void setNodeDecoding(boolean shouldDecodeNodes) {
-			this.shouldDecodeNodes = shouldDecodeNodes;
-		}
-
-	public boolean shouldDecodeNodes() {
-		return shouldDecodeNodes;
-	}
-
-	public void setEscapeCharacterRemoval(boolean shouldRemoveEscapeCharacters) {
-		this.shouldRemoveEscapeCharacters = shouldRemoveEscapeCharacters;
-	}
-
-	public boolean shouldRemoveEscapeCharacters() {
-		return shouldRemoveEscapeCharacters;
-	}
-
-	public void setNonBreakSpaceConversion(boolean shouldConvertNonBreakSpace) {
-		this.shouldConvertNonBreakingSpace = shouldConvertNonBreakSpace;
+	public StringNodeFactory getStringNodeFactory() {
+		if (stringNodeFactory == null)
+			stringNodeFactory = new StringNodeFactory();
+		return stringNodeFactory;
 	}
 	
-	public boolean shouldConvertNonBreakingSpace() {
-		return shouldConvertNonBreakingSpace;
-	}
-		
+	public void setStringNodeFactory(StringNodeFactory stringNodeFactory) {
+		this.stringNodeFactory = stringNodeFactory;	
+	}		
 }

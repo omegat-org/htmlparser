@@ -30,6 +30,7 @@
 
 package org.htmlparser.tests.nodeDecoratorTests;
 
+import org.htmlparser.StringNodeFactory;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -43,8 +44,10 @@ public class DecodingNodeTest extends ParserTestCase {
 	private String parseToObtainDecodedResult(String STRING_TO_DECODE)
 		throws ParserException {
 		StringBuffer decodedContent = new StringBuffer();
+		StringNodeFactory stringNodeFactory = new StringNodeFactory();
+		stringNodeFactory.setNodeDecoding(true);
 		createParser(STRING_TO_DECODE);
-		parser.setNodeDecoding(true);  // tell parser to decode StringNodes
+		parser.setStringNodeFactory(stringNodeFactory); 
 		NodeIterator nodes = parser.elements();
 		
 		while (nodes.hasMoreNodes()) 

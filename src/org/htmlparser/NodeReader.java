@@ -414,5 +414,4 @@ public class NodeReader extends BufferedReader
 	public void setDontReadNextLine(boolean dontReadNextLine) {
 		this.dontReadNextLine = dontReadNextLine;
 	}
-
 }

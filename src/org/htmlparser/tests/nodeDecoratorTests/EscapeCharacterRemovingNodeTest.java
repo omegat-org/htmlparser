@@ -30,6 +30,7 @@
 
 package org.htmlparser.tests.nodeDecoratorTests;
 
+import org.htmlparser.StringNodeFactory;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -42,8 +43,12 @@ public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
 	private String parseToObtainDecodedResult(String STRING_TO_DECODE)
 		throws ParserException {
 		StringBuffer decodedContent = new StringBuffer();
+
+		StringNodeFactory stringNodeFactory = new StringNodeFactory();
+		stringNodeFactory.setEscapeCharacterRemoval(true);
 		createParser(STRING_TO_DECODE);
-		parser.setEscapeCharacterRemoval(true);  
+		parser.setStringNodeFactory(stringNodeFactory); 
+
 		NodeIterator nodes = parser.elements();
 		
 		while (nodes.hasMoreNodes()) 
@@ -86,9 +91,13 @@ public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
 			"The Testing & Refactoring WorkshopCreated by Industrial Logic, Inc.";
 
 		StringBuffer decodedContent = new StringBuffer();
+		
+		StringNodeFactory stringNodeFactory = new StringNodeFactory();
+		stringNodeFactory.setNodeDecoding(true);
+		stringNodeFactory.setEscapeCharacterRemoval(true);
+		
 		createParser(ENCODED_WORKSHOP_TITLE);
-		parser.setEscapeCharacterRemoval(true);
-		parser.setNodeDecoding(true);
+		parser.setStringNodeFactory(stringNodeFactory);
 		NodeIterator nodes = parser.elements();
 		
 		while (nodes.hasMoreNodes()) 

@@ -29,7 +29,6 @@
 
 package org.htmlparser;
 
-import org.htmlparser.nodeDecorators.*;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.NodeVisitor;
 
@@ -56,21 +55,6 @@ public class StringNode extends AbstractNode
 		super(textBegin,textEnd);
 		this.textBuffer = textBuffer;
 	}
-
-	public static Node createStringNode(
-		StringBuffer textBuffer, int textBegin, int textEnd, 
-		boolean shouldDecode, boolean shouldRemoveEscapeCharacters,
-		boolean shouldConvertNonBlankingSpace) {
-		Node newNode = new StringNode(textBuffer, textBegin, textEnd);
-		if (shouldDecode)
-			newNode = new DecodingNode(newNode);
-		if (shouldRemoveEscapeCharacters)
-			newNode = new EscapeCharacterRemovingNode(newNode);
-		if (shouldConvertNonBlankingSpace)
-			newNode = new NonBreakingSpaceConvertingNode(newNode);
-		return newNode;
-	}
-	
 
 	/**
 	 * Returns the text of the string line

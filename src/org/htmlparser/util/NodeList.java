@@ -31,7 +31,6 @@ package org.htmlparser.util;
 import java.io.Serializable;
 import java.util.NoSuchElementException;
 
-import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 
 public class NodeList implements Serializable {
@@ -46,7 +45,7 @@ public class NodeList implements Serializable {
 	public NodeList() {
 		size = 0;
 		capacity = INITIAL_CAPACITY;
-		nodeData = new AbstractNode[capacity];
+		nodeData = newNodeArrayFor(capacity);
 		capacityIncrement = capacity*2;
 		numberOfAdjustments = 0;
 	}
@@ -74,9 +73,13 @@ public class NodeList implements Serializable {
 		capacity += capacityIncrement;
 		capacityIncrement *= 2;
 		Node oldData [] = nodeData;
-		nodeData = new AbstractNode[capacity];
+		nodeData = newNodeArrayFor(capacity);
 		System.arraycopy(oldData, 0, nodeData, 0, size);
 		numberOfAdjustments++;
+	}
+
+	private Node[] newNodeArrayFor(int capacity) {
+		return new Node[capacity];
 	}
 	
 	public int size() {
@@ -111,7 +114,7 @@ public class NodeList implements Serializable {
 	}
 	
 	public Node [] toNodeArray() {
-		Node [] nodeArray = new AbstractNode[size];
+		Node [] nodeArray = newNodeArrayFor(size);
 		System.arraycopy(nodeData, 0, nodeArray, 0, size);		
 		return nodeArray;
 	}
@@ -138,7 +141,7 @@ public class NodeList implements Serializable {
 	public void removeAll() {
 		size = 0;
 		capacity = INITIAL_CAPACITY;
-		nodeData = new AbstractNode[capacity];
+		nodeData = newNodeArrayFor(capacity);
 		capacityIncrement = capacity*2;
 		numberOfAdjustments = 0;
 	}

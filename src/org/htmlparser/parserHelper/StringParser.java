@@ -31,7 +31,6 @@ package org.htmlparser.parserHelper;
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.Parser;
-import org.htmlparser.StringNode;
 
 public class StringParser {
 	private final static int BEFORE_PARSE_BEGINS_STATE=0;	
@@ -138,9 +137,6 @@ public class StringParser {
 
 			}
 		}
-		return StringNode.createStringNode(textBuffer, textBegin, textEnd,
-				  						    reader.getParser().shouldDecodeNodes(),
-				  						    reader.getParser().shouldRemoveEscapeCharacters(),
-				  						    reader.getParser().shouldConvertNonBreakingSpace());
+		return reader.getParser().getStringNodeFactory().createStringNode(textBuffer, textBegin, textEnd);
 	}
 }

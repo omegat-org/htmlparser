@@ -30,6 +30,7 @@
 
 package org.htmlparser.tests.nodeDecoratorTests;
 
+import org.htmlparser.StringNodeFactory;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -42,8 +43,12 @@ public class NonBreakingSpaceConvertingNodeTest extends ParserTestCase {
 	private String parseToObtainDecodedResult(String STRING_TO_DECODE)
 		throws ParserException {
 		StringBuffer decodedContent = new StringBuffer();
+		
+		StringNodeFactory stringNodeFactory = new StringNodeFactory();
+		stringNodeFactory.setNonBreakSpaceConversion(true);
 		createParser(STRING_TO_DECODE);
-		parser.setNonBreakSpaceConversion(true);  
+		parser.setStringNodeFactory(stringNodeFactory); 
+
 		NodeIterator nodes = parser.elements();
 		
 		while (nodes.hasMoreNodes()) 

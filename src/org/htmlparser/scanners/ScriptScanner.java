@@ -44,8 +44,6 @@ public class ScriptScanner extends CompositeTagScanner {
 	private static final String MATCH_NAME [] = {"SCRIPT"};
 	private static final String ENDERS [] = {"BODY", "HTML"};
 
-	
-
 	public ScriptScanner() {
 		super("",MATCH_NAME,ENDERS);
 	}
