@@ -228,6 +228,7 @@ HTML Parser Integration Release 1.4-20040104
       <include name="org/htmlparser/AbstractNode.class"/>
       <include name="org/htmlparser/Node.class"/>
       <include name="org/htmlparser/NodeFilter.class"/>
+      <include name="org/htmlparser/Tag.class"/>
       <include name="org/htmlparser/util/ParserException.class"/>
       <include name="org/htmlparser/util/ChainedException.class"/>
       <include name="org/htmlparser/util/NodeList*.class"/>
