@@ -34,6 +34,7 @@ import org.htmlparser.filters.HasChildFilter;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.filters.NotFilter;
 import org.htmlparser.filters.OrFilter;
+import org.htmlparser.filters.RegexFilter;
 import org.htmlparser.filters.StringFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
@@ -269,6 +270,64 @@ public class FilterTest extends ParserTestCase
             count++;
         }
         assertEquals ("wrong count", 2, count);
+    }
+
+    /**
+     * Test regular expression matching:
+     */
+    public void testRegularExpression () throws Exception
+    {
+        String target =
+              "\n"
+            + "\n"
+            + "Most recently, in the Western Conference final, the Flames knocked off \n"
+            + "the San Jose Sharks, the Pacific Division champions, to become the first \n"
+            + "Canadian team to reach the Stanley Cup Championship series since 1994.";
+            
+        String html =
+              "<html><head><title>CBC Sports Online: NHL Playoffs</title></head>"
+            + "<body><h1>CBC SPORTS ONLINE</h1>\n"
+            + "The Calgary Flames have already defeated three NHL division winners \n"
+            + "during their improbable playoff run. If they are to hoist the Stanley \n"
+            + "Cup they'll have to go through one more. <p><table ALIGN=\"Right\" width=196 CELLPADDING=0 cellspacing=0 hspace=4> <tr><td><img src=\"/gfx/topstory/sports/iginla_j0524.jpg\" width=194 height=194 hspace=3 border=1><br>\n"
+            + "\n"
+            + "<font SIZE=\"1\" FACE=\"verdana,arial\">\n"
+            + "Jarome Iginla skates during the Flames' practice on Monday. Calgary takes on the Tampa Bay Lightning in the Stanley Cup finals beginning Tuesday night in Tampa\n"
+            + "</font></td></tr></table>\n"
+            + "\n"
+            + "\n"
+            + "In the post-season's first round, the Flames defeated the Vancouver \n"
+            + "Canucks, the Northwest Division winners, in seven tough games. <p>\n"
+            + "\n"
+            + "In Round 2 it was the Detroit Red Wings, who not only won the Central \n"
+            + "Division, but also boasted the NHL's best overall record during the \n"
+            + "regular season, who fell to the Flames. <p>"
+            + target
+            + "<p>\n"
+            + "\n"
+            + "Up next for the Flames is the Tampa Bay Lighting -- the runaway winners \n"
+            + "of the NHL's Southeast Division and the Eastern Conference's best team \n"
+            + "during the regular season. <p>\n"
+            + "\n"
+            + "The Lighting advanced by beating the Philadelphia Flyers in the Eastern \n"
+            + "Conference final. <p>\n"
+            + "</body></html>\n";
+        Lexer lexer;
+        Parser parser;
+        RegexFilter filter;
+        NodeIterator iterator;
+        int count;
+
+        lexer = new Lexer (html);
+        parser = new Parser (lexer);
+        filter = new RegexFilter ("(19|20)\\d\\d([- \\\\/.](0[1-9]|1[012])[- \\\\/.](0[1-9]|[12][0-9]|3[01]))?");
+        count = 0;
+        for (iterator = parser.extractAllNodesThatMatch (filter).elements (); iterator.hasMoreNodes ();)
+        {
+            assertEquals ("text wrong", target, iterator.nextNode ().toHtml ());
+            count++;
+        }
+        assertEquals ("wrong count", 1, count);
     }
 }
 
