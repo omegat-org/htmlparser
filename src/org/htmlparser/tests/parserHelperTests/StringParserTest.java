@@ -33,6 +33,7 @@ import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.HTMLLinkScanner;
 import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tags.HTMLMetaTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
 
@@ -177,4 +178,23 @@ public class StringParserTest extends HTMLParserTestCase {
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
 		assertStringEquals("First String node contents","a\r\n\r\nb",stringNode.getText());
 	}	
+	
+	/**
+	 * An attempt to reproduce bug 677176, which passes.
+	 * @throws Exception
+	 */
+	public void testStringParserBug() throws Exception {
+		createParser(
+			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 " +			"Transitional//EN\">" +			"<html>" +			"<head>" +			"<title>Untitled Document</title>" +			"<meta http-equiv=\"Content-Type\" content=\"text/html; " +			"charset=iso-8859-1\">" +			"</head>" +			"<script language=\"JavaScript\" type=\"text/JavaScript\">" +			"// if this fails, output a 'hello' " +			"if (true) " +			"{ " +			"//something good... " +			"} " +			"</script>" +			"<body>" +			"</body>" +			"</html>" 		);	
+		parser.registerScanners();
+		parseAndAssertNodeCount(10);
+		assertType("fourth node",HTMLMetaTag.class,node[4]);
+		HTMLMetaTag metaTag = (HTMLMetaTag)node[4];
+		
+		assertStringEquals(
+			"content",
+			"text/html; charset=iso-8859-1",
+			metaTag.getAttribute("CONTENT")
+		);
+	}
 }
