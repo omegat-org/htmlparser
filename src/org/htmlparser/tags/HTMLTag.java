@@ -28,16 +28,19 @@
 
 package org.htmlparser.tags;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Hashtable;
 
+import org.htmlparser.HTMLNode;
+import org.htmlparser.HTMLReader;
 import org.htmlparser.parserHelper.ParameterParser;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.HTMLTagScanner;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.HTMLVisitor;
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
 /**
  * HTMLTag represents a generic tag. This class allows users to register specific
  * tag scanners, which can identify links, or image references. This tag asks the
@@ -402,8 +405,9 @@ public class HTMLTag extends HTMLNode
      * in the tag classes.
      * @see org.htmlparser.HTMLNode#collectInto(Vector, String)
      */
-	public void collectInto(Vector collectionVector, String filter) {
-		if (thisScanner!=null && thisScanner.getFilter()==filter) collectionVector.add(this);
+	public void collectInto(NodeList collectionList, String filter) {
+		if (thisScanner!=null && thisScanner.getFilter()==filter) 
+			collectionList.add(this);
 	}
 
 	/**

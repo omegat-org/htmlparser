@@ -39,8 +39,8 @@ import java.util.Vector;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.tags.HTMLLinkTag;
-import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.visitors.ObjectFindingVisitor;
 
 /**
  * Extract strings from a URL.
@@ -96,22 +96,20 @@ public class LinkBean extends Object implements Serializable
         
         parser = new HTMLParser (url);
         parser.registerScanners ();
+        ObjectFindingVisitor visitor = new ObjectFindingVisitor(HTMLLinkTag.class);
+        parser.visitAllNodesWith(visitor);
+        HTMLNode [] nodes = visitor.getTags();
         vector = new Vector();
-        for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();)
-        {
-        	node = e.nextNode();
-            node.collectInto (vector, HTMLLinkTag.LINK_TAG_FILTER);
-        }
-        for (int i = 0; i < vector.size (); i++)
+        for (int i = 0; i < nodes.length; i++)
             try
             {
-                link = (HTMLLinkTag)vector.elementAt (i);
-                vector.setElementAt (new URL (link.getLink ()), i);
+                link = (HTMLLinkTag)nodes[i];
+                vector.add(new URL (link.getLink ()));
             }
             catch (MalformedURLException murle)
             {
-                vector.remove (i);
-                i--;
+                //vector.remove (i);
+                //i--;
             }
         ret = new URL[vector.size ()];
         vector.copyInto (ret);

@@ -29,9 +29,8 @@
 
 package org.htmlparser;
 
-import java.util.Vector;
-
-import org.htmlparser.visitors.*;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.visitors.HTMLVisitor;
 
 /**
  * Normal text in the html document is identified and represented by this class.
@@ -75,8 +74,8 @@ public class HTMLStringNode extends HTMLNode
 	public String toString() {
 		return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
-	public void collectInto(Vector collectionVector, String filter) {
-		if (filter==STRING_FILTER) collectionVector.add(this);
+	public void collectInto(NodeList collectionList, String filter) {
+		if (filter==STRING_FILTER) collectionList.add(this);
 	}
 
 	public void accept(HTMLVisitor visitor) {

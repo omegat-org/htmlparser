@@ -29,9 +29,8 @@
 
 package org.htmlparser;
 
-import java.util.Vector;
-
-import org.htmlparser.visitors.*;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.visitors.HTMLVisitor;
 
 /**
  * The remark tag is identified and represented by this class.
@@ -80,8 +79,8 @@ public class HTMLRemarkNode extends HTMLNode
 		return "Comment Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+"\n";
 	}
 
-	public void collectInto(Vector collectionVector, String filter) {
-		if (filter==REMARK_NODE_FILTER) collectionVector.add(this);
+	public void collectInto(NodeList collectionList, String filter) {
+		if (filter==REMARK_NODE_FILTER) collectionList.add(this);
 	}
 
 	public void accept(HTMLVisitor visitor) {

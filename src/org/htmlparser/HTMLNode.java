@@ -31,9 +31,9 @@ package org.htmlparser;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.Vector;
 
-import org.htmlparser.visitors.*;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.visitors.HTMLVisitor;
 
 
 /**
@@ -142,25 +142,27 @@ public abstract class HTMLNode
 	 * Using collectInto(), programs get a lot shorter. Now, the code to extract all links from a page would look 
 	 * like :
 	 * <pre>
-	 * Vector collectionVector = new Vector();
-	 * HTMLNode node;
-	 * String filter = HTMLLinkTag.LINK_TAG_FILTER;
-	 * for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-	 * 		node = e.nextHTMLNode();
-	 * 		node.collectInto(collectionVector,filter);
+	 * NodeList collectionList = new NodeList(); 
+	 * HTMLNode node; 
+	 * String filter = HTMLLinkTag.LINK_TAG_FILTER; 
+	 * for (HTMLEnumeration e = parser.elements(); e.hasMoreNodes();) {
+	 * 		node = e.nextNode();
+	 * 		node.collectInto (collectionVector, filter); 
 	 * }
 	 * </pre>
-	 * Thus, collectionVector will hold all the link nodes, irrespective of how deep the links are embedded.
-	 * This of course implies that tags must fulfill their responsibilities toward honouring certain filters.
+	 * Thus, collectionList will hold all the link nodes, irrespective of how
+	 * deep the links are embedded. This of course implies that tags must
+	 * fulfill their responsibilities toward honouring certain filters.
 	 * 
 	 * <B>Important:</B> In order to keep performance optimal, <B>do not create</B> you own filter strings, as 
 	 * the internal matching occurs with the pre-existing filter string object (in the relevant class). i.e. do not
-	 * make calls like : <I>collectInto(collectionVector,"-l")</I>, instead, make calls only like :
-	 * <I>collectInto(collectionVector,HTMLLinkTag.LINK_TAG_FILTER)</I>.<P/>
+	 * make calls like : 
+	 * <I>collectInto(collectionList,"-l")</I>, instead, make calls only like :
+	 * <I>collectInto(collectionList,HTMLLinkTag.LINK_TAG_FILTER)</I>.<P/>
 	 * 
 	 * To find out if your desired tag has filtering support, check the API of the tag.
 	 */
-	public abstract void collectInto(Vector collectionVector,String filter);
+	public abstract void collectInto(NodeList collectionList,String filter);
 	
 	/**
 	 * Returns the beginning position of the tag.

@@ -33,8 +33,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
@@ -43,6 +41,8 @@ import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.util.NodeList;
+import org.htmlparser.util.SimpleEnumeration;
 
 public class HTMLParserTest extends HTMLParserTestCase {
 
@@ -443,16 +443,16 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		);		
 		parser.registerScanners();
 		int i = 0;
-		Vector collectionVector = new Vector();
+		NodeList collectionList = new NodeList();
 
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			HTMLNode node = e.nextNode();
-			node.collectInto(collectionVector,HTMLLinkTag.LINK_TAG_FILTER);
+			node.collectInto(collectionList,HTMLLinkTag.LINK_TAG_FILTER);
 		}
-		assertEquals("Size of collection vector should be 11",11,collectionVector.size());
+		assertEquals("Size of collection vector should be 11",11,collectionList.size());
 		// All items in collection vector should be links
-		for (Enumeration e = collectionVector.elements();e.hasMoreElements();) {
-			HTMLNode node = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = collectionList.elements();e.hasMoreNodes();) {
+			HTMLNode node = e.nextNode();
 			assertTrue("Only links should have been parsed",node instanceof HTMLLinkTag);
 		}
 	}
@@ -500,16 +500,16 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		"</html>");		
 		parser.registerScanners();
 		int i = 0;
-		Vector collectionVector = new Vector();
+		NodeList collectionList = new NodeList();
 
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			HTMLNode node = e.nextNode();
-			node.collectInto(collectionVector,HTMLImageTag.IMAGE_TAG_FILTER);
+			node.collectInto(collectionList,HTMLImageTag.IMAGE_TAG_FILTER);
 		}
-		assertEquals("Size of collection vector should be 5",5,collectionVector.size());
+		assertEquals("Size of collection vector should be 5",5,collectionList.size());
 		// All items in collection vector should be links
-		for (Enumeration e = collectionVector.elements();e.hasMoreElements();) {
-			HTMLNode node = (HTMLNode)e.nextElement();
+		for (SimpleEnumeration e = collectionList.elements();e.hasMoreNodes();) {
+			HTMLNode node = e.nextNode();
 			assertTrue("Only images should have been parsed",node instanceof HTMLImageTag);
 		}
 	}

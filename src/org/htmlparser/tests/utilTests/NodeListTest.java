@@ -1,12 +1,10 @@
 package org.htmlparser.tests.utilTests;
 
 
-import java.util.Vector;
-
 import org.htmlparser.HTMLNode;
 import org.htmlparser.tests.HTMLParserTestCase;
-import org.htmlparser.util.SimpleEnumeration;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.SimpleEnumeration;
 import org.htmlparser.visitors.HTMLVisitor;
 
 public class NodeListTest extends HTMLParserTestCase {
@@ -94,7 +92,7 @@ public class NodeListTest extends HTMLParserTestCase {
 			public void accept(HTMLVisitor visitor) {
 			}
 
-			public void collectInto(Vector collectionVector, String filter) {
+			public void collectInto(NodeList collectionList, String filter) {
 			}
 	
 			public String toHTML() {

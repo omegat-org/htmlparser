@@ -28,8 +28,6 @@
 
 package org.htmlparser.tags;
 
-import java.util.Vector;
-
 import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -185,12 +183,12 @@ public abstract class CompositeTag extends HTMLTag {
 		return searchFor(searchString, false);
 	}
 
-	public void collectInto(Vector collectionVector, String filter) {
-		super.collectInto(collectionVector, filter);
+	public void collectInto(NodeList collectionList, String filter) {
+		super.collectInto(collectionList, filter);
 		HTMLNode node;
 		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
 			node = (HTMLNode)e.nextNode();
-			node.collectInto(collectionVector,filter);
+			node.collectInto(collectionList,filter);
 		}
 	}
 

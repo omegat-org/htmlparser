@@ -32,6 +32,7 @@ import java.util.Hashtable;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLStringNode;
+import org.htmlparser.tags.Div;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
@@ -343,14 +344,15 @@ public class HTMLTagTest extends HTMLParserTestCase
 		createParser(testHTML,"http://www.cia.gov");
 		// Register the image scanner
 		parser.registerScanners();
-		parseAndAssertNodeCount(12);
+		parseAndAssertNodeCount(1);
 		// Check the tags
 		HTMLTag tag = (HTMLTag)node[0];
 		assertEquals("DIV Tag expected","div align=\"center\"",tag.getText());
-		tag = (HTMLTag)node[1];
-		assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
+		Div div = (Div)tag;
+		HTMLTag fontTag = (HTMLTag)div.children().nextNode();
+		assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",fontTag.getText());
 		// Try to parse the parameters from this tag.
-		Hashtable table = tag.getAttributes();
+		Hashtable table = fontTag.getAttributes();
 		assertNotNull("Parameters table",table);
 		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
 		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));

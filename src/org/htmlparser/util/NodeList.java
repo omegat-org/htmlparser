@@ -28,6 +28,7 @@
 
 package org.htmlparser.util;
 
+import java.net.URL;
 import java.util.NoSuchElementException;
 
 import org.htmlparser.HTMLNode;
@@ -114,4 +115,6 @@ public class NodeList {
 			buff.append(nodeData[i].toHTML());	
 		return buff.toString();
 	}
+	
+	
 }
