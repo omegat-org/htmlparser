@@ -243,7 +243,7 @@ public class NodeReader extends BufferedReader
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
 			appendLineDetails(msgBuffer);
-			msgBuffer.append("\n Caused by:\n").append(sw.getBuffer());
+			msgBuffer.append("\n Caused by:\n").append(sw.getBuffer().toString ());
 			ParserException ex = new ParserException(msgBuffer.toString(),e);
 			parser.getFeedback().error(msgBuffer.toString(),ex);
 			throw ex;			

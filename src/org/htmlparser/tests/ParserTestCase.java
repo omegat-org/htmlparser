@@ -401,7 +401,7 @@ public class ParserTestCase extends TestCase {
 
 	public static String removeEscapeCharacters(String inputString) {
 		inputString = ParserUtils.removeChars(inputString,'\r');
-		inputString = inputString.replaceAll("\n"," ");
+		inputString = inputString.replace ('\n',' ');
 		inputString = ParserUtils.removeChars(inputString,'\t');
 		return inputString;
 	}
