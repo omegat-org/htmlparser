@@ -359,6 +359,7 @@ public boolean isEndOfLineCharState() {
 	 */
 	public HTMLNode scan(Enumeration scanners,String url,HTMLReader reader) throws HTMLParserException
 	{
+		if (tagContents.length()==0) return this;
 		try {
 			boolean found=false;
 			HTMLNode retVal=null;

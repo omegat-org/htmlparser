@@ -682,4 +682,44 @@ public void testToHTML() throws HTMLParserException {
 		String test = "  fdfdf dfdf   ";
 		assertEquals("Expected Pruned string","fdfdf dfdf",HTMLTag.pruneSpaces(test));
 	}
+	/**
+	 * Bug reported by John Zook, if there is an empty tag,
+	 * then HTMLTag shouldnt pass it down to the scanners.
+	 */
+	public void testEmptyTag() throws HTMLParserException {
+		String testHTML = "<html><body><>text</body></html>";
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[10];
+		parser.registerScanners();
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should have been 6 nodes",6,i);
+		assertTrue("Third node should be an HTMLtag",node[2] instanceof HTMLTag);
+		HTMLTag htmlTag = (HTMLTag)node[2];
+		assertEquals("Third node should be empty","",htmlTag.getText());
+	}	
+	/**
+	 * Bug reported by John Zook, if there is an empty tag,
+	 * then HTMLTag shouldnt pass it down to the scanners.
+	 */
+	public void testEmptyTag2() throws HTMLParserException {
+		String testHTML = "<html><body>text<></body></html>";
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[10];
+		parser.registerScanners();
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+		assertEquals("There should have been 6 nodes",6,i);
+		assertTrue("Fourth node should be an HTMLtag",node[3] instanceof HTMLTag);
+		HTMLTag htmlTag = (HTMLTag)node[3];
+		assertEquals("Fourth node should be empty","",htmlTag.getText());
+	}		
 }

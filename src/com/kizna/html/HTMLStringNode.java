@@ -88,22 +88,24 @@ public class HTMLStringNode extends HTMLNode
 		int textBegin=position;
 		int textEnd=position;
 		int inputLen = input.length();
+		char ch;
 		for (int i=position;(i<inputLen && state!=2);i++)
 		{
+			ch  = input.charAt(i);
 			// When the input has ended but no text is found, we end up returning null
-			if (input.charAt(i)=='<' && state==0)
+			if (ch=='<' && state==0)
 			{
 				return null;
 			}
 			// The following conditionals are a bug fix
 			// done by Roger Sollberger. They correspond to a
 			// testcase in HTMLStringNodeTest (testTagCharsInStringNode)
-			if (input.charAt(i)=='<') {
+			if (ch=='<') {
 				if ((i+1)<input.length()) {
 					char nextChar = input.charAt(i+1);
 					if  (((nextChar>='A') && (nextChar<='Z')) || // next char must be A-Z 
 				     ((nextChar>='a') && (nextChar<='z')) || // next char must be a-z
-				     (nextChar=='/' || nextChar=='!'))   // or next char is a '/' 
+				     (nextChar=='/' || nextChar=='!' || nextChar=='>'))   // or next char is a '/' 
 					{
 						state = 2;
 						textEnd=i-1;
@@ -112,7 +114,7 @@ public class HTMLStringNode extends HTMLNode
 			}
 			if (state==0)
 			{
-				if (input.charAt(i)!=' ') state=1;
+				if (ch!=' ') state=1;
 				else textBuffer.append(input.charAt(i));
 			}
 			if (state==1)
