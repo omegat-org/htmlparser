@@ -146,7 +146,9 @@ public class HTMLParser
 	 * This constructor enables the construction of test cases, with readers
 	 * associated with test string buffers. 
 	 * @param reader org.htmlparser.HTMLReader
-	 * @param feedback HTMLParserFeedback
+	 * @param feedback The HTMLParserFeedback object to use when information,
+     * warning and error messages are produced. If <em>null</em> no feedback
+     * is provided.
 	 */
 	public HTMLParser(HTMLReader reader,HTMLParserFeedback feedback) 
 	{
@@ -173,9 +175,11 @@ public class HTMLParser
 	
 	/**
 	 * Creates a HTMLParser object with the location of the resource (URL or file)
-	 * You would typicall create a DefaultHTMLParserFeedback object and pass it in
-	 * @param resourceLocn Either the URL or the filename (autodetects)
-	 * @param feedback HTMLParserFeedback
+	 * You would typically create a DefaultHTMLParserFeedback object and pass it in.
+	 * @param resourceLocn Either the URL or the filename (autodetects).
+	 * @param feedback The HTMLParserFeedback object to use when information,
+     * warning and error messages are produced. If <em>null</em> no feedback
+     * is provided.
 	 */
 	public HTMLParser(String resourceLocn,HTMLParserFeedback feedback) throws HTMLParserException
 	{
@@ -197,9 +201,9 @@ public class HTMLParser
 	}
 
 	/**
-	 * Creates a HTMLParser object with the location of the resource (URL or file)
-	 * You would typicall create a DefaultHTMLParserFeedback object and pass it in
-	 * @param resourceLocn Either the URL or the filename (autodetects)
+	 * Creates a HTMLParser object with the location of the resource (URL or file).
+	 * A DefaultHTMLParserFeedback object is used for feedback.
+	 * @param resourceLocn Either the URL or the filename (autodetects).
 	 */
 	public HTMLParser(String resourceLocn) throws HTMLParserException
 	{
@@ -207,7 +211,9 @@ public class HTMLParser
 	}
 	
 	/**
-	 * This method is present to enable users to plugin their own readers (it uses DefaultHTMLParserFeedback)
+	 * This method is present to enable users to plugin their own readers.
+	 * A DefaultHTMLParserFeedback object is used for feedback.
+     * @param reader The source for HTML to be parsed.
 	 */
 	public HTMLParser(HTMLReader reader) 
 	{
