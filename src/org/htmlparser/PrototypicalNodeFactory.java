@@ -381,9 +381,9 @@ public class PrototypicalNodeFactory
         try
         {
             ret = (Remark)(getRemarkPrototype ().clone ());
-//            if (ret instanceof AbstractNode)
-//                ((AbstractNode)ret).setPage (page);
-//            else
+            if (ret instanceof AbstractNode)
+                ((AbstractNode)ret).setPage (page);
+            else
             {
                 first = start + 4; // <!--
                 last = end - 3; // -->
