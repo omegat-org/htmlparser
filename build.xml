@@ -5,18 +5,26 @@
   <property name="build" value="build"/>
   <property name="version" value="1.1"/>
   <property name="versionString" value="1_1"/>
+  <property name="previousVersion" value="1.2"/>
   <property name="docs" value="docs"/>
   <property name="resources" value="resources"/>
   <property name="dist"  value="release/htmlparser${version}"/>
   <property name="releaseDir" value="release"/>
   <property name="finalLoc" value="distribution"/>
 
-  <target name="init">
+  <target name="init" depends="versionSource">
 	<mkdir dir="${finalLoc}"/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
   </target>
-	
+
+  <target name="versionSource">
+  	<replace dir="${src}" value="v${version}">
+		<include name="**/*.java"/>
+		<replacefilter token="v${previousVersion}" value="v${version}"/>
+  	</replace>	
+  </target>
+  
   <target name="compile" depends="init">
     <!-- Compile the java code from ${src} into ${build} -->
     <javac srcdir="${src}/com/kizna/html" destdir="${build}"/>
