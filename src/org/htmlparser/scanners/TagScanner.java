@@ -273,15 +273,6 @@ public abstract class TagScanner
 	 */
 	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException { return null; }
 
-	/**
-	 * Checks if there is an existing scanner of the same
-	 * type that is open - indicating that we're now dealing
-	 * with a broken tag
-	 * @return Returns a boolean
-	 */
-	public boolean isPreviousLinkScannerOpen() {
-		return previousOpenScanner!=null;
-	}
 
 	protected Tag getReplacedEndTag(Tag tag, NodeReader reader, String currentLine) {
 		// Replace tag - it was a <A> tag - replace with </a>
@@ -319,13 +310,5 @@ public abstract class TagScanner
 		);
 	}
 
-	protected boolean isBrokenTag() {
-		return previousOpenScanner!=null;
-	}
-
-	protected boolean isTagFoundAtAll(Tag tag) {
-		return tag.getText().length()==1;
-	}
-
-	protected TagScanner previousOpenScanner=null;  
+ 
 }

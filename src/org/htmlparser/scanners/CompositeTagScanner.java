@@ -43,7 +43,8 @@ public abstract class CompositeTagScanner extends TagScanner {
 	protected String [] nameOfTagToMatch;
 	private boolean removeScanners;
 	private boolean stringNodeIgnoreMode;
-
+	protected TagScanner previousOpenScanner=null; 
+	
 	public CompositeTagScanner(String [] nameOfTagToMatch) {
 		this("",nameOfTagToMatch,false,false);
 	}
@@ -126,11 +127,13 @@ public abstract class CompositeTagScanner extends TagScanner {
 			}
 			if (removeScanners)
 				reader.getParser().setScanners(tempScanners);
-			return createTag(new TagData(
+			return createTag(
+				new TagData(
 					startTag.elementBegin(),
 					endTag.elementEnd(),
 					startTag.getText(),
-					currLine				
+					currLine,
+					url				
 				), new CompositeTagData(
 					startTag,endTag,childVector
 				)
@@ -175,6 +178,23 @@ public abstract class CompositeTagScanner extends TagScanner {
 
 	protected boolean isTagToBeEndedFor(String tmp) {
 		return false;
+	}
+
+	/**
+	 * Checks if there is an existing scanner of the same
+	 * type that is open - indicating that we're now dealing
+	 * with a broken tag
+	 * @return Returns a boolean
+	 */
+	public boolean isPreviousLinkScannerOpen() {
+		return previousOpenScanner!=null;
+	}
+	protected boolean isBrokenTag() {
+		return previousOpenScanner==this;
+	}
+
+	protected boolean isTagFoundAtAll(Tag tag) {
+		return tag.getText().length()==1;
 	}
 
 

@@ -211,7 +211,7 @@ public class LinkScannerTest extends ParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLLinkTag",node[0] instanceof LinkTag);
 		LinkTag linkTag = (LinkTag)node[0];
-		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mytest.html",linkTag.getLink());
+		assertStringEquals("Expected Link","http://www.yahoo.com/abc/def/mytest.html",linkTag.getLink());
 	}
 
 	public void testRelativeLinkScan3() throws ParserException {
@@ -221,7 +221,7 @@ public class LinkScannerTest extends ParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLLinkTag",node[0] instanceof LinkTag);
 		LinkTag linkTag = (LinkTag)node[0];
-		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mytest.html",linkTag.getLink());
+		assertStringEquals("Expected Link","http://www.yahoo.com/abc/def/mytest.html",linkTag.getLink());
 	}
 
 	/**
