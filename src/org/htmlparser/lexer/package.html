@@ -38,8 +38,7 @@
 <TITLE>Lexer Package</TITLE>
 </HEAD>
 <BODY>
-The lexer package will eventually be the base level I/O subsystem.
-<EM>It is currently under development.</EM>
+The lexer package is the base level I/O subsystem.
 <P>The lexer package is responsible for reading characters from the HTML source
 and identifying the node lexemes. For example, the HTML code below would return
 the list of nodes shown:</P>
@@ -97,15 +96,14 @@ previous implementations are highlighted in <B>bold</B>.
 <DT>Contiguous Nodes
 <DD><B>Adjacent nodes have no characters between them.</B> The list of nodes forms an
 uninterrupted chain that, by start and end definitions, completely covers the
-characters that were read from the HTML source. Despite this, the nodes are not
-stored in a linked list, but rather an array to ease any editing tasks that may
-be performed.
+characters that were read from the HTML source.
 <DT>Text Fidelity
-<DD>Besides complete coverage, the <B>nodes do not contain copies of the text</B>,
-but instead simply contain offsets into a single large buffer that contains the
-text read from the HTML source. Even within tags, the attributes list can
-contain whitespace, thus there is no lost whitespace or text formatting
-either outside or within tags. Upper and lower case text is preserved.
+<DD>Besides complete coverage, the <B>nodes do not initially contain copies of 
+the text</B>, but instead simply contain offsets into a single large buffer
+that contains the text read from the HTML source. Even within tags, the
+attributes list can contain whitespace, thus there is no lost whitespace or
+text formatting either outside or within tags. Upper and lower case text is
+preserved.
 <DT>Line Endings
 <DD><B>End of line characters are just whitespace.</B> There is no distinction
 made between end of line characters (or pairs of characters on Windows) and
@@ -126,14 +124,15 @@ TagParser & AttributeParser):
 By integrating the four state machines into one, a single pass over the text is
 all that's needed for a low level parse of the HTML source. In previous
 implementations, the attributes were parsed on a second scan after the initial
-tag was extracted.
+tag was extracted. (Actually, for error conditions, the lexer can back up  a
+node to handle missing end tags etc.).
 <DT>Two Jars
 <DD>For elementary operations at the node level, a minimalist jar file containing
 <B>only the lexer and base tag classes</B> is split out from the larger <CODE>htmlparser.jar</CODE>.
 In this way, simple parsing and output is handled with a jar file that is under
-40 kilobytes, but anything beyond peephole manipulation, i.e. closing tag detection
+45 kilobytes, but anything beyond peephole manipulation, i.e. closing tag detection
 and other semantic reasoning will need the full set of scanners, nodes and ancillary
-classes, which now stands at 160 kilobytes.
+classes, which now stands at 210 kilobytes.
 </DL>
 </BODY>
 </HTML>

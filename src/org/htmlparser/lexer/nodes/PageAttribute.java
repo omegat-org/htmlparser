@@ -39,7 +39,7 @@ import org.htmlparser.lexer.Page;
  * This attribute is similar to Attribute but 'lazy loaded' from the
  * <code>Page</code> by providing the page and cursor offsets
  * into the page for the name and value. This is done for speed, since
- * if the name and value are not been needed we can avoid the cost and memory
+ * if the name and value are not needed we can avoid the cost and memory
  * overhead of creating the strings.
  * <p>
  * Thus the property getters, defer to the base class unless the property

@@ -38,9 +38,7 @@ import org.htmlparser.util.sort.Sort;
 import org.htmlparser.util.sort.Sortable;
 
 /**
- * A sorted array of integers which are the positions of end of line characters.
- * Maintains a list of integers which are (the positions of the first
- * characters of each line.
+ * A sorted array of integers, the positions of the first characters of each line.
  * To facilitate processing the first element should be maintained at position 0.
  * Facilities to add, remove, search and determine row and column are provided.
  * This class provides similar functionality to a Vector but
