@@ -618,6 +618,25 @@ public class TagTest extends ParserTestCase
 		assertEquals("Word expected for line 4","%",Tag.extractWord(line4));
 		String line5 = "OPTION";
 		assertEquals("Word expected for line 5","OPTION",Tag.extractWord(line5));
-
     }
+
+//    /**
+//     * See bug #726913 toHtml() method incomplete
+//     */
+//    public void testSetText() throws ParserException
+//    {
+//        String testHTML = "<LABEL ID=\"JohnDoe\" >John Doe</LABEL>";
+//        createParser(testHTML);
+//        parser.addScanner(new org.htmlparser.scanners.LabelScanner("-l"));
+//        parseAndAssertNodeCount(1);
+//        org.htmlparser.tags.LabelTag htmlTag = (org.htmlparser.tags.LabelTag)node[0];
+//        String expectedHTML = "<LABEL ID=\"JohnDoe\" >John Doe</LABEL>";
+//        assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
+//        assertStringEquals("Expected HTML","John Doe",htmlTag.getLabel());
+//
+//        htmlTag.setText("Jane Doe");
+//        expectedHTML = "<LABEL ID=\"JohnDoe\" >Jane Doe</LABEL>";
+//        assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
+//        assertStringEquals("Expected HTML","Jane Doe",htmlTag.getLabel());
+//    }
 }
