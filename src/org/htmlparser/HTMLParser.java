@@ -104,45 +104,132 @@ import org.htmlparser.util.HTMLTagParser;
  */
 public class HTMLParser
 {
+	// Please don't change the formatting of the VERSION_STRING
+	// below. This is done so as to facilitate the ant script
+	public final static java.lang.String 
+	VERSION_STRING="1.2 (Integration Build Dec 15, 2002)"
+	;
+	// End of formatting
+
+	/**
+	 * Feedback object.
+	 */
+	private HTMLParserFeedback feedback;
+	
 	/**
 	 * The URL or filename to be parsed.
 	 */
 	protected String resourceLocn;
 	
 	/** 
-	 * The html reader associated with this parser
+	 * The html reader associated with this parser.
 	 */
 	protected HTMLReader reader;
+
+    /**
+     * The list of scanners to apply at the top level.
+     */
+	private Hashtable scanners;
 	
-	/**
-	 * The last read HTML node.
-	 */
-	protected HTMLNode node;
-	
-	/**
-	 * Keeps track of whether the first reading has been performed.
-	 */
-	protected boolean readFlag = false;
-	
-	private Hashtable scanners = new Hashtable();
-	
-	/**
-	 * Keeps track if a connection was opened to a file or url
-	 */
-	private boolean connectionOpened=true;
-	
-	/**
-	 * Feedback object
-	 */
-	private HTMLParserFeedback feedback;
-	
-	// Please dont change the formatting of the VERSION_STRING
-	// below. This is done so as to facilitate the ant script
-	public final static java.lang.String 
-	VERSION_STRING="1.2 (Integration Build Dec 15, 2002)"
-	;
-	// End of formatting
-	/**
+    /**
+     * A quiet message sink.
+     * Use this for no feedback.
+     */
+    public static HTMLParserFeedback nul = new DefaultHTMLParserFeedback (DefaultHTMLParserFeedback.QUIET);
+    
+    /**
+     * A verbose message sink.
+     * Use this for output on <code>System.out</code>.
+     */
+    public static HTMLParserFeedback stdout = new DefaultHTMLParserFeedback ();
+
+    /**
+     * Opens a connection using the given url.
+     * @param url The url to open.
+     * @param feedback The ibject to use for messages or <code>null</code>.
+     * @exception HTMLParserException if an i/o exception occurs accessing the url.
+     */
+    private static URLConnection openConnection (URL url, HTMLParserFeedback feedback)
+        throws
+            HTMLParserException
+    {
+        URLConnection ret;
+        
+        try
+        {
+            ret = url.openConnection ();
+        }
+        catch (IOException ioe)
+        {
+            String msg = "HTMLParser.openConnection() : Error in opening a connection to " + url.toExternalForm ();
+            HTMLParserException ex = new HTMLParserException (msg, ioe);
+            if (null != feedback)
+                feedback.error (msg, ex);
+            throw ex;
+        }
+        
+        return (ret);
+    }
+
+    /**
+     * Opens a connection based on a given string.
+     * The string is either a file, in which case <code>file://localhost</code>
+     * is prepended (with an intervening slash if required), or a url that
+     * begins with one of the known protocol strings, i.e. <code>http://</code>.
+     * @param string The name of a file or a url.
+     * @param feedback The object to use for messages or <code>null</code> for no feedback.
+     * @exception HTMLParserException if the string is not a valid url or file.
+     */
+    private static URLConnection openConnection (String string, HTMLParserFeedback feedback)
+        throws
+            HTMLParserException
+    {
+        final String prefix = "file://localhost";
+        String resource;
+        URL url;
+        StringBuffer buffer;
+        URLConnection ret;
+
+        // for a while we warn people about spaces in their URL
+        resource = HTMLLinkProcessor.fixSpaces (string);
+        if (!resource.equals (string) && (null != feedback))
+            feedback.warning ("URL containing spaces was adjusted to \""
+                + resource
+                + "\", use HTMLLinkProcessor.fixSpaces()");
+
+        try
+        {
+            url = new URL (resource);
+            ret =  openConnection (url, feedback);
+        }
+        catch (MalformedURLException murle)
+        {   // try it as a file
+            buffer = new StringBuffer (prefix.length () + string.length () + 1);
+            buffer.append (prefix);
+            if (!string.startsWith (File.separator))
+                buffer.append ("/");
+            buffer.append (resource);
+            try
+            {
+                url = new URL (buffer.toString ());
+                ret = openConnection (url, feedback);
+                if (null != feedback)
+                    feedback.info (url.toExternalForm ());
+            }
+            catch (MalformedURLException murle2)
+            {
+                String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
+                HTMLParserException ex = new HTMLParserException (msg, murle2);
+                if (null != feedback)
+                    feedback.error (msg, ex);
+                throw ex;
+            }
+        }
+        
+        return (ret);
+    }
+
+    /**
 	 * This constructor enables the construction of test cases, with readers
 	 * associated with test string buffers. It can also be used with readers of the user's choice
 	 * streaming data into the parser.<p/>
@@ -155,49 +242,67 @@ public class HTMLParser
 	 * parser.getReader().reset();
 	 * </pre>
 	 * </li>
-	 * @param reader org.htmlparser.HTMLReader
-	 * @param feedback The HTMLParserFeedback object to use when information,
+	 * </ul>
+	 * @param rd The reader to draw characters from.
+	 * @param fb The object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
 	 */
-	public HTMLParser(HTMLReader reader,HTMLParserFeedback feedback) 
+	public HTMLParser(HTMLReader rd, HTMLParserFeedback fb) 
 	{
-		this.reader = reader;
-        if (null == feedback)
-            this.feedback = new DefaultHTMLParserFeedback (DefaultHTMLParserFeedback.QUIET);
-        else
-            this.feedback = feedback;
-		HTMLTag.setTagParser(new HTMLTagParser(feedback));		
+        feedback = (null == fb) ? nul : fb;
+        resourceLocn = rd.getURL ();
+		reader = rd;
+        scanners = new Hashtable();
+		HTMLTag.setTagParser(new HTMLTagParser(feedback));
 		reader.setParser(this);
-		connectionOpened=false;
 	}
 	
+    /**
+     * Constructor for custom HTTP access.
+     * @param connection A fully conditioned connection. The connect()
+     * method will be called so it need not be connected yet.
+     * @param fb The object to use for message communication.
+     */
+    public HTMLParser (URLConnection connection, HTMLParserFeedback fb)
+        throws
+            HTMLParserException
+    {
+        feedback = (null == fb) ? nul : fb;
+        resourceLocn = connection.getURL ().toExternalForm ();
+        try
+        {
+            connection.connect ();
+            // the default charset should be iso-8859-1,
+            // see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
+            reader = new HTMLReader (new BufferedReader (new InputStreamReader (connection.getInputStream (), "8859_1")), resourceLocn);
+            reader.setParser (this);
+            HTMLTag.setTagParser(new HTMLTagParser(feedback));
+            scanners = new Hashtable();
+        }
+        catch (IOException ioe)
+        {
+            String msg = "HTMLParser() : Error in opening a connection to " + connection.getURL ().toExternalForm ();
+            HTMLParserException ex = new HTMLParserException (msg, ioe);
+            feedback.error (msg, ex);
+            throw ex;
+        }
+    }
+
 	/**
 	 * Creates a HTMLParser object with the location of the resource (URL or file)
 	 * You would typically create a DefaultHTMLParserFeedback object and pass it in.
 	 * @param resourceLocn Either the URL or the filename (autodetects).
+     * A standard HTTP GET is performed to read the content of the URL.
 	 * @param feedback The HTMLParserFeedback object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
+     * @see #HTMLParser(URLConnection,HTMLParserFeedback)
 	 */
-	public HTMLParser(String resourceLocn,HTMLParserFeedback feedback) throws HTMLParserException
+	public HTMLParser(String resourceLocn, HTMLParserFeedback feedback) throws HTMLParserException
 	{
-		try {
-			this.resourceLocn = resourceLocn;
-            if (null == feedback)
-                this.feedback = new DefaultHTMLParserFeedback (DefaultHTMLParserFeedback.QUIET);
-            else
-    			this.feedback = feedback;
-			HTMLTag.setTagParser(new HTMLTagParser(feedback));
-			openConnection();
-		}
-		catch (Exception e) {
-			String msg="Error in constructing the parser object for resource "+resourceLocn;
-			HTMLParserException ex = new HTMLParserException(msg,e);
-			feedback.error(msg,ex);
-			throw ex;
-		}
-	}
+        this (openConnection (resourceLocn, feedback), feedback);
+    }
 
 	/**
 	 * Creates a HTMLParser object with the location of the resource (URL or file).
@@ -206,7 +311,7 @@ public class HTMLParser
 	 */
 	public HTMLParser(String resourceLocn) throws HTMLParserException
 	{
-		this(resourceLocn,new DefaultHTMLParserFeedback());
+		this (resourceLocn, stdout);
 	}
 	
 	/**
@@ -226,9 +331,21 @@ public class HTMLParser
 	 */
 	public HTMLParser(HTMLReader reader) 
 	{
-		this(reader,new DefaultHTMLParserFeedback());	
+		this (reader, stdout);	
 	}	
-		
+
+    /**
+     * Constructor for non-standard access.
+     * A DefaultHTMLParserFeedback object is used for feedback.
+     * @param connection A fully conditioned connection. The connect()
+     * method will be called so it need not be connected yet.
+     * @see #HTMLParser(URLConnection,HTMLParserFeedback)
+     */
+    public HTMLParser (URLConnection connection) throws HTMLParserException
+    {
+        this (connection, stdout);
+    }
+
 	/**
 	 * Add a new Tag Scanner.
 	 * In typical situations where you require a no-frills parser, use the registerScanners() method to add the most
@@ -243,16 +360,6 @@ public class HTMLParser
 			scanners.put(ids[i],scanner);
 		}
 		scanner.setFeedback(feedback);
-	}
-	
-	private String checkEnding(String link)
-	{
-		// Check if the link ends in html, htm, or /. If not, add a slash
-		int l1 = link.indexOf("html");
-		int l2 = link.indexOf("htm");
-		int l3 = link.indexOf("php");
-		int l4 = link.indexOf("jsp");
-		return link;
 	}
 	
 	/**
@@ -282,6 +389,16 @@ public class HTMLParser
 	{
 		return new HTMLEnumeration()
 		{
+            /**
+             * The last read HTML node.
+             */
+            protected HTMLNode node;
+
+            /**
+             * Keeps track of whether the first reading has been performed.
+             */
+            protected boolean readFlag = false;
+
 			public boolean hasMoreNodes() throws HTMLParserException
 			{
 				if (reader==null) return false;
@@ -289,7 +406,7 @@ public class HTMLParser
 				{
 					node = reader.readElement();
 					readFlag=true;
-				   if (node==null) {
+				    if (node==null) {
 				   		// Parser has completed. 
 				   		// Re-initialize
 				   		return false;
@@ -413,66 +530,6 @@ public class HTMLParser
 		}
 		catch (HTMLParserException e) {
 			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Opens the connection with the resource to begin reading, by creating a HTML reader
-	 * object.
-	 */
-	private void openConnection() throws HTMLParserException
-	{
-		try
-		{
-			if (HTMLLinkProcessor.isURL(resourceLocn))
-			{ 
-				reader = openURLConnection();
-			}
-			else 
-			reader = openFileConnection();
-			reader.setParser(this);
-		}
-		catch (Exception e)
-		{
-			String msg="HTMLParser.openConnection() : Error in opening a connection to "+resourceLocn;
-			HTMLParserException ex = new HTMLParserException(msg,e);
-			feedback.error(msg,ex);
-			throw ex;
-		}
-	}
-	
-	private HTMLReader openFileConnection() throws HTMLParserException {
-		try {
-			return new HTMLReader(new BufferedReader(new FileReader(resourceLocn)),resourceLocn);
-		}
-		catch (Exception e) {
-			String msg="HTMLParser.openFileConnection() : Error in opening a file connection to "+resourceLocn;
-			HTMLParserException ex = new HTMLParserException(msg,e);
-			feedback.error(msg,ex);
-			throw ex;
-		}
-	}
-	
-	private HTMLReader openURLConnection()	throws HTMLParserException {
-		try {
-            // for a while we'll warn people that translations are not happening any more
-            if (-1 != resourceLocn.indexOf ("#38;"))
-                feedback.warning ("URL contains escape - use org.htmlparser.util.Translate.decode()");
-
-            // Its a web address
-			resourceLocn=checkEnding(resourceLocn);
-			resourceLocn=HTMLLinkProcessor.fixSpaces(resourceLocn);
-			URL url = new URL(resourceLocn);
-			URLConnection uc = url.openConnection();
-            // the default charset should be iso-8859-1,
-            // see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
-			return new HTMLReader(new BufferedReader(new InputStreamReader(uc.getInputStream(),"8859_1")),resourceLocn);
-		}
-		catch (Exception e) {
-			String msg="HTMLParser.openURLConnection() : Error in opening a URL connection to "+resourceLocn;
-			HTMLParserException ex = new HTMLParserException(msg,e);
-			feedback.error(msg,ex);
-			throw ex;
 		}
 	}
 	
