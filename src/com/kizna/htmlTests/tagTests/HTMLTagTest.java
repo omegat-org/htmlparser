@@ -192,7 +192,7 @@ public void testNestedTags() {
                 o = en.nextElement();        
                 
                 tag = (HTMLTag)o;     
-                h = tag.parseParameters();
+                h = tag.getParsed();
 				String classValue= (String)h.get("CLASS");
                 assertEquals ("The class value should be ","userData",classValue);
             }
@@ -211,7 +211,7 @@ public void testNestedTags() {
         HTMLEndTag etag;
         HTMLStringNode snode;
         Object o=null;
-        String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle\">Kaarle's homepage</A><p>Paragraph</p>";
+        String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
        	StringReader sr = new StringReader(lin1);
     	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
 	    HTMLParser parser = new HTMLParser(reader);
@@ -226,7 +226,7 @@ public void testNestedTags() {
                 o = en.nextElement();        
                 
                 tag = (HTMLTag)o;     
-                h = tag.parseParameters();
+                h = tag.getParsed();
                 a = (String)h.get(tag.TAGNAME);                
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
@@ -298,7 +298,7 @@ public void testNestedTags() {
                 o = en.nextElement();        
                 
                 tag = (HTMLTag)o;     
-                h = tag.parseParameters();
+                h = tag.getParsed();
                 a = (String)h.get(tag.TAGNAME);                
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
@@ -379,7 +379,7 @@ public void testNestedTags() {
 		tag = (HTMLTag)node[1];
 		assertEquals("Second tag should be corrected","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
 		// Try to parse the parameters from this tag.
-		Hashtable table = tag.parseParameters();
+		Hashtable table = tag.getParsed();
 		assertNotNull("Parameters table",table);
 		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
 		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
@@ -552,7 +552,8 @@ public void testToHTML() {
 		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
 		assertEquals("Node contents","META name=\"Hello\" value=\"World </I>\"",tag.getText()); 
-    	
+		assertEquals("Meta Content","World </I>",tag.getParameter("value"));
+
     }
     public void testIncorrectInvertedCommas() {
     	String testHTML = new String("<META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"\">"); 
@@ -572,7 +573,11 @@ public void testToHTML() {
 		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
 		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
-		assertEquals("Node contents","META NAME=Author CONTENT=DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getText()); 
+		assertStringEquals("Node contents","META NAME=Author CONTENT=DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getText()); 
+		Hashtable table = tag.getParsed();
+		for (Enumeration e = table.keys();e.hasMoreElements();)
+		System.out.println((String)e.nextElement());
+		assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getParameter("CONTENT"));
     	
     }    
     public void testIncorrectInvertedCommas2() {
