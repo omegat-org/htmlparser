@@ -63,6 +63,7 @@ public class Feedback
     }
 
     /**
+     * Information message.
      * <em>Just eats the info message.</em>
      * @param message {@inheritDoc} 
      */
@@ -72,6 +73,7 @@ public class Feedback
     }
 
     /**
+     * Warning message.
      * Calls {@link ErrorHandler#warning(SAXParseException) ErrorHandler.warning}.
      * @param message {@inheritDoc} 
      */
@@ -89,6 +91,7 @@ public class Feedback
     }
 
     /**
+     * Error message.
      * Calls {@link ErrorHandler#error(SAXParseException) ErrorHandler.error}.
      * @param message {@inheritDoc} 
      */

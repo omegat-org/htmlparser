@@ -703,7 +703,7 @@ public class Translate
     /**
      * Look up a reference by kernel.
      * Use a binary search on the ordered list of known references.
-     * <em>This is not very efficient, use {@link #lookup(CharacterReference) }
+     * <em>This is not very efficient, use {@link org.htmlparser.util.Translate#lookup(org.htmlparser.util.CharacterReference) lookup(CharacterReference)}
      * instead.</em>
      * @param kernel The string to lookup, i.e. "amp".
      * @param start The starting point in the string of the kernel.

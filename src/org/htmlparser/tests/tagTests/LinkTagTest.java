@@ -339,6 +339,7 @@ public class LinkTagTest extends ParserTestCase {
     }
 
     /**
+     * Test mail link.
      * Bug #738504 MailLink != HTTPLink
      */
     public void testMailToIsNotAHTTPLink () throws ParserException

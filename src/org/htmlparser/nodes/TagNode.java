@@ -151,7 +151,7 @@ public class TagNode
 
     /**
      * Create a tag like the one provided.
-     * @param node The tag to emulate.
+     * @param tag The tag to emulate.
      * @param scanner The scanner for this tag.
      */
     public TagNode (TagNode tag, TagScanner scanner)

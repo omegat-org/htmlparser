@@ -46,6 +46,7 @@ public class RemarkNodeParserTest extends ParserTestCase
     }
 
     /**
+     * Test unparsed remark node.
      * The bug being reproduced is this : <BR>
      * &lt;!-- saved from url=(0022)http://internet.e-mail --&gt;
      * &lt;HTML&gt;
@@ -182,6 +183,7 @@ public class RemarkNodeParserTest extends ParserTestCase
     }
 
     /**
+     * Test tag within remark.
      * Reproduction of bug reported by John Zook [594301]
      * When we have tags like :
      * &lt;!-- &lt;A&gt; --&gt;
@@ -361,6 +363,7 @@ public class RemarkNodeParserTest extends ParserTestCase
 //    }
 
     /**
+     * Test exclamation mark ending.
      * Test a comment ending with !--.
      * See bug #788746 parser crashes on comments like <!-- foobar --!>
      */

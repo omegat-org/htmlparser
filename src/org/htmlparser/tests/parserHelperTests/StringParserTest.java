@@ -67,6 +67,7 @@ public class StringParserTest extends ParserTestCase {
     }
 
     /**
+     * Test string containing link.
      * Bug reported by Kaarle Kaila of Nokia<br>
      * For the following HTML :
      * view these documents, you must have &lt;A href='http://www.adobe.com'&gt;Adobe <br>

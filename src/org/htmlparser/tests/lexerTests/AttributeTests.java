@@ -546,6 +546,7 @@ public class AttributeTests extends ParserTestCase
     }
     
     /**
+     * Test for lost attributes.
      * see bug #778781 SRC-attribute suppression in IMG-tags
      * & #753012 IMG SRC not parsed v1.3 & v1.4
      * & #755929 Empty string attr. value causes attr parsing to be stopped

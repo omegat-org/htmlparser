@@ -120,10 +120,6 @@ public class ScriptCommentTest extends ParserTestCase {
 
         /**
          * Creates a new ScriptVisitor object.
-         *
-         * @param hat param.
-         * @param hostString param.
-         * @param direction param.
          */
         public ScriptVisitor() {
             super(true, true);

@@ -178,6 +178,7 @@ public class ImageTagTest extends ParserTestCase
     }
 
     /**
+     * Test empty attribute.
      * See bug #755929 Empty string attr. value causes attr parsing to be stopped
      * and bug #753012 IMG SRC not parsed v1.3 & v1.4
      */

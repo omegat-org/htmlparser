@@ -325,7 +325,7 @@ public class PrototypicalNodeFactory
 
     /**
      * Get the object being used to generate generic tag nodes.
-     * These are returned from {@link createTagNode} when no specific tag
+     * These are returned from {@link #createTagNode} when no specific tag
      * is found in the registered tag list.
      * @return The prototype for {@link Tag} nodes.
      */
@@ -336,9 +336,9 @@ public class PrototypicalNodeFactory
 
     /**
      * Set the object to be used to generate tag nodes.
-     * These are returned from {@link createTagNode} when no specific tag
+     * These are returned from {@link #createTagNode} when no specific tag
      * is found in the registered tag list.
-     * @param remark The prototype for {@link Tag} nodes.
+     * @param tag The prototype for {@link Tag} nodes.
      */
     public void setTagPrototype (Tag tag)
     {

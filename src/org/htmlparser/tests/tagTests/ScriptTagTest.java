@@ -75,16 +75,17 @@ public class ScriptTagTest extends ParserTestCase{
     }
 
     /**
-    * Bug check by Wolfgang Germund 2002-06-02
-    * Upon parsing :
-    * &lt;script language="javascript"&gt;
-    * if(navigator.appName.indexOf("Netscape") != -1)
-    * document.write ('xxx');
-    * else
-    * document.write ('yyy');
-    * &lt;/script&gt;
-    * check toRawString().
-    */
+     * Test raw string.
+     * Bug check by Wolfgang Germund 2002-06-02
+     * Upon parsing :
+     * &lt;script language="javascript"&gt;
+     * if(navigator.appName.indexOf("Netscape") != -1)
+     * document.write ('xxx');
+     * else
+     * document.write ('yyy');
+     * &lt;/script&gt;
+     * check toRawString().
+     */
     public void testToHTMLWG() throws ParserException
     {
         StringBuffer sb2 = new StringBuffer();

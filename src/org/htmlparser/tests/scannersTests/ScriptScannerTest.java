@@ -64,6 +64,7 @@ public class ScriptScannerTest extends ParserTestCase
     }
 
     /**
+     * Test javascript tag attributes.
      * Bug reported by Gordon Deudney 2002-03-27
      * Upon parsing :
      * &lt;SCRIPT LANGUAGE="JavaScript"
@@ -84,6 +85,7 @@ public class ScriptScannerTest extends ParserTestCase
     }
 
     /**
+     * Test script code.
      * Bug check by Wolfgang Germund 2002-06-02
      * Upon parsing :
      * &lt;script language="javascript"&gt;

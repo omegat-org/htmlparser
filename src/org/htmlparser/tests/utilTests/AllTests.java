@@ -34,7 +34,6 @@ import org.htmlparser.tests.ParserTestCase;
 /**
  * Insert the type's description here.
  * Creation date: (6/17/2001 6:07:04 PM)
- * @author: Administrator
  */
 public class AllTests extends ParserTestCase
 {
