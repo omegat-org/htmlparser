@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021109 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021120 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -151,6 +151,16 @@ public class HTMLLinkProcessor {
 			dotLoc=link.indexOf("..");
 		}
 		return link;
+	}
+	public static String fixSpaces(String url) {
+		StringBuffer returnURL=new StringBuffer();
+		char ch;
+		for (int i=0;i<url.length();i++) {
+			ch = url.charAt(i);
+			if (ch==' ') returnURL.append("%20"); else
+			returnURL.append(ch);
+		}
+		return returnURL.toString();
 	}
 		public static String removeEscapeCharacters(String link)
 		{

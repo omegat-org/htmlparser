@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021109 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021120 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -155,5 +155,12 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		assertEquals("Third Element","www.mysite.com/",third);
 		String fourth = (String)directories.elementAt(3);
 		assertEquals("Fourth Element","books/",fourth);
+	}
+	public void testFixSpaces() {
+		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
+		HTMLLinkProcessor lp = new HTMLLinkProcessor();
+		String fixedURL = lp.fixSpaces(url);
+		int index = fixedURL.indexOf(" ");
+		assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html",fixedURL);
 	}
 }

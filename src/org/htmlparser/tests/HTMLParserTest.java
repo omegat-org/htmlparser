@@ -30,6 +30,7 @@ package org.htmlparser.tests;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -110,12 +111,30 @@ public class HTMLParserTest extends TestCase {
 	public void testNullUrl() {
 		HTMLParser parser;
 		try {
-			parser = new HTMLParser("");
+			parser = new HTMLParser("http://someoneexisting.com");
 			assertTrue("Should have thrown an exception!",false);
 		}
 		catch (HTMLParserException e) {
 			
 		}
+	}
+	
+	public void testURLWithSpaces() throws HTMLParserException{
+		HTMLParser parser;
+		//System.out.println("************ Testing URL ************");
+		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
+		
+		parser = new HTMLParser(url);
+		HTMLNode node [] = new HTMLNode[30];
+		int i = 0;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i] = e.nextHTMLNode();
+		//	node[i].print();
+			i++;
+			
+		}
+		assertEquals("Expected nodes",12,i);
+		//System.out.println("************ Finished Testing URL ************");
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLParserTest.class);
