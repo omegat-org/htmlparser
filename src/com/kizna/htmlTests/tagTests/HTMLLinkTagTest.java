@@ -199,7 +199,6 @@ public void testLinkNodeBug5() throws HTMLParserException
 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 	{
 		node[i++] = e.nextHTMLNode();
-		System.out.println(i-1 + " : " + node[i-1].toHTML());
 	}
 			
 	assertEquals("There should be 6 nodes identified",new Integer(6),new Integer(i));

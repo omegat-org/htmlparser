@@ -96,21 +96,7 @@ public void testBodyTagBug1() throws HTMLParserException {
 	HTMLTag tag = (HTMLTag)node[0];
 	assertEquals("Contents of the tag","BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\r\nvLink=#551a8b",tag.getText());
 }
-    public void testCheckValidity() {
-    	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
-    	int state = HTMLTag.checkValidity(HTMLTag.TAG_IGNORE_DATA_STATE,tag);
-    	assertEquals("Expected State",HTMLTag.TAG_FINISHED_PARSING_STATE,state);
-    }
-    public void testCorrectTag() {
-    	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
-		HTMLTag.correctTag(tag);
-		assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
-    }
-    public void testExtractWord() {
-    	String line = "Abc DEF GHHI";
-    	String word = HTMLTag.extractWord(line);
-    	assertEquals("Word expected","ABC",HTMLTag.extractWord(line));
-    }
+
 /**
  * The following should be identified as a tag : <BR>
  * 	&lt;MYTAG abcd\n"+
@@ -380,14 +366,12 @@ public void testNestedTags() throws HTMLParserException {
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreNodes()) {
                     node = en.nextHTMLNode();        
-                   // System.out.println("snode = " + o );
                     snode = (HTMLStringNode)node;   
                     assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
                 }
 
                 if (en.hasMoreNodes()) {
                     node = en.nextHTMLNode();        
-                  //  System.out.println("etag = " + o );
                     etag = (HTMLEndTag)node;        
                     assertEquals("Still patragraph endtag",etag.getText(),"A");                    
                 }
@@ -674,16 +658,7 @@ public void testToHTML() throws HTMLParserException {
 		assertEquals("Node contents","meta name=\"description\" content=\"Une base de données sur les thèses de gographie soutenues en France\"",tag.getText()); 
     	
     }
-	public void testInsertInvertedCommasCorrectly() {
-		StringBuffer test = new StringBuffer("a b=c d e = f"); 
-		StringBuffer result = HTMLTag.insertInvertedCommasCorrectly(test);
-		assertStringEquals("Expected Correction","a b=\"c d\" e=\"f\"",result.toString());
-		
-	}
-	public void testPruneSpaces() {
-		String test = "  fdfdf dfdf   ";
-		assertEquals("Expected Pruned string","fdfdf dfdf",HTMLTag.pruneSpaces(test));
-	}
+
 	/**
 	 * Bug reported by John Zook, if there is an empty tag,
 	 * then HTMLTag shouldnt pass it down to the scanners.

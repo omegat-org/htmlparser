@@ -61,6 +61,7 @@ public static TestSuite suite() {
 	
 	suite.addTest(HTMLLinkProcessorTest.suite());
 	suite.addTest(HTMLParameterParserTest.suite());	
+	suite.addTest(HTMLTagParserTest.suite());
 	return suite;
 } 
 }

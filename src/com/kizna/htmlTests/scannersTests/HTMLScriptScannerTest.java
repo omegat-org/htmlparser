@@ -228,7 +228,6 @@ public void testScanScriptWithLinks() throws HTMLParserException
 	instanceof HTMLScriptTag); 
 	// Check the data in the applet tag 
 	HTMLScriptTag scriptTag = (HTMLScriptTag)node[0];
-	//System.out.println("TestHTML = \r\n"+testHTML2+"\r\n ScriptCode = \r\n"+scriptTag.getScriptCode());
 	//assertStringEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
 }
 }

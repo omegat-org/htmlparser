@@ -1,3 +1,35 @@
+// HTMLParser Library v1_2_20021016 - A java-based parser for HTML
+// Copyright (C) Dec 31, 2000 Somik Raha
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// For any questions or suggestions, you can write to me at :
+// Email :somik@kizna.com
+// 
+// Postal Address : 
+// Somik Raha
+// R&D Team
+// Kizna Corporation
+// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
+// Shibuya-ku, Tokyo, 
+// 150-0012, 
+// JAPAN
+// Tel  :  +81-3-54752646
+// Fax : +81-3-5449-4870
+// Website : www.kizna.com
+
 package com.kizna.html.tags;
 
 import java.util.*;
@@ -5,6 +37,7 @@ import java.io.IOException;
 import com.kizna.html.scanners.HTMLTagScanner;
 import com.kizna.html.util.HTMLParameterParser;
 import com.kizna.html.util.HTMLParserException;
+import com.kizna.html.util.HTMLTagParser;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLReader;
 /**
@@ -29,6 +62,7 @@ public class HTMLTag extends HTMLNode
 	private static boolean encounteredQuery=false;
 	private static Vector strictTags=null;
 	private static HTMLParameterParser paramParser = new HTMLParameterParser();
+	private static HTMLTagParser tagParser = new HTMLTagParser();
 	/**
 	 * Tag contents will have the contents of the comment tag.
    */
@@ -77,146 +111,7 @@ public class HTMLTag extends HTMLNode
 	public void append(String ch) {
 		tagContents.append(ch);
 	}
-	protected static int automataIllegalState(String input, int state, int i, char ch) {
-		if (ch=='/' && i>0 && input.charAt(i-1)=='<')
-		{
-			state = TAG_ILLEGAL_STATE;
-		}
-		return state;
-	}
-	protected static int automataInput(int state, int i, char ch, HTMLTag tag) {
-		state = checkIllegalState(state, i, ch, tag);
-		state = checkFinishedState(state, i, ch, tag);
-		state = toggleIgnoringState(state, ch);
-		if (state==TAG_IGNORE_DATA_STATE && ch=='<') {
-			state = TAG_IGNORE_BEGIN_TAG_STATE;
-		}
-		if (state==TAG_IGNORE_BEGIN_TAG_STATE && ch=='>') {
-			state = TAG_IGNORE_DATA_STATE;
-		}
-		checkIfAppendable(state, ch, tag);
-		state = checkBeginParsingState(state, i, ch, tag);
-
-		return state;
-	}
-	private static int checkBeginParsingState(int state, int i, char ch, HTMLTag tag) {
-		if (ch=='<' && (state==TAG_BEFORE_PARSING_STATE || state==TAG_ILLEGAL_STATE))
-		{
-			// Transition from State 0 to State 1 - Record data till > is encountered
-			tag.setTagBegin(i);
-			state = TAG_BEGIN_PARSING_STATE;
-		}
-		return state;
-	}
-	private static int checkFinishedState(int state, int i, char ch, HTMLTag tag) {
-		if (ch=='>')
-		{
-			if (state==TAG_BEGIN_PARSING_STATE)
-			{
-				state = TAG_FINISHED_PARSING_STATE;
-				tag.setTagEnd(i);
-			}
-			else
-			if (state==TAG_IGNORE_DATA_STATE) {
-				if (encounteredQuery) {
-					encounteredQuery=false;
-					return state;
-				}
-				// Now, either this is a valid > input, and should be ignored,
-				// or it is a mistake in the html, in which case we need to correct it *sigh*
-				state = TAG_FINISHED_PARSING_STATE;
-				tag.setTagEnd(i);
-				// Do Correction
-				// Correct the tag - assuming its grouped into name value pairs
-				// Remove all inverted commas.
-				correctTag(tag);
-			}
-		}
-		return state;
-	}
-	private static void checkIfAppendable(int state, char ch, HTMLTag tag) {
-		if (state==TAG_IGNORE_DATA_STATE || state==TAG_BEGIN_PARSING_STATE || state==TAG_IGNORE_BEGIN_TAG_STATE) {
-			if (ch=='?') encounteredQuery=true;
-			tag.append(ch);
-		}
-	}
-	private static int checkIllegalState(int state, int i, char ch, HTMLTag tag) {
-		if (ch=='/' && i>0 && tag.getTagLine().charAt(i-1)=='<' && state!=TAG_IGNORE_DATA_STATE && state!=TAG_IGNORE_BEGIN_TAG_STATE)
-		{
-			state = TAG_ILLEGAL_STATE;
-		}
-		return state;
-	}
-	public static int checkValidity(int state,HTMLTag tag) {
-		// If the tag begins with any of the strictness tag values, then we may assume
-		// that this is a valid > within the ignore state, and continue as normal
-		// if however, this tag does not come under the strictness vector, then we
-		// need to correct
-		if (strictTags==null) return TAG_FINISHED_PARSING_STATE;
-		// Get the first word within the tag
-		String word = extractWord(tag.getText());
-		// Now we have the word. Check if it exists in the vector
-
-		if (strictTags.contains(word)) {
-			// Yes it is contained
-			// Hence, continue parsing as normal
-			return state;
-		}
-		else {
-			// Nope - it is not contained.
-			// Assume this was a mistake.
-			return TAG_FINISHED_PARSING_STATE;			
-		}
-	}
-	public static void correctTag(HTMLTag tag) {
-		String tempText = tag.getText();
-		StringBuffer absorbedText = new StringBuffer();
-		char c;
-		for (int j=0;j<tempText.length();j++) {
-			c = tempText.charAt(j);
-			if (c!='"')
-			absorbedText.append(c);
-		}
-		// Go into the next stage.
-		StringBuffer result = insertInvertedCommasCorrectly(absorbedText);
-		tag.setText(result.toString());
-	}
-	public static StringBuffer insertInvertedCommasCorrectly(StringBuffer absorbedText) {
-		StringBuffer result = new StringBuffer();
-		StringTokenizer tok = new StringTokenizer(absorbedText.toString(),"=",false);
-		String token;
-		token=  (String)tok.nextToken();
-		result.append(token+"=");
-		for (;tok.hasMoreTokens();) {
-			token=  (String)tok.nextToken();
-			token = pruneSpaces(token);
-			result.append('"');
-			int lastIndex = token.lastIndexOf(' ');
-			if (lastIndex!=-1 && tok.hasMoreTokens()) {
-				result.append(token.substring(0,lastIndex));
-				result.append('"');
-				result.append(token.substring(lastIndex,token.length()));
-			} else result.append(token+'"');
-			if (tok.hasMoreTokens()) result.append("=");
-		}
-		return result;
-	}
-	public static String pruneSpaces(String token) {
-		int firstSpace;
-		int lastSpace;
-		firstSpace = token.indexOf(' ');
-		while (firstSpace==0) {
-			token = token.substring(1,token.length());
-			firstSpace = token.indexOf(' ');
-		}
-		lastSpace  = token.lastIndexOf(' ');
-		while (lastSpace==token.length()-1) {
-			token = token.substring(0,token.length()-1);
-			lastSpace  = token.lastIndexOf(' ');
-		}			
-		return token;
-	}
-  /**
+  	/**
 	 * Returns the beginning position of the string.
 	 */	
 	public int elementBegin()
@@ -230,16 +125,7 @@ public class HTMLTag extends HTMLNode
 	{
 		return tagEnd;
 	}
-	public static String extractWord(String s) {
-		String word = "";
-		boolean parse=true;
-		for (int i=0;i<s.length() && parse==true;i++) {
-			char ch = s.charAt(i);
-			if (ch==' ') parse = false; else word +=ch;
-		}
-		word = word.toUpperCase();
-		return word;
-	}
+
 	/**
 	 * Locate the tag withing the input string, by parsing from the given position
 	 * @param reader HTML reader to be provided so as to allow reading of next line
@@ -248,33 +134,18 @@ public class HTMLTag extends HTMLNode
 	 */			
 	public static HTMLTag find(HTMLReader reader,String input,int position)
 	{
-		int state = TAG_BEFORE_PARSING_STATE;
-		StringBuffer tagContents = new StringBuffer();
-		int i=position;
-		char ch;
-		HTMLTag tag = new HTMLTag(0,0,"",input);
-		encounteredQuery = false;
-		while (i<tag.getTagLine().length()&& state!=TAG_FINISHED_PARSING_STATE && state!=TAG_ILLEGAL_STATE)
-		{
-			ch = tag.getTagLine().charAt(i);
-			state = automataInput(state, i, ch, tag);
-			i = incrementCounter(reader, state, i, tag);
-		}
-		if (state==TAG_FINISHED_PARSING_STATE)
-		return tag;
-		else
-		return null;	
+		return tagParser.find(reader,input,position);
 	}
 	 public Hashtable parseParameters(){
 	 	return paramParser.parseParameters(this);
 	 }
-/*
-* in case the tag is parsed at the scan method
-* this will return value of a parameter
-* not implemented yet
-* @param name of parameter
-* @author Kaarle Kaila 23.10.2001
-*/
+	/*
+	* in case the tag is parsed at the scan method
+	* this will return value of a parameter
+	* not implemented yet
+	* @param name of parameter
+	* @author Kaarle Kaila 23.10.2001
+	*/
 	
 	public String getParameter(String name){
 	    return (String)getParsed().get(name.toUpperCase());
@@ -296,24 +167,23 @@ public class HTMLTag extends HTMLNode
 	public static Vector getStrictTags() {
 		return strictTags;
 	}
-/*
-* in case the tag is parsed at the scan method
-* this will return the tag-name (TAG)
-* not implemented yet
-* @author Kaarle Kaila 23.10.2001
-*/
+	/*
+	 * in case the tag is parsed at the scan method
+	 * this will return the tag-name (TAG)
+	 * not implemented yet
+	 * @author Kaarle Kaila 23.10.2001
+	 */
 	public String getTagName(){
 	    if (parsed == null) parsed=parseParameters();
 	    return (String)parsed.get(TAGNAME);
 	}
-/**
- * Insert the method's description here.
- * Creation date: (6/6/2001 12:09:38 PM)
- * @return java.lang.String
- */
-public java.lang.String getTagLine() {
-	return tagLine;
-}
+	/**
+	 * Returns the tagLine
+	 * @return java.lang.String
+	 */
+	public java.lang.String getTagLine() {
+		return tagLine;
+	}
 	/**
 	 * Return the text contained in this tag
 	 */
@@ -328,39 +198,14 @@ public java.lang.String getTagLine() {
 	{
 		return thisScanner;
 	}
-	public static int incrementCounter(HTMLReader reader, int state, int i, HTMLTag tag) {
-		String nextLine = null;
-		if ((state==TAG_BEGIN_PARSING_STATE || state == TAG_IGNORE_DATA_STATE) && i==tag.getTagLine().length()-1)
-		{
-			// The while loop below is a bug fix contributed by
-			// Annette Doyle - see testcase HTMLImageScannerTest.testImageTagOnMultipleLines()
-			// Further modified by Somik Raha, to remove bug - HTMLTagTest.testBrokenTag
-			do {
-				nextLine = reader.getNextLine();		
-			}
-			while (nextLine!=null && nextLine.length()==0);
-			if (nextLine==null) {
-				// This means we have a broken tag. Fill in an end tag symbol here.
-				nextLine = ">";
-			} else {
-				// This means this is just a new line, hence add the new line character
-				tag.append(lineSeparator);
-			}
-
-			// We need to continue parsing to the next line
-			tag.setTagLine(nextLine);
-			i=-1;
-		}		
-		return ++i;
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/16/2002 3:28:38 PM)
+	 * @return boolean
+	 */
+	public boolean isEndOfLineCharState() {
+		return endOfLineCharState;
 	}
-/**
- * Insert the method's description here.
- * Creation date: (6/16/2002 3:28:38 PM)
- * @return boolean
- */
-public boolean isEndOfLineCharState() {
-	return endOfLineCharState;
-}
 
 	/**
 	 * Scan the tag to see using the registered scanners, and attempt identification.
@@ -396,14 +241,14 @@ public boolean isEndOfLineCharState() {
 			throw new HTMLParserException("HTMLTag.scan() : Error while scanning tag, tag contents = "+errorMsg+", tagLine = "+tagLine,e);
 		}
 	}
-/**
- * Insert the method's description here.
- * Creation date: (6/16/2002 3:28:38 PM)
- * @param newEndOfLineCharState boolean
- */
-public void setEndOfLineCharState(boolean newEndOfLineCharState) {
-	endOfLineCharState = newEndOfLineCharState;
-}
+	/**
+	 * Insert the method's description here.
+	 * Creation date: (6/16/2002 3:28:38 PM)
+	 * @param newEndOfLineCharState boolean
+	 */
+	public void setEndOfLineCharState(boolean newEndOfLineCharState) {
+		endOfLineCharState = newEndOfLineCharState;
+	}
 	/**
 	 * Sets the parsed.
 	 * @param parsed The parsed to set
@@ -449,15 +294,6 @@ public void setEndOfLineCharState(boolean newEndOfLineCharState) {
 	public void setThisScanner(HTMLTagScanner scanner)
 	{
 		thisScanner = scanner;
-	}
-	private static int toggleIgnoringState(int state, char ch) {
-		if (ch=='"') {
-			// State 4 is ignoring mode. In this mode, we cant exit upon recieving endtag character
-			// This is to avoid problems with end tags within inverted commas (occuring with JSP tags).
-			if (state==TAG_IGNORE_DATA_STATE) state = TAG_BEGIN_PARSING_STATE; else
-			if (state==TAG_BEGIN_PARSING_STATE) state = TAG_IGNORE_DATA_STATE;
-		}
-		return state;
 	}
 	public String toPlainTextString() {
 		return "";

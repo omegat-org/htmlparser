@@ -122,6 +122,12 @@ public class HTMLParser
 	 */
 	protected boolean readFlag = false;
 	private Vector scanners = new Vector();
+	
+	/**
+	 * Feedback object
+	 */
+	private HTMLParserFeedback feedback;
+	
 	// Please dont change the formatting of the VERSION_STRING
 	// below. This is done so as to facilitate the ant script
 	public final static java.lang.String 
@@ -137,6 +143,7 @@ public class HTMLParser
 	public HTMLParser(HTMLReader reader,HTMLParserFeedback feedback) 
 	{
 		this.reader = reader;
+		this.feedback = feedback;
 		reader.setParser(this);
 	
 	}
@@ -152,6 +159,7 @@ public class HTMLParser
 	{
 		try {
 			this.resourceLocn = resourceLocn;
+			this.feedback = feedback;
 			openConnection();
 		}
 		catch (Exception e) {
@@ -461,4 +469,12 @@ public class HTMLParser
 		HTMLNode.setLineSeparator(lineSeparator);	
 	}
 	
+	/**
+	 * Returns the feedback.
+	 * @return HTMLParserFeedback
+	 */
+	public HTMLParserFeedback getFeedback() {
+		return feedback;
+	}
+
 }

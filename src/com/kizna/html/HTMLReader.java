@@ -67,7 +67,6 @@ public class HTMLReader extends BufferedReader
 	public HTMLReader(Reader in, int len)
 	{
 		super(in,len);
-//		this.in = in;
 		this.parser = null;
 	}
 	/**
@@ -76,35 +75,34 @@ public class HTMLReader extends BufferedReader
 	public HTMLReader(Reader in,String url)
 	{
 		super(in);
-//		this.in = in;
 		this.url = url;
 		this.parser = null;		
 	}
-/**
- * This method is intended to be called only by scanners, when a situation of dirty html has arisen, 
- * and action has been taken to correct the parsed tags. For e.g. if we have html of the form :
- * <pre>
- * <a href="somelink.html"><img src=...><td><tr><a href="someotherlink.html">...</a>
- * </pre>
- * Now to salvage the first link, we'd probably like to insert an end tag somewhere (typically before the
- * second begin link tag). So that the parsing continues uninterrupted, we will need to change the existing
- * line being parsed, to contain the end tag in it. 
- */
-public void changeLine(String line) {
-	this.line = line;
-}
+	/**
+	 * This method is intended to be called only by scanners, when a situation of dirty html has arisen, 
+	 * and action has been taken to correct the parsed tags. For e.g. if we have html of the form :
+	 * <pre>
+	 * <a href="somelink.html"><img src=...><td><tr><a href="someotherlink.html">...</a>
+	 * </pre>
+	 * Now to salvage the first link, we'd probably like to insert an end tag somewhere (typically before the
+	 * second begin link tag). So that the parsing continues uninterrupted, we will need to change the existing
+	 * line being parsed, to contain the end tag in it. 
+	 */
+	public void changeLine(String line) {
+		this.line = line;
+	}
 	public String getCurrentLine() {
 		return line;
 	}
-/**
- * This method is useful when designing your own scanners. You might need to find out what is the location where the
- * reader has stopped last.
- * @return int Last position read by the reader
- */
-public int getLastReadPosition() {
-	if (node!=null) return node.elementEnd(); else
-	return 0;
-}
+	/**
+	 * This method is useful when designing your own scanners. You might need to find out what is the location where the
+	 * reader has stopped last.
+	 * @return int Last position read by the reader
+	 */
+	public int getLastReadPosition() {
+		if (node!=null) return node.elementEnd(); else
+		return 0;
+	}
 	/*
 	 * Read the next line
 	 * @return String containing the line
@@ -123,14 +121,13 @@ public int getLastReadPosition() {
 		}
 		return null;
 	}
-/**
- * Insert the method's description here.
- * Creation date: (12/24/2001 5:27:37 PM)
- * @return com.kizna.html.HTMLParser
- */
-public HTMLParser getParser() {
-	return parser;
-}
+	/**
+	 * Returns the parser object for which this reader exists
+	 * @return com.kizna.html.HTMLParser
+	 */
+	public HTMLParser getParser() {
+		return parser;
+	}
 	/**
 	 * Gets the previousOpenScanner.
 	 * @return Returns a HTMLTagScanner
@@ -199,13 +196,13 @@ public HTMLParser getParser() {
 				return true;
 		else return false;
 	}
-/**
- * The setParser method is used by the parser to put its own object into the reader. This happens internally,
- * so this method is not generally for use by the developer or the user.
- */
-public void setParser(HTMLParser newParser) {
-	parser = newParser;
-}
+	/**
+	 * The setParser method is used by the parser to put its own object into the reader. This happens internally,
+	 * so this method is not generally for use by the developer or the user.
+	 */
+	public void setParser(HTMLParser newParser) {
+		parser = newParser;
+	}
 	/**
 	 * Sets the previousOpenScanner.
 	 * @param previousOpenScanner The previousOpenScanner to set
