@@ -1,4 +1,4 @@
-HTMLParser Integration Release 1.3 - 20030112
+HTMLParser Integration Release 1.3 - 20030202
 *********************************************
 
 Q1. What are the contents of the distribution ? 

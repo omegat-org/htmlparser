@@ -1,4 +1,4 @@
-Integration build 1.3 - 20030201
+Integration build 1.3 - 20030202
 --------------------------------
 [1] Renamed HTMLCompositeTagScanner to CompositeTagScanner
 [2] Renamed HTMLTag.getParameter() to HTMLTag.getAttribute()
@@ -11,7 +11,10 @@ Integration build 1.3 - 20030201
 [9] Added DivScanner
 [10] Modified collectInto to use NodeList
 [11] Added collectInto(NodeList, Class)
-[12] CompositeTagScanner can handle single xml-like tags e..g &lt;div/&gt;
+[12] CompositeTagScanner can handle single xml-like tags e..g <div/>
+[13] Fixed bug 678969 - StringParser was not going into ignore mode on
+encountering double quotes
+[14] Added LabelScanner
 
 Integration build 1.3 - 20030125
 --------------------------------
