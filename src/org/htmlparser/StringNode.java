@@ -59,12 +59,15 @@ public class StringNode extends AbstractNode
 
 	public static Node createStringNode(
 		StringBuffer textBuffer, int textBegin, int textEnd, 
-		boolean shouldDecode, boolean shouldRemoveEscapeCharacters) {
+		boolean shouldDecode, boolean shouldRemoveEscapeCharacters,
+		boolean shouldConvertNonBlankSpace) {
 		Node newNode = new StringNode(textBuffer, textBegin, textEnd);
 		if (shouldDecode)
 			newNode = new DecodingNode(newNode);
 		if (shouldRemoveEscapeCharacters)
 			newNode = new EscapeCharacterRemovingNode(newNode);
+		if (shouldConvertNonBlankSpace)
+			newNode = new NonBreakingSpaceConvertingNode(newNode);
 		return newNode;
 	}
 	

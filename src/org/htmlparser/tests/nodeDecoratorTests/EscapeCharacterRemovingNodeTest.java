@@ -35,7 +35,6 @@ import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class EscapeCharacterRemovingNodeTest extends ParserTestCase {
-
 	public EscapeCharacterRemovingNodeTest(String name) {
 		super(name);
 	}

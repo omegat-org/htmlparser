@@ -193,6 +193,12 @@ public class Parser
 	 * Escape character removal occurs via the method, org.htmlparser.util.ParserUtils.removeEscapeCharacters()
 	 */
 	private boolean shouldRemoveEscapeCharacters = false;
+	
+	/**
+	 * Flag to tell the parser to convert non breaking space 
+	 * (i.e. \u00a0) to a space (" ").  If true, this will happen inside StringNode's toPlainTextString.  
+	 */
+	private boolean shouldConvertNonBreakingSpace = false;	
 
 	/**
 	 * Feedback object.
@@ -1238,4 +1244,13 @@ public class Parser
 	public boolean shouldRemoveEscapeCharacters() {
 		return shouldRemoveEscapeCharacters;
 	}
+
+	public void setNonBreakSpaceConversion(boolean shouldConvertNonBreakSpace) {
+		this.shouldConvertNonBreakingSpace = shouldConvertNonBreakSpace;
+	}
+	
+	public boolean shouldConvertNonBreakingSpace() {
+		return shouldConvertNonBreakingSpace;
+	}
+		
 }

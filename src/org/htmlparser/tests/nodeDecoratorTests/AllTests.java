@@ -40,6 +40,7 @@ public class AllTests extends junit.framework.TestCase
 		TestSuite suite = new TestSuite("Node Decorator Tests");
 		suite.addTestSuite(DecodingNodeTest.class);
 		suite.addTestSuite(EscapeCharacterRemovingNodeTest.class);
+		suite.addTestSuite(NonBreakingSpaceConvertingNodeTest.class);
 		return suite; 
 	}
 
