@@ -25,6 +25,9 @@
 // 2583 Cedar Street, Berkeley, 
 // CA 94708, USA
 // Website : http://www.industriallogic.com
+//
+// Author of this class : Dhaval Udani
+// dhaval.h.udani@orbitech.co.in
 
 package org.htmlparser.tests.tagTests;
 
@@ -33,11 +36,12 @@ import java.util.*;
 import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.*;
 
 import junit.framework.*;
 
-public class HTMLSelectTagTest extends TestCase 
+public class HTMLSelectTagTest extends HTMLParserTestCase
 {
 	private String testHTML = new String(
 									"<SELECT name=\"Nominees\">\n"+
@@ -50,54 +54,22 @@ public class HTMLSelectTagTest extends TestCase
 									"<option value=\"Niece\">Niece\n" +
 									"</select>"
 									);
-	private HTMLNode[] node;
-	private int i;
 	
-	/**
-	 * Constructor for HTMLSelectTagTest.
-	 * @param arg0
-	 */
 	public HTMLSelectTagTest(String name) 
 	{
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(HTMLSelectTagTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {HTMLSelectTagTest.class.getName()});
-	}
-	
-	public void setUp() throws Exception
-	{
+	protected void setUp() throws Exception{
 		super.setUp();
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
-
+		createParser(testHTML);
 		parser.addScanner(new HTMLSelectTagScanner("-s"));
 		
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-	}
-	
-	public void tearDown() throws Exception
-	{
-		super.tearDown();
+		parseAndAssertNodeCount(1);
 	}
 	
 	public void testToHTML() throws HTMLParserException 
 	{
-		
-		assertEquals("There should be 1 nodes identified",1,i);	
 		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);
 		HTMLSelectTag SelectTag;
 		SelectTag = (HTMLSelectTag) node[0];
@@ -116,8 +88,6 @@ public class HTMLSelectTagTest extends TestCase
 	
 	public void testToString() throws HTMLParserException 
 	{
-		
-		assertEquals("There should be 1 nodes identified",1,i);	
 		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);
 		HTMLSelectTag SelectTag;
 		SelectTag = (HTMLSelectTag) node[0];
@@ -130,7 +100,6 @@ public class HTMLSelectTagTest extends TestCase
 								"OPTION TAG\n--------\nVALUE : Nephew\nTEXT : Nephew\n\n" +
 								"OPTION TAG\n--------\nVALUE : Niece\nTEXT : Niece\r\n\n\n",
 							SelectTag.toString());
-
 	}
 	
 }

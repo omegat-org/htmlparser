@@ -35,6 +35,7 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLMetaTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -42,17 +43,14 @@ import org.htmlparser.util.HTMLParserException;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class HTMLMetaTagTest extends TestCase {
+public class HTMLMetaTagTest extends HTMLParserTestCase {
 
-	/**
-	 * Constructor for HTMLMetaTagTest.
-	 * @param arg0
-	 */
 	public HTMLMetaTagTest(String name) {
 		super(name);
 	}
+
 	public void testToHTML() throws HTMLParserException {
-		String testHTML = new String(
+		createParser(
 		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
 		"<html>\n"+
 		"<head><title>SpamCop - Welcome to SpamCop\n"+
@@ -62,27 +60,15 @@ public class HTMLMetaTagTest extends TestCase {
 		"<META name=\"language\" content=\"en\">\n"+
 		"<META name=\"owner\" content=\"service@admin.spamcop.net\">\n"+
 		"<META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
 
 		parser.registerScanners();
 		
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 9 nodes identified",9,i);	
+		parseAndAssertNodeCount(9);
 		assertTrue("Node 5 should be META Tag",node[4] instanceof HTMLMetaTag);
 		HTMLMetaTag metaTag;
 		metaTag = (HTMLMetaTag) node[4];
 		assertEquals("Meta Tag 4 Name","description",metaTag.getMetaTagName());
 		assertEquals("Meta Tag 4 Contents","Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.",metaTag.getMetaTagContents());
 		assertEquals("Raw String","<META name=\"description\" content=\"Protecting the internet community through technology, not legislation.  SpamCop eliminates spam.  Automatically file spam reports with the network administrators who can stop spam at the source.  Subscribe, and filter your email through powerful statistical analysis before it reaches your inbox.\">",metaTag.toHTML());
-	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLMetaTagTest.class);
 	}
 }

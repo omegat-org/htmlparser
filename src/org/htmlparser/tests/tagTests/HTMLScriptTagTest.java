@@ -32,6 +32,7 @@ import java.util.*;
 import java.io.*;
 import org.htmlparser.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -40,37 +41,20 @@ import org.htmlparser.scanners.*;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * Insert the type's description here.
- * @author: Somik Raha - Indraprastha
- */
-public class HTMLScriptTagTest extends TestCase{
+public class HTMLScriptTagTest extends HTMLParserTestCase{
 	private HTMLScriptScanner scriptScanner;
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 11:22:01 AM)
-	 */
+
 	public HTMLScriptTagTest(String name) 
 	{
 		super(name);	
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 11:24:33 AM)
-	 */
-	protected void setUp() 
+
+	protected void setUp() throws Exception
 	{
+		super.setUp();
 		scriptScanner = new HTMLScriptScanner();	
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 11:22:36 AM)
-	 * @return junit.framework.TestSuite
-	 */
-	public static TestSuite suite() {
-		TestSuite suite = new TestSuite(HTMLScriptTagTest.class);
-		return suite;
-	}
+
 	public void testCreation() {
 		HTMLScriptTag scriptTag = new HTMLScriptTag(0,10,"Tag Contents","Script Code","english","text","tagline");
 		assertNotNull("Script Tag object creation",scriptTag);
@@ -82,10 +66,7 @@ public class HTMLScriptTagTest extends TestCase{
 		assertEquals("Script Tag Type","text",scriptTag.getType());
 		assertEquals("Script Tag Line","tagline",scriptTag.getTagLine());
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 11:51:06 AM)
-	 */
+
 	public void testExtractLanguage() 
 	{
 		scriptScanner.extractLanguage(new HTMLTag(10,10,"script language=\"JavaScript\"",""));
@@ -95,10 +76,7 @@ public class HTMLScriptTagTest extends TestCase{
 		assertEquals("",scriptScanner.getLanguage());
 		
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 12:19:43 PM)
-	 */
+
 	public void testExtractType() 
 	{
 		scriptScanner.extractType(new HTMLTag(10,10,"script language=\"JavaScript\"",""));
@@ -107,26 +85,19 @@ public class HTMLScriptTagTest extends TestCase{
 		scriptScanner.extractType(new HTMLTag(10,10,"SCRIPT TYPE=\"text/javascript\"",""));
 		assertEquals("text/javascript",scriptScanner.getType());	
 	}
+
 	public void testToHTML() throws HTMLParserException {
-		String testHTML = new String("<SCRIPT>document.write(d+\".com\")</SCRIPT>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
+		createParser("<SCRIPT>document.write(d+\".com\")</SCRIPT>");
 		// Register the image scanner
 		parser.addScanner(new HTMLScriptScanner("-s"));
 			
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));	
+		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
 		// Check the data in the applet tag
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0];
 		assertEquals("Expected Raw String","<SCRIPT>document.write(d+\".com\")</SCRIPT>",scriptTag.toHTML());
 	}
+	
 	/** 
 	* Bug check by Wolfgang Germund 2002-06-02 
 	* Upon parsing : 
@@ -149,20 +120,11 @@ public class HTMLScriptTagTest extends TestCase{
 		sb1.append("</script>\r\n"); 
 		String testHTML1 = new String(sb1.toString()); 
 		
-		StringReader sr = new StringReader(testHTML1); 
-		HTMLReader reader = new HTMLReader(new 
-		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
+		createParser(testHTML1); 
 		parser.setLineSeparator("\r\n");
-		HTMLNode [] node = new HTMLNode[10]; 
 		// Register the image scanner 
 		parser.addScanner(new HTMLScriptScanner("-s")); 
 		
-		int i = 0; 
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) 
-		{ 
-			node[i++] = e.nextHTMLNode(); 
-		} 
 		
 		StringBuffer sb2 = new StringBuffer(); 
 		sb2.append("<script language=\"javascript\">\r\n"); 
@@ -173,8 +135,7 @@ public class HTMLScriptTagTest extends TestCase{
 		sb2.append("</SCRIPT>"); 
 		String testHTML2 = new String(sb2.toString()); 
 		
-		assertEquals("There should be 2 nodes identified",new 
-		Integer(2),new Integer(i)); 
+		parseAndAssertNodeCount(2);
 		assertTrue("Node should be a script tag",node[1] 
 		instanceof HTMLScriptTag); 
 		// Check the data in the applet tag 
@@ -182,6 +143,7 @@ public class HTMLScriptTagTest extends TestCase{
 		[1]; 
 		assertEquals("Expected Script Code",testHTML2,scriptTag.toHTML()); 
 	} 
+	
 	public void testParamExtraction() throws HTMLParserException {
 		StringBuffer sb1 = new StringBuffer(); 
 		sb1.append("<script src=\"/adb.js\" language=\"javascript\">\r\n"); 
@@ -190,24 +152,11 @@ public class HTMLScriptTagTest extends TestCase{
 		sb1.append("else\r\n"); 
 		sb1.append(" document.write ('yyy');\r\n"); 
 		sb1.append("</script>\r\n"); 
-		String testHTML1 = new String(sb1.toString()); 
+		createParser(sb1.toString()); 
 		
-		StringReader sr = new StringReader(testHTML1); 
-		HTMLReader reader = new HTMLReader(new 
-		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
-		HTMLNode [] node = new HTMLNode[10]; 
 		// Register the image scanner 
 		parser.addScanner(new HTMLScriptScanner("-s")); 
-		
-		
-		int i = 0; 
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) 
-		{ 
-			node[i++] = e.nextHTMLNode(); 
-		} 
-		
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
+		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0]; 
 		assertEquals("Script Src","/adb.js",scriptTag.getParameter("src"));

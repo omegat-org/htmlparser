@@ -25,7 +25,6 @@
 // 2583 Cedar Street, Berkeley, 
 // CA 94708, USA
 // Website : http://www.industriallogic.com
-
 //
 // Author of this class : Dhaval Udani
 // dhaval.h.udani@orbitech.co.in
@@ -36,11 +35,12 @@ import java.io.*;
 import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.*;
 
 import junit.framework.*;
 
-public class HTMLOptionTagTest extends TestCase 
+public class HTMLOptionTagTest extends HTMLParserTestCase 
 {
 	private String testHTML = new String(
 									"<OPTION value=\"Google Search\">Google</OPTION>" +
@@ -55,55 +55,22 @@ public class HTMLOptionTagTest extends TestCase
 									"<OPTION>Cricinfo" +
 									"<OPTION value=\"Microsoft Passport\">"
 									);
-	private HTMLNode[] node;
-	private int i;
 	
-	/**
-	 * Constructor for HTMLOptionTagTest.
-	 * @param arg0
-	 */
 	public HTMLOptionTagTest(String name) 
 	{
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(HTMLOptionTagTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {HTMLOptionTagTest.class.getName()});
-	}
-	
-	public void setUp() throws Exception
-	{
+	protected void setUp() throws Exception {
 		super.setUp();
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
-
-		reader.getParser().addScanner(new HTMLOptionTagScanner("-i"));
-		
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-	}
-	
-	public void tearDown() throws Exception
-	{
-		super.tearDown();
-	}
+		createParser(testHTML);
+		parser.addScanner(new HTMLOptionTagScanner("-i"));
+		parseAndAssertNodeCount(11);
+	}	
 	
 	public void testToHTML() throws HTMLParserException 
 	{
-		
-		assertEquals("There should be 11 nodes identified",11,i);	
-		for(int j=0;j<i;j++)
+		for(int j=0;j<nodeCount;j++)
 		{
 			assertTrue("Node " + j + " should be Option Tag",node[j] instanceof HTMLOptionTag);
 		}
@@ -134,9 +101,7 @@ public class HTMLOptionTagTest extends TestCase
 	
 	public void testToString() throws HTMLParserException 
 	{
-		
-		assertEquals("There should be 11 nodes identified",11,i);	
-		for(int j=0;j<i;j++)
+		for(int j=0;j<nodeCount;j++)
 		{
 			assertTrue("Node " + j + " should be Option Tag",node[j] instanceof HTMLOptionTag);
 		}
