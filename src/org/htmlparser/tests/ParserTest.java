@@ -692,5 +692,28 @@ public class ParserTest extends ParserTestCase {
 		TagScanner scanner = (TagScanner)scanners.get("FORM");
 		assertNull("shouldnt have found scanner",scanner);
 	}
-	
+
+    /**
+     * See bug #728241 OutOfMemory error/ Infinite loop
+     */
+    public void testOutOfMemory () throws Exception
+    {
+        createParser (
+            "<html><head>\n"
+            + "</head>\n"
+            + "<body>\n"
+            + "<table>       \n"
+            + "<tr>\n"
+            + "      <td><img src=\"foo.jpg\" alt=\"f's\n"
+            + "b\"><font\n"
+            + " size=1>blah</font>\n"
+            + "</td>\n"
+            + "</tr>\n"
+            + "</table>\n"
+            + "</body></html>\n");
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+        {
+			Node node = e.nextNode();
+		}
+    }
 }
