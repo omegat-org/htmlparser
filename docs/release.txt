@@ -1,3 +1,22 @@
+Integration Build 1.2 - 20020623
+--------------------------------
+[1] Refactored HTMLAppletScanner
+[2] Refactored HTMLScriptScanner
+[3] Added testcases for script scanner
+[4] Refactored HTMLTagScanner (removed extractField)
+[5] Fixed bug in HTMLLinkScanner - would crash on freshmeat.net,
+bcos of <a>Revision</a>. Now this is being treated as three
+seperate nodes(tag, string node, end tag)
+[6] Fixed ant script bug, not allowing it to be run from the command
+line by issuing the ant command.
+[7] Redesigned HTMLFormScanner, testcases written, included in package
+[8] Refactored HTMLImageScanner evaluate() method to be more optimized
+[9] Redesigned HTMLFrameScanner, testcases written, also written 
+HTMLFrameSetScanner.
+[10] Fixed bug in HTMLTag, now parseParameters is automatically
+called only once, when either getParsed(), or getParameter() is invoked.
+[11] toRawString() renamed to toHTML() - intention revealing name
+
 Integration Build 1.2 - 20020616
 --------------------------------
 [1] Fixed multiple line bug (reported by Gordon Deudney).
