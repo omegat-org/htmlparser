@@ -162,4 +162,20 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 		assertEquals("Script Src","/adb.js",scriptTag.getParameter("src"));
 		assertEquals("Script Language","javascript",scriptTag.getParameter("language"));		
 	}
+
+	public void testVariableDeclarations() throws HTMLParserException {
+		StringBuffer sb1 = new StringBuffer(); 
+		sb1.append("<script language=\"javascript\">\n"); 
+		sb1.append("var lower = '<%=lowerValuel%>';\n"); 
+		sb1.append("</script>\n"); 
+		createParser(sb1.toString()); 
+		
+		// Register the image scanner 
+		parser.addScanner(new HTMLScriptScanner("-s")); 
+		//parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
+		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0]; 
+		assertStringEquals("Script toHTML()","<SCRIPT LANGUAGE=\"javascript\">\r\nvar lower = '<%=lowerValue%>';\r\n</SCRIPT>\r\n",scriptTag.toHTML());
+	}	
 }
