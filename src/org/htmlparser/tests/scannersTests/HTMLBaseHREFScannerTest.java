@@ -87,7 +87,4 @@ public class HTMLBaseHREFScannerTest extends HTMLParserTestCase {
 		assertEquals("Base HREF Url","http://www.abc.com",baseRefTag.getBaseUrl());	
 	}
 	
-	public static TestSuite suite() {
-		return new TestSuite(HTMLBaseHREFScannerTest.class);
-	}
 }

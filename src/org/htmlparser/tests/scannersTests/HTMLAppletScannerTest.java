@@ -49,12 +49,6 @@ public class HTMLAppletScannerTest extends HTMLParserTestCase
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		TestSuite suite = new TestSuite(HTMLAppletScannerTest.class);
-		return suite;
-	}
-	
 	public void testEvaluate() 
 	{
 		HTMLAppletScanner scanner = new HTMLAppletScanner("-a");
