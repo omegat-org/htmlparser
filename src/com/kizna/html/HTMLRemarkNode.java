@@ -141,8 +141,13 @@ public class HTMLRemarkNode extends HTMLNode
 			
 			if (state==REMARK_NODE_FIRST_DASH_RECEIVED_STATE)
 			{
-				if (ch == '-')
-				state=REMARK_NODE_ACCEPTING_STATE;
+				if (ch == '-') {
+					state=REMARK_NODE_ACCEPTING_STATE;
+					// Do a lookahead and see if the next char is >
+					if (input.length()>i+1 && input.charAt(i+1)=='>') {
+						state=REMARK_NODE_ACCEPTED_STATE;tagEnd=i+1;
+					}
+				}
 				else state=REMARK_NODE_ILLEGAL_STATE;
 			} 
 			if (state==REMARK_NODE_EXCLAMATION_RECEIVED_STATE)

@@ -252,7 +252,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
 		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
-		assertEquals("Expected contents","\n",remarkNode.getText());
+		assertEquals("Expected contents","",remarkNode.getText());
 		
 	}	
 }
