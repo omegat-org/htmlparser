@@ -12,6 +12,250 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20030907
+--------------------------------
+
+2003-09-07 17:28  derrickoswald
+
+	* src/org/htmlparser/lexer/nodes/: Attribute.java, TagNode.java:
+
+	Fix setAttribute and optimize getAttribute for speed.
+	
+2003-09-03 19:36  derrickoswald
+
+	* src/org/htmlparser/: AbstractNode.java, Node.java,
+	NodeReader.java, RemarkNode.java, StringNode.java,
+	StringNodeFactory.java, lexer/Page.java, lexer/PageIndex.java,
+	lexer/nodes/AbstractNode.java, lexer/nodes/RemarkNode.java,
+	lexer/nodes/StringNode.java, lexer/nodes/TagNode.java,
+	nodeDecorators/AbstractNodeDecorator.java,
+	nodeDecorators/DecodingNode.java,
+	nodeDecorators/EscapeCharacterRemovingNode.java,
+	nodeDecorators/NonBreakingSpaceConvertingNode.java,
+	parserHelper/AttributeParser.java,
+	parserHelper/CompositeTagScannerHelper.java,
+	parserHelper/ParserHelper.java,
+	parserHelper/ScriptScannerHelper.java,
+	parserHelper/StringParser.java, parserHelper/TagParser.java,
+	parserapplications/MailRipper.java, parserapplications/Robot.java,
+	scanners/AppletScanner.java, scanners/BaseHrefScanner.java,
+	scanners/BodyScanner.java, scanners/BulletListScanner.java,
+	scanners/BulletScanner.java, scanners/CompositeTagScanner.java,
+	scanners/DivScanner.java, scanners/DoctypeScanner.java,
+	scanners/FormScanner.java, scanners/FrameScanner.java,
+	scanners/FrameSetScanner.java, scanners/HeadScanner.java,
+	scanners/HtmlScanner.java, scanners/ImageScanner.java,
+	scanners/InputTagScanner.java, scanners/JspScanner.java,
+	scanners/LabelScanner.java, scanners/LinkScanner.java,
+	scanners/MetaTagScanner.java, scanners/OptionTagScanner.java,
+	scanners/ScriptScanner.java, scanners/SelectTagScanner.java,
+	scanners/SpanScanner.java, scanners/StyleScanner.java,
+	scanners/TableColumnScanner.java, scanners/TableRowScanner.java,
+	scanners/TableScanner.java, scanners/TagScanner.java,
+	scanners/TextareaTagScanner.java, scanners/TitleScanner.java,
+	tags/BaseHrefTag.java, tags/BodyTag.java, tags/Bullet.java,
+	tags/BulletList.java, tags/CompositeTag.java, tags/Div.java,
+	tags/DoctypeTag.java, tags/EndTag.java, tags/FormTag.java,
+	tags/FrameSetTag.java, tags/FrameTag.java, tags/HeadTag.java,
+	tags/Html.java, tags/ImageTag.java, tags/InputTag.java,
+	tags/JspTag.java, tags/LabelTag.java, tags/MetaTag.java,
+	tags/OptionTag.java, tags/ScriptTag.java, tags/SelectTag.java,
+	tags/Span.java, tags/StyleTag.java, tags/TableColumn.java,
+	tags/TableRow.java, tags/TableTag.java, tags/Tag.java,
+	tags/TextareaTag.java, tags/TitleTag.java,
+	tags/data/CompositeTagData.java, tags/data/FormData.java,
+	tags/data/LinkData.java, tags/data/TagData.java,
+	tests/AllTests.java, tests/AssertXmlEqualsTest.java,
+	tests/BadTagIdentifier.java, tests/FunctionalTests.java,
+	tests/InstanceofPerformanceTest.java,
+	tests/LineNumberAssignedByNodeReaderTest.java,
+	tests/ParserTest.java, tests/ParserTestCase.java,
+	tests/PerformanceTest.java, tests/codeMetrics/LineCounter.java,
+	tests/lexerTests/AllTests.java, tests/lexerTests/LexerTests.java,
+	tests/lexerTests/PageIndexTests.java,
+	tests/lexerTests/PageTests.java, tests/lexerTests/SourceTests.java,
+	tests/lexerTests/StreamTests.java,
+	tests/nodeDecoratorTests/AllTests.java,
+	tests/nodeDecoratorTests/DecodingNodeTest.java,
+	tests/nodeDecoratorTests/EscapeCharacterRemovingNodeTest.java,
+	tests/nodeDecoratorTests/NonBreakingSpaceConvertingNodeTest.java,
+	tests/parserHelperTests/AllTests.java,
+	tests/parserHelperTests/CompositeTagScannerHelperTest.java,
+	tests/parserHelperTests/StringParserTest.java,
+	tests/scannersTests/AllTests.java,
+	tests/scannersTests/BaseHREFScannerTest.java,
+	tests/scannersTests/BodyScannerTest.java,
+	tests/scannersTests/BulletListScannerTest.java,
+	tests/scannersTests/BulletScannerTest.java,
+	tests/scannersTests/CompositeTagScannerTest.java,
+	tests/scannersTests/DivScannerTest.java,
+	tests/scannersTests/FormScannerTest.java,
+	tests/scannersTests/FrameScannerTest.java,
+	tests/scannersTests/FrameSetScannerTest.java,
+	tests/scannersTests/HeadScannerTest.java,
+	tests/scannersTests/HtmlTest.java,
+	tests/scannersTests/ImageScannerTest.java,
+	tests/scannersTests/InputTagScannerTest.java,
+	tests/scannersTests/JspScannerTest.java,
+	tests/scannersTests/LabelScannerTest.java,
+	tests/scannersTests/LinkScannerTest.java,
+	tests/scannersTests/MetaTagScannerTest.java,
+	tests/scannersTests/OptionTagScannerTest.java,
+	tests/scannersTests/ScriptScannerTest.java,
+	tests/scannersTests/SelectTagScannerTest.java,
+	tests/scannersTests/SpanScannerTest.java,
+	tests/scannersTests/StyleScannerTest.java,
+	tests/scannersTests/TableScannerTest.java,
+	tests/scannersTests/TagScannerTest.java,
+	tests/scannersTests/TextareaTagScannerTest.java,
+	tests/scannersTests/TitleScannerTest.java,
+	tests/scannersTests/XmlEndTagScanningTest.java,
+	tests/tagTests/AllTests.java, tests/tagTests/BaseHrefTagTest.java,
+	tests/tagTests/BodyTagTest.java,
+	tests/tagTests/CompositeTagTest.java,
+	tests/tagTests/DoctypeTagTest.java, tests/tagTests/EndTagTest.java,
+	tests/tagTests/FormTagTest.java,
+	tests/tagTests/FrameSetTagTest.java,
+	tests/tagTests/FrameTagTest.java, tests/tagTests/InputTagTest.java,
+	tests/tagTests/MetaTagTest.java,
+	tests/tagTests/ObjectCollectionTest.java,
+	tests/tagTests/OptionTagTest.java,
+	tests/tagTests/ScriptTagTest.java,
+	tests/tagTests/SelectTagTest.java,
+	tests/tagTests/StyleTagTest.java, tests/tagTests/TagTest.java,
+	tests/tagTests/TextareaTagTest.java,
+	tests/tagTests/TitleTagTest.java,
+	tests/temporaryFailures/AttributeParserTest.java,
+	tests/temporaryFailures/TagParserTest.java,
+	tests/utilTests/AllTests.java, tests/utilTests/BeanTest.java,
+	tests/utilTests/CharacterTranslationTest.java,
+	tests/utilTests/HTMLLinkProcessorTest.java,
+	tests/utilTests/HTMLParserUtilsTest.java,
+	tests/utilTests/HTMLTagParserTest.java,
+	tests/utilTests/NodeListTest.java,
+	tests/visitorsTests/AllTests.java,
+	tests/visitorsTests/CompositeTagFindingVisitorTest.java,
+	tests/visitorsTests/HtmlPageTest.java,
+	tests/visitorsTests/LinkFindingVisitorTest.java,
+	tests/visitorsTests/NodeVisitorTest.java,
+	tests/visitorsTests/StringFindingVisitorTest.java,
+	tests/visitorsTests/TagFindingVisitorTest.java,
+	tests/visitorsTests/TextExtractingVisitorTest.java,
+	tests/visitorsTests/UrlModifyingVisitorTest.java,
+	util/DefaultParserFeedback.java, util/LinkProcessor.java,
+	util/NodeIterator.java, util/NodeList.java, util/ParserUtils.java,
+	util/PeekingIterator.java, util/SimpleNodeIterator.java,
+	util/Translate.java, util/sort/Ordered.java, util/sort/Sort.java,
+	util/sort/Sortable.java, visitors/HtmlPage.java,
+	visitors/LinkFindingVisitor.java, visitors/NodeVisitor.java,
+	visitors/ObjectFindingVisitor.java,
+	visitors/StringFindingVisitor.java,
+	visitors/TagFindingVisitor.java,
+	visitors/TextExtractingVisitor.java,
+	visitors/UrlModifyingVisitor.java:
+
+	Change tabs to spaces in all source files.
+	
+2003-09-01 20:41  derrickoswald
+
+	* docs/samples/index.html:
+
+	Further to bug #786869 LinkExtractor Sample not working,
+	The original samples directory on the web page either needs to be revamped or removed
+	and the missing pieces moved to the wiki pages:
+	http://htmlparser.sourceforge.net/docs/index.php/SamplePrograms
+	
+	Until then I've flagged the samples directory as out of date in the index.html file.
+	I'll add the task to the list of requests for feature enhancements.
+	
+2003-09-01 18:02  derrickoswald
+
+	* src/org/htmlparser/tests/scannersTests/AppletScannerTest.java:
+
+	Further to bug #798554 Applet Tag does not update codebase data, fix test case.
+	
+	********************
+	Note:
+	AppletTag getAttribute() no longer retrieves the parameter, it returns the Tag.getAttribute() value like it should.
+	Use AttributeTag.getParameter() to access the list of parameters of the applet tag.,
+	********************
+	
+2003-09-01 17:53  derrickoswald
+
+	* src/org/htmlparser/tests/tagTests/JspTagTest.java:
+
+	Incorporated test cases from bug #772700 Jsp Tags are not parsed correctly when in quoted attributes.
+	This should be resolved when the lexer package is integrated.
+	Commented out the one that fails.
+	
+2003-09-01 17:41  derrickoswald
+
+	* src/org/htmlparser/tests/tagTests/ImageTagTest.java:
+
+	Add test case text from bug bug #778781  SRC-attribute suppression in IMG-tags.
+	
+2003-09-01 17:28  derrickoswald
+
+	* src/org/htmlparser/: tags/LinkTag.java,
+	tests/tagTests/LinkTagTest.java:
+
+	Fix bug #784767 irc://server/channel urls are HTTPLike?
+	Added an isIRCLink() method, but,
+	I'm not sure that isHTTPLikeLink() should use the gainsaying of all know link types.
+	This needs review.
+	
+2003-09-01 16:48  derrickoswald
+
+	* docs/samples/links.html:
+
+	Fix bug #786869 LinkExtractor Sample not working.
+	
+2003-09-01 16:24  derrickoswald
+
+	* src/org/htmlparser/parserapplications/LinkExtractor.java:
+
+	Fix bug #786869 LinkExtractor Sample not working.
+	
+2003-09-01 15:55  derrickoswald
+
+	* src/org/htmlparser/: RemarkNodeParser.java,
+	tests/parserHelperTests/RemarkNodeParserTest.java:
+
+	Workaround for bug #788746 parser crashes on comments like <!-- foobar --!>.
+	No real solution because the codebase assumes remarks end with -->, so this
+	just avoids the crash, but the toHtml() output will output --!-->, which isn't really correct.
+	Added the test case as RemarkNodeParserTest.testExclamationComment().
+	
+2003-09-01 15:20  derrickoswald
+
+	* src/org/htmlparser/Parser.java:
+
+	Fixed bug #798553 setInputHtml does not set text.
+	Added ! (not) to the guard.
+	
+2003-09-01 15:11  derrickoswald
+
+	* src/org/htmlparser/: tags/AppletTag.java,
+	tests/tagTests/AppletTagTest.java:
+
+	Fixed bug #798554 Applet Tag does not update codebase data.
+	Rewrote the AppletTag class to honour setting codebase, archive, applet class and applet params.
+	Added 4 new test cases in AppletTagTest.
+	
+2003-09-01 09:53  derrickoswald
+
+	* src/org/htmlparser/Parser.java:
+
+	Fix bug #798552 Sample for node iterator incorrect
+	DocComment changes only.
+	Tabs converted to spaces.
+	
+2003-08-26 22:40  derrickoswald
+
+	* src/org/htmlparser/tests/lexerTests/KitTest.java:
+
+	Testing cvs keyword substitution.
+
 Integration Build 1.4 - 20030824
 --------------------------------
 
