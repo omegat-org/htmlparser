@@ -52,21 +52,13 @@ import junit.framework.TestSuite;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-public class HTMLParserTest extends TestCase {
+public class HTMLParserTest extends HTMLParserTestCase {
 
-	/**
-	 * Constructor for HTMLParserTest.
-	 * @param arg0
-	 */
 	public HTMLParserTest(String name) {
 		super(name);
 	}
 	public void testElements() throws HTMLParserException {
-		String testHTML = new String("<SomeHTML>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
+		createParser("<SomeHTML>");
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{

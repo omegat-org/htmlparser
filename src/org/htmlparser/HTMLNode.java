@@ -172,7 +172,6 @@ public abstract class HTMLNode
 		return nodeBegin;
 	}
 
-
 	/**
 	 * Returns the ending position fo the tag
 	 */
@@ -180,6 +179,5 @@ public abstract class HTMLNode
 	{
 		return nodeEnd;
 	}
-
 
 }
