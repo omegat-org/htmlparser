@@ -83,7 +83,7 @@ public class HTMLStyleScannerTest extends junit.framework.TestCase
 	 * Insert the method's description here.
 	 * Creation date: (1/8/2002 8:57:36 PM)
 	 */
-	/*public void testScan() throws HTMLParserException {
+	public void testScan() throws HTMLParserException {
 		
 		String testHTML = new String("<STYLE TYPE=\"text/css\"><!--\n\n"+
 		"</STYLE>");
@@ -100,7 +100,7 @@ public class HTMLStyleScannerTest extends junit.framework.TestCase
 		assertTrue(node[0] instanceof HTMLStyleTag);
 			
 		
-	}*/
+	}
 	/**
 	 * Insert the method's description here.
 	 * Creation date: (12/25/2001 1:04:23 PM)
@@ -167,8 +167,8 @@ public class HTMLStyleScannerTest extends junit.framework.TestCase
 	 	assertEquals("Number of nodes expected",5,i);
 		assertTrue(node[4] instanceof HTMLStyleTag);
 		HTMLStyleTag styleTag = (HTMLStyleTag)node[4];
-		String expectedCode = "<!--\n\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\n"+
-		"//\n-->";
+		String expectedCode = "<!--\r\n\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\n"+
+		"//\r\n-->";
 		assertEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
 	}
 }

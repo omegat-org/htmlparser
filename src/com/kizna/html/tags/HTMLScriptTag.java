@@ -97,7 +97,7 @@ public void setType(java.lang.String newType) {
 public String toHTML() {
 	StringBuffer sb = new StringBuffer();
 	sb.append("<"+tagContents+">");
-	if (isEndOfLineCharState()) sb.append("\r\n");	
+	if (isEndOfLineCharState()) sb.append(lineSeparator);	
 	sb.append(scriptCode);
 	sb.append("</SCRIPT>");
 

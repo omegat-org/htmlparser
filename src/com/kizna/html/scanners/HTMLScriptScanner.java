@@ -150,7 +150,7 @@ public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currentLin
 				}
 			} else {
 				if (prevNode!=null) {
-					if (prevNode.elementEnd() > node.elementBegin()) buff.append("\r\n");
+					if (prevNode.elementEnd() > node.elementBegin()) buff.append(HTMLNode.getLineSeparator());
 				}
 				buff.append(node.toHTML());
 	

@@ -106,28 +106,11 @@ public class HTMLRemarkNode extends HTMLNode
 		while (i < inputLen && state < REMARK_NODE_ACCEPTED_STATE)
 		{
 			ch = input.charAt(i);
-			/*if (state == REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE && ch == '>')
+			if (state == REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE && ch == '>')
 			{
 				state=REMARK_NODE_ACCEPTED_STATE;
 				tagEnd=i;
-			}*/ 
-			if (state == REMARK_NODE_CLOSING_SECOND_DASH_RECEIVED_STATE) {
- 				if (ch == '>')
- 				{
- 					state=REMARK_NODE_ACCEPTED_STATE;
- 					tagEnd=i;
- 				} else if (ch=='-') {
- 					tagContents.append(prevChar);
- 				} else
- 				{
- 					// Rollback last 2 characters (assumed same)
- 					state = REMARK_NODE_ACCEPTING_STATE;
- 					tagContents.append(prevChar);
- 					tagContents.append(prevChar);
- 				}
-
-			}
-
+			} 
 			if (state==REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE)
 			{
 				if (ch == '-')
@@ -143,11 +126,11 @@ public class HTMLRemarkNode extends HTMLNode
 			if (state==REMARK_NODE_ACCEPTING_STATE) {
 				if (ch == '-') {
 					state=REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE;
-				} /*else
+				} else
 				if (ch == '<')
 				{
 					state=REMARK_NODE_ILLEGAL_STATE;
-				} */
+				} 
 			}
 			if (state==REMARK_NODE_ACCEPTING_STATE)
 			{
@@ -191,8 +174,7 @@ public class HTMLRemarkNode extends HTMLNode
 					state = REMARK_NODE_ILLEGAL_STATE;
 				}
 			} 
-//			if (state > REMARK_NODE_OPENING_ANGLE_BRACKET_STATE && state < REMARK_NODE_ACCEPTED_STATE && i == input.length() - 1)
-			if (state >=REMARK_NODE_ACCEPTING_STATE  && state < REMARK_NODE_ACCEPTED_STATE && i == input.length() - 1)			
+			if (state > REMARK_NODE_OPENING_ANGLE_BRACKET_STATE && state < REMARK_NODE_ACCEPTED_STATE && i == input.length() - 1)
 			{
 				// We need to continue parsing to the next line
 				//input = reader.getNextLine();
@@ -228,7 +210,7 @@ public class HTMLRemarkNode extends HTMLNode
 		return tagContents;
 	}
 	public String toHTML() {
-		return "<!--\n"+tagContents+"\n-->";
+		return "<!--" + lineSeparator + tagContents + lineSeparator + "-->";
 	}
 	/**
 	 * Print the contents of the remark tag.

@@ -133,7 +133,7 @@ public class HTMLStringNode extends HTMLNode
 					state =2;
 					
 				} else {
-					textBuffer.append("\r\n");
+					textBuffer.append(lineSeparator);
 					inputLen = input.length();
 					i=-1;
 					textBegin=-1;

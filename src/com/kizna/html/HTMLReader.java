@@ -213,4 +213,20 @@ public void setParser(HTMLParser newParser) {
 	public void setPreviousOpenScanner(HTMLTagScanner previousOpenScanner) {
 		this.previousOpenScanner = previousOpenScanner;
 	}
+	
+	/**
+	 * @param lineSeparator New Line separator to be used
+	 */
+	public static void setLineSeparator(String lineSeparator)
+	{
+		HTMLNode.setLineSeparator(lineSeparator);	
+	}
+	
+	/**
+	 * @param lineSeparator New Line separator to be used
+	 */
+	public static String getLineSeparator()
+	{
+		return (HTMLNode.getLineSeparator());
+	}
 }

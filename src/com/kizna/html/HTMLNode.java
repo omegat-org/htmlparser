@@ -39,6 +39,32 @@ import java.io.PrintWriter;
 public abstract class HTMLNode
 {
 	/**
+	 * Variable to store lineSeparator.<br>
+	 * This is setup to read line.separator from the System property.<br>
+	 * However it can also be changed using the mutator methods.
+	 * THis will be used in the toHTML() methods in all the sub-classes of HTMLNode.
+	 */
+	protected static String lineSeparator = 
+			(String)java.security.AccessController.doPrivileged(
+						new sun.security.action.GetPropertyAction("line.separator"));
+	
+	/**
+	 * @param lineSeparator New Line separator to be used
+	 */
+	public static void setLineSeparator(String lineSeparator)
+	{
+		HTMLNode.lineSeparator = lineSeparator;	
+	}
+	
+	/**
+	 * @return String lineSeparator that will be used in toHTML()
+	 */
+	public static String getLineSeparator()
+	{
+		return HTMLNode.lineSeparator;
+	}
+
+	/**
 	 * Return the beginning position of the element
 	 */
 	public abstract int elementBegin();

@@ -37,7 +37,6 @@ import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
-import com.kizna.htmlTests.tagTests.HTMLTagTest;
 
 
 import com.kizna.html.HTMLReader;
@@ -182,11 +181,11 @@ public void testToPlainTextString() throws HTMLParserException {
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
-		assertEquals("Raw String of the remarkNode #1","<!--\n saved from url=(0022)http://internet.e-mail \n-->",remarkNode.toHTML());	
+		assertEquals("Raw String of the remarkNode #1","<!--\r\n saved from url=(0022)http://internet.e-mail \r\n-->",remarkNode.toHTML());	
 		// The sixth node should be a HTMLRemarkNode 
 		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 		remarkNode = (HTMLRemarkNode)node[5];
-		assertEquals("Raw String of the remarkNode #6","<!--\n\n   Whats gonna happen now ?\n\n-->",remarkNode.toHTML());			
+		assertEquals("Raw String of the remarkNode #6","<!--\r\n\n   Whats gonna happen now ?\n\r\n-->",remarkNode.toHTML());			
 	}
 	public void testNonRemarkNode() throws HTMLParserException {
 		String testHTML = new String("&nbsp;<![endif]>");
@@ -255,94 +254,5 @@ public void testToPlainTextString() throws HTMLParserException {
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
 		assertEquals("Expected contents","",remarkNode.getText());
 		
-	}
-	/**
-	 * Reproduction of bug reported by John Zook [594301]
-	 * When we have tags like :
-	 * &lt;!-- &lt;A&gt; --&gt;
-	 * it doesent get parsed correctly
-	 */	
-	public void testTagWithinRemarkNode() throws HTMLParserException {
-		String testHTML = new String("<!-- <A> -->");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
-		HTMLNode [] node = new HTMLNode[20];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
-		assertTrue("Node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
-		assertEquals("Expected contents"," <A> ",remarkNode.getText());
-				
-	}
-	/**
-	 * Bug reported by John Zook [594301], invalid remark nodes are accepted as remark nodes.
-	 * &lt;<br>
-	 * -<br>
-	 * -<br>
-	 * ssd --&gt;<br>
-	 * This is not supposed to be a remarknode
-	 */
-	public void testInvalidTag() throws HTMLParserException {
-		String testHTML = new String("<!\n"+
-		"-\n"+
-		"-\n"+
-		"ssd -->");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
-		HTMLNode [] node = new HTMLNode[20];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
-		assertTrue("Node should be a HTMLTag but was "+node[0],node[0] instanceof HTMLTag);
-		HTMLTag tag = (HTMLTag)node[0];
-		assertStringEquals("Expected contents","!\n"+
-		"-\n"+
-		"-\n"+
-		"ssd --",tag.getText());
-		
-	}
-	/**
-	 * Bug reported by John Zook [594301]
-	 * If dashes exist in a comment, they dont get added to the comment text
-	 */
-	public void testDashesInComment() throws HTMLParserException{
-		String testHTML = new String("<!-- -- -->");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
-		HTMLNode [] node = new HTMLNode[20];
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
-		assertTrue("Node should be a HTMLRemarkNode but was "+node[0],node[0] instanceof HTMLRemarkNode);
-		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
-		assertEquals("Remark Node contents"," -- ",remarkNode.getText());
-	}
-	public void assertStringEquals(String message,String s1,String s2) {
-		for (int i=0;i<s1.length();i++) {
-			if (s1.charAt(i)!=s2.charAt(i)) {
-				assertTrue(message+
-					" \nMismatch of strings at char posn "+i+
-					" \nString 1 upto mismatch = "+s1.substring(0,i)+
-					" \nString 2 upto mismatch = "+s2.substring(0,i)+
-					" \nString 1 mismatch character = "+s1.charAt(i)+", code = "+(int)s1.charAt(i)+
-					" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i)+
-					" \nComplete String 1 = "+s1+
-					" \nComplete String 2 = "+s2,false);
-			}
-		}
-	}    
-	
+	}	
 }

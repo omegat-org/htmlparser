@@ -68,6 +68,11 @@ public static TestSuite suite() {
 	suite.addTest(HTMLAppletTagTest.suite());
 	suite.addTest(HTMLFrameTagTest.suite());
 	suite.addTest(HTMLFrameSetTagTest.suite());	
+	suite.addTest(HTMLInputTagTest.suite());
+	suite.addTest(HTMLOptionTagTest.suite());
+	suite.addTest(HTMLSelectTagTest.suite());
+	suite.addTest(HTMLTextareaTagTest.suite());
+
 	return suite; 
 }
 }

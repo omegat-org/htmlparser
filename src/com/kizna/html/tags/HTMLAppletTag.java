@@ -199,11 +199,11 @@ public void setMisc(java.util.Vector newMisc) {
 	 */
 	public String toHTML() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(super.toHTML()+"\n");
+		sb.append(super.toHTML()+lineSeparator);
 		for (Enumeration e = getParameterNames();e.hasMoreElements();) {
 			String paramName = (String)e.nextElement();
 			String paramValue = getParameter(paramName);
-			sb.append("<PARAM NAME=\""+paramName+"\" VALUE=\""+paramValue+"\">\n");
+			sb.append("<PARAM NAME=\""+paramName+"\" VALUE=\""+paramValue+"\">").append(lineSeparator);
 		}
 		sb.append("</APPLET>");
 		return sb.toString();

@@ -139,7 +139,7 @@ public class HTMLFormTag extends HTMLTag
 			if (prevNode!=null) {
 				if (prevNode.elementEnd()>node.elementBegin()) {
 					// Its a new line
-					rawBuffer.append("\n");					
+					rawBuffer.append(lineSeparator);					
 				}
 			}
 			rawBuffer.append(node.toHTML());

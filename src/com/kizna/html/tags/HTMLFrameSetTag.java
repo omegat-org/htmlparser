@@ -109,10 +109,10 @@ public class HTMLFrameSetTag extends HTMLTag
 		HTMLNode node=null,prevNode=this;
 		for (Enumeration e = frames.elements();e.hasMoreElements();) {
 			node = (HTMLNode)e.nextElement();
-			if (prevNode.elementEnd()>node.elementBegin()) sb.append("\r\n");
+			if (prevNode.elementEnd()>node.elementBegin()) sb.append(lineSeparator);
 			sb.append(node.toHTML());
 		} 
-		if (node.elementEnd()>elementEnd()) sb.append("\r\n");
+		if (node.elementEnd()>elementEnd()) sb.append(lineSeparator);
 		sb.append("</FRAMESET>");
 		return sb.toString();
 	}

@@ -115,16 +115,29 @@ public class HTMLFormScannerTest extends TestCase {
 		assertEquals("Input Password Tag","<INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\">",passwdTag.toHTML());
 		assertEquals("Input Submit Tag","<INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\">",submitTag.toHTML());
 		
-		assertEquals("Raw String","<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
-		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
-		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
+		String tempString = "<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\r\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\r\n"+
+		"</FORM>";
+		assertEquals("Length of string",tempString.length(),formTag.toHTML().length());
+
+		assertEquals("Raw String","<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\r\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>Password</b></font></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\r\n"+
+		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\r\n"+
 		"</FORM>",formTag.toHTML());
 	}
 	/*public void testScanFormWithNoEnding() throws HTMLParserException{

@@ -453,7 +453,7 @@ public void setEndOfLineCharState(boolean newEndOfLineCharState) {
 		return "";
 	}
 	public String toHTML() {
-		if (endOfLineCharState) return "<"+tagContents+">\r\n"; else
+		if (endOfLineCharState) return "<"+tagContents+">" + lineSeparator; else
 		return "<"+tagContents+">";
 	}
 	/**
