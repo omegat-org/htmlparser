@@ -376,5 +376,52 @@ public class BeanTest extends TestCase
         check (sb, "<html><head></head><body>\t \tx</body></html>", "x");
         check (sb, "<html><head></head><body>\t\t x</body></html>", "x");
     }
+    
+	/**
+	 * Test text including a "pre" tag
+	 */
+	public void testOutputWithPreTags() {
+		StringBean sb;
+		sb = new StringBean ();
+		String sampleCode = "public class Product {}";
+		check (sb, "<body><pre>"+sampleCode+"</pre></body>", sampleCode);
+	}
+    
+	/**
+	 * Test text including a "script" tag
+	 */
+	public void testOutputWithScriptTags() {
+		StringBean sb;
+		sb = new StringBean ();
+		
+		String sampleScript =
+		  "<script language=\"javascript\">\r\n"
+		+ "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n" 
+		+ " document.write ('xxx');\r\n" 
+		+ "else\r\n"
+		+ " document.write ('yyy');\r\n"
+		+ "</script>\r\n";
+		
+		check (sb, "<body>"+sampleScript+"</body>", "");
+	}
+	
+	/**
+	 * Test output with pre and script tags
+	 */
+	public void xtestOutputWithPreAndScriptTags() {
+		StringBean sb;
+		sb = new StringBean ();
+		
+		String sampleScript =
+		  "<script language=\"javascript\">\r\n"
+		+ "if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n" 
+		+ " document.write ('xxx');\r\n" 
+		+ "else\r\n"
+		+ " document.write ('yyy');\r\n"
+		+ "</script>\r\n";
+		
+		check (sb, "<body><pre>"+sampleScript+"</pre></body>", sampleScript);
+	}
+    
 }
 
