@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021125 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021201 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -65,8 +65,11 @@ public class HTMLBaseHREFScanner extends HTMLTagScanner {
 	 */
 	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currLine)	throws HTMLParserException {
 		String baseUrl = (String)tag.getParameter("HREF");
-      	String absoluteBaseUrl = removeLastSlash(baseUrl.trim());
-      	processor.setBaseUrl(absoluteBaseUrl);
+		String absoluteBaseUrl="";
+		if (baseUrl != null && baseUrl.length()>0) {
+	      	absoluteBaseUrl = removeLastSlash(baseUrl.trim());
+    	  	processor.setBaseUrl(absoluteBaseUrl);
+		} 
 		return new HTMLBaseHREFTag(tag.elementBegin(),tag.elementEnd(),tag.getText(),absoluteBaseUrl,currLine);
 	}
 	public String removeLastSlash(String baseUrl)

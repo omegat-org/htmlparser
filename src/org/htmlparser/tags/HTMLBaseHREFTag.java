@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021125 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021201 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -56,6 +56,6 @@ public class HTMLBaseHREFTag extends HTMLTag {
 				"Name : "+baseUrl;
 	}
 	public String toHTML() {
-		return "<BASE HREF=\""+baseUrl+"\">";
+		return super.toHTML();
 	}
 }

@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021125 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021201 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -32,6 +32,7 @@ import java.io.StringReader;
 
 import org.htmlparser.tags.HTMLBaseHREFTag;
 import org.htmlparser.tests.HTMLParserTestCase;
+import org.htmlparser.util.HTMLParserException;
 
 
 import junit.framework.TestCase;
@@ -42,9 +43,17 @@ public class HTMLBaseHREFTagTest extends HTMLParserTestCase {
 	public HTMLBaseHREFTagTest(String name) {
 		super(name);
 	}
-	public void testToHTML() {
+	public void testConstruction() {
 		HTMLBaseHREFTag baseRefTag = new HTMLBaseHREFTag(0,0,"","http://www.abc.com","");
-		String expected = "<BASE HREF=\"http://www.abc.com\">";
-		assertEquals("Expected HTML Reconstruction",expected,baseRefTag.toHTML());
+		assertEquals("Expected Base URL","http://www.abc.com",baseRefTag.getBaseUrl());
 	}
+	public void testNotHREFBaseTag() throws HTMLParserException {
+		createParser("<base target=\"_top\">");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Should be a base tag but was "+node[0].getClass().getName(),node[0] instanceof HTMLBaseHREFTag);
+		HTMLBaseHREFTag baseTag = (HTMLBaseHREFTag)node[0];
+		assertEquals("Base Tag HTML","<base target=\"_top\">",baseTag.toHTML());
+	}
+
 }
