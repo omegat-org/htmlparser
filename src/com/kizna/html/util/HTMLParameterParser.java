@@ -72,7 +72,7 @@ public class HTMLParameterParser {
         name=null;
         value=null;
         tokenAccumulator=null;
-        waitingForValue=false;       
+        waitingForValue=false;          
         StringTokenizer token = new StringTokenizer(tag.getText() + " ",delim,true);
         while (token.hasMoreTokens()) {
             currentToken = token.nextToken();
@@ -107,6 +107,7 @@ public class HTMLParameterParser {
             // - a value of a parameter
             if (!isValueInited && delim.indexOf(tokenAccumulator)>=0) {
                 // tokenAccumulator was a delimiter
+                //System.out.println("k:" + tokenAccumulator  + ":m");
                 if ( waitingForValue) {
                   if (tokenAccumulator.charAt(0)==equalTo) {
                         // here set to receive next value of parameter
@@ -139,6 +140,7 @@ public class HTMLParameterParser {
                         value=null;
                         name=tokenAccumulator;
                         waitingForValue=true;
+                        isValueInited=false;
 
                     }
                 }
@@ -150,6 +152,7 @@ public class HTMLParameterParser {
                         name=null;
                         name = null;
                         value=null;
+                        isValueInited=false;
                     }                
                     waitingForValue=false;
                 }           

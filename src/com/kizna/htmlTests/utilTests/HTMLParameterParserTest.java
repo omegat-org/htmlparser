@@ -41,11 +41,26 @@ public class HTMLParameterParserTest extends TestCase {
 		HTMLParameterParser parser = new HTMLParameterParser();
 		HTMLTag tag = new HTMLTag(0,0,"a b\"c\"","");
 		Hashtable table = parser.parseParameters(tag);
-		assertEquals("Value","",table.get("B"));
-                assertEquals("Value","",table.get("C"));
+		assertEquals("ValueB","",table.get("B"));
+                
 	}
         
+        public void testTwoParams(){
+		HTMLParameterParser parser = new HTMLParameterParser();
+		HTMLTag tag = new HTMLTag(0,0,"PARAM NAME=\"Param1\" VALUE=\"Somik\">\n","");
+		Hashtable table = parser.parseParameters(tag);
+		assertEquals("Param1","Param1",table.get("NAME"));
+                assertEquals("Somik","Somik",table.get("VALUE"));                
+        }
 
+        public void testPlainParams(){
+		HTMLParameterParser parser = new HTMLParameterParser();
+		HTMLTag tag = new HTMLTag(0,0,"PARAM NAME=Param1 VALUE=Somik","");
+		Hashtable table = parser.parseParameters(tag);
+		assertEquals("Param1","Param1",table.get("NAME"));
+                assertEquals("Somik","Somik",table.get("VALUE"));                
+        }
+        
         
 	public static TestSuite suite() {
 		return new TestSuite(HTMLParameterParserTest.class);
