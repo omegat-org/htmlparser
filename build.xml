@@ -120,6 +120,7 @@ Update the Web Site
   <property name="distribution" value="distribution"/>
   <property name="junit.jar" value="${lib}/junit.jar"/>
   <property name="commons-logging.jar" value="${lib}/commons-logging.jar"/>
+  <property name="sax2.jar" value="${lib}/sax2.jar"/>
 
   <taskdef resource="checkstyletask.properties"
            classpath="${lib}/checkstyle-all-3.1.jar"/>
@@ -221,7 +222,7 @@ Update the Web Site
   </target>
 
   <target name="compile" description="compile all java files">
-    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" classpath="src:${commons-logging.jar}"/>
+    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**" debug="on" classpath="src:${commons-logging.jar}"/>
   </target>
 
   <target name="compilelexer" description="compile lexer java files">
@@ -245,10 +246,9 @@ Update the Web Site
   </target>
 
   <target name="compileparser" depends="compilelexer" description="compile parser java files">
-    <javac srcdir="${src}" debug="on" classpath="src:${commons-logging.jar}">
+    <javac srcdir="${src}" debug="on" classpath="src:${commons-logging.jar}:${sax2.jar}">
       <include name="org/htmlparser/**/*.java"/>
       <exclude name="org/htmlparser/tests/**"/>
-      <exclude name="org/htmlparser/util/Generate.java"/> 
       <exclude name="org/htmlparser/lexerapplications/**/*.java"/>
     </javac>
   </target>
@@ -293,7 +293,7 @@ Update the Web Site
     <jar jarfile="${lib}/htmlparser.jar"
       basedir="${src}"
       includes="**/*.class **/*.gif"
-      excludes="org/htmlparser/tests/**/*.class,org/htmlparser/util/Generate.class">
+      excludes="org/htmlparser/tests/**/*.class">
       <manifest>
         <attribute name="Main-Class" value="org.htmlparser.Parser"/>
         <section name="org/htmlparser/Parser.class">
@@ -341,6 +341,7 @@ Update the Web Site
         <pathelement location="src"/>
         <pathelement location="${junit.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
+        <pathelement location="${sax2.jar}"/>
         <pathelement location="${java.home}/../lib/tools.jar"/>
       </classpath>
     </javac>
@@ -350,6 +351,7 @@ Update the Web Site
         <pathelement location="${src}"/>
         <pathelement location="${junit.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
+        <pathelement location="${sax2.jar}"/>
         <pathelement location="${java.home}/../lib/tools.jar"/>
       </classpath>
       <arg value="-text"/>
@@ -417,8 +419,10 @@ Update the Web Site
       <group title="Scanners" packages="org.htmlparser.scanners"/>
       <group title="Beans" packages="org.htmlparser.beans"/>
       <group title="Patterns" packages="org.htmlparser.visitors,org.htmlparser.nodeDecorators,org.htmlparser.filters"/>
+      <group title="Sax" packages="org.htmlparser.sax"/>
       <group title="Utility" packages="org.htmlparser.util,org.htmlparser.util.sort"/>
       <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+      <link href="http://www.saxproject.org/apidoc/"/>
     </javadoc>
     <copy file="${resources}/inherit.gif" tofile="${docs}/javadoc/resources/inherit.gif" overwrite="true"/>
     <delete file="${resources}/HtmlTaglet.class"/>
