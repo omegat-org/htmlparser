@@ -1,36 +1,5 @@
-// HTMLParser Library v1.2(20020503) - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-// For any questions or suggestions, you can write to me at :
-// Email :somik@kizna.com
-// 
-// Postal Address : 
-// Somik Raha
-// R&D Team
-// Kizna Corporation
-// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
-// Shibuya-ku, Tokyo, 
-// 150-0012, 
-// JAPAN
-// Tel  :  +81-3-54752646
-// Fax : +81-3-5449-4870
-// Website : www.kizna.com
-
 package com.kizna.htmlTests.scannersTests;
+
 import java.io.BufferedReader;
 import java.util.Hashtable;
 import com.kizna.html.tags.HTMLScriptTag;
@@ -53,6 +22,18 @@ public class HTMLScriptScannerTest extends junit.framework.TestCase
  */
 public HTMLScriptScannerTest(String name) {
 	super(name);
+}
+public void assertStringEquals(String message,String s1,String s2) {
+	for (int i=0;i<s1.length();i++) {
+		if (s1.charAt(i)!=s2.charAt(i)) {
+			assertTrue(message+
+				" \nMismatch of strings at char posn "+i+
+				" \nString 1 upto mismatch = "+s1.substring(0,i)+
+				" \nString 2 upto mismatch = "+s2.substring(0,i)+
+				" \nString 1 mismatch character = "+s1.charAt(i)+", code = "+(int)s1.charAt(i)+
+				" \nString 2 mismatch character = "+s2.charAt(i)+", code = "+(int)s2.charAt(i),false);
+		}
+	}
 }
 public static void main(String[] args) {
 	new junit.awtui.TestRunner().start(new String[] {"com.kizna.htmlTests.scannersTests.HTMLScriptScannerTest"});
@@ -102,7 +83,6 @@ public void testScan()
 	HTMLScriptTag scriptTag = (HTMLScriptTag)node[0];
 	assertEquals("Expected Script Code","document.write(d+\".com\")",scriptTag.getScriptCode());
 }
-
 /**
  * Bug reported by Gordon Deudney 2002-03-27
  * Upon parsing :
@@ -170,7 +150,7 @@ public void testScanBugWG()
 	node[i++] = (HTMLNode)e.nextElement(); 
 	} 
 	
-	StringBuffer sb2 = new StringBuffer(); 
+	StringBuffer sb2 = new StringBuffer();
 	sb2.append("\r\n"); // !!! CRLF from the TAG Line 
 	sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
 	sb2.append(" document.write ('xxx');\r\n"); 
@@ -184,9 +164,8 @@ public void testScanBugWG()
 	instanceof HTMLScriptTag); 
 	// Check the data in the applet tag 
 	HTMLScriptTag scriptTag = (HTMLScriptTag)node 
-	[1]; 
-	assertEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
-} 
-
-
+	[1];
+	System.out.println("Expected Script Code= "+testHTML2+", script code = "+scriptTag.getScriptCode());
+	assertStringEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
+}
 }

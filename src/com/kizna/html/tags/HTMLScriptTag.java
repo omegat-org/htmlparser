@@ -96,9 +96,11 @@ public void setType(java.lang.String newType) {
 }
 public String toRawString() {
 	StringBuffer sb = new StringBuffer();
-	sb.append(super.toRawString());
+	sb.append("<"+tagContents+">");
+	if (isEndOfLineCharState()) sb.append("\r\n");	
 	sb.append(scriptCode);
 	sb.append("</SCRIPT>");
+
 	return sb.toString();
 }
 /**

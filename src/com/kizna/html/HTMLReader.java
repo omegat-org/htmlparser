@@ -1,40 +1,5 @@
-// HTMLParser Library v1.2(20020503) - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-// For any questions or suggestions, you can write to me at :
-// Email :somik@kizna.com
-// 
-// Postal Address : 
-// Somik Raha
-// R&D Team
-// Kizna Corporation
-// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
-// Shibuya-ku, Tokyo, 
-// 150-0012, 
-// JAPAN
-// Tel  :  +81-3-54752646
-// Fax : +81-3-5449-4870
-// Website : www.kizna.com
-//
-// Improvements contributed by Nash Tsai (nash_c@users.sourceforge.net)
-// Bug fixes contributed by Kaarle Kaila (kaila@users.sourceforge.net)
-//
-
 package com.kizna.html;
+
 //////////////////
 // Java Imports //
 //////////////////
@@ -61,6 +26,7 @@ public class HTMLReader extends BufferedReader
 	protected String url;
 	private java.io.BufferedReader in;
 	private HTMLParser parser;
+	private boolean tagUpgraded=false;
 	/**
 	 * This constructor basically overrides the existing constructor in the
 	 * BufferedReader class.
@@ -81,6 +47,22 @@ public class HTMLReader extends BufferedReader
 		this.in = in;
 		this.url = url;
 		this.parser = null;		
+	}
+/**
+ * This method is intended to be called only by scanners, when a situation of dirty html has arisen, 
+ * and action has been taken to correct the parsed tags. For e.g. if we have html of the form :
+ * <pre>
+ * <a href="somelink.html"><img src=...><td><tr><a href="someotherlink.html">...</a>
+ * </pre>
+ * Now to salvage the first link, we'd probably like to insert an end tag somewhere (typically before the
+ * second begin link tag). So that the parsing continues uninterrupted, we will need to change the existing
+ * line being parsed, to contain the end tag in it. 
+ */
+public void changeLine(String line) {
+	this.line = line;
+}
+	public String getCurrentLine() {
+		return line;
 	}
 /**
  * This method is useful when designing your own scanners. You might need to find out what is the location where the
@@ -117,20 +99,13 @@ public int getLastReadPosition() {
 public HTMLParser getParser() {
 	return parser;
 }
-
-/**
- * This method is intended to be called only by scanners, when a situation of dirty html has arisen, 
- * and action has been taken to correct the parsed tags. For e.g. if we have html of the form :
- * <pre>
- * <a href="somelink.html"><img src=...><td><tr><a href="someotherlink.html">...</a>
- * </pre>
- * Now to salvage the first link, we'd probably like to insert an end tag somewhere (typically before the
- * second begin link tag). So that the parsing continues uninterrupted, we will need to change the existing
- * line being parsed, to contain the end tag in it. 
- */
-public void changeLine(String line) {
-	this.line = line;
-}
+	/**
+	 * Gets the previousOpenScanner.
+	 * @return Returns a HTMLTagScanner
+	 */
+	public HTMLTagScanner getPreviousOpenScanner() {
+		return previousOpenScanner;
+	}
 	/**
 	 * Read the next element
 	 * @return HTMLNode - The next node
@@ -201,23 +176,11 @@ public String readLine() throws IOException{
 public void setParser(HTMLParser newParser) {
 	parser = newParser;
 }
-
-	/**
-	 * Gets the previousOpenScanner.
-	 * @return Returns a HTMLTagScanner
-	 */
-	public HTMLTagScanner getPreviousOpenScanner() {
-		return previousOpenScanner;
-	}
-
 	/**
 	 * Sets the previousOpenScanner.
 	 * @param previousOpenScanner The previousOpenScanner to set
 	 */
 	public void setPreviousOpenScanner(HTMLTagScanner previousOpenScanner) {
 		this.previousOpenScanner = previousOpenScanner;
-	}
-	public String getCurrentLine() {
-		return line;
 	}
 }

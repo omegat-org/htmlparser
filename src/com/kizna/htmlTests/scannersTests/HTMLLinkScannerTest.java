@@ -119,7 +119,7 @@ public void testErroneousLinkBugFromYahoo2() {
 	HTMLTag tag = (HTMLTag)node[2];
 	assertEquals("Third node","td nowrap",tag.getText());
 	HTMLStringNode stringNode = (HTMLStringNode)node[3];
-	assertEquals("Fourth node"," &nbsp;",stringNode.getText());	
+	assertEquals("Fourth node"," &nbsp;\r\n",stringNode.getText());	
 }
 
 /**
@@ -151,9 +151,9 @@ public void testErroneousLinkBugFromYahoo() {
 	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
 	assertEquals("Link","http://www.yahoo.com/s/8741",linkTag.getLink());
 	// Verify the link data
-	assertEquals("Link Text","This is a test",linkTag.getLinkText());
+	assertEquals("Link Text","This is a test\r\n",linkTag.getLinkText());
 	// Verify the reconstruction html
-	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>This is a test</A>",linkTag.toRawString());
+	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>This is a test\r\n</A>",linkTag.toRawString());
 }
 
 /**

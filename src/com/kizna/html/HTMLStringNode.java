@@ -87,7 +87,8 @@ public class HTMLStringNode extends HTMLNode
 		int state = 0;
 		int textBegin=position;
 		int textEnd=position;
-		for (int i=position;(i<input.length() && state!=2);i++)
+		int inputLen = input.length();
+		for (int i=position;(i<inputLen && state!=2);i++)
 		{
 			// When the input has ended but no text is found, we end up returning null
 			if (input.charAt(i)=='<' && state==0)
@@ -117,8 +118,19 @@ public class HTMLStringNode extends HTMLNode
 			}				
 			if (state==1 && i==input.length()-1)
 			{
-				state=2;
-				textEnd=i;
+				input = reader.getNextLine();
+
+				if (input==null) {
+					textEnd=i-1;
+					state =2;
+					
+				} else {
+					text+="\r\n";
+					inputLen = input.length();
+					i=-1;
+					textBegin=-1;
+				}
+
 			}
 		}
 		if (textBegin<=textEnd) return new HTMLStringNode(text,textBegin,textEnd);

@@ -89,7 +89,7 @@ public void testExtractXMLData() {
 	
 	String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
 	System.out.println("Result = "+result);
-	assertEquals("Result","Abhi Sri",result);
+	assertEquals("Result","Abhi\r\nSri\r\n",result);
 }
 public void testExtractXMLDataSingle() {
 	String testHTML = new String(

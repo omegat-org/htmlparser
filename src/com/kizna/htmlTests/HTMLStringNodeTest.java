@@ -125,7 +125,8 @@ public void testStringNodeBug2()
 	assertTrue("Second node should be a link node",node[1] instanceof HTMLLinkTag);
 	HTMLLinkTag linkNode = (HTMLLinkTag)node[1];
 	assertEquals("Link is","http://www.adobe.com",linkNode.getLink());
-	assertEquals("Link text is","Adobe Acrobat Reader",linkNode.getLinkText());
+	assertEquals("Link text is","Adobe \r\nAcrobat Reader",linkNode.getLinkText());
+
 	assertTrue("Third node should be a string node",node[2] instanceof HTMLStringNode);
 	HTMLStringNode stringNode2 = (HTMLStringNode)node[2];
 	assertEquals("Contents of third node"," installed on your computer.",stringNode2.getText());

@@ -1,36 +1,5 @@
-// HTMLParser Library v1.1 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-// For any questions or suggestions, you can write to me at :
-// Email :somik@kizna.com
-// 
-// Postal Address : 
-// Somik Raha
-// R&D Team
-// Kizna Corporation
-// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
-// Shibuya-ku, Tokyo, 
-// 150-0012, 
-// JAPAN
-// Tel  :  +81-3-54752646
-// Fax : +81-3-5449-4870
-// Website : www.kizna.com
-
 package com.kizna.htmlTests.tagTests;
+
 import java.io.BufferedReader;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -94,6 +63,21 @@ public void testBodyTagBug1()
 	HTMLTag tag = (HTMLTag)node[0];
 	assertEquals("Contents of the tag","BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\nvLink=#551a8b",tag.getText());
 }
+    public void testCheckValidity() {
+    	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
+    	int state = HTMLTag.checkValidity(HTMLTag.TAG_IGNORE_DATA_STATE,tag);
+    	assertEquals("Expected State",HTMLTag.TAG_FINISHED_PARSING_STATE,state);
+    }
+    public void testCorrectTag() {
+    	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
+		HTMLTag.correctTag(tag);
+		assertEquals("Corrected Tag","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
+    }
+    public void testExtractWord() {
+    	String line = "Abc DEF GHHI";
+    	String word = HTMLTag.extractWord(line);
+    	assertEquals("Word expected","ABC",HTMLTag.extractWord(line));
+    }
 /**
  * The following should be identified as a tag : <BR>
  * 	&lt;MYTAG abcd\n"+
@@ -335,6 +319,81 @@ public void testNestedTags() {
             fail("Bad class element = " + o.getClass().getName());
         }
     }
+    /**
+     * Reproduction of a bug reported by Annette Doyle
+     * This is actually a pretty good example of dirty html - we are in a fix 
+     * here, bcos the font tag (the first one) has an erroneous inverted comma. In HTMLTag,
+     * we ignore anything in inverted commas, and dont if its outside. This kind of messes
+     * up our parsing almost completely.
+     * 
+     */
+    public void testStrictParsing() {
+		String testHTML = "<div align=\"center\"><font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"><a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+ 
+        "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
+        "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
+        "<a href=\"/cia/notices.html#sec\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Security</font></a>\n"+
+        "<a href=\"/cia/contact.htm\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Contact Us</font></a>\n"+
+        "<a href=\"/cia/sitemap.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Site Map</font></a>\n"+
+        "<a href=\"/cia/siteindex.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Index</font></a>\n"+
+        "<a href=\"/search\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Search</font></a>\n"+
+        "</font></div>"; 
+	
+		StringReader sr = new StringReader(testHTML); 
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[100];
+		// Register the image scanner
+		parser.registerScanners();
+		int i = 0;
+		HTMLNode thisNode;
+		for (Enumeration e = parser.elements();e.hasMoreElements();) {
+			node[i++] = (HTMLNode)e.nextElement();
+		}	    	
+		assertEquals("Number of nodes found",12,i);
+		// Check the tags
+		HTMLTag tag = (HTMLTag)node[0];
+		assertEquals("DIV Tag expected","div align=\"center\"",tag.getText());		
+		tag = (HTMLTag)node[1];
+		assertEquals("Second tag should be corrected","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
+		// Try to parse the parameters from this tag.
+		Hashtable table = tag.parseParameters();
+		assertNotNull("Parameters table",table);
+		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
+		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
+    }
+public void testToRawString() {
+	String testHTML = new String(
+		"<MYTAG abcd\n"+
+		"efgh\n"+
+		"ijkl\n"+
+		"mnop>\n"+
+		"<TITLE>Hello</TITLE>\n"+
+		"<A HREF=\"Hello.html\">Hey</A>"
+	);
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[10];
+
+			
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 4 node identified",new Integer(7),new Integer(i));
+	// The node should be an HTMLTag
+	assertTrue("1st Node should be a HTMLTag",node[0] instanceof HTMLTag);
+	HTMLTag tag = (HTMLTag)node[0];
+	assertEquals("Raw String of the tag","<MYTAG abcd\nefgh\nijkl\nmnop>",tag.toRawString());
+	assertTrue("2nd Node should be a HTMLTag",node[1] instanceof HTMLTag);
+	assertTrue("5th Node should be a HTMLTag",node[4] instanceof HTMLTag);
+	tag = (HTMLTag)node[1];
+	assertEquals("Raw String of the tag","<TITLE>",tag.toRawString());
+	tag = (HTMLTag)node[4];
+	assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toRawString());
+	
+}
     public void testWithLink(){
         String data = "<P>To download a document: click on a link. ";
         data += "Once the .pdf file opens, use the &#34;Save As&#34; ";
@@ -415,95 +474,4 @@ public void testNestedTags() {
             fail("Bad class element = " + o.getClass().getName());
         }
     }
-    /**
-     * Reproduction of a bug reported by Annette Doyle
-     * This is actually a pretty good example of dirty html - we are in a fix 
-     * here, bcos the font tag (the first one) has an erroneous inverted comma. In HTMLTag,
-     * we ignore anything in inverted commas, and dont if its outside. This kind of messes
-     * up our parsing almost completely.
-     * 
-     */
-    public void testStrictParsing() {
-		String testHTML = "<div align=\"center\"><font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"><a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+ 
-        "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
-        "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
-        "<a href=\"/cia/notices.html#sec\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Security</font></a>\n"+
-        "<a href=\"/cia/contact.htm\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Contact Us</font></a>\n"+
-        "<a href=\"/cia/sitemap.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Site Map</font></a>\n"+
-        "<a href=\"/cia/siteindex.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Index</font></a>\n"+
-        "<a href=\"/search\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Search</font></a>\n"+
-        "</font></div>"; 
-	
-		StringReader sr = new StringReader(testHTML); 
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
-		HTMLParser parser = new HTMLParser(reader);
-		HTMLNode [] node = new HTMLNode[100];
-		// Register the image scanner
-		parser.registerScanners();
-		int i = 0;
-		HTMLNode thisNode;
-		for (Enumeration e = parser.elements();e.hasMoreElements();) {
-			node[i++] = (HTMLNode)e.nextElement();
-		}	    	
-		assertEquals("Number of nodes found",12,i);
-		// Check the tags
-		HTMLTag tag = (HTMLTag)node[0];
-		assertEquals("DIV Tag expected","div align=\"center\"",tag.getText());		
-		tag = (HTMLTag)node[1];
-		assertEquals("Second tag should be corrected","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
-		// Try to parse the parameters from this tag.
-		Hashtable table = tag.parseParameters();
-		assertNotNull("Parameters table",table);
-		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
-		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
-    }
-    public void testCheckValidity() {
-    	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
-    	int state = HTMLTag.checkValidity(HTMLTag.TAG_IGNORE_DATA_STATE,tag);
-    	assertEquals("Expected State",HTMLTag.TAG_FINISHED_PARSING_STATE,state);
-    }
-    public void testExtractWord() {
-    	String line = "Abc DEF GHHI";
-    	String word = HTMLTag.extractWord(line);
-    	assertEquals("Word expected","ABC",HTMLTag.extractWord(line));
-    }
-    public void testCorrectTag() {
-    	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
-		HTMLTag.correctTag(tag);
-		assertEquals("Corrected Tag","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
-    }
-
-public void testToRawString() {
-	String testHTML = new String(
-		"<MYTAG abcd\n"+
-		"efgh\n"+
-		"ijkl\n"+
-		"mnop>\n"+
-		"<TITLE>Hello</TITLE>\n"+
-		"<A HREF=\"Hello.html\">Hey</A>"
-	);
-	StringReader sr = new StringReader(testHTML);
-	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
-	HTMLNode [] node = new HTMLNode[10];
-
-			
-	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
-	{
-		node[i++] = (HTMLNode)e.nextElement();
-	}
-	assertEquals("There should be 4 node identified",new Integer(7),new Integer(i));
-	// The node should be an HTMLTag
-	assertTrue("1st Node should be a HTMLTag",node[0] instanceof HTMLTag);
-	HTMLTag tag = (HTMLTag)node[0];
-	assertEquals("Raw String of the tag","<MYTAG abcd\nefgh\nijkl\nmnop>",tag.toRawString());
-	assertTrue("2nd Node should be a HTMLTag",node[1] instanceof HTMLTag);
-	assertTrue("5th Node should be a HTMLTag",node[4] instanceof HTMLTag);
-	tag = (HTMLTag)node[1];
-	assertEquals("Raw String of the tag","<TITLE>",tag.toRawString());
-	tag = (HTMLTag)node[4];
-	assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toRawString());
-	
-}
 }

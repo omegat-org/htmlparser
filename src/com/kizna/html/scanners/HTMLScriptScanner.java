@@ -36,6 +36,7 @@ package com.kizna.html.scanners;
 /////////////////////////
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.HTMLNode;
+import com.kizna.html.HTMLStringNode;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLScriptTag;
@@ -124,61 +125,31 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 	// We know we have script stuff. So first extract the information from the tag about the language
 	extractLanguage(tag);
 	extractType(tag);
-	// Parse on till the end tag </script> is found
-	String line;
 	HTMLEndTag endTag=null;
 	HTMLNode node = null;
 	boolean endScriptFound=false;
 	StringBuffer buff=new StringBuffer();
-	// Take the line after the current tag
-	line = currentLine;
-	// Set the looking positiong for endTag to just after the begin tag
-	int lookPos = tag.elementEnd()+1;
-	do
-	{	
-		if (line!=null)
-		{
-			node = HTMLEndTag.find(line,lookPos);
-			if (node!=null) 
-			{
-				endTag = (HTMLEndTag)node;
-				if (endTag.getContents().toUpperCase().equals("SCRIPT")) 
-				{
-					endScriptFound = true;
-					// Check if there was anything in front of endTag, and if so, add it to the code buffer
-					if (endTag.elementBegin()>0)
-					{
-						buff.append(line.substring(lookPos,endTag.elementBegin()));	
-					}
-				}else 
-				{
-					// Bugfix by Wolfgang Germund 2002-06-02 
-					// buff.append(line); 
-	
-					buff.append(line.substring(lookPos)); 
-					//buff.append("\n\r");
-					buff.append("\r\n");
-				}
-			} 
-			else 
-			{
-				// Bugfix by Wolfgang Germund 2002-06-02 
-				//buff.append(line);
-				buff.append(line.substring(lookPos)); 
 
-				//buff.append("\n\r");
-				buff.append("\r\n");
+	HTMLNode prevNode=tag;
+	do {
+		node = reader.readElement();
+		if (node instanceof HTMLEndTag) {
+			endTag = (HTMLEndTag)node;
+			if (endTag.getContents().toUpperCase().equals("SCRIPT")) 
+			{
+				endScriptFound = true;
+				// Check if there was anything in front of endTag, and if so, add it to the code buffer
 			}
-			
-		}
-		if (!endScriptFound) 
-		{
-			line = reader.getNextLine();
-			// Set the looking position for the end tag to 0
-			lookPos = 0;
+		} else {
+			if (prevNode!=null) {
+				if (prevNode.elementEnd() > node.elementBegin()) buff.append("\r\n");
+			}
+			buff.append(node.toRawString());
+
+			prevNode = node;
 		}
 	}
-	while (!endScriptFound && line!=null);
+	while (!endScriptFound);
 	HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
 	scriptTag.setThisScanner(this);
 	return scriptTag; 
