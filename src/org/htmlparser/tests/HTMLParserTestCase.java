@@ -192,7 +192,6 @@ public class HTMLParserTestCase extends TestCase {
 		if (expectedNode instanceof HTMLTag) {
 			HTMLTag expectedTag = (HTMLTag)expectedNode;
 			HTMLTag actualTag   = (HTMLTag)actualNode;
-			assertTagEquals(displayMessage, expectedTag, actualTag);
 			if (isTagAnXmlEndTag(expectedTag)) {
 				if (!isTagAnXmlEndTag(actualTag)) {
 					HTMLNode tempNode =
@@ -203,13 +202,17 @@ public class HTMLParserTestCase extends TestCase {
 						tempNode instanceof HTMLEndTag
 					);
 					actualTag = (HTMLEndTag)tempNode;
+					String expectedTagName = HTMLParserUtils.removeChars(
+						expectedTag.getTagName(),'/'
+					);
 					assertEquals(
 						"expected end tag",
-						expectedTag.getTagName(),
+						expectedTagName,
 						actualTag.getTagName()
 					);
 				}
-			} 
+			} else
+			assertTagEquals(displayMessage, expectedTag, actualTag);
 		}
 	}
 
@@ -243,5 +246,5 @@ public class HTMLParserTestCase extends TestCase {
 		inputString = HTMLParserUtils.removeChars(inputString,'\n');
 		inputString = HTMLParserUtils.removeChars(inputString,'\t');
 		return inputString;
-	}		
+	}	
 }
