@@ -9,6 +9,8 @@ inside HTMLTagScanner. Scanner designers dont have to
 worry about making links with the scanner and the tag
 created, and forcing of attribute parsing. HTMLEndTag
 is now a HTMLTag, hence there is more uniformity in the interface now.
+[4] Fixed bug in HTMLLinkScanner, enabling it to 
+parse broken links.
 
 Integration Build 1.2 - 20020623
 --------------------------------

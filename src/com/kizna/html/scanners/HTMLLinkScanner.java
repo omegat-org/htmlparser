@@ -227,9 +227,14 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			} 
 			else nodeVector.addElement(node);
 		}
-		while (endFlag==false);
-		if (node instanceof HTMLEndTag)
+		while (endFlag==false && node!=null);
+		if (node instanceof HTMLEndTag || node==null)
 		{
+			if (node==null)  {
+				// Add an end link tag
+				HTMLEndTag endTag = new HTMLEndTag(0,3,"A","</A>");
+				node = endTag;
+			}
 			previousOpenLinkScanner = null;
 			return createLinkTag(currentLine, node, mailLink, link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
 		}
