@@ -1165,13 +1165,14 @@ public class Parser
         visitor.finishedParsing();
     }
     
-    /** Initializes the parser with the given input HTML String.
+    /**
+     * Initializes the parser with the given input HTML String.
      * @param inputHTML the input HTML that is to be parsed.
      */
-    public void setInputHTML(String inputHTML) {
-      if ("".equals(inputHTML)) {
-        reader = new NodeReader(new StringReader(inputHTML),"");      
-      }
+    public void setInputHTML (String inputHTML)
+    {
+        if (!"".equals (inputHTML))
+            reader = new NodeReader (new StringReader (inputHTML), "");      
     }   
     
     public Node [] extractAllNodesThatAre(Class nodeType) throws ParserException {
