@@ -134,9 +134,10 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		assertTypeNameSize("Input Password Tag","password","passwd","20",passwdTag);
 		assertTypeNameValue("Input Submit Tag","submit","submit","Login",submitTag);
 		
-		HTMLTextareaTag textAreaTag = formTag.getTextAreaTag("description");
+		HTMLTextareaTag textAreaTag = formTag.getTextAreaTag("Description");
 		assertNotNull("Text Area Tag should have been found",textAreaTag);
 		assertEquals("Text Area Tag Contents","Contents of TextArea",textAreaTag.getValue());
+		assertNull("Should have been null",formTag.getTextAreaTag("junk"));
 		
 		assertEquals("Length of string",EXPECTED_FORM_HTML.length(),formTag.toHTML().length());
 

@@ -245,7 +245,10 @@ public class HTMLFormTag extends HTMLTag
 				found = true;
 			}
 		}
-		return textareaTag;
+		if (found) 
+			return textareaTag;
+		else
+			return null;
 	}
 
 	public Vector searchFor(String searchString) {
