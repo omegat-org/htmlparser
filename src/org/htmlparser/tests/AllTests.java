@@ -105,7 +105,6 @@ public class AllTests extends junit.framework.TestCase
 		basic.addTestSuite(HTMLStringNodeTest.class);
 		basic.addTestSuite(HTMLRemarkNodeTest.class);
 		basic.addTestSuite(HTMLParserTest.class);
-		basic.addTestSuite(HTMLRendererTest.class);
         suite.addTest(basic);
 		suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());
 		suite.addTest(org.htmlparser.tests.utilTests.AllTests.suite());
