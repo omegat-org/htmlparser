@@ -95,8 +95,10 @@ public abstract class CompositeTag extends Tag {
 	public String toHtml() {
 		StringBuffer sb = new StringBuffer();
 		putStartTagInto(sb);
-		putChildrenInto(sb);
-		putEndTagInto(sb);
+		if (!startTag.isEmptyXmlTag()) {
+			putChildrenInto(sb);
+			putEndTagInto(sb);
+		}
 		return sb.toString();
 	}
 

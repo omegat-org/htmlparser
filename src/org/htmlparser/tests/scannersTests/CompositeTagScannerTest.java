@@ -71,6 +71,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertEquals("ending loc",8,customTag.getStartTag().elementEnd());
 		assertEquals("starting line position",0,customTag.tagData.getStartLine());
 		assertEquals("ending line position",0,customTag.tagData.getEndLine());
+		assertStringEquals("html","<CUSTOM/>",customTag.toHtml());
 	}
 	
 	public void testEmptyCompositeTagAnotherStyle() throws ParserException {
@@ -130,7 +131,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
 	public void testCompositeTagWithAnotherTagChild() throws ParserException {
 		createParser(
 			"<Custom>" +
-				"<Another>" +
+				"<Another/>" +
 			"</Custom>"
 		);
 		parser.addScanner(new AnotherScanner());
@@ -141,12 +142,12 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertEquals("starting loc",0,customTag.getStartTag().elementBegin());
 		assertEquals("ending loc",7,customTag.getStartTag().elementEnd());
 		assertEquals("custom tag starting loc",0,customTag.elementBegin());
-		assertEquals("custom tag ending loc",23,customTag.elementEnd());
+		assertEquals("custom tag ending loc",26,customTag.elementEnd());
 
 		Node child = customTag.childAt(0);
 		assertType("child",AnotherTag.class,child);
 		AnotherTag tag = (AnotherTag)child;
-		assertStringEquals("child html","<Another>",child.toHtml());
+		assertStringEquals("child html","<ANOTHER/>",child.toHtml());
 	}
 		
 	public void _testXmlTypeCompositeTags() throws ParserException {

@@ -24,6 +24,7 @@ public class CompositeTagScannerHelper {
 	private String currLine;
 	private Tag endTag;
 	private NodeList nodeList;
+	private boolean endTagFound;
 	
 	public CompositeTagScannerHelper(
 		CompositeTagScanner scanner,
@@ -39,10 +40,13 @@ public class CompositeTagScannerHelper {
 		this.currLine = currLine;	
 		this.endTag = tag;
 		this.nodeList = new NodeList();
+		this.endTagFound = false;
 	}
 		
 	public Tag scan() throws ParserException {
-		Node currentNode = null;
+		Node currentNode = tag;
+		doEmptyXmlTagCheckOn(currentNode);
+		if (!endTagFound) 
 		do {
 			currentNode = reader.readElement();
 			if (currentNode==null) continue;
@@ -65,8 +69,10 @@ public class CompositeTagScannerHelper {
 	}
 
 	private void doChildAndEndTagCheckOn(Node currentNode) {
-		if (currentNode instanceof EndTag)
+		if (currentNode instanceof EndTag) {
 			endTag = (Tag)currentNode;
+			endTagFound = true;
+		}
 		else 
 			nodeList.add(currentNode);	
 	}
@@ -75,7 +81,8 @@ public class CompositeTagScannerHelper {
 		if (currentNode instanceof Tag) {
 			Tag possibleEndTag = (Tag)currentNode;
 			if (tag.isEmptyXmlTag()) {
-				endTag = possibleEndTag;			
+				endTag = possibleEndTag;
+				endTagFound = true;			
 			}
 		}
 	}
