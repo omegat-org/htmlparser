@@ -5,7 +5,7 @@
 <div class="wikitext">
 <p><b>Using Cookies with the Parser
 
-<p><b>Problem: (by <span class="wikiunknown"><u>ShanSivakolundhu)
+<p><b>Problem: (by ShanSivakolundhu)
 <br />
 In order to access a particular site I neet to have
 a cookie set. Is there any way I can set the cookie
@@ -15,78 +15,124 @@ before I create a parser object ? Just like ...
 URLConnection.("Cookie", cookieValue);
 URLConnection.connect();
 
-<p><b>Solution: (by <span class="wikiunknown"><u>BobLewis)
+<p><b>Solution: (by BobLewis)
 <br />
 In order to send cookies in your Http requests, all
 you need to do is set the Cookie HTTP Header in the
 URL Connection.
 
-<p>Generally what I've done is first create a
-HttpURLConnection, create some Cookie objects that are
-needed, and set the HTTP Header using those objects
-(See below for code to format the header value).
-
-<p>Then I'll create the Parser using the URLConnection
-something like this:
+<p>Create the URL and open the connection, but before passing
+the connection to the parser, set the "Cookie" request property:
 
 <pre>
-        DefaultHTMLParserFeedback feedback =
-           new DefaultHTMLParserFeedback(DefaultHTMLParserFeedback.DEBUG);
+import java.net.URL;
+import java.net.URLConnection;
+import javax.servlet.http.Cookie;
 
-        HTMLReader reader = null;
-        HTMLParser parser = null;
-        String charset = HttpUtil.getCharacterSet(urlConn);
+import org.htmlparser.Parser;
+import org.htmlparser.util.NodeIterator;
 
-        InputStreamReader isr =
-           new InputStreamReader(urlConn.getInputStream(), charset);
-        reader = new HTMLReader(isr, 8192);
-        parser = new HTMLParser(reader, feedback);
-
-<p>The <span class="wikiunknown"><u>HttpUtil.getCharacterSet method used above is
-basically just taken from the method of the same name
-in the HTMLParser class.  That method is protected, so
-I had to duplicate it elsewhere.
-
-<pre>
+/**
+ * Demonstrate cookie usage with the HTML Parser.
+ */
+public class CookieDemo
+{
     /**
-     * set cookies to send in a HttpURLConnection&lt;br&gt;
-     * This method should only be called before any
-     * parameters are posted
-     * and before the connection is made.
-     * @param urlConn the HttpURLConnection to send
-     * the cookies through
-     * @param cookies the cookies to send
+     * The cookies.
+     * You'll need to get these from your browser's cookie jar or somewhere.
+     * Only the cookies that apply to the URL you are using and haven't expired
+     * are supposed to be passed in the request.
+     * This is only part of a real cookie, much longer than shown.
      */
-    public static void postCookies(HttpURLConnection urlConn, Cookie[] cookies) {
-        if ((cookies == null) || (cookies.length ==0)) {
-            return;
+    public static Cookie[] cookies =
+    {
+        new Cookie ("user", "%2536%2535%2538%2531%2539%2530%253a etc."),
+    };
+
+    /**
+     * Generate a HTTP cookie header value string from an array of cookies.
+     * &lt;pre&gt;
+     *   The syntax for the header is:
+     *
+     *    cookie          =       "Cookie:" cookie-version
+     *                            1*((";" | ",") cookie-value)
+     *    cookie-value    =       NAME "=" VALUE [";" path] [";" domain]
+     *    cookie-version  =       "$Version" "=" value
+     *    NAME            =       attr
+     *    VALUE           =       value
+     *    path            =       "$Path" "=" value
+     *    domain          =       "$Domain" "=" value
+     *
+     * &lt;/pre&gt;
+     * @param cookies The cookies which should be set in the header value.
+     * @return A string containing the HTTP Cookie Header value.
+     * @see &lt;a href="http://www.ietf.org/rfc/rfc2109.txt"&gt;RFC 2109&lt;/a&gt;
+     */
+    public static String generateCookieHeader (Cookie[] cookies)
+    {
+        int version;
+        boolean quote;
+        StringBuffer ret;
+
+        ret = new StringBuffer ();
+
+        version = 0;
+        for (int i = 0; i &lt; cookies.length; i++)
+            version = Math.max (version, cookies[i].getVersion ());
+        if (0 != version)
+        {
+            ret.append ("$Version=\"");
+            ret.append (version);
+            ret.append ("\"");
         }
-        String[] cookieHeaders = new String[cookies.length];
-        urlConn.setRequestProperty("cookie",generateCookieHeader(cookies));
-    }
-
-    /**
-     * generate a HTTP cookie header value string
-     * from an array of cookies
-     * @param cookies the cookies which should be set
-     * in the header value
-     * @return A string containing the HTTP Cookie
-     * Header value
-     */
-    private static String generateCookieHeader(Cookie[] cookies) {
-        StringBuffer buf = new StringBuffer();
-
-        for (int i=0; i &lt; cookies.length;i++) {
-            buf.append(cookies[i].getName());
-            buf.append("=");
-            buf.append(cookies[i].getValue());
-            if (i+1 != cookies.length) {
-                buf.append("; ");
+        for (int i = 0; i &lt; cookies.length; i++)
+        {
+            if (0 != ret.length ())
+                ret.append ("; ");
+            ret.append (cookies[i].getName ());
+            ret.append ("=");
+            if (0 != version)
+                ret.append ("\"");
+            ret.append (cookies[i].getValue ());
+            if (0 != version)
+                ret.append ("\"");
+            if (0 != version)
+            {
+                if ((null != cookies[i].getPath ())
+                    &amp;&amp; (0 != cookies[i].getPath ().length ()))
+                {
+                    ret.append ("; $Path=\"");
+                    ret.append (cookies[i].getPath ());
+                    ret.append ("\"");
+                }
+                if ((null != cookies[i].getDomain ())
+                    &amp;&amp; (0 != cookies[i].getDomain ().length ()))
+                {
+                    ret.append ("; $Domain=\"");
+                    ret.append (cookies[i].getDomain ());
+                    ret.append ("\"");
+                }
             }
-            else buf.append(" ");
         }
-        return buf.toString();
+
+        return (ret.toString ());
     }
+
+    public static void main (String[] args) throws Exception
+    {
+        Parser parser;
+        URL url;
+        URLConnection connection;
+
+        parser = new Parser ();
+        url = new URL ("http://slashdot.org");
+        connection = url.openConnection ();
+        connection.setRequestProperty ("Cookie", generateCookieHeader (cookies));
+        parser.setConnection (connection);
+        for (NodeIterator iterator = parser.elements (); iterator.hasMoreNodes (); )
+            System.out.println (iterator.nextNode ());
+    }
+}
 
 
 
@@ -94,7 +140,7 @@ I had to duplicate it elsewhere.
 
 <hr class="printer" noshade="noshade" />
 
-<p class="editdate">Last edited on Wednesday, April  2, 2003  3:04:24 pm.
+<p class="editdate">Last edited on Monday, January 26, 2004  7:26:47 pm.
 
 <hr class="toolbar" noshade="noshade" />
 </body></html>

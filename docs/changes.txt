@@ -12,6 +12,68 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20040229
+--------------------------------
+
+2004-02-29 10:09  derrickoswald
+
+	* build.xml, src/doc-files/overview.html,
+	src/org/htmlparser/parserapplications/StringExtractor.java,
+	src/org/htmlparser/nodeDecorators/package.html,
+	src/org/htmlparser/tags/CompositeTag.java:
+
+	Javadoc changes.
+	Fix the "low hanging fruit" javadoc issues.
+	
+2004-02-29 09:16  derrickoswald
+
+	* src/org/htmlparser/: scanners/StyleScanner.java,
+	tags/StyleTag.java, tests/tagTests/StyleTagTest.java:
+
+	Fix bug #900125 Style Tag Children not grouped
+	Added StyleScanner, a near copy of ScriptScanner.
+	Added testStyleChildren() in StyleTagTest to check it's operation.
+	
+2004-02-29 07:52  derrickoswald
+
+	* src/org/htmlparser/: lexer/nodes/RemarkNode.java,
+	lexer/nodes/StringNode.java, tags/ImageTag.java, tags/LinkTag.java,
+	tests/ParserTest.java:
+
+	Fix bug #900128 RemarkNode.setText() does not set Text
+	Add override setText() to StringNode and RemarkNode.
+	Add unit tests to excercise the new code.
+	Remove remaining XX_FILTER constants.
+	
+2004-02-28 20:38  derrickoswald
+
+	* src/org/htmlparser/tags/ScriptTag.java:
+
+	Correct booboo in ScriptTag toHtml() injected by fix to bug #902121.
+	
+2004-02-28 10:52  derrickoswald
+
+	* src/org/htmlparser/: beans/StringBean.java, filters/package.html,
+	lexer/nodes/TagNode.java, scanners/ScriptDecoder.java,
+	scanners/ScriptScanner.java, tags/ScriptTag.java, tags/Tag.java,
+	tests/ParserTestCase.java,
+	tests/scannersTests/ScriptScannerTest.java:
+
+	Fix bug #902121 StringBean throws NullPointerException.
+	Added ScriptDecoder to handle Microsoft Script Encoder encrypted tags.
+	Added accessor to ScriptTag's scriptCode property to be able to override it.
+	Ensured that a Tag always has a non-null name.
+	Skip STYLE tags in StringBean, just like SCRIPT.
+	
+2004-02-18 07:34  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	tests/lexerTests/LexerTests.java:
+
+	Fix bug #899413 bug in javascript end detection.
+	Patch submitted by Gernot Fricke handles escaped quotes in strings when
+	lexing with smartquote turned on. Added test case in LexerTests.
+
 Integration Build 1.4 - 20040216
 --------------------------------
 
