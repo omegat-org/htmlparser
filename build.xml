@@ -3,7 +3,7 @@
   <!-- set global properties for this build -->
   <property name="src" value="src"/>
   <property name="build" value="build"/>
-  <property name="version" value="1_2_20020826"/>
+  <property name="version" value="1_2_20020831"/>
   <property name="versionString" value="1_2"/>
   <property name="previousVersion" value="1_2_20020811"/>
   <property name="docs" value="docs"/>
