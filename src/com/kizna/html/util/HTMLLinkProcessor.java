@@ -77,7 +77,7 @@ public void addDirectoriesToVector(Vector directories, String temp) {
  */
 public String checkIfLinkIsRelative(String link, String url) {
 	if (link==null) return "";
-	if (link.indexOf("http://")==-1 && link.indexOf("mailto:")==-1 && url != null)
+	if (link.indexOf("://")==-1 && link.indexOf("mailto:")==-1 && url != null)
 	{
 		String temp=url;
 		Vector directories = new Vector();

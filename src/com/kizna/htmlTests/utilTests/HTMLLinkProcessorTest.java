@@ -87,4 +87,21 @@ public void testRemoveFirstSlashIfFound2() {
 	String result = linkProcessor.removeFirstSlashIfFound(testString);
 	assertNull("Result should have been null",result);
 }
+
+/**
+ * This testcase is based on a bug reported by Kimberly Berry
+ * If a link contains a protocol other than http, it should not be considered relative.
+ */
+public void testCheckIfLinkIsRelative() {
+	String link1 = "ftp://geocities.com/someplace/something.zip";
+	String link2 = "gopher://geocities.com/someplace/something.zip";
+	String link3 = "myprotocol://geocities.com/someplace/something.zip";
+	String link4 = "https://www.geocities.com/someplace/something.zip";
+	String url = "http://www.geocities.com";
+	HTMLLinkProcessor lp = new HTMLLinkProcessor();
+	assertEquals("Shouldnt be a relative link","ftp://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link1,url));
+	assertEquals("Shouldnt be a relative link","gopher://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link2,url));
+	assertEquals("Shouldnt be a relative link","myprotocol://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link3,url));
+	assertEquals("Shouldnt be a relative link","https://www.geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link4,url));		
+}
 }
