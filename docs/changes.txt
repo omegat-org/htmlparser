@@ -2,6 +2,9 @@ Integration Build 1.3 - 20030404
 --------------------------------
 [1] Fixed bug 712888 (scanning nested custom tags)
 [2] Redesigned assertXmlEquals()
+[3] Fixed bug in Parser.removeScanner()
+[4] Fixed unnecessary addition of ACTION attribute in Form tag
+[5] Fixed Bullet scanner out of memory exception
 
 Integration Build 1.3 - 20030330
 --------------------------------
