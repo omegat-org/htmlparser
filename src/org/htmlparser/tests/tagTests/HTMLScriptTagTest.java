@@ -50,7 +50,7 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 	}
 
 	public void testCreation() {
-		HTMLScriptTag scriptTag = new HTMLScriptTag(0,10,"Tag Contents","Script Code","english","text","tagline");
+		HTMLScriptTag scriptTag = new HTMLScriptTag(0,10,"Tag Contents","Script Code","english","text","tagline",null,null,null);
 		assertNotNull("Script Tag object creation",scriptTag);
 		assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
 		assertEquals("Script Tag End",10,scriptTag.elementEnd());

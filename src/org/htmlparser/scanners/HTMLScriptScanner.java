@@ -31,6 +31,7 @@ package org.htmlparser.scanners;
 // HTML Parser Imports //
 /////////////////////////
 import java.util.Hashtable;
+import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
@@ -110,7 +111,9 @@ public class HTMLScriptScanner extends HTMLTagScanner {
 			// We know we have script stuff. So first extract the information from the tag about the language
 			extractLanguage(tag);
 			extractType(tag);
-			HTMLEndTag endTag=null;
+			HTMLTag startTag = tag;
+			HTMLTag endTag=null;
+			Vector childNodes = new Vector();
 			HTMLNode node = null;
 			boolean endScriptFound=false;
 			StringBuffer buff=new StringBuffer();
@@ -132,7 +135,7 @@ public class HTMLScriptScanner extends HTMLTagScanner {
 						if (prevNode.elementEnd() > node.elementBegin()) buff.append(HTMLNode.getLineSeparator());
 					}
 					buff.append(node.toHTML());
-		
+					childNodes.addElement(node);
 					prevNode = node;
 				}
 			}
@@ -141,7 +144,7 @@ public class HTMLScriptScanner extends HTMLTagScanner {
 				throw new HTMLParserException("HTMLScriptScanner.scan() : Went into a potential infinite loop, could not create script tag.\n"+
 				"buff contents so far "+buff.toString()+", currentLine= "+currentLine);
 			}
-			HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine);
+			HTMLScriptTag scriptTag = new HTMLScriptTag(0,node.elementEnd(),tag.getText(),buff.toString(),language,type,currentLine,childNodes,startTag,endTag);
 			reader.getParser().setScanners(tempScanners);
 			return scriptTag; 
 		}

@@ -28,12 +28,12 @@
 
 package org.htmlparser.tags;
 
-import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * A HTMLScriptTag represents a JavaScript node
  */
-public class HTMLScriptTag extends HTMLTag {
+public class HTMLScriptTag extends HTMLCompositeTag {
 	private java.lang.String language;
 	private java.lang.String type;
 	private String scriptCode;
@@ -48,9 +48,9 @@ public class HTMLScriptTag extends HTMLTag {
 	 * @param type The type parameter
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public HTMLScriptTag(int tagBegin, int tagEnd, String tagContents, String scriptCode,String language,String type,String tagLine) 
+	public HTMLScriptTag(int tagBegin, int tagEnd, String tagContents, String scriptCode,String language,String type,String tagLine,Vector childNodes,HTMLTag startTag, HTMLTag endTag) 
 	{
-		super(tagBegin,tagEnd,tagContents,tagLine);
+		super(tagBegin,tagEnd,tagContents,tagLine,childNodes,startTag,endTag);
 		this.scriptCode = scriptCode;
 		this.language = language; 
 		this.type = type;
@@ -92,24 +92,7 @@ public class HTMLScriptTag extends HTMLTag {
 	public void setType(java.lang.String newType) {
 		type = newType;
 	}
-	public String toHTML() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("<SCRIPT");
-		String key, value;
-		for (Enumeration e=parsed.keys();e.hasMoreElements();) {
-			key = (String)e.nextElement();
-			value = (String)parsed.get(key);
-			if (!key.equals(HTMLTag.TAGNAME)) {
-				sb.append(" "+key+"=\""+value+"\"");
-			}
-		}
-		sb.append(">");
-		if (isEndOfLineCharState()) sb.append(lineSeparator);	
-		sb.append(scriptCode);
-		sb.append("</SCRIPT>");
-	
-		return sb.toString();
-	}
+
 	/**
 	 * Print the contents of the javascript node
 	 */
