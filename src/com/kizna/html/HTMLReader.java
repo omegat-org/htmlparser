@@ -51,12 +51,12 @@ import com.kizna.html.scanners.*;
  */
 public class HTMLReader extends BufferedReader
 {
+	public static final String DECIPHER_ERROR="HTMLReader.readElement() : Error occurred while trying to decipher the tag using scanners";
 	protected int posInLine=-1;
 	protected String line;
 	protected HTMLNode node = null;
 	protected HTMLTagScanner previousOpenScanner = null;
 	protected String url;
-//	private java.io.BufferedReader in;
 	private HTMLParser parser;
 	private boolean tagUpgraded=false;
 	/**
@@ -170,7 +170,7 @@ public class HTMLReader extends BufferedReader
 				}
 				catch (Exception e)
 				{
-					throw new HTMLParserException("HTMLReader.readElement() : Error occurred while trying to decipher the tag using scanners",e);
+					throw new HTMLParserException(DECIPHER_ERROR,e);
 				}
 			}
 	

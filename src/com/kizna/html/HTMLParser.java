@@ -198,6 +198,7 @@ public class HTMLParser
 		for (int i=0;i<ids.length;i++) {
 			scanners.put(ids[i],scanner);
 		}
+		scanner.setFeedback(feedback);
 	}
 		private String checkEnding(String link)
 		{

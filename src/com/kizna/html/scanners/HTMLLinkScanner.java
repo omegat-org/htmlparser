@@ -26,6 +26,7 @@ import com.kizna.html.util.HTMLParserException;
  */
 public class HTMLLinkScanner extends HTMLTagScanner
 {
+	public static final String DIRTY_TAG_MESSAGE=" is a dirty link tag - the tag was not closed. \nWe encountered an open tag, before the previous end tag was found.\nCorrecting this..";
 	private HTMLTagScanner previousOpenLinkScanner=null;
 	private HTMLLinkProcessor processor;
 	/**
@@ -72,6 +73,12 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		// Is it a dirty html tag (should have been end tag but is begin)
 		if ((ch=='a' || ch=='A')) {
 			if (previousOpenLinkScanner!=null) {
+				StringBuffer msg= new StringBuffer();
+				msg.append("<");
+				msg.append(s);
+				msg.append(">");
+				msg.append(DIRTY_TAG_MESSAGE);
+				feedback.warning(msg.toString());
 				// This is dirty HTML. Assume the current tag is
 				// not a new link tag - but an end tag. This is actually a really wild bug - 
 				// Internet Explorer actually parses such tags.

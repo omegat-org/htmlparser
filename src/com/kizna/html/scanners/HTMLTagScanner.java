@@ -47,6 +47,15 @@ import com.kizna.html.util.*;
 /**
  * HTMLTagScanner is an abstract superclass which is subclassed to create specific 
  * scanners, that operate on a tag's strings, identify it, and can extract data from it.
+ * <br>
+ * If you wish to write your own scanner, then you must implement scan().
+ * You MAY implement evaluate() as well, if your evaluation logic is not based on a simple text match.
+ * You MUST implement getID() - which identifies your scanner uniquely in the hashtable of scanners.
+ * 
+ * <br>
+ * Also, you have a feedback object provided to you, should you want to send log messages. This object is
+ * instantiated by HTMLParser when a scanner is added to its collection.
+ * 
  */
 public abstract class HTMLTagScanner
 {
@@ -58,6 +67,11 @@ public abstract class HTMLTagScanner
    * implementations of the parser.
    */
   protected String filter;
+  
+  /**
+   * HTMLParserFeedback object automatically initialized
+   */
+  protected HTMLParserFeedback feedback;
   /**
    * Default Constructor, automatically registers the scanner into a static array of 
    * scanners inside HTMLTag
@@ -220,5 +234,7 @@ public abstract class HTMLTagScanner
   }
   public abstract String [] getID();
 
-
+  public final void setFeedback(HTMLParserFeedback feedback) {
+  	this.feedback = feedback;
+  }
 }
