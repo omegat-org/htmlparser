@@ -15,6 +15,200 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.5 - 20040728
+--------------------------------
+
+2004-07-28 21:50  derrickoswald
+
+	* src/org/htmlparser/parserapplications/SiteCapturer.java:
+
+	Fix bug #998195 SiteCatpurer just crashed
+	After EncodingChangeException try again with the encoding now set correctly.
+	
+2004-07-28 21:19  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, lexer/Page.java:
+
+	Fix bug #995703 Parser Crash and bug #988846 Linkbean getLinks() segmentation fault
+	by not testing for content type "text/XXX" in Page, but rather issuing a warning when this is
+	discovered by the Parser level.
+	
+2004-07-28 07:38  derrickoswald
+
+	* bin/: beanybaby.bat, lexer.bat, linkextractor.bat, parser.bat,
+	stringextractor.bat, thumbelina, thumbelina.bat:
+
+	Fix batch files.
+	
+2004-07-21 22:22  derrickoswald
+
+	* src/org/htmlparser/: tests/tagTests/LinkTagTest.java,
+	util/NodeList.java:
+
+	Add test case for bug #982175 False Positives on &reg; entity.
+	Not reproducible (version 1.5).
+	
+2004-07-18 17:31  derrickoswald
+
+	* src/: org/htmlparser/tests/scannersTests/ScriptScannerTest.java,
+	org/htmlparser/tags/FormTag.java,
+	org/htmlparser/tests/visitorsTests/ScriptCommentTest.java,
+	org/htmlparser/util/Translate.java, doc-files/overview.html,
+	org/htmlparser/nodes/TagNode.java,
+	org/htmlparser/tests/parserHelperTests/RemarkNodeParserTest.java,
+	org/htmlparser/tests/parserHelperTests/StringParserTest.java,
+	org/htmlparser/tests/tagTests/ImageTagTest.java,
+	org/htmlparser/tests/tagTests/LinkTagTest.java,
+	org/htmlparser/tests/tagTests/ScriptTagTest.java,
+	org/htmlparser/tests/utilTests/AllTests.java,
+	org/htmlparser/PrototypicalNodeFactory.java,
+	org/htmlparser/sax/Feedback.java,
+	org/htmlparser/tests/lexerTests/AttributeTests.java:
+
+	Fix some javadoc warnings.
+	
+2004-07-17 09:45  derrickoswald
+
+	* src/org/htmlparser/: scanners/CompositeTagScanner.java,
+	scanners/ScriptDecoder.java, scanners/ScriptScanner.java,
+	scanners/StyleScanner.java,
+	tests/utilTests/CharacterTranslationTest.java,
+	tests/utilTests/HTMLParserUtilsTest.java,
+	filters/CssSelectorNodeFilter.java, filters/HasParentFilter.java,
+	nodes/AbstractNode.java, nodes/RemarkNode.java, nodes/TagNode.java,
+	nodes/TextNode.java, tags/ImageTag.java, tags/LinkTag.java,
+	tags/TitleTag.java, tests/ParserTestCase.java, Attribute.java,
+	Parser.java, lexer/InputStreamSource.java,
+	tests/lexerTests/AttributeTests.java,
+	tests/scannersTests/ScriptScannerTest.java, util/Translate.java,
+	tests/tagTests/StyleTagTest.java, tests/tagTests/TagTest.java,
+	util/ParserUtils.java:
+
+	Remove unused imports.
+	
+2004-07-13 21:58  derrickoswald
+
+	* build.xml, lib/sax2.jar, src/org/htmlparser/sax/Attributes.java,
+	src/org/htmlparser/sax/Feedback.java,
+	src/org/htmlparser/sax/Locator.java,
+	src/org/htmlparser/sax/XMLReader.java,
+	src/org/htmlparser/sax/package.html,
+	src/org/htmlparser/tests/SAXTest.java:
+
+	Implement rudimentary sax parser.
+	Currently exposes DOM parser via sax project (http://sourceforge.net/projects/sax) interfaces.
+	
+2004-07-12 21:02  derrickoswald
+
+	* src/org/htmlparser/lexer/Page.java, docs/contributors.html:
+
+	Add fix to Page.getContentType() suggested by Manuel Polo.
+	
+2004-07-03 09:56  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, lexer/InputStreamSource.java,
+	lexer/Page.java, lexer/Source.java, lexer/StringSource.java,
+	tests/lexerTests/SourceTests.java, util/ParserUtils.java:
+
+	Further fix to bug #973137 Double-bytes characters are messed after parsing.
+	Created a proper String based source with the encoding only optionally specified.
+	A string is no longer converted to a byte array and then back to characters.
+	
+2004-07-01 21:33  derrickoswald
+
+	* src/org/htmlparser/tests/ParserTestCase.java:
+
+	Fix broken test framework.
+	
+2004-07-01 20:49  derrickoswald
+
+	* build.xml, src/org/htmlparser/Node.java,
+	src/org/htmlparser/PrototypicalNodeFactory.java,
+	src/org/htmlparser/Tag.java,
+	src/org/htmlparser/filters/CssSelectorNodeFilter.java,
+	src/org/htmlparser/filters/HasParentFilter.java,
+	src/org/htmlparser/nodeDecorators/AbstractNodeDecorator.java,
+	src/org/htmlparser/nodes/TagNode.java,
+	src/org/htmlparser/scanners/CompositeTagScanner.java,
+	src/org/htmlparser/scanners/Scanner.java,
+	src/org/htmlparser/scanners/ScriptScanner.java,
+	src/org/htmlparser/scanners/StyleScanner.java,
+	src/org/htmlparser/scanners/TagScanner.java,
+	src/org/htmlparser/tags/AppletTag.java,
+	src/org/htmlparser/tags/BaseHrefTag.java,
+	src/org/htmlparser/tags/CompositeTag.java,
+	src/org/htmlparser/tags/DoctypeTag.java,
+	src/org/htmlparser/tags/FrameTag.java,
+	src/org/htmlparser/tags/ImageTag.java,
+	src/org/htmlparser/tags/InputTag.java,
+	src/org/htmlparser/tags/JspTag.java,
+	src/org/htmlparser/tags/MetaTag.java,
+	src/org/htmlparser/tags/ObjectTag.java,
+	src/org/htmlparser/tags/Tag.java,
+	src/org/htmlparser/tests/ParserTest.java,
+	src/org/htmlparser/tests/ParserTestCase.java,
+	src/org/htmlparser/tests/filterTests/FilterTest.java,
+	src/org/htmlparser/tests/lexerTests/AttributeTests.java,
+	src/org/htmlparser/tests/lexerTests/TagTests.java,
+	src/org/htmlparser/tests/parserHelperTests/CompositeTagScannerHelperTest.java,
+	src/org/htmlparser/tests/parserHelperTests/RemarkNodeParserTest.java,
+	src/org/htmlparser/tests/scannersTests/CompositeTagScannerTest.java,
+	src/org/htmlparser/tests/scannersTests/TagScannerTest.java,
+	src/org/htmlparser/tests/tagTests/BaseHrefTagTest.java,
+	src/org/htmlparser/tests/tagTests/BodyTagTest.java,
+	src/org/htmlparser/tests/tagTests/DivTagTest.java,
+	src/org/htmlparser/tests/tagTests/EndTagTest.java,
+	src/org/htmlparser/tests/tagTests/FormTagTest.java,
+	src/org/htmlparser/tests/tagTests/FrameSetTagTest.java,
+	src/org/htmlparser/tests/tagTests/HtmlTagTest.java,
+	src/org/htmlparser/tests/tagTests/JspTagTest.java,
+	src/org/htmlparser/tests/tagTests/LinkTagTest.java,
+	src/org/htmlparser/tests/tagTests/MetaTagTest.java,
+	src/org/htmlparser/tests/tagTests/ObjectCollectionTest.java,
+	src/org/htmlparser/tests/tagTests/SpanTagTest.java,
+	src/org/htmlparser/tests/tagTests/TagTest.java,
+	src/org/htmlparser/tests/tagTests/TitleTagTest.java,
+	src/org/htmlparser/tests/utilTests/CharacterTranslationTest.java,
+	src/org/htmlparser/tests/visitorsTests/TagFindingVisitorTest.java,
+	src/org/htmlparser/util/IteratorImpl.java,
+	src/org/htmlparser/util/ParserUtils.java,
+	src/org/htmlparser/util/PeekingIterator.java,
+	src/org/htmlparser/util/PeekingIteratorImpl.java:
+
+	Part four of a multiphase refactoring.
+	Most internals now use the Tag interface.
+	This interface has been broadened to add set/get scanner and set/get endtag.
+	Removed the org.htmlparser.tags.Tag class and moved the remaining (minor) functionality
+	to the TagNode class. So now tags inherit directly from TagNode or CompositeTag.
+	** NOTE: If you have subclassed org.htmlparser.tags.Tag, use org.htmlparser.nodes.TagNode now.**
+	Removed deprecated methods getTagBegin/getTagEnd and deleted unused classes:
+	PeekingIterator and it's Implementation.
+	
+2004-06-26 07:56  derrickoswald
+
+	* src/org/htmlparser/tests/lexerTests/AttributeTests.java:
+
+	Add test case for bug #979893 Not Parsing all Attributes.
+	Not reproducible.
+	
+2004-06-26 07:25  derrickoswald
+
+	* docs/contributors.html, docs/release.txt,
+	src/org/htmlparser/PrototypicalNodeFactory.java,
+	src/org/htmlparser/tags/ObjectTag.java:
+
+	Incorporate ObjectTag submitted by Enrico Triolo.
+	
+2004-06-15 22:17  derrickoswald
+
+	* src/org/htmlparser/: Parser.java,
+	tests/InstanceofPerformanceTest.java, tests/ParserTestCase.java,
+	tests/lexerTests/TagTests.java,
+	tests/visitorsTests/UrlModifyingVisitorTest.java:
+
+	Fix bug #973137 Double-bytes characters are messed after parsing.
+	Add an encoding parameter to the static createParser() method.
+
 Integration Build 1.5 - 20040613
 --------------------------------
 

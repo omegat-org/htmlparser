@@ -1,4 +1,4 @@
-HTMLParser Version 1.5 (Integration Build Jun 13, 2004)
+HTMLParser Version 1.5 (Integration Build Jul 28, 2004)
 *********************************************
 
 Contents of the distribution
