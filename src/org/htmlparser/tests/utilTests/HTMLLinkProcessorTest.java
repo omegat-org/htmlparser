@@ -39,33 +39,20 @@ import junit.framework.TestSuite;
  */
 public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 	private HTMLLinkProcessor linkProcessor;
-	/**
-	 * HTMLExtractorTest constructor comment.
-	 * @param name java.lang.String
-	 */
+
 	public HTMLLinkProcessorTest(String name) {
 		super(name);
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (12/25/2001 12:50:03 PM)
-	 */
+
 	protected void setUp() {
 		linkProcessor = new HTMLLinkProcessor();
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (12/25/2001 12:49:09 PM)
-	 * @return junit.framework.TestSuite
-	 */
+
 	public static TestSuite suite() {
 		TestSuite suite = new TestSuite(HTMLLinkProcessorTest.class);
 		return suite;
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (12/25/2001 12:49:43 PM)
-	 */
+
 	public void testRemoveFirstSlashIfFound() {
 		String testString= "/abcdefg";
 		String expected = "abcdefg";
@@ -76,20 +63,13 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		result = linkProcessor.removeFirstSlashIfFound(testString);
 		assertNull("Null test, result should be null",result);
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (12/25/2001 12:49:43 PM)
-	 */
+
 	public void testRemoveFirstSlashIfFound2() {
 		String testString= "";
 		String result = linkProcessor.removeFirstSlashIfFound(testString);
 		assertNull("Result should have been null",result);
 	}
 	
-	/**
-	 * This testcase is based on a bug reported by Kimberly Berry
-	 * If a link contains a protocol other than http, it should not be considered relative.
-	 */
 	public void testCheckIfLinkIsRelative() {
 		String link1 = "ftp://geocities.com/someplace/something.zip";
 		String link2 = "gopher://geocities.com/someplace/something.zip";
@@ -102,12 +82,14 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		assertEquals("Shouldnt be a relative link","myprotocol://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link3,url));
 		assertEquals("Shouldnt be a relative link","https://www.geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link4,url));		
 	}
+
 	public void testCheckIfLinkIsRelative2() {
 		String link = "newpage.html";
 		String url = "http://www.mysite.com/books/some.asp";
 		HTMLLinkProcessor lp = new HTMLLinkProcessor();
 		assertEquals("Should be a relative link","http://www.mysite.com/books/newpage.html",lp.checkIfLinkIsRelative(link,url));
 	}	
+
 	public void testIsURL() {
 		String resourceLoc1 = "http://someurl.com";
 		String resourceLoc2 = "myfilehttp.dat";		
@@ -118,11 +100,7 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		assertTrue(resourceLoc3+" should be a url",HTMLLinkProcessor.isURL(resourceLoc3));
 		
 	}
-	/**
-	 * This testcase is based on a bug reported by Kamen.
-	 * If a relative link starts with a slash, it should be directly appended to the base url,
-	 * and directories of the base url should be omitted.
-	 */
+
 	public void testCheckIfLinkIsRelativeDoubleSlashBug() {
 		String link = "/someplace/somepage.html";
 		HTMLLinkProcessor lp = new HTMLLinkProcessor();
@@ -141,6 +119,7 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		assertEquals("relative link(2)","www.google.com/someplace/somepage.html",lp.processSlashIsFirstChar(link,url2));		
 		
 	}
+
 	public void testAddDirectoriesToVector() {
 		String url = "http://www.mysite.com/books/some.asp";
 		HTMLLinkProcessor lp = new HTMLLinkProcessor();
@@ -156,6 +135,7 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		String fourth = (String)directories.elementAt(3);
 		assertEquals("Fourth Element","books/",fourth);
 	}
+
 	public void testFixSpaces() {
 		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
 		HTMLLinkProcessor lp = new HTMLLinkProcessor();

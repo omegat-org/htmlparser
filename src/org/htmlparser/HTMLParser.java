@@ -46,6 +46,7 @@ import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserFeedback;
 import org.htmlparser.util.HTMLTagParser;
+
 /**
  * This is the class that the user will use, either to get an iterator into 
  * the html page or to directly parse the page and print the results
@@ -106,23 +107,29 @@ public class HTMLParser
 	 * The URL or filename to be parsed.
 	 */
 	protected String resourceLocn;
+	
 	/** 
 	 * The html reader associated with this parser
 	 */
 	protected HTMLReader reader;
+	
 	/**
 	 * The last read HTML node.
 	 */
 	protected HTMLNode node;
+	
 	/**
 	 * Keeps track of whether the first reading has been performed.
 	 */
 	protected boolean readFlag = false;
+	
 	private Hashtable scanners = new Hashtable();
+	
 	/**
 	 * Keeps track if a connection was opened to a file or url
 	 */
 	private boolean connectionOpened=true;
+	
 	/**
 	 * Feedback object
 	 */
@@ -149,7 +156,6 @@ public class HTMLParser
 		markBeginningOfStream(reader);
 		connectionOpened=false;
 	}
-
 
 	public void markBeginningOfStream(HTMLReader reader) {
 		try {
@@ -193,6 +199,9 @@ public class HTMLParser
 		this(resourceLocn,new DefaultHTMLParserFeedback());
 	}
 	
+	/**
+	 * This method is present to enable users to plugin their own readers (it uses DefaultHTMLParserFeedback)
+	 */
 	public HTMLParser(HTMLReader reader) 
 	{
 		this(reader,new DefaultHTMLParserFeedback());	
@@ -213,6 +222,7 @@ public class HTMLParser
 		}
 		scanner.setFeedback(feedback);
 	}
+	
 	private String checkEnding(String link)
 	{
 		// Check if the link ends in html, htm, or /. If not, add a slash
@@ -222,6 +232,7 @@ public class HTMLParser
 		int l4 = link.indexOf("jsp");
 		return link;
 	}
+	
 	/**
 	 * Returns an iterator (enumeration) to the html nodes. Each node can be a tag/endtag/
 	 * string/link/image<br>
@@ -304,12 +315,14 @@ public class HTMLParser
 
 		};
 	}
+	
 	/**
 	 * Flush the current scanners registered. The registered scanners list becomes empty with this call.
 	 */
 	public void flushScanners() {
 		scanners = new Hashtable();	
 	}
+	
 	/**
 	 * Get the number of scanners registered currently in the scanner.
 	 * @return int number of scanners registered
@@ -317,6 +330,7 @@ public class HTMLParser
 	public int getNumScanners() {
 		return scanners.size();	
 	}
+	
 	/**
 	 * Get an enumeration of scanners registered currently in the parser
 	 * @return Enumeration of scanners currently registered in the parser
@@ -324,7 +338,8 @@ public class HTMLParser
 	public Hashtable getScanners() {
 		return scanners;
 	}
-	/*
+	
+	/**
 	 * The main program, which can be executed from the command line
 	 */
 	public static void main(String [] args)
@@ -376,6 +391,7 @@ public class HTMLParser
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * Opens the connection with the resource to begin reading, by creating a HTML reader
 	 * object.
@@ -400,6 +416,7 @@ public class HTMLParser
 			throw ex;
 		}
 	}
+	
 	private HTMLReader openFileConnection() throws HTMLParserException {
 		try {
 			return new HTMLReader(new BufferedReader(new FileReader(resourceLocn)),resourceLocn);
@@ -411,6 +428,7 @@ public class HTMLParser
 			throw ex;
 		}
 	}
+	
 	private HTMLReader openURLConnection()	throws HTMLParserException {
 		try {
 			// Its a web address
@@ -428,6 +446,7 @@ public class HTMLParser
 			throw ex;
 		}
 	}
+	
 	/**
 	 * Parse the given resource, using the filter provided
 	 */
@@ -459,7 +478,8 @@ public class HTMLParser
 		}
 
 	}
-/**
+	
+	/**
 	 * This method should be invoked in order to register some common scanners. The scanners that get added are : <br>
 	 * HTMLLinkScanner    (filter key "-l")<br>
 	 * HTMLImageScanner   (filter key "-i")<br>
@@ -503,6 +523,7 @@ public class HTMLParser
 		addScanner(new HTMLFrameSetScanner("-r"));	
 		addScanner(linkScanner.createBaseHREFScanner("-b"));
 	}
+	
 	/**
 	 * Removes a specified scanner object.
 	 * @param scanner HTMLTagScanner object to be removed from the list of registered scanners
@@ -510,6 +531,7 @@ public class HTMLParser
 	public void removeScanner(HTMLTagScanner scanner) {
 		scanners.remove(scanner);
 	}
+	
 	/**
 	 * This method is to be used to change the set of scanners in the current parser.
 	 * @param newScanners Vector holding scanner objects to be used during the parsing process.

@@ -99,11 +99,7 @@ public class Robot {
 	    }
 	  }
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (8/3/2001 2:10:08 AM)
-	 * @param args java.lang.String[]
-	 */
+
 	public static void main(String[] args) 
 	{
 	  System.out.println("Robot Crawler v"+HTMLParser.VERSION_STRING);
