@@ -529,4 +529,9 @@ public class LinkScannerTest extends ParserTestCase
 		LinkTag linkTag = (LinkTag)node[0];
 		assertStringEquals("expected link","<%=Application(\"sURL\")%>/literature/index.htm",linkTag.getLink());
 	}
+	
+	public void testLinkScannerFilter() throws Exception {
+		LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
+		assertEquals("linkscanner filter",LinkTag.LINK_TAG_FILTER,linkScanner.getFilter());
+	}
 }

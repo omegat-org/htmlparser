@@ -99,37 +99,39 @@ public abstract class TagScanner
 	  if (index!=-1)	s=s.substring(index+1,s.length());
 	  return s;
 	}
+	
 	/**
 	 * Insert the method's description here.
 	 * Creation date: (6/18/2001 2:15:02 AM)
 	 * @return java.lang.String
 	 */
-		public static String absorbLeadingBlanks(String s) 
-		{
-		  String temp = new String(s);
-		  while (temp.length()!=0 && temp.charAt(0)==' ')
-		  {
-		    temp = temp.substring(1,temp.length());
-		  }
-		  return temp;
-		}
-	  /**
-	   * This method is used to decide if this scanner can handle this tag type. If the
-	   * evaluation returns true, the calling side makes a call to scan().
-	   * <strong>This method has to be implemented meaningfully only if a first-word match with 
-	   * the scanner id does not imply a match (or extra processing needs to be done).
-	   * Default returns true</strong>
-	   * @param s The complete text contents of the Tag.
-	   * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-	   * scan has begun, and hence allows us to write scanners that can work with dirty html
-	   */
-	  public boolean evaluate(String s,TagScanner previousOpenScanner) {
-	  	return true;
+	public static String absorbLeadingBlanks(String s) 
+	{
+	  String temp = new String(s);
+	  while (temp.length()!=0 && temp.charAt(0)==' ')
+	  {
+	    temp = temp.substring(1,temp.length());
 	  }
-	  public static String extractXMLData(Node node, String tagName, NodeReader reader) throws ParserException{
-		try {	  
-		  String xmlData = "";
-	
+	  return temp;
+	}
+
+  /**
+   * This method is used to decide if this scanner can handle this tag type. If the
+   * evaluation returns true, the calling side makes a call to scan().
+   * <strong>This method has to be implemented meaningfully only if a first-word match with 
+   * the scanner id does not imply a match (or extra processing needs to be done).
+   * Default returns true</strong>
+   * @param s The complete text contents of the Tag.
+   * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
+   * scan has begun, and hence allows us to write scanners that can work with dirty html
+   */
+  public boolean evaluate(String s,TagScanner previousOpenScanner) {
+  	return true;
+  }
+  public static String extractXMLData(Node node, String tagName, NodeReader reader) throws ParserException{
+	try {	  
+	  String xmlData = "";
+
 	  boolean xmlTagFound = isXMLTagFound(node, tagName);
 	  if (xmlTagFound) {
 	    try{
@@ -168,17 +170,11 @@ public abstract class TagScanner
 		throw new ParserException("HTMLTagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
 		}
 	  }
-	  /**
-	   * Get the filter associated with this node.
-	   */
-	  public String getFilter()
-	  {
+
+	public String getFilter() {
 	    return filter;
-	  }
-		/**
-	 * Insert the method's description here.
-	 * Creation date: (10/24/2001 6:27:02 PM)
-	 */
+	}
+
 	public static boolean isXMLTagFound(Node node, String tagName) {
 		boolean xmlTagFound=false;
 		if (node instanceof Tag) {

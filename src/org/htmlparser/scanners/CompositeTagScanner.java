@@ -53,6 +53,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 		this(filter,nameOfTagToMatch,false,false);
 	}
 	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, boolean removeScanners, boolean stringNodeIgnoreMode) {
+		super(filter);
 		this.nameOfTagToMatch = nameOfTagToMatch;
 		this.removeScanners = removeScanners;
 		this.stringNodeIgnoreMode = stringNodeIgnoreMode;

@@ -943,7 +943,9 @@ public class Parser
 					if (!(node instanceof Tag)) continue;
 					Tag tag=(Tag)node;
 					TagScanner scanner = tag.getThisScanner();
-					if (scanner==null) continue;
+					if (scanner==null) 
+						continue;
+					
 					String tagFilter = scanner.getFilter();
 					if (tagFilter==null) continue;
 					if (tagFilter.equals(filter))
