@@ -68,14 +68,14 @@ public class HTMLSelectTagTest extends HTMLParserTestCase
 		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);
 		HTMLSelectTag SelectTag;
 		SelectTag = (HTMLSelectTag) node[0];
-		assertEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
+		assertStringEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
 									"<OPTION VALUE=\"Spouse\">Spouse</OPTION>\r\n"+
 									"<OPTION VALUE=\"Father\"></OPTION>\r\n"+
-									"<OPTION VALUE=\"Mother\">Mother\r\n</OPTION>\r\n" +
+									"<OPTION VALUE=\"Mother\">Mother\r\n</OPTION>" +
 									"<OPTION VALUE=\"Son\">Son\r\n</OPTION>\r\n"+
-									"<OPTION VALUE=\"Daughter\">Daughter\r\n</OPTION>\r\n"+
+									"<OPTION VALUE=\"Daughter\">Daughter\r\n</OPTION>"+
 									"<OPTION VALUE=\"Nephew\">Nephew</OPTION>\r\n"+
-									"<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>\r\n"+
+									"<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>"+
 									"</SELECT>",
 									SelectTag.toHTML());
 	}	

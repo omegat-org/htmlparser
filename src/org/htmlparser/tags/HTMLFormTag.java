@@ -135,8 +135,8 @@ public class HTMLFormTag extends HTMLCompositeTag
 	 */
 	public void setFormLocation(String formURL)
 	{
-		this.formURL = formURL;
 		parsed.put("ACTION",formURL);
+		this.formURL = formURL;
 	}
 	/**
 	 * Set the form method
@@ -144,6 +144,7 @@ public class HTMLFormTag extends HTMLCompositeTag
 	 */
 	public void setFormMethod(String formMethod)
 	{
+		parsed.put("METHOD",formMethod);
 		this.formMethod = formMethod;
 	}
 	/**
@@ -152,6 +153,7 @@ public class HTMLFormTag extends HTMLCompositeTag
 	 */
    	public void setFormName(String formName)
    	{
+      	parsed.put("NAME",formName);
       	this.formName = formName;
    	}
 	/**

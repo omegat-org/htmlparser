@@ -54,12 +54,13 @@ public class HTMLSelectTagScanner extends HTMLTagScanner
 		super(pFilter);
 	}
 	
-	public HTMLTag scan(HTMLTag pTag, String pUrl, HTMLReader pReader, String pCurrLine)
+	public HTMLTag scan(HTMLTag tag, String pUrl, HTMLReader pReader, String pCurrLine)
 			throws HTMLParserException
 	{
 		try
 		{
-			HTMLEndTag lEndTag=null;
+			HTMLTag startTag = tag;
+			HTMLEndTag endTag=null;
 			HTMLNode lNode = null;
 			boolean endTagFound=false;
 			Vector lOptionTags=new Vector();
@@ -74,8 +75,8 @@ public class HTMLSelectTagScanner extends HTMLTagScanner
 				lNode = pReader.readElement();
 				if (lNode instanceof HTMLEndTag)
 				{
-					lEndTag = (HTMLEndTag)lNode;
-					if (lEndTag.getText().toUpperCase().equals("SELECT")) 
+					endTag = (HTMLEndTag)lNode;
+					if (endTag.getText().toUpperCase().equals("SELECT")) 
 					{
 						endTagFound = true;
 					}
@@ -92,8 +93,8 @@ public class HTMLSelectTagScanner extends HTMLTagScanner
 			}
 			while (!endTagFound);
 			HTMLSelectTag lSelectTag = new HTMLSelectTag(
-										0, lNode.elementEnd(), pTag.getText(), 
-										lOptionTags, pCurrLine);
+										0, lNode.elementEnd(), tag.getText(), 
+										lOptionTags, pCurrLine,startTag,endTag);
 			HTMLParserUtils.restoreScanners(pReader, tempScanners);
 			return lSelectTag;
 		}

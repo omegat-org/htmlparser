@@ -31,51 +31,34 @@ package org.htmlparser.tags;
 import java.util.*;
 import org.htmlparser.util.*;
 
-public class HTMLSelectTag extends HTMLTag
+public class HTMLSelectTag extends HTMLCompositeTag
 {
 	//This vector consists of all the option tags under the select tag
-	private Vector mOptionTags;
+	private Vector optionTags;
 	
-	public HTMLSelectTag(int pTagBegin, int pTagEnd, String pTagContents, 
-							Vector pOptionTags, String pTagLine)
+	public HTMLSelectTag(int tagBegin, int tagEnd, String tagContents, 
+							Vector optionTags, String tagLine,HTMLTag beginTag, HTMLTag endTag)
 	{
-		super(pTagBegin,pTagEnd,pTagContents,pTagLine);
-		this.mOptionTags = pOptionTags;
+		super(tagBegin,tagEnd,tagContents,tagLine,optionTags,beginTag,endTag);
+		this.optionTags = optionTags;
 	}
 	
 	public Vector getOptionTags()
 	{
-		return mOptionTags;
+		return optionTags;
 	}
 	
 	public void setOptionTags(Vector newOptionTags)
 	{
-		this.mOptionTags = newOptionTags;
+		this.optionTags = newOptionTags;
 	}
 
-	public String toHTML()
-	{
-		String lHTMLString = HTMLParserUtils.toHTML(this);
-		
-		StringBuffer lSelectTag = new StringBuffer(lHTMLString);
-		lSelectTag.append(lineSeparator);
-		
-		for(int i=0;i<mOptionTags.size(); i++)
-		{
-			HTMLOptionTag lOptionTag = (HTMLOptionTag)mOptionTags.elementAt(i);
-			lSelectTag.append(lOptionTag.toHTML()).append(lineSeparator);
-		}
-		lSelectTag.append("</SELECT>");
-		
-		return lSelectTag.toString();
-	}
-	
 	public String toString() 
 	{
 		StringBuffer lString = new StringBuffer(HTMLParserUtils.toString(this));
-		for(int i=0;i<mOptionTags.size(); i++)
+		for(int i=0;i<optionTags.size(); i++)
 		{
-			HTMLOptionTag lOptionTag = (HTMLOptionTag)mOptionTags.elementAt(i);
+			HTMLOptionTag lOptionTag = (HTMLOptionTag)optionTags.elementAt(i);
 			lString.append(lOptionTag.toString()).append("\n");
 		}
 		
