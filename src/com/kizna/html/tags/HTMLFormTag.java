@@ -39,18 +39,26 @@ import java.util.Vector;
 import com.kizna.html.HTMLNode;
 
 /**
- * Identifies an image tag
+ * Represents a FORM tag.
  */
 public class HTMLFormTag extends HTMLTag
 {
-	/**
-	 * The URL where the image is stored.
-	 */
 	protected String formURL;
    	protected String formName;
    	protected String formMethod;
    	protected Vector formInputVector;
    	protected Vector allNodesVector;
+   	/**
+   	 * A form tag - contains information contained in the form tag.
+   	 * @param formURL URL to which form data will be sent
+   	 * @param formName Name of the form
+   	 * @param formMethod GET or POST
+   	 * @param formBegin Beginning of the form 
+   	 * @param formEnd End of the form
+   	 * @param tagLine The tag line where this tag occurred
+   	 * @param formInputVector The vector of INPUT elements
+   	 * @param allNodesVector The vector of all elements in the FORM
+   	 */
 	public HTMLFormTag(String formURL,String formName, String formMethod, int formBegin, int formEnd,
                       String tagLine, Vector formInputVector, Vector allNodesVector)
 	{
@@ -61,17 +69,23 @@ public class HTMLFormTag extends HTMLTag
       	this.formInputVector = formInputVector;
       	this.allNodesVector = allNodesVector;
 	}
+	/**
+	 * @return Vector Input elements in the form
+	 */
 	public Vector getFormInputs()
 	{
 		return formInputVector;
 	}
 	/**
-	 * Returns the location of the image
+	 * @return String The url of the form
 	 */
 	public String getFormLocation()
 	{
 		return formURL;
 	}
+	/**
+	 * @return String The method of the form (GET if nothing is specified)
+	 */
 	public String getFormMethod() {
       	if(formMethod==null)
       	{	
@@ -79,6 +93,10 @@ public class HTMLFormTag extends HTMLTag
       	}
 		return formMethod;
 	}
+	/**
+	 * @param name The name of the input tag to be retrieved
+	 * @return HTMLTag The input tag corresponding to the name provided
+	 */
 	public HTMLTag getInputTag(String name) {
 		HTMLTag inputTag=null;
 		boolean found=false;
@@ -91,34 +109,54 @@ public class HTMLFormTag extends HTMLTag
 		if (found)
 		return inputTag; else return null;
 	}
+	/**
+	 * @return String The name of the form
+	 */
 	public String getFormName() {
 		return formName;
 	}
+	/**
+	 * Set the form inputs
+	 * @param formInputVector The vector of input tags
+	 */
 	public void setFormInputs(Vector formInputVector)
 	{
 		this.formInputVector = formInputVector;
 	}
+	/**
+	 * Set the form location. Modification of this element will cause the HTML rendering 
+	 * to change as well (in a call to toHTML()).
+	 * @param formURL The new FORM location
+	 */
 	public void setFormLocation(String formURL)
 	{
 		this.formURL = formURL;
 	}
+	/**
+	 * Set the form method
+	 * @param formMethod The new method of sending data
+	 */
 	public void setFormMethod(String formMethod)
 	{
 		this.formMethod = formMethod;
 	}
-   public void setFormName(String formName)
-   {
-      this.formName = formName;
-   }
 	/**
-	 * Print the contents of the HTMLFormTag
+	 * Set the form name
+	 * @param formName The name of the form
+	 */
+   	public void setFormName(String formName)
+   	{
+      	this.formName = formName;
+   	}
+	/**
+	 * @return String The contents of the HTMLFormTag
 	 */
 	public String toString()
 	{
 		return "FORM TAG : Form at "+formURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
 	/**
-	 * Returns the allNodesVector.
+	 * Returns the allNodesVector - all nodes in the form.
 	 * @return Vector
 	 */
 	public Vector getAllNodesVector() {
@@ -132,6 +170,9 @@ public class HTMLFormTag extends HTMLTag
 	public void setAllNodesVector(Vector allNodesVector) {
 		this.allNodesVector = allNodesVector;
 	}
+	/**
+	 * The HTML Rendering of the Form tag
+	 */
 	public String toHTML() {
 		StringBuffer rawBuffer = new StringBuffer();
 		HTMLNode node,prevNode=null;
