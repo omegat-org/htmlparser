@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020623 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020630 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -117,7 +117,7 @@ public class HTMLParser
 	 */
 	protected boolean readFlag = false;
 	private Vector scanners = new Vector();
-	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Jun 23, 2002)";
+	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Jun 30, 2002)";
 /**
  * This constructor enables the construction of test cases, with readers
  * associated with test string buffers. 
@@ -269,7 +269,7 @@ public Enumeration getScanners() {
 			System.out.println("   -a Show only the Applet tag extracted from the document");
 			System.out.println("   -j Parse JSP tags");	
 			System.out.println("   -m Parse Meta tags");		
-			System.out.println("   -t Extract the Title");
+			System.out.println("   -T Extract the Title");
 			System.out.println("   -f Extract forms");
 			System.out.println("   -r Extract frameset");
 			System.out.println("   -help This screen");
@@ -389,7 +389,7 @@ public void registerScanners() {
 	addScanner(new HTMLJspScanner("-j"));
 	addScanner(new HTMLAppletScanner("-a"));
 	addScanner(new HTMLMetaTagScanner("-m"));
-	addScanner(new HTMLTitleScanner("-t"));
+	addScanner(new HTMLTitleScanner("-T"));
 	addScanner(new HTMLDoctypeScanner("-d"));
 	addScanner(new HTMLFormScanner("-f"));
 	addScanner(new HTMLFrameSetScanner("-r"));	
