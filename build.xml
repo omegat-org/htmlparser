@@ -3,9 +3,9 @@
   <!-- set global properties for this build -->
   <property name="src" value="src"/>
   <property name="build" value="build"/>
-  <property name="version" value="1_2_20020630"/>
+  <property name="version" value="1_2_20020707"/>
   <property name="versionString" value="1_2"/>
-  <property name="previousVersion" value="1_2_20020623"/>
+  <property name="previousVersion" value="1_2_20020630"/>
   <property name="docs" value="docs"/>
   <property name="resources" value="resources"/>
   <property name="dist"  value="release/htmlparser${versionString}"/>
