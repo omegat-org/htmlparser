@@ -1,3 +1,9 @@
+Integration Build 1.2 - 20020728
+--------------------------------
+[1] Fixed bug in HTMLParser.openConnection(), mistaking 
+files for urls if they contain "http" or "www" anywhere.
+[2] 
+
 Integration Build 1.2 - 20020721
 --------------------------------
 [1] Fixed HTMLStringNode bug, whereby it wasnt able to 
