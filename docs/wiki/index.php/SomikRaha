@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- $Id$ -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="robots" content="index,follow" />
+<meta name="keywords" content="Somik Raha, PhpWiki" />
+<meta name="language" content="" />
+<meta name="document-type" content="Public" />
+<meta name="document-rating" content="General" />
+<meta name="generator" content="phpWiki" />
+<meta name="PHPWIKI_VERSION" content="1.3.4" />
+
+<link rel="shortcut icon" href="/wiki/themes/default/images/favicon.ico" />
+<link rel="home" title="HomePage" href="HomePage" />
+<link rel="help" title="HowToUseWiki" href="HowToUseWiki" />
+<link rel="copyright" title="GNU General Public License" href="http://www.gnu.org/copyleft/gpl.html#SEC1" />
+<link rel="author" title="The PhpWiki Programming Team" href="http://phpwiki.sourceforge.net/phpwiki/ThePhpWikiProgrammingTeam" />
+<link rel="search" title="FindPage" href="FindPage" />
+<link rel="alternate" title="View Source: SomikRaha" href="SomikRaha?action=viewsource&amp;version=3" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="RecentChanges?format=rss" />
+
+<link rel="bookmark" title="SandBox" href="SandBox" />
+<link rel="bookmark" title="WikiWikiWeb" href="WikiWikiWeb" />
+
+
+
+<link rel="stylesheet" title="MacOSX" type="text/css" charset="iso-8859-1" href="/wiki/themes/MacOSX/MacOSX.css" /><link rel="alternate stylesheet" title="Printer" type="text/css" charset="iso-8859-1" href="/wiki/themes/default/phpwiki-printer.css" media="print, screen" /><link rel="alternate stylesheet" title="Modern" type="text/css" charset="iso-8859-1" href="/wiki/themes/default/phpwiki-modern.css" /><style type="text/css">
+<!--
+body {background-image: url(/wiki/themes/MacOSX/images/bgpaper8.png);}
+-->
+</style>
+<title>PhpWiki - Somik Raha</title>
+</head>
+<!-- End head -->
+<!-- Begin body -->
+<!-- $Id$ -->
+<body>
+<!-- Begin top -->
+<!-- $Id$ -->
+
+<!-- End top -->
+<!-- Begin browse -->
+<!-- $Id$ -->
+
+
+<div class="wikitext"><blockquote>
+<p>Welcome to my space on the HTMLParser wiki. I founded the HTMLParser project two years back, under the confusion that there were no other html parsers around. Since then, it has been one exciting journey - made possible because of the vast feedback that has been pouring in, that really shows the power of the open-source movement.</p>
+<p>You can visit my <a href="http://www.geocities.com/somik/index.html" class="namedurl"><span style="white-space: nowrap"><img src="../themes/MacOSX/images/http.png" alt="http" class="linkicon" border="0" />home</span> page</a> to see some of my other work.</p>
+</blockquote>
+<p>-</p>
+</div>
+
+
+<!-- End browse -->
+<!-- Begin bottom -->
+<!-- $Id$ -->
+<!-- Add your Disclaimer here -->
+<!-- Begin debug -->
+<!-- $Id$ -->
+<table width="%100" border="0" cellpadding="0" cellspacing="0">
+<tr><td>
+
+</td><td>
+<span class="debug">Page Execution took 0.284 seconds</span>
+</td></tr></table>
+<!-- This keeps the valid XHTML! icons from "hanging off the bottom of the scree" -->
+<br style="clear: both;" />
+<!-- End debug -->
+<!-- End bottom -->
+</body>
+<!-- End body -->
+<!-- phpwiki source:
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+From Pear CVS: Id: DB.php,v 1.13 2002/07/02 15:19:49 cox Exp
+$Id$
+From Pear CVS: Id: PEAR.php,v 1.29 2001/12/15 15:01:35 mj Exp
+$Id$
+From Pear CVS: Id: mysql.php,v 1.5 2002/06/19 00:41:06 cox Exp
+$Id$
+From Pear CVS: Id: common.php,v 1.8 2002/06/12 15:03:16 fab Exp
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+$Id$
+-->
+</html>

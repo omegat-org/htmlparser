@@ -54,6 +54,68 @@ public class WikiCapturer
     }
 
     /**
+     * Returns <code>true</code> if the link is one we are interested in.
+     * @param link The link to be checked.
+     * @return <code>true</code> if the link has the source URL as a prefix
+     * and doesn't contain '?' or '#'; the former because we won't be able to
+     * handle server side queries in the static target directory structure and
+     * the latter because presumably the full page with that reference has
+     * already been captured previously. This performs a case insensitive
+     * comparison, which is cheating really, but it's cheap.
+     */
+    protected boolean isToBeCaptured (String link)
+    {
+        boolean ret;
+        
+        ret = super.isToBeCaptured (link);
+
+        // eliminate PhpWiki specific pages
+        if (ret)
+            if (link.endsWith ("PhpWikiAdministration"))
+                ret = false;
+            else if (link.endsWith ("PhpWikiDocumentation"))
+                ret = false;
+            else if (link.endsWith ("TextFormattingRules"))
+                ret = false;
+            else if (link.endsWith ("NewMarkupTestPage"))
+                ret = false;
+            else if (link.endsWith ("OldMarkupTestPage"))
+                ret = false;
+            else if (link.endsWith ("OldTextFormattingRules"))
+                ret = false;
+            else if (link.endsWith ("PgsrcTranslation"))
+                ret = false;
+            else if (link.endsWith ("HowToUseWiki"))
+                ret = false;
+            else if (link.endsWith ("MoreAboutMechanics"))
+                ret = false;
+            else if (link.endsWith ("AddingPages"))
+                ret = false;
+            else if (link.endsWith ("WikiWikiWeb"))
+                ret = false;
+            else if (link.endsWith ("UserPreferences"))
+                ret = false;
+            else if (link.endsWith ("PhpWiki"))
+                ret = false;
+            else if (link.endsWith ("WabiSabi"))
+                ret = false;
+            else if (link.endsWith ("EditText"))
+                ret = false;
+            else if (link.endsWith ("FindPage"))
+                ret = false;
+            else if (link.endsWith ("RecentChanges"))
+                ret = false;
+            else if (link.endsWith ("RecentEdits"))
+                ret = false;
+            else if (link.endsWith ("RecentVisitors"))
+                ret = false;
+            else if (link.endsWith ("SteveWainstead"))
+                ret = false;
+
+        return (ret);
+    }
+
+    /**
      * Mainline to capture a web site locally.
      * @param args The command line arguments.
      * There are three arguments the web site to capture, the local directory

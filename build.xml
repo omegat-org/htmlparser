@@ -5,51 +5,47 @@ Build Procedure
 
 Release Procedure
 - cd htmlparser
-- delete the local Wiki pages with 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/wiki/*'
-  and 'rm /home/derrick/htmlparser_cvs/htmlparser/docs/wiki/images/*',
-  of course any one else would have to adjust this and
-  also the hard-coded path in WikiCapturer
-- 'javac -classpath lib/htmlparser.jar ../WikiCapturer/src/org/htmlparser/wikicapturer/CaptureWiki.java ../WikiCapturer/src/org/htmlparser/wikicapturer/PhpWikiVisitor.java'
-  and 'java -classpath lib/htmlparser.jar:../WikiCapturer/src org.htmlparser.wikicapturer.CaptureWiki'
-  fetches current Wiki pages
+- 'ant wiki' captures the PhpWiki from http://htmlparser.sourceforge.org/docs/wiki to
+  the docs/wiki directory (except for indirect image references).
 - set environment variables CVSROOT and CVS_RSH (see changelog task)
 - 'ant changelog' generates htmlparser/ChangeLog (this will be changed to use the previous version tag someday)
-- edit the ChangeLog to exclude changes already incorporated and the previous 
-  release's "update of version headers" drop - the CVS date spec is only accurate
-  to the day since it comes from the version coded in the Parser.java file,
-  that's why this step can't be automated
+- edit the ChangeLog to exclude changes already incorporated - the CVS date spec
+  is only accurate to the day since it comes from the version coded in the
+  Parser.java file, that's why this step can't be automated
 - incorporate changes from ChangeLog into htmlparser/docs/changes under
   a heading like "Integration Build 1.5 - 20040522"
 - 'ant versionSource' updates the version in Parser.java and release.txt
-- perform a CVS update on htmlparser to identify new and changed files
-- commit changed files (i.e. Parser.java, release.txt, docs/changes, docs/wiki
-  and docs/wiki/images) to the head revision using a reason of the form:
-Update version to 1.5-20040522.
+- edit docs/release.txt to update changes since the last version, bugs fixed
+  and enhancements completed
+- perform a CVS update on htmlparser/ to identify new and changed files
+- commit changed files (i.e. Parser.java, docs/release.txt, docs/changes.txt,
+  docs/release.txt and docs/wiki) to the head revision using a reason of the form:
+    Update version to 1.5-20040522.
 - use CVS to tag the current head revisions with a name like v1_5_20040522.
-- use CVS to checkout everything with the tag used above
+- use CVS to checkout everything with the tag created above
 - 'ant test' compiles and runs the unit tests
-- 'ant clean htmlparser' updates the version headers, creates the jar file and doc files and zips
+- 'ant clean htmlparser' creates the jar file and doc files and zips
   everything into a file htmlparser/distribution/htmlparser1_5_20040522.zip
 - use CVS to checkout everything against the head revision to reset your workspace
 
 Sourceforge File Release Procedure
 - upload the zip file to the sourceforge site
-$ ftp upload.sourceforge.net
-Name: anonymous
-Password: yourname@users.sourceforge.org
-ftp> cd incoming
-ftp> bin
-ftp> put htmlparser1_5_20040522.zip
-ftp> bye
+    $ ftp upload.sourceforge.net
+    Name: anonymous
+    Password: yourname@users.sourceforge.org
+    ftp> cd incoming
+    ftp> bin
+    ftp> put htmlparser1_5_20040522.zip
+    ftp> bye
 - add a release to the 'Integation Builds' package
-Admin-File Releases-Add Release, use a name of the form '1_5_20040522'
+    Admin-File Releases-Add Release, use a name of the form '1_5_20040522'
 - Step 1, 'Paste The Notes' (using numeric character references and
   character entity references because this is displayed as HTML) with a
   format like :
-Integration build.
-Failing Unit Tests:
-Open Bugs:
-Pending Bugs:
+    Integration build.
+    Failing Unit Tests:
+    Open Bugs:
+    Pending Bugs:
 - use the 'Upload Change Log:' field to specify the ChamgeLog file you edited
 - Step 2, check the checkbox of the htmlparser1_5_20040522.zip file from the
   list of files in the uploads section
@@ -64,13 +60,45 @@ Pending Bugs:
 
 Submit News
 - from the project summary screen, select 'Submit News' and title it like:
-HTML Parser Integration Release 1.5-20040522 
+    HTML Parser Integration Release 1.5-20040522 
 - type in a summary of the changes made
 - SUBMIT
 - delete the previous release news item using Admin-Publicity-Administrate project news
 - choose the old news item, change the Status to 'Delete'
 - SUBMIT
+
+Update the Web Site
+- remove the local docs/wiki directory
+- create a tarball of the docs directory
+    tar -tf docs.tar
+- use secure copy to move the tarball onto the shell.sourceforge.net server
+    scp docs.tar derrickoswald@shell.sourceforge.net:/home/groups/h/ht/htmlparser/
+- ssh into the shell.sourceforge.net server and cd to /home/groups/h/ht/htmlparser/
+    ssh derrickoswald@shell.sourceforge.net
+- move the old htdocs out of the way
+    mv htdocs oldhtdocs
+- create a new htdocs directory
+    mkdir htdocs
+- unpack the tarball into htdocs
+    cd htdocs
+    tar -xf docs.tar
+- copy or move the following files/directories from the old htdocs to the new one:
+    mv ../olddocs/benchmarks.zip .
+    mv ../olddocs/HTMLParser_Coverage.html .
+    mv ../olddocs/javadoc_1_2 .
+    mv ../olddocs/javadoc_1_3 .
+    mv ../olddocs/performance .
+    mv ../olddocs/test .
+    mv ../olddocs/wiki .
+- edit the panel.html file to change the target of the Wiki link from
+    wiki/index.html
+  to
+    wiki/index.php
+- delete the old htmldocs directory
+    rm -rf ../oldhtdocs
+
 -->
+
 <project name="HTMLParser" default="htmlparser" basedir=".">
 
   <!-- set global properties for this build -->
@@ -85,6 +113,7 @@ HTML Parser Integration Release 1.5-20040522
   <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
   <property name="src" value="src"/>
   <property name="docs" value="docs"/>
+  <property name="wiki" value="${docs}/wiki"/>
   <property name="bin" value="bin"/>
   <property name="lib" value="lib"/>
   <property name="resources" value="resources"/>
@@ -322,6 +351,32 @@ HTML Parser Integration Release 1.5-20040522
         <pathelement location="${java.home}/../lib/tools.jar"/>
       </classpath>
       <arg value="-text"/>
+    </java>
+  </target>
+
+  <!-- Delete the files gathered from the wiki. -->
+  <target name="cleanwiki" description="delete local wiki files">
+    <!-- Delete the content, leave the CVS files. -->
+    <!-- This is done so deleted wiki pages are not left orphaned in CVS. -->
+    <delete failonerror="false">
+      <fileset dir="${wiki}">
+        <filename name="**/*"/>
+        <not>
+          <filename name="*CVS*"/>
+        </not>
+      </fileset>
+    </delete>
+  </target>
+  
+  <!-- Capture the wiki -->
+  <target name="wiki" depends="jar,cleanwiki" description="capture the wiki">
+    <java classname="org.htmlparser.parserapplications.WikiCapturer" fork="yes" failonerror="yes">
+      <classpath>
+        <pathelement location="${lib}/htmlparser.jar"/>
+      </classpath>
+      <arg value="http://htmlparser.sourceforge.net/wiki/"/>
+      <arg value="${wiki}"/>
+      <arg value="true"/>
     </java>
   </target>
 
