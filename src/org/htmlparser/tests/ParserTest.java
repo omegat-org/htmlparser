@@ -105,9 +105,9 @@ public class ParserTest extends ParserTestCase {
 		assertEquals("There should be "+cnt+" nodes identified (second call to parser.elements())",cnt,i);
 	}	
 	
-	/**
+    /**
      * Test the Parser(URLConnection) constructor.
-	 * This testcase needs you to be online.
+     * This testcase needs you to be online.
      * Based on the form at Canada Post <code>http://www.canadapost.ca/tools/pcl/bin/default-e.asp</code>:
      * <pre>
      * &lt;form NAME="SearchQuick" method="POST" action="cp_search_response-e.asp"
@@ -196,8 +196,8 @@ public class ParserTest extends ParserTestCase {
      * &lt;/form&gt;
      * </pre>
      * Sumbits the POST and verifies the returned HTML contains an expected value.
-	 */
-	public void _testPOST() throws Exception
+     */
+    public void testPOST() throws Exception
     {   // the form data:
         final String number = "2708";
         final String street = "Kelly";
