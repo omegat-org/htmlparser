@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020831 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021002 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -122,7 +122,7 @@ public class HTMLParser
 	 */
 	protected boolean readFlag = false;
 	private Vector scanners = new Vector();
-	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Aug 31, 2002)";
+	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Oct 02, 2002)";
 	/**
 	 * This constructor enables the construction of test cases, with readers
 	 * associated with test string buffers. 
