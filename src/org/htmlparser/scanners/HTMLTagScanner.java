@@ -271,6 +271,14 @@ public abstract class HTMLTagScanner
 		newLine += currentLine.substring(node.elementBegin(),currentLine.length());
 		return newLine;
 	}
-	// Creates a Base Ref Scanner sharing the same link processor
+	
+	/**
+	 * Override this method to create your own tag type
+	 * @param tagData
+	 * @param tag
+	 * @param url
+	 * @return HTMLTag
+	 * @throws HTMLParserException
+	 */
 	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url) throws HTMLParserException { return null; }  
 }
