@@ -77,9 +77,9 @@ public class OptionTagTest extends ParserTestCase
     {
         for(int j=0;j<nodeCount;j++)
         {
-            //assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
-            System.out.println(node[j].getClass().getName());
-            System.out.println(node[j].toHtml());
+            assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
+//            System.out.println(node[j].getClass().getName());
+//            System.out.println(node[j].toHtml());
         }
         OptionTag OptionTag;
         OptionTag = (OptionTag) node[0];

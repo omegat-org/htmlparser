@@ -253,16 +253,16 @@ public class StreamTests extends ParserTestCase
             while (-1 != stream.read ());
             time2 = System.currentTimeMillis () - begin;
 
-            System.out.println ("fills: " + stream.fills);
-            System.out.println ("reallocations: " + stream.reallocations);
-            System.out.println ("synchronous: " + stream.synchronous);
-            System.out.println ("buffer size: " + stream.mBuffer.length);
-            System.out.println ("bytes: " + stream.mLevel);
+//            System.out.println ("fills: " + stream.fills);
+//            System.out.println ("reallocations: " + stream.reallocations);
+//            System.out.println ("synchronous: " + stream.synchronous);
+//            System.out.println ("buffer size: " + stream.mBuffer.length);
+//            System.out.println ("bytes: " + stream.mLevel);
             stream.close ();
 
-            System.out.println ("time (" + time2 + ") vs. (" + time1 + ") for " + index + " bytes");
+//            System.out.println ("time (" + time2 + ") vs. (" + time1 + ") for " + index + " bytes");
             double samples = index / 1000;
-            System.out.println ("average available bytes (" + available2/samples + ") vs. (" + available1/samples + ")");
+//            System.out.println ("average available bytes (" + available2/samples + ") vs. (" + available1/samples + ")");
 
             assertTrue ("slower (" + time2 + ") vs. (" + time1 + ")", time2 < time1);
             assertTrue ("average available bytes not greater (" + available2/samples + ") vs. (" + available1/samples + ")", available2 > available1);

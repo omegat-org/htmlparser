@@ -80,7 +80,7 @@ public class BulletScannerTest extends ParserTestCase {
         parser.registerScanners();
         for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
             Node node = i.nextNode();
-            System.out.println(node.toHtml());
+//            System.out.println(node.toHtml());
         }
     }
 

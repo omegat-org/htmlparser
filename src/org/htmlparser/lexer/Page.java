@@ -326,16 +326,15 @@ public class Page
             }
             catch (UnsupportedEncodingException uee)
             {
-                StringBuffer msg;
-                String message;
-
-                msg = new StringBuffer (1024);
-                msg.append (getConnection ().getURL ().toExternalForm ());
-                msg.append (" has an encoding (");
-                msg.append (charset);
-                msg.append (") which is not supported, using ");
-                msg.append (DEFAULT_CHARSET);
-                System.out.println (msg.toString ());
+//                StringBuffer msg;
+//
+//                msg = new StringBuffer (1024);
+//                msg.append (getConnection ().getURL ().toExternalForm ());
+//                msg.append (" has an encoding (");
+//                msg.append (charset);
+//                msg.append (") which is not supported, using ");
+//                msg.append (DEFAULT_CHARSET);
+//                System.out.println (msg.toString ());
                 charset = DEFAULT_CHARSET;
                 mSource = new Source (stream, charset);
             }
@@ -553,15 +552,15 @@ public class Page
 
                     // Charset names are not case-sensitive;
                     // that is, case is always ignored when comparing charset names.
-                    if (!ret.equalsIgnoreCase (content))
-                    {
-                        System.out.println (
-                            "detected charset \""
-                            + content
-                            + "\", using \""
-                            + ret
-                            + "\"");
-                    }
+//                    if (!ret.equalsIgnoreCase (content))
+//                    {
+//                        System.out.println (
+//                            "detected charset \""
+//                            + content
+//                            + "\", using \""
+//                            + ret
+//                            + "\"");
+//                    }
                 }
             }
         }

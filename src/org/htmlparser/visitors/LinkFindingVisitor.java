@@ -40,7 +40,7 @@ public class LinkFindingVisitor extends NodeVisitor {
     }
 
     public void visitLinkTag(LinkTag linkTag) {
-        System.out.println("Matching with "+linkTag.getLinkText());
+//        System.out.println("Matching with "+linkTag.getLinkText());
         if (linkTag.getLinkText().toUpperCase().indexOf(linkTextToFind)!=-1) {
             linkTagFound = true;
             count++;

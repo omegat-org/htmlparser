@@ -47,6 +47,7 @@ import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
+import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -346,7 +347,7 @@ public class ParserTest extends ParserTestCase
             out.println ("</body>");
             out.println ("</html>");
             out.close ();
-            parser = new Parser (file.getAbsolutePath ());
+            parser = new Parser (file.getAbsolutePath (), new DefaultParserFeedback(DefaultParserFeedback.QUIET));
             nodes = new AbstractNode[30];
             i = 0;
             for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)

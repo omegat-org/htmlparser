@@ -163,7 +163,6 @@ public class AppletTag extends CompositeTag
         String paramName;
         String paramValue;
         Vector attributes;
-        Attribute attribute;
         StringNode string;
 
         kids = getChildren ();
@@ -199,19 +198,12 @@ public class AppletTag extends CompositeTag
             attributes = new Vector (); // should the tag copy the attributes?
             paramName = (String)e.nextElement ();
             paramValue = (String)newAppletParams.get (paramName);
-            attribute = new Attribute ("PARAM", null);
-            System.out.println (attribute);
-            attributes.addElement (attribute);
+            attributes.addElement (new Attribute ("PARAM", null));
             attributes.addElement (new Attribute (" "));
-            attribute = new Attribute ("VALUE", paramValue, '"');
-            System.out.println (attribute);
-            attributes.addElement (attribute);
+            attributes.addElement (new Attribute ("VALUE", paramValue, '"'));
             attributes.addElement (new Attribute (" "));
-            attribute = new Attribute ("NAME", paramName, '"');
-            System.out.println (attribute);
-            attributes.addElement (attribute);
+            attributes.addElement (new Attribute ("NAME", paramName, '"'));
             tag = new Tag (null, 0, 0, attributes);
-            System.out.println (tag.toHtml ());
             kids.add (tag);
         }
 

@@ -73,28 +73,28 @@ public class ParserTestCase extends TestCase {
 
     protected void createParser(String inputHTML) {
         mLexer =  new Lexer (new Page (inputHTML));
-        parser = new Parser(mLexer, new DefaultParserFeedback());
+        parser = new Parser(mLexer, new DefaultParserFeedback(DefaultParserFeedback.QUIET));
         node = new AbstractNode[40];
     }
 
     protected void createParser(String inputHTML,int numNodes)
     {
         Lexer lexer = new Lexer (inputHTML);
-        parser = new Parser (lexer, new DefaultParserFeedback());
+        parser = new Parser (lexer, new DefaultParserFeedback(DefaultParserFeedback.QUIET));
         node = new AbstractNode[numNodes];
     }
 
     protected void createParser(String inputHTML, String url) {
         Lexer lexer = new Lexer (inputHTML);
         lexer.getPage ().setUrl (url);
-        parser = new Parser (lexer, new DefaultParserFeedback());
+        parser = new Parser (lexer, new DefaultParserFeedback(DefaultParserFeedback.QUIET));
         node = new AbstractNode[40];
     }
 
     protected void createParser(String inputHTML, String url,int numNodes) {
         Lexer lexer = new Lexer (inputHTML);
         lexer.getPage ().setUrl (url);
-        parser = new Parser (lexer, new DefaultParserFeedback());
+        parser = new Parser (lexer, new DefaultParserFeedback(DefaultParserFeedback.QUIET));
         node = new AbstractNode[numNodes];
     }
 
