@@ -38,6 +38,7 @@ import java.io.StringReader;
 
 import com.kizna.html.*;
 import com.kizna.html.tags.HTMLImageTag;
+import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.scanners.HTMLImageScanner;
 import junit.framework.TestSuite;
@@ -236,7 +237,7 @@ public void testImageWithNewLineChars()
 /**
  * Test case to reproduce bug reported by Annette
  */
-public void testImageWithWidthParamFirst() 
+public void testImageTagsFromYahoo() 
 {
 	String testHTML = "<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n"+
 	"<input type=submit value=Search> <a href=r/so>advanced search</a></td></tr></table><table border=0 cellspacing=0 cellpadding=3 width=640><tr><td nowrap align=center><table border=0 cellspacing=0 cellpadding=0><tr><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif\" width=20 height=20 border=0></a></td><td> &nbsp; &nbsp; <a href=s/1048><b>Yahooligans!</b></a> - <a href=s/5282>Eet & Ern</a>, <a href=s/5283>Games</a>, <a href=s/5284>Science</a>, <a href=s/5285>Sports</a>, <a href=s/5286>Movies</a>, <a href=s/1048>more</a> &nbsp; &nbsp; </td><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif\" width=20 height=20 border=0></a></td></tr></table></td></tr><tr><td nowrap align=center><small><b>Shop</b>&nbsp;\n";
@@ -261,6 +262,37 @@ public void testImageWithWidthParamFirst()
 	assertEquals("Expected Image 2","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif",imageTag2.getImageLocation());
 	HTMLImageTag imageTag3 = (HTMLImageTag)node[2];
 	assertEquals("Expected Image 3","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif",imageTag3.getImageLocation());	
+}
+/**
+ * Test case to reproduce bug reported by Annette
+ */
+public void testImageTagsFromYahooWithAllScannersRegistered() 
+{
+	String testHTML = "<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n";
+
+	StringReader sr = new StringReader(testHTML); 
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[100];
+	// Register the image scanner
+	parser.registerScanners();
+	int i = 0;
+	HTMLNode thisNode;
+	for (Enumeration e = parser.elements();e.hasMoreElements();) {
+		node[i++] = (HTMLNode)e.nextElement();
+	}	
+	assertEquals("Number of nodes identified should be 3",22,i);
+	assertTrue("Node identified should be HTMLLinkTag",node[11] instanceof HTMLLinkTag);
+	HTMLLinkTag linkTag = (HTMLLinkTag)node[11];
+	HTMLNode [] node2 = new HTMLNode[10];
+	int j = 0;
+	for (Enumeration e = linkTag.linkData();e.hasMoreElements();) {
+		node2[j++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("Number of tags within the link",1,j);
+	assertTrue("Tag within link should be an image tag",node2[0] instanceof HTMLImageTag);
+	HTMLImageTag imageTag = (HTMLImageTag)node2[0];
+	assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageLocation());		
 }
 
 }
