@@ -30,6 +30,7 @@ package org.htmlparser.tests.tagTests;
 import java.io.BufferedReader;
 import org.htmlparser.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -38,30 +39,14 @@ import org.htmlparser.scanners.*;
 import java.io.StringReader;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-/**
- * Insert the type's description here.
- * Creation date: (6/17/2001 3:59:52 PM)
- * @author: Administrator
- */
-public class HTMLJspTagTest extends TestCase 
+
+public class HTMLJspTagTest extends HTMLParserTestCase
 {
-	/**
-	 * HTMLStringNodeTest constructor comment.
-	 * @param name java.lang.String
-	 */
+
 	public HTMLJspTagTest(String name) {
 		super(name);
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 11:22:36 AM)
-	 * @return junit.framework.TestSuite
-	 */
-	public static TestSuite suite() 
-	{
-		TestSuite suite = new TestSuite(HTMLJspTagTest.class);
-		return suite;
-	}
+
 	/**
 	 * Check if the JSP Tag is being correctly recognized.
 	 * Our test html is : <BR>
@@ -81,7 +66,7 @@ public class HTMLJspTagTest extends TestCase
 	 */
 	public void testJspTag() throws HTMLParserException
 	{
-		String testHTML = new String(
+		createParser(
 			"<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
 			"<jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/>\n"+
 			"<%\n"+
@@ -94,19 +79,10 @@ public class HTMLJspTagTest extends TestCase
 			"        if(transfer.validate(request))\n"+
 			"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
 			"%>\n");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.setLineSeparator("\r\n");
-		HTMLNode [] node = new HTMLNode[20];
 		// Register the Jsp Scanner
 		parser.addScanner(new HTMLJspScanner("-j"));	
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
+		parseAndAssertNodeCount(5);
 		// The first node should be an HTMLJspTag
 		assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof HTMLJspTag);
 		HTMLJspTag tag = (HTMLJspTag)node[0];
@@ -152,7 +128,7 @@ public class HTMLJspTagTest extends TestCase
 	 */
 	public void testToHTML() throws HTMLParserException
 	{
-		String testHTML = new String(
+		createParser(
 			"<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>\n"+
 			"<jsp:useBean id=\"transfer\" scope=\"session\" class=\"com.bank.PageBean\"/>\n"+
 			"<%\n"+
@@ -165,19 +141,10 @@ public class HTMLJspTagTest extends TestCase
 			"        if(transfer.validate(request))\n"+
 			"            %><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+ 
 			"%>\n");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.setLineSeparator("\r\n");
-		HTMLNode [] node = new HTMLNode[20];
 		// Register the Jsp Scanner
 		parser.addScanner(new HTMLJspScanner("-j"));	
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
+		parseAndAssertNodeCount(5);
 		// The first node should be an HTMLJspTag
 		assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof HTMLJspTag);
 		HTMLJspTag tag = (HTMLJspTag)node[0];
