@@ -262,4 +262,30 @@ public class FormScannerTest extends ParserTestCase {
 		assertEquals("Link URL","http://www.yahoo.com",linkTag.getLink());
 		assertTrue("Sixth Node is a form tag",node[5] instanceof FormTag);
 	}
+
+	/**
+	 * Bug 713907 reported by Dhaval Udani, erroneous 
+	 * parsing of form tag (even when form scanner is not
+	 * registered)
+	 */
+	public void testFormScanningShouldNotHappen() throws Exception {
+		String testHTML =
+			"<HTML><HEAD><TITLE>Test Form Tag</TITLE></HEAD>" +
+			"<BODY><FORM name=\"form0\"><INPUT type=\"text\" name=\"text0\"></FORM>" +
+			"</BODY></HTML>";
+		createParser(
+			testHTML
+		);
+		parser.registerScanners();
+		parser.removeScanner(new FormScanner(""));
+		Node [] nodes =
+			parser.extractAllNodesThatAre(
+				FormTag.class
+			);
+		assertEquals(
+			"shouldnt have found form tag",
+			0,
+			nodes.length
+		);
+	}		
 }

@@ -28,7 +28,7 @@
 
 package org.htmlparser.scanners;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
@@ -78,7 +78,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 			
 			NodeList childrenNodeList = new NodeList();
 			
-			Hashtable tempScanners=null;
+			Map tempScanners=null;
 			if (removeScanners) {
 				tempScanners = reader.getParser().getScanners();
 				reader.getParser().flushScanners();

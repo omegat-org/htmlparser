@@ -28,11 +28,17 @@
 
 package org.htmlparser.scanners;
 
-import java.util.*;
-import org.htmlparser.*;
-import org.htmlparser.tags.*;
-import org.htmlparser.tags.data.*;
-import org.htmlparser.util.*;
+import java.util.Map;
+
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
+import org.htmlparser.StringNode;
+import org.htmlparser.tags.EndTag;
+import org.htmlparser.tags.OptionTag;
+import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.ParserException;
+import org.htmlparser.util.ParserUtils;
 
 public class OptionTagScanner extends TagScanner
 {
@@ -57,7 +63,7 @@ public class OptionTagScanner extends TagScanner
 			boolean endTagFound=false;
 			StringBuffer text=new StringBuffer("");
 			// Remove all existing scanners, so as to parse only till the end tag
-			Hashtable tempScanners = ParserUtils.adjustScanners(reader);	
+			Map tempScanners = ParserUtils.adjustScanners(reader);	
 
 			do 
 			{

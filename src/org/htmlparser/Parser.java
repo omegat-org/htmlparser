@@ -40,7 +40,9 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.htmlparser.parserHelper.ParserHelper;
 import org.htmlparser.parserHelper.TagParser;
@@ -172,7 +174,7 @@ public class Parser
     /**
      * The list of scanners to apply at the top level.
      */
-	private Hashtable scanners;
+	private Map scanners;
 
     /**
      * The encoding being used to decode the connection input stream.
@@ -598,16 +600,16 @@ public class Parser
 	 * This method is to be used to change the set of scanners in the current parser.
 	 * @param newScanners Vector holding scanner objects to be used during the parsing process.
 	 */
-	public void setScanners(Hashtable newScanners)
+	public void setScanners(Map newScanners)
     {
-		scanners = (null == newScanners) ? new Hashtable() : newScanners;
+		scanners = (null == newScanners) ? new HashMap() : newScanners;
 	}
 	
 	/**
 	 * Get an enumeration of scanners registered currently in the parser
 	 * @return Enumeration of scanners currently registered in the parser
 	 */
-	public Hashtable getScanners() {
+	public Map getScanners() {
 		return scanners;
 	}
 
@@ -1026,12 +1028,20 @@ public class Parser
 		addScanner(new HtmlScanner());
 		addScanner(new BodyScanner("-body"));
 	}
+	
 	/**
-	 * Removes a specified scanner object.
+	 * Removes a specified scanner object. You can create
+	 * an anonymous object as a parameter. This method
+	 * will use the scanner's key and remove it from the 
+	 * registry of scanners.
+	 * e.g.
+	 * <pre>
+	 * removeScanner(new FormScanner(""));
+	 * </pre>
 	 * @param scanner TagScanner object to be removed from the list of registered scanners
 	 */
 	public void removeScanner(TagScanner scanner) {
-		scanners.remove(scanner);
+		scanners.remove(scanner.getID()[0]);
 	}
 
 	/**

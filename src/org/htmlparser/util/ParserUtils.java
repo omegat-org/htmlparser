@@ -30,6 +30,7 @@ package org.htmlparser.util;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
@@ -87,18 +88,18 @@ public class ParserUtils
 		return lString.toString();
 	}
 	
-	public static Hashtable adjustScanners(NodeReader pReader) 
+	public static Map adjustScanners(NodeReader reader) 
 	{
-		Hashtable tempScanners= new Hashtable();
-		tempScanners = pReader.getParser().getScanners();		
+		Map tempScanners= new Hashtable();
+		tempScanners = reader.getParser().getScanners();		
 		// Remove all existing scanners
-		pReader.getParser().flushScanners();
+		reader.getParser().flushScanners();
 		return tempScanners;
 	}
-	public static void restoreScanners(NodeReader pReader, Hashtable tempScanners)
+	public static void restoreScanners(NodeReader reader, Map tempScanners)
 	{
 		// Flush the scanners
-		pReader.getParser().setScanners(tempScanners);
+		reader.getParser().setScanners(tempScanners);
 	}
 
 	public static String removeChars(String s,char occur)  {

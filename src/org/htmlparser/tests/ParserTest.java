@@ -33,15 +33,18 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
+import org.htmlparser.scanners.FormScanner;
+import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeIterator;
-import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
 public class ParserTest extends ParserTestCase {
@@ -573,5 +576,15 @@ public class ParserTest extends ParserTestCase {
 			assertTrue("Only images should have been parsed",node instanceof ImageTag);
 		}
 	}
-	
+
+	public void testRemoveScanner() throws Exception {
+		createParser(
+			""
+		);
+		parser.registerScanners();
+		parser.removeScanner(new FormScanner(""));
+		Map scanners = parser.getScanners();
+		TagScanner scanner = (TagScanner)scanners.get("FORM");
+		assertNull("shouldnt have found scanner",scanner);
+	}		
 }

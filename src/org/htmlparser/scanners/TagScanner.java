@@ -32,6 +32,7 @@ package org.htmlparser.scanners;
 //////////////////
 import java.io.Serializable;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
@@ -234,12 +235,12 @@ public abstract class TagScanner
 	  	this.feedback = feedback;
 	}
 	
-	public static Hashtable adjustScanners(NodeReader pReader) 
+	public static Map adjustScanners(NodeReader reader) 
 	{
-		Hashtable tempScanners= new Hashtable();
-		tempScanners = pReader.getParser().getScanners();		
+		Map tempScanners= new Hashtable();
+		tempScanners = reader.getParser().getScanners();		
 		// Remove all existing scanners
-		pReader.getParser().flushScanners();
+		reader.getParser().flushScanners();
 		return tempScanners;
 	}
 	

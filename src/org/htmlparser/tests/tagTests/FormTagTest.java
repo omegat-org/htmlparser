@@ -35,8 +35,8 @@ import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.tests.scannersTests.FormScannerTest;
-import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 
 public class FormTagTest extends ParserTestCase {
 
@@ -114,4 +114,31 @@ public class FormTagTest extends ParserTestCase {
 		assertNotNull("Should have found the password node",tag);
 		assertType("tag found",InputTag.class,tag);
 	}	
+	
+	/**
+	 * Bug 713907 reported by Dhaval Udani, erroneous 
+	 * attributes being reported.
+	 */
+	public void testFormRendering() throws Exception {
+		String testHTML =
+			"<HTML><HEAD><TITLE>Test Form Tag</TITLE></HEAD>" +
+			"<BODY><FORM name=\"form0\"><INPUT type=\"text\" name=\"text0\"></FORM>" +
+			"</BODY></HTML>";
+		createParser(
+			testHTML
+		);
+		parser.registerScanners();
+		FormTag formTag = 
+			(FormTag)(parser.extractAllNodesThatAre(
+				FormTag.class
+			)[0]);
+		assertNotNull("Should have found a form tag",formTag);
+		assertStringEquals("name","form0",formTag.getFormName());
+		assertNull("action",formTag.getAttribute("ACTION"));
+		assertXmlEquals(
+			"html",
+			"<FORM NAME=\"form0\">" +				"<INPUT TYPE=\"text\" NAME=\"text0\">" +			"</FORM>",
+			formTag.toHtml()
+		);
+	}
 }

@@ -31,6 +31,7 @@ package org.htmlparser.tags;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
@@ -38,8 +39,8 @@ import org.htmlparser.parserHelper.AttributeParser;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.util.ParserException;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 /**
  * Tag represents a generic tag. This class allows users to register specific
@@ -252,7 +253,7 @@ public class Tag extends Node
 	 * @param url URL at which HTML page is located
 	 * @param reader The NodeReader that is to be used for reading the url
 	 */
-	public Node scan(Hashtable scanners,String url,NodeReader reader) throws ParserException
+	public Node scan(Map scanners,String url,NodeReader reader) throws ParserException
 	{
 		if (tagContents.length()==0) return this;
 		try {

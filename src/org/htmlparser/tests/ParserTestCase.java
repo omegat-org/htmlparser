@@ -333,6 +333,43 @@ public class ParserTestCase extends TestCase {
 
 
 	private void assertAttributesMatch(String displayMessage, Tag expectedTag, Tag actualTag) {
+		assertAllExpectedTagAttributesFoundInActualTag(
+			displayMessage,
+			expectedTag,
+			actualTag);
+		if (expectedTag.getAttributes().size()!=actualTag.getAttributes().size()) {
+			assertActualTagHasNoExtraAttributes(displayMessage, expectedTag, actualTag);
+		}
+	}
+	
+	private void assertActualTagHasNoExtraAttributes(String displayMessage, Tag expectedTag, Tag actualTag) {
+		Iterator i = actualTag.getAttributes().keySet().iterator();
+		while (i.hasNext()) {
+			String key = (String)i.next();
+			if (key=="/") continue;
+			String expectedValue = 
+				expectedTag.getAttribute(key);
+			String actualValue =
+				actualTag.getAttribute(key);
+			if (key==Tag.TAGNAME) {
+				expectedValue = ParserUtils.removeChars(expectedValue,'/');
+				actualValue = ParserUtils.removeChars(actualValue,'/');
+				assertStringEquals(displayMessage+"\ntag name",actualValue,expectedValue);
+				continue;
+			}
+		
+			String expectedHTML = expectedTag.toHtml();
+			if (expectedValue==null)
+				fail(
+					"\nActual tag had extra key: "+key+displayMessage
+				);
+		}	
+	}
+	
+	private void assertAllExpectedTagAttributesFoundInActualTag(
+		String displayMessage,
+		Tag expectedTag,
+		Tag actualTag) {
 		Iterator i = expectedTag.getAttributes().keySet().iterator();
 		while (i.hasNext()) {
 			String key = (String)i.next();
@@ -357,7 +394,6 @@ public class ParserTestCase extends TestCase {
 				expectedValue,
 				actualValue
 			);
-								
 		}
 	}
 
