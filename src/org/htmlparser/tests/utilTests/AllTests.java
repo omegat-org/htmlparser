@@ -45,9 +45,70 @@ public class AllTests extends junit.framework.TestCase
 public AllTests(String name) {
 	super(name);
 }
-public static void main(String[] args) {
-	new junit.awtui.TestRunner().start(new String[] {"org.htmlparser.tests.AllTests"});
-}
+
+    /**
+     * Mainline for all suites of tests.
+     * @param args Command line arguments. The following options
+     * are understood:
+     * <pre>
+     * -text  -- use junit.textui.TestRunner
+     * -awt   -- use junit.awtui.TestRunner
+     * -swing -- use junit.swingui.TestRunner (default)
+     * </pre>
+     * All other options are passed on to the junit framework.
+     */
+	public static void main(String[] args)
+    {
+        String runner;
+        int i;
+        String arguments[];
+        Class cls;
+
+        runner = null;
+        for (i = 0; (i < args.length) && (null == runner); i++)
+        {
+            if (args[i].equalsIgnoreCase ("-text"))
+                runner = "junit.textui.TestRunner";
+            else if (args[i].equalsIgnoreCase ("-awt"))
+                runner = "junit.awtui.TestRunner";
+            else if (args[i].equalsIgnoreCase ("-swing"))
+                runner = "junit.swingui.TestRunner";
+        }
+        if (null != runner)
+        {
+            // remove it from the arguments
+            arguments = new String[args.length - 1];
+            System.arraycopy (args, 0, arguments, 0, i - 1);
+            System.arraycopy (args, i, arguments, i - 1, args.length - i);
+            args = arguments;
+        }
+        else
+            runner = "junit.swingui.TestRunner";
+
+        // append the test class
+        arguments = new String[args.length + 1];
+        System.arraycopy (args, 0, arguments, 0, args.length);
+        arguments[args.length] = "org.htmlparser.tests.utilTests.AllTests";
+
+        // invoke main() of the test runner
+        try
+        {
+            cls = Class.forName (runner);
+            java.lang.reflect.Method method = cls.getDeclaredMethod (
+                "main", new Class[] { String[].class });
+            method.invoke (
+                null,
+                new Object[] { arguments });
+        }
+        catch (Throwable t)
+        {
+            System.err.println (
+                "cannot run unit test ("
+                + t.getMessage ()
+                + ")");
+        }
+	}
+
 /**
  * Insert the method's description here.
  * Creation date: (6/17/2001 6:07:15 PM)

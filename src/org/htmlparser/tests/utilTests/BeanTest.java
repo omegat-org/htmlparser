@@ -32,9 +32,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Vector;
 
@@ -86,6 +89,40 @@ public class BeanTest extends TestCase
         ois.close ();
         
         return (ret);
+    }
+
+    /**
+     * Makes sure that the bean returns text when passed the html.
+     */
+    protected void check (StringBean bean, String html, String text)
+    {
+        String path;
+        File file;
+        PrintWriter out;
+        String string;
+        
+        path = System.getProperty ("user.dir");
+        if (!path.endsWith (File.separator))
+            path += File.separator;
+        file = new File (path + "delete_me.html");
+        try
+        {
+            out = new PrintWriter (new FileWriter (file));
+            out.println (html);
+            out.close ();
+            bean.setURL (file.getAbsolutePath ());
+            string = bean.getStrings ();
+        }
+        catch (Exception e)
+        {
+            fail (e.toString ());
+            string = null; // never reached
+        }
+        finally
+        {
+            file.delete ();
+        }
+        assertEquals ("stringbean text differs", text, string);
     }
 
     public void testZeroArgConstructor ()
@@ -265,6 +302,79 @@ public class BeanTest extends TestCase
         assertTrue (
             "Links property change not fired for URL change",
             hit[0].booleanValue ());
+    }
+
+    /**
+     * Test no text returns empty string.
+     */
+    public void testCollapsed1 ()
+    {
+        StringBean sb;
+
+        sb = new StringBean ();
+        sb.setLinks (false);
+        sb.setReplaceNonBreakingSpaces (true);
+        sb.setCollapse (false);
+        check (sb, "<html><head></head><body></body></html>", "");
+        check (sb, "<html><head></head><body> </body></html>", " ");
+        check (sb, "<html><head></head><body>\t</body></html>", "\t");
+        sb.setCollapse (true);
+        check (sb, "<html><head></head><body></body></html>", "");
+        check (sb, "<html><head></head><body> </body></html>", "");
+        check (sb, "<html><head></head><body>\t</body></html>", "");
+    }
+
+    /**
+     * Test multiple whitespace returns empty string.
+     */
+    public void testCollapsed2 ()
+    {
+        StringBean sb;
+
+        sb = new StringBean ();
+        sb.setLinks (false);
+        sb.setReplaceNonBreakingSpaces (true);
+        sb.setCollapse (false);
+        check (sb, "<html><head></head><body>  </body></html>", "  ");
+        check (sb, "<html><head></head><body>\t\t</body></html>", "\t\t");
+        check (sb, "<html><head></head><body> \t\t</body></html>", " \t\t");
+        check (sb, "<html><head></head><body>\t \t</body></html>", "\t \t");
+        check (sb, "<html><head></head><body>\t\t </body></html>", "\t\t ");
+        sb.setCollapse (true);
+        check (sb, "<html><head></head><body>  </body></html>", "");
+        check (sb, "<html><head></head><body>\t\t</body></html>", "");
+        check (sb, "<html><head></head><body> \t\t</body></html>", "");
+        check (sb, "<html><head></head><body>\t \t</body></html>", "");
+        check (sb, "<html><head></head><body>\t\t </body></html>", "");
+    }
+
+    /**
+     * Test text preceded or followed by whitespace returns just text.
+     */
+    public void testCollapsed3 ()
+    {
+        StringBean sb;
+
+        sb = new StringBean ();
+        sb.setLinks (false);
+        sb.setReplaceNonBreakingSpaces (true);
+        sb.setCollapse (false);
+        check (sb, "<html><head></head><body>x  </body></html>", "x  ");
+        check (sb, "<html><head></head><body>x\t\t</body></html>", "x\t\t");
+        check (sb, "<html><head></head><body>x \t\t</body></html>", "x \t\t");
+        check (sb, "<html><head></head><body>x\t \t</body></html>", "x\t \t");
+        check (sb, "<html><head></head><body>x\t\t </body></html>", "x\t\t ");
+        sb.setCollapse (true);
+        check (sb, "<html><head></head><body>x  </body></html>", "x");
+        check (sb, "<html><head></head><body>x\t\t</body></html>", "x");
+        check (sb, "<html><head></head><body>x \t\t</body></html>", "x");
+        check (sb, "<html><head></head><body>x\t \t</body></html>", "x");
+        check (sb, "<html><head></head><body>x\t\t </body></html>", "x");
+        check (sb, "<html><head></head><body>  x</body></html>", "x");
+        check (sb, "<html><head></head><body>\t\tx</body></html>", "x");
+        check (sb, "<html><head></head><body> \t\tx</body></html>", "x");
+        check (sb, "<html><head></head><body>\t \tx</body></html>", "x");
+        check (sb, "<html><head></head><body>\t\t x</body></html>", "x");
     }
 }
 
