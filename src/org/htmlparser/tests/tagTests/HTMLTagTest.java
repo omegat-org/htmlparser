@@ -72,23 +72,13 @@ public class HTMLTagTest extends HTMLParserTestCase
 	 * Creation date: (6/17/2001 5:27:42 PM)
 	 */
 	public void testLargeTagBug() throws HTMLParserException {
-		String testHTML = new String(
+		createParser(
 			"<MYTAG abcd\n"+
 			"efgh\n"+
 			"ijkl\n"+
 			"mnop>"
 		);
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[10];
-	
-				
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));
+		parseAndAssertNodeCount(1);
 		// The node should be an HTMLTag
 		assertTrue("Node should be a HTMLTag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag)node[0];
@@ -104,296 +94,289 @@ public class HTMLTagTest extends HTMLParserTestCase
 		HTMLEndTag etag;
 		String s = "input type=\"text\" value=\"<%=\"test\"%>\" name=\"text\"";
 		String line = "<"+s+">";
-	    StringReader sr = new StringReader(line);
-	    HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-	  	HTMLNode [] node = new HTMLNode[10];
-		int i = 0;
-	  	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes(); ) {
-	    	node[i++] = e.nextHTMLNode();
-		}	
-	   	// Check the no of nodes found (should be only one)
-	   	assertEquals("Number of nodes found", 1,i);
+	    createParser(line);
+		parseAndAssertNodeCount(1);
 		assertTrue("The node found should have been an HTMLTag",node[0] instanceof HTMLTag);
 		HTMLTag tag = (HTMLTag) node[0];
 		assertEquals("Tag Contents",s,tag.getText());
 	}
-	    /**
-	    * Test parseParameter method
-	    * Created by Kaarle Kaila (august 2001)
-	    * the tag name is here G
-	    */
-	    public void testParseParameter3() throws HTMLParserException {
-	        HTMLTag tag;
-	        HTMLEndTag etag;
-	        HTMLStringNode snode;
-	        HTMLNode node=null;
-	        String lin1 = "<DIV class=\"userData\" id=\"oLayout\" name=\"oLayout\"></DIV>";
-	       	StringReader sr = new StringReader(lin1);
-	    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-	        HTMLEnumeration en = parser.elements();
-	        Hashtable h;
-	        boolean testEnd=true;  // test end of first part
-	        String a,href,myPara,myValue,nice;      
-	        
-	        try {
 	
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                
-	                tag = (HTMLTag)node;     
-	                h = tag.getParsed();
-					String classValue= (String)h.get("CLASS");
-	                assertEquals ("The class value should be ","userData",classValue);
-	            }
-	            
-	        } 
-	        catch (ClassCastException ce) {
-	            fail("Bad class element = " + node.getClass().getName());
-	        }
-	    }
-	    /**
-	    * Test parseParameter method
-	    * Created by Kaarle Kaila (august 2001)
-	    * the tag name is here A (and should be eaten up by linkScanner)
-	    */
-	    public void testParseParameterA() throws HTMLParserException {
-	        HTMLTag tag;
-	        HTMLEndTag etag;
-	        HTMLStringNode snode;
-			HTMLNode node=null;
-	        String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
-	       	StringReader sr = new StringReader(lin1);
-	    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-	        HTMLEnumeration en = parser.elements();
-	        Hashtable h;
-	        boolean testEnd=true;  // test end of first part
-	        String a,href,myPara,myValue,nice;      
-	        
-	        try {
+    /**
+     * Test parseParameter method
+     * Created by Kaarle Kaila (august 2001)
+     * the tag name is here G
+     */
+    public void testParseParameter3() throws HTMLParserException {
+        HTMLTag tag;
+        HTMLEndTag etag;
+        HTMLStringNode snode;
+        HTMLNode node=null;
+        String lin1 = "<DIV class=\"userData\" id=\"oLayout\" name=\"oLayout\"></DIV>";
+       	StringReader sr = new StringReader(lin1);
+    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+        HTMLEnumeration en = parser.elements();
+        Hashtable h;
+        boolean testEnd=true;  // test end of first part
+        String a,href,myPara,myValue,nice;      
+        
+        try {
+
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                
+                tag = (HTMLTag)node;     
+                h = tag.getParsed();
+				String classValue= (String)h.get("CLASS");
+                assertEquals ("The class value should be ","userData",classValue);
+            }
+            
+        } 
+        catch (ClassCastException ce) {
+            fail("Bad class element = " + node.getClass().getName());
+        }
+    }
+    /**
+    * Test parseParameter method
+    * Created by Kaarle Kaila (august 2001)
+    * the tag name is here A (and should be eaten up by linkScanner)
+    */
+    public void testParseParameterA() throws HTMLParserException {
+        HTMLTag tag;
+        HTMLEndTag etag;
+        HTMLStringNode snode;
+		HTMLNode node=null;
+        String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
+       	StringReader sr = new StringReader(lin1);
+    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+        HTMLEnumeration en = parser.elements();
+        Hashtable h;
+        boolean testEnd=true;  // test end of first part
+        String a,href,myPara,myValue,nice;      
+        
+        try {
+
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                
+                tag = (HTMLTag)node;     
+                h = tag.getParsed();
+                a = (String)h.get(tag.TAGNAME);                
+                href = (String)h.get("HREF");
+                myValue = (String)h.get("MYPARAMETER");
+                nice = (String)h.get("YOURPARAMETER");
+                assertEquals ("Link tag (A)","A",a);
+                assertEquals ("href value","http://www.iki.fi/kaila",href);
+                assertEquals ("myparameter value","",myValue);
+                assertEquals ("yourparameter value","Kaarle Kaaila",nice);
+//                }
+            }
+            if (!(node instanceof HTMLLinkTag)) {
+                // linkscanner has eaten up this piece
+                if ( en.hasMoreNodes()) {
+                    node = en.nextHTMLNode();        
+                    snode = (HTMLStringNode)node;   
+                    assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
+                }
+
+                if (en.hasMoreNodes()) {
+                    node = en.nextHTMLNode();        
+                    etag = (HTMLEndTag)node;        
+                    assertEquals("endtag of link",etag.getText(),"A");
+                }
+            }
+            // testing rest
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                
+                tag = (HTMLTag)node;        
+                assertEquals("following paragraph begins",tag.getText(),"p");
+            }
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                snode = (HTMLStringNode)node;   
+                assertEquals("paragraph contents",snode.getText(),"Paragraph");
+            }            
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                etag = (HTMLEndTag)node;        
+                assertEquals("paragrapg endtag",etag.getText(),"p");
+            }
+            
+        } catch (ClassCastException ce) {
+            fail("Bad class element = " + node.getClass().getName());
+        }
+    }
+    /**
+    * Test parseParameter method
+    * Created by Kaarle Kaila (august 2001)
+    * the tag name is here G
+    */
+    public void testParseParameterG() throws HTMLParserException{
+        HTMLTag tag;
+        HTMLEndTag etag;
+        HTMLStringNode snode;
+        HTMLNode node=null;
+        String lin1 = "<G href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaila\">Kaarle's homepage</G><p>Paragraph</p>";
+       	StringReader sr = new StringReader(lin1);
+    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+        HTMLEnumeration en = parser.elements();
+        Hashtable h;
+        boolean testEnd=true;  // test end of first part
+        String a,href,myPara,myValue,nice;      
+        
+        try {
+
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                
+                tag = (HTMLTag)node;     
+                h = tag.getParsed();
+                a = (String)h.get(tag.TAGNAME);                
+                href = (String)h.get("HREF");
+                myValue = (String)h.get("MYPARAMETER");
+                nice = (String)h.get("YOURPARAMETER");
+                assertEquals ("The tagname should be G",a,"G");
+                assertEquals ("Check the http address",href,"http://www.iki.fi/kaila");
+                assertEquals ("myValue is empty",myValue,"");
+                assertEquals ("The second parameter value",nice,"Kaila");
+//                }
+            }
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                snode = (HTMLStringNode)node;   
+                assertEquals("The text of the element",snode.getText(),"Kaarle's homepage");
+            }
+
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                etag = (HTMLEndTag)node;        
+                assertEquals("Endtag is G",etag.getText(),"G");
+            }
+            // testing rest
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                
+                tag = (HTMLTag)node;        
+                assertEquals("Follow up by p-tag",tag.getText(),"p");
+            }
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                snode = (HTMLStringNode)node;   
+                assertEquals("Verify the paragraph text",snode.getText(),"Paragraph");
+            }            
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                etag = (HTMLEndTag)node;        
+                assertEquals("Still patragraph endtag",etag.getText(),"p");
+            }
+            
+        } catch (ClassCastException ce) {
+            fail("Bad class element = " + node.getClass().getName());
+        }
+    }
+    
+    
+ /**
+    * Test parseParameter method
+    * Created by Kaarle Kaila (august 2002)
+    * the tag name is here A (and should be eaten up by linkScanner)
+  * Tests elements where = sign is surrounded by spaces
+    */
+    public void testParseParameterSpace() throws HTMLParserException{
+        HTMLTag tag;
+        HTMLEndTag etag;
+        HTMLStringNode snode;
+        HTMLNode node=null;
+        String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
+       	StringReader sr = new StringReader(lin1);
+    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+        HTMLEnumeration en = parser.elements();
+        Hashtable h;
+        boolean testEnd=true;  // test end of first part
+        String a,href,myPara,myValue,nice;      
+        
+        try {
+
+            if (en.hasMoreNodes()) {
+                node = en.nextHTMLNode();        
+                
+                tag = (HTMLTag)node;     
+                h = tag.parseParameters();
+                a = (String)h.get(tag.TAGNAME);                
+                nice = (String)h.get("YOURPARAMETER");
+                assertEquals ("Link tag (A)",a,"A");
+                assertEquals ("yourParameter value","Kaarle",nice);
+            }
+            if (!(node instanceof HTMLLinkTag)) {
+                // linkscanner has eaten up this piece
+                if ( en.hasMoreNodes()) {
+                    node = en.nextHTMLNode();        
+                    snode = (HTMLStringNode)node;   
+                    assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
+                }
+
+                if (en.hasMoreNodes()) {
+                    node = en.nextHTMLNode();        
+                    etag = (HTMLEndTag)node;        
+                    assertEquals("Still patragraph endtag",etag.getText(),"A");                    
+                }
+            }
+            // testing rest
+            
+        } catch (ClassCastException ce) {
+            fail("Bad class element = " + node.getClass().getName());
+        }
+    }
+     
+    
+    
+    
+    /**
+     * Reproduction of a bug reported by Annette Doyle
+     * This is actually a pretty good example of dirty html - we are in a fix 
+     * here, bcos the font tag (the first one) has an erroneous inverted comma. In HTMLTag,
+     * we ignore anything in inverted commas, and dont if its outside. This kind of messes
+     * up our parsing almost completely.
+     * 
+     */
+    public void testStrictParsing() throws HTMLParserException {
+		String testHTML = "<div align=\"center\"><font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"><a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+ 
+        "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
+        "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
+        "<a href=\"/cia/notices.html#sec\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Security</font></a>\n"+
+        "<a href=\"/cia/contact.htm\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Contact Us</font></a>\n"+
+        "<a href=\"/cia/sitemap.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Site Map</font></a>\n"+
+        "<a href=\"/cia/siteindex.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Index</font></a>\n"+
+        "<a href=\"/search\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Search</font></a>\n"+
+        "</font></div>"; 
 	
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                
-	                tag = (HTMLTag)node;     
-	                h = tag.getParsed();
-	                a = (String)h.get(tag.TAGNAME);                
-	                href = (String)h.get("HREF");
-	                myValue = (String)h.get("MYPARAMETER");
-	                nice = (String)h.get("YOURPARAMETER");
-	                assertEquals ("Link tag (A)","A",a);
-	                assertEquals ("href value","http://www.iki.fi/kaila",href);
-	                assertEquals ("myparameter value","",myValue);
-	                assertEquals ("yourparameter value","Kaarle Kaaila",nice);
-	//                }
-	            }
-	            if (!(node instanceof HTMLLinkTag)) {
-	                // linkscanner has eaten up this piece
-	                if ( en.hasMoreNodes()) {
-	                    node = en.nextHTMLNode();        
-	                    snode = (HTMLStringNode)node;   
-	                    assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
-	                }
-	
-	                if (en.hasMoreNodes()) {
-	                    node = en.nextHTMLNode();        
-	                    etag = (HTMLEndTag)node;        
-	                    assertEquals("endtag of link",etag.getText(),"A");
-	                }
-	            }
-	            // testing rest
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                
-	                tag = (HTMLTag)node;        
-	                assertEquals("following paragraph begins",tag.getText(),"p");
-	            }
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                snode = (HTMLStringNode)node;   
-	                assertEquals("paragraph contents",snode.getText(),"Paragraph");
-	            }            
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                etag = (HTMLEndTag)node;        
-	                assertEquals("paragrapg endtag",etag.getText(),"p");
-	            }
-	            
-	        } catch (ClassCastException ce) {
-	            fail("Bad class element = " + node.getClass().getName());
-	        }
-	    }
-	    /**
-	    * Test parseParameter method
-	    * Created by Kaarle Kaila (august 2001)
-	    * the tag name is here G
-	    */
-	    public void testParseParameterG() throws HTMLParserException{
-	        HTMLTag tag;
-	        HTMLEndTag etag;
-	        HTMLStringNode snode;
-	        HTMLNode node=null;
-	        String lin1 = "<G href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaila\">Kaarle's homepage</G><p>Paragraph</p>";
-	       	StringReader sr = new StringReader(lin1);
-	    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-	        HTMLEnumeration en = parser.elements();
-	        Hashtable h;
-	        boolean testEnd=true;  // test end of first part
-	        String a,href,myPara,myValue,nice;      
-	        
-	        try {
-	
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                
-	                tag = (HTMLTag)node;     
-	                h = tag.getParsed();
-	                a = (String)h.get(tag.TAGNAME);                
-	                href = (String)h.get("HREF");
-	                myValue = (String)h.get("MYPARAMETER");
-	                nice = (String)h.get("YOURPARAMETER");
-	                assertEquals ("The tagname should be G",a,"G");
-	                assertEquals ("Check the http address",href,"http://www.iki.fi/kaila");
-	                assertEquals ("myValue is empty",myValue,"");
-	                assertEquals ("The second parameter value",nice,"Kaila");
-	//                }
-	            }
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                snode = (HTMLStringNode)node;   
-	                assertEquals("The text of the element",snode.getText(),"Kaarle's homepage");
-	            }
-	
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                etag = (HTMLEndTag)node;        
-	                assertEquals("Endtag is G",etag.getText(),"G");
-	            }
-	            // testing rest
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                
-	                tag = (HTMLTag)node;        
-	                assertEquals("Follow up by p-tag",tag.getText(),"p");
-	            }
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                snode = (HTMLStringNode)node;   
-	                assertEquals("Verify the paragraph text",snode.getText(),"Paragraph");
-	            }            
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                etag = (HTMLEndTag)node;        
-	                assertEquals("Still patragraph endtag",etag.getText(),"p");
-	            }
-	            
-	        } catch (ClassCastException ce) {
-	            fail("Bad class element = " + node.getClass().getName());
-	        }
-	    }
-	    
-	    
-	 /**
-	    * Test parseParameter method
-	    * Created by Kaarle Kaila (august 2002)
-	    * the tag name is here A (and should be eaten up by linkScanner)
-	  * Tests elements where = sign is surrounded by spaces
-	    */
-	    public void testParseParameterSpace() throws HTMLParserException{
-	        HTMLTag tag;
-	        HTMLEndTag etag;
-	        HTMLStringNode snode;
-	        HTMLNode node=null;
-	        String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
-	       	StringReader sr = new StringReader(lin1);
-	    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-	        HTMLEnumeration en = parser.elements();
-	        Hashtable h;
-	        boolean testEnd=true;  // test end of first part
-	        String a,href,myPara,myValue,nice;      
-	        
-	        try {
-	
-	            if (en.hasMoreNodes()) {
-	                node = en.nextHTMLNode();        
-	                
-	                tag = (HTMLTag)node;     
-	                h = tag.parseParameters();
-	                a = (String)h.get(tag.TAGNAME);                
-	                nice = (String)h.get("YOURPARAMETER");
-	                assertEquals ("Link tag (A)",a,"A");
-	                assertEquals ("yourParameter value","Kaarle",nice);
-	            }
-	            if (!(node instanceof HTMLLinkTag)) {
-	                // linkscanner has eaten up this piece
-	                if ( en.hasMoreNodes()) {
-	                    node = en.nextHTMLNode();        
-	                    snode = (HTMLStringNode)node;   
-	                    assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
-	                }
-	
-	                if (en.hasMoreNodes()) {
-	                    node = en.nextHTMLNode();        
-	                    etag = (HTMLEndTag)node;        
-	                    assertEquals("Still patragraph endtag",etag.getText(),"A");                    
-	                }
-	            }
-	            // testing rest
-	            
-	        } catch (ClassCastException ce) {
-	            fail("Bad class element = " + node.getClass().getName());
-	        }
-	    }
-	     
-	    
-	    
-	    
-	    /**
-	     * Reproduction of a bug reported by Annette Doyle
-	     * This is actually a pretty good example of dirty html - we are in a fix 
-	     * here, bcos the font tag (the first one) has an erroneous inverted comma. In HTMLTag,
-	     * we ignore anything in inverted commas, and dont if its outside. This kind of messes
-	     * up our parsing almost completely.
-	     * 
-	     */
-	    public void testStrictParsing() throws HTMLParserException {
-			String testHTML = "<div align=\"center\"><font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"><a href=\"/index.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Home</font></a>\n"+ 
-	        "<a href=\"/cia/notices.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Notices</font></a>\n"+
-	        "<a href=\"/cia/notices.html#priv\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Privacy</font></a>\n"+
-	        "<a href=\"/cia/notices.html#sec\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Security</font></a>\n"+
-	        "<a href=\"/cia/contact.htm\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Contact Us</font></a>\n"+
-	        "<a href=\"/cia/sitemap.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Site Map</font></a>\n"+
-	        "<a href=\"/cia/siteindex.html\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Index</font></a>\n"+
-	        "<a href=\"/search\" link=\"#000000\" vlink=\"#000000\"><font color=\"#FFFFFF\">Search</font></a>\n"+
-	        "</font></div>"; 
-		
-			StringReader sr = new StringReader(testHTML); 
-			HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
-			HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-			HTMLNode [] node = new HTMLNode[100];
-			// Register the image scanner
-			parser.registerScanners();
-			int i = 0;
-			HTMLNode thisNode;
-			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
-				node[i++] = e.nextHTMLNode();
-			}	    	
-			assertEquals("Number of nodes found",12,i);
-			// Check the tags
-			HTMLTag tag = (HTMLTag)node[0];
-			assertEquals("DIV Tag expected","div align=\"center\"",tag.getText());		
-			tag = (HTMLTag)node[1];
-			assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
-			// Try to parse the parameters from this tag.
-			Hashtable table = tag.getParsed();
-			assertNotNull("Parameters table",table);
-			assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
-			assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
-	    }
+		StringReader sr = new StringReader(testHTML); 
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		HTMLNode [] node = new HTMLNode[100];
+		// Register the image scanner
+		parser.registerScanners();
+		int i = 0;
+		HTMLNode thisNode;
+		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}	    	
+		assertEquals("Number of nodes found",12,i);
+		// Check the tags
+		HTMLTag tag = (HTMLTag)node[0];
+		assertEquals("DIV Tag expected","div align=\"center\"",tag.getText());		
+		tag = (HTMLTag)node[1];
+		assertEquals("Second tag should be corrected","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
+		// Try to parse the parameters from this tag.
+		Hashtable table = tag.getParsed();
+		assertNotNull("Parameters table",table);
+		assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
+		assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
+    }
 	public void testToHTML() throws HTMLParserException {
 		String testHTML = new String(
 			"<MYTAG abcd\n"+
