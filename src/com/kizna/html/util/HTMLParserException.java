@@ -45,8 +45,6 @@ import java.util.*;
 public class HTMLParserException
   extends ChainedException
 {
-  protected Throwable throwable;
-
   public HTMLParserException() {}
 
   public HTMLParserException(String message)
