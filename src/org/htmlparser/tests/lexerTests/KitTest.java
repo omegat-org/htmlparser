@@ -30,10 +30,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.Vector;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.EditorKit;
 import javax.swing.text.Element;
-import javax.swing.text.ElementIterator;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
@@ -42,7 +39,6 @@ import javax.swing.text.html.HTMLEditorKit.ParserCallback;
 import org.htmlparser.Node;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.lexer.Page;
 import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.TagNode;
@@ -607,6 +603,9 @@ public class KitTest extends ParserCallback
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.6  2004/01/14 02:53:47  derrickoswald
+ * *** empty log message ***
+ *
  * Revision 1.5  2003/10/20 01:28:03  derrickoswald
  * Removed lexer level AbstractNode.
  * Removed data package from parser level tags.

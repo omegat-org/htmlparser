@@ -26,8 +26,6 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.util.ParserUtils;
-
 /**
  * A text area tag within a form.
  */

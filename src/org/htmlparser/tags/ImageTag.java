@@ -28,8 +28,6 @@ package org.htmlparser.tags;
 
 import java.util.Vector;
 import org.htmlparser.lexer.nodes.Attribute;
-import org.htmlparser.lexer.nodes.TagNode;
-import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 import org.htmlparser.visitors.NodeVisitor;
 

@@ -35,7 +35,6 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Map;
 
 import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
@@ -46,7 +45,6 @@ import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;

@@ -34,7 +34,6 @@ import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SpecialHashtable;
 import org.htmlparser.util.Translate;

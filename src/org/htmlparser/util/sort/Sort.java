@@ -484,12 +484,66 @@ public class Sort
 
     /**
      * Binary search for an object
+     * @param vector The vector of <code>Ordered</code> objects.
      * @param ref The name to search for.
      * @return The index at which reference was found or is to be inserted.
      */
     public static int bsearch (Vector vector, Ordered ref)
     {
         return (bsearch (vector, ref, 0, vector.size () - 1));
+    }
+
+    /**
+     * Binary search for an object
+     * @param array The array of <code>Ordered</code> objects.
+     * @param ref The name to search for.
+     * @param lo The lower index within which to look.
+     * @param hi The upper index within which to look.
+     * @return The index at which reference was found or is to be inserted.
+     */
+    public static int bsearch (Ordered[] array, Ordered ref, int lo, int hi)
+    {   int num;
+        int mid;
+        int half;
+        int result;
+        int ret;
+
+        ret = -1;
+
+        num = (hi - lo) + 1;
+        while ((-1 == ret) && (lo <= hi))
+        {
+            half = num / 2;
+            mid = lo + ((0 != (num & 1)) ? half : half - 1);
+            result = ref.compare (array[mid]);
+            if (0 == result)
+                ret = mid;
+            else if (0 > result)
+            {
+                hi = mid - 1;
+                num = ((0 != (num & 1)) ? half : half - 1);
+            }
+            else
+            {
+                lo = mid + 1;
+                num = half;
+            }
+        }
+        if (-1 == ret)
+            ret = lo;
+
+        return (ret);
+    }
+
+    /**
+     * Binary search for an object
+     * @param array The array of <code>Ordered</code> objects.
+     * @param ref The name to search for.
+     * @return The index at which reference was found or is to be inserted.
+     */
+    public static int bsearch (Ordered[] array, Ordered ref)
+    {
+        return (bsearch (array, ref, 0, array.length - 1));
     }
 }
 

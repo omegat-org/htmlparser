@@ -29,12 +29,10 @@ package org.htmlparser.tests.lexerTests;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.htmlparser.lexer.Stream;
 import org.htmlparser.tests.ParserTestCase;

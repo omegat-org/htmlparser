@@ -29,15 +29,12 @@ package org.htmlparser.scanners;
 import java.util.Vector;
 
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.tags.CompositeTag;
-import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;

@@ -32,21 +32,12 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
 
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.NodeFactory;
-import org.htmlparser.nodeDecorators.DecodingNode;
-import org.htmlparser.nodeDecorators.EscapeCharacterRemovingNode;
-import org.htmlparser.nodeDecorators.NonBreakingSpaceConvertingNode;
-import org.htmlparser.tags.Tag; // temporarily
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.IteratorImpl;
 import org.htmlparser.util.LinkProcessor;

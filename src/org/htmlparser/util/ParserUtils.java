@@ -26,15 +26,9 @@
 
 package org.htmlparser.util;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Map;
-
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.Parser;
 import org.htmlparser.filters.NodeClassFilter;
-import org.htmlparser.tags.Tag;
 
 public class ParserUtils
 {

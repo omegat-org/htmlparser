@@ -28,7 +28,6 @@ package org.htmlparser.visitors;
 
 import org.htmlparser.StringNode;
 import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.Translate;
 
 

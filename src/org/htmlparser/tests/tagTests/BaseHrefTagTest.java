@@ -26,8 +26,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.Vector;
-
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.LinkTag;

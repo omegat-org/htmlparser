@@ -26,24 +26,13 @@
 
 package org.htmlparser.tests.lexerTests;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashSet;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.lexer.Page;
-import org.htmlparser.lexer.PageIndex;
-import org.htmlparser.lexer.Source;
-import org.htmlparser.lexer.Stream;
 import org.htmlparser.lexer.nodes.RemarkNode;
 import org.htmlparser.lexer.nodes.StringNode;
 import org.htmlparser.lexer.nodes.TagNode;
@@ -51,7 +40,6 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.ParserException;
 
 public class LexerTests extends ParserTestCase
@@ -620,11 +608,11 @@ public class LexerTests extends ParserTestCase
      * however, the problem is that ISO-2022-JP (aka JIS) encoding sometimes
      * causes spurious tags.
      * The root cause is characters bracketed by [esc]$B and [esc](J (contrary
-     * to what is indicated in the j_s_nightingale analysis of the problem) that
+     * to what is indicated in then j_s_nightingale analysis of the problem) that
      * sometimes have an angle bracket (&lt; or 0x3c) embedded in them. These
      * are taken to be tags by the parser, instead of being considered strings.
      * <p>
-     * The URL http://www.009.com/ has an ISO-8859-1 encoding (the default), but
+     * The URL refrenced has an ISO-8859-1 encoding (the default), but
      * Japanese characters intermixed on the page with English, using the JIS
      * encoding. We detect failure by looking for weird tag names which were
      * not correctly handled as string nodes.
@@ -666,7 +654,7 @@ public class LexerTests extends ParserTestCase
         Parser parser;
         NodeIterator iterator;
         
-        parser = new Parser ("http://htmlparser.sourceforge.net/test/www_009_com.html");
+        parser = new Parser ("http://www.009.com/");
         iterator = parser.elements ();
         while (iterator.hasMoreNodes ())
             checkTagNames (iterator.nextNode ());
@@ -745,40 +733,5 @@ public class LexerTests extends ParserTestCase
         assertStringEquals ("conjoined text", expected, buffer.toString ());
     }
 
-    /**
-     * See bug #874175 StringBean doesn't handle charset change well
-     * Force an encoding change exception, reset and re-read.
-     */
-    public void testEncodingChange ()
-        throws
-            ParserException
-    {
-        NodeIterator iterator;
-        Node node;
-        boolean success;
-
-        parser = new Parser ("http://htmlparser.sourceforge.net/test/www_china-pub_com.html");
-        success = false;
-        try
-        {
-            for (iterator = parser.elements (); iterator.hasMoreNodes (); )
-                node = iterator.nextNode ();
-        }
-        catch (EncodingChangeException ece)
-        {
-            success = true;
-            try
-            {
-                parser.reset ();
-                for (iterator = parser.elements (); iterator.hasMoreNodes (); )
-                    node = iterator.nextNode ();
-            }
-            catch (ParserException pe)
-            {
-                success = false;
-            }
-        }
-        assertTrue ("encoding change failed", success);
-    }
 }
 

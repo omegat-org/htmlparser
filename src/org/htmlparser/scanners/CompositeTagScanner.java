@@ -26,8 +26,6 @@
 
 package org.htmlparser.scanners;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Vector;
 
 import org.htmlparser.Node;

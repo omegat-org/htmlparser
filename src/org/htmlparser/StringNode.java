@@ -27,7 +27,6 @@
 package org.htmlparser;
 
 import org.htmlparser.lexer.Page;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**

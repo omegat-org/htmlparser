@@ -26,9 +26,6 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.Node;
-import org.htmlparser.util.SimpleNodeIterator;
-
 /**
  * The JSP/ASP tags like &lt;%&#46;&#46;&#46;%&gt; can be identified by this class.
  */

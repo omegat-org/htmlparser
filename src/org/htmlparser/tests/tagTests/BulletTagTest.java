@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.Node;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.tags.Bullet;
 import org.htmlparser.util.NodeIterator;

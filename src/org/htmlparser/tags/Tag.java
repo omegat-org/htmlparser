@@ -31,7 +31,6 @@ import java.util.Vector;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.scanners.TagScanner;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**

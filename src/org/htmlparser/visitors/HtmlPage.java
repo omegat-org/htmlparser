@@ -26,10 +26,7 @@
 
 package org.htmlparser.visitors;
 
-import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.Tag;

@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.Vector;
 import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 

@@ -26,12 +26,10 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.util.Vector;
 import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.StringNode;
-import org.htmlparser.lexer.Page;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Div;
@@ -41,7 +39,6 @@ import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class CompositeTagScannerTest extends ParserTestCase {

@@ -27,7 +27,6 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
 /**

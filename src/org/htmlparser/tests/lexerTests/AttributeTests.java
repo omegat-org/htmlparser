@@ -28,10 +28,8 @@ package org.htmlparser.tests.lexerTests;
 
 import java.util.Hashtable;
 import java.util.Vector;
-import junit.framework.TestSuite;
 import org.htmlparser.Node;
 
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.PageAttribute;

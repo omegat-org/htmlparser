@@ -26,12 +26,9 @@
 
 package org.htmlparser.tests;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.Vector;
 
 import junit.framework.TestCase;
 

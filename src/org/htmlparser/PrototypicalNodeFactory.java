@@ -33,10 +33,6 @@ import java.util.Vector;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.NodeFactory;
-import org.htmlparser.nodeDecorators.DecodingNode;
-import org.htmlparser.nodeDecorators.EscapeCharacterRemovingNode;
-import org.htmlparser.nodeDecorators.NonBreakingSpaceConvertingNode;
-//import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.*; // import everything for now
 import org.htmlparser.util.ParserException;
 

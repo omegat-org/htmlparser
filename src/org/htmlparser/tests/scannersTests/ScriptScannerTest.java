@@ -30,7 +30,6 @@ import java.util.Hashtable;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tests.ParserTestCase;

@@ -28,13 +28,7 @@ package org.htmlparser.tests;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.MalformedURLException;
-import java.net.URL;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.htmlparser.Node;
@@ -42,7 +36,6 @@ import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.util.DefaultParserFeedback;
-import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 

@@ -28,7 +28,6 @@ package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.tags.JspTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;

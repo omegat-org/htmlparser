@@ -35,12 +35,9 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tests.ParserTestCase;
-import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.NodeIterator;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
-import org.htmlparser.util.SimpleNodeIterator;
 
 public class ImageTagTest extends ParserTestCase
 {

@@ -28,11 +28,9 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.StringNode;
 import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tests.ParserTestCase;
-import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class ScriptTagTest extends ParserTestCase{

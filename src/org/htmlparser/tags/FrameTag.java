@@ -26,8 +26,6 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.util.LinkProcessor;
-
 /**
  * Identifies a frame tag
  */

@@ -26,10 +26,7 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.Node;
-
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.ParserUtils;
 
 /**
  * A select tag within a form.

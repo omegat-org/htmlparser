@@ -26,15 +26,8 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.util.Vector;
-import org.htmlparser.Node;
-import org.htmlparser.Parser;
-import org.htmlparser.lexer.Lexer;
-import org.htmlparser.lexer.Page;
-import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
-import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 

@@ -27,7 +27,6 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.lexer.Page;
-import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.ParserException;
 
 /**
