@@ -1,3 +1,9 @@
+Integration Build 1.2 - 20020607
+--------------------------------
+Incorporated bug fixes by Wolfgang Germund
+In HTMLScriptScanner - the html extracted with toRawString
+did not mirror the actual html data.
+
 Integration Build 1.2 - 20020512
 --------------------------------
 [1] Made Link Scanner more fault tolerant.
