@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -95,7 +94,6 @@ public class ScriptTagTest extends ParserTestCase{
         String testHTML1 = sb1.toString();
 
         createParser(testHTML1);
-        Parser.setLineSeparator("\r\n");
         parser.setNodeFactory (new PrototypicalNodeFactory (new ScriptTag ()));
         parseAndAssertNodeCount(3);
         assertTrue("Node should be a script tag",node[1]

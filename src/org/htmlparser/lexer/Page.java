@@ -41,6 +41,7 @@ import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
+import org.htmlparser.http.ConnectionManager;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -94,21 +95,9 @@ public class Page
     protected transient URLConnection mConnection;
 
     /**
-     * Messages for page not there (404).
+     * Connection control (proxy, cookies, authorization).
      */
-    static private final String[] mFourOhFour =
-    {
-        "The web site you seek cannot be located, but countless more exist",
-        "You step in the stream, but the water has moved on. This page is not here.",
-        "Yesterday the page existed. Today it does not. The internet is like that.",
-        "That page was so big. It might have been very useful. But now it is gone.",
-        "Three things are certain: death, taxes and broken links. Guess which has occured.",
-        "Chaos reigns within. Reflect, repent and enter the correct URL. Order shall return.",
-        "Stay the patient course. Of little worth is your ire. The page is not found.",
-        "A non-existant URL reduces your expensive computer to a simple stone.",
-        "Many people have visited that page. Today, you are not one of the lucky ones.",
-        "Cutting the wind with a knife. Bookmarking a URL. Both are ephemeral.",
-    };
+    public static ConnectionManager mConnectionManager = new ConnectionManager ();
 
     /**
      * Construct an empty page.
@@ -188,6 +177,28 @@ public class Page
     public Page (String text)
     {
         this (text, null);
+    }
+
+    //
+    // static methods
+    //
+
+    /**
+     * Get the connection manager all Parsers use.
+     * @return The connection manager.
+     */
+    public static ConnectionManager getConnectionManager ()
+    {
+        return (mConnectionManager);
+    }
+
+    /**
+     * Set the connection manager to use.
+     * @return The connection manager.
+     */
+    public static void setConnectionManager (ConnectionManager manager)
+    {
+        mConnectionManager = manager;
     }
 
     //
@@ -350,24 +361,15 @@ public class Page
         mConnection = connection;
         try
         {
-            try
-            {
-                getConnection ().setRequestProperty ("Accept-Encoding", "gzip, deflate");
-            }
-            catch (IllegalStateException ise) //  already connected
-            {
-                // assume all request properties have already been set
-            }
             getConnection ().connect ();
         }
         catch (UnknownHostException uhe)
         {
-            int message = (int)(Math.random () * mFourOhFour.length);
-            throw new ParserException (mFourOhFour[message], uhe);
+            throw new ParserException ("Connect to " + mConnection.getURL ().toExternalForm () + " failed.", uhe);
         }
         catch (IOException ioe)
         {
-            throw new ParserException (ioe.getMessage (), ioe);
+            throw new ParserException ("Exception connecting to " + mConnection.getURL ().toExternalForm () + " (" + ioe.getMessage () + ").", ioe);
         }
         type = getContentType ();
         charset = getCharset (type);
@@ -408,7 +410,7 @@ public class Page
         }
         catch (IOException ioe)
         {
-            throw new ParserException (ioe.getMessage (), ioe);
+            throw new ParserException ("Exception getting input stream from " + mConnection.getURL ().toExternalForm () + " (" + ioe.getMessage () + ").", ioe);
         }
         mUrl = connection.getURL ().toExternalForm ();
         mIndex = new PageIndex (this);

@@ -928,7 +928,7 @@ public class ThumbelinaFrame
                 query);
             if (null != query)
             {
-                // replace spzces with +
+                // replace spaces with +
                 terms = query.replace (' ', '+');
                 buffer = new StringBuffer (1024);
                 buffer.append ("http://www.google.ca/search?");
@@ -943,7 +943,7 @@ public class ThumbelinaFrame
                 connection = (HttpURLConnection)url.openConnection ();
                 if (USE_MOZILLA_HEADERS)
                 {
-                    // Theses are the Mozilla header fields:
+                    // These are the Mozilla header fields:
                     //Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,video/x-mng,image/png,image/jpeg,image/gif;q=0.2,text/css,*/*;q=0.1
                     //Accept-Language: en-us, en;q=0.50
                     //Connection: keep-alive

@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Tag;
 import org.htmlparser.tags.JspTag;
@@ -82,7 +81,6 @@ public class JspTagTest extends ParserTestCase
             jsp + "\n" +
             "<" + contents2 + ">\n<jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
             "%>");
-        Parser.setLineSeparator("\r\n");
         parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
         parseAndAssertNodeCount(8);
         // The first node should be a JspTag
@@ -136,7 +134,6 @@ public class JspTagTest extends ParserTestCase
             guts
             + "%><jsp:forward page=\"transferConfirm.jsp\"/><%\n"+
             "%>\n");
-        Parser.setLineSeparator("\r\n");
         parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
         parseAndAssertNodeCount(8);
         // The first node should be a JspTag

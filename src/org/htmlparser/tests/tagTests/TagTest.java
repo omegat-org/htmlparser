@@ -29,7 +29,6 @@ package org.htmlparser.tests.tagTests;
 import org.htmlparser.Attribute;
 
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
@@ -545,7 +544,6 @@ public class TagTest extends ParserTestCase
     public void testEmptyTag4() throws ParserException {
         String testHTML = "<html><body>text\n<>text</body></html>";
         createParser(testHTML);
-        Parser.setLineSeparator ("\r\n"); // actually a static method
         parseAndAssertNodeCount(1);
         assertTrue("Only node should be an HTML node",node[0] instanceof Html);
         Html html = (Html)node[0];
@@ -565,7 +563,6 @@ public class TagTest extends ParserTestCase
     public void testEmptyTag5() throws ParserException {
         String testHTML = "<html><body>text<\n>text</body></html>";
         createParser(testHTML);
-        Parser.setLineSeparator ("\r\n"); // actually a static method
         parseAndAssertNodeCount(1);
         assertTrue("Only node should be an HTML node",node[0] instanceof Html);
         Html html = (Html)node[0];
@@ -585,7 +582,6 @@ public class TagTest extends ParserTestCase
     public void testEmptyTag6() throws ParserException {
         String testHTML = "<html><body>text<>\ntext</body></html>";
         createParser(testHTML);
-        Parser.setLineSeparator ("\r\n"); // actually a static method
         parseAndAssertNodeCount(1);
         assertTrue("Only node should be an HTML node",node[0] instanceof Html);
         Html html = (Html)node[0];

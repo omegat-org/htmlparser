@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.JspTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -84,7 +83,6 @@ public class JspScannerTest extends ParserTestCase {
                 "return value;\n" +
                 "}\n" +
                 "%>");
-            Parser.setLineSeparator("\r\n");
             parser.setNodeFactory (new PrototypicalNodeFactory (new JspTag ()));
             parseAndAssertNodeCount(1);
         }

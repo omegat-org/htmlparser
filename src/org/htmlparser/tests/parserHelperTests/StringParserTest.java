@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.parserHelperTests;
 
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Remark;
 import org.htmlparser.Text;
@@ -80,7 +79,6 @@ public class StringParserTest extends ParserTestCase {
 
         createParser("view these documents, you must have <A href='http://www.adobe.com'>Adobe \n"+
             "Acrobat Reader</A> installed on your computer.");
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(3);
         // The first node should be a Text-  with the text - view these documents, you must have
         assertTrue("First node should be a Text",node[0] instanceof Text);

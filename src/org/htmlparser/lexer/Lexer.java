@@ -29,7 +29,6 @@ package org.htmlparser.lexer;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLConnection;
 import java.util.Vector;
 
@@ -38,6 +37,7 @@ import org.htmlparser.NodeFactory;
 import org.htmlparser.Remark;
 import org.htmlparser.Text;
 import org.htmlparser.Tag;
+import org.htmlparser.http.ConnectionManager;
 import org.htmlparser.nodes.RemarkNode;
 import org.htmlparser.nodes.TextNode;
 import org.htmlparser.nodes.TagNode;
@@ -1104,7 +1104,6 @@ public class Lexer
             IOException,
             ParserException
     {
-        URL url;
         Lexer lexer;
         Node node;
 
@@ -1112,10 +1111,10 @@ public class Lexer
             System.out.println ("usage: java -jar htmllexer.jar <url>");
         else
         {
-            url = new URL (args[0]);
             try
             {
-                lexer = new Lexer (url.openConnection ());
+                ConnectionManager manager = Page.getConnectionManager ();
+                lexer = new Lexer (manager.openConnection (args[0]));
                 while (null != (node = lexer.nextNode ()))
                     System.out.println (node.toString ());
             }

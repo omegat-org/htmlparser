@@ -27,7 +27,6 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
@@ -271,7 +270,6 @@ public class ImageTagTest extends ParserTestCase
     public void testImageWithNewLineChars() throws ParserException
     {
         createParser("<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">","http://www.yahoo.com/ghi");
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(1);
         assertTrue("Node identified should be HTMLImageTag",node[0] instanceof ImageTag);
         ImageTag imageTag = (ImageTag)node[0];

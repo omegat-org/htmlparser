@@ -112,7 +112,6 @@ public class ScriptScannerTest extends ParserTestCase
         String testHTML1 = sb1.toString();
 
         createParser(testHTML1,"http://www.google.com/test/index.html");
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a body tag", node[0] instanceof BodyTag);
         BodyTag body = (BodyTag)node[0];

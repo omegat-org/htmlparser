@@ -26,18 +26,14 @@
 
 package org.htmlparser;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.HttpURLConnection;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.filters.NodeClassFilter;
+import org.htmlparser.http.ConnectionManager;
+import org.htmlparser.http.ConnectionMonitor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.DefaultParserFeedback;
@@ -58,11 +54,12 @@ import org.htmlparser.visitors.NodeVisitor;
  * It is important to note that the parsing occurs when you enumerate, ON DEMAND.
  * This is a thread-safe way, and you only get the control back after a
  * particular element is parsed and returned, which could be the entire body.
- *  @see Parser#elements()
+ * @see Parser#elements()
  */
 public class Parser
     implements
-        Serializable
+        Serializable,
+        ConnectionMonitor
 {
     // Please don't change the formatting of the version variables below.
     // This is done so as to facilitate ant script processing.
@@ -98,16 +95,6 @@ public class Parser
     // End of formatting
 
     /**
-     * Default Request header fields.
-     * So far this is just "User-Agent".
-     */
-    protected static Map mDefaultRequestProperties = new HashMap ();
-    static
-    {
-        mDefaultRequestProperties.put ("User-Agent", "HTMLParser/" + VERSION_NUMBER);
-    }
-   
-    /**
      * Feedback object.
      */
     protected ParserFeedback mFeedback;
@@ -116,14 +103,6 @@ public class Parser
      * The html lexer associated with this parser.
      */
     protected Lexer mLexer;
-
-    /**
-     * Variable to store lineSeparator.
-     * This is setup to read <code>line.separator</code> from the System property.
-     * However it can also be changed using the mutator methods.
-     * This will be used in the toHTML() methods in all the sub-classes of Node.
-     */
-    protected static String lineSeparator = System.getProperty("line.separator", "\n");
 
     /**
      * A quiet message sink.
@@ -140,14 +119,6 @@ public class Parser
     //
     // Static methods
     //
-
-    /**
-     * @param lineSeparatorString New Line separator to be used
-     */
-    public static void setLineSeparator(String lineSeparatorString)
-    {
-        lineSeparator = lineSeparatorString;
-    }
 
     /**
      * Return the version string of this parser.
@@ -172,67 +143,40 @@ public class Parser
     }
 
     /**
-     * Get the current default request header properties.
-     * A String-to-String map of header keys and values.
-     * These fields are set by the parser when creating a connection.
+     * Get the connection manager all Parsers use.
+     * @return The connection manager.
      */
-    public static Map getDefaultRequestProperties ()
+    public static ConnectionManager getConnectionManager ()
     {
-        return (mDefaultRequestProperties);
+        return (Page.getConnectionManager ());
     }
 
     /**
-     * Set the default request header properties.
-     * A String-to-String map of header keys and values.
-     * These fields are set by the parser when creating a connection.
-     * Some of these can be set directly on a <code>URLConnection</code>,
-     * i.e. If-Modified-Since is set with setIfModifiedSince(long),
-     * but since the parser transparently opens the connection on behalf
-     * of the developer, these properties are not available before the
-     * connection is fetched. Setting these request header fields affects all
-     * subsequent connections opened by the parser. For more direct control
-     * create a <code>URLConnection</code> and set it on the parser.<p>
-     * From <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1</a>: 
-     * <pre>
-     * 5.3 Request Header Fields
-     * 
-     *    The request-header fields allow the client to pass additional
-     *    information about the request, and about the client itself, to the
-     *    server. These fields act as request modifiers, with semantics
-     *    equivalent to the parameters on a programming language method
-     *    invocation.
-     * 
-     *        request-header = Accept                   ; Section 14.1
-     *                       | Accept-Charset           ; Section 14.2
-     *                       | Accept-Encoding          ; Section 14.3
-     *                       | Accept-Language          ; Section 14.4
-     *                       | Authorization            ; Section 14.8
-     *                       | Expect                   ; Section 14.20
-     *                       | From                     ; Section 14.22
-     *                       | Host                     ; Section 14.23
-     *                       | If-Match                 ; Section 14.24
-     *                       | If-Modified-Since        ; Section 14.25
-     *                       | If-None-Match            ; Section 14.26
-     *                       | If-Range                 ; Section 14.27
-     *                       | If-Unmodified-Since      ; Section 14.28
-     *                       | Max-Forwards             ; Section 14.31
-     *                       | Proxy-Authorization      ; Section 14.34
-     *                       | Range                    ; Section 14.35
-     *                       | Referer                  ; Section 14.36
-     *                       | TE                       ; Section 14.39
-     *                       | User-Agent               ; Section 14.43
-     * 
-     *    Request-header field names can be extended reliably only in
-     *    combination with a change in the protocol version. However, new or
-     *    experimental header fields MAY be given the semantics of request-
-     *    header fields if all parties in the communication recognize them to
-     *    be request-header fields. Unrecognized header fields are treated as
-     *    entity-header fields.
-     * </pre>
+     * Set the connection manager all Parsers use.
+     * @return The connection manager.
      */
-    public static void setDefaultRequestProperties (Map properties)
+    public static void setConnectionManager (ConnectionManager manager)
     {
-        mDefaultRequestProperties = properties;
+        Page.setConnectionManager (manager);
+    }
+
+    /**
+     * Creates the parser on an input string.
+     * @param html The string containing HTML.
+     * @param charset <em>Optional</em>. The character set encoding that will
+     * be reported by {@link #getEncoding}. If charset is <code>null</code>
+     * the default character set is used.
+     * @return A parser with the <code>html</code> string as input.
+     */
+    public static Parser createParser (String html, String charset)
+    {
+        Parser ret;
+
+        if (null == html)
+            throw new IllegalArgumentException ("html cannot be null");
+        ret = new Parser (new Lexer (new Page (html, charset)));
+
+        return (ret);
     }
 
     //
@@ -270,7 +214,7 @@ public class Parser
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
      */
-    public Parser(Lexer lexer, ParserFeedback fb)
+    public Parser (Lexer lexer, ParserFeedback fb)
     {
         setFeedback (fb);
         if (null == lexer)
@@ -302,9 +246,9 @@ public class Parser
      * is provided.
      * @see #Parser(URLConnection,ParserFeedback)
      */
-    public Parser(String resourceLocn, ParserFeedback feedback) throws ParserException
+    public Parser (String resourceLocn, ParserFeedback feedback) throws ParserException
     {
-        this (openConnection (resourceLocn, feedback), feedback);
+        this (getConnectionManager ().openConnection (resourceLocn), feedback);
     }
 
     /**
@@ -312,7 +256,7 @@ public class Parser
      * A DefaultHTMLParserFeedback object is used for feedback.
      * @param resourceLocn Either the URL or the filename (autodetects).
      */
-    public Parser(String resourceLocn) throws ParserException
+    public Parser (String resourceLocn) throws ParserException
     {
         this (resourceLocn, stdout);
     }
@@ -394,7 +338,7 @@ public class Parser
             ParserException
     {
         if ((null != url) && !"".equals (url))
-            setConnection (openConnection (url, getFeedback ()));
+            setConnection (Page.getConnectionManager ().openConnection (url));
     }
 
     /**
@@ -572,178 +516,6 @@ public class Parser
         }
     }
 
-    /**
-     * Opens a connection using the given url.
-     * @param url The url to open.
-     * @param feedback The ibject to use for messages or <code>null</code>.
-     * @exception ParserException if an i/o exception occurs accessing the url.
-     */
-    public static URLConnection openConnection (URL url, ParserFeedback feedback)
-        throws
-            ParserException
-    {
-        Map properties;
-        String key;
-        String value;
-        URLConnection ret;
-
-        try
-        {
-            ret = url.openConnection ();
-            properties = getDefaultRequestProperties ();
-            if (null != properties)
-                for (Iterator iterator = properties.keySet ().iterator (); iterator.hasNext (); )
-                {
-                    key = (String)iterator.next ();
-                    value = (String)properties.get (key);
-                    ret.setRequestProperty (key, value);
-                }
-        }
-        catch (IOException ioe)
-        {
-            String msg = "HTMLParser.openConnection() : Error in opening a connection to " + url.toExternalForm ();
-            ParserException ex = new ParserException (msg, ioe);
-            if (null != feedback)
-                feedback.error (msg, ex);
-            throw ex;
-        }
-
-        return (ret);
-    }
-
-    /**
-     * Turn spaces into %20.
-     * @param url The url containing spaces.
-     * @return The URL with spaces as %20 sequences.
-     */
-    public static String fixSpaces (String url)
-    {
-        int index;
-        int length;
-        char ch;
-        StringBuffer returnURL;
-
-        index = url.indexOf (' ');
-        if (-1 != index)
-        {
-            length = url.length ();
-            returnURL = new StringBuffer (length * 3);
-            returnURL.append (url.substring (0, index));
-            for (int i = index; i < length; i++)
-            {
-                ch = url.charAt (i);
-                if (ch==' ')
-                    returnURL.append ("%20");
-                else
-                    returnURL.append (ch);
-            }
-            url = returnURL.toString ();
-        }
-
-        return (url);
-    }
-
-    /**
-     * Opens a connection based on a given string.
-     * The string is either a file, in which case <code>file://localhost</code>
-     * is prepended to a canonical path derived from the string, or a url that
-     * begins with one of the known protocol strings, i.e. <code>http://</code>.
-     * Embedded spaces are silently converted to %20 sequences.
-     * @param string The name of a file or a url.
-     * @param feedback The object to use for messages or <code>null</code> for no feedback.
-     * @exception ParserException if the string is not a valid url or file.
-     */
-    public static URLConnection openConnection (String string, ParserFeedback feedback)
-        throws
-            ParserException
-    {
-        final String prefix = "file://localhost";
-        String resource;
-        URL url;
-        StringBuffer buffer;
-        URLConnection ret;
-
-        try
-        {
-            url = new URL (fixSpaces (string));
-            ret =  openConnection (url, feedback);
-        }
-        catch (MalformedURLException murle)
-        {   // try it as a file
-            try
-            {
-                File file = new File (string);
-                resource = file.getCanonicalPath ();
-                buffer = new StringBuffer (prefix.length () + resource.length ());
-                buffer.append (prefix);
-                if (!resource.startsWith ("/"))
-                    buffer.append ("/");
-                buffer.append (resource);
-                url = new URL (fixSpaces (buffer.toString ()));
-                ret = openConnection (url, feedback);
-                if (null != feedback)
-                    feedback.info (url.toExternalForm ());
-            }
-            catch (MalformedURLException murle2)
-            {
-                String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
-                ParserException ex = new ParserException (msg, murle2);
-                if (null != feedback)
-                    feedback.error (msg, ex);
-                throw ex;
-            }
-            catch (IOException ioe)
-            {
-                String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
-                ParserException ex = new ParserException (msg, ioe);
-                if (null != feedback)
-                    feedback.error (msg, ex);
-                throw ex;
-            }
-        }
-
-        return (ret);
-    }
-
-    /**
-     * The main program, which can be executed from the command line
-     */
-    public static void main(String [] args)
-    {
-        System.out.println("HTMLParser v"+VERSION_STRING);
-        if (args.length<1 || args[0].equals("-help"))
-        {
-            System.out.println();
-            System.out.println("Syntax : java -jar htmlparser.jar <resourceLocn/website> [node_type]");
-            System.out.println("   <resourceLocn/website> the URL or file to be parsed");
-            System.out.println("   node_type an optional node name, for example:");
-            System.out.println("     A - Show only the link tags extracted from the document");
-            System.out.println("     IMG - Show only the image tags extracted from the document");
-            System.out.println("     TITLE - Extract the title from the document");
-            System.out.println();
-            System.out.println("Example : java -jar htmlparser.jar http://www.yahoo.com");
-            System.out.println();
-            System.out.println("For support, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page...");
-            System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
-            System.out.println();
-            System.exit(-1);
-        }
-        try
-        {
-            Parser parser = new Parser (args[0]);
-            System.out.println ("Parsing " + parser.getURL ());
-            NodeFilter filter;
-            if (1 < args.length)
-                filter = new TagNameFilter (args[1]);
-            else
-                filter = null;
-            parser.parse (filter);
-        }
-        catch (ParserException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void visitAllNodesWith(NodeVisitor visitor) throws ParserException {
         Node node;
         visitor.beginParsing();
@@ -797,29 +569,84 @@ public class Parser
         return (ret.toNodeArray ());
     }
 
+    //
+    // ConnectionMonitor interface
+    //
+
     /**
-     * Creates the parser on an input string.
-     * @param html The string containing HTML.
-     * @param charset <em>Optional</em>. The character set encoding that will
-     * be reported by {@link #getEncoding}. If charset is <code>null</code>
-     * the default character set is used.
-     * @return A parser with the <code>html</code> string as input.
+     * Called just prior to calling connect.
+     * The connection has been conditioned with proxy, URL user/password,
+     * and cookie information. It is still possible to adjust the
+     * connection to alter the request method for example. 
+     * @param connection The connection which is about to be connected.
+     * @exception This exception is thrown if the connection monitor
+     * wants the ConnectionManager to bail out.
      */
-    public static Parser createParser (String html, String charset)
+    public void preConnect (HttpURLConnection connection)
+    	throws
+    		ParserException
+	{
+        if (null != getFeedback ())
+            getFeedback ().info (ConnectionManager.getRequestHeader (connection));
+	}
+
+    /** Called just after calling connect.
+     * The response code and header fields can be examined.
+     * @param connection The connection that was just connected.
+     * @exception This exception is thrown if the connection monitor
+     * wants the ConnectionManager to bail out.
+     */
+    public void postConnect (HttpURLConnection connection)
+		throws
+			ParserException
     {
-        Parser ret;
-
-        if (null == html)
-            throw new IllegalArgumentException ("html cannot be null");
-        ret = new Parser (new Lexer (new Page (html, charset)));
-
-        return (ret);
+        if (null != getFeedback ())
+            getFeedback ().info (ConnectionManager.getResponseHeader (connection));
     }
 
     /**
-     * @return String lineSeparator that will be used in toHTML()
+     * The main program, which can be executed from the command line
      */
-    public static String getLineSeparator() {
-        return lineSeparator;
+    public static void main (String [] args)
+    {
+        Parser parser;
+        NodeFilter filter;
+
+        if (args.length < 1 || args[0].equals ("-help"))
+        {
+            System.out.println ("HTML Parser v" + VERSION_STRING + "\n");
+            System.out.println ();
+            System.out.println ("Syntax : java -jar htmlparser.jar <resourceLocn/website> [node_type]");
+            System.out.println ("   <resourceLocn/website> the URL or file to be parsed");
+            System.out.println ("   node_type an optional node name, for example:");
+            System.out.println ("     A - Show only the link tags extracted from the document");
+            System.out.println ("     IMG - Show only the image tags extracted from the document");
+            System.out.println ("     TITLE - Extract the title from the document");
+            System.out.println ();
+            System.out.println ("Example : java -jar htmlparser.jar http://www.yahoo.com");
+            System.out.println ();
+            System.out.println ("For support, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page...");
+            System.out.println ("HTML Parser home page : http://htmlparser.org");
+            System.out.println ();
+        }
+        else
+	        try
+	        {
+	            parser = new Parser ();
+	            if (1 < args.length)
+	                filter = new TagNameFilter (args[1]);
+	            else
+	            {   // for a simple dump, use more verbose settings
+	                filter = null;
+	                parser.setFeedback (Parser.stdout);
+	                getConnectionManager ().setMonitor (parser);
+	            }
+	            parser.setURL (args[0]);
+	            parser.parse (filter);
+	        }
+	        catch (ParserException e)
+	        {
+	            e.printStackTrace ();
+	        }
     }
 }

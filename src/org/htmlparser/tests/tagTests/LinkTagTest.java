@@ -27,7 +27,6 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
@@ -124,7 +123,6 @@ public class LinkTagTest extends ParserTestCase {
         createParser("<a href=" + link1 + ">���O</a>&nbsp; <a \n"+
         "href=" + link2 + ">��ï</a>&nbsp; <a\n"+
         "href=" + link3 + ">�q�T��</a>&nbsp;&nbsp;","http://www.cj.com");
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(6);
         assertTrue("Node should be a LinkTag",node[2] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[2];
@@ -244,7 +242,6 @@ public class LinkTagTest extends ParserTestCase {
         createParser(link1 + "\n"+
             "<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font>" +
             link2 + " by Rajesh Jain","http://www.cj.com/");
-        Parser.setLineSeparator("\r\n");
         parser.setNodeFactory (new PrototypicalNodeFactory (new LinkTag ()));
         parseAndAssertNodeCount(10);
         assertTrue("First Node should be a LinkTag",node[0] instanceof LinkTag);
@@ -499,7 +496,6 @@ public class LinkTagTest extends ParserTestCase {
         createParser("<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font><a \n"+
         "href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
         "nical.html\"> Journalism 3.0</a> by Rajesh Jain");
-        Parser.setLineSeparator("\r\n");
         parser.setNodeFactory (new PrototypicalNodeFactory (new LinkTag ()));
         parseAndAssertNodeCount(8);
         assertTrue("Seventh node should be a link tag",node[6] instanceof LinkTag);

@@ -26,7 +26,6 @@
 
 package org.htmlparser.tests.parserHelperTests;
 
-import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Remark;
 import org.htmlparser.Tag;
@@ -74,7 +73,6 @@ public class RemarkNodeParserTest extends ParserTestCase
             "<TEST>\n"+
             "</TEST>\n");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(15);
         // The first node should be a Remark
         assertTrue("First node should be a Remark",node[0] instanceof Remark);
@@ -98,7 +96,6 @@ public class RemarkNodeParserTest extends ParserTestCase
             "<TEST>\n"+
             "</TEST>\n");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(15);
         // The first node should be a Remark
         assertTrue("First node should be a Remark",node[0] instanceof Remark);
@@ -123,7 +120,6 @@ public class RemarkNodeParserTest extends ParserTestCase
             "<TEST>\n"+
             "</TEST>\n");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(15);
         // The first node should be a Remark
         assertTrue("First node should be a Remark",node[0] instanceof Remark);
@@ -159,7 +155,6 @@ public class RemarkNodeParserTest extends ParserTestCase
         "\n"+
         "-->");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a Remark",node[0] instanceof Remark);
         Remark Remark = (Remark)node[0];
@@ -194,7 +189,6 @@ public class RemarkNodeParserTest extends ParserTestCase
         "<A>\n"+
         "bcd -->");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
-        Parser.setLineSeparator("\n");
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a Remark",node[0] instanceof Remark);
         Remark Remark = (Remark)node[0];
@@ -216,7 +210,6 @@ public class RemarkNodeParserTest extends ParserTestCase
         "-\n"+
         "ssd -->");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
-        Parser.setLineSeparator("\n");
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a Tag but was "+node[0],node[0] instanceof Tag);
         Tag tag = (Tag)node[0];
@@ -224,7 +217,6 @@ public class RemarkNodeParserTest extends ParserTestCase
         "-\n"+
         "-\n"+
         "ssd --",tag.getText());
-        Parser.setLineSeparator("\r\n");
     }
 
     /**
