@@ -9,9 +9,10 @@
   <property name="resources" value="resources"/>
   <property name="dist"  value="release/htmlparser${version}"/>
   <property name="releaseDir" value="release"/>
+  <property name="finalLoc" value="distribution"/>
 
   <target name="init">
-
+	<mkdir dir="${finalLoc}"/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
   </target>
@@ -80,10 +81,10 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
   <target name="Package" depends="Release">
     <zip zipfile="${dist}/src.zip"
        basedir="${src}"/>
-    <zip zipfile="${releaseDir}/htmlparser${versionString}.zip"
-       basedir="${dist}"/>
-    <tar tarfile="${releaseDir}/docs.tar" basedir="${dist}/docs"/>
-    <gzip zipfile="${releaseDir}/docs.tar.gz" src="${releaseDir}/docs.tar"/>
+    <zip zipfile="${finalLoc}/htmlparser${versionString}.zip"
+       basedir="${releaseDir}"/>
+    <tar tarfile="${finalLoc}/docs.tar" basedir="${dist}/docs"/>
+    <gzip zipfile="${finalLoc}/docs.tar.gz" src="${finalLoc}/docs.tar"/>
   </target>
 
   <target name="clean">
