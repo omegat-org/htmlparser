@@ -117,7 +117,7 @@ public class HTMLParser
 	 */
 	protected boolean readFlag = false;
 	private Vector scanners = new Vector();
-	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Jun 16, 2002)";
+	public final static java.lang.String VERSION_STRING = "1.2 (Integration Build Jun 23, 2002)";
 /**
  * This constructor enables the construction of test cases, with readers
  * associated with test string buffers. 
@@ -270,6 +270,8 @@ public Enumeration getScanners() {
 			System.out.println("   -j Parse JSP tags");	
 			System.out.println("   -m Parse Meta tags");		
 			System.out.println("   -t Extract the Title");
+			System.out.println("   -f Extract forms");
+			System.out.println("   -r Extract frameset");
 			System.out.println("   -help This screen");
 			System.out.println();
 			System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
