@@ -57,7 +57,6 @@ public class TagParser {
 
 	public Tag find(NodeReader reader,String input,int position) {
 		int state = TAG_BEFORE_PARSING_STATE;
-		StringBuffer tagContents = new StringBuffer();
 		i=position;
 		char ch;
 		Tag tag = new Tag(new TagData(0,0,"",input));
@@ -71,9 +70,15 @@ public class TagParser {
 			state = automataInput(state, ch, tag, i);
 			i = incrementCounter(reader, state, tag);
 		}
-		if (state==TAG_FINISHED_PARSING_STATE)
-		return tag;
-		else
+		if (state==TAG_FINISHED_PARSING_STATE) {
+			String tagLine = tag.getTagLine();
+			if (i>1 && tagLine.charAt(i-2)=='/') {
+				tag.setEmptyXmlTag(true);
+				String tagContents = tag.getText();
+				tag.setText(tagContents.substring(0,tagContents.length()-1));
+			}
+			return tag;
+		} else
 		return null;	
 	}
 
@@ -91,7 +96,6 @@ public class TagParser {
 				state = TAG_IGNORE_BEGIN_TAG_STATE;
 		}
 		if (state==TAG_IGNORE_BEGIN_TAG_STATE && ch=='>') {
-
 				state = TAG_IGNORE_DATA_STATE;
 		}
 		checkIfAppendable(state, ch, tag);

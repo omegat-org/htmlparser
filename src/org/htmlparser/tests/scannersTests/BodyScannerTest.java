@@ -64,7 +64,7 @@ public class BodyScannerTest extends ParserTestCase {
 	 	assertTrue(node[4] instanceof BodyTag);
 		// check the body node
 		BodyTag bodyTag = (BodyTag) node[4];
-		assertEquals("Body","<BODY><%=BodyValue%></BODY>",bodyTag.toHtml());
+		assertStringEquals("Body","<BODY><%=BodyValue%></BODY>",bodyTag.toHtml());
 		assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
 	}
 	

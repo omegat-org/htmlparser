@@ -46,10 +46,12 @@ public class JspTag extends Tag
 	{
 		super(tagData);
 	}
+	
 	public String toHtml() {
 		return "<%"+tagContents+"%>";
 	}
-		/**
+	
+	/**
 	 * Print the contents of the remark tag.
 	 */
 	public String toString()

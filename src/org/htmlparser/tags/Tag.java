@@ -64,13 +64,14 @@ public class Tag extends Node
 	private final static int TAG_IGNORE_DATA_STATE=5;
 	private final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
 	private final static String EMPTY_STRING="";
-
+	
 	private static AttributeParser paramParser = new AttributeParser();
 	private static TagParser tagParser;
 	/**
 	 * Tag contents will have the contents of the comment tag.
-   */
-	StringBuffer tagContents;
+     */
+	protected StringBuffer tagContents;
+	private boolean emptyXmlTag = false;
 	/**
 	* tag parameters parsed into this hashtable
 	* not implemented yet
@@ -151,8 +152,7 @@ public class Tag extends Node
 	 * @param input Input String
 	 * @param position Position to start parsing from
 	 */
-	public static Tag find(NodeReader reader,String input,int position)
-	{
+	public static Tag find(NodeReader reader,String input,int position) {
 		return tagParser.find(reader,input,position);
 	}
 
@@ -216,15 +216,16 @@ public class Tag extends Node
 	 * Returns the line where the tag was found
 	 * @return java.lang.String
 	 */
-	public java.lang.String getTagLine() {
+	public String getTagLine() {
 		return tagLine;
 	}
 
 	/**
 	 * Return the text contained in this tag
 	 */
-	public String getText()
-	{
+	public String getText() {
+//		if (isEmptyXmlTag())
+//			 return tagContents.toString()+"/"; else
 		return tagContents.toString();
 	}
 
@@ -373,7 +374,8 @@ public class Tag extends Node
                           }
 			}
 		}
-                if (empty != null) sb.append(empty);
+		if (empty != null) sb.append(empty);
+		if (isEmptyXmlTag()) sb.append("/");
 		sb.append(">");
 		return sb.toString();
 	}
@@ -448,6 +450,15 @@ public class Tag extends Node
 
 	public String getType() {
 		return TYPE;
+	}
+
+
+	public boolean isEmptyXmlTag() {
+		return emptyXmlTag;
+	}
+
+	public void setEmptyXmlTag(boolean emptyXmlTag) {
+		this.emptyXmlTag = emptyXmlTag;
 	}
 
 }

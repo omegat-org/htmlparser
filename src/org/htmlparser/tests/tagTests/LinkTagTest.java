@@ -134,12 +134,12 @@ public class LinkTagTest extends ParserTestCase {
 		// The node should be an HTMLLinkTag
 		assertTrue("Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
 		LinkTag linkNode = (LinkTag)node[2];
-		assertEquals("Link incorrect!!","http://photo.kimo.com.tw/",linkNode.getLink());
+		assertStringEquals("Link incorrect!!","http://photo.kimo.com.tw",linkNode.getLink());
 		assertEquals("Link beginning",new Integer(48),new Integer(linkNode.elementBegin()));
 		assertEquals("Link ending",new Integer(38),new Integer(linkNode.elementEnd()));
 	
 			LinkTag linkNode2 = (LinkTag)node[4];
-		assertEquals("Link incorrect!!","http://address.kimo.com.tw/",linkNode2.getLink());
+		assertStringEquals("Link incorrect!!","http://address.kimo.com.tw",linkNode2.getLink());
 		assertEquals("Link beginning",new Integer(46),new Integer(linkNode2.elementBegin()));
 		assertEquals("Link ending",new Integer(42),new Integer(linkNode2.elementEnd()));
 	}

@@ -229,9 +229,31 @@ public class ScriptScannerTest extends ParserTestCase
 		
 	}
 	
-	public void testScriptBug() throws ParserException {
+	public void testScriptCodeExtraction() throws ParserException {
 		createParser(
-			"<SCRIPT language=JavaScript> " +			"document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +			"width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");" + 			"</SCRIPT>"
+			"<SCRIPT language=JavaScript> " +
+			"document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
+			"width=\"80\" height=\"20\" border=\"0\"></a>\");" + 
+			"</SCRIPT>"
+		);		
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertType("script",ScriptTag.class,node[0]);
+		ScriptTag scriptTag = (ScriptTag)node[0];
+		assertStringEquals(
+			"script code",
+			"document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
+			"width=\"80\" height=\"20\" border=\"0\"></a>\");",
+			scriptTag.getScriptCode()
+		);
+	}
+
+	public void testScriptCodeExtractionWithMultipleQuotes() throws ParserException {
+		createParser(
+			"<SCRIPT language=JavaScript> " +
+			"document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
+			"width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");" + 
+			"</SCRIPT>"
 		);
 		parser.registerScanners();
 		parseAndAssertNodeCount(1);
@@ -239,9 +261,11 @@ public class ScriptScannerTest extends ParserTestCase
 		ScriptTag scriptTag = (ScriptTag)node[0];
 		assertStringEquals(
 			"script code",
-			"document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
-			"width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");",
+			"document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
+			"width=\"80\" height=\"20\" border=\"0\"></a>\");",
 			scriptTag.getScriptCode()
 		);
 	}
+
+
 }

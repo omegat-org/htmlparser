@@ -60,6 +60,7 @@ public class TagParserTest extends ParserTestCase {
 		assertType("should be Tag",Tag.class,node[0]);
 		Tag tag = (Tag)node[0];
 		assertStringEquals("tag name","CUSTOM",tag.getTagName());
+		assertTrue("empty tag",tag.isEmptyXmlTag());
 		assertStringEquals(
 			"html",
 			"<CUSTOM/>",
