@@ -44,8 +44,6 @@ import org.htmlparser.util.ParserException;
 public class FormScanner extends CompositeTagScanner
 {
     private static final String [] MATCH_ID = { "FORM" };
-    public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";
-    private boolean linkScannerAlreadyOpen=false;
     private static final String [] formTagEnders = {"FORM","HTML","BODY"};
     
     /**
@@ -109,26 +107,6 @@ public class FormScanner extends CompositeTagScanner
     public String [] getID()
     {
         return MATCH_ID;
-    }
-
-    public boolean evaluate(Tag tag, TagScanner previousOpenScanner)
-    {
-        if (previousOpenScanner instanceof LinkScanner)
-        {
-            linkScannerAlreadyOpen = true;
-            StringBuffer msg= new StringBuffer();
-                msg.append(tag.toHtml ());
-                msg.append(PREVIOUS_DIRTY_LINK_MESSAGE);
-                feedback.warning(msg.toString());
-                // This is dirty HTML. Assume the current tag is
-                // not a new link tag - but an end tag. This is actually a really wild bug -
-                // Internet Explorer actually parses such tags.
-                // So - we shall then proceed to fool the scanner into sending an endtag of type </A>
-                // For this - set the dirty flag to true and return
-        }
-        else
-            linkScannerAlreadyOpen = false;
-        return super.evaluate(tag, previousOpenScanner);
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException

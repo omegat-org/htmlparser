@@ -168,6 +168,7 @@ public class ScriptScanner extends CompositeTagScanner {
                 end = new Tag (lexer.getPage (), tag.getEndPosition (), tag.getEndPosition (), new Vector ());
 //TODO: use the factory:
             ret = createTag (lexer.getPage (), tag.elementBegin(), end.elementEnd(), tag.getAttributesEx (), tag, end, new NodeList (last));
+            ret.setThisScanner (this);
         }
         finally
         {

@@ -69,71 +69,32 @@ public abstract class TagScanner
     implements
         Serializable
 {
-      /**
-       * A filter which is used to associate this tag. The filter contains a string
-       * that is used to match which tags are to be allowed to pass through. This can
-       * be useful when one wishes to dynamically filter out all tags except one type
-       * which may be programmed later than the parser. Is also useful for command line
-       * implementations of the parser.
-       */
-      protected String filter;
-
-      /**
-       * HTMLParserFeedback object automatically initialized
-       */
-      protected ParserFeedback feedback;
-      /**
-       * Default Constructor, automatically registers the scanner into a static array of
-       * scanners inside Tag
-       */
-      public TagScanner()
-      {
-        this.filter="";
-      }
-      /**
-       * This constructor automatically registers the scanner, and sets the filter for this
-       * tag.
-       * @param filter The filter which will allow this tag to pass through.
-       */
-      public TagScanner(String filter)
-      {
-        this.filter=filter;
-      }
-        /**
-     * Insert the method's description here.
-     * Creation date: (6/4/2001 11:44:09 AM)
-     * @return java.lang.String
-     * @param c char
+    /**
+     * A filter which is used to associate this tag. The filter contains a string
+     * that is used to match which tags are to be allowed to pass through. This can
+     * be useful when one wishes to dynamically filter out all tags except one type
+     * which may be programmed later than the parser. Is also useful for command line
+     * implementations of the parser.
      */
-    public String absorb(String s,char c) {
-      int index = s.indexOf(c);
-      if (index!=-1)    s=s.substring(index+1,s.length());
-      return s;
+    protected String filter;
+    
+    /**
+     * Default Constructor, automatically registers the scanner into a static array of
+     * scanners inside Tag
+     */
+    public TagScanner ()
+    {
+        this ("");
     }
 
     /**
-     * Remove whitespace from the front of the given string.
-     * @param s The string to trim.
-     * @return Either the same string or a string with whitespace chopped off.
+     * This constructor automatically registers the scanner, and sets the filter for this
+     * tag.
+     * @param filter The filter which will allow this tag to pass through.
      */
-    public static String absorbLeadingBlanks (String s)
+    public TagScanner (String filter)
     {
-        int length;
-        int i;
-        String ret;
-
-        i = 0;
-        length = s.length ();
-        while (i < length && Character.isWhitespace (s.charAt (i)))
-            i++;
-        if (0 == i)
-            ret = s;
-        else if (length == i)
-            ret = "";
-        else
-            ret = s.substring (i);
-
-        return (ret);
+        this.filter=filter;
     }
 
     /**
@@ -152,99 +113,35 @@ public abstract class TagScanner
         return (true);
     }
     
-    /**
-     * Pull the text between two matching capitalized 'XML' tags.
-     * @deprecated This reads ahead on your iterator and doesn't put them back if it's not an XML tag.
-     */
-    public static String extractXMLData (Node node, String tagName, NodeIterator iterator)
-    throws
-    ParserException
+    public String getFilter()
     {
-        try
-        {
-            String xmlData = "";
-            
-            boolean xmlTagFound = isXMLTagFound (node, tagName);
-            if (xmlTagFound)
-            {
-                try
-                {
-                    do
-                    {
-                        node = iterator.nextNode ();
-                        if (node!=null)
-                        {
-                            if (node instanceof StringNode)
-                            {
-                                StringNode stringNode = (StringNode)node;
-                                if (xmlData.length ()>0)
-                                    xmlData+=" ";
-                                xmlData += stringNode.getText ();
-                            }
-                            else
-                                if (!(node instanceof Tag && ((Tag)node).isEndTag ()))
-                                    xmlTagFound = false;
-                        }
-                    }
-                    while (node instanceof StringNode);
-                    
-                }
-                
-                catch (Exception e)
-                {
-                    throw new ParserException ("TagScanner.extractXMLData() : error while trying to find xml tag",e);
-                }
-            }
-            // check end tag matches start tag
-            if (xmlTagFound)
-            {
-                if (node!=null)
-                {
-                    if (node instanceof Tag && ((Tag)node).isEndTag ())
-                    {
-                        Tag endTag = (Tag)node;
-                        if (!endTag.getTagName ().equals (tagName))
-                            xmlTagFound = false;
-                    }
-                    
-                }
-                
-            }
-            if (xmlTagFound)
-                return xmlData;
-            else
-                return null;
-        }
-        catch (Exception e)
-        {
-            throw new ParserException ("TagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
-        }
-    }
-
-    public String getFilter() {
         return filter;
     }
 
-    public static boolean isXMLTagFound(Node node, String tagName) {
-        boolean xmlTagFound=false;
-        if (node instanceof Tag) {
-            Tag tag = (Tag)node;
-            if (tag.getText().toUpperCase().indexOf(tagName)==0) {
-              xmlTagFound=true;
-            }
-        }
-        return xmlTagFound;
-    }
+    /**
+     * Scan the tag and extract the information related to this type. The url of the
+     * initiating scan has to be provided in case relative links are found. The initial
+     * url is then prepended to it to give an absolute link.
+     * The Lexer is provided in order to do a lookahead operation. We assume that
+     * the identification has already been performed using the evaluate() method.
+     * @param tag HTML Tag to be scanned for identification.
+     * @param url The initiating url of the scan (Where the html page lies).
+     * @param lexer Provides html page access.
+     * @return The resultant tag (may be unchanged).
+     */
+    public Tag scan (Tag tag, String url, Lexer lexer) throws ParserException
+    {
+        Tag ret;
+        
+        ret = createTag(lexer.getPage (), tag.elementBegin(), tag.elementEnd(), tag.getAttributesEx (), tag, url);
+        ret.setThisScanner(this);
 
-    public final Tag createScannedNode(Tag tag,String url,Lexer lexer) throws ParserException {
-        Tag thisTag = scan(tag,url,lexer);
-        thisTag.setThisScanner(this);
-        thisTag.setAttributesEx(tag.getAttributesEx());
-        return thisTag;
+        return (ret);
     }
 
     /**
-     * Override this method to create your own tag type
+     * Create a tag.
+     * Override this method to create your own tag type.
      * @param tagData
      * @param tag
      * @param url
@@ -253,104 +150,5 @@ public abstract class TagScanner
      */
     protected abstract Tag createTag(Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException;
 
-    /**
-     * Scan the tag and extract the information related to this type. The url of the
-     * initiating scan has to be provided in case relative links are found. The initial
-     * url is then prepended to it to give an absolute link.
-     * The NodeReader is provided in order to do a lookahead operation. We assume that
-     * the identification has already been performed using the evaluate() method.
-     * @param tag HTML Tag to be scanned for identification
-     * @param url The initiating url of the scan (Where the html page lies)
-     * @param reader The reader object responsible for reading the html page
-     */
-    public Tag scan(Tag tag,String url,Lexer lexer) throws ParserException
-    {
-        return (createTag(lexer.getPage (), tag.elementBegin(), tag.elementEnd(), tag.getAttributesEx (), tag, url));
-    }
-
-    public String removeChars(String s,String occur)  {
-        StringBuffer newString = new StringBuffer();
-        int index;
-        do {
-            index = s.indexOf(occur);
-            if (index!=-1) {
-                newString.append(s.substring(0,index));
-                s=s.substring(index+occur.length());
-            }
-        }
-        while (index!=-1);
-        newString.append(s);
-        return newString.toString();
-    }
-
     public abstract String [] getID();
-
-    public final void setFeedback(ParserFeedback feedback) {
-        this.feedback = feedback;
-    }
-
-    public static Map adjustScanners(Parser parser)
-    {
-        Map ret;
-
-        ret = parser.getScanners();
-        // Remove all existing scanners
-        parser.flushScanners();
-
-        return (ret);
-    }
-
-    public static void restoreScanners(Parser parser, Hashtable tempScanners)
-    {
-        // Flush the scanners
-        parser.setScanners(tempScanners);
-    }
-
-    /**
-     * Insert an EndTag in the currentLine, just before the occurence of the provided tag
-     */
-    public String insertEndTagBeforeNode(AbstractNode node, String currentLine) {
-        String newLine = currentLine.substring(0,node.elementBegin());
-        newLine += "</A>";
-        newLine += currentLine.substring(node.elementBegin(),currentLine.length());
-        return newLine;
-    }
-
-//    protected Tag getReplacedEndTag(Tag tag, NodeReader reader, String currentLine) {
-//        // Replace tag - it was a <A> tag - replace with </a>
-//        String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
-//        reader.changeLine(newLine);
-//        return new EndTag(
-//            new TagData(
-//                tag.elementBegin(),
-//                tag.elementBegin()+3,
-//                tag.getTagName(),
-//                currentLine
-//            )
-//        );
-//    }
-
-    public String replaceFaultyTagWithEndTag(Tag tag, String currentLine) {
-        String newLine = currentLine.substring(0,tag.elementBegin());
-        newLine+="</"+tag.getTagName()+">";
-        newLine+=currentLine.substring(tag.elementEnd()+1,currentLine.length());
-
-        return newLine;
-    }
-
-//    protected Tag getInsertedEndTag(Tag tag, String currentLine) {
-//        // Insert end tag
-//        String newLine = insertEndTagBeforeNode(tag, currentLine);
-//        reader.changeLine(newLine);
-//        return new EndTag(
-//            new TagData(
-//                tag.elementBegin(),
-//                tag.elementBegin()+3,
-//                tag.getTagName(),
-//                currentLine
-//            )
-//        );
-//    }
-
-
 }

@@ -52,47 +52,6 @@ public class TagScannerTest extends ParserTestCase
         super(name);
     }
 
-    public void testAbsorbLeadingBlanks()
-    {
-        String test = "   This is a test";
-        String result = TagScanner.absorbLeadingBlanks(test);
-        assertEquals("Absorb test","This is a test",result);
-    }
-
-    public void testExtractXMLData() throws ParserException {
-        createParser(
-            "<MESSAGE>\n"+
-            "Abhi\n"+
-            "Sri\n"+
-            "</MESSAGE>");
-        Parser.setLineSeparator("\r\n");
-        NodeIterator e = parser.elements();
-
-        Node node = e.nextNode();
-        try {
-            String result = TagScanner.extractXMLData (node, "MESSAGE", e);
-            assertEquals("Result","\nAbhi\nSri\n",result);
-        }
-        catch (ParserException ex) {
-            assertTrue(e.toString(),false);
-        }
-    }
-
-    public void testExtractXMLDataSingle() throws ParserException {
-        createParser(
-            "<MESSAGE>Test</MESSAGE>");
-        NodeIterator e = parser.elements();
-
-        Node node = (Node)e.nextNode();
-        try {
-            String result = TagScanner.extractXMLData (node, "MESSAGE", e);
-            assertEquals("Result","Test",result);
-        }
-        catch (ParserException ex) {
-            assertTrue(e.toString(),false);
-        }
-    }
-
     public void testTagExtraction() throws ParserException
     {
         String testHTML = "<AREA \n coords=0,0,52,52 href=\"http://www.yahoo.com/r/c1\" shape=RECT>";
@@ -101,46 +60,9 @@ public class TagScannerTest extends ParserTestCase
         assertNotNull(tag);
     }
 
-    /**
-     * Captures bug reported by Raghavender Srimantula
-     * Problem is in isXMLTag - when it uses equals() to
-     * find a match
-     */
-    public void testIsXMLTag() throws ParserException {
-        createParser("<OPTION value=\"#\">Select a destination</OPTION>");
-        Node node;
-        NodeIterator e = parser.elements();
-        node = (Node)e.nextNode();
-        assertTrue("OPTION tag could not be identified",TagScanner.isXMLTagFound(node,"OPTION"));
-    }
-
     public void testRemoveChars() {
         String test = "hello\nworld\n\tqsdsds";
         String result = ParserUtils.removeChars(test,'\n');
         assertEquals("Removing Chars","helloworld\tqsdsds",result);
     }
-
-    public void testRemoveChars2() {
-        String test = "hello\r\nworld\r\n\tqsdsds";
-        TagScanner scanner = new TagScanner() {
-            public Tag scan(Tag tag,String url,Lexer lexer) { return null;}
-            public boolean evaluate(Tag tag,TagScanner previousOpenScanner) { return false; }
-            public String [] getID() { return null; }
-            protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) { return null; }
-        };
-        String result = scanner.removeChars(test,"\r\n");
-        assertEquals("Removing Chars","helloworld\tqsdsds",result);
-    }
-
-    /**
-     * Bug report by Cedric Rosa
-     * in absorbLeadingBlanks - crashes if the tag
-     * is empty
-     */
-    public void testAbsorbLeadingBlanksBlankTag() {
-        String testData = new String("");
-        String result=TagScanner.absorbLeadingBlanks(testData);
-        assertEquals("",result);
-    }
-
 }

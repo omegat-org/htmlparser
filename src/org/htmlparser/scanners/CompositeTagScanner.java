@@ -237,7 +237,7 @@ public abstract class CompositeTagScanner extends TagScanner
                             org.htmlparser.Parser parser = (org.htmlparser.Parser)lexer.getNodeFactory ();
                             scanner = parser.getScanner (name);
                             if ((null != scanner) && scanner.evaluate (next, this))
-                                node = scanner.createScannedNode (next, lexer.getPage ().getUrl (), lexer);
+                                node = scanner.scan (next, lexer.getPage ().getUrl (), lexer);
                         }
                     }
 
@@ -251,6 +251,7 @@ public abstract class CompositeTagScanner extends TagScanner
             endTag = createVirtualEndTag (tag, lexer.getPage (), lexer.getCursor ().getPosition ());
 
         composite = (CompositeTag)createTag (lexer.getPage (), tag.elementBegin (), endTag.elementEnd (), tag.getAttributesEx (), tag, endTag, nodeList);
+        composite.setThisScanner (this);
         for (int i = 0; i < composite.getChildCount (); i++)
             composite.childAt (i).setParent (composite);
         ret = composite;

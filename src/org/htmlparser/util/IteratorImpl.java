@@ -75,7 +75,7 @@ public class IteratorImpl implements PeekingIterator
                             org.htmlparser.Parser parser = (org.htmlparser.Parser)mLexer.getNodeFactory ();
                             scanner = parser.getScanner (name);
                             if ((null != scanner) && scanner.evaluate (tag, null))
-                                ret = scanner.createScannedNode (tag, mLexer.getPage ().getUrl (), mLexer);
+                                ret = scanner.scan (tag, mLexer.getPage ().getUrl (), mLexer);
                         }
                     }
 

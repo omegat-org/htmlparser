@@ -535,12 +535,12 @@ public class Parser
      * would also be of use when you have developed custom scanners, and need to register them into the parser.
      * @param scanner TagScanner object (or derivative) to be added to the list of registered scanners
      */
-    public void addScanner(TagScanner scanner) {
+    public void addScanner(TagScanner scanner)
+    {
         String ids[] = scanner.getID();
         for (int i=0;i<ids.length;i++) {
             scanners.put(ids[i],scanner);
         }
-        scanner.setFeedback(feedback);
     }
 
     /**
