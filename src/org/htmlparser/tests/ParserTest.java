@@ -359,7 +359,7 @@ public class ParserTest extends ParserTestCase {
      * Here, ibm.co.jp is an example of a HTTP server that correctly sets the
      * charset in the header to match the content encoding.
      */
-    public void _testHTTPCharset ()
+    public void testHTTPCharset ()
     {
 		Parser parser;
 		try
@@ -379,7 +379,7 @@ public class ParserTest extends ParserTestCase {
      * charset in the header to match the content encoding. We check that after
      * the enumeration is created, that the charset has changed to the correct value.
      */
-    public void _testHTMLCharset ()
+    public void testHTMLCharset ()
     {
 		Parser parser;
         NodeIterator enumeration;
@@ -395,6 +395,26 @@ public class ParserTest extends ParserTestCase {
         {
             fail ("could not open http://www.sony.co.jp");
 		}
+    }
+
+    /**
+     * Test the case of a charset directive different than the HTTP header.
+     * See bug #707447 META TAG - CHARSET
+     * and bug #699886 can't parse website other than iso-8859-1
+     */
+	public void testSwitchCharset () throws ParserException
+    {
+		Parser parser;
+		String url = "http://htmlparser.sourceforge.net/test/gb2312Charset.html";
+        int i;
+        Node[] nodes;
+		
+		parser = new Parser(url);
+        i = 0;
+        nodes = new Node[30];
+		for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
+			nodes[i++] = e.nextNode();
+        assertEquals ("Expected nodes", 14, i);
     }
 
     /**

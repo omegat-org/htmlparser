@@ -30,7 +30,7 @@ package org.htmlparser;
 //////////////////
 // Java Imports //
 //////////////////
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -183,6 +183,11 @@ public class Parser
     protected transient URLConnection url_conn;
 
     /**
+     * The bytes extracted from the source.
+     */
+    protected transient BufferedInputStream input;
+
+    /**
      * A quiet message sink.
      * Use this for no feedback.
      */
@@ -226,6 +231,7 @@ public class Parser
         reader = null;
         character_set = DEFAULT_CHARSET;
         url_conn = null;
+        input = null;
 		Tag.setTagParser (new TagParser (getFeedback ()));
     }
 
@@ -252,9 +258,14 @@ public class Parser
 	{
         setFeedback (fb);
         setScanners (null);
-        setReader (rd);
+        resourceLocn = null;
+        reader = null;
+        character_set = DEFAULT_CHARSET;
+        url_conn = null;
+		input = null;
+	    setReader (rd);
 		Tag.setTagParser(new TagParser(feedback));
-	}
+    }
 	
     /**
      * Constructor for custom HTTP access.
@@ -268,6 +279,11 @@ public class Parser
     {
         setFeedback (fb);
         setScanners (null);
+        resourceLocn = null;
+        reader = null;
+        character_set = DEFAULT_CHARSET;
+        url_conn = null;
+        input = null;
         Tag.setTagParser (new TagParser (feedback));
         setConnection (connection);
     }
@@ -487,6 +503,7 @@ public class Parser
     {
         String chs;
         NodeReader rd;
+        BufferedInputStream in;
 
         if ((null != encoding) && !"".equals (encoding))
             if (null == getConnection ())
@@ -495,10 +512,11 @@ public class Parser
             {
                 rd = getReader ();
                 chs = getEncoding ();
+                in = input;
                 try
                 {
                     character_set = encoding;
-                    createReader ();
+                    recreateReader ();
                 }
                 catch (UnsupportedEncodingException uee)
                 {
@@ -507,6 +525,7 @@ public class Parser
                     feedback.error (msg, ex);
                     character_set = chs;
                     reader = rd;
+                    input = in;
                     throw ex;
                 }
                 catch (IOException ioe)
@@ -516,6 +535,7 @@ public class Parser
                     feedback.error (msg, ex);
                     character_set = chs;
                     reader = rd;
+                    input = in;
                     throw ex;
                 }
             }
@@ -626,14 +646,43 @@ public class Parser
     {
         InputStream stream;
         InputStreamReader in;
-        
+
         stream = url_conn.getInputStream ();
-        in = new InputStreamReader (stream, character_set);
-        reader = new NodeReader (new BufferedReader (in), resourceLocn);
+        input = new BufferedInputStream (stream);
+        input.mark (Integer.MAX_VALUE);
+        in = new InputStreamReader (input, character_set);
+        reader = new NodeReader (in, resourceLocn);
         reader.setParser (this);
     }
 
+    /**
+     * Create a new reader for the URLConnection object but reuse the input stream.
+     * The current character set is used to transform the input stream
+     * into a character reader. Defaults to <code>createReader()</code> if
+     * there is no existing input stream.
+     * @exception UnsupportedEncodingException if the current character set 
+     * is not supported on this platform.
+     * @exception IOException if there is a problem constructing the reader.
+     * @see #getEncoding()
+     */
+    protected void recreateReader ()
+        throws
+            UnsupportedEncodingException,
+            IOException
+    {
+        InputStreamReader in;
 
+        if (null == input)
+            createReader ();
+        else
+        {
+            input.reset ();
+            input.mark (Integer.MAX_VALUE);
+            in = new InputStreamReader (input, character_set);
+            reader = new NodeReader (in, resourceLocn);
+            reader.setParser (this);
+        }
+    }
     
     /**
      * Try and extract the character set from the HTTP header.
@@ -819,7 +868,7 @@ public class Parser
 		                        if (!charset.equalsIgnoreCase (character_set))
 		                        {   // oops, different character set, restart
 		                            character_set = charset;
-		                            createReader ();
+		                            recreateReader ();
 		                            ret = new IteratorImpl (reader, resourceLocn, feedback);
 		                        }
 		                        // once we see the Content-Type meta tag we're finished the pre-read
