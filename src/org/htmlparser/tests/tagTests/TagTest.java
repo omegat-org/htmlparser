@@ -367,7 +367,8 @@ public class TagTest extends ParserTestCase
         assertNotNull("Parameters table",table);
         assertEquals("font sans-serif parameter","sans-serif",table.get("SANS-SERIF"));
         // an alternate interpretation: assertEquals("font face parameter","Arial,helvetica,",table.get("FACE"));
-        assertEquals("font face parameter","Arial,\"helvetica,",table.get("FACE"));
+        // another: assertEquals("font face parameter","Arial,\"helvetica,",table.get("FACE"));
+        assertEquals("font face parameter","Arial,",table.get("FACE"));
     }
 
     public void testToHTML() throws ParserException {

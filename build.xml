@@ -300,6 +300,7 @@ HTML Parser Integration Release 1.4-20040104
         <pathelement location="src"/>
         <pathelement location="${junit.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
+        <pathelement location="${java.home}/../lib/tools.jar"/>
       </classpath>
     </javac>
     <java classname="org.htmlparser.tests.AllTests" fork="yes" failonerror="yes">
@@ -308,6 +309,7 @@ HTML Parser Integration Release 1.4-20040104
         <pathelement location="${src}"/>
         <pathelement location="${junit.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
+        <pathelement location="${java.home}/../lib/tools.jar"/>
       </classpath>
       <arg value="-text"/>
     </java>
