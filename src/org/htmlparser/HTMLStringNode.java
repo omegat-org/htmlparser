@@ -36,10 +36,14 @@ import java.util.Vector;
  */
 public class HTMLStringNode extends HTMLNode
 {
-  public static final String STRING_FILTER="-string";
-  /**
-   * The text of the string.
-   */	
+  	private final static int BEFORE_PARSE_BEGINS_STATE=0;	
+  	private final static int PARSE_HAS_BEGUN_STATE=1;
+  	private final static int PARSE_COMPLETED_STATE=2;	
+  	  	
+	public static final String STRING_FILTER="-string";
+	/**
+	 * The text of the string.
+	 */	
 	protected StringBuffer textBuffer;
 
 	/** 
@@ -63,16 +67,16 @@ public class HTMLStringNode extends HTMLNode
 	public static HTMLNode find(HTMLReader reader,String input,int position)
 	{
 		StringBuffer textBuffer = new StringBuffer();
-		int state = 0;
+		int state = BEFORE_PARSE_BEGINS_STATE;
 		int textBegin=position;
 		int textEnd=position;
 		int inputLen = input.length();
 		char ch;
-		for (int i=position;(i<inputLen && state!=2);i++)
+		for (int i=position;(i<inputLen && state!=PARSE_COMPLETED_STATE);i++)
 		{
 			ch  = input.charAt(i);
 			// When the input has ended but no text is found, we end up returning null
-			if (ch=='<' && state==0)
+			if (ch=='<' && state==BEFORE_PARSE_BEGINS_STATE)
 			{
 				return null;
 			}
@@ -86,30 +90,31 @@ public class HTMLStringNode extends HTMLNode
 				     ((nextChar>='a') && (nextChar<='z')) || // next char must be a-z
 				     (nextChar=='/' || nextChar=='!' || nextChar=='>' || nextChar=='%'))   // or next char is a '/' 
 					{
-						state = 2;
+						state = PARSE_COMPLETED_STATE;
 						textEnd=i-1;
 					}
 				}
 			}
-			if (state==0)
+						
+			if (state==BEFORE_PARSE_BEGINS_STATE)
 			{
-				if (ch!=' ') state=1;
+				if (ch!=' ') state=PARSE_HAS_BEGUN_STATE;
 				else textBuffer.append(input.charAt(i));
 			}
-			if (state==1)
+			if (state==PARSE_HAS_BEGUN_STATE)
 			{
 				textBuffer.append(input.charAt(i));
 			}				
 			// Patch by Cedric Rosa
-			if (state==0 && i==inputLen-1)
-			   state=1;
-			if (state==1 && i==inputLen-1)
+			if (state==BEFORE_PARSE_BEGINS_STATE && i==inputLen-1)
+			   state=PARSE_HAS_BEGUN_STATE;
+			if (state==PARSE_HAS_BEGUN_STATE && i==inputLen-1)
 			{
 				input = reader.getNextLine();
 
 				if (input==null) {
 					textEnd=i;
-					state =2;
+					state =PARSE_COMPLETED_STATE;
 					
 				} else {
 					textBuffer.append(lineSeparator);
