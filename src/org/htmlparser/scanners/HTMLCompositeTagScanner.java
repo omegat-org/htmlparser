@@ -41,7 +41,8 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 				endTag = (HTMLTag)node;
 				if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch)) 
 					endTagFound = true;
-			} else {
+			} 
+			if (!endTagFound){
 				childVector.addElement(node);
 				childNodeEncountered(node);
 			}

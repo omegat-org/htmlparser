@@ -31,6 +31,7 @@
 
 package org.htmlparser.tests.tagTests;
 
+import org.htmlparser.scanners.HTMLOptionTagScanner;
 import org.htmlparser.scanners.HTMLSelectTagScanner;
 import org.htmlparser.tags.HTMLSelectTag;
 import org.htmlparser.tests.HTMLParserTestCase;
@@ -59,15 +60,15 @@ public class HTMLSelectTagTest extends HTMLParserTestCase
 		super.setUp();
 		createParser(testHTML);
 		parser.addScanner(new HTMLSelectTagScanner("-s"));
-		
+		parser.addScanner(new HTMLOptionTagScanner("-o"));
 		parseAndAssertNodeCount(1);
 	}
 	
 	public void testToHTML() throws HTMLParserException 
 	{
 		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);
-		HTMLSelectTag SelectTag;
-		SelectTag = (HTMLSelectTag) node[0];
+		HTMLSelectTag selectTag;
+		selectTag = (HTMLSelectTag) node[0];
 		assertStringEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
 									"<OPTION VALUE=\"Spouse\">Spouse</OPTION>\r\n"+
 									"<OPTION VALUE=\"Father\"></OPTION>\r\n"+
@@ -77,15 +78,15 @@ public class HTMLSelectTagTest extends HTMLParserTestCase
 									"<OPTION VALUE=\"Nephew\">Nephew</OPTION>\r\n"+
 									"<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>"+
 									"</SELECT>",
-									SelectTag.toHTML());
+									selectTag.toHTML());
 	}	
 	
 	
 	public void testToString() throws HTMLParserException 
 	{
-		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);
-		HTMLSelectTag SelectTag;
-		SelectTag = (HTMLSelectTag) node[0];
+		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);	
+		HTMLSelectTag selectTag;
+		selectTag = (HTMLSelectTag) node[0];
 		assertStringEquals("HTML Raw String","SELECT TAG\n--------\nNAME : Nominees\n" +
 								"OPTION TAG\n--------\nVALUE : Spouse\nTEXT : Spouse\n\n" +
 								"OPTION TAG\n--------\nVALUE : Father\nTEXT : \n\n" +
@@ -94,7 +95,7 @@ public class HTMLSelectTagTest extends HTMLParserTestCase
 								"OPTION TAG\n--------\nVALUE : Daughter\nTEXT : Daughter\r\n\n\n" +
 								"OPTION TAG\n--------\nVALUE : Nephew\nTEXT : Nephew\n\n" +
 								"OPTION TAG\n--------\nVALUE : Niece\nTEXT : Niece\r\n\n\n",
-							SelectTag.toString());
+							selectTag.toString());
 	}
 
 

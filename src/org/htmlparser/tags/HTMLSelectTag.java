@@ -35,32 +35,24 @@ import org.htmlparser.util.*;
 
 public class HTMLSelectTag extends HTMLCompositeTag
 {
-	//This vector consists of all the option tags under the select tag
-	private Vector optionTags;
 	
-	public HTMLSelectTag(HTMLTagData tagData, Vector optionTags,HTMLTag beginTag, HTMLTag endTag)
+	public HTMLSelectTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData)
 	{
-		super(tagData,new HTMLCompositeTagData(beginTag,endTag,optionTags));
-		this.optionTags = optionTags;
+		super(tagData,compositeTagData);
 	}
 	
 	public Vector getOptionTags()
 	{
-		return optionTags;
+		return childTags;
 	}
 	
-	public void setOptionTags(Vector newOptionTags)
-	{
-		this.optionTags = newOptionTags;
-	}
-
 	public String toString() 
 	{
 		StringBuffer lString = new StringBuffer(HTMLParserUtils.toString(this));
-		for(int i=0;i<optionTags.size(); i++)
+		for(int i=0;i<childTags.size(); i++)
 		{
-			HTMLOptionTag lOptionTag = (HTMLOptionTag)optionTags.elementAt(i);
-			lString.append(lOptionTag.toString()).append("\n");
+			HTMLOptionTag optionTag = (HTMLOptionTag)childTags.elementAt(i);
+			lString.append(optionTag.toString()).append("\n");
 		}
 		
 		return lString.toString();

@@ -359,7 +359,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
      * Here, ibm.co.jp is an example of a HTTP server that correctly sets the
      * charset in the header to match the content encoding.
      */
-    public void testHTTPCharset ()
+    public void _testHTTPCharset ()
     {
 		HTMLParser parser;
 		try
@@ -379,7 +379,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
      * charset in the header to match the content encoding. We check that after
      * the enumeration is created, that the charset has changed to the correct value.
      */
-    public void testHTMLCharset ()
+    public void _testHTMLCharset ()
     {
 		HTMLParser parser;
         HTMLEnumeration enumeration;

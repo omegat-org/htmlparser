@@ -45,25 +45,25 @@ public class HTMLInputTagScanner extends HTMLTagScanner
 		super(pFilter);
 	}
 	
-	public HTMLTag scan(HTMLTag pTag, String pUrl, HTMLReader pReader, String pCurrLine)
+	public HTMLTag scan(HTMLTag tag, String url, HTMLReader pReader, String currentLine)
 			throws HTMLParserException
 	{
 		try
 		{
-			HTMLInputTag lInputTag = 
+			HTMLInputTag inputTag = 
 			new HTMLInputTag(
 				new HTMLTagData(
-					pTag.elementBegin(),
-					pTag.elementEnd(),
-					pTag.getText(), 
-					pCurrLine
+					tag.elementBegin(),
+					tag.elementEnd(),
+					tag.getText(), 
+					currentLine
 				)
 			);
-			return lInputTag;
+			return inputTag;
 		}
 		catch (Exception e) 
 		{
-			throw new HTMLParserException("HTMLInputTagScanner.scan() : Error while scanning input tags, current line = "+pCurrLine,e);
+			throw new HTMLParserException("HTMLInputTagScanner.scan() : Error while scanning input tags, current line = "+currentLine,e);
 		}
 	}
 	

@@ -28,82 +28,25 @@
 
 package org.htmlparser.scanners;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
-import org.htmlparser.HTMLNode;
-import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLStringNode;
-import org.htmlparser.tags.HTMLEndTag;
-import org.htmlparser.tags.HTMLOptionTag;
 import org.htmlparser.tags.HTMLSelectTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
-import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.util.HTMLParserUtils;
 
 
-public class HTMLSelectTagScanner extends HTMLTagScanner
+public class HTMLSelectTagScanner extends HTMLCompositeTagScanner
 {
 	public HTMLSelectTagScanner()
 	{
-		super();
+		super("SELECT");
 	}
 	
-	public HTMLSelectTagScanner(String pFilter)
+	public HTMLSelectTagScanner(String filter)
 	{
-		super(pFilter);
+		super(filter,"SELECT");
 	}
 	
-	public HTMLTag scan(HTMLTag tag, String pUrl, HTMLReader reader, String currLine)
-			throws HTMLParserException
-	{
-		try
-		{
-			HTMLTag startTag = tag;
-			HTMLEndTag endTag=null;
-			HTMLNode node = null;
-			boolean endTagFound=false;
-			Vector optionTags=new Vector();
-			// Remove all existing scanners, so as to parse only till the end tag
-			Hashtable tempScanners = HTMLParserUtils.adjustScanners(reader);	
 
-			//However we need to activate Option tag scanner since select will 
-			//have multiple option tags.
-			reader.getParser().addScanner(new HTMLOptionTagScanner());
-			do 
-			{
-				node = reader.readElement();
-				if (node instanceof HTMLEndTag)
-				{
-					endTag = (HTMLEndTag)node;
-					if (endTag.getText().toUpperCase().equals("SELECT")) 
-					{
-						endTagFound = true;
-					}
-				}
-				else if (node instanceof HTMLOptionTag)
-				{
-					optionTags.add((HTMLOptionTag)node);
-				}
-				else
-				{
-					if (!(node instanceof HTMLStringNode))
-						throw new HTMLParserException("Error occurred scanning select tag. Undefined tag : " + node.toHTML());
-				}
-			}
-			while (!endTagFound);
-			HTMLSelectTag selectTag = new HTMLSelectTag(new HTMLTagData(
-										0, node.elementEnd(), tag.getText(), 
-										currLine), optionTags,startTag,endTag);
-			HTMLParserUtils.restoreScanners(reader, tempScanners);
-			return selectTag;
-		}
-		catch (Exception e) 
-		{
-			throw new HTMLParserException("HTMLSelectTagScanner.scan() : Error while scanning select tags, current line = "+currLine,e);
-		}
-	}
 	
 	/**
 	 * @see org.htmlparser.scanners.HTMLTagScanner#getID()
@@ -112,6 +55,13 @@ public class HTMLSelectTagScanner extends HTMLTagScanner
 		String [] ids = new String[1];
 		ids[0] = "SELECT";
 		return ids;
+	}
+
+
+	protected HTMLTag createTag(
+		HTMLTagData tagData,
+		HTMLCompositeTagData compositeTagData) {
+		return new HTMLSelectTag(tagData,compositeTagData);
 	}
 
 }
