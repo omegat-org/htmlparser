@@ -167,7 +167,7 @@ public class FormScanner extends CompositeTagScanner
 		return new FormTag(tagData, compositeTagData);
 	}
 
-	protected boolean isTagToBeEndedFor(String tmp) {
+	public boolean isTagToBeEndedFor(String tmp) {
 		boolean match=false;
 		for (int i=0;i<formTagEnders.length && !match;i++) {
 			if (tmp.toUpperCase().indexOf(formTagEnders[i])==0)

@@ -215,7 +215,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 		);
 	}
 
-	protected boolean isTagToBeEndedFor(String tmp) {
+	public boolean isTagToBeEndedFor(String tagName) {
 		return false;
 	}
 

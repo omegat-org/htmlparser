@@ -201,7 +201,7 @@ public class LinkScanner extends CompositeTagScanner
 		return MATCH_NAME;
 	}
 
-	protected boolean isTagToBeEndedFor(String tmp) {
+	public boolean isTagToBeEndedFor(String tmp) {
 		boolean match=false;
 		for (int i=0;i<linkTagEnders.length && !match;i++) {
 			if (tmp.toUpperCase().indexOf(linkTagEnders[i])!=-1)

@@ -258,6 +258,10 @@ public abstract class CompositeTag extends Tag {
 		return startTag;
 	}
 
+	public Tag getEndTag() {
+		return endTag;
+	}
+
 
 
 }

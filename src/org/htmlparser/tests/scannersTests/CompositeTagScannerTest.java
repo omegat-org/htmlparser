@@ -148,6 +148,10 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		Node child = customTag.childAt(0);
 		assertType("child",AnotherTag.class,child);
 		AnotherTag tag = (AnotherTag)child;
+		assertEquals("another tag start pos",8,tag.elementBegin());
+		assertEquals("another tag ending pos",17,tag.elementEnd());
+		
+		assertEquals("custom end tag start pos",18,customTag.getEndTag().elementBegin());
 		assertStringEquals("child html","<ANOTHER/>",child.toHtml());
 	}
 		
@@ -245,7 +249,23 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertEquals("ending line position",0,customTag.tagData.getEndLine());
 		assertStringEquals("html","<CUSTOM></CUSTOM>",customTag.toHtml());		
 	}
-	
+
+	public void testCompositeTagWithErroneousAnotherTag() throws ParserException {
+		createParser(
+			"<custom>" +				"<another>" +			"</custom>"
+		);
+		parser.addScanner(new AnotherScanner());
+		CustomTag customTag = parseCustomTag();
+		int x = customTag.getChildCount();
+		assertEquals("child count",1,customTag.getChildCount());
+		assertFalse("custom tag should be xml end tag",customTag.isEmptyXmlTag());
+		assertEquals("starting loc",0,customTag.getStartTag().elementBegin());
+		assertEquals("ending loc",7,customTag.getStartTag().elementEnd());
+		assertEquals("starting line position",0,customTag.tagData.getStartLine());
+		assertEquals("ending line position",0,customTag.tagData.getEndLine());
+		assertStringEquals("html","<CUSTOM><ANOTHER></ANOTHER></CUSTOM>",customTag.toHtml());		
+	}
+		
 	public static class CustomScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "CUSTOM" };
 		public CustomScanner() { super("", MATCH_NAME); }
@@ -268,6 +288,14 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		protected boolean isBrokenTag() {
 			return false;
 		}
+		
+		public boolean isTagToBeEndedFor(String tagName) {
+			if (tagName.equals("CUSTOM")) 
+				return true;
+			else 
+				return false;
+		}
+
 	}
 
 	// Custom Tags
@@ -283,5 +311,6 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		public AnotherTag(TagData tagData, CompositeTagData compositeTagData) {
 			super(tagData,compositeTagData);
 		}
+		
 	}	
 }

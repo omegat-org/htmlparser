@@ -51,30 +51,48 @@ public class CompositeTagScannerHelper {
 				currentNode = reader.readElement();
 				if (currentNode==null) continue;
 				doEmptyXmlTagCheckOn(currentNode);
-				doChildAndEndTagCheckOn(currentNode);					
+				if (!endTagFound)
+					doChildAndEndTagCheckOn(currentNode);					
 			}
 			while (currentNode!=null && !endTagFound);
 		}
 		if (endTag==null) {
-			String endTagName = tag.getTagName();
-			int endTagBegin = tag.elementEnd() + 1;
-			int endTagEnd = endTagBegin + endTagName.length() + 3; 
-			endTag = new EndTag(
-				new TagData(
-					endTagBegin,
-					endTagEnd,
-					endTagName,
-					currLine
-				)
-			);
+			createCorrectionEndTag();
 		}
 		return createTag();
+	}
+
+	private void createCorrectionEndTag() {
+		String endTagName = tag.getTagName();
+		int endTagBegin = tag.elementEnd() + 1;
+		int endTagEnd = endTagBegin + endTagName.length() + 2; 
+		StringBuffer newLine = createModifiedLine(endTagName, endTagBegin);
+		reader.changeLine(newLine.toString());
+		reader.setPosInLine(endTagEnd);
+		endTag = new EndTag(
+			new TagData(
+				endTagBegin,
+				endTagEnd,
+				endTagName,
+				currLine
+			)
+		);
+	}
+
+	private StringBuffer createModifiedLine(String endTagName, int endTagBegin) {
+		StringBuffer newLine = new StringBuffer();
+		newLine.append(currLine.substring(0,endTagBegin));
+		newLine.append("</");
+		newLine.append(endTagName);
+		newLine.append(">");
+		newLine.append(currLine.substring(endTagBegin,currLine.length()));
+		return newLine;
 	}
 
 	private Tag createTag() throws ParserException {
 		return scanner.createTag(
 			new TagData(
-				0,endTag.elementEnd(),0,0,"","","",tag.isEmptyXmlTag()
+				tag.elementBegin(),endTag.elementEnd(),0,0,"","","",tag.isEmptyXmlTag()
 			),
 			new CompositeTagData(
 				tag,endTag,nodeList
@@ -101,6 +119,10 @@ public class CompositeTagScannerHelper {
 			Tag possibleEndTag = (Tag)currentNode;
 			if (tag.isEmptyXmlTag()) {
 				endTag = possibleEndTag;
+				endTagFound = true;			
+			} else
+			if (scanner.isTagToBeEndedFor(possibleEndTag.getTagName())) {
+				createCorrectionEndTag();
 				endTagFound = true;			
 			}
 		}
