@@ -199,4 +199,22 @@ public class ImageTagTest extends ParserTestCase
         ImageTag img = extractLinkImage (link);
         assertNotNull ("no image tag", img);
     }
+
+    /**
+     * See bug #755929 Empty string attr. value causes attr parsing to be stopped
+     * and bug #753012 IMG SRC not parsed v1.3 & v1.4
+     */
+    public void testEmptyStringElement () throws ParserException
+    {
+        String html = "<img height=\"1\" width=\"1\" alt=\"\" "
+            + "src=\"http://i.cnn.net/cnn/images/1.gif\"/>";
+
+        createParser (html);
+		parser.registerScanners ();
+
+        parseAndAssertNodeCount (1);
+		assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+        ImageTag img = (ImageTag)node[0];
+        assertTrue ("bad source", "http://i.cnn.net/cnn/images/1.gif".equals (img.getImageURL ()));
+    }     
 }

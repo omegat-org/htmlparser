@@ -126,7 +126,8 @@ public class AttributeParser {
                 }
                 else {
                    	processInvalidPart();
-                    break;
+                    if (!tokenizer.hasMoreTokens ())
+                        break;
                 }
             }
         }
