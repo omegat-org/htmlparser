@@ -31,6 +31,7 @@ package org.htmlparser.visitors;
 import org.htmlparser.StringNode;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
+import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.Translate;
 
 
@@ -64,6 +65,10 @@ public class TextExtractingVisitor extends NodeVisitor {
 			text = replaceNonBreakingSpaceWithOrdinarySpace(text);
 		}
 		textAccumulator.append(text);
+	}
+
+	public void visitTitleTag(TitleTag titleTag) {
+		textAccumulator.append(titleTag.getTitle ());
 	}
 
 	private String replaceNonBreakingSpaceWithOrdinarySpace(String text) {
