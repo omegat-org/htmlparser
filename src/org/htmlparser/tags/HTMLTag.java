@@ -30,11 +30,11 @@ package org.htmlparser.tags;
 
 import java.util.*;
 
+import org.htmlparser.parserHelper.ParameterParser;
+import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.HTMLTagScanner;
 import org.htmlparser.tags.data.HTMLTagData;
-import org.htmlparser.util.HTMLParameterParser;
 import org.htmlparser.util.HTMLParserException;
-import org.htmlparser.util.HTMLTagParser;
 import org.htmlparser.visitors.HTMLVisitor;
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
@@ -61,8 +61,8 @@ public class HTMLTag extends HTMLNode
 	private final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
 	private final static String EMPTY_STRING="";
 
-	private static HTMLParameterParser paramParser = new HTMLParameterParser();
-	private static HTMLTagParser tagParser;
+	private static ParameterParser paramParser = new ParameterParser();
+	private static TagParser tagParser;
 	/**
 	 * Tag contents will have the contents of the comment tag.
    */
@@ -370,7 +370,7 @@ public class HTMLTag extends HTMLNode
 	 * Sets the tagParser.
 	 * @param tagParser The tagParser to set
 	 */
-	public static void setTagParser(HTMLTagParser tagParser) {
+	public static void setTagParser(TagParser tagParser) {
 		HTMLTag.tagParser = tagParser;
 	}
 

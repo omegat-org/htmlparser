@@ -29,6 +29,8 @@
 package org.htmlparser.tests.utilTests;
 
 
+import org.htmlparser.tests.parserHelperTests.*;
+
 import junit.framework.TestSuite;
 /**
  * Insert the type's description here.
@@ -57,7 +59,7 @@ public static TestSuite suite() {
 	
 	suite.addTestSuite(BeanTest.class);
 	suite.addTestSuite(HTMLLinkProcessorTest.class);
-	suite.addTestSuite(HTMLParameterParserTest.class);	
+	suite.addTestSuite(ParameterParserTest.class);	
 	suite.addTestSuite(HTMLTagParserTest.class);
 	suite.addTestSuite(CharacterTranslationTest.class);
 	suite.addTestSuite(HTMLVectorTest.class);

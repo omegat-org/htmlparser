@@ -27,6 +27,8 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.tests;
+import org.htmlparser.tests.parserHelperTests.*;
+
 import junit.framework.TestSuite;
 
 public class AllTests extends junit.framework.TestCase 
@@ -102,8 +104,8 @@ public class AllTests extends junit.framework.TestCase
 	public static TestSuite suite() {
 		TestSuite suite = new TestSuite("HTMLParser Tests");
 		TestSuite basic = new TestSuite("Basic Tests");
-		basic.addTestSuite(HTMLStringNodeTest.class);
-		basic.addTestSuite(HTMLRemarkNodeTest.class);
+		basic.addTestSuite(StringParserTest.class);
+		basic.addTestSuite(RemarkNodeParserTest.class);
 		basic.addTestSuite(HTMLParserTest.class);
         suite.addTest(basic);
 		suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());

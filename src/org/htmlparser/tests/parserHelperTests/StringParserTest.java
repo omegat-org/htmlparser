@@ -27,17 +27,18 @@
 // Website : http://www.industriallogic.com
 
 
-package org.htmlparser.tests;
+package org.htmlparser.tests.parserHelperTests;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.HTMLLinkScanner;
 import org.htmlparser.tags.HTMLLinkTag;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
 
-public class HTMLStringNodeTest extends HTMLParserTestCase {
+public class StringParserTest extends HTMLParserTestCase {
 
-	public HTMLStringNodeTest(String name) {
+	public StringParserTest(String name) {
 		super(name);
 	}
 	

@@ -26,7 +26,7 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
-package org.htmlparser.util;
+package org.htmlparser.parserHelper;
 
 import java.util.Hashtable;
 import java.util.StringTokenizer;
@@ -42,7 +42,7 @@ import org.htmlparser.tags.HTMLTag;
  * @author Somik Raha, Kaarle Kaila
  * @version 7 AUG 2001
  */
-public class HTMLParameterParser {
+public class ParameterParser {
     private final String delim = " \t\r\n\f=\"'>";
     private final char doubleQuote = '\"';
     private final char singleQuote = '\'';

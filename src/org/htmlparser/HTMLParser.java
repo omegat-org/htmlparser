@@ -37,6 +37,7 @@ import java.util.*;
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
+import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
@@ -49,7 +50,6 @@ import org.htmlparser.util.HTMLEnumerationImpl;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserFeedback;
-import org.htmlparser.util.HTMLTagParser;
 import org.htmlparser.visitors.HTMLVisitor;
 
 /**
@@ -284,7 +284,7 @@ public class HTMLParser
         reader = null;
         character_set = DEFAULT_CHARSET;
         url_conn = null;
-		HTMLTag.setTagParser (new HTMLTagParser (getFeedback ()));
+		HTMLTag.setTagParser (new TagParser (getFeedback ()));
     }
 
     /**
@@ -311,7 +311,7 @@ public class HTMLParser
         setFeedback (fb);
         setScanners (null);
         setReader (rd);
-		HTMLTag.setTagParser(new HTMLTagParser(feedback));
+		HTMLTag.setTagParser(new TagParser(feedback));
 	}
 	
     /**
@@ -326,7 +326,7 @@ public class HTMLParser
     {
         setFeedback (fb);
         setScanners (null);
-        HTMLTag.setTagParser (new HTMLTagParser (feedback));
+        HTMLTag.setTagParser (new TagParser (feedback));
         setConnection (connection);
     }
 

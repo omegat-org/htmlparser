@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
-import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
@@ -47,10 +46,10 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 		
 		do {
 			if (stringNodeIgnoreMode)
-				HTMLStringNode.setIgnoreStateMode(true);
+				reader.getStringParser().setIgnoreStateMode(true);
 			node = reader.readElement();
 			if (stringNodeIgnoreMode)
-				HTMLStringNode.setIgnoreStateMode(false);
+				reader.getStringParser().setIgnoreStateMode(false);
 			if (node instanceof HTMLEndTag) {
 				endTag = (HTMLTag)node;
 				for (int i=0;i<nameOfTagToMatch.length && !endTagFound;i++) {

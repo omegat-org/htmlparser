@@ -26,7 +26,7 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
-package org.htmlparser.util;
+package org.htmlparser.parserHelper;
 
 import java.util.StringTokenizer;
 
@@ -34,6 +34,7 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.*;
+import org.htmlparser.util.HTMLParserFeedback;
 
 /**
  * @author Somik Raha
@@ -43,7 +44,7 @@ import org.htmlparser.tags.data.*;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-public class HTMLTagParser {
+public class TagParser {
 	public final static int TAG_BEFORE_PARSING_STATE=1;
     public final static int TAG_BEGIN_PARSING_STATE=2;
     public final static int TAG_FINISHED_PARSING_STATE=3;
@@ -54,7 +55,7 @@ public class HTMLTagParser {
 	private HTMLParserFeedback feedback;
 	private boolean encounteredQuery;
 	private int i;
-	public HTMLTagParser(HTMLParserFeedback feedback) {
+	public TagParser(HTMLParserFeedback feedback) {
 		this.feedback = feedback;
 	}
 	public HTMLTag find(HTMLReader reader,String input,int position) {

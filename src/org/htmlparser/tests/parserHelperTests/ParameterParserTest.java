@@ -26,27 +26,27 @@
 // CA 94708, USA
 // Website : http://www.industriallogic.com
 
-package org.htmlparser.tests.utilTests;
+package org.htmlparser.tests.parserHelperTests;
 
 import java.util.Hashtable;
 
+import org.htmlparser.parserHelper.ParameterParser;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLTagData;
-import org.htmlparser.util.HTMLParameterParser;
 
 import junit.framework.TestCase;
 
-public class HTMLParameterParserTest extends TestCase {
-	private HTMLParameterParser parser;
+public class ParameterParserTest extends TestCase {
+	private ParameterParser parser;
 	private HTMLTag tag;
 	private Hashtable table;
 	
-	public HTMLParameterParserTest(String name) {
+	public ParameterParserTest(String name) {
 		super(name);
 	}
 
 	protected void setUp() {
-		parser = new HTMLParameterParser();
+		parser = new ParameterParser();
 	}
 	
 	public void getParameterTableFor(String tagContents) {

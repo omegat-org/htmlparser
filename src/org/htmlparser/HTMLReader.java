@@ -40,6 +40,7 @@ import java.io.*;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.parserHelper.*;
 import org.htmlparser.scanners.*;
 
 /**
@@ -58,6 +59,8 @@ public class HTMLReader extends BufferedReader
 	private boolean tagUpgraded=false;
 	private int lineCount;
 	private String previousLine;
+	private StringParser stringParser = new StringParser();
+	private RemarkNodeParser remarkNodeParser = new RemarkNodeParser();
 	/**
 	 * The constructor takes in a reader object, it's length and the url to be read.
 	 */
@@ -178,7 +181,7 @@ public class HTMLReader extends BufferedReader
             
             if ('<' == line.charAt (posInLine))
             {
-                node = HTMLRemarkNode.find(this,line,posInLine);
+                node = remarkNodeParser.find(this,line,posInLine);
                 if (node!=null) return node;
 
                 node = HTMLTag.find(this,line,posInLine);
@@ -207,7 +210,7 @@ public class HTMLReader extends BufferedReader
             }
             else
             {
-                node = HTMLStringNode.find(this,line,posInLine);
+                node = stringParser.find(this,line,posInLine);
                 if (node!=null) return node;
             }
 		
@@ -314,6 +317,10 @@ public class HTMLReader extends BufferedReader
 		super.reset();
 		lineCount = 1;
 		posInLine = -1;
+	}
+
+	public StringParser getStringParser() {
+		return stringParser;
 	}
 
 }

@@ -28,14 +28,14 @@
 
 package org.htmlparser.tests.utilTests;
 
+import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
-import org.htmlparser.util.HTMLTagParser;
 
 public class HTMLTagParserTest extends HTMLParserTestCase {
-	private HTMLTagParser tagParser;
+	private TagParser tagParser;
 
 	public HTMLTagParserTest(String name) {
 		super(name);
@@ -55,10 +55,10 @@ public class HTMLTagParserTest extends HTMLParserTestCase {
 
 	public void testPruneSpaces() {
 		String test = "  fdfdf dfdf   ";
-		assertEquals("Expected Pruned string","fdfdf dfdf",HTMLTagParser.pruneSpaces(test));
+		assertEquals("Expected Pruned string","fdfdf dfdf",TagParser.pruneSpaces(test));
 	}   
 
 	protected void setUp() {
-		tagParser = new HTMLTagParser(new DefaultHTMLParserFeedback());	
+		tagParser = new TagParser(new DefaultHTMLParserFeedback());	
 	} 
 }
