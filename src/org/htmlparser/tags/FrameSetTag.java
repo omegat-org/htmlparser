@@ -26,6 +26,8 @@
 
 package org.htmlparser.tags;
 
+import java.util.Locale;
+
 import org.htmlparser.Node;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
@@ -89,32 +91,44 @@ public class FrameSetTag extends CompositeTag
 
     /**
      * Gets a frame by name.
+     * Names are checked without case sensitivity and conversion to uppercase
+     * is performed with an English locale.
      * @param name The name of the frame to retrieve.
      * @return The specified frame or <code>null</code> if it wasn't found.
      */
-    public FrameTag getFrame(String name)
+    public FrameTag getFrame (String name)
     {
-        boolean found;
+        return (getFrame (name, Locale.ENGLISH));
+    }
+
+    /**
+     * Gets a frame by name.
+     * Names are checked without case sensitivity and conversion to uppercase
+     * is performed with the locale provided.
+     * @param name The name of the frame to retrieve.
+     * @param locale The locale to use when converting to uppercase.
+     * @return The specified frame or <code>null</code> if it wasn't found.
+     */
+    public FrameTag getFrame (String name, Locale locale)
+    {
         Node node;
-        FrameTag frameTag;
+        FrameTag ret;
+
+        ret = null;
         
-        found = false;
-        name = name.toUpperCase ();
-        frameTag = null;
-        for (SimpleNodeIterator e=getFrames().elements();e.hasMoreNodes() && !found;)
+        name = name.toUpperCase (locale);
+        for (SimpleNodeIterator e = getFrames ().elements (); e.hasMoreNodes () && (null == ret); )
         {
             node = e.nextNode();
             if (node instanceof FrameTag)
             {
-                frameTag = (FrameTag)node;
-                if (frameTag.getFrameName().toUpperCase().equals(name))
-                    found = true;
+                ret = (FrameTag)node;
+                if (!ret.getFrameName ().toUpperCase (locale).equals (name))
+                    ret = null;
             }
         }
-        if (found)
-            return (frameTag);
-        else
-            return (null);
+
+        return (ret);
     }
 
     /**

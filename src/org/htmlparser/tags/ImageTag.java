@@ -26,7 +26,9 @@
 
 package org.htmlparser.tags;
 
+import java.util.Locale;
 import java.util.Vector;
+
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.util.ParserUtils;
 import org.htmlparser.visitors.NodeVisitor;
@@ -106,7 +108,7 @@ public class ImageTag extends Tag
                 case 0: // looking for 'src'
                     if (null != string)
                     {
-                        name = string.toUpperCase ();
+                        name = string.toUpperCase (Locale.ENGLISH);
                         if (name.equals ("SRC"))
                         {
                             state = 1;

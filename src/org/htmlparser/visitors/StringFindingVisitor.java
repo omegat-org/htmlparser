@@ -26,29 +26,40 @@
 
 package org.htmlparser.visitors;
 
+import java.util.Locale;
+
 import org.htmlparser.StringNode;
 
-public class StringFindingVisitor extends NodeVisitor {
-    private boolean stringFound = false;
+public class StringFindingVisitor extends NodeVisitor
+{
     private String stringToFind;
     private int foundCount;
     private boolean multipleSearchesWithinStrings;
+    private Locale locale;
 
-    public StringFindingVisitor(String stringToFind) {
-        this.stringToFind = stringToFind.toUpperCase();
+    public StringFindingVisitor(String stringToFind)
+    {
+        this (stringToFind, null);
+    }
+
+    public StringFindingVisitor(String stringToFind, Locale locale)
+    {
+        this.locale = (null == locale) ? Locale.ENGLISH : locale;
+        this.stringToFind = stringToFind.toUpperCase (this.locale);
         foundCount = 0;
         multipleSearchesWithinStrings = false;
     }
 
-    public void doMultipleSearchesWithinStrings() {
+    public void doMultipleSearchesWithinStrings()
+    {
         multipleSearchesWithinStrings = true;
     }
 
-    public void visitStringNode(StringNode stringNode) {
-        String stringToBeSearched = stringNode.getText().toUpperCase();
+    public void visitStringNode(StringNode stringNode)
+    {
+        String stringToBeSearched = stringNode.getText().toUpperCase(locale);
         if (!multipleSearchesWithinStrings &&
             stringToBeSearched.indexOf(stringToFind) != -1) {
-            stringFound = true;
             foundCount++;
         } else if (multipleSearchesWithinStrings) {
             int index = -1;
@@ -60,11 +71,13 @@ public class StringFindingVisitor extends NodeVisitor {
         }
     }
 
-    public boolean stringWasFound() {
-        return stringFound;
+    public boolean stringWasFound()
+    {
+        return (0 != stringFoundCount());
     }
 
-    public int stringFoundCount() {
+    public int stringFoundCount()
+    {
         return foundCount;
     }
 

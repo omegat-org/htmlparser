@@ -28,9 +28,10 @@ package org.htmlparser.lexer.nodes;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Vector;
-import org.htmlparser.AbstractNode;
 
+import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
@@ -339,11 +340,12 @@ public class TagNode
      * Attribute} objects, which offer more information than the simple
      * <code>String</code> objects available from this <code>Hashtable</code>.
      * @return Returns a list of name/value pairs representing the attributes.
-     * These are not in order, the keys (names) are capitalized and the values
+     * These are not in order, the keys (names) are converted to uppercase and the values
      * are not quoted, even if they need to be. The table <em>will</em> return
      * <code>null</code> if there was no value for an attribute (no equals
      * sign or nothing to the right of the equals sign). A special entry with
      * a key of SpecialHashtable.TAGNAME ("$<TAGNAME>$") holds the tag name.
+     * The conversion to uppercase is performed with an ENGLISH locale.
      */
     public Hashtable getAttributes ()
     {
@@ -359,7 +361,7 @@ public class TagNode
         {
             // special handling for the node name
             attribute = (Attribute)attributes.elementAt (0);
-            ret.put (SpecialHashtable.TAGNAME, attribute.getName ().toUpperCase ());
+            ret.put (SpecialHashtable.TAGNAME, attribute.getName ().toUpperCase (Locale.ENGLISH));
             // the rest
             for (int i = 1; i < attributes.size (); i++)
             {
@@ -371,7 +373,7 @@ public class TagNode
                         value = SpecialHashtable.NOTHING;
                     if (null == value)
                         value = SpecialHashtable.NULLVALUE;
-                    ret.put (attribute.getName ().toUpperCase (), value);
+                    ret.put (attribute.getName ().toUpperCase (Locale.ENGLISH), value);
                 }
             }
         }
@@ -390,6 +392,7 @@ public class TagNode
      * a slash in the case of an XML type tag.
      * To get at the original text of the tag name use
      * {@link #getRawTagName getRawTagName()}.
+     * The conversion to uppercase is performed with an ENGLISH locale.
      * </em>
      * @return The tag name.
      */
@@ -400,7 +403,7 @@ public class TagNode
         ret = getRawTagName ();
         if (null != ret)
         {
-            ret = ret.toUpperCase ();
+            ret = ret.toUpperCase (Locale.ENGLISH);
             if (ret.startsWith ("/"))
                 ret = ret.substring (1);
             if (ret.endsWith ("/"))
@@ -672,7 +675,7 @@ public class TagNode
      */
     public boolean breaksFlow ()
     {
-        return (breakTags.containsKey (getTagName ().toUpperCase ()));
+        return (breakTags.containsKey (getTagName ()));
     }
 
     /**

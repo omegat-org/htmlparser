@@ -26,6 +26,8 @@
 
 package org.htmlparser.filters;
 
+import java.util.Locale;
+
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.lexer.nodes.StringNode;
@@ -46,6 +48,11 @@ public class StringFilter implements NodeFilter
     protected boolean mCaseSensitive;
 
     /**
+     * The locale to use converting to uppercase in the case insensitive searches.
+     */
+    protected Locale mLocale;
+
+    /**
      * Creates a new instance of StringFilter that accepts string nodes containing a certain string.
      * The comparison is case insensitive.
      * @param pattern The pattern to search for.
@@ -63,11 +70,25 @@ public class StringFilter implements NodeFilter
      */
     public StringFilter (String pattern, boolean case_sensitive)
     {
+        this (pattern, case_sensitive, null);
+    }
+    
+    /**
+     * Creates a new instance of StringFilter that accepts string nodes containing a certain string.
+     * @param pattern The pattern to search for.
+     * @param case_sensitive If <code>true</code>, comparisons are performed
+     * respecting case.
+     */
+    public StringFilter (String pattern, boolean case_sensitive, Locale locale)
+    {
         mCaseSensitive = case_sensitive;
         if (mCaseSensitive)
             mPattern = pattern;
         else
-            mPattern = pattern.toUpperCase ();
+        {
+            mLocale = (null == locale) ? Locale.ENGLISH : locale;
+            mPattern = pattern.toUpperCase (mLocale);
+        }
     }
 
     /**
@@ -84,7 +105,7 @@ public class StringFilter implements NodeFilter
         {
             string = ((StringNode)node).getText ();
             if (!mCaseSensitive)
-                string = string.toUpperCase ();
+                string = string.toUpperCase (mLocale);
             ret = -1 != string.indexOf (mPattern);
         }
 

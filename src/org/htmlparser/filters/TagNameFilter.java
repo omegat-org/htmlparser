@@ -26,6 +26,8 @@
 
 package org.htmlparser.filters;
 
+import java.util.Locale;
+
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.lexer.nodes.TagNode;
@@ -48,7 +50,7 @@ public class TagNameFilter
      */
     public TagNameFilter (String name)
     {
-        mName = name.toUpperCase ();
+        mName = name.toUpperCase (Locale.ENGLISH);
     }
 
     /**

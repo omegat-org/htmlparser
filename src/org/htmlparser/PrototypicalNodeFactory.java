@@ -28,8 +28,10 @@ package org.htmlparser;
 
 import java.io.Serializable;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
+
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.NodeFactory;
@@ -244,7 +246,7 @@ public class PrototypicalNodeFactory
             {
                 try
                 {
-                    id = id.toUpperCase ();
+                    id = id.toUpperCase (Locale.ENGLISH);
                     if (!id.startsWith ("/"))
                     {
                         if (id.endsWith ("/"))

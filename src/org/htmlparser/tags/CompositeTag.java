@@ -26,6 +26,8 @@
 
 package org.htmlparser.tags;
 
+import java.util.Locale;
+
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.StringNode;
@@ -185,33 +187,81 @@ public class CompositeTag extends Tag
     }
 
     /**
-     * Searches for any node whose text representation contains the search
-     * string. Collects all such nodes in a NodeList.
-     * e.g. if you wish to find any textareas in a form tag containing "hello
-     * world", the code would be :
+     * Searches for all nodes whose text representation contains the search string.
+     * Collects all nodes containing the search string into a NodeList.
+     * This search is <b>case-insensitive</b> and the search string and the
+     * node text are converted to uppercase using an English locale.
+     * For example, if you wish to find any textareas in a form tag containing
+     * "hello world", the code would be:
      * <code>
-     *  NodeList nodeList = formTag.searchFor("Hello World");
+     * NodeList nodeList = formTag.searchFor("Hello World");
      * </code>
-     * @param searchString search criterion
-     * @param caseSensitive specify whether this search should be case
-     * sensitive
-     * @return NodeList Collection of nodes whose string contents or
-     * representation have the searchString in them
+     * @param searchString Search criterion.
+     * @return A collection of nodes whose string contents or
+     * representation have the <code>searchString</code> in them.
      */
+    public NodeList searchFor (String searchString)
+    {
+        return (searchFor (searchString, false));
+    }
 
-    public NodeList searchFor(String searchString, boolean caseSensitive) {
-        NodeList foundList = new NodeList();
+    /**
+     * Searches for all nodes whose text representation contains the search string.
+     * Collects all nodes containing the search string into a NodeList.
+     * For example, if you wish to find any textareas in a form tag containing
+     * "hello world", the code would be:
+     * <code>
+     * NodeList nodeList = formTag.searchFor("Hello World");
+     * </code>
+     * @param searchString Search criterion.
+     * @param caseSensitive If <code>true</code> this search should be case
+     * sensitive. Otherwise, the search string and the node text are converted
+     * to uppercase using an English locale.
+     * @return A collection of nodes whose string contents or
+     * representation have the <code>searchString</code> in them.
+     */
+    public NodeList searchFor (String searchString, boolean caseSensitive)
+    {
+        return (searchFor (searchString, caseSensitive, Locale.ENGLISH));
+    }
+
+    /**
+     * Searches for all nodes whose text representation contains the search string.
+     * Collects all nodes containing the search string into a NodeList.
+     * For example, if you wish to find any textareas in a form tag containing
+     * "hello world", the code would be:
+     * <code>
+     * NodeList nodeList = formTag.searchFor("Hello World");
+     * </code>
+     * @param searchString Search criterion.
+     * @param caseSensitive If <code>true</code> this search should be case
+     * sensitive. Otherwise, the search string and the node text are converted
+     * to uppercase using the locale provided.
+     * @parem locale The locale for uppercase conversion.
+     * @return A collection of nodes whose string contents or
+     * representation have the <code>searchString</code> in them.
+     */
+    public NodeList searchFor (String searchString, boolean caseSensitive, Locale locale)
+    {
         Node node;
-        if (!caseSensitive) searchString = searchString.toUpperCase();
-        for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
-            node = e.nextNode();
-            String nodeTextString = node.toPlainTextString();
-            if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
-            if (nodeTextString.indexOf(searchString)!=-1) {
-                foundList.add(node);
-            }
+        String text;
+        NodeList ret;
+        
+        ret = new NodeList ();
+
+        if (!caseSensitive)
+            searchString = searchString.toUpperCase (locale);
+        for (SimpleNodeIterator e = children (); e.hasMoreNodes (); )
+        {
+            node = e.nextNode ();
+            text = node.toPlainTextString ();
+            if (!caseSensitive)
+                text = text.toUpperCase (locale);
+            if (-1 != text.indexOf (searchString))
+                ret.add (node);
         }
-        return foundList;
+
+        return (ret);
     }
 
     /**
@@ -230,40 +280,39 @@ public class CompositeTag extends Tag
     }
 
     /**
-     * Searches for any node whose text representation contains the search
-     * string. Collects all such nodes in a NodeList.
-     * e.g. if you wish to find any textareas in a form tag containing "hello
-     * world", the code would be :
-     * <code>
-     *  NodeList nodeList = formTag.searchFor("Hello World");
-     * </code>
-     * This search is <b>case-insensitive</b>.
-     * @param searchString search criterion
-     * @return NodeList Collection of nodes whose string contents or
-     * representation have the searchString in them
+     * Returns the node number of the first node containing the given text.
+     * This can be useful to index into the composite tag and get other children.
+     * Text is compared without case sensitivity and conversion to uppercase
+     * uses an English locale.
+     * @param text The text to search for.
+     * @return int The node index in the children list of the node containing
+     * the text or -1 if not found.
      */
-    public NodeList searchFor(String searchString) {
-        return searchFor(searchString, false);
+    public int findPositionOf (String text)
+    {
+        return (findPositionOf (text, Locale.ENGLISH));
     }
 
     /**
-     * Returns the node number of the string node containing the
-     * given text. This can be useful to index into the composite tag
-     * and get other children.
-     * @param text
-     * @return int
+     * Returns the node number of the first node containing the given text.
+     * This can be useful to index into the composite tag and get other children.
+     * Text is compared without case sensitivity and conversion to uppercase
+     * uses the supplied locale.
+     * @param text The text to search for.
+     * @return int The node index in the children list of the node containing
+     * the text or -1 if not found.
      */
-    public int findPositionOf(String text)
+    public int findPositionOf (String text, Locale locale)
     {
         Node node;
         int loc;
         
         loc = 0;
-        text = text.toUpperCase ();
+        text = text.toUpperCase (locale);
         for (SimpleNodeIterator e = children (); e.hasMoreNodes (); )
         {
             node = e.nextNode ();
-            if (-1 != node.toPlainTextString ().toUpperCase ().indexOf (text))
+            if (-1 != node.toPlainTextString ().toUpperCase (locale).indexOf (text))
                 return loc;
             loc++;
         }

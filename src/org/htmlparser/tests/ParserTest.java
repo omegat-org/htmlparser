@@ -35,6 +35,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Locale;
 
 import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
@@ -844,6 +845,7 @@ public class ParserTest extends ParserTestCase
             file.delete ();
         }
     }
+
     /**
      * Test reproducing a java.lang.StackOverflowError.
      */
@@ -857,5 +859,28 @@ public class ParserTest extends ParserTestCase
         parseAndAssertNodeCount (1);
         output = node[0].toString (); // this was where StackOverflow was thrown
         assertTrue ("bad toString()", -1 != output.indexOf (guts));
+    }
+
+    /**
+     * See bug #883664 toUpperCase on tag names and attributes depends on locale
+     */
+    public void testDifferentLocale () throws Exception
+    {
+        String html;
+        Locale original;
+                                                                                                                                                        
+        html = "<title>This is supposedly Turkish.</title>";
+        original = Locale.getDefault ();
+        try
+        {
+            Locale.setDefault (new Locale ("tr")); // turkish
+            createParser (html);
+            parseAndAssertNodeCount (1);
+            assertStringEquals ("html", html, node[0].toHtml ());
+        }
+        finally
+        {
+            Locale.setDefault (original);
+        }
     }
 }

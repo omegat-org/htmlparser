@@ -26,31 +26,42 @@
 
 package org.htmlparser.visitors;
 
+import java.util.Locale;
+
 import org.htmlparser.tags.LinkTag;
 
-public class LinkFindingVisitor extends NodeVisitor {
+public class LinkFindingVisitor extends NodeVisitor
+{
     private String linkTextToFind;
-    private boolean linkTagFound = false;
-    private int count = 0;
+    private int count;
+    private Locale locale;
 
-    public LinkFindingVisitor(String linkTextToFind) {
-        this.linkTextToFind = linkTextToFind.toUpperCase();
+    public LinkFindingVisitor (String linkTextToFind)
+    {
+        this (linkTextToFind, null);
     }
 
-    public void visitLinkTag(LinkTag linkTag) {
-//        System.out.println("Matching with "+linkTag.getLinkText());
-        if (linkTag.getLinkText().toUpperCase().indexOf(linkTextToFind)!=-1) {
-            linkTagFound = true;
+    public LinkFindingVisitor (String linkTextToFind, Locale locale)
+    {
+        count = 0;
+        this.locale = (null == locale) ? Locale.ENGLISH : locale;
+        this.linkTextToFind = linkTextToFind.toUpperCase (this.locale);
+    }
+
+    public void visitLinkTag(LinkTag linkTag)
+    {
+        if (-1 != linkTag.getLinkText ().toUpperCase (locale).indexOf (linkTextToFind))
             count++;
-        }
     }
 
-    public boolean linkTextFound() {
-        return linkTagFound;
+    public boolean linkTextFound()
+    {
+        return (0 != count);
     }
 
-    public int getCount() {
-        return count;
+    public int getCount()
+    {
+        return (count);
     }
 
 }

@@ -28,6 +28,7 @@ package org.htmlparser.tests;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Locale;
 
 import junit.framework.TestSuite;
 
@@ -104,7 +105,7 @@ public class FunctionalTests extends ParserTestCase {
             line = lines.readLine();
             if (line!=null) {
                 // Check the line for image tags
-                String newline = line.toUpperCase();
+                String newline = line.toUpperCase (Locale.ENGLISH);
                 int fromIndex = -1;
                 do {
                     fromIndex = newline.indexOf("<IMG",fromIndex+1);
