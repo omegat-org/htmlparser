@@ -108,7 +108,7 @@ public class AttributeParser {
                 putDataIntoTable(h,element,null,true);
             }
             else {
-                if (nextPart != null) {
+                if (nextPart != null && (0 < nextPart.length ())) {
                     if (name == null) {
                         if (!nextPart.substring(0,1).equals(" ")) {
                             name = nextPart;
