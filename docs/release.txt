@@ -10,8 +10,14 @@ Q1. What are the contents of the distribution ?
 
 A1. The distribution contains :
     (i) binary jar file - htmlparser.jar (in lib directory)
+    
     (ii) source code - src.zip (in distribution directory)
+    	 Also contains necessary resources, and build file. Unzip this
+    	 and you should be all set to build the parser from its source.
+    	 You would need Jakarta Ant already installed to run the script.
+    	 
     (iii) documentation - doc directory (includes javadoc)
+    
     (iv) Executing scripts - There are three scripts (in the bin directory):
          (a) runParser.bat  : Runs the html parser
          (b) runCrawler.bat : Runs the robot crawler
