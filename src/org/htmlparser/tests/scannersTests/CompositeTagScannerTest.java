@@ -150,6 +150,17 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		assertStringEquals("child html","<ANOTHER/>",child.toHtml());
 	}
 		
+	public void testParseTwoCompositeTags() throws ParserException {
+		createParser(
+			"<Custom>" +			"</Custom>" +
+			"<Custom/>"
+		);
+		parser.addScanner(new CustomScanner());
+		parseAndAssertNodeCount(2);
+		assertType("tag 1",CustomTag.class,node[0]);
+		assertType("tag 2",CustomTag.class,node[1]);
+	}
+	
 	public void _testXmlTypeCompositeTags() throws ParserException {
 		createParser(
 			"<Custom>" +

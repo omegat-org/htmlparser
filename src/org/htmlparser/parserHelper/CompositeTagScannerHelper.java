@@ -46,14 +46,15 @@ public class CompositeTagScannerHelper {
 	public Tag scan() throws ParserException {
 		Node currentNode = tag;
 		doEmptyXmlTagCheckOn(currentNode);
-		if (!endTagFound) 
-		do {
-			currentNode = reader.readElement();
-			if (currentNode==null) continue;
-			doEmptyXmlTagCheckOn(currentNode);
-			doChildAndEndTagCheckOn(currentNode);					
+		if (!endTagFound) { 
+			do {
+				currentNode = reader.readElement();
+				if (currentNode==null) continue;
+				doEmptyXmlTagCheckOn(currentNode);
+				doChildAndEndTagCheckOn(currentNode);					
+			}
+			while (currentNode!=null && !endTagFound);
 		}
-		while (currentNode!=null);
 		return createTag();
 	}
 
