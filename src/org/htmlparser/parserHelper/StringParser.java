@@ -83,7 +83,7 @@ public class StringParser {
 					}
 				}
 			}
-			if (ignoreStateMode && ch=='\'') {
+			if (ignoreStateMode && (ch=='\'' || ch=='"')) {
 				if (state==PARSE_IGNORE_STATE) state=PARSE_HAS_BEGUN_STATE;
 				else {
 					if (input.charAt(i+1)=='<')

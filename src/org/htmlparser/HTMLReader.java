@@ -61,6 +61,7 @@ public class HTMLReader extends BufferedReader
 	private String previousLine;
 	private StringParser stringParser = new StringParser();
 	private RemarkNodeParser remarkNodeParser = new RemarkNodeParser();
+
 	/**
 	 * The constructor takes in a reader object, it's length and the url to be read.
 	 */
@@ -183,7 +184,6 @@ public class HTMLReader extends BufferedReader
             {
                 node = remarkNodeParser.find(this,line,posInLine);
                 if (node!=null) return node;
-
                 node = HTMLTag.find(this,line,posInLine);
                 if (node!=null)
                 {
@@ -322,5 +322,4 @@ public class HTMLReader extends BufferedReader
 	public StringParser getStringParser() {
 		return stringParser;
 	}
-
 }
