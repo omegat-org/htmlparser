@@ -36,6 +36,7 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
 		testLineNumber("<Custom />", 1, 0, 1, 1);
 		testLineNumber("<Custom></Custom>", 1, 0, 1, 1);
 		testLineNumber("<Custom>Content</Custom>", 1, 0, 1, 1);
+		testLineNumber("<Custom>Content<Custom></Custom>", 1, 0, 1, 1);
 		testLineNumber(
 			"<Custom>\n" +
 			"	Content\n" +
@@ -79,14 +80,14 @@ public class LineNumberAssignedByNodeReaderTest extends ParserTestCase {
 	 * @param endLine int the expected end line number of the tag
 	 * @throws ParserException if there is an exception during parsing
 	 */ 
-	private void testLineNumber(String xml, int numNodes, int useNode, int startLine, int endLine) throws ParserException {
+	private void testLineNumber(String xml, int numNodes, int useNode, int expectedStartLine, int expectedEndLine) throws ParserException {
 		createParser(xml);
 		parser.addScanner(new CustomScanner());
 		parseAndAssertNodeCount(numNodes);
 		assertType("custom node",CustomTag.class,node[useNode]);
 		CustomTag tag = (CustomTag)node[useNode];
-		assertEquals("start line", tag.tagData.getStartLine(), startLine);
-		assertEquals("end line", tag.tagData.getEndLine(), endLine);
+		assertEquals("start line", expectedStartLine, tag.tagData.getStartLine());
+		assertEquals("end line", expectedEndLine, tag.tagData.getEndLine());
 		
 	}
 

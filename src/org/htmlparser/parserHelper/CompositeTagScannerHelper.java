@@ -25,6 +25,8 @@ public class CompositeTagScannerHelper {
 	private Tag endTag;
 	private NodeList nodeList;
 	private boolean endTagFound;
+	private int startingLineNumber;
+	private int endingLineNumber;
 	
 	public CompositeTagScannerHelper(
 		CompositeTagScanner scanner,
@@ -41,6 +43,8 @@ public class CompositeTagScannerHelper {
 		this.endTag = null;
 		this.nodeList = new NodeList();
 		this.endTagFound = false;
+		this.startingLineNumber = reader.getLastLineNumber();
+		this.endingLineNumber = -1;
 	}
 		
 	public Tag scan() throws ParserException {
@@ -64,6 +68,7 @@ public class CompositeTagScannerHelper {
 		if (endTag==null) {
 			createCorrectionEndTagBefore(reader.getLastReadPosition()+1);
 		}
+		this.endingLineNumber = reader.getLastLineNumber();
 		return createTag();
 	}
 
@@ -110,7 +115,14 @@ public class CompositeTagScannerHelper {
 	private Tag createTag() throws ParserException {
 		return scanner.createTag(
 			new TagData(
-				tag.elementBegin(),endTag.elementEnd(),0,0,"","",url,tag.isEmptyXmlTag()
+				tag.elementBegin(),
+				endTag.elementEnd(),
+				startingLineNumber,
+				endingLineNumber,
+				"",
+				"",
+				url,
+				tag.isEmptyXmlTag()
 			),
 			new CompositeTagData(
 				tag,endTag,nodeList

@@ -146,7 +146,8 @@ public class NodeReader extends BufferedReader
 		{
 			previousLine = line;
 			line = readLine();
-			lineCount++;
+			if (line!=null)
+				lineCount++;
 			posInLine = 0;
 			return line;
 		}
