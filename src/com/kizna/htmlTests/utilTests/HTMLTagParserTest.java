@@ -1,6 +1,7 @@
 package com.kizna.htmlTests.utilTests;
 
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLTagParser;
 import com.kizna.htmlTests.tagTests.HTMLTagTest;
 
@@ -40,7 +41,7 @@ public class HTMLTagParserTest extends TestCase {
 		assertEquals("Expected Pruned string","fdfdf dfdf",tagParser.pruneSpaces(test));
 	}   
 	protected void setUp() {
-		tagParser = new HTMLTagParser();	
+		tagParser = new HTMLTagParser(new DefaultHTMLParserFeedback());	
 	} 
 	public static TestSuite suite() {
 		return new TestSuite(HTMLTagParserTest.class);

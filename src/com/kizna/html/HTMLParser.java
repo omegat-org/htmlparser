@@ -49,6 +49,7 @@ import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLLinkProcessor;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.util.HTMLParserFeedback;
+import com.kizna.html.util.HTMLTagParser;
 /**
  * This is the class that the user will use, either to get an iterator into 
  * the html page or to directly parse the page and print the results
@@ -144,6 +145,7 @@ public class HTMLParser
 	{
 		this.reader = reader;
 		this.feedback = feedback;
+		HTMLTag.setTagParser(new HTMLTagParser(feedback));		
 		reader.setParser(this);
 	
 	}
@@ -160,6 +162,7 @@ public class HTMLParser
 		try {
 			this.resourceLocn = resourceLocn;
 			this.feedback = feedback;
+			HTMLTag.setTagParser(new HTMLTagParser(feedback));
 			openConnection();
 		}
 		catch (Exception e) {

@@ -62,7 +62,7 @@ public class HTMLTag extends HTMLNode
 	private static boolean encounteredQuery=false;
 	private static Vector strictTags=null;
 	private static HTMLParameterParser paramParser = new HTMLParameterParser();
-	private static HTMLTagParser tagParser = new HTMLTagParser();
+	private static HTMLTagParser tagParser;
 	/**
 	 * Tag contents will have the contents of the comment tag.
    */
@@ -309,4 +309,12 @@ public class HTMLTag extends HTMLNode
 	{
 		return "Begin Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	/**
+	 * Sets the tagParser.
+	 * @param tagParser The tagParser to set
+	 */
+	public static void setTagParser(HTMLTagParser tagParser) {
+		HTMLTag.tagParser = tagParser;
+	}
+
 }
