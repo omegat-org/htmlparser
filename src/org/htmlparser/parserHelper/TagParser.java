@@ -48,7 +48,7 @@ public class TagParser {
 	public final static String ENCOUNTERED_QUERY_MESSAGE = "TagParser : Encountered > after a query. Accepting without correction and continuing parsing";
 	
 	private ParserFeedback feedback;
-	private boolean encounteredQuery;
+//	private boolean encounteredQuery;
 
 	public TagParser(ParserFeedback feedback) {
 		this.feedback = feedback;
@@ -59,14 +59,14 @@ public class TagParser {
 		int i=position;
 		char ch;
 		Tag tag = new Tag(new TagData(0,0,"",input));
-		encounteredQuery = false;
+		Bool encounteredQuery = new Bool(false);
 		while (i<tag.getTagLine().length() && 
 				state!=TAG_FINISHED_PARSING_STATE && 
 				state!=TAG_ILLEGAL_STATE
 			)
 		{
 			ch = tag.getTagLine().charAt(i);
-			state = automataInput(i, state, ch, tag, i);
+			state = automataInput(encounteredQuery, i, state, ch, tag, i);
 			i = incrementCounter(i, reader, state, tag);
 		}
 		if (state==TAG_FINISHED_PARSING_STATE) {
@@ -81,9 +81,9 @@ public class TagParser {
 		return null;	
 	}
 
-	private int automataInput(int i, int state,char ch, Tag tag, int pos) {
+	private int automataInput(Bool encounteredQuery, int i, int state,char ch, Tag tag, int pos) {
 		state = checkIllegalState(i, state, ch, tag);
-		state = checkFinishedState(i, state, ch, tag, pos);
+		state = checkFinishedState(encounteredQuery, i, state, ch, tag, pos);
 		state = toggleIgnoringState(state, ch);
 		if (state==TAG_BEFORE_PARSING_STATE && ch!='<') {
             state= TAG_ILLEGAL_STATE;
@@ -97,7 +97,7 @@ public class TagParser {
 		if (state==TAG_IGNORE_BEGIN_TAG_STATE && ch=='>') {
 				state = TAG_IGNORE_DATA_STATE;
 		}
-		checkIfAppendable(state, ch, tag);
+		checkIfAppendable(encounteredQuery, state, ch, tag);
 		state = checkBeginParsingState(i, state, ch, tag);
 
 		return state;
@@ -122,7 +122,7 @@ public class TagParser {
 		return openTagPos > closeTagPos || (openTagPos ==-1 && closeTagPos!=-1);
  	}
  	
-	private int checkFinishedState(int i, int state,  char ch, Tag tag, int pos) {
+	private int checkFinishedState(Bool encounteredQuery, int i, int state,  char ch, Tag tag, int pos) {
 		if (ch=='>')
 		{
 			if (state==TAG_BEGIN_PARSING_STATE)
@@ -132,8 +132,8 @@ public class TagParser {
 			}
 			else
 			if (state==TAG_IGNORE_DATA_STATE) {
-				if (encounteredQuery) {
-					encounteredQuery=false;
+				if (encounteredQuery.getBoolean()) {
+					encounteredQuery.setBoolean(false);
 					feedback.info(ENCOUNTERED_QUERY_MESSAGE);
 					return state;
 				}
@@ -170,11 +170,12 @@ public class TagParser {
 		return state;
 	}
 
-	private void checkIfAppendable(int state, char ch, Tag tag) {
+	private void checkIfAppendable(Bool encounteredQuery,int state, char ch, Tag tag) {
 		if (state==TAG_IGNORE_DATA_STATE || 
 			state==TAG_BEGIN_PARSING_STATE || 
 			state==TAG_IGNORE_BEGIN_TAG_STATE) {
-			if (ch=='?') encounteredQuery=true;
+			if (ch=='?') 
+				encounteredQuery.setBoolean(true);
 			tag.append(ch);
 		}
 	}
@@ -305,4 +306,20 @@ public class TagParser {
 		}		
 		return ++i;
 	}	
+	
+	class Bool {
+		private boolean boolValue;
+		
+		Bool(boolean boolValue) {
+			this.boolValue = boolValue;	
+		}
+		
+		public void setBoolean(boolean boolValue) {
+			this.boolValue = boolValue;
+		}
+		
+		public boolean getBoolean() {
+			return boolValue;
+		}
+	}
 }
