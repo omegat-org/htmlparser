@@ -1,3 +1,16 @@
+Integration Build 1.2 - 20021006
+--------------------------------
+[1] Bug fixed in HTMLStyleScanner, allowing attributes to show
+in style tag
+[2] HTMLFormTag bug fixed - allows changing of internal form attributes,
+and is reflected in toHTML()
+[3] HTMLFormScanner included in lineup of standard scanners
+
+Integration Build 1.2 - 20020831
+--------------------------------
+[1] API integrated with HTMLParserFeedback
+[2] End-of-line string integration completed
+
 Integration Build 1.2 - 20020826
 --------------------------------
 [1] Added new tag-scanner pairs for the following tags:
@@ -35,7 +48,7 @@ character on the last line was causing a parser crash
 [4] Fixed bug in HTMLParameterParser.parseParameters(), due to which
 params with spaces before = were not being picked up
 [5] Made massive API changes - throwing exceptions and using HTMLEnumeration
-[6] Fixed HTMLRemarkNode bug - we can recognize stuff like &lt;!--&gt; now.
+[6] Fixed HTMLRemarkNode bug - we can recognize stuff like <!--> now.
 [7] Fixed HTMLImageScanner bug - we can now fix image tags like
 IMG SRC"somepic.jpg" - the missing equal to can be deduced
 [8] Fixed HTMLLinkScanner bug - end tags within a link were not being included
@@ -98,7 +111,7 @@ Integration Build 1.2 - 20020623
 [3] Added testcases for script scanner
 [4] Refactored HTMLTagScanner (removed extractField)
 [5] Fixed bug in HTMLLinkScanner - would crash on freshmeat.net,
-bcos of &lt;a&gt;Revision&lt;/a&gt;. Now this is being treated as three
+bcos of <a>Revision</a>. Now this is being treated as three
 seperate nodes(tag, string node, end tag)
 [6] Fixed ant script bug, not allowing it to be run from the command
 line by issuing the ant command.
@@ -128,11 +141,11 @@ Integration Build 1.2 - 20020512
 --------------------------------
 [1] Made Link Scanner more fault tolerant.
 Can handle bad links like
-&lt;A HREF="..."&gt;&lt;IMG&gt;&lt;/td&gt;&lt;td ...&gt;&lt;A href=".."&gt;...&lt;/a&gt;
+<A HREF="..."><IMG></td><td ...><A href="..">...</a>
 
-In the above, the first link is correctly ended before&lt;/td&gt;
+In the above, the first link is correctly ended before</td>
 
-&lt;A HREF="..."&gt;&lt;IMG&gt;&lt;A HREF="..."&gt;...&lt;/a&gt;
+<A HREF="..."><IMG><A HREF="...">...</a>
 
 The first link is correctly ended before the second link begins
 
@@ -152,8 +165,121 @@ Nightly Build 1.2 - 20020503
 ----------------------------
 [1] Major fix - Dirty parsing of erroneous inverted commas possible
 [2] Tags spread out on multiple lines, with blank lines in between are supported
-[3] Bug in HTMLStringNode fixed, so as to be able to parse tag characters &lt; and &gt;
+[3] Bug in HTMLStringNode fixed, so as to be able to parse tag characters < and >
 [4] Image tag parameters not being retrieved, bug fixed
 [5] Added HTMLFormScanner, HTMLFrameScanner, HTMLFormTag, HTMLFrameTag - but these
 are not yet integrated with the code, pending testcases.
 
+Production Release ver 1.1
+--------------------------
+[1] Added META and TITLE tag scanners
+[2] Fixed spaces bug in HTMLLinkScanner and HTMLImageScanner. The parser
+now supports links or urls with spaces in them. Functionality
+modification - HTMLTag no longer absorbs spaces. It reports data as is,
+and leaves the responsibility of processing to the particular scanner.
+[3] Fixed XML parsing bug - isXMLTagFound() in HTMLTagScanner - it no longer checks for equality,
+but for the beginning of an xml tag
+[4] HTMLTag bug - if a link is spread over two lines, the parser would crash.
+[5] Dynamic Page Parsing supported (urls need not end with .html anymore)
+[6] Dirty HTML of the form <A HREF="http://www.somelink.com">abcd<A>, is now correctly 
+handled. The second <A> is taken as </A>.
+
+Maintenance Release ver 1.04
+----------------------------
+[1] Bug fix in HTMLTag, now caught by test case in HTMLTagTest. Will cause incorrect parsing for JSP tags, which have end tag symbols in inverted commas. 
+[2] Bug fix in HTMLLinkParser - would crash for link tags which have no link in them. Test case also added. 
+[3] More test cases added, for ImageTag as well, and HTMLTag also. 
+
+Maintenance Release ver 1.03
+----------------------------
+This version contains the following bug fix :
+[1] Bug in HTMLRemarkNode, now caught by test case in HTMLRemarkNodeTest. Will cause incorrect parsing if remarks are spread across lines.
+
+Maintenance Release ver 1.02
+----------------------------
+This version contains the following bug fixes :
+[1] Bug in HTMLStyleScanner, now caught by test case in HTMLStyleScannerTest - would end up crashing on parsing google.
+[2] Changed encoding support to 8859_4 for English and most European languages - this fixes some crashes observed on Finnish pages
+
+Maintenance Release ver 1.01
+----------------------------
+This version contains the following bug fix :
+[1] Bug in HTMLStyleScanner, now caught by test case in HTMLStyleScannerTest - would end up crashing on standard style tags
+
+Rel - ver 1.00
+--------------
+This version contains :
+[1] Major architecture overhaul - significant change : no more static scanner registration. Architecture has been simplified a lot.
+[2] Major bug fixes - several bugs have been fixed, lots of testcases added, and stability vastly improved.
+[3] Improved documentation - The javadoc is now substantial. Please look at the javadoc for the HTMLParser class, especially the elements() method. This has a lot of info to get you started.
+
+From this release, HTML Parser enters the beta stage (Alpha stage is finally over - phew!). From now on, the API will not be changed significantly, and future releases would be of a maintenance nature.
+
+Rel 0.98
+--------
+This version contains :
+[1] Improvements - replacements of String by StringBuffer (by Nash Tsai)
+[2] Bug fix in HTMLReader (by Kaarle Kaila)
+[3] Addition of mailto support in HTMLLinkScanner
+[4] Addition of applications - MailRipper and Robot - to demonstrate usage of HTMLParser
+
+Rel 0.97
+--------
+Bugs fixed : 
+[1] HTMLStyleTag : Extra tagBegin, tagEnd present, instead of using parent's fields.
+[2] HTMLLinkScanner : Scanning of URLs with a slash in the end of the base url, and a slash in the beginning of a link, 
+would result in two slashes in the generated link
+[3] Null Pointer Exception caused by HTMLLinkScanner, when tags beginning with A are wrongly identified as link tags.
+[4] HTMLScriptScanner parsing bug, if </script> is in the same line as <script>, it isnt correctly parsed and gives
+a null pointer exception
+[5] HTMLImageScanner bug : When parsing images without inverted commas, it crashes.
+[6] HTMLLinkScanner Bug : When parsing links without inverted commas in href, it crashes.
+[7] HTMLLinkScanner Bug : When parsing links which contain images in them, it doesent recognize images. Modified now to recognize images and text uniformly.
+
+Thanks to Roger Kjensrud for pointing out important bugs.
+
+Rel 0.96
+--------
+This version has some major architecture improvements.
+Modifications :
+
+(1) HTMLJspTag and HTMLDoctypeTag now use the HTMLTag architecture to register scanners.
+(2) HTMLParser has a new constructor to register an external HTMLReader. This allows the
+writing of powerful testcases.
+(3) HTMLAppletTag and HTMLAppletTagScanner introduced
+(4) Packages introduced for better management of classes
+
+Bugs Fixed :
+
+(1) Bug in parsing StringNode fixed
+(2) Relative Link bug fixed (resoultion of .. in the links or images)
+(3) Miscallaneous parsing bugs fixed
+
+Thanks to Manpreet Singh for pointing out important bugs.
+
+Rel 0.94
+--------
+Additions :
+
+(1) Recognition of style code. 
+
+Bugs fixed :
+(1) Javascript parsing bug
+(2) RemarkTag parsing bug
+(3) Declaration Tag parsing bug
+
+Rel 0.9
+-------
+Additions :
+
+(1) Recognition of Javascript code. Pages with javascript can now be parsed correctly.
+(2) Basic tests introduced in the package com.kizna.htmlTests
+(3) Documentation improved a bit
+(4) Complete packaging in one zip file instead of many seperate files
+
+Rel 0.82
+--------
+Bugs fixed :
+(1) Bug in HTMLDecTag
+(2) Bug in HTMLLinkReader
+These were causing the parsing to crash when tried with websites like http://www.google.com. This has been corrected now.
