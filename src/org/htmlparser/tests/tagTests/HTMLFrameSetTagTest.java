@@ -53,8 +53,8 @@ public class HTMLFrameSetTagTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be End Tag",node[0] instanceof HTMLFrameSetTag);
 		HTMLFrameSetTag frameSetTag = (HTMLFrameSetTag)node[0];
-		assertEquals("HTML Contents",
-		"<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\r\n"+ 
+		assertStringEquals("HTML Contents",
+		"<FRAMESET BORDER=\"0\" ROWS=\"115,*\" FRAMESPACING=\"0\" FRAMEBORDER=\"NO\">\r\n"+ 
   			"<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\r\n"+
 	  		"<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\r\n"+
 		"</FRAMESET>",

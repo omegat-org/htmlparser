@@ -31,12 +31,10 @@ package org.htmlparser.tags;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.htmlparser.HTMLNode;
-
 /**
  * Identifies an frame tag
  */
-public class HTMLFrameSetTag extends HTMLTag
+public class HTMLFrameSetTag extends HTMLCompositeTag
 {
 	/**
 	 * The URL where the image is stored.
@@ -44,9 +42,9 @@ public class HTMLFrameSetTag extends HTMLTag
 	protected String frameURL;
    	protected String frameName;
    	protected Vector frames;
-	public HTMLFrameSetTag(int frameSetBegin, int frameSetEnd,String frameSetContents,String tagLine,Vector frames)
+	public HTMLFrameSetTag(int frameSetBegin, int frameSetEnd,String frameSetContents,String tagLine,Vector frames,HTMLTag startTag, HTMLTag endTag)
 	{
-		super(frameSetBegin,frameSetEnd,frameSetContents,tagLine);
+		super(frameSetBegin,frameSetEnd,frameSetContents,tagLine,frames,startTag,endTag);
 
       	this.frames = frames;
 	}
@@ -93,24 +91,4 @@ public class HTMLFrameSetTag extends HTMLTag
 	public void setFrames(Vector frames) {
 		this.frames = frames;
 	}
-
-
-	/**
-	 * @see org.htmlparser.HTMLNode#toHTML()
-	 */
-	public String toHTML() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(super.toHTML());
-		HTMLNode node=null,prevNode=this;
-		for (Enumeration e = frames.elements();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
-			if (prevNode.elementEnd()>node.elementBegin()) sb.append(lineSeparator);
-			sb.append(node.toHTML());
-		} 
-		if (node.elementEnd()>elementEnd()) sb.append(lineSeparator);
-		sb.append("</FRAMESET>");
-		return sb.toString();
-	}
-
-
 }

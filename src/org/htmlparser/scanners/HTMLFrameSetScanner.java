@@ -92,14 +92,17 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 	public HTMLTag scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws HTMLParserException
 	{
 		try {
+			HTMLTag startTag = tag;
+			HTMLTag endTag   = null;
 			Vector frameVector = new Vector();
 			boolean endFrameSetFound=false;
 			HTMLNode node;
 			int frameSetEnd=-1;
+			
 			do {
 				node = reader.readElement();
 				if (node instanceof HTMLEndTag) {
-					HTMLEndTag endTag = (HTMLEndTag)node;
+					endTag = (HTMLEndTag)node;
 					if (endTag.getText().toUpperCase().equals("FRAMESET")) {
 						endFrameSetFound = true;
 						frameSetEnd = endTag.elementEnd();
@@ -118,7 +121,7 @@ public class HTMLFrameSetScanner extends HTMLTagScanner
 				throw new HTMLParserException("HTMLFrameSetScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
 				"Frame Vector contents : "+msg.toString());
 			}
-			HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector);
+			HTMLFrameSetTag frameSetTag = new HTMLFrameSetTag(tag.elementBegin(),frameSetEnd,tag.getText(),currentLine,frameVector,startTag,endTag);
 			return frameSetTag;		
 		}
 		catch (Exception e) {
