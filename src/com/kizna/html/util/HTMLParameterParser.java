@@ -102,6 +102,66 @@ public class HTMLParameterParser {
             if (delim.indexOf(t)>=0) {
                 // t was a delimiter
                 if (waitingForValue) {
+                  if (t.equals("=")) {
+                        // here set to receive next value of parameter
+                        waitingForValue=false;
+                        isValue=true;
+                        value="";
+                    }                   
+                } 
+            }
+            else {                
+     
+                if (isValue) {
+                    value=t;
+                    isValue=false;
+                }
+                else {
+                    if (name==null) {
+                        name=t;
+                        if (isName) {
+                            waitingForValue=false;
+                        }
+                        else {
+                            waitingForValue=true;
+                        }
+                    }
+                    else {
+
+                        h.put(name.toUpperCase(),"");  
+                        isName=false;
+                        value=null;
+                        name=t;
+                        waitingForValue=true;
+
+                    }
+                }
+                
+                if (!waitingForValue) {
+                    if (name != null && isValue==false){
+                        if (isName && value == null) value=HTMLTag.TAGNAME;
+                        else if (value==null) value = ""; // Hashtable does not accept nulls
+                        if (isName) {
+                            // store tagname as tag.TAGNAME,tag                        
+                            h.put(value,name.toUpperCase());  
+                        } 
+                        else {                   
+                            // store tag parameters as NAME, value
+                            h.put(name.toUpperCase(),value);  
+                        }
+                        isName=false;
+                        name=null;
+                        name = null;
+                        value=null;
+                    }                
+                    waitingForValue=false;
+                }           
+            }
+        }
+        return h;
+    }
+ /*               
+                if (waitingForValue) {
 					
                     if (t.equals("=")) {
                         // here set to receive next value of parameter
@@ -142,4 +202,5 @@ public class HTMLParameterParser {
         }
         return h;
     }
+  */
 }

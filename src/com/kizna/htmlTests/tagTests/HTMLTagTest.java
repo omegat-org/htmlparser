@@ -342,6 +342,66 @@ public void testNestedTags() {
             fail("Bad class element = " + o.getClass().getName());
         }
     }
+    
+    
+ /**
+    * Test parseParameter method
+    * Created by Kaarle Kaila (august 2002)
+    * the tag name is here A (and should be eaten up by linkScanner)
+  * Tests elements where = sign is surrounded by spaces
+    */
+    public void testParseParameterSpace(){
+        HTMLTag tag;
+        HTMLEndTag etag;
+        HTMLStringNode snode;
+        Object o=null;
+        String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
+       	StringReader sr = new StringReader(lin1);
+    	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	    HTMLParser parser = new HTMLParser(reader);
+        Enumeration en = parser.elements();
+        Hashtable h;
+        boolean testEnd=true;  // test end of first part
+        String a,href,myPara,myValue,nice;      
+        
+        try {
+
+            if (en.hasMoreElements()) {
+                o = en.nextElement();        
+                
+                tag = (HTMLTag)o;     
+                h = tag.parseParameters();
+                a = (String)h.get(tag.TAGNAME);                
+                nice = (String)h.get("YOURPARAMETER");
+                assertEquals ("Link tag (A)",a,"A");
+                assertEquals ("yourParameter value","Kaarle",nice);
+            }
+            if (!(o instanceof HTMLLinkTag)) {
+                // linkscanner has eaten up this piece
+                if ( en.hasMoreElements()) {
+                    o = en.nextElement();        
+                   // System.out.println("snode = " + o );
+                    snode = (HTMLStringNode)o;   
+                    assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
+                }
+
+                if (en.hasMoreElements()) {
+                    o = en.nextElement();        
+                  //  System.out.println("etag = " + o );
+                    etag = (HTMLEndTag)o;        
+                    assertEquals("Still patragraph endtag",etag.getText(),"A");                    
+                }
+            }
+            // testing rest
+            
+        } catch (ClassCastException ce) {
+            fail("Bad class element = " + o.getClass().getName());
+        }
+    }
+     
+    
+    
+    
     /**
      * Reproduction of a bug reported by Annette Doyle
      * This is actually a pretty good example of dirty html - we are in a fix 
