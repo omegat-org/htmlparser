@@ -63,6 +63,11 @@ public class HTMLFormScanner extends HTMLTagScanner
    public final static String HIDDEN = "HIDDEN";
    public final static String PASSWORD = "PASSWORD";
    public final static String FILE = "FILE";*/
+   /*public final static String TEXT = "TEXT";
+   public final static String IMAGE = "IMAGE";
+   public final static String HIDDEN = "HIDDEN";
+   public final static String PASSWORD = "PASSWORD";
+   public final static String FILE = "FILE";*/
 	/**
 	 * Overriding the default constructor
 	 */

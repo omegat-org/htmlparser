@@ -1,36 +1,5 @@
-// HTMLParser Library v1.2(20020503) - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-// For any questions or suggestions, you can write to me at :
-// Email :somik@kizna.com
-// 
-// Postal Address : 
-// Somik Raha
-// R&D Team
-// Kizna Corporation
-// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
-// Shibuya-ku, Tokyo, 
-// 150-0012, 
-// JAPAN
-// Tel  :  +81-3-54752646
-// Fax : +81-3-5449-4870
-// Website : www.kizna.com
-
 package com.kizna.html.scanners;
+
 //////////////////
 // Java Imports //
 //////////////////
@@ -56,7 +25,7 @@ import com.kizna.html.util.HTMLLinkProcessor;
  */
 public class HTMLLinkScanner extends HTMLTagScanner
 {
-	private boolean dirty = false;
+	private HTMLTagScanner previousOpenLinkScanner=null;
 	/**
 	 * Overriding the default constructor
 	 */
@@ -70,6 +39,17 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	public HTMLLinkScanner(String filter)
 	{
 		super(filter);
+	}
+	protected HTMLNode createLinkTag(String currentLine, HTMLNode node, boolean mailLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector) {
+		int linkEnd;
+		// The link has been completed
+		// Create the link object and return it
+		// HTMLLinkNode Constructor got one extra parameter 
+		// Kaarle Kaila 23.10.2001
+		linkEnd = node.elementEnd();
+		HTMLLinkTag linkTag = new HTMLLinkTag(link,linkText,linkBegin,linkEnd,accessKey,currentLine,nodeVector,mailLink,tagContents,linkContents);
+		linkTag.setThisScanner(this);
+		return linkTag;
 	}
 	/**
 	 * Template Method, used to decide if this scanner can handle the Link tag type. If 
@@ -86,17 +66,17 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		char ch = s.charAt(0);
 		
 		// Is it a dirty html tag (should have been end tag but is begin)
-		if ((ch=='a' || ch=='A') && s.length()==1) {
-			if (previousOpenScanner instanceof HTMLLinkScanner) {
+		if ((ch=='a' || ch=='A')) {
+			if (previousOpenLinkScanner!=null) {
 				// This is dirty HTML. Assume the current tag is
 				// not a new link tag - but an end tag. This is actually a really wild bug - 
 				// Internet Explorer actually parses such tags.
 				// So - we shall then proceed to fool the scanner into sending an endtag of type </A>
 				// For this - set the dirty flag to true and return
-				dirty = true;	
 				return true;  
 			} 
-		} else dirty = false;
+		}
+		
 
 		if ((ch=='a' || ch=='A') && (s.charAt(1)==' ' || s.charAt(1)=='\n')) retVal = true; else retVal = false;
 
@@ -154,6 +134,13 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		} else return null;
 	}
 	/**
+	 * Gets the dirty.
+	 * @return Returns a boolean
+	 */
+	public boolean isPreviousLinkScannerOpen() {
+		return previousOpenLinkScanner!=null;
+	}
+	/**
 	 * Scan the tag and extract the information relevant to the link tag.
 	 * @param tag HTML Tag to be scanned
 	 * @param url The URL of the html page in which this tag is located
@@ -162,11 +149,12 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	 */
 	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
-		if (dirty) {
+		if (previousOpenLinkScanner!=null) {
 			// Fool the reader into thinking this is an end tag (to handle dirty html, where there is 
 			// actually no end tag for the link
 			return new HTMLEndTag(tag.elementBegin(),tag.elementEnd(),"A");
 		}
+		previousOpenLinkScanner = this;
 		HTMLNode node;
 		boolean mailLink = false;
 		String link,linkText="",accessKey=null,tmp;
@@ -216,28 +204,10 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		while (endFlag==false);
 		if (node instanceof HTMLEndTag)
 		{
+			previousOpenLinkScanner = null;
 			return createLinkTag(currentLine, node, mailLink, link, linkText, accessKey, linkBegin, tagContents, linkContents, nodeVector);
 		}
 		
 		return null;
 	}
-	protected HTMLNode createLinkTag(String currentLine, HTMLNode node, boolean mailLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector) {
-		int linkEnd;
-		// The link has been completed
-		// Create the link object and return it
-		// HTMLLinkNode Constructor got one extra parameter 
-		// Kaarle Kaila 23.10.2001
-		linkEnd = node.elementEnd();
-		HTMLLinkTag linkTag = new HTMLLinkTag(link,linkText,linkBegin,linkEnd,accessKey,currentLine,nodeVector,mailLink,tagContents,linkContents);
-		linkTag.setThisScanner(this);
-		return linkTag;
-	}
-	/**
-	 * Gets the dirty.
-	 * @return Returns a boolean
-	 */
-	public boolean getDirty() {
-		return dirty;
-	}
-
 }

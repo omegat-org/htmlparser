@@ -38,7 +38,7 @@ import com.kizna.html.HTMLNode;
  */
 public class HTMLDoctypeTag extends HTMLTag
 {
-	/**
+		/**
 	 * The HTMLDoctypeTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.
 	 * @param tagBegin beginning position of the tag
