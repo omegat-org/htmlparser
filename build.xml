@@ -152,18 +152,21 @@
            author="true"
            version="true"
            use="true"
-           windowtitle="HTMLParser ${version}">
-      <doctitle><![CDATA[<h1>HTMLParser ${version}</h1>]]></doctitle>
+           windowtitle="HTML Parser ${version}">
+      <doctitle><![CDATA[<h1>HTML Parser ${version}</h1>]]></doctitle>
       <header><![CDATA[<A HREF="http://htmlparser.sourceforge.net" target="_top">HTML Parser Home Page</A>]]></header>
-      <bottom><![CDATA[HTMLParser is an open source library released under LGPL. <BR> If you want to be notified when a new release of HTML Parser is out, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-announce">HTMLParser Announcement List</A>.<BR>
-If you have questions about the usage of the parser, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-user">HTMLParser User List</A>. 
+      <bottom><![CDATA[HTML Parser is an open source library released under LGPL. <BR> If you want to be notified when a new release of HTML Parser is out, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-announce">HTML Parser Announcement List</A>.<BR>
+If you have questions about the usage of the parser, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-user">HTML Parser User List</A>. 
 <BR>
-If you want to join as a developer, please sign up on the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-developer">HTMLParser Developer List</A>.<BR> All three lists can be joined from the <A HREF="http://htmlparser.sourceforge.net/mailinglists.html">HTMLParser Mailing Lists Page.</A>  ]]></bottom>
-      <footer>(c) Dec 31, 2000 Somik Raha</footer>
-      <group title="HTMLParser Main Package" packages="org.htmlparser"/>
-      <group title="HTMLParser Tags" packages="org.htmlparser.tags"/>
-      <group title="HTMLParser Scanners" packages="org.htmlparser.scanners"/>
-      <group title="HTMLParser Utility Packages (of developer interest only)" packages="org.htmlparser.util"/>
+If you want to join as a developer, please sign up on the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-developer">HTML Parser Developer List</A>.<BR> All three lists can be joined from the <A HREF="http://htmlparser.sourceforge.net/mailinglists.html">HTML Parser Mailing Lists Page.</A>  ]]></bottom>
+      <footer>(c) 2003 Somik Raha</footer>
+      <group title="Main Package" packages="org.htmlparser"/>
+      <group title="Example Applications" packages="org.htmlparser.parserapplications"/>
+      <group title="Tags" packages="org.htmlparser.tags,org.htmlparser.tags.data"/>
+      <group title="Scanners" packages="org.htmlparser.scanners"/>
+      <group title="Beans" packages="org.htmlparser.beans"/>
+      <group title="Visitors" packages="org.htmlparser.visitors"/>
+      <group title="Utility Packages (of developer interest only)" packages="org.htmlparser.util"/>
     </javadoc>         
   </target>
 
