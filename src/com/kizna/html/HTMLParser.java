@@ -166,7 +166,10 @@ public class HTMLParser
 			openConnection();
 		}
 		catch (Exception e) {
-			throw new HTMLParserException("Error in constructing the parser object for resource "+resourceLocn,e);
+			String msg="Error in constructing the parser object for resource "+resourceLocn;
+			HTMLParserException ex = new HTMLParserException(msg,e);
+			feedback.error(msg,ex);
+			throw ex;
 		}
 	}
 
@@ -200,22 +203,15 @@ public class HTMLParser
 		}
 		scanner.setFeedback(feedback);
 	}
-		private String checkEnding(String link)
-		{
-			// Check if the link ends in html, htm, or /. If not, add a slash
-			int l1 = link.indexOf("html");
-			int l2 = link.indexOf("htm");
-			int l3 = link.indexOf("php");
-			int l4 = link.indexOf("jsp");
-			/*if (l1==-1 && l2==-1 && l3==-1 && l4==-1)
-			{
-				if (link.charAt(link.length()-1)!='/')
-				{ 
-					link+="/index.html";
-				} 
-				return link;
-			} else */return link;
-		}
+	private String checkEnding(String link)
+	{
+		// Check if the link ends in html, htm, or /. If not, add a slash
+		int l1 = link.indexOf("html");
+		int l2 = link.indexOf("htm");
+		int l3 = link.indexOf("php");
+		int l4 = link.indexOf("jsp");
+		return link;
+	}
 	/**
 	 * Returns an iterator (enumeration) to the html nodes. Each node can be a tag/endtag/
 	 * string/link/image<br>
@@ -256,7 +252,14 @@ public class HTMLParser
 						return true;
 				}
 				catch (Exception e) {
-					throw new HTMLParserException("Unexpected Exception occurred in HTMLParser.hasMoreNodes()"+resourceLocn,e);
+					StringBuffer msgBuffer = new StringBuffer();
+					msgBuffer.append("Unexpected Exception occurred in HTMLParser.hasMoreNodes()");
+					msgBuffer.append(resourceLocn);
+					msgBuffer.append(", in nextHTMLNode");
+					reader.appendLineDetails(msgBuffer);
+					HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
+					feedback.error(msgBuffer.toString(),ex);
+					throw ex;
 				}
 
 			}
@@ -268,9 +271,17 @@ public class HTMLParser
 					return node;
 				}
 				catch (Exception e) {
-					throw new HTMLParserException("Unexpected Exception occurred while reading "+resourceLocn+", in nextHTMLNode",e);
+					StringBuffer msgBuffer = new StringBuffer();
+					msgBuffer.append("Unexpected Exception occurred while reading ");
+					msgBuffer.append(resourceLocn);
+					msgBuffer.append(", in nextHTMLNode");
+					reader.appendLineDetails(msgBuffer);
+					HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
+					feedback.error(msgBuffer.toString(),ex);
+					throw ex;
 				}
 			}
+
 		};
 	}
 	/**
@@ -363,7 +374,10 @@ public class HTMLParser
 		}
 		catch (Exception e)
 		{
-			throw new HTMLParserException("HTMLParser.openConnection() : Error in opening a connection to "+resourceLocn,e);
+			String msg="HTMLParser.openConnection() : Error in opening a connection to "+resourceLocn;
+			HTMLParserException ex = new HTMLParserException(msg,e);
+			feedback.error(msg,ex);
+			throw ex;
 		}
 	}
 	private HTMLReader openFileConnection() throws HTMLParserException {
@@ -371,7 +385,10 @@ public class HTMLParser
 			return new HTMLReader(new BufferedReader(new FileReader(resourceLocn)),resourceLocn);
 		}
 		catch (Exception e) {
-			throw new HTMLParserException("HTMLParser.openFileConnection() : Error in opening a file connection to "+resourceLocn,e);
+			String msg="HTMLParser.openFileConnection() : Error in opening a file connection to "+resourceLocn;
+			HTMLParserException ex = new HTMLParserException(msg,e);
+			feedback.error(msg,ex);
+			throw ex;
 		}
 	}
 	private HTMLReader openURLConnection()	throws HTMLParserException {
@@ -384,7 +401,10 @@ public class HTMLParser
 			return new HTMLReader(new BufferedReader(new InputStreamReader(uc.getInputStream(),"8859_4")),resourceLocn);
 		}
 		catch (Exception e) {
-			throw new HTMLParserException("HTMLParser.openURLConnection() : Error in opening a URL connection to "+resourceLocn,e);
+			String msg="HTMLParser.openURLConnection() : Error in opening a URL connection to "+resourceLocn;
+			HTMLParserException ex = new HTMLParserException(msg,e);
+			feedback.error(msg,ex);
+			throw ex;
 		}
 	}
 	/**

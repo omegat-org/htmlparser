@@ -59,6 +59,8 @@ public class HTMLReader extends BufferedReader
 	protected String url;
 	private HTMLParser parser;
 	private boolean tagUpgraded=false;
+	private int lineCount;
+	private String previousLine;
 	/**
 	 * This constructor basically overrides the existing constructor in the
 	 * BufferedReader class.
@@ -68,6 +70,7 @@ public class HTMLReader extends BufferedReader
 	{
 		super(in,len);
 		this.parser = null;
+		this.lineCount = 1;
 	}
 	/**
 	 * The constructor takes in a reader object, and the url to be read.
@@ -77,6 +80,7 @@ public class HTMLReader extends BufferedReader
 		super(in);
 		this.url = url;
 		this.parser = null;		
+		this.lineCount = 1;
 	}
 	/**
 	 * This method is intended to be called only by scanners, when a situation of dirty html has arisen, 
@@ -111,7 +115,9 @@ public class HTMLReader extends BufferedReader
 	{
 		try
 		{
+			previousLine = line;
 			line = readLine();
+			lineCount++;
 			posInLine = 0;
 			return line;
 		}
@@ -169,8 +175,14 @@ public class HTMLReader extends BufferedReader
 					return node;
 				}
 				catch (Exception e)
-				{
-					throw new HTMLParserException(DECIPHER_ERROR,e);
+				{			
+					StringBuffer msgBuffer = new StringBuffer();
+					msgBuffer.append(DECIPHER_ERROR);
+					appendLineDetails(msgBuffer);
+					HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
+					
+					parser.getFeedback().error(msgBuffer.toString(),ex);
+					throw ex;
 				}
 			}
 	
@@ -183,8 +195,20 @@ public class HTMLReader extends BufferedReader
 			return null;
 		}
 		catch (Exception e) {
-			throw new HTMLParserException("HTMLReader.readElement() : Error occurred while trying to read the next element, at this line :"+line,e);
+			StringBuffer msgBuffer = new StringBuffer("HTMLReader.readElement() : Error occurred while trying to read the next element,");
+			appendLineDetails(msgBuffer);
+			HTMLParserException ex = new HTMLParserException(msgBuffer.toString(),e);
+			parser.getFeedback().error(msgBuffer.toString(),ex);
+			throw ex;			
 		}
+	}
+	public void appendLineDetails(StringBuffer msgBuffer) {
+		msgBuffer.append("\nat Line ");
+		msgBuffer.append(getLineCount());
+		msgBuffer.append(" : ");
+		msgBuffer.append(getLine());
+		msgBuffer.append("\nPrevious Line ").append(getLineCount()-1);
+		msgBuffer.append(" : ").append(getPreviousLine());
 	}
 	/**
 	 * Do we need to read the next line ?
@@ -226,4 +250,28 @@ public class HTMLReader extends BufferedReader
 	{
 		return (HTMLNode.getLineSeparator());
 	}
+	/**
+	 * Returns the lineCount.
+	 * @return int
+	 */
+	public int getLineCount() {
+		return lineCount;
+	}
+
+	/**
+	 * Returns the previousLine.
+	 * @return String
+	 */
+	public String getPreviousLine() {
+		return previousLine;
+	}
+
+	/**
+	 * Returns the line.
+	 * @return String
+	 */
+	public String getLine() {
+		return line;
+	}
+
 }
