@@ -140,8 +140,8 @@ public class CompositeTagScannerHelper {
 				endTag.elementEnd(),
 				startingLineNumber,
 				endingLineNumber,
-				"",
-				"",
+				tag.getText(),
+				currLine,
 				url,
 				tag.isEmptyXmlTag()
 			),

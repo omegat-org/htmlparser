@@ -73,6 +73,7 @@ public class ScriptScanner extends CompositeTagScanner {
 	public Tag scan(Tag tag, String url, NodeReader reader, String currLine)
 		throws ParserException {
 		try {
+			int startLine = reader.getLastLineNumber();
 			String line = null;
 			StringBuffer scriptContents = 
 				new StringBuffer();
@@ -137,9 +138,12 @@ public class ScriptScanner extends CompositeTagScanner {
 				new TagData(
 					startTag.elementBegin(),
 					endTag.elementEnd(),
+					startLine,
+					reader.getLastLineNumber(),
 					startTag.getText(),
 					currLine,
-					url
+					url,
+					false
 				), new CompositeTagData(
 					startTag,endTag,childrenNodeList
 				)
