@@ -26,14 +26,22 @@
 
 package org.htmlparser.lexer;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.*;
-import java.net.*;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
 
-import org.htmlparser.util.*;
+import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.ParserException;
 
 /**
  * Represents the contents of an HTML page.
@@ -691,7 +699,7 @@ public class Page
                         throw new ParserException ("reset stream failed");
                     for (int i = 0; i < offset; i++)
                         if (new_chars[i] != buffer[i])
-                            throw new ParserException ("character mismatch (new: "
+                            throw new EncodingChangeException ("character mismatch (new: "
                             + new_chars[i]
                             + " != old: "
                             + buffer[i]
@@ -699,7 +707,7 @@ public class Page
                             + encoding
                             + " to "
                             + character_set
-                            + " at offset "
+                            + " at character offset "
                             + offset);
                 }
             }

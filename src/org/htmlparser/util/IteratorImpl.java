@@ -63,8 +63,9 @@ public class IteratorImpl implements NodeIterator
     /**
      * Get the next node.
      * @return The next node in the HTML stream, or null if there are no more nodes.
+     * @exception ParserException If an unrecoverable error occurs.
      */
-    public Node nextNode() throws ParserException
+    public Node nextNode () throws ParserException
     {
         Tag tag;
         String name;
@@ -94,15 +95,19 @@ public class IteratorImpl implements NodeIterator
                 }
             }
         }
+        catch (ParserException pe)
+        {
+            throw pe; // no need to wrap an existing ParserException
+        }
         catch (Exception e)
         {
-            StringBuffer msgBuffer = new StringBuffer();
-            msgBuffer.append("Unexpected Exception occurred while reading ");
-            msgBuffer.append(mLexer.getPage ().getUrl ());
-            msgBuffer.append(", in nextHTMLNode");
-//                reader.appendLineDetails(msgBuffer);
-            ParserException ex = new ParserException(msgBuffer.toString(),e);
-            mFeedback.error(msgBuffer.toString(),ex);
+            StringBuffer msgBuffer = new StringBuffer ();
+            msgBuffer.append ("Unexpected Exception occurred while reading ");
+            msgBuffer.append (mLexer.getPage ().getUrl ());
+            msgBuffer.append (", in nextNode");
+            // TODO: appendLineDetails (msgBuffer);
+            ParserException ex = new ParserException (msgBuffer.toString (), e);
+            mFeedback.error (msgBuffer.toString (), ex);
             throw ex;
         }
         

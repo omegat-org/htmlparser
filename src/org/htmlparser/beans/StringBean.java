@@ -36,6 +36,7 @@ import org.htmlparser.StringNode;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.Translate;
 import org.htmlparser.visitors.NodeVisitor;
 
@@ -305,6 +306,26 @@ public class StringBean extends NodeVisitor implements Serializable
                     mBuffer = null;
                 }
             }
+            catch (EncodingChangeException ece)
+            {
+                mIsPre = false;
+                mIsScript = false;
+                try
+                {   // try again with the encoding now in force
+                    mParser.reset ();
+                    mBuffer = new StringBuffer (4096);
+                    mParser.visitAllNodesWith (this);
+                    updateStrings (mBuffer.toString ());
+                }
+                catch (ParserException pe)
+                {
+                    updateStrings (pe.toString ());
+                }
+                finally
+                {
+                    mBuffer = null;
+                }
+             }
             catch (ParserException pe)
             {
                 updateStrings (pe.toString ());
