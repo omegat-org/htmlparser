@@ -63,6 +63,7 @@ import org.htmlparser.tags.HTMLFormTag;
  */
 public class HTMLFormScanner extends HTMLTagScanner
 {
+	public static final String PREVIOUS_DIRTY_LINK_MESSAGE="Encountered a form tag after an open link tag.\nThere should have been an end tag for the link before the form tag began.\nCorrecting this..";	
 	private Vector textAreaVector;
 	private boolean linkScannerAlreadyOpen=false;
  	/**
@@ -210,8 +211,20 @@ public class HTMLFormScanner extends HTMLTagScanner
 	}
 
 	public boolean evaluate(String s, HTMLTagScanner previousOpenScanner) {
-		if (previousOpenScanner instanceof HTMLLinkScanner)
+		if (previousOpenScanner instanceof HTMLLinkScanner) {
 			linkScannerAlreadyOpen = true;			
+			StringBuffer msg= new StringBuffer();
+				msg.append("<");
+				msg.append(s);
+				msg.append(">");
+				msg.append(PREVIOUS_DIRTY_LINK_MESSAGE);
+				feedback.warning(msg.toString());
+				// This is dirty HTML. Assume the current tag is
+				// not a new link tag - but an end tag. This is actually a really wild bug - 
+				// Internet Explorer actually parses such tags.
+				// So - we shall then proceed to fool the scanner into sending an endtag of type </A>
+				// For this - set the dirty flag to true and return
+		}
 		else 	
 			linkScannerAlreadyOpen = false;
 		return super.evaluate(s, previousOpenScanner);
