@@ -106,7 +106,7 @@ public class Page
         }
         catch (IOException ioe)
         {
-            throw new ParserException ("oops", ioe);
+            throw new ParserException (ioe.getMessage (), ioe);
         }
         try
         {
@@ -114,7 +114,7 @@ public class Page
         }
         catch (IOException ioe)
         {
-            throw new ParserException ("oops2", ioe);
+            throw new ParserException (ioe.getMessage (), ioe);
         }
         mIndex = new PageIndex (this);
     }
