@@ -28,17 +28,16 @@
 
 package org.htmlparser.tags;
 
-import java.util.List;
-
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 
 public class TableRow extends CompositeTag {
-	private List columnsList;
+	private NodeList columnsList;
 	public TableRow(
 		TagData tagData,
 		CompositeTagData compositeTagData,
-		List columnsList) {
+		NodeList columnsList) {
 		super(tagData, compositeTagData);
 		this.columnsList = columnsList;
 	}
@@ -50,7 +49,7 @@ public class TableRow extends CompositeTag {
 	public TableColumn [] getColumns() {
 		TableColumn [] columns = new TableColumn[columnsList.size()];
 		for (int i=0;i<columnsList.size();i++) {
-			columns[i] = (TableColumn)columnsList.get(i);
+			columns[i] = (TableColumn)columnsList.elementAt(i);
 		}
 		return columns;
 	}

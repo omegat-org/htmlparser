@@ -28,20 +28,21 @@
 
 package org.htmlparser.scanners;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 
 public class TableScanner extends CompositeTagScanner {
 	private final static String MATCH_STRING [] = { "TABLE" };
-	private List rows;
+	private final static String ENDERS [] = { "BODY", "HTML" };
+	private Set enderSet;
 	
 	public TableScanner(Parser parser) {
 		this(parser,"");
@@ -50,11 +51,15 @@ public class TableScanner extends CompositeTagScanner {
 	public TableScanner(Parser parser,String filter) {
 		super(filter, MATCH_STRING);
 		parser.addScanner(new TableRowScanner(parser));
+		enderSet = new HashSet();
+		for (int i=0;i<ENDERS.length;i++)
+			enderSet.add(ENDERS[i]);
 	}
 
 	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
+		NodeList rows = compositeTagData.getChildren().searchFor(TableRow.class); 
 		return new TableTag(tagData,compositeTagData,rows);
 	}
 
@@ -62,12 +67,8 @@ public class TableScanner extends CompositeTagScanner {
 		return MATCH_STRING;
 	}
 
-	public void beforeScanningStarts() {
-		rows = new ArrayList();
+	public boolean isTagToBeEndedFor(String tagName) {
+		return enderSet.contains(tagName);
 	}
 
-	public void childNodeEncountered(Node node) {
-		if (node instanceof TableRow) 
-			rows.add(node);
-	}
 }

@@ -28,20 +28,16 @@
 
 package org.htmlparser.scanners;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 
 public class TableRowScanner extends CompositeTagScanner {
 	private final static String MATCH_STRING [] = { "TR" };
-	private List columns;
 	
 	public TableRowScanner(Parser parser) {
 		this("",parser);
@@ -63,20 +59,13 @@ public class TableRowScanner extends CompositeTagScanner {
 	public Tag createTag(
 		TagData tagData,
 		CompositeTagData compositeTagData) {
+		NodeList columns = 
+			compositeTagData.getChildren().searchFor(TableColumn.class);
 		return new TableRow(tagData,compositeTagData,columns);
 	}
 
 	public String[] getID() {
 		return MATCH_STRING;
-	}
-
-	public void beforeScanningStarts() {
-		columns = new ArrayList();
-	}
-
-	public void childNodeEncountered(Node node) {
-		if (node instanceof TableColumn)
-			columns.add(node);
 	}
 
 }

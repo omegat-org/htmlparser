@@ -28,10 +28,13 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import org.htmlparser.Node;
 import org.htmlparser.scanners.TableScanner;
+import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.ParserException;
 
 public class TableScannerTest extends ParserTestCase {
 	
@@ -54,5 +57,46 @@ public class TableScannerTest extends ParserTestCase {
 		TableRow row = tableTag.getRow(0);
 		assertEquals("columns in row 1",2,row.getColumnCount());
 		assertEquals("table width","100.0%",tableTag.getAttribute("WIDTH"));
+	}
+	
+	public void testErroneousTables() throws ParserException {
+		createParser(
+			"<HTML>\n"+ 
+				"<table border>\n"+ 
+					"<tr>\n"+ 
+						"<td>Head1</td>\n"+ 
+						"<td>Val1</td>\n"+ 
+					"</tr>\n"+ 
+					"<tr>\n"+ 
+						"<td>Head2</td>\n"+ 
+						"<td>Val2</td>\n"+ 
+					"</tr>\n"+ 
+					"<tr>\n"+ 
+						"<td>\n"+ 
+							"<table border>\n"+ 
+								"<tr>\n"+ 
+									"<td>table2 Head1</td>\n"+ 
+									"<td>table2 Val1</td>\n"+ 
+								"</tr>\n"+ 
+							"</table>\n"+ 
+						"</td>\n"+ 
+					"</tr>\n"+ 
+			"</BODY>\n"+ 
+			"</HTML>"
+		);
+		parser.registerScanners();
+		parseAndAssertNodeCount(4);
+		assertType("second tag",TableTag.class,node[1]);
+		TableTag table = (TableTag)node[1];
+		assertEquals("rows",3,table.getRowCount());
+		TableRow tr = table.getRow(2);
+		assertEquals("columns",1,tr.getColumnCount());
+		TableColumn td = tr.getColumns()[0];
+		Node node = td.childAt(0);
+		assertType("node",TableTag.class,node);
+		TableTag table2 = (TableTag)node;
+		assertEquals("second table row count",1,table2.getRowCount());
+		tr = table2.getRow(0);
+		assertEquals("second table col count",2,tr.getColumnCount());
 	}
 }
