@@ -152,14 +152,22 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 					}
 				}else 
 				{
-					buff.append(line);
-					buff.append("\n\r");
+					// Bugfix by Wolfgang Germund 2002-06-02 
+					// buff.append(line); 
+	
+					buff.append(line.substring(lookPos)); 
+					//buff.append("\n\r");
+					buff.append("\r\n");
 				}
 			} 
 			else 
 			{
-				buff.append(line);
-				buff.append("\n\r");
+				// Bugfix by Wolfgang Germund 2002-06-02 
+				//buff.append(line);
+				buff.append(line.substring(lookPos)); 
+
+				//buff.append("\n\r");
+				buff.append("\r\n");
 			}
 			
 		}

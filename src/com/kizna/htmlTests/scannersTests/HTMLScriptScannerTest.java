@@ -133,5 +133,60 @@ public void testScanBug()
 	String srcExpected = (String)table.get("SRC");
 	assertEquals("Expected SRC value","../js/DetermineBrowser.js",srcExpected);
 }
+/** 
+* Bug check by Wolfgang Germund 2002-06-02 
+* Upon parsing : 
+* &lt;script language="javascript"&gt; 
+* if(navigator.appName.indexOf("Netscape") != -1) 
+* document.write ('xxx'); 
+* else 
+* document.write ('yyy'); 
+* &lt;/script&gt; 
+* check getScriptCode(). 
+*/ 
+public void testScanBugWG() 
+{ 
+	StringBuffer sb1 = new StringBuffer(); 
+	sb1.append("<body><script language=\"javascript\">\r\n"); 
+	sb1.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
+	sb1.append(" document.write ('xxx');\r\n"); 
+	sb1.append("else\r\n"); 
+	sb1.append(" document.write ('yyy');\r\n"); 
+	sb1.append("</script>\r\n"); 
+	String testHTML1 = new String(sb1.toString()); 
+	
+	StringReader sr = new StringReader(testHTML1); 
+	HTMLReader reader = new HTMLReader(new 
+	BufferedReader(sr),"http://www.google.com/test/index.html"); 
+	HTMLParser parser = new HTMLParser(reader); 
+	HTMLNode [] node = new HTMLNode[10]; 
+	// Register the image scanner 
+	parser.addScanner(new HTMLScriptScanner("-s")); 
+	
+	int i = 0; 
+	for (Enumeration e = parser.elements 
+	();e.hasMoreElements();) 
+	{ 
+	node[i++] = (HTMLNode)e.nextElement(); 
+	} 
+	
+	StringBuffer sb2 = new StringBuffer(); 
+	sb2.append("\r\n"); // !!! CRLF from the TAG Line 
+	sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
+	sb2.append(" document.write ('xxx');\r\n"); 
+	sb2.append("else\r\n"); 
+	sb2.append(" document.write ('yyy');\r\n"); 
+	String testHTML2 = new String(sb2.toString()); 
+	
+	assertEquals("There should be 1 node identified",new 
+	Integer(2),new Integer(i)); 
+	assertTrue("Node should be a script tag",node[1] 
+	instanceof HTMLScriptTag); 
+	// Check the data in the applet tag 
+	HTMLScriptTag scriptTag = (HTMLScriptTag)node 
+	[1]; 
+	assertEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
+} 
+
 
 }
