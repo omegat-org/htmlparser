@@ -26,8 +26,8 @@
 
 package org.htmlparser.visitors;
 
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
+import org.htmlparser.Remark;
+import org.htmlparser.Text;
 import org.htmlparser.Tag;
 
 /**
@@ -132,7 +132,7 @@ public abstract class NodeVisitor
      * Called for each <code>StringNode</code> visited.
      * @param string The string node being visited.
      */
-    public void visitStringNode (StringNode string)
+    public void visitStringNode (Text string)
     {
     }
     
@@ -140,7 +140,7 @@ public abstract class NodeVisitor
      * Called for each <code>RemarkNode</code> visited.
      * @param remark The remark node being visited.
      */
-    public void visitRemarkNode (RemarkNode remark)
+    public void visitRemarkNode (Remark remark)
     {
     }
 

@@ -27,7 +27,6 @@
 package org.htmlparser;
 
 import java.util.Vector;
-import org.htmlparser.lexer.nodes.Attribute;
 
 /**
  * Identifies what a Tag such as &lt;XXX xxx yyy="zzz"&gt; can do.

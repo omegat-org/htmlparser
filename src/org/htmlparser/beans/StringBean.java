@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.net.URLConnection;
 
 import org.htmlparser.Parser;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.Tag;
 import org.htmlparser.util.ParserException;
@@ -606,7 +606,7 @@ public class StringBean extends NodeVisitor implements Serializable
      * Appends the text to the output.
      * @param string The text node.
      */
-    public void visitStringNode (StringNode string)
+    public void visitStringNode (Text string)
     {
         if (!mIsScript && !mIsStyle)
         {

@@ -26,10 +26,10 @@
 
 package org.htmlparser.nodeDecorators;
 
-import org.htmlparser.Node;
+import org.htmlparser.Text;
 
 public class NonBreakingSpaceConvertingNode extends AbstractNodeDecorator {
-    public NonBreakingSpaceConvertingNode(Node newDelegate) {
+    public NonBreakingSpaceConvertingNode(Text newDelegate) {
         super(newDelegate);
     }
 

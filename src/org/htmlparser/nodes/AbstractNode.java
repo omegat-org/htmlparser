@@ -24,10 +24,13 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
-package org.htmlparser;
+package org.htmlparser.nodes;
 
 import java.io.Serializable;
 
+import org.htmlparser.Attribute;
+import org.htmlparser.Node;
+import org.htmlparser.NodeFilter;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;

@@ -28,10 +28,10 @@ package org.htmlparser.scanners;
 
 import java.util.Vector;
 
+import org.htmlparser.Attribute;
 import org.htmlparser.Node;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.scanners.Scanner;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Tag;

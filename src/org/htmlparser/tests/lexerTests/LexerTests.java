@@ -32,11 +32,10 @@ import java.util.HashSet;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.Remark;
+import org.htmlparser.Tag;
+import org.htmlparser.Text;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
-import org.htmlparser.lexer.nodes.TagNode;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
@@ -65,12 +64,12 @@ public class LexerTests extends ParserTestCase
     {
         String reference;
         Lexer lexer;
-        StringNode node;
+        Text node;
 
         reference = "Hello world";
         lexer = new Lexer (reference);
-        node = (StringNode)lexer.nextNode ();
-        assertEquals ("StringNode contents wrong", reference, node.getText ());
+        node = (Text)lexer.nextNode ();
+        assertEquals ("Text contents wrong", reference, node.getText ());
     }
 
     /**
@@ -80,12 +79,12 @@ public class LexerTests extends ParserTestCase
     {
         String reference;
         Lexer lexer;
-        StringNode node;
+        Text node;
 
         reference = "Hello\nworld";
         lexer = new Lexer (reference);
-        node = (StringNode)lexer.nextNode ();
-        assertEquals ("StringNode contents wrong", reference, node.getText ());
+        node = (Text)lexer.nextNode ();
+        assertEquals ("Text contents wrong", reference, node.getText ());
     }
 
     /**
@@ -95,16 +94,16 @@ public class LexerTests extends ParserTestCase
     {
         String reference;
         Lexer lexer;
-        StringNode node;
+        Text node;
 
         reference = "Hello\r\nworld";
         lexer = new Lexer (reference);
-        node = (StringNode)lexer.nextNode ();
-        assertEquals ("StringNode contents wrong", reference, node.getText ());
+        node = (Text)lexer.nextNode ();
+        assertEquals ("Text contents wrong", reference, node.getText ());
         reference = "Hello\rworld";
         lexer = new Lexer (reference);
-        node = (StringNode)lexer.nextNode ();
-        assertEquals ("StringNode contents wrong", reference, node.getText ());
+        node = (Text)lexer.nextNode ();
+        assertEquals ("Text contents wrong", reference, node.getText ());
     }
 
     /**
@@ -114,20 +113,20 @@ public class LexerTests extends ParserTestCase
     {
         String reference;
         Lexer lexer;
-        StringNode node;
+        Text node;
 
         reference = "Hello world\n";
         lexer = new Lexer (reference);
-        node = (StringNode)lexer.nextNode ();
-        assertEquals ("StringNode contents wrong", reference, node.getText ());
+        node = (Text)lexer.nextNode ();
+        assertEquals ("Text contents wrong", reference, node.getText ());
         reference = "Hello world\r";
         lexer = new Lexer (reference);
-        node = (StringNode)lexer.nextNode ();
-        assertEquals ("StringNode contents wrong", reference, node.getText ());
+        node = (Text)lexer.nextNode ();
+        assertEquals ("Text contents wrong", reference, node.getText ());
         reference = "Hello world\r\n";
         lexer = new Lexer (reference);
-        node = (StringNode)lexer.nextNode ();
-        assertEquals ("StringNode contents wrong", reference, node.getText ());
+        node = (Text)lexer.nextNode ();
+        assertEquals ("Text contents wrong", reference, node.getText ());
     }
 
     /**
@@ -151,15 +150,15 @@ public class LexerTests extends ParserTestCase
             "<!--head-->",
         };
         Lexer lexer;
-        StringNode node;
+        Text node;
 
         for (int i = 0; i < references.length; i++)
         {
             for (int j = 0; j < suffixes.length; j++)
             {
                 lexer = new Lexer (references[i] + suffixes[j]);
-                node = (StringNode)lexer.nextNode ();
-                assertEquals ("StringNode contents wrong", references[i], node.getText ());
+                node = (Text)lexer.nextNode ();
+                assertEquals ("Text contents wrong", references[i], node.getText ());
             }
         }
     }
@@ -172,19 +171,19 @@ public class LexerTests extends ParserTestCase
         String reference;
         String suffix;
         Lexer lexer;
-        TagNode node;
+        Node node;
 
         reference = "<head>";
         lexer = new Lexer (reference);
-        node = (TagNode)lexer.nextNode ();
+        node = lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
 
         reference = "<head>";
         suffix = "<body>";
         lexer = new Lexer (reference + suffix);
-        node = (TagNode)lexer.nextNode ();
+        node = lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
-        node = (TagNode)lexer.nextNode ();
+        node = lexer.nextNode ();
         assertEquals ("Tag contents wrong", suffix, node.toHtml ());
     }
 
@@ -195,53 +194,53 @@ public class LexerTests extends ParserTestCase
     {
         String reference;
         Lexer lexer;
-        TagNode node;
+        Node node;
 
         reference = "<head lang='en_US' dir=ltr\nprofile=\"http://htmlparser.sourceforge.org/dictionary.html\">";
         lexer = new Lexer (reference);
-        node = (TagNode)lexer.nextNode ();
+        node = lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
     }
 
     /**
      * Test operation with comments.
      */
-    public void testRemarkNode () throws ParserException
+    public void testRemark () throws ParserException
     {
         String reference;
         Lexer lexer;
-        RemarkNode node;
+        Remark node;
         String suffix;
 
         reference = "<!-- This is a comment -->";
         lexer = new Lexer (reference);
-        node = (RemarkNode)lexer.nextNode ();
+        node = (Remark)lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
 
         reference = "<!-- This is a comment --  >";
         lexer = new Lexer (reference);
-        node = (RemarkNode)lexer.nextNode ();
+        node = (Remark)lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
 
         reference = "<!-- This is a\nmultiline comment -->";
         lexer = new Lexer (reference);
-        node = (RemarkNode)lexer.nextNode ();
+        node = (Remark)lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
 
         suffix = "<head>";
         reference = "<!-- This is a comment -->";
         lexer = new Lexer (reference + suffix);
-        node = (RemarkNode)lexer.nextNode ();
+        node = (Remark)lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
 
         reference = "<!-- This is a comment --  >";
         lexer = new Lexer (reference + suffix);
-        node = (RemarkNode)lexer.nextNode ();
+        node = (Remark)lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
 
         reference = "<!-- This is a\nmultiline comment -->";
         lexer = new Lexer (reference + suffix);
-        node = (RemarkNode)lexer.nextNode ();
+        node = (Remark)lexer.nextNode ();
         assertEquals ("Tag contents wrong", reference, node.toHtml ());
     }
 

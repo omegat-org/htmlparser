@@ -28,8 +28,8 @@ package org.htmlparser.visitors;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
+import org.htmlparser.Remark;
+import org.htmlparser.Text;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
@@ -47,12 +47,12 @@ public class UrlModifyingVisitor extends NodeVisitor {
         modifiedResult = new StringBuffer();
     }
 
-    public void visitRemarkNode (RemarkNode remarkNode)
+    public void visitRemarkNode (Remark remarkNode)
     {
         modifiedResult.append (remarkNode.toHtml());
     }
 
-    public void visitStringNode(StringNode stringNode)
+    public void visitStringNode(Text stringNode)
     {
         modifiedResult.append (stringNode.toHtml());
     }

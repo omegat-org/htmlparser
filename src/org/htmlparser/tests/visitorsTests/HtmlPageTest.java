@@ -27,7 +27,7 @@
 package org.htmlparser.tests.visitorsTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
@@ -90,7 +90,7 @@ public class HtmlPageTest extends ParserTestCase {
         assertEquals("number of nodes in body",1,bodyNodes.size());
         Node node = bodyNodes.elementAt(0);
         assertTrue("expected stringNode but was "+node.getClass().getName(),
-            node instanceof StringNode
+            node instanceof Text
         );
         assertStringEquals(
             "body contents",

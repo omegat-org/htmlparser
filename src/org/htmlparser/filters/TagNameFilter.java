@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.lexer.nodes.TagNode;
+import org.htmlparser.Tag;
 
 /**
  * This class accepts all tags matching the tag name.
@@ -61,8 +61,8 @@ public class TagNameFilter
      */
     public boolean accept (Node node)
     {
-        return ((node instanceof TagNode) &&
-                !((TagNode)node).isEndTag () &&
-                ((TagNode)node).getTagName ().equals (mName));
+        return ((node instanceof Tag) &&
+                !((Tag)node).isEndTag () &&
+                ((Tag)node).getTagName ().equals (mName));
     }
 }

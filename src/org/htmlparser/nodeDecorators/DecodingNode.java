@@ -26,11 +26,11 @@
 
 package org.htmlparser.nodeDecorators;
 
-import org.htmlparser.Node;
+import org.htmlparser.Text;
 import org.htmlparser.util.Translate;
 
 public class DecodingNode extends AbstractNodeDecorator {
-    public DecodingNode(Node node) {
+    public DecodingNode(Text node) {
         super(node);
     }
 

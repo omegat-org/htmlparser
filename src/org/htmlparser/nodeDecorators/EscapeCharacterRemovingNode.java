@@ -26,11 +26,11 @@
 
 package org.htmlparser.nodeDecorators;
 
-import org.htmlparser.Node;
+import org.htmlparser.Text;
 import org.htmlparser.util.ParserUtils;
 
 public class EscapeCharacterRemovingNode extends AbstractNodeDecorator {
-    public EscapeCharacterRemovingNode(Node newDelegate) {
+    public EscapeCharacterRemovingNode(Text newDelegate) {
         super(newDelegate);
     }
 

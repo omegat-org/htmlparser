@@ -63,8 +63,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.htmlparser.Node;
+import org.htmlparser.Tag;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -768,10 +768,10 @@ public class Thumbelina
         HashMap links;
         boolean ina; // true when within a <A></A> pair
         Node node;
-        TagNode tag;
+        Tag tag;
         String name;
-        TagNode startatag;
-        TagNode imgtag;
+        Tag startatag;
+        Tag imgtag;
         String href;
         String src;
         URL url;
@@ -784,9 +784,9 @@ public class Thumbelina
         imgtag = null;
         while (null != (node = lexer.nextNode ()))
         {
-            if (node instanceof TagNode)
+            if (node instanceof Tag)
             {
-                tag = (TagNode)node;
+                tag = (Tag)node;
                 name = tag.getTagName ();
                 if ("A".equals (name))
                 {
@@ -1453,6 +1453,13 @@ public class Thumbelina
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.5  2004/05/24 16:18:17  derrickoswald
+ * Part three of a multiphase refactoring.
+ * The three node types are now fronted by interfaces (program to the interface paradigm)
+ * with concrete implementations in the new htmlparser.nodes package. Classes from the
+ * lexer.nodes package are moved to this package, and obvious references to the concrete
+ * classes that got broken by this have been changed to use the interfaces where possible.
+ *
  * Revision 1.4  2004/05/16 17:59:56  derrickoswald
  * Alter bound property name constants to agree with section
  * 8.8 Capitalization of inferred names.

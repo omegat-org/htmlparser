@@ -31,7 +31,7 @@ import java.util.Hashtable;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Html;
@@ -153,7 +153,7 @@ public class TagTest extends ParserTestCase
     public void testParseParameterA() throws ParserException {
         Tag tag;
         Tag etag;
-        StringNode snode;
+        Text snode;
         Node node=null;
         String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
         createParser(lin1);
@@ -181,7 +181,7 @@ public class TagTest extends ParserTestCase
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreNodes()) {
                     node = en.nextNode();
-                    snode = (StringNode)node;
+                    snode = (Text)node;
                     assertEquals("Value of element","Kaarle's homepage",snode.getText());
                 }
 
@@ -200,7 +200,7 @@ public class TagTest extends ParserTestCase
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                snode = (StringNode)node;
+                snode = (Text)node;
                 assertEquals("paragraph contents","Paragraph",snode.getText());
             }
             if (en.hasMoreNodes()) {
@@ -223,7 +223,7 @@ public class TagTest extends ParserTestCase
     public void testParseParameterG() throws ParserException{
         Tag tag;
         Tag etag;
-        StringNode snode;
+        Text snode;
         Node node=null;
         String lin1 = "<G href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaila\">Kaarle's homepage</G><p>Paragraph</p>";
         createParser(lin1);
@@ -249,7 +249,7 @@ public class TagTest extends ParserTestCase
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                snode = (StringNode)node;
+                snode = (Text)node;
                 assertEquals("The text of the element",snode.getText(),"Kaarle's homepage");
             }
 
@@ -267,7 +267,7 @@ public class TagTest extends ParserTestCase
             }
             if (en.hasMoreNodes()) {
                 node = en.nextNode();
-                snode = (StringNode)node;
+                snode = (Text)node;
                 assertEquals("Verify the paragraph text","Paragraph", snode.getText());
             }
             if (en.hasMoreNodes()) {
@@ -291,7 +291,7 @@ public class TagTest extends ParserTestCase
     public void testParseParameterSpace() throws ParserException{
         Tag tag;
         Tag etag;
-        StringNode snode;
+        Text snode;
         Node node=null;
         String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
         createParser(lin1);
@@ -315,7 +315,7 @@ public class TagTest extends ParserTestCase
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreNodes()) {
                     node = en.nextNode();
-                    snode = (StringNode)node;
+                    snode = (Text)node;
                     assertEquals("Value of element","Kaarle's homepage",snode.getText());
                 }
 
@@ -515,8 +515,8 @@ public class TagTest extends ParserTestCase
         createParser(testHTML);
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(5);
-        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[2];
+        assertTrue("Third node should be a string node",node[2] instanceof Text);
+        Text stringNode = (Text)node[2];
         assertEquals("Third node has incorrect text","<>text",stringNode.getText());
     }
 
@@ -528,8 +528,8 @@ public class TagTest extends ParserTestCase
         createParser(testHTML);
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(5);
-        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[2];
+        assertTrue("Third node should be a string node",node[2] instanceof Text);
+        Text stringNode = (Text)node[2];
         assertEquals("Third node has incorrect text","text<>",stringNode.getText());
     }
 
@@ -546,8 +546,8 @@ public class TagTest extends ParserTestCase
         assertTrue("Only node should be an BODY node",html.getChild(0) instanceof BodyTag);
         BodyTag body = (BodyTag)html.getChild(0);
         assertTrue("BODY node should have one child",1 == body.getChildCount ());
-        assertTrue("Only node should be a string node",body.getChild(0) instanceof StringNode);
-        StringNode stringNode = (StringNode)body.getChild(0);
+        assertTrue("Only node should be a string node",body.getChild(0) instanceof Text);
+        Text stringNode = (Text)body.getChild(0);
         assertEquals("Third node has incorrect text","text<>text",stringNode.getText());
     }
 
@@ -565,8 +565,8 @@ public class TagTest extends ParserTestCase
         assertTrue("Only node should be an BODY node",html.getChild(0) instanceof BodyTag);
         BodyTag body = (BodyTag)html.getChild(0);
         assertTrue("BODY node should have one child",1 == body.getChildCount ());
-        assertTrue("Only node should be a string node",body.getChild(0) instanceof StringNode);
-        StringNode stringNode = (StringNode)body.getChild(0);
+        assertTrue("Only node should be a string node",body.getChild(0) instanceof Text);
+        Text stringNode = (Text)body.getChild(0);
         String actual = stringNode.getText();
         assertEquals("Third node has incorrect text","text\n<>text",actual);
     }
@@ -585,8 +585,8 @@ public class TagTest extends ParserTestCase
         assertTrue("Only node should be an BODY node",html.getChild(0) instanceof BodyTag);
         BodyTag body = (BodyTag)html.getChild(0);
         assertTrue("BODY node should have one child",1 == body.getChildCount ());
-        assertTrue("Only node should be a string node",body.getChild(0) instanceof StringNode);
-        StringNode stringNode = (StringNode)body.getChild(0);
+        assertTrue("Only node should be a string node",body.getChild(0) instanceof Text);
+        Text stringNode = (Text)body.getChild(0);
         String actual = stringNode.getText();
         assertEquals("Third node has incorrect text","text<\n>text",actual);
     }
@@ -605,8 +605,8 @@ public class TagTest extends ParserTestCase
         assertTrue("Only node should be an BODY node",html.getChild(0) instanceof BodyTag);
         BodyTag body = (BodyTag)html.getChild(0);
         assertTrue("BODY node should have one child",1 == body.getChildCount ());
-        assertTrue("Only node should be a string node",body.getChild(0) instanceof StringNode);
-        StringNode stringNode = (StringNode)body.getChild(0);
+        assertTrue("Only node should be a string node",body.getChild(0) instanceof Text);
+        Text stringNode = (Text)body.getChild(0);
         String actual = stringNode.getText();
         assertEquals("Third node has incorrect text","text<>\ntext",actual);
     }
@@ -647,7 +647,7 @@ public class TagTest extends ParserTestCase
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
         assertStringEquals("Expected HTML","John Doe",htmlTag.getLabel());
 
-        ((org.htmlparser.StringNode)((org.htmlparser.tags.CompositeTag)htmlTag).getChild(0)).setText("Jane Doe");
+        ((org.htmlparser.Text)((org.htmlparser.tags.CompositeTag)htmlTag).getChild(0)).setText("Jane Doe");
         expectedHTML = "<LABEL ID=\"JohnDoe\">Jane Doe</LABEL>";
         assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
         assertStringEquals("Expected HTML","Jane Doe",htmlTag.getLabel());

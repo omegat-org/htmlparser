@@ -30,8 +30,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import org.htmlparser.Node;
 
+import org.htmlparser.Attribute;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.PageAttribute;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.Tag;

@@ -28,7 +28,7 @@ package org.htmlparser.visitors;
 
 import java.util.Locale;
 
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 
 public class StringFindingVisitor extends NodeVisitor
 {
@@ -55,7 +55,7 @@ public class StringFindingVisitor extends NodeVisitor
         multipleSearchesWithinStrings = true;
     }
 
-    public void visitStringNode(StringNode stringNode)
+    public void visitStringNode(Text stringNode)
     {
         String stringToBeSearched = stringNode.getText().toUpperCase(locale);
         if (!multipleSearchesWithinStrings &&

@@ -24,11 +24,14 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
-package org.htmlparser.lexer.nodes;
+package org.htmlparser;
 
 import java.util.Vector;
+
+import org.htmlparser.Remark;
+import org.htmlparser.Tag;
+import org.htmlparser.Text;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.Node;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -44,7 +47,7 @@ public interface NodeFactory
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
      */
-    public Node createStringNode (Page page, int start, int end)
+    public Text createStringNode (Page page, int start, int end)
         throws
             ParserException;
 
@@ -54,7 +57,7 @@ public interface NodeFactory
      * @param start The beginning position of the remark.
      * @param end The ending positiong of the remark.
      */
-    public Node createRemarkNode (Page page, int start, int end)
+    public Remark createRemarkNode (Page page, int start, int end)
         throws
             ParserException;
 
@@ -69,7 +72,7 @@ public interface NodeFactory
      * @param end The ending positiong of the tag.
      * @param attributes The attributes contained in this tag.
      */
-    public Node createTagNode (Page page, int start, int end, Vector attributes)
+    public Tag createTagNode (Page page, int start, int end, Vector attributes)
         throws
             ParserException;
 }

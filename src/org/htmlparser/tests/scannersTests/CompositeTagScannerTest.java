@@ -26,10 +26,10 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
+import org.htmlparser.nodes.AbstractNode;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Div;
@@ -115,7 +115,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertEquals("starting line position",0,customTag.getStartingLineNumber());
         assertEquals("ending line position",0,customTag.getEndingLineNumber());
         Node child = customTag.childAt(0);
-        assertType("child",StringNode.class,child);
+        assertType("child",Text.class,child);
         assertStringEquals("child text","Hello",child.toPlainTextString());
     }
 
@@ -234,8 +234,8 @@ public class CompositeTagScannerTest extends ParserTestCase {
         AnotherTag anotherTag = (AnotherTag)node;
         assertEquals("another tag children count",1,anotherTag.getChildCount());
         node = anotherTag.childAt(0);
-        assertType("nested child",StringNode.class,node);
-        StringNode text = (StringNode)node;
+        assertType("nested child",Text.class,node);
+        Text text = (Text)node;
         assertEquals("text","Hello",text.toPlainTextString());
     }
 
@@ -268,8 +268,8 @@ public class CompositeTagScannerTest extends ParserTestCase {
         AnotherTag anotherTag = (AnotherTag)node;
         assertEquals("another tag children count",1,anotherTag.getChildCount());
         node = anotherTag.childAt(0);
-        assertType("nested child",StringNode.class,node);
-        StringNode text = (StringNode)node;
+        assertType("nested child",Text.class,node);
+        Text text = (Text)node;
         assertEquals("text","Hello",text.toPlainTextString());
     }
 
@@ -415,7 +415,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         assertEquals("ending line position",0,customTag.getEndingLineNumber());
         AnotherTag anotherTag = (AnotherTag)customTag.childAt(0);
         assertEquals("anotherTag child count",1,anotherTag.getChildCount());
-        StringNode stringNode = (StringNode)anotherTag.childAt(0);
+        Text stringNode = (Text)anotherTag.childAt(0);
         assertStringEquals("anotherTag child text","something",stringNode.toPlainTextString());
         assertStringEquals(
             "first custom tag html",
@@ -531,7 +531,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         );
 
         Node firstChild = customTag.childAt(0);
-        assertType("firstChild",StringNode.class,firstChild);
+        assertType("firstChild",Text.class,firstChild);
         Node parent = firstChild.getParent();
         assertNotNull("first child parent should not be null",parent);
         assertSame("parent and custom tag should be the same",customTag,parent);

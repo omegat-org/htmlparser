@@ -26,12 +26,11 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.StringNode;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.RemarkNode;
+import org.htmlparser.Remark;
+import org.htmlparser.Text;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.FormTag;
@@ -222,7 +221,7 @@ public class FormTagTest extends ParserTestCase {
         parseAndAssertNodeCount(1);
         assertTrue("Should be a HTMLFormTag",node[0] instanceof FormTag);
         NodeList remarkNodes = new NodeList ();
-        NodeClassFilter filter = new NodeClassFilter (RemarkNode.class);
+        NodeClassFilter filter = new NodeClassFilter (Remark.class);
         for (NodeIterator e = ((FormTag)node[0]).children (); e.hasMoreNodes ();)
             e.nextNode ().collectInto (remarkNodes, filter);
         assertEquals("Remark Node Count",1,remarkNodes.size ());
@@ -241,12 +240,12 @@ public class FormTagTest extends ParserTestCase {
         parseAndAssertNodeCount(1);
         assertTrue("Should be a HTMLFormTag",node[0] instanceof FormTag);
         FormTag formTag = (FormTag)node[0];
-        RemarkNode [] remarkNode = new RemarkNode[10];
+        Remark [] remarkNode = new Remark[10];
         int i = 0;
         for (NodeIterator e=formTag.children();e.hasMoreNodes();) {
             Node formNode = (Node)e.nextNode();
-            if (formNode instanceof RemarkNode) {
-                remarkNode[i++] = (RemarkNode)formNode;
+            if (formNode instanceof Remark) {
+                remarkNode[i++] = (Remark)formNode;
             }
         }
         assertEquals("Remark Node Count",1,i);
@@ -323,7 +322,7 @@ public class FormTagTest extends ParserTestCase {
         factory.unregisterTag (new BodyTag ());
         parser.setNodeFactory (factory);
         i = 0;
-        nodes = new AbstractNode[50];
+        nodes = new Node[50];
         for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
             nodes[i++] = e.nextNode();
         assertEquals ("Expected nodes", 39, i);
@@ -376,8 +375,8 @@ public class FormTagTest extends ParserTestCase {
         Node[] nodes = nodeList.toNodeArray();
 
         assertEquals("Number of nodes found",1,nodes.length);
-        assertType("search result node",StringNode.class,nodes[0]);
-        StringNode stringNode = (StringNode)nodes[0];
+        assertType("search result node",Text.class,nodes[0]);
+        Text stringNode = (Text)nodes[0];
         assertEquals("Expected contents of string node","User Name",stringNode.getText());
     }
 

@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 
 /**
  * This class accepts all string nodes containing the given string.
@@ -101,9 +101,9 @@ public class StringFilter implements NodeFilter
         boolean ret;
         
         ret = false;
-        if (node instanceof StringNode)
+        if (node instanceof Text)
         {
-            string = ((StringNode)node).getText ();
+            string = ((Text)node).getText ();
             if (!mCaseSensitive)
                 string = string.toUpperCase (mLocale);
             ret = -1 != string.indexOf (mPattern);

@@ -44,8 +44,8 @@ import java.util.Random;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
+import org.htmlparser.Remark;
+import org.htmlparser.Text;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
@@ -250,11 +250,11 @@ public class CharacterTranslationTest
         {
             NodeList children;
 
-            if (node instanceof StringNode)
+            if (node instanceof Text)
             {
                 // Node is a plain string
-                // Cast it to an HTMLStringNode
-                StringNode stringNode = (StringNode)node;
+                // Cast it to an HTMLText
+                Text stringNode = (Text)node;
                 // Retrieve the data from the object
                 buffer.append (stringNode.getText ());
             }
@@ -279,7 +279,7 @@ public class CharacterTranslationTest
                             gather (children.elementAt (i), buffer);
                 }
             }
-            else if (node instanceof RemarkNode)
+            else if (node instanceof Remark)
             {
             }
             else

@@ -30,9 +30,9 @@ import java.util.Locale;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.StringNode;
-import org.htmlparser.AbstractNode;
-import org.htmlparser.lexer.nodes.TagNode;
+import org.htmlparser.Text;
+import org.htmlparser.nodes.AbstractNode;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
@@ -475,31 +475,31 @@ public class CompositeTag extends Tag
     }
 
     /**
-     * Finds a string node, however embedded it might be, and returns
-     * it. The string node will retain links to its parents, so
+     * Finds a text node, however embedded it might be, and returns
+     * it. The text node will retain links to its parents, so
      * further navigation is possible.
      * @param searchText
-     * @return The list of string nodes (recursively) found.
+     * @return The list of text nodes (recursively) found.
      */
-    public StringNode [] digupStringNode(String searchText) {
+    public Text[] digupStringNode(String searchText) {
         NodeList nodeList = searchFor(searchText);
         NodeList stringNodes = new NodeList();
         for (int i=0;i<nodeList.size();i++) {
             Node node = nodeList.elementAt(i);
-            if (node instanceof StringNode) {
+            if (node instanceof Text) {
                 stringNodes.add(node);
             } else {
                 if (node instanceof CompositeTag) {
                     CompositeTag ctag = (CompositeTag)node;
-                    StringNode [] nodes = ctag.digupStringNode(searchText);
+                    Text[] nodes = ctag.digupStringNode(searchText);
                     for (int j=0;j<nodes.length;j++)
                         stringNodes.add(nodes[j]);
                 }
             }
         }
-        StringNode [] stringNode = new StringNode[stringNodes.size()];
+        Text[] stringNode = new Text[stringNodes.size()];
         for (int i=0;i<stringNode.length;i++) {
-            stringNode[i] = (StringNode)stringNodes.elementAt(i);
+            stringNode[i] = (Text)stringNodes.elementAt(i);
         }
         return stringNode;
     }

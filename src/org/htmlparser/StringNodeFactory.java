@@ -75,9 +75,9 @@ public class StringNodeFactory
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
      */
-    public Node createStringNode (Page page, int start, int end)
+    public Text createStringNode (Page page, int start, int end)
     {
-        Node ret;
+        Text ret;
         
         ret = super.createStringNode (page, start, end);
         if (getDecode ())

@@ -27,7 +27,7 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Node;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
@@ -61,7 +61,7 @@ public class CompositeTagTest extends ParserTestCase {
         );
         parseAndAssertNodeCount(1);
         TableTag tableTag = (TableTag)node[0];
-        StringNode [] stringNode =
+        Text[] stringNode =
             tableTag.digupStringNode("Hello World");
 
         assertEquals("number of string nodes",1,stringNode.length);
@@ -92,7 +92,7 @@ public class CompositeTagTest extends ParserTestCase {
         );
         parseAndAssertNodeCount(1);
         TableTag tableTag = (TableTag)node[0];
-        StringNode [] stringNode =
+        Text [] stringNode =
             tableTag.digupStringNode("Hello World");
 
         assertEquals("number of string nodes",1,stringNode.length);

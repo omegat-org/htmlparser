@@ -37,12 +37,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
 
-import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
+import org.htmlparser.Remark;
+import org.htmlparser.Text;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
@@ -102,7 +101,7 @@ public class ParserTest extends ParserTestCase
             throw new ParserException("You must be offline! This test needs you to be connected to the internet.",e);
         }
 
-        Node [] node = new AbstractNode[500];
+        Node[] node = new Node[500];
         int i = 0;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();)
         {
@@ -229,7 +228,7 @@ public class ParserTest extends ParserTestCase
         boolean pass;
         NodeIterator enumeration;
         Node node;
-        StringNode string;
+        Text string;
 
         try
         {
@@ -312,9 +311,9 @@ public class ParserTest extends ParserTestCase
         for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)
         {
             node = enumeration.nextNode ();
-            if (node instanceof StringNode)
+            if (node instanceof Text)
             {
-                string = (StringNode)node;
+                string = (Text)node;
                 if (-1 != string.getText ().indexOf (postal_code))
                     pass = true;
             }
@@ -355,7 +354,7 @@ public class ParserTest extends ParserTestCase
             out.close ();
             parser = new Parser (file.getAbsolutePath (), new DefaultParserFeedback(DefaultParserFeedback.QUIET));
             parser.setNodeFactory (new PrototypicalNodeFactory (true));
-            nodes = new AbstractNode[30];
+            nodes = new Node[30];
             i = 0;
             for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)
             {
@@ -436,7 +435,7 @@ public class ParserTest extends ParserTestCase
         parser = new Parser(url);
         parser.setNodeFactory (new PrototypicalNodeFactory (new MetaTag ()));
         i = 0;
-        nodes = new AbstractNode[30];
+        nodes = new Node[30];
         for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
             nodes[i++] = e.nextNode();
         assertEquals ("Expected nodes", 23, i);
@@ -576,7 +575,7 @@ public class ParserTest extends ParserTestCase
 
         parser = new Parser(url);
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
-        Node node [] = new AbstractNode[30];
+        Node node [] = new Node[30];
         int i = 0;
         for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
             node[i] = e.nextNode();
@@ -904,7 +903,7 @@ public class ParserTest extends ParserTestCase
         parseAndAssertNodeCount (1);
         assertStringEquals ("html wrong", html, node[0].toHtml ());
         assertTrue ("wrong number of children", 1 == node[0].getChildren ().size ());
-        assertTrue ("string node expected", node[0].getChildren ().elementAt (0) instanceof StringNode);
+        assertTrue ("string node expected", node[0].getChildren ().elementAt (0) instanceof Text);
         txt = node[0].getChildren ().elementAt (0);
         assertStringEquals ("string html wrong", text, txt.toHtml ());
         assertStringEquals ("string contents wrong", text, txt.getText ());
@@ -939,7 +938,7 @@ public class ParserTest extends ParserTestCase
         parseAndAssertNodeCount (1);
         assertStringEquals ("html wrong", html, node[0].toHtml ());
         assertTrue ("wrong number of children", 1 == node[0].getChildren ().size ());
-        assertTrue ("remark node expected", node[0].getChildren ().elementAt (0) instanceof RemarkNode);
+        assertTrue ("remark node expected", node[0].getChildren ().elementAt (0) instanceof Remark);
         rem = node[0].getChildren ().elementAt (0);
         assertStringEquals ("remark html wrong", remark, rem.toHtml ());
         assertStringEquals ("remark contents wrong", text, rem.getText ());

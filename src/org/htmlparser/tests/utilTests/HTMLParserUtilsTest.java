@@ -219,11 +219,10 @@ public class HTMLParserUtilsTest extends ParserTestCase {
         }
         catch (Exception e)
         {
-            assertStringEquals(
-                "modified text",
-                "error msg",
-                e.getMessage()
-            );
+            String msg = e.getMessage ();
+            if (null == msg)
+                msg = e.getClass ().getName ();
+            fail (msg);
         }
     }
     
@@ -278,11 +277,10 @@ public class HTMLParserUtilsTest extends ParserTestCase {
         }
         catch (Exception e)
         {
-            assertStringEquals(
-                "modified text",
-                "error msg",
-                e.getMessage()
-            );
+            String msg = e.getMessage ();
+            if (null == msg)
+                msg = e.getClass ().getName ();
+            fail (msg);
         }
     }
     
@@ -337,11 +335,10 @@ public class HTMLParserUtilsTest extends ParserTestCase {
         }
         catch (Exception e)
         {
-            assertStringEquals(
-                "modified text",
-                "error msg",
-                e.getMessage()
-            );
+            String msg = e.getMessage ();
+            if (null == msg)
+                msg = e.getClass ().getName ();
+            fail (msg);
         }
     }
     
@@ -391,11 +388,10 @@ public class HTMLParserUtilsTest extends ParserTestCase {
         }
         catch (Exception e)
         {
-            assertStringEquals(
-                "modified text",
-                "error msg",
-                e.getMessage()
-            );
+            String msg = e.getMessage ();
+            if (null == msg)
+                msg = e.getClass ().getName ();
+            fail (msg);
         }
     }
 }

@@ -26,12 +26,10 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
-
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.tags.HeadTag;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tags.ImageTag;
@@ -390,10 +388,10 @@ public class LinkTagTest extends ParserTestCase {
         parseAndAssertNodeCount(6);
         // The first node should be a Tag
         assertTrue("First node should be a Tag",node[0] instanceof Tag);
-        // The second node should be a HTMLStringNode
-        assertTrue("Second node should be a StringNode",node[1] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[1];
-        assertEquals("Text of the StringNode","Site Comments?",stringNode.getText());
+        // The second node should be a Text
+        assertTrue("Second node should be a Text",node[1] instanceof Text);
+        Text stringNode = (Text)node[1];
+        assertEquals("Text of the Text","Site Comments?",stringNode.getText());
         assertTrue("Third node should be a tag",node[2] instanceof Tag);
         assertTrue("Fourth node should be a link",node[3] instanceof LinkTag);
         // LinkScanner.evaluate() says no HREF means it isn't a link:
@@ -509,8 +507,8 @@ public class LinkTagTest extends ParserTestCase {
         //assertEquals("Length of link tag",exp.length(), linkTag.getLink().length());
         assertStringEquals("Link URL of link tag",exp,linkTag.getLink());
         assertEquals("Link Text of link tag"," Journalism 3.0",linkTag.getLinkText());
-        assertTrue("Eight node should be a string node",node[7] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[7];
+        assertTrue("Eight node should be a string node",node[7] instanceof Text);
+        Text stringNode = (Text)node[7];
         assertEquals("String node contents"," by Rajesh Jain",stringNode.getText());
     }
 
@@ -555,7 +553,7 @@ public class LinkTagTest extends ParserTestCase {
 
         LinkTag linkTag = (LinkTag)node[0];
         // Get the link data and cross-check
-        Node [] dataNode= new AbstractNode[10];
+        Node [] dataNode= new Node[10];
         int i = 0;
         for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();)
         {
@@ -563,12 +561,12 @@ public class LinkTagTest extends ParserTestCase {
         }
         assertEquals("Number of data nodes",new Integer(2),new Integer(i));
         assertTrue("First data node should be an Image Node",dataNode[0] instanceof ImageTag);
-        assertTrue("Second data node shouls be a String Node",dataNode[1] instanceof StringNode);
+        assertTrue("Second data node shouls be a String Node",dataNode[1] instanceof Text);
 
         // Check the contents of each data node
         ImageTag imageTag = (ImageTag)dataNode[0];
         assertEquals("Image URL","http://www.yahoo.com/abcd.jpg",imageTag.getImageURL());
-        StringNode stringNode = (StringNode)dataNode[1];
+        Text stringNode = (Text)dataNode[1];
         assertEquals("String Contents","Hello World",stringNode.getText());
     }
 
@@ -587,9 +585,9 @@ public class LinkTagTest extends ParserTestCase {
         Tag tag = (Tag)node[0];
         assertEquals("Tag Contents",html,tag.toHtml());
         assertEquals("Node 0 should have one child", 1, tag.getChildren ().size ());
-        assertTrue("The child should be a string node", tag.getChildren ().elementAt (0) instanceof StringNode);
-        StringNode stringNode = (StringNode)tag.getChildren ().elementAt (0);
-        assertEquals("StringNode Contents","Revision",stringNode.getText());
+        assertTrue("The child should be a string node", tag.getChildren ().elementAt (0) instanceof Text);
+        Text stringNode = (Text)tag.getChildren ().elementAt (0);
+        assertEquals("Text Contents","Revision",stringNode.getText());
     }
 
     /**
@@ -627,7 +625,7 @@ public class LinkTagTest extends ParserTestCase {
         LinkTag linkTag = (LinkTag)node[0];
         assertEquals("Link URL","http://transfer.go.com/cgi/atransfer.pl?goto=http://www.signs.movies.com&name=114332&srvc=nws&context=283&guid=4AD5723D-C802-4310-A388-0B24E1A79689",linkTag.getLink());
         assertEquals("Link Text","",linkTag.getLinkText());
-        Node [] containedNodes = new AbstractNode[10];
+        Node [] containedNodes = new Node[10];
         int i=0;
         for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();) {
             containedNodes[i++] = e.nextNode();
@@ -775,7 +773,7 @@ public class LinkTagTest extends ParserTestCase {
         LinkTag linkTag = (LinkTag) node[0];
         // Get the image tag from the link
 
-        Node insideNodes [] = new AbstractNode[10];
+        Node insideNodes [] = new Node[10];
         int j =0 ;
         for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();) {
             insideNodes[j++]= (Node)e.nextNode();

@@ -30,9 +30,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.htmlparser.Attribute;
 import org.htmlparser.Node;
-import org.htmlparser.StringNode;
-import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.Text;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
@@ -41,7 +41,9 @@ import org.htmlparser.util.SimpleNodeIterator;
  * It extends a basic tag by providing accessors to the class, codebase,
  * archive and parameters.
  */
-public class AppletTag extends CompositeTag
+public class AppletTag
+    extends
+        CompositeTag
 {
     /**
      * The set of names handled by this tag.
@@ -192,7 +194,7 @@ public class AppletTag extends CompositeTag
         String paramName;
         String paramValue;
         Vector attributes;
-        StringNode string;
+        Text string;
 
         kids = getChildren ();
         if (null == kids)
@@ -210,9 +212,9 @@ public class AppletTag extends CompositeTag
                         if (i < kids.size ())
                         {
                             node = kids.elementAt (i);
-                            if (node instanceof StringNode)
+                            if (node instanceof Text)
                             {
-                                string = (StringNode)node;
+                                string = (Text)node;
                                 if (0 == string.getText ().trim ().length ())
                                     kids.remove (i);
                             }   

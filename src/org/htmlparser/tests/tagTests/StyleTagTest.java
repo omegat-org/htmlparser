@@ -27,7 +27,7 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Parser;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.tags.HeadTag;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tags.StyleTag;
@@ -149,15 +149,15 @@ public class StyleTagTest extends ParserTestCase {
             style +
             "</style>";
         StyleTag tag;
-        StringNode string;
+        Text string;
 
         createParser (html);
         parseAndAssertNodeCount (1);
         assertTrue ("Node should be a STYLE tag", node[0] instanceof StyleTag);
         tag = (StyleTag)node[0];
         assertTrue ("STYLE tag should have one child", 1 == tag.getChildCount ());
-        assertTrue ("Child should be a StringNode", tag.getChild (0) instanceof StringNode);
-        string = (StringNode)tag.getChild (0);
+        assertTrue ("Child should be a StringNode", tag.getChild (0) instanceof Text);
+        string = (Text)tag.getChild (0);
         assertStringEquals ("Style text incorrect", style, string.toHtml ());
     }
 }

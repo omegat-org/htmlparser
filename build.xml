@@ -197,9 +197,14 @@ HTML Parser Integration Release 1.5-20040522
 
   <target name="compilelexer" description="compile lexer java files">
     <javac srcdir="${src}" debug="on" classpath="src:${commons-logging.jar}" target="1.1">
-      <include name="org/htmlparser/lexer/**/*.java"/>
-      <include name="org/htmlparser/AbstractNode.java"/>
+      <include name="org/htmlparser/lexer/*.java"/>
+      <include name="org/htmlparser/nodes/*.java"/>
+      <include name="org/htmlparser/Attribute.java"/>
       <include name="org/htmlparser/Node.java"/>
+      <include name="org/htmlparser/NodeFactory.java"/>
+      <include name="org/htmlparser/Remark.java"/>
+      <include name="org/htmlparser/Tag.java"/>
+      <include name="org/htmlparser/Text.java"/>
       <include name="org/htmlparser/util/ParserException.java"/>
       <include name="org/htmlparser/util/ChainedException.java"/>
       <include name="org/htmlparser/util/NodeList.java"/>
@@ -227,11 +232,14 @@ HTML Parser Integration Release 1.5-20040522
     <mkdir dir="${lib}"/>
     <jar jarfile="${lib}/htmllexer.jar"
       basedir="${src}">
-      <include name="org/htmlparser/lexer/**/*.class"/>
-      <include name="org/htmlparser/AbstractNode.class"/>
+      <include name="org/htmlparser/lexer/*.class"/>
+      <include name="org/htmlparser/nodes/*.class"/>
+      <include name="org/htmlparser/Attribute.class"/>
       <include name="org/htmlparser/Node.class"/>
-      <include name="org/htmlparser/NodeFilter.class"/>
+      <include name="org/htmlparser/NodeFactory.class"/>
+      <include name="org/htmlparser/Remark.class"/>
       <include name="org/htmlparser/Tag.class"/>
+      <include name="org/htmlparser/Text.class"/>
       <include name="org/htmlparser/util/ParserException.class"/>
       <include name="org/htmlparser/util/ChainedException.class"/>
       <include name="org/htmlparser/util/NodeList*.class"/>
@@ -348,7 +356,7 @@ HTML Parser Integration Release 1.5-20040522
       <group title="Main Package" packages="org.htmlparser"/>
       <group title="Example Applications" packages="org.htmlparser.parserapplications,org.htmlparser.lexerapplications.tabby,org.htmlparser.lexerapplications.thumbelina"/>
       <group title="Tags" packages="org.htmlparser.tags,org.htmlparser.tags.data"/>
-      <group title="Lexer" packages="org.htmlparser.lexer,org.htmlparser.lexer.nodes"/>
+      <group title="Lexer" packages="org.htmlparser.lexer"/>
       <group title="Scanners" packages="org.htmlparser.scanners"/>
       <group title="Beans" packages="org.htmlparser.beans"/>
       <group title="Patterns" packages="org.htmlparser.visitors,org.htmlparser.nodeDecorators,org.htmlparser.filters"/>

@@ -29,12 +29,12 @@ package org.htmlparser.scanners;
 import java.util.Vector;
 
 import org.htmlparser.Node;
+import org.htmlparser.NodeFactory;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
+import org.htmlparser.Remark;
+import org.htmlparser.Text;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
@@ -69,7 +69,7 @@ public class StyleScanner extends CompositeTagScanner
         Node node;
         boolean done;
         int position;
-        StringNode last;
+        Text last;
         Tag end;
         NodeFactory factory;
         CompositeTag ret;
@@ -107,27 +107,24 @@ public class StyleScanner extends CompositeTagScanner
                                 // append it to the previous one
                                 last.setEndPosition (node.elementEnd ());
                             else
-                                // TODO: need to remove this cast
-                                last = (StringNode)factory.createStringNode (lexer.getPage (), node.elementBegin (), node.elementEnd ());
+                                last = factory.createStringNode (lexer.getPage (), node.elementBegin (), node.elementEnd ());
                         }
-                    else if (node instanceof RemarkNode)
+                    else if (node instanceof Remark)
                     {
                         if (null != last)
                             last.setEndPosition (node.getEndPosition ());
                         else
                         {
-                            // TODO: need to remove this cast
-                            // last = (StringNode)factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
-                            last = (StringNode)factory.createStringNode (lexer.getPage (), node.elementBegin (), node.elementEnd ());
+                            // last = factory.createStringNode (lexer, node.elementBegin (), node.elementEnd ());
+                            last = factory.createStringNode (lexer.getPage (), node.elementBegin (), node.elementEnd ());
                         }
                     }
-                    else // StringNode
+                    else // Text
                     {
                         if (null != last)
                             last.setEndPosition (node.getEndPosition ());
                         else
-                            // TODO: need to remove this cast
-                            last = (StringNode)node;
+                            last = (Text)node;
                     }
 
             }
@@ -135,8 +132,7 @@ public class StyleScanner extends CompositeTagScanner
 
             // build new string tag if required
             if (null == last)
-                // TODO: need to remove this cast
-                last = (StringNode)factory.createStringNode (lexer.getPage (), position, position);
+                last = factory.createStringNode (lexer.getPage (), position, position);
             // build new end tag if required
             if (null == end)
                 end = new Tag (lexer.getPage (), tag.getEndPosition (), tag.getEndPosition (), new Vector ());

@@ -26,7 +26,7 @@
 
 package org.htmlparser.visitors;
 
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.Tag;
 import org.htmlparser.util.Translate;
 
@@ -54,7 +54,7 @@ public class TextExtractingVisitor extends NodeVisitor {
         return textAccumulator.toString();
     }
 
-    public void visitStringNode(StringNode stringNode) {
+    public void visitStringNode(Text stringNode) {
         String text = stringNode.getText();
         if (!preTagBeingProcessed) {
             text = Translate.decode(text);

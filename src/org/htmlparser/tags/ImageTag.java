@@ -29,14 +29,16 @@ package org.htmlparser.tags;
 import java.util.Locale;
 import java.util.Vector;
 
-import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.Attribute;
 import org.htmlparser.util.ParserUtils;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * Identifies an image tag.
  */
-public class ImageTag extends Tag
+public class ImageTag
+    extends
+        Tag
 {
     /**
      * The set of names handled by this tag.

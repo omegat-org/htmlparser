@@ -34,20 +34,21 @@ import java.net.URLConnection;
 import java.util.Vector;
 
 import org.htmlparser.Node;
-import org.htmlparser.AbstractNode;
-import org.htmlparser.lexer.nodes.PageAttribute;
-import org.htmlparser.lexer.nodes.NodeFactory;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
-import org.htmlparser.lexer.nodes.TagNode;
+import org.htmlparser.NodeFactory;
+import org.htmlparser.Remark;
+import org.htmlparser.Text;
+import org.htmlparser.Tag;
+import org.htmlparser.nodes.RemarkNode;
+import org.htmlparser.nodes.TextNode;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.ParserException;
 
 /**
  * This class parses the HTML stream into nodes.
  * There are three major types of nodes (lexemes):
- * <li>RemarkNode</li>
- * <li>StringNode</li>
- * <li>TagNode</li>
+ * <li>Remark</li>
+ * <li>Text</li>
+ * <li>Tag</li>
  * Each time <code>nextNode()</code> is called, another node is returned until
  * the stream is exhausted, and <code>null</code> is returned.
  */
@@ -221,7 +222,7 @@ public class Lexer
 
     /**
      * Get the next node from the source.
-     * @return A RemarkNode, StringNode or TagNode, or <code>null</code> if no
+     * @return A Remark, Text or Tag, or <code>null</code> if no
      * more lexemes are present.
      * @exception ParserException If there is a problem with the underlying page.
      */
@@ -235,7 +236,7 @@ public class Lexer
     /**
      * Get the next node from the source.
      * @param quotesmart If <code>true</code>, strings ignore quoted contents.
-     * @return A RemarkNode, StringNode or TagNode, or <code>null</code> if no
+     * @return A Remark, Text or Tag, or <code>null</code> if no
      * more lexemes are present.
      * @exception ParserException If there is a problem with the underlying page.
      */
@@ -1079,9 +1080,9 @@ public class Lexer
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
      */
-    public Node createStringNode (Page page,  int start, int end)
+    public Text createStringNode (Page page,  int start, int end)
     {
-        return (new StringNode (page, start, end));
+        return (new TextNode (page, start, end));
     }
 
     /**
@@ -1090,7 +1091,7 @@ public class Lexer
      * @param start The beginning position of the remark.
      * @param end The ending positiong of the remark.
      */
-    public Node createRemarkNode (Page page,  int start, int end)
+    public Remark createRemarkNode (Page page,  int start, int end)
     {
         return (new RemarkNode (page, start, end));
     }
@@ -1106,7 +1107,7 @@ public class Lexer
      * @param end The ending positiong of the tag.
      * @param attributes The attributes contained in this tag.
      */
-    public Node createTagNode (Page page, int start, int end, Vector attributes)
+    public Tag createTagNode (Page page, int start, int end, Vector attributes)
     {
         return (new TagNode (page, start, end, attributes));
     }

@@ -37,8 +37,7 @@ import org.htmlparser.filters.OrFilter;
 import org.htmlparser.filters.StringFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.StringNode;
-import org.htmlparser.lexer.nodes.TagNode;
+import org.htmlparser.Text;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
@@ -79,7 +78,7 @@ public class FilterTest extends ParserTestCase
         assertType ("should be BodyTag", BodyTag.class, list.elementAt (0));
         BodyTag body = (BodyTag)list.elementAt (0);
         assertEquals ("only one child", 1, body.getChildCount ());
-        assertSuperType ("should be StringNode", StringNode.class, body.getChildren ().elementAt (0));
+        assertSuperType ("should be Text", Text.class, body.getChildren ().elementAt (0));
         assertStringEquals("html", guts, body.toHtml ());
     }
 
@@ -98,8 +97,8 @@ public class FilterTest extends ParserTestCase
         createParser (html);
         list = parser.extractAllNodesThatMatch (new TagNameFilter ("booty"));
         assertEquals ("only one element", 1, list.size ());
-        assertSuperType ("should be Tag", TagNode.class, list.elementAt (0));
-        assertStringEquals("name", "BOOTY", ((TagNode)list.elementAt (0)).getTagName ());
+        assertSuperType ("should be Tag", Tag.class, list.elementAt (0));
+        assertStringEquals("name", "BOOTY", ((Tag)(list.elementAt (0))).getTagName ());
     }
 
     /**
@@ -116,8 +115,8 @@ public class FilterTest extends ParserTestCase
         createParser (html);
         list = parser.extractAllNodesThatMatch (new StringFilter ("Time"));
         assertEquals ("only one element", 1, list.size ());
-        assertSuperType ("should be String", StringNode.class, list.elementAt (0));
-        assertStringEquals("name", "time", ((StringNode)list.elementAt (0)).getText ());
+        assertSuperType ("should be String", Text.class, list.elementAt (0));
+        assertStringEquals("name", "time", ((Text)list.elementAt (0)).getText ());
         // test case sensitivity
         list = parser.extractAllNodesThatMatch (new StringFilter ("Time", true));
         assertEquals ("should be no elements", 0, list.size ());
@@ -140,8 +139,8 @@ public class FilterTest extends ParserTestCase
         assertType ("should be LinkTag", LinkTag.class, list.elementAt (0));
         LinkTag link = (LinkTag)list.elementAt (0);
         assertEquals ("three children", 3, link.getChildCount ());
-        assertSuperType ("should be TagNode", TagNode.class, link.getChildren ().elementAt (0));
-        TagNode tag = (TagNode)link.getChildren ().elementAt (0);
+        assertSuperType ("should be TagNode", Tag.class, link.getChildren ().elementAt (0));
+        Tag tag = (Tag)link.getChildren ().elementAt (0);
         assertStringEquals("name", "B", tag.getTagName ());
     }
 

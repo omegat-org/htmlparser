@@ -26,13 +26,15 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.lexer.nodes.Attribute;
+import org.htmlparser.Attribute;
 import org.htmlparser.util.ParserException;
 
 /**
  * A Meta Tag
  */
-public class MetaTag extends Tag
+public class MetaTag
+    extends
+        Tag
 {
     /**
      * The set of names handled by this tag.

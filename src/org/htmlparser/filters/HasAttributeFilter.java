@@ -28,10 +28,10 @@ package org.htmlparser.filters;
 
 import java.util.Locale;
 
+import org.htmlparser.Attribute;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.lexer.nodes.Attribute;
-import org.htmlparser.lexer.nodes.TagNode;
+import org.htmlparser.Tag;
 
 /**
  * This class accepts all tags that have a certain attribute, and optionally, with a certain value.
@@ -74,14 +74,14 @@ public class HasAttributeFilter implements NodeFilter
      */
     public boolean accept (Node node)
     {
-        TagNode tag;
+        Tag tag;
         Attribute attribute;
         boolean ret;
 
         ret = false;
-        if (node instanceof TagNode)
+        if (node instanceof Tag)
         {
-            tag = (TagNode)node;
+            tag = (Tag)node;
             attribute = tag.getAttributeEx (mAttribute);
             ret = null != attribute;
             if (ret && (null != mValue))

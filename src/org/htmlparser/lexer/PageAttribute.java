@@ -24,8 +24,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
-package org.htmlparser.lexer.nodes;
+package org.htmlparser.lexer;
 
+import org.htmlparser.Attribute;
 import org.htmlparser.lexer.Page;
 
 /**
@@ -41,7 +42,9 @@ import org.htmlparser.lexer.Page;
  * page. Optimizations in the predicates and length calculation defer the
  * actual instantiation of strings until absolutely needed.
  */
-public class PageAttribute extends Attribute
+public class PageAttribute
+    extends
+        Attribute
 {
     /**
      * The page this attribute is extracted from.

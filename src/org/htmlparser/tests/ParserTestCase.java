@@ -32,10 +32,9 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.FormTag;
@@ -67,28 +66,28 @@ public class ParserTestCase extends TestCase {
     protected void createParser(String inputHTML) {
         mLexer =  new Lexer (new Page (inputHTML));
         parser = new Parser(mLexer, new DefaultParserFeedback(DefaultParserFeedback.QUIET));
-        node = new AbstractNode[40];
+        node = new Node[40];
     }
 
     protected void createParser(String inputHTML,int numNodes)
     {
         Lexer lexer = new Lexer (inputHTML);
         parser = new Parser (lexer, new DefaultParserFeedback(DefaultParserFeedback.QUIET));
-        node = new AbstractNode[numNodes];
+        node = new Node[numNodes];
     }
 
     protected void createParser(String inputHTML, String url) {
         Lexer lexer = new Lexer (inputHTML);
         lexer.getPage ().setUrl (url);
         parser = new Parser (lexer, new DefaultParserFeedback(DefaultParserFeedback.QUIET));
-        node = new AbstractNode[40];
+        node = new Node[40];
     }
 
     protected void createParser(String inputHTML, String url,int numNodes) {
         Lexer lexer = new Lexer (inputHTML);
         lexer.getPage ().setUrl (url);
         parser = new Parser (lexer, new DefaultParserFeedback(DefaultParserFeedback.QUIET));
-        node = new AbstractNode[numNodes];
+        node = new Node[numNodes];
     }
 
     public Parser getParser ()
@@ -270,7 +269,7 @@ public class ParserTestCase extends TestCase {
         String text=null;
         do {
             nextNode = nodeIterator.nextNode();
-            if (nextNode instanceof StringNode) {
+            if (nextNode instanceof Text) {
                 text = nextNode.toPlainTextString().trim();
             } else text = null;
         }
@@ -425,16 +424,20 @@ public class ParserTestCase extends TestCase {
         Class expectedType,
         Object object)
     {
-        
-        String expectedTypeName = expectedType.getName();
-        String actualTypeName   = object.getClass().getName();
-        if (!actualTypeName.equals(expectedTypeName))
-            fail(
-                message+" should have been of type\n"+
-                expectedTypeName+
-                " but was of type \n"+
-                actualTypeName+"\n and is :"+((Node)object).toHtml()
-            );
+        if (!expectedType.isAssignableFrom (object.getClass ()))
+        {
+            String expectedTypeName = expectedType.getName ();
+            String actualTypeName   = object.getClass ().getName ();
+            if (!actualTypeName.equals (expectedTypeName))
+                fail(
+                    message + " should have been of type "+
+                    expectedTypeName
+                    + " but was of type "
+                    + actualTypeName
+                    + " and is:"
+                    + ((Node)object).toHtml()
+                );
+        }
     }
 
     protected void assertHiddenIDTagPresent(FormTag formTag, String name, String inputTagValue) {

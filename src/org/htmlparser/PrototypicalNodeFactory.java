@@ -32,9 +32,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
+import org.htmlparser.Attribute;
+import org.htmlparser.NodeFactory;
+import org.htmlparser.Remark;
+import org.htmlparser.Tag;
+import org.htmlparser.Text;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.lexer.nodes.Attribute;
-import org.htmlparser.lexer.nodes.NodeFactory;
+import org.htmlparser.nodes.TextNode;
+import org.htmlparser.nodes.RemarkNode;
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.BodyTag;
@@ -62,7 +67,6 @@ import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableHeader;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
-import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.ParserException;
@@ -105,7 +109,7 @@ public class PrototypicalNodeFactory
     /**
      * Create a new factory with the given tag as the only one registered.
      */
-    public PrototypicalNodeFactory (Tag tag)
+    public PrototypicalNodeFactory (org.htmlparser.tags.Tag tag)
     {
         this (true);
         registerTag (tag);
@@ -114,7 +118,7 @@ public class PrototypicalNodeFactory
     /**
      * Create a new factory with the given tags registered.
      */
-    public PrototypicalNodeFactory (Tag[] tags)
+    public PrototypicalNodeFactory (org.htmlparser.tags.Tag[] tags)
     {
         this (true);
         for (int i = 0; i < tags.length; i++)
@@ -128,7 +132,7 @@ public class PrototypicalNodeFactory
      * @return The tag previously registered with that id,
      * or <code>null</code> if none.
      */
-    public Tag put (String id, Tag tag)
+    public Tag put (String id, org.htmlparser.tags.Tag tag)
     {
         return ((Tag)mBlastocyst.put (id, tag));
     }
@@ -138,9 +142,9 @@ public class PrototypicalNodeFactory
      * @param id The name of the tag to return.
      * @return The tag registered under the id name or <code>null</code> if none.
      */
-    public Tag get (String id)
+    public org.htmlparser.tags.Tag get (String id)
     {
-        return ((Tag)mBlastocyst.get (id));
+        return ((org.htmlparser.tags.Tag)mBlastocyst.get (id));
     }
 
     /**
@@ -148,9 +152,9 @@ public class PrototypicalNodeFactory
      * @param id The name of the tag to remove.
      * @return The tag that was registered with that id.
      */
-    public Tag remove (String id)
+    public org.htmlparser.tags.Tag remove (String id)
     {
-        return ((Tag)mBlastocyst.remove (id));
+        return ((org.htmlparser.tags.Tag)mBlastocyst.remove (id));
     }
 
     /**
@@ -162,7 +166,7 @@ public class PrototypicalNodeFactory
     }
 
 
-    public void registerTag (Tag tag)
+    public void registerTag (org.htmlparser.tags.Tag tag)
     {
         String ids[];
         
@@ -171,7 +175,7 @@ public class PrototypicalNodeFactory
             put (ids[i], tag);
     }
 
-    public void unregisterTag (Tag tag)
+    public void unregisterTag (org.htmlparser.tags.Tag tag)
     {
         String ids[];
         
@@ -225,13 +229,9 @@ public class PrototypicalNodeFactory
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
      */
-    public Node createStringNode (Page page, int start, int end)
+    public Text createStringNode (Page page, int start, int end)
     {
-        Node ret;
-        
-        ret = new StringNode (page, start, end);
-
-        return (ret);
+        return (new TextNode (page, start, end));
     }
 
     /**
@@ -240,7 +240,7 @@ public class PrototypicalNodeFactory
      * @param start The beginning position of the remark.
      * @param end The ending positiong of the remark.
      */
-    public Node createRemarkNode (Page page, int start, int end)
+    public Remark createRemarkNode (Page page, int start, int end)
     {
         return (new RemarkNode (page, start, end));
     }
@@ -256,14 +256,14 @@ public class PrototypicalNodeFactory
      * @param end The ending positiong of the tag.
      * @param attributes The attributes contained in this tag.
      */
-    public Node createTagNode (Page page, int start, int end, Vector attributes)
+    public Tag createTagNode (Page page, int start, int end, Vector attributes)
         throws
             ParserException
     {
         Attribute attribute;
         String id;
-        Tag prototype;
-        Tag ret;
+        org.htmlparser.tags.Tag prototype;
+        org.htmlparser.tags.Tag ret;
 
         ret = null;
 
@@ -280,10 +280,10 @@ public class PrototypicalNodeFactory
                     {
                         if (id.endsWith ("/"))
                             id = id.substring (0, id.length () - 1);
-                        prototype = (Tag)mBlastocyst.get (id);
+                        prototype = (org.htmlparser.tags.Tag)mBlastocyst.get (id);
                         if (null != prototype)
                         {
-                            ret = (Tag)prototype.clone ();
+                            ret = (org.htmlparser.tags.Tag)prototype.clone ();
                             ret.setPage (page);
                             ret.setStartPosition (start);
                             ret.setEndPosition (end);
@@ -298,7 +298,7 @@ public class PrototypicalNodeFactory
             }
         }
         if (null == ret)
-            ret = new Tag (page, start, end, attributes);
+            ret = new org.htmlparser.tags.Tag (page, start, end, attributes);
 
         return (ret);
     }

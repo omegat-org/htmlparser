@@ -26,7 +26,7 @@
 
 package org.htmlparser.tests.tagTests;
 
-import org.htmlparser.StringNode;
+import org.htmlparser.Text;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
@@ -155,7 +155,7 @@ public class OptionTagTest extends ParserTestCase
         parseAndAssertNodeCount(10);
         for (int j = 0; j < 10; j++)
         {
-            if (node[j] instanceof StringNode)
+            if (node[j] instanceof Text)
                 continue;
             assertTrue("Node " + j + " should be Option Tag",node[j] instanceof OptionTag);
         }

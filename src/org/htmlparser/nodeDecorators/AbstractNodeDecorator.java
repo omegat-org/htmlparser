@@ -27,15 +27,18 @@
 package org.htmlparser.nodeDecorators;
 
 import org.htmlparser.Node;
+import org.htmlparser.Text;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 
-public abstract class AbstractNodeDecorator implements Node {
-    protected Node delegate;
+public abstract class AbstractNodeDecorator implements Text
+{
+    protected Text delegate;
 
-    protected AbstractNodeDecorator(Node delegate) {
+    protected AbstractNodeDecorator(Text delegate)
+    {
         this.delegate = delegate;
     }
 

@@ -29,9 +29,8 @@ package org.htmlparser.tags;
 import java.util.Vector;
 
 import org.htmlparser.lexer.Page;
-import org.htmlparser.lexer.nodes.TagNode;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.scanners.TagScanner;
-import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * Tag represents a generic tag.
@@ -39,7 +38,11 @@ import org.htmlparser.visitors.NodeVisitor;
  * This is also the base class for all tags created by the parser (not the
  * lexer which has nodes).
  */
-public class Tag extends TagNode implements Cloneable
+public class Tag
+    extends
+        TagNode
+    implements
+        Cloneable
 {
     /**
      * An empty set of tag names.

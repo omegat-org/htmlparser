@@ -28,8 +28,8 @@ package org.htmlparser.tests.parserHelperTests;
 
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.RemarkNode;
-import org.htmlparser.StringNode;
+import org.htmlparser.Remark;
+import org.htmlparser.Text;
 import org.htmlparser.tags.HeadTag;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tags.LinkTag;
@@ -56,14 +56,14 @@ public class StringParserTest extends ParserTestCase {
      * with the end tag). The bug lies in NodeReader.readElement().
      * Creation date: (6/17/2001 4:01:06 PM)
      */
-    public void testStringNodeBug1() throws ParserException {
+    public void testTextBug1() throws ParserException {
         createParser("<HTML><HEAD><TITLE>Google</TITLE>");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(5);
-        // The fourth node should be a StringNode-  with the text - Google
-        assertTrue("Fourth node should be a StringNode",node[3] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[3];
-        assertEquals("Text of the StringNode","Google",stringNode.getText());
+        // The fourth node should be a Text-  with the text - Google
+        assertTrue("Fourth node should be a Text",node[3] instanceof Text);
+        Text stringNode = (Text)node[3];
+        assertEquals("Text of the Text","Google",stringNode.getText());
     }
 
     /**
@@ -74,24 +74,24 @@ public class StringParserTest extends ParserTestCase {
      * The first string before the link is not identified, and the space after the link is also not identified
      * Creation date: (8/2/2001 2:07:32 AM)
      */
-    public void testStringNodeBug2() throws ParserException {
+    public void testTextBug2() throws ParserException {
         // Register the link scanner
 
         createParser("view these documents, you must have <A href='http://www.adobe.com'>Adobe \n"+
             "Acrobat Reader</A> installed on your computer.");
         Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(3);
-        // The first node should be a StringNode-  with the text - view these documents, you must have
-        assertTrue("First node should be a StringNode",node[0] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[0];
-        assertEquals("Text of the StringNode","view these documents, you must have ",stringNode.getText());
+        // The first node should be a Text-  with the text - view these documents, you must have
+        assertTrue("First node should be a Text",node[0] instanceof Text);
+        Text stringNode = (Text)node[0];
+        assertEquals("Text of the Text","view these documents, you must have ",stringNode.getText());
         assertTrue("Second node should be a link node",node[1] instanceof LinkTag);
         LinkTag linkNode = (LinkTag)node[1];
         assertEquals("Link is","http://www.adobe.com",linkNode.getLink());
         assertEquals("Link text is","Adobe \nAcrobat Reader",linkNode.getLinkText());
 
-        assertTrue("Third node should be a string node",node[2] instanceof StringNode);
-        StringNode stringNode2 = (StringNode)node[2];
+        assertTrue("Third node should be a string node",node[2] instanceof Text);
+        Text stringNode2 = (Text)node[2];
         assertEquals("Contents of third node"," installed on your computer.",stringNode2.getText());
     }
 
@@ -101,7 +101,7 @@ public class StringParserTest extends ParserTestCase {
      * &lt;a href="http://asgard.ch"&gt;[&lt; ASGARD &gt;&lt;/a&gt;&lt;br&gt;
      * The string node is not correctly identified
      */
-    public void testTagCharsInStringNode() throws ParserException {
+    public void testTagCharsInText() throws ParserException {
         createParser("<a href=\"http://asgard.ch\">[> ASGARD <]</a>");
         parseAndAssertNodeCount(1);
         assertTrue("Node identified must be a link tag",node[0] instanceof LinkTag);
@@ -114,11 +114,11 @@ public class StringParserTest extends ParserTestCase {
         createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(10);
-        assertTrue("Fourth Node identified must be a string node",node[3] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[3];
+        assertTrue("Fourth Node identified must be a string node",node[3] instanceof Text);
+        Text stringNode = (Text)node[3];
         assertEquals("First String Node","This is the Title",stringNode.toPlainTextString());
-        assertTrue("Eighth Node identified must be a string node",node[7] instanceof StringNode);
-        stringNode = (StringNode)node[7];
+        assertTrue("Eighth Node identified must be a string node",node[7] instanceof Text);
+        stringNode = (Text)node[7];
         assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toPlainTextString());
     }
 
@@ -126,11 +126,11 @@ public class StringParserTest extends ParserTestCase {
         createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(10);
-        assertTrue("Fourth Node identified must be a string node",node[3] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[3];
+        assertTrue("Fourth Node identified must be a string node",node[3] instanceof Text);
+        Text stringNode = (Text)node[3];
         assertEquals("First String Node","This is the Title",stringNode.toHtml());
-        assertTrue("Eighth Node identified must be a string node",node[7] instanceof StringNode);
-        stringNode = (StringNode)node[7];
+        assertTrue("Eighth Node identified must be a string node",node[7] instanceof Text);
+        stringNode = (Text)node[7];
         assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHtml());
     }
 
@@ -142,7 +142,7 @@ public class StringParserTest extends ParserTestCase {
         );
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(4);
-        assertTrue("Third Node identified must be a string node",node[2] instanceof StringNode);
+        assertTrue("Third Node identified must be a string node",node[2] instanceof Text);
     }
 
     /**
@@ -155,28 +155,28 @@ public class StringParserTest extends ParserTestCase {
         );
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(3);
-        assertTrue("First node should be StringNode",node[0] instanceof StringNode);
-        assertTrue("Second node should be RemarkNode",node[1] instanceof RemarkNode);
-        assertTrue("Third node should be StringNode",node[2] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[0];
+        assertTrue("First node should be Text",node[0] instanceof Text);
+        assertTrue("Second node should be Remark",node[1] instanceof Remark);
+        assertTrue("Third node should be Text",node[2] instanceof Text);
+        Text stringNode = (Text)node[0];
         assertEquals("First String node contents","Before Comment ",stringNode.getText());
-        StringNode stringNode2 = (StringNode)node[2];
+        Text stringNode2 = (Text)node[2];
         assertEquals("Second String node contents"," After Comment",stringNode2.getText());
-        RemarkNode remarkNode = (RemarkNode)node[1];
+        Remark remarkNode = (Remark)node[1];
         assertEquals("Remark Node contents"," Comment ",remarkNode.getText());
 
     }
 
     /**
      * Based on a bug report submitted by Cedric Rosa, if the last line contains a single character,
-     * StringNode does not return the string node correctly.
+     * Text does not return the string node correctly.
      */
     public void testLastLineWithOneChar() throws ParserException {
         createParser("a");
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
-        assertTrue("First node should be StringNode",node[0] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[0];
+        assertTrue("First node should be Text",node[0] instanceof Text);
+        Text stringNode = (Text)node[0];
         assertEquals("First String node contents","a",stringNode.getText());
     }
 
@@ -185,8 +185,8 @@ public class StringParserTest extends ParserTestCase {
         createParser(text);
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
-        assertTrue("First node should be StringNode",node[0] instanceof StringNode);
-        StringNode stringNode = (StringNode)node[0];
+        assertTrue("First node should be Text",node[0] instanceof Text);
+        Text stringNode = (Text)node[0];
         assertStringEquals("First String node contents",text,stringNode.getText());
     }
 
@@ -237,8 +237,8 @@ public class StringParserTest extends ParserTestCase {
         createParser(text);
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount(1);
-        assertType("first node",StringNode.class,node[0]);
-        StringNode stringNode = (StringNode)node[0];
+        assertType("first node",Text.class,node[0]);
+        Text stringNode = (Text)node[0];
         assertStringEquals("text",text,stringNode.toPlainTextString());
     }
 

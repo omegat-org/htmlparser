@@ -40,7 +40,6 @@ import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.IteratorImpl;
 import org.htmlparser.util.NodeIterator;

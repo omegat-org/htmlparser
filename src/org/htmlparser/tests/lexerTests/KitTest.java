@@ -36,12 +36,13 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTMLEditorKit.Parser;
 import javax.swing.text.html.HTMLEditorKit.ParserCallback;
+
+import org.htmlparser.Attribute;
 import org.htmlparser.Node;
+import org.htmlparser.Tag;
+import org.htmlparser.nodes.AbstractNode;
 import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.AbstractNode;
-import org.htmlparser.lexer.nodes.Attribute;
-import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.Translate;
 
@@ -265,9 +266,9 @@ public class KitTest extends ParserCallback
         for (int i = mIndex; i < Math.min (mIndex + 25, mNodes.size ()); i++)
         {
             node = (Node)mNodes.elementAt (i);
-            if (node instanceof TagNode)
+            if (node instanceof Tag)
             {
-                ours = ((Attribute)(((TagNode)node).getAttributesEx ().elementAt (0))).getName ();
+                ours = ((Attribute)(((Tag)node).getAttributesEx ().elementAt (0))).getName ();
                 if (match (theirs, ours))
                 {
                     match = i;
@@ -330,9 +331,9 @@ public class KitTest extends ParserCallback
         for (int i = mIndex; i < Math.min (mIndex + 25, mNodes.size ()); i++)
         {
             node = (Node)mNodes.elementAt (i);
-            if (node instanceof TagNode)
+            if (node instanceof Tag)
             {
-                ours = ((Attribute)(((TagNode)node).getAttributesEx ().elementAt (0))).getName ().substring (1);
+                ours = ((Attribute)(((Tag)node).getAttributesEx ().elementAt (0))).getName ().substring (1);
                 if (match (theirs, ours))
                 {
                     match = i;
@@ -396,9 +397,9 @@ public class KitTest extends ParserCallback
         for (int i = mIndex; i < Math.min (mIndex + 25, mNodes.size ()); i++)
         {
             node = (Node)mNodes.elementAt (i);
-            if (node instanceof TagNode)
+            if (node instanceof Tag)
             {
-                ours = ((Attribute)(((TagNode)node).getAttributesEx ().elementAt (0))).getName ();
+                ours = ((Attribute)(((Tag)node).getAttributesEx ().elementAt (0))).getName ();
                 if (match (theirs, ours))
                 {
                     match = i;
@@ -603,6 +604,13 @@ public class KitTest extends ParserCallback
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.7  2004/05/24 16:18:31  derrickoswald
+ * Part three of a multiphase refactoring.
+ * The three node types are now fronted by interfaces (program to the interface paradigm)
+ * with concrete implementations in the new htmlparser.nodes package. Classes from the
+ * lexer.nodes package are moved to this package, and obvious references to the concrete
+ * classes that got broken by this have been changed to use the interfaces where possible.
+ *
  * Revision 1.6  2004/01/14 02:53:47  derrickoswald
  * *** empty log message ***
  *

@@ -26,8 +26,8 @@
 
 package org.htmlparser.tests.utilTests;
 
-import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
+import org.htmlparser.nodes.AbstractNode;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
@@ -109,7 +109,7 @@ public class NodeListTest extends ParserTestCase {
 
     public void testElements() throws Exception {
         createTestDataAndPutInVector(11);
-        Node [] resultNodes = new AbstractNode[11];
+        Node [] resultNodes = new Node[11];
         int i = 0;
         for (SimpleNodeIterator e = nodeList.elements();e.hasMoreNodes();) {
             resultNodes[i] = e.nextNode();
@@ -140,7 +140,7 @@ public class NodeListTest extends ParserTestCase {
     }
 
     private void createTestDataAndPutInVector(int nodeCount) {
-        testNodes = new AbstractNode[nodeCount];
+        testNodes = new Node[nodeCount];
         for (int i=0;i<nodeCount;i++) {
             testNodes[i]= createHTMLNodeObject();
             nodeList.add(testNodes[i]);
