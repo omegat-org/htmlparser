@@ -43,6 +43,7 @@ import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.tests.tagTests.HTMLTagTest;
 
 import junit.extensions.ExceptionTestCase;
@@ -57,10 +58,12 @@ import junit.framework.TestSuite;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-public class HTMLFormScannerTest extends TestCase {
+public class HTMLFormScannerTest extends HTMLParserTestCase {
+	
 	public HTMLFormScannerTest(String name) {
 		super(name);
 	}
+	
 	public void testEvaluate() {		
 		String line1="form method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
 		String line2="FORM method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
@@ -70,8 +73,9 @@ public class HTMLFormScannerTest extends TestCase {
 		assertTrue("Line 2",formScanner.evaluate(line2,null));
 		assertTrue("Line 3",formScanner.evaluate(line3,null));
 	}
+	
 	public void testScan() throws HTMLParserException {
-		String testHTML = new String(
+		createParser(
 		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\"><FONT face=\"Arial, verdana\" size=2><b>User Name</b></font></TD></TR>\n"+
@@ -82,20 +86,11 @@ public class HTMLFormScannerTest extends TestCase {
 		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
-		"</FORM>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
-
+		"</FORM>","http://www.google.com/test/index.html");
+		
 		parser.addScanner(new HTMLFormScanner(""));
 		
-		int i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 nodes identified",1,i);	
+		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
 		assertEquals("Method","post",formTag.getFormMethod());
@@ -129,8 +124,9 @@ public class HTMLFormScannerTest extends TestCase {
 
 		HTMLTagTest.assertStringEquals("Raw String",tempString,formTag.toHTML());
 	}
+	
 	public void testScanFormWithNoEnding() {
-		String testHTML = new String(
+		createParser(
 		"<TABLE>\n"+
 		"<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
@@ -142,27 +138,15 @@ public class HTMLFormScannerTest extends TestCase {
 		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
-		"</TABLE>");
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		HTMLNode [] node = new HTMLNode[20];
-
+		"</TABLE>","http://www.google.com/test/index.html");
+		
 		parser.addScanner(new HTMLFormScanner(""));
 		
-		int i = 0;
 		try {
-			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-			{
-				node[i++] = e.nextHTMLNode();
-			}
+			parseAndAssertNodeCount(1);
 			assertTrue("Should have thrown an HTMLParserException",false);
-
 		}
 		catch (HTMLParserException e) {
 		}
-	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLFormScannerTest.class);
 	}
 }

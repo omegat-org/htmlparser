@@ -70,23 +70,23 @@ public AllTests(String name) {
  */
 public static TestSuite suite() {
 	TestSuite suite = new TestSuite();
-	suite.addTest(HTMLTagScannerTest.suite());
-	suite.addTest(HTMLAppletScannerTest.suite());
-	suite.addTest(HTMLScriptScannerTest.suite());
-	suite.addTest(HTMLImageScannerTest.suite());
-	suite.addTest(HTMLLinkScannerTest.suite());
-	suite.addTest(HTMLStyleScannerTest.suite());	
-	suite.addTest(HTMLMetaTagScannerTest.suite());			
-	suite.addTest(HTMLTitleScannerTest.suite());				
-	suite.addTest(HTMLFormScannerTest.suite());	
-	suite.addTest(HTMLFrameScannerTest.suite());	
-	suite.addTest(HTMLFrameSetScannerTest.suite());
-	suite.addTest(HTMLInputTagScannerTest.suite());
-	suite.addTest(HTMLOptionTagScannerTest.suite());
-	suite.addTest(HTMLSelectTagScannerTest.suite());
-	suite.addTest(HTMLTextareaTagScannerTest.suite());
-	suite.addTest(HTMLBaseHREFScannerTest.suite());
-	suite.addTest(HTMLJspScannerTest.suite());	
+	suite.addTestSuite(HTMLTagScannerTest.class);
+	suite.addTestSuite(HTMLAppletScannerTest.class);
+	suite.addTestSuite(HTMLScriptScannerTest.class);
+	suite.addTestSuite(HTMLImageScannerTest.class);
+	suite.addTestSuite(HTMLLinkScannerTest.class);
+	suite.addTestSuite(HTMLStyleScannerTest.class);	
+	suite.addTestSuite(HTMLMetaTagScannerTest.class);			
+	suite.addTestSuite(HTMLTitleScannerTest.class);				
+	suite.addTestSuite(HTMLFormScannerTest.class);	
+	suite.addTestSuite(HTMLFrameScannerTest.class);	
+	suite.addTestSuite(HTMLFrameSetScannerTest.class);
+	suite.addTestSuite(HTMLInputTagScannerTest.class);
+	suite.addTestSuite(HTMLOptionTagScannerTest.class);
+	suite.addTestSuite(HTMLSelectTagScannerTest.class);
+	suite.addTestSuite(HTMLTextareaTagScannerTest.class);
+	suite.addTestSuite(HTMLBaseHREFScannerTest.class);
+	suite.addTestSuite(HTMLJspScannerTest.class);	
 	return suite;
 }
 }
