@@ -23,6 +23,7 @@ public class HTMLTag extends HTMLNode
     public final static int TAG_FINISHED_PARSING_STATE=2;
 	public final static int TAG_ILLEGAL_STATE=3;
 	public final static int TAG_IGNORE_DATA_STATE=4;	    
+	public final static int TAG_IGNORE_BEGIN_TAG_STATE=5;
 	private static Vector strictTags=null;
 	/**
 	 * Tag contents will have the contents of the comment tag.
@@ -80,8 +81,15 @@ public class HTMLTag extends HTMLNode
 		state = checkIllegalState(state, i, ch, tag);
 		state = checkFinishedState(state, i, ch, tag);
 		state = toggleIgnoringState(state, ch);
+		if (state==TAG_IGNORE_DATA_STATE && ch=='<') {
+			state = TAG_IGNORE_BEGIN_TAG_STATE;
+		}
+		if (state==TAG_IGNORE_BEGIN_TAG_STATE && ch=='>') {
+			state = TAG_IGNORE_DATA_STATE;
+		}
 		checkIfAppendable(state, ch, tag);
 		state = checkBeginParsingState(state, i, ch, tag);
+
 		return state;
 	}
 	private static int checkBeginParsingState(int state, int i, char ch, HTMLTag tag) {
@@ -121,12 +129,12 @@ public class HTMLTag extends HTMLNode
 		return state;
 	}
 	private static void checkIfAppendable(int state, char ch, HTMLTag tag) {
-		if (state==TAG_IGNORE_DATA_STATE || state==TAG_BEGIN_PARSING_STATE) {
+		if (state==TAG_IGNORE_DATA_STATE || state==TAG_BEGIN_PARSING_STATE || state==TAG_IGNORE_BEGIN_TAG_STATE) {
 			tag.append(ch);
 		}
 	}
 	private static int checkIllegalState(int state, int i, char ch, HTMLTag tag) {
-		if (ch=='/' && i>0 && tag.getTagLine().charAt(i-1)=='<' && state!=TAG_IGNORE_DATA_STATE)
+		if (ch=='/' && i>0 && tag.getTagLine().charAt(i-1)=='<' && state!=TAG_IGNORE_DATA_STATE && state!=TAG_IGNORE_BEGIN_TAG_STATE)
 		{
 			state = TAG_ILLEGAL_STATE;
 		}

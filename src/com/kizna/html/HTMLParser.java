@@ -142,7 +142,7 @@ public HTMLParser(HTMLReader reader)
 	public void initializeStrictness() {
 		Vector strictVector = new Vector();
 		strictVector.addElement(new String("INPUT"));
-		strictVector.addElement(new String("META"));		
+		//strictVector.addElement(new String("META"));		
 		HTMLTag.setStrictTags(strictVector);
 	}
 /**

@@ -533,4 +533,89 @@ public void testToHTML() {
 		HTMLTag tag = (HTMLTag)node[0];
 		assertEquals("Node contents","br",tag.getText());    	
     }
+    public void testTagInsideTag() {
+    	String testHTML = new String("<META name=\"Hello\" value=\"World </I>\">"); 
+		
+		StringReader sr = new StringReader(testHTML); 
+		HTMLReader reader = new HTMLReader(new 
+		BufferedReader(sr),"http://www.google.com/test/index.html"); 
+		HTMLParser parser = new HTMLParser(reader); 
+		HTMLNode [] node = new HTMLNode[10]; 
+				
+		int i = 0; 
+		for (Enumeration e = parser.elements();e.hasMoreElements();) 
+		{ 
+			node[i++] = (HTMLNode)e.nextElement(); 
+		} 
+		
+		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
+		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
+		HTMLTag tag = (HTMLTag)node[0];
+		assertEquals("Node contents","META name=\"Hello\" value=\"World </I>\"",tag.getText()); 
+    	
+    }
+    public void testIncorrectInvertedCommas() {
+    	String testHTML = new String("<META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"\">"); 
+		
+		StringReader sr = new StringReader(testHTML); 
+		HTMLReader reader = new HTMLReader(new 
+		BufferedReader(sr),"http://www.google.com/test/index.html"); 
+		HTMLParser parser = new HTMLParser(reader); 
+		HTMLNode [] node = new HTMLNode[10]; 
+				
+		int i = 0; 
+		for (Enumeration e = parser.elements();e.hasMoreElements();) 
+		{ 
+			node[i++] = (HTMLNode)e.nextElement(); 
+		} 
+		
+		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
+		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
+		HTMLTag tag = (HTMLTag)node[0];
+		assertEquals("Node contents","META NAME=Author CONTENT=DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getText()); 
+    	
+    }    
+    public void testIncorrectInvertedCommas2() {
+    	String testHTML = new String("<META NAME=\"Keywords\" CONTENT=Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality\">"); 
+		
+		StringReader sr = new StringReader(testHTML); 
+		HTMLReader reader = new HTMLReader(new 
+		BufferedReader(sr),"http://www.google.com/test/index.html"); 
+		HTMLParser parser = new HTMLParser(reader); 
+		HTMLNode [] node = new HTMLNode[10]; 
+				
+		int i = 0; 
+		for (Enumeration e = parser.elements();e.hasMoreElements();) 
+		{ 
+			node[i++] = (HTMLNode)e.nextElement(); 
+		} 
+		
+		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
+		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
+		HTMLTag tag = (HTMLTag)node[0];
+		assertStringEquals("Node contents","META NAME=Keywords CONTENT=Moscou, modernisation, politique urbaine, spécificités culturelles, municipalité, Moscou, modernisation, urban politics, cultural specificities, municipality",tag.getText()); 
+    	
+    }        
+ 	public void testIncorrectInvertedCommas3() {
+    	String testHTML = new String("<meta name=\"description\" content=\"Une base de données sur les thèses de g\"ographie soutenues en France \">"); 
+		
+		StringReader sr = new StringReader(testHTML); 
+		HTMLReader reader = new HTMLReader(new 
+		BufferedReader(sr),"http://www.google.com/test/index.html"); 
+		HTMLParser parser = new HTMLParser(reader); 
+		HTMLNode [] node = new HTMLNode[10]; 
+				
+		int i = 0; 
+		for (Enumeration e = parser.elements();e.hasMoreElements();) 
+		{ 
+			node[i++] = (HTMLNode)e.nextElement(); 
+		} 
+		
+		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i)); 
+		assertTrue("Node should be a tag",node[0] instanceof HTMLTag);
+		HTMLTag tag = (HTMLTag)node[0];
+		assertEquals("Node contents","meta name=description content=Une base de données sur les thèses de gographie soutenues en France ",tag.getText()); 
+    	
+    }
+    
 }
