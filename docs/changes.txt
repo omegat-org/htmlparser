@@ -1,3 +1,17 @@
+Production Release ver 1.1
+--------------------------
+[1] Added META and TITLE tag scanners
+[2] Fixed spaces bug in HTMLLinkScanner and HTMLImageScanner. The parser
+now supports links or urls with spaces in them. Functionality
+modification - HTMLTag no longer absorbs spaces. It reports data as is,
+and leaves the responsibility of processing to the particular scanner.
+[3] Fixed XML parsing bug - isXMLTagFound() in HTMLTagScanner - it no longer checks for equality,
+but for the beginning of an xml tag
+[4] HTMLTag bug - if a link is spread over two lines, the parser would crash.
+[5] Dynamic Page Parsing supported (urls need not end with .html anymore)
+[6] Dirty HTML of the form <A HREF="http://www.somelink.com">abcd<A>, is now correctly 
+handled. The second <A> is taken as </A>.
+
 Maintenance Release ver 1.04
 ----------------------------
 [1] Bug fix in HTMLTag, now caught by test case in HTMLTagTest. Will cause incorrect parsing for JSP tags, which have end tag symbols in inverted commas. 

@@ -23,7 +23,21 @@ to open source this, so that it may benefit other developers. This is released
 under <a href="http://www.gnu.org/copyleft/lesser.html">LGPL</a>. Kizna
 Corporation disclaims all copyright of this product.
 
-<p><b>Release 1.04 is out! (March-23-2002)</b></div>
+<p><b>Production Release 1.1 is out! (Apr-17-2002)</b></div>
+<div class=MsoNormal><a href="http://prdownloads.sourceforge.net/htmlparser/htmlparser1_1.zip">Download
+it here</a></div>
+<br>
+<div class=MsoNormal><b>Production Release 1.1 contains : </b><BR>
+[1] Added META and TITLE tag scanners<BR>
+[2] Fixed spaces bug in HTMLLinkScanner and HTMLImageScanner. The parser<BR>
+now supports links or urls with spaces in them. Functionality
+modification - HTMLTag no longer absorbs spaces. It reports data as is,
+and leaves the responsibility of processing to the particular scanner.<BR>
+[3] Fixed XML parsing bug - isXMLTagFound() in HTMLTagScanner - it no longer checks for equality, but for the beginning of an xml tag<BR>
+[4] HTMLTag bug - if a link is spread over two lines, the parser would crash.<BR>
+[5] Dynamic Page Parsing supported (urls need not end with .html anymore)<BR>
+[6] Dirty HTML of the form &lt;A HREF="http://www.somelink.com"&gt;abcd&lt;A&gt;, is now correctly handled. The second &lt;A&gt; is taken as &lt;/A&gt;.<BR>
+ <BR>
 
 <div class=MsoNormal><a href="http://prdownloads.sourceforge.net/htmlparser/htmlparser1_04.zip">Download
 it here</a></div>

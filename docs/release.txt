@@ -1,3 +1,17 @@
+Production Release ver 1.1
+--------------------------
+[1] Added META and TITLE tag scanners
+[2] Fixed spaces bug in HTMLLinkScanner and HTMLImageScanner. The parser
+now supports links or urls with spaces in them. Functionality
+modification - HTMLTag no longer absorbs spaces. It reports data as is,
+and leaves the responsibility of processing to the particular scanner.
+[3] Fixed XML parsing bug - isXMLTagFound() in HTMLTagScanner - it no longer checks for equality,
+but for the beginning of an xml tag
+[4] HTMLTag bug - if a link is spread over two lines, the parser would crash.
+[5] Dynamic Page Parsing supported (urls need not end with .html anymore)
+[6] Dirty HTML of the form <A HREF="http://www.somelink.com">abcd<A>, is now correctly 
+handled. The second <A> is taken as </A>.
+
 Maintenance Release ver 1.04
 ----------------------------
 [1] Bug fix in HTMLTag, now caught by test case in HTMLTagTest. Will cause incorrect parsing for JSP tags, which have end tag symbols in inverted commas. 
@@ -35,10 +49,10 @@ Q3. How do I extend the capability of this library ?
 Q1. What are the contents of the distribution ?
 
 A1. The distribution contains :
-    (i) binary jar file - htmlparser.jar
-    (ii) source code - src.zip
-    (iii) javadoc folder - Check the documentation for the HTMLParser class (especially the elements() method)
-    (iv) Executing scripts - There are three scripts :
+    (i) binary jar file - htmlparser.jar (in lib directory)
+    (ii) source code - src.zip (in distribution directory)
+    (iii) documentation - doc directory (includes javadoc)
+    (iv) Executing scripts - There are three scripts (in the bin directory):
          (a) runParser.bat  : Runs the html parser
          (b) runCrawler.bat : Runs the robot crawler
          (c) runRipper.bat  : Runs the mail ripper   
@@ -60,17 +74,25 @@ and the switches allowed will be shown.
 ---------- *** ------------
 Q2. Which part of the source code should I analyze to be able to use it in my project ?
 
-Go through HTMLParser.java very carefully. It will show you how to use the framework. You can control the parsing process by picking up the Enumeration through the elements() method. The javadoc of the elements() method provides code samples. 
+Go through the javadoc of HTMLParser.java - it contains all the examples to get you started.
 
-Also go through the package com.kizna.parserapplications. The two applications here, Robot and MailRipper, have been expressly written for the purpose of demonstrating the usage of htmlparser.
+Also go through the package com.kizna.parserapplications. 
+The two applications here, Robot and MailRipper, have been expressly written for the purpose of demonstrating the usage of htmlparser.
 
 ---------- *** ------------
 
 Q3. How do I extend the capability of this library ?
 
-You need to extend the HTMLTagScanner in order to take advantage of existing code to identify a generic tag. You could add further processing code based on the tag contents. For more information on how to do this, examine the code of the scanners in the com.kizna.html.scanners package. The scanners basically use a Template Method+Factory Method approach. You need to override the evaluate() and scan() methods, and register your scanner to the parser before you begin parsing.
+You need to extend the HTMLTagScanner in order to take advantage of existing 
+code to identify a generic tag. You could add further processing code based 
+on the tag contents. For more information on how to do this, examine the code 
+of the scanners in the com.kizna.html.scanners package. The scanners 
+basically use a Template Method+Factory Method approach. You need to 
+override the evaluate() and scan() methods, and register your 
+scanner to the parser before you begin parsing.
 
-This process is not complex, and is especially simple if you have a prior understanding of TM and FM (Refer Design Patterns by Erich Gamma, et al). You can take advantage of the parsing data available to you from the reader, so make sure that you are fully aware of the API of the HTMLReader.
+This process is simple, check the com.kizna.html.scanners package
+to see how the existing scanners work.
 ---------- *** ------------
 
 Acknowledgements :
@@ -83,5 +105,17 @@ The following people have contributed important bug reports, feature ideas :
 [6] Nash Tsai
 [7] Rodney S Foley
 [8] Serge Kruppa
+[9] Raj Sharma
+[10] Sam Joseph
+[11] Raghavender Srimantula
 
-If you find any bugs, please go to http://sourceforge.net/projects/htmlparser and click on the Bugs link. You can open a bug case here. You will be amazed at the speed of fixing.
+If you find any bugs, please go to 
+http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 
+You will be amazed at the speed of fixing. Open Source rocks!
+
+And please join the HTMLParser-User mailing list
+to get help on getting started. Join HTMLParser-Developer
+to become a developer on this project. Join HTMLParser-Announce to 
+be notified whenever a new release is out.
+
+All these mailing lists can be joined from http://htmlparser.sourceforge.net
