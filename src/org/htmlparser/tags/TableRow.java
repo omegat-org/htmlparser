@@ -80,22 +80,71 @@ public class TableRow extends CompositeTag
     /**
      * Get the number of columns in this row.
      */
-    public int getColumnCount()
+    public int getColumnCount ()
     {
-        return (getChildren ().searchFor (TableColumn.class).size ());
+        return (
+            (null == getChildren ()) ? 0 :
+            getChildren ().searchFor (TableColumn.class).size ());
     }
 
     /**
      * Get the children (columns) of this row.
      */
-    public TableColumn [] getColumns()
+    public TableColumn [] getColumns ()
     {
         NodeList list;
-        
-        list = getChildren ().searchFor (TableColumn.class);
-        TableColumn [] columns = new TableColumn[list.size()];
-        list.copyToNodeArray (columns);
-        
-        return (columns);
+        TableColumn [] ret;
+
+        if (null != getChildren ())
+        {
+            list = getChildren ().searchFor (TableColumn.class);
+            ret = new TableColumn[list.size ()];
+            list.copyToNodeArray (ret);
+        }
+        else
+            ret = new TableColumn[0];
+
+        return (ret);
+    }
+
+    /**
+     * Checks if this table has a header
+     * @return <code>true</code> if there is a header tag.
+     */
+    public boolean hasHeader ()
+    {
+        return (0 != getHeaderCount ());
+    }
+
+    /**
+     * Get the number of headers in this row.
+     * @return The count of header tags in this row.
+     */
+    public int getHeaderCount ()
+    {
+        return (
+            (null == getChildren ()) ? 0 :
+            getChildren ().searchFor (TableHeader.class, false).size ());
+    }
+
+    /**
+     * Get the header of this table
+     * @return Table header tags contained in this row.
+     */
+    public TableHeader[] getHeader ()
+    {
+        NodeList list;
+        TableHeader [] ret;
+
+        if (null != getChildren ())
+        {
+            list = getChildren ().searchFor (TableHeader.class, false);
+            ret = new TableHeader[list.size ()];
+            list.copyToNodeArray (ret);
+        }
+        else
+            ret = new TableHeader[0];
+
+        return (ret);
     }
 }

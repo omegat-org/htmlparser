@@ -170,6 +170,7 @@ public class PrototypicalNodeFactory
         registerTag (new SelectTag ());
         registerTag (new StyleTag ());
         registerTag (new TableColumn ());
+        registerTag (new TableHeader ());
         registerTag (new TableRow ());
         registerTag (new TableTag ());
         registerTag (new TextareaTag ());
