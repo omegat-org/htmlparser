@@ -79,14 +79,33 @@ public class HTMLLinkProcessor {
 		if (link==null) return "";
 		if (link.indexOf("://")==-1 && link.indexOf("mailto:")==-1 && url != null)
 		{
-			String temp=url;
-			Vector directories = new Vector();
-			addDirectoriesToVector(directories, temp);
-			link = handleRelationalPath(directories, link);
-			String dir = createDirectory(directories);
-			link = removeFirstSlashIfFound(link);
-			link=dir+link;		
+			// Bug fix by Karem for relative links that
+			// begin with /
+			if (link.charAt(0)=='/') { 
+				link = processSlashIsFirstChar(link, url);
+			} else {
+				link = processAppendRelativeLink(link, url);	
+			}
 		}
+		return link;
+	}
+	public String processAppendRelativeLink(String link, String url) {
+		String temp=url;
+		Vector directories = new Vector();
+		addDirectoriesToVector(directories, temp);
+		link = handleRelationalPath(directories, link);
+		String dir = createDirectory(directories);
+		link = removeFirstSlashIfFound(link);
+		link=dir+link;	
+		return link;
+	}
+	public String processSlashIsFirstChar(String link, String url) {
+		int i = url.indexOf("/",7); 
+		if (i==-1) { 
+			link = url+link; 
+		} else { 
+			link = url.substring(0,i)+link; 
+		} 
 		return link;
 	}
 	/** 

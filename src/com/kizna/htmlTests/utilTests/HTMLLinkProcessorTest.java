@@ -110,4 +110,27 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		assertTrue("Should be a url",HTMLLinkProcessor.isURL(resourceLoc1));
 		assertTrue("Should not be a url",!HTMLLinkProcessor.isURL(resourceLoc2));		
 	}
+	/**
+	 * This testcase is based on a bug reported by Kamen.
+	 * If a relative link starts with a slash, it should be directly appended to the base url,
+	 * and directories of the base url should be omitted.
+	 */
+	public void testCheckIfLinkIsRelativeDoubleSlashBug() {
+		String link = "/someplace/somepage.html";
+		HTMLLinkProcessor lp = new HTMLLinkProcessor();
+		String url = "http://www.google.com/someDirectory/";
+		String url2 = "www.google.com/someDirectory/";
+		assertEquals("relative link","http://www.google.com/someplace/somepage.html",lp.checkIfLinkIsRelative(link,url));
+		assertEquals("relative link (2)","www.google.com/someplace/somepage.html",lp.checkIfLinkIsRelative(link,url2));		
+	}	
+	
+	public void testSlashIsFirstChar() {
+		String link = "/someplace/somepage.html";
+		HTMLLinkProcessor lp = new HTMLLinkProcessor();
+		String url = "http://www.google.com/someDirectory/";
+		String url2 = "www.google.com/someDirectory/";
+		assertEquals("relative link","http://www.google.com/someplace/somepage.html",lp.processSlashIsFirstChar(link,url));
+		assertEquals("relative link(2)","www.google.com/someplace/somepage.html",lp.processSlashIsFirstChar(link,url2));		
+		
+	}
 }
