@@ -77,6 +77,46 @@ public class HTMLTag extends HTMLNode
 	protected HTMLTagScanner thisScanner=null;
 	private java.lang.String tagLine;
 	private boolean endOfLineCharState;
+
+    /**
+     * Set of tags that breaks the flow.
+     */
+    protected static HashSet mBreakTags;
+    static
+    {
+        mBreakTags = new HashSet (30);
+        mBreakTags.add ("BLOCKQUOTE");
+        mBreakTags.add ("BODY");
+        mBreakTags.add ("BR");
+        mBreakTags.add ("CENTER");
+        mBreakTags.add ("DD");
+        mBreakTags.add ("DIR");
+        mBreakTags.add ("DIV");
+        mBreakTags.add ("DL");
+        mBreakTags.add ("DT");
+        mBreakTags.add ("FORM");
+        mBreakTags.add ("H1");
+        mBreakTags.add ("H2");
+        mBreakTags.add ("H3");
+        mBreakTags.add ("H4");
+        mBreakTags.add ("H5");
+        mBreakTags.add ("H6");
+        mBreakTags.add ("HEAD");
+        mBreakTags.add ("HR");
+        mBreakTags.add ("HTML");
+        mBreakTags.add ("ISINDEX");
+        mBreakTags.add ("LI");
+        mBreakTags.add ("MENU");
+        mBreakTags.add ("NOFRAMES");
+        mBreakTags.add ("OL");
+        mBreakTags.add ("P");
+        mBreakTags.add ("PRE");
+        mBreakTags.add ("TD");
+        mBreakTags.add ("TH");
+        mBreakTags.add ("TITLE");
+        mBreakTags.add ("UL");
+    }
+
 	/**
 	 * Set the HTMLTag with the beginning posn, ending posn and tag contents
 	 * @param nodeBegin Beginning position of the tag
@@ -311,4 +351,13 @@ public class HTMLTag extends HTMLNode
 		HTMLTag.tagParser = tagParser;
 	}
 
+    /**
+     * Determines if the given tag breaks the flow of text.
+     * @return <code>true</code> if following text would start on a new line,
+     * <code>false</code> otherwise.
+     */
+    public boolean breaksFlow ()
+    {
+        return (mBreakTags.contains (getText ().toUpperCase ()));
+    }
 }
