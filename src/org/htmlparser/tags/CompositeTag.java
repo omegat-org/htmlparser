@@ -242,14 +242,18 @@ public class CompositeTag extends Tag
      * @param text
      * @return int
      */
-    public int findPositionOf(String text) {
+    public int findPositionOf(String text)
+    {
         Node node;
-        int loc = 0;
-        for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
-            node = e.nextNode();
-            if (node.toPlainTextString().toUpperCase().indexOf(text.toUpperCase())!=-1) {
+        int loc;
+        
+        loc = 0;
+        text = text.toUpperCase ();
+        for (SimpleNodeIterator e = children (); e.hasMoreNodes (); )
+        {
+            node = e.nextNode ();
+            if (-1 != node.toPlainTextString ().toUpperCase ().indexOf (text))
                 return loc;
-            }
             loc++;
         }
         return -1;
@@ -325,7 +329,7 @@ public class CompositeTag extends Tag
         super.collectInto (list, filter);
         for (SimpleNodeIterator e = children(); e.hasMoreNodes ();)
             e.nextNode ().collectInto (list, filter);
-        if (null != getEndTag ())
+        if ((null != getEndTag ()) && (this != getEndTag ())) // 2nd guard handles <tag/>
             getEndTag ().collectInto (list, filter);
     }
 
@@ -366,7 +370,7 @@ public class CompositeTag extends Tag
                     child.accept (visitor);
                 }
             }
-            if (null != getEndTag ())
+            if ((null != getEndTag ()) && (this != getEndTag ())) // 2nd guard handles <tag/>
                 getEndTag ().accept (visitor);
         }
     }
@@ -457,6 +461,20 @@ public class CompositeTag extends Tag
         
         ret = super.toHtml ();
         ret = ret.substring (1, ret.length () - 1);
+        
+        return (ret);
+    }
+
+    /**
+     * Return the text between the start tag and the end tag.
+     * @return The contents of the CompositeTag.
+     */
+    public String getStringText ()
+    {
+        String ret;
+        int start = getEndPosition ();
+        int end = mEndTag.getStartPosition ();
+        ret = getPage ().getText (start, end);
         
         return (ret);
     }
