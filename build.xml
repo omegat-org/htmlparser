@@ -99,6 +99,11 @@ HTML Parser Integration Release 1.4-20030824
     </checkstyle>
   </target>
 
+  <target name="JDK1.4">
+      <condition property="JDK1.4">
+        <equals arg1="1.4" arg2="${ant.java.version}"/>
+      </condition>
+  </target>
 
   <target name="init" description="initialize version properties">
     <echo message="**********************************"/>
@@ -306,7 +311,14 @@ HTML Parser Integration Release 1.4-20030824
   </target>
 
   <!-- Create the Thumbelina jar -->
-  <target name="thumbelina" depends="jarlexer" description="create thumbelina.jar">
+  <target name="thumbelina" depends="JDK1.4,jarlexer" description="create thumbelina.jar" if="JDK1.4">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
+    <echo message="**********************************"/>
+    <echo message="*  Creating thumbelina.jar....   *"/>
+    <echo message="**********************************"/>
+
     <javac compiler="javac1.4" srcdir="${src}" debug="on" classpath="src:${dist}/lib/htmllexer.jar">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.java"/>
     </javac>
@@ -416,11 +428,12 @@ HTML Parser Integration Release 1.4-20030824
      <copy todir="${dist}/bin" >
         <fileset dir="${resources}" includes="*.bat"/>
         <fileset dir="${resources}" includes="lexer"/>
+        <fileset dir="${resources}" includes="thumbelina"/>
      </copy>
   </target>
 
   <!-- The release directory structuring finishes here -->
-  <target name="Release" depends="versionSource,jar,javadoc,CopyBatch" description="prepare the release files">
+  <target name="Release" depends="versionSource,jar,thumbelina,javadoc,CopyBatch" description="prepare the release files">
   </target>
 
   <!-- Package the release -->
