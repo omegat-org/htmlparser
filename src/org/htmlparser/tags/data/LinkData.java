@@ -34,16 +34,14 @@ public class LinkData {
 	private String accessKey;
 	private boolean mailLink;
 	private boolean javascriptLink;
-	private String linkContents;
 	
 	public LinkData(String link,String linkText,String accessKey,boolean mailLink,
-	boolean javascriptLink, String linkContents) {
+	boolean javascriptLink) {
 		this.link = link;
 		this.linkText = linkText;
 		this.accessKey = accessKey;
 		this.mailLink = mailLink;
 		this.javascriptLink = javascriptLink;
-		this.linkContents = linkContents;
 	}
 
 	public String getAccessKey() {
@@ -56,10 +54,6 @@ public class LinkData {
 
 	public String getLink() {
 		return link;
-	}
-
-	public String getLinkContents() {
-		return linkContents;
 	}
 
 	public String getLinkText() {

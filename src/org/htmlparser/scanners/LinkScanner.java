@@ -36,7 +36,6 @@ import java.util.Hashtable;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
-import org.htmlparser.StringNode;
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
@@ -76,7 +75,7 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createLinkTag(String url, String currentLine, Node node, int linkBegin, String tagContents, String linkContents, NodeList nodeVector, Tag startTag, Tag endTag) throws ParserException {
+	protected Tag createLinkTag(String url, String currentLine, Node node, int linkBegin, String tagContents, NodeList nodeVector, Tag startTag, Tag endTag) throws ParserException {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
@@ -120,8 +119,7 @@ public class LinkScanner extends CompositeTagScanner
 				myLinkText,
 				accessKey,
 				mailLink,
-				javascriptLink,
-				linkContents
+				javascriptLink
 			)
 		);
 		linkTag.setThisScanner(this);
@@ -224,9 +222,6 @@ public class LinkScanner extends CompositeTagScanner
 			String tmp;
 			int linkBegin, linkEnd;
 			String tagContents =  tag.getText();
-			String linkContents=""; // Kaarle Kaila 23.10.2001
-			// Yes, the tag is a link
-			// Extract the link
 			
 			linkBegin = tag.elementBegin();
 			// Get the next element, which is string, till </a> is encountered
@@ -239,17 +234,9 @@ public class LinkScanner extends CompositeTagScanner
 			{
 				node = reader.readElement();
 	
-				if (node instanceof StringNode)
-				{
-					
-					tmp =node.toPlainTextString();
-					linkContents += tmp;   // Kaarle Kaila 23.10.2001
-					
-				}
 				if (node instanceof EndTag)
 				{
 				    tmp = ((EndTag)node).getText();
-				    linkContents += "</" + tmp  ;   // Kaarle Kaila 23.10.2001
 					char ch = tmp.charAt(0);
 					if (ch=='a' || ch=='A') {
 						endFlag=true;
@@ -290,7 +277,7 @@ public class LinkScanner extends CompositeTagScanner
 			{
 				
 				previousOpenScanner = null;
-				return createLinkTag(url,currentLine, node, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
+				return createLinkTag(url,currentLine, node, linkBegin, tagContents, nodeVector,startTag,endTag);
 			}
 			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
 			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);

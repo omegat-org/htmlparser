@@ -50,11 +50,6 @@ public class LinkTag extends CompositeTag
 	 */
 	protected String linkText;
 	/**
-	* The contents of link element after the tag
-	* added by Kaarle Kaila 23.10.2001
-	*/
-	protected String linkContents;
-	/**
 	 * The accesskey existing inside this link.
 	 */
 	protected String accessKey;
@@ -103,7 +98,6 @@ public class LinkTag extends CompositeTag
 		this.linkText = linkData.getLinkText();
 		this.accessKey = linkData.getAccessKey();
 		this.mailLink = linkData.isMailLink();
-		this.linkContents = linkData.getLinkContents();  
 		this.javascriptLink = linkData.isJavascriptLink();
 	}
 	/**
@@ -133,7 +127,7 @@ public class LinkTag extends CompositeTag
 	 */
 	public String getText()
 	{
-		return tagContents + ">" + linkContents;
+		return toHtml();
 	}
 	/**
 	 * Is this a mail address
