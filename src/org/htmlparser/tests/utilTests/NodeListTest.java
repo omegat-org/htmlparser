@@ -144,7 +144,25 @@ public class NodeListTest extends ParserTestCase {
 		assertEquals("List Size",1,nodeList.size());
 		assertTrue("First Element",node1==nodeList.elementAt(0));
 		assertTrue("Second Element",null==nodeList.elementAt(1));
-		
-				
 	}
+	
+	public void testRemoveAll() {
+		Node node1 = createHTMLNodeObject();
+		Node node2 = createHTMLNodeObject();
+		nodeList.add(node1);
+		nodeList.add(node2);
+		assertEquals("Vector Size",2,nodeList.size());
+		assertTrue("First Element",node1==nodeList.elementAt(0));
+		assertTrue("Second Element",node2==nodeList.elementAt(1));
+		nodeList.removeAll();
+		assertEquals("List Size",0,nodeList.size());
+		assertTrue("First Element",null==nodeList.elementAt(0));
+		assertTrue("Second Element",null==nodeList.elementAt(1));
+	}
+	
+	public static void main(String[] args) 
+	{
+		new junit.awtui.TestRunner().start(new String[] {NodeListTest.class.getName()});
+	}
+
 }

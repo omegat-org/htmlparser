@@ -121,6 +121,14 @@ public class NodeList implements Serializable {
 		size--;		
 	}
 	
+	public void removeAll() {
+		size = 0;
+		capacity = INITIAL_CAPACITY;
+		nodeData = new Node[capacity];
+		capacityIncrement = capacity*2;
+		numberOfAdjustments = 0;
+	}
+	
 	public String toString() {
 		StringBuffer text = new StringBuffer();
 		for (int i=0;i<size;i++)
