@@ -9,6 +9,8 @@ Integration build 1.3 - 20030201
 [7] Added TextExtractingVisitor
 [8] Added non-recursive visiting (flag in HTMLVisitor)
 [9] Added DivScanner
+[10] Modified collectInto to use NodeList
+[11] Added collectInto(NodeList, Class)
 
 Integration build 1.3 - 20030125
 --------------------------------
