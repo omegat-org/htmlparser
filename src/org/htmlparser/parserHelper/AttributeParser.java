@@ -43,14 +43,27 @@ import org.htmlparser.tags.Tag;
  * @version 7 AUG 2001
  */
 public class AttributeParser {
-    private final String delima = " \t\r\n\f=\"'>";
-    private final String delimb = " \t\r\n\f\"'>";
-    private final char doubleQuote = '\"';
-    private final char singleQuote = '\'';
+    private final String DELIMETERS = " \t\r\n\f=\"'>";
+    private final String DELIMETERS_WITHOUT_EQUALS = " \t\r\n\f\"'>";
+    private final char DOUBLE_QUOTE = '\"';
+    private final char SINGLE_QUOTE = '\'';
     private String delim;
 
 
 
+	private Hashtable attributeTable;
+	private String element;
+	private String name;
+	private String value;
+	private String part;
+	private String empty;
+	private boolean equal;
+	private StringTokenizer tokenizer;
+	private boolean doubleQuote;
+	private boolean singleQuote;
+	private boolean ready;
+	private String currentToken;
+	private String tokenAccumulator;
 	/**
 	* Method to break the tag into pieces.
 	* @param returns a Hastable with elements containing the
@@ -90,119 +103,142 @@ public class AttributeParser {
 	* </pre>
 	*
 	*/
-   public Hashtable parseAttributes(Tag tag){
-        Hashtable h = new Hashtable();
-        String element,name,value,nextPart=null;
-        String empty=null;
+   public Hashtable parseAttributes(Tag tag) {
+		attributeTable = new Hashtable();
+		part = null;
+		empty = null;
         name=null;
         value=null;
         element=null;
-        boolean waitingForEqual=false;
-        delim=delima;
-        StringTokenizer tokenizer = new StringTokenizer(tag.getText(),delim,true);
+		equal = false;
+        delim=DELIMETERS;
+		tokenizer = new StringTokenizer(tag.getText(),delim,true);
         while (true) {
-            nextPart=getNextPart(tokenizer,delim);
-            delim=delima;
-            if (element==null && nextPart != null && !nextPart.equals("=")){
-                element = nextPart;
-                putDataIntoTable(h,element,null,true);
+            part=getNextPartUsing(delim);
+            delim=DELIMETERS;
+            if (element==null && part != null && !part.equals("=")){
+                element = part;
+                putDataIntoTable(attributeTable,element,null,true);
             }
             else {
-                if (nextPart != null && (0 < nextPart.length ())) {
-                    if (name == null) {
-                        if (!nextPart.substring(0,1).equals(" ")) {
-                            name = nextPart;
-                            waitingForEqual=true;
-                        }
-                    }
-                    else {
-                        if (waitingForEqual){
-                            if (nextPart.equals("=")) {
-                                waitingForEqual=false;
-                                delim=delimb;
-                            }
-                            else {
-                                 putDataIntoTable(h,name,"",false);
-                                 name=nextPart;
-                                 value=null;
-                            }
-                        }
-                        if (!waitingForEqual && !nextPart.equals("=")) {
-                            value=nextPart;
-                            putDataIntoTable(h,name,value,false);
-                            name=null;
-                            value=null;
-                        }
-                    }
+                if (isValid(part)) {
+                    process(part);
                 }
                 else {
-                    if (name != null) {
-                      if (name.equals("/")) {
-                        putDataIntoTable(h,Tag.EMPTYTAG,"",false);
-                      } else {
-                        putDataIntoTable(h,name,"",false);
-                      }
-                      name=null;
-                      value=null;
-                    }
+                   	processInvalidPart();
                     break;
                 }
             }
         }
         if (null == element) // handle no tag contents
-            putDataIntoTable(h,"",null,true);
-        return h;
+            putDataIntoTable(attributeTable,"",null,true);
+        return attributeTable;
     }
 
-    private String getNextPart(StringTokenizer tokenizer,String deli){
-        String tokenAccumulator=null;
-        boolean isDoubleQuote=false;
-        boolean isSingleQuote=false;
-        boolean isDataReady=false;
-        String currentToken;
-        while (isDataReady == false && tokenizer.hasMoreTokens()) {
-            currentToken = tokenizer.nextToken(deli);
-            //
-            // First let's combine tokens that are inside "" or ''
-            //
-            if (isDoubleQuote || isSingleQuote) {
-                if (isDoubleQuote && currentToken.charAt(0)==doubleQuote){
-                    isDoubleQuote= false;
-                    isDataReady=true;
-                } else if (isSingleQuote && currentToken.charAt(0)==singleQuote) {
-                    isSingleQuote=false;
-                    isDataReady=true;
-                }else {
-                    tokenAccumulator += currentToken;
-                    continue;
-                }
-            } else if (currentToken.charAt(0)==doubleQuote){
-                isDoubleQuote= true;
+	private void processInvalidPart() {
+		 if (name != null) {
+		      if (name.equals("/")) {
+		        putDataIntoTable(attributeTable,Tag.EMPTYTAG,"",false);
+		      } else {
+		        putDataIntoTable(attributeTable,name,"",false);
+		      }
+		      name=null;
+		      value=null;
+		    }
+	}
+
+	private boolean isValid(String part) {
+		return part != null && (0 < part.length ());
+	}
+
+	private void process(String part) {
+		if (name == null) {
+		    if (!part.substring(0,1).equals(" ")) {
+		        name = part;
+		        equal=true;
+		    }
+		}
+		else {
+		    if (equal){
+		        if (part.equals("=")) {
+		            equal=false;
+		            delim=DELIMETERS_WITHOUT_EQUALS;
+		        }
+		        else {
+		             putDataIntoTable(attributeTable,name,"",false);
+		             name=part;
+		             value=null;
+		        }
+		    }
+		    if (!equal && !part.equals("=")) {
+		        value=part;
+		        putDataIntoTable(attributeTable,name,value,false);
+		        name=null;
+		        value=null;
+		    }
+		}
+	}
+
+    private String getNextPartUsing(String delimiter) {
+		tokenAccumulator = null;
+		doubleQuote = false;
+		singleQuote = false;
+		ready = false;
+        while (ready == false && tokenizer.hasMoreTokens()) {
+            currentToken = tokenizer.nextToken(delimiter);
+
+            if (doubleQuote || singleQuote) {
+                combineTokensInsideSingleOrDoubleQuotes();
+            } else if (isCurrentTokenDoubleQuote()){
+                doubleQuote= true;
                 tokenAccumulator = "";
-                continue;
-            } else if (currentToken.charAt(0)==singleQuote){
-                isSingleQuote=true;
+            } else if (isCurrentTokenSingleQuote()){
+                singleQuote=true;
                 tokenAccumulator="";
-                continue;
-            } else tokenAccumulator = currentToken;
-
-            if (tokenAccumulator.equals(currentToken)) {
-
-                if (delim.indexOf(tokenAccumulator)>=0) {
-                    if (tokenAccumulator.equals("=")){
-                        isDataReady=true;
-                    }
-                }
-                else {
-
-                    isDataReady=true;
-                }
+            } else {
+            	tokenAccumulator = currentToken;
+                ready = isReadyWithNextPart(currentToken);
             }
-            else isDataReady=true;
-
         }
         return tokenAccumulator;
     }
+
+	private boolean isReadyWithNextPart(String currentToken) {
+		boolean ready = false;
+		if (isDelimeter(currentToken)) {
+		    if (currentToken.equals("=")){
+		        ready=true;
+		    }
+		}
+		else {
+		    ready=true;
+		}
+		return ready;
+	}
+
+	private boolean isDelimeter(String token) {
+		return delim.indexOf(tokenAccumulator)>=0;
+	}
+	
+	private boolean isCurrentTokenSingleQuote() {
+		return currentToken.charAt(0)==SINGLE_QUOTE;
+	}
+
+	private boolean isCurrentTokenDoubleQuote() {
+		return currentToken.charAt(0)==DOUBLE_QUOTE;
+	}
+
+	private void combineTokensInsideSingleOrDoubleQuotes() {
+		if (doubleQuote && currentToken.charAt(0)==DOUBLE_QUOTE){
+		    doubleQuote= false;
+		    ready=true;
+		} else if (singleQuote && currentToken.charAt(0)==SINGLE_QUOTE) {
+		    singleQuote=false;
+		    ready=true;
+		}else {
+		    tokenAccumulator += currentToken;
+		}
+	}
 
 
     private void putDataIntoTable(Hashtable h,String name,String value,boolean isName) {
