@@ -22,6 +22,8 @@ Integration build 1.3 - 20030104
     tag
     endtag
     string
+  (this will return more HTMLStringNode objects than it did before).
+[13] Improve speed by performing tag/string triage based on '<' as next character.
 	
 Integration build 1.3 - 20021228
 --------------------------------
