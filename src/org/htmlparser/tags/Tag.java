@@ -28,20 +28,12 @@
 
 package org.htmlparser.tags;
 
-import java.lang.CloneNotSupportedException;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.Vector;
 
-import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.ParserException;
-import org.htmlparser.util.SpecialHashtable;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
@@ -52,10 +44,29 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class Tag extends TagNode implements Cloneable
 {
+    /**
+     * An empty set of tag names.
+     */
+    private final static String[] NONE = new String[0];
+    
+    /**
+     * The scanner for this tag.
+     */
     private TagScanner mScanner;
+    
+    /**
+     * The default scanner for non-composite tags.
+     */
+    protected final static TagScanner mDefaultScanner = new TagScanner ();
 
     public Tag ()
     {
+        String[] names;
+        
+        names = getIds ();
+        if ((null != names) && (0 != names.length))
+            setTagName (names[0]);
+        setThisScanner (mDefaultScanner);
     }
 
     public Tag (TagNode node, TagScanner scanner)
@@ -73,6 +84,42 @@ public class Tag extends TagNode implements Cloneable
     public Object clone() throws CloneNotSupportedException
     {
         return (super.clone ());
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * Since this a a generic tag, it has no ids.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (NONE);
+    }
+
+    /**
+     * Return the set of tag names that cause this tag to finish.
+     * These are the normal (non end tags) that if encountered while
+     * scanning (a composite tag) will cause the generation of a virtual
+     * tag.
+     * Since this a a non-composite tag, the default is no enders.
+     * @return The names of following tags that stop further scanning.
+     */
+    public String[] getEnders ()
+    {
+        return (NONE);
+    }
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * These are the end tags that if encountered while
+     * scanning (a composite tag) will cause the generation of a virtual
+     * tag.
+     * Since this a a non-composite tag, it has no end tag enders.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (NONE);
     }
 
     /**

@@ -35,10 +35,25 @@ import org.htmlparser.lexer.nodes.Attribute;
  */
 public class MetaTag extends Tag
 {
-    
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"META"};
+
+    /**
+     * Create a new meta tag.
+     */
     public MetaTag ()
     {
-        setTagName ("META");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 
     public String getHttpEquiv ()

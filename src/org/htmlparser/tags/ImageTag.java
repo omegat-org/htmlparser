@@ -43,16 +43,32 @@ public class ImageTag extends Tag
     public static final String IMAGE_TAG_FILTER="-i";
 
     /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"IMG"};
+
+    /**
      * Holds the set value of the SRC attribute, since this can differ
      * from the attribute value due to relative references resolved by
      * the scanner.
      */
     protected String imageURL;
 
+    /**
+     * Create a new image tag.
+     */
     public ImageTag ()
     {
-        setTagName ("IMG");
         imageURL = null;
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 
     /**

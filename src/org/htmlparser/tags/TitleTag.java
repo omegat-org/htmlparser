@@ -35,9 +35,53 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class TitleTag extends CompositeTag
 {
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"TITLE"};
+
+    /**
+     * The set of tag names that indicate the end of this tag.
+     */
+    private static final String[] mEnders = new String[] {"TITLE","BODY"};
+
+    /**
+     * The set of end tag names that indicate the end of this tag.
+     */
+    private static final String[] mEndTagEnders = new String[] {"HEAD", "HTML"};
+
+    /**
+     * Create a new title tag.
+     */
     public TitleTag ()
     {
-        setTagName ("TITLE");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
+    }
+
+    /**
+     * Return the set of tag names that cause this tag to finish.
+     * @return The names of following tags that stop further scanning.
+     */
+    public String[] getEnders ()
+    {
+        return (mEnders);
+    }
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (mEndTagEnders);
     }
 
     /**

@@ -41,6 +41,7 @@ import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -65,7 +66,7 @@ import org.htmlparser.util.ParserFeedback;
  * instantiated by Parser when a scanner is added to its collection.
  *
  */
-public abstract class TagScanner
+public class TagScanner
     implements
         Serializable
 {
@@ -148,7 +149,23 @@ public abstract class TagScanner
      * @return Tag
      * @throws ParserException
      */
-    public abstract Tag createTag(Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException;
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag tag, String url) throws ParserException
+    {
+        Tag ret;
 
-    public abstract String [] getID();
+        ret = null;
+
+        ret = new Tag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        
+        return (ret);
+    }
+
+    public String [] getID ()
+    {
+        return (new String[0]);
+    }
 }

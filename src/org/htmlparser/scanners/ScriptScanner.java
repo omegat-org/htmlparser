@@ -117,7 +117,7 @@ public class ScriptScanner extends CompositeTagScanner {
                             end = (Tag)node;
                             done = true;
                         }
-                        else if (isTagToBeEndedFor ((Tag)node))
+                        else if (isTagToBeEndedFor (tag, (Tag)node))
                         {
                             lexer.setPosition (position);
                             done = true;

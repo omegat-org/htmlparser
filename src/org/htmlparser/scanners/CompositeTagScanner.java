@@ -90,7 +90,7 @@ import org.htmlparser.util.ParserException;
  * </pre>
  * Inside the scanner, use createTag() to specify what tag needs to be created.
  */
-public abstract class CompositeTagScanner extends TagScanner
+public class CompositeTagScanner extends TagScanner
 {
     protected Set tagEnderSet;
     private Set endTagEnderSet;
@@ -215,7 +215,7 @@ public abstract class CompositeTagScanner extends TagScanner
                             endTag = next;
                             node = null;
                         }
-                        else if (isTagToBeEndedFor (next)) // check DTD
+                        else if (isTagToBeEndedFor (tag, next)) // check DTD
                         {
                             // insert a virtual end tag and backup one node
                             endTag = createVirtualEndTag (tag, lexer.getPage (), next.getStartPosition ());
@@ -225,11 +225,8 @@ public abstract class CompositeTagScanner extends TagScanner
                         else if (!next.isEndTag ())
                         {
                             // now recurse if there is a scanner for this type of tag
-                            // whoah! really cheat here to get the parser
-                            // maybe eventually the tag will know it's own scanner eh
-                            org.htmlparser.Parser parser = (org.htmlparser.Parser)lexer.getNodeFactory ();
-                            scanner = parser.getScanner (name);
-                            if ((null != scanner) && scanner.evaluate (next, this))
+                            scanner = next.getThisScanner ();
+                            if ((null != scanner) && scanner.evaluate (next, null))
                                 node = scanner.scan (next, lexer.getPage ().getUrl (), lexer);
                         }
                     }
@@ -303,20 +300,41 @@ public abstract class CompositeTagScanner extends TagScanner
      * ending position are the same).
      * @param children The list of nodes contained within the ebgin end tag pair.
      */
-    public abstract Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException;
+    public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException
+    {
+        CompositeTag ret;
 
-    public final boolean isTagToBeEndedFor(Tag tag)
+        ret = new CompositeTag ();
+        ret.setPage (page);
+        ret.setStartPosition (start);
+        ret.setEndPosition (end);
+        ret.setAttributesEx (attributes);
+        ret.setStartTag (startTag);
+        ret.setEndTag (endTag);
+        ret.setChildren (children);
+
+        return (ret);        
+    }
+
+    public final boolean isTagToBeEndedFor (Tag current, Tag tag)
     {
         String name;
+        String[] ends;
         boolean ret;
 
         ret = false;
 
         name = tag.getTagName ();
         if (tag.isEndTag ())
-            ret = endTagEnderSet.contains (name);
+            ends = current.getEndTagEnders ();
         else
-            ret = tagEnderSet.contains (name);
+            ends = current.getEnders ();
+        for (int i = 0; i < ends.length; i++)
+            if (name.equalsIgnoreCase (ends[i]))
+            {
+                ret = true;
+                break;
+            }
         
         return (ret);
     }

@@ -41,6 +41,22 @@ import org.htmlparser.visitors.NodeVisitor;
 public class LinkTag extends CompositeTag
 {
     public static final String LINK_TAG_FILTER="-l";
+
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"A"};
+
+    /**
+     * The set of tag names that indicate the end of this tag.
+     */
+    private static final String[] mEnders = new String[] {"A", "TD", "TR", "FORM", "LI"};
+
+    /**
+     * The set of end tag names that indicate the end of this tag.
+     */
+    private static final String[] mEndTagEnders = new String[] {"TD", "TR", "FORM", "LI", "BODY", "HTML"};
+
     /**
      * The URL where the link points to
      */
@@ -57,7 +73,7 @@ public class LinkTag extends CompositeTag
     private boolean javascriptLink;
 
     /**
-     * Constructor creates an LinkNode object, which basically stores the location
+     * Constructor creates an LinkTag object, which basically stores the location
      * where the link points to, and the text it contains.
      * <p>
      * In order to get the contents of the link tag, use the method linkData(),
@@ -90,7 +106,33 @@ public class LinkTag extends CompositeTag
      */
     public LinkTag ()
     {
-        setTagName ("A");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
+    }
+
+    /**
+     * Return the set of tag names that cause this tag to finish.
+     * @return The names of following tags that stop further scanning.
+     */
+    public String[] getEnders ()
+    {
+        return (mEnders);
+    }
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (mEndTagEnders);
     }
 
     /**

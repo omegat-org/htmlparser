@@ -558,12 +558,14 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
     public static class CustomScanner extends CompositeTagScanner {
         private static final String MATCH_NAME [] = { "CUSTOM" };
+        private boolean selfChildrenAllowed;
         public CustomScanner() {
             this(true);
         }
 
         public CustomScanner(boolean selfChildrenAllowed) {
-            super("", selfChildrenAllowed ? new String[] {} : MATCH_NAME);
+//            super("", selfChildrenAllowed ? new String[] {} : MATCH_NAME);
+            this.selfChildrenAllowed = selfChildrenAllowed;
         }
 
         public String[] getID() {
@@ -574,7 +576,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         {
             CustomTag ret;
 
-            ret = new CustomTag ();
+            ret = new CustomTag (selfChildrenAllowed);
             ret.setPage (page);
             ret.setStartPosition (start);
             ret.setEndPosition (end);
@@ -589,12 +591,15 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
     public static class AnotherScanner extends CompositeTagScanner {
         private static final String MATCH_NAME [] = { "ANOTHER" };
+        private boolean acceptCustomTagsButDontAcceptCustomEndTags;
         public AnotherScanner() {
-            super("", new String[] {"CUSTOM"});
+//            super("", new String[] {"CUSTOM"});
+            acceptCustomTagsButDontAcceptCustomEndTags = false;
         }
 
         public AnotherScanner(boolean acceptCustomTagsButDontAcceptCustomEndTags) {
-            super("", new String[] {}, new String[] {"CUSTOM"});
+//            super("", new String[] {}, new String[] {"CUSTOM"});
+            this.acceptCustomTagsButDontAcceptCustomEndTags = acceptCustomTagsButDontAcceptCustomEndTags;
         }
 
         public String[] getID() {
@@ -605,7 +610,7 @@ public class CompositeTagScannerTest extends ParserTestCase {
         {
             AnotherTag ret;
 
-            ret = new AnotherTag ();
+            ret = new AnotherTag (acceptCustomTagsButDontAcceptCustomEndTags);
             ret.setPage (page);
             ret.setStartPosition (start);
             ret.setEndPosition (end);
@@ -624,9 +629,101 @@ public class CompositeTagScannerTest extends ParserTestCase {
 
     public static class CustomTag extends CompositeTag
     {
+        /**
+         * The set of names handled by this tag.
+         */
+        private static final String[] mIds = new String[] {"CUSTOM"};
+
+        protected String[] mEnders;
+
+        public CustomTag ()
+        {
+            this (true);
+        }
+
+        public CustomTag (boolean selfChildrenAllowed)
+        {
+            if (selfChildrenAllowed)
+                mEnders = new String[0];
+            else
+                mEnders = mIds;
+        }
+
+        /**
+         * Return the set of names handled by this tag.
+         * @return The names to be matched that create tags of this type.
+         */
+        public String[] getIds ()
+        {
+            return (mIds);
+        }
+
+        /**
+         * Return the set of tag names that cause this tag to finish.
+         * @return The names of following tags that stop further scanning.
+         */
+        public String[] getEnders ()
+        {
+            return (mEnders);
+        }
     }
 
     public static class AnotherTag extends CompositeTag
     {
+        /**
+         * The set of names handled by this tag.
+         */
+        private static final String[] mIds = new String[] {"ANOTHER"};
+
+        /**
+         * The set of tag names that indicate the end of this tag.
+         */
+        private final String[] mEnders;
+
+        /**
+         * The set of end tag names that indicate the end of this tag.
+         */
+        private final String[] mEndTagEnders;
+
+        public AnotherTag (boolean acceptCustomTagsButDontAcceptCustomEndTags)
+        {
+            if (acceptCustomTagsButDontAcceptCustomEndTags)
+            {
+                mEnders = new String[0];
+                mEndTagEnders = new String[] {"CUSTOM"};
+            }
+            else
+            {
+                mEnders = new String[] {"CUSTOM"};
+                mEndTagEnders = new String[] {"CUSTOM"};
+            }
+        }
+
+        /**
+         * Return the set of names handled by this tag.
+         * @return The names to be matched that create tags of this type.
+         */
+        public String[] getIds ()
+        {
+            return (mIds);
+        }
+
+        /**
+         * Return the set of tag names that cause this tag to finish.
+         * @return The names of following tags that stop further scanning.
+         */
+        public String[] getEnders ()
+        {
+            return (mEnders);
+        }
+
+        /**
+         * Return the set of end tag names that cause this tag to finish.
+         * @return The names of following end tags that stop further scanning.
+         */
+        public String[] getEndTagEnders ()
+        {
+            return (mEndTagEnders);
+        }
     }
 }

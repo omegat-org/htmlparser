@@ -34,9 +34,25 @@ package org.htmlparser.tags;
  */
 public class DoctypeTag extends Tag
 {
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"!DOCTYPE"};
+
+    /**
+     * Create a new !doctype tag.
+     */
     public DoctypeTag ()
     {
-        setTagName ("!DOCTYPE");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 
     /**

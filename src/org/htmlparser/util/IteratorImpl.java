@@ -69,11 +69,7 @@ public class IteratorImpl implements PeekingIterator
                         if (!tag.isEndTag ())
                         {
                             // now recurse if there is a scanner for this type of tag
-                            name = tag.getTagName ();
-                            // whoah! really cheat here to get the parser
-                            // maybe eventually the tag will know it's own scanner eh
-                            org.htmlparser.Parser parser = (org.htmlparser.Parser)mLexer.getNodeFactory ();
-                            scanner = parser.getScanner (name);
+                            scanner = tag.getThisScanner ();
                             if ((null != scanner) && scanner.evaluate (tag, null))
                                 ret = scanner.scan (tag, mLexer.getPage ().getUrl (), mLexer);
                         }

@@ -29,7 +29,6 @@
 
 package org.htmlparser.tags;
 
-import java.util.Vector;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.LinkProcessor;
 
@@ -39,9 +38,25 @@ import org.htmlparser.util.LinkProcessor;
  */
 public class BaseHrefTag extends Tag
 {
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"BASE"};
+
+    /**
+     * Create a new base tag.
+     */
     public BaseHrefTag ()
     {
-        setTagName ("BASE");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 
     /**

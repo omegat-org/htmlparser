@@ -38,9 +38,53 @@ import org.htmlparser.util.ParserUtils;
  */
 public class SelectTag extends CompositeTag
 {
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"SELECT"};
+
+    /**
+     * The set of tag names that indicate the end of this tag.
+     */
+    private static final String[] mEnders = new String[] {"INPUT", "TEXTAREA", "SELECT"};
+
+    /**
+     * The set of end tag names that indicate the end of this tag.
+     */
+    private static final String[] mEndTagEnders = new String[] {"FORM", "BODY", "HTML"};
+
+    /**
+     * Create a new select tag.
+     */
     public SelectTag ()
     {
-        setTagName ("SELECT");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
+    }
+
+    /**
+     * Return the set of tag names that cause this tag to finish.
+     * @return The names of following tags that stop further scanning.
+     */
+    public String[] getEnders ()
+    {
+        return (mEnders);
+    }
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (mEndTagEnders);
     }
 
     public OptionTag [] getOptionTags ()

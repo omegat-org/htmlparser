@@ -31,11 +31,27 @@ package org.htmlparser.tags;
 /**
  * A StyleTag represents a &lt;style&gt; tag.
  */
-public class StyleTag extends CompositeTag {
-    
+public class StyleTag extends CompositeTag
+{
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"STYLE"};
+
+    /**
+     * Create a new style tag.
+     */
     public StyleTag ()
     {
-        setTagName ("STYLE");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 
     /**

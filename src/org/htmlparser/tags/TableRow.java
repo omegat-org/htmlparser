@@ -33,11 +33,36 @@ import org.htmlparser.util.NodeList;
 /**
  * A table row tag.
  */
-public class TableRow extends CompositeTag {
-    
+public class TableRow extends CompositeTag
+{
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"TR"};
+
+    /**
+     * Create a new table row tag.
+     */
     public TableRow ()
     {
-        setTagName ("TR");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
+    }
+
+    /**
+     * Return the set of tag names that cause this tag to finish.
+     * @return The names of following tags that stop further scanning.
+     */
+    public String[] getEnders ()
+    {
+        return (mIds);
     }
 
     /**

@@ -31,10 +31,26 @@ package org.htmlparser.tags;
 /**
  * A span tag.
  */
-public class Span extends CompositeTag {
+public class Span extends CompositeTag
+{
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"SPAN"};
 
+    /**
+     * Create a new span tag.
+     */
     public Span ()
     {
-        setTagName ("SPAN");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 }

@@ -31,10 +31,35 @@ package org.htmlparser.tags;
 /**
  * A table column tag.
  */
-public class TableColumn extends CompositeTag {
+public class TableColumn extends CompositeTag
+{
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"TD"};
 
+    /**
+     * Create a new table column tag.
+     */
     public TableColumn ()
     {
-        setTagName ("TD");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
+    }
+
+    /**
+     * Return the set of tag names that cause this tag to finish.
+     * @return The names of following tags that stop further scanning.
+     */
+    public String[] getEnders ()
+    {
+        return (mIds);
     }
 }

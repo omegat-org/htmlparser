@@ -35,9 +35,25 @@ import org.htmlparser.util.ParserUtils;
  */
 public class InputTag extends Tag
 {
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"INPUT"};
+
+    /**
+     * Create a new input tag.
+     */
     public InputTag ()
     {
-        setTagName ("INPUT");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 
     public String toString() {

@@ -33,9 +33,24 @@ package org.htmlparser.tags;
  */
 public class Html extends CompositeTag
 {
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"HTML"};
 
+    /**
+     * Create a new html tag.
+     */
     public Html ()
     {
-        setTagName ("HTML");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 }

@@ -37,9 +37,39 @@ import org.htmlparser.util.SimpleNodeIterator;
  */
 public class FrameSetTag extends CompositeTag
 {
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"FRAMESET"};
+
+    /**
+     * The set of end tag names that indicate the end of this tag.
+     */
+    private static final String[] mEndTagEnders = new String[] {"HTML"};
+
+    /**
+     * Create a new frame set tag.
+     */
     public FrameSetTag ()
     {
-        setTagName ("FRAMESET");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
+    }
+
+    /**
+     * Return the set of end tag names that cause this tag to finish.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (mEndTagEnders);
     }
 
     /**

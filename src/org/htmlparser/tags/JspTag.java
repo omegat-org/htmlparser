@@ -36,9 +36,25 @@ import org.htmlparser.util.SimpleNodeIterator;
  */
 public class JspTag extends Tag
 {
+    /**
+     * The set of names handled by this tag.
+     */
+    private static final String[] mIds = new String[] {"%", "%=", "%@"};
+
+    /**
+     * Create a new jsp tag.
+     */
     public JspTag ()
     {
-        setTagName ("%");
+    }
+
+    /**
+     * Return the set of names handled by this tag.
+     * @return The names to be matched that create tags of this type.
+     */
+    public String[] getIds ()
+    {
+        return (mIds);
     }
 
     /**
