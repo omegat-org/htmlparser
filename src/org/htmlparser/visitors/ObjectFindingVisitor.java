@@ -27,7 +27,7 @@
 package org.htmlparser.visitors;
 
 import org.htmlparser.Node;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 import org.htmlparser.util.NodeList;
 
 public class ObjectFindingVisitor extends NodeVisitor {

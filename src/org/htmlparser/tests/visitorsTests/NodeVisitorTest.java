@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.NodeVisitor;
 

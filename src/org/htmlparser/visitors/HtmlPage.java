@@ -29,7 +29,7 @@ package org.htmlparser.visitors;
 import org.htmlparser.Parser;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.TableTag;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.NodeList;
 
@@ -59,6 +59,8 @@ public class HtmlPage extends NodeVisitor {
             tables.add(tag);
         else if (isBodyTag(tag))
             nodesInBody = tag.getChildren ();
+        else if (isTitleTag(tag))
+            title = ((TitleTag)tag).getTitle();
     }
 
     private boolean isTable(Tag tag)
@@ -71,6 +73,11 @@ public class HtmlPage extends NodeVisitor {
         return (tag instanceof BodyTag);
     }
 
+    private boolean isTitleTag(Tag tag)
+    {
+        return (tag instanceof TitleTag);
+    }
+
     public NodeList getBody() {
         return nodesInBody;
     }
@@ -80,10 +87,5 @@ public class HtmlPage extends NodeVisitor {
         TableTag [] tableArr = new TableTag[tables.size()];
         tables.copyToNodeArray (tableArr);
         return tableArr;
-    }
-
-    public void visitTitleTag(TitleTag titleTag)
-    {
-        title = titleTag.getTitle();
     }
 }

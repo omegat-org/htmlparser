@@ -28,6 +28,7 @@ package org.htmlparser;
 
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.visitors.NodeVisitor;
 
 public interface Node
 {
@@ -134,7 +135,7 @@ public interface Node
     /**
      * Apply the visitor object (of type NodeVisitor) to this node.
      */
-    public abstract void accept(Object visitor);
+    public abstract void accept (NodeVisitor visitor);
 
     /**
      * Get the parent of this node.

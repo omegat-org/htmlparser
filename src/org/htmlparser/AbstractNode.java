@@ -31,6 +31,7 @@ import java.io.Serializable;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * AbstractNode, which implements the Node interface, is the base class for all types of nodes, including tags, string elements, etc
@@ -218,7 +219,7 @@ public abstract class AbstractNode implements Node, Serializable
         nodeEnd = position;
     }
 
-    public abstract void accept(Object visitor);
+    public abstract void accept (NodeVisitor visitor);
 
     /**
      * @deprecated - use toHtml() instead

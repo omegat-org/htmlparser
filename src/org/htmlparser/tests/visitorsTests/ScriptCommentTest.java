@@ -28,7 +28,7 @@ package org.htmlparser.tests.visitorsTests;
 
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.ScriptTag;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.NodeVisitor;
 

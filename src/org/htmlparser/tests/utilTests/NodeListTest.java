@@ -31,6 +31,7 @@ import org.htmlparser.Node;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
+import org.htmlparser.visitors.NodeVisitor;
 
 public class NodeListTest extends ParserTestCase {
 
@@ -120,7 +121,7 @@ public class NodeListTest extends ParserTestCase {
 
     private Node createHTMLNodeObject() {
         Node node = new AbstractNode(null,10,20) {
-            public void accept(Object visitor) {
+            public void accept(NodeVisitor visitor) {
             }
 
             public String toHtml() {

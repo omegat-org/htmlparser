@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.lexer.nodes.StringNode;
+import org.htmlparser.StringNode;
 
 /**
  * This class accepts all string nodes containing the given string.

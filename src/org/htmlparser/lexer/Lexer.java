@@ -37,8 +37,8 @@ import org.htmlparser.Node;
 import org.htmlparser.AbstractNode;
 import org.htmlparser.lexer.nodes.PageAttribute;
 import org.htmlparser.lexer.nodes.NodeFactory;
-import org.htmlparser.lexer.nodes.RemarkNode;
-import org.htmlparser.lexer.nodes.StringNode;
+import org.htmlparser.RemarkNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.util.ParserException;
 

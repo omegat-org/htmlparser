@@ -37,7 +37,7 @@ import org.htmlparser.filters.OrFilter;
 import org.htmlparser.filters.StringFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.lexer.nodes.StringNode;
+import org.htmlparser.StringNode;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.LinkTag;

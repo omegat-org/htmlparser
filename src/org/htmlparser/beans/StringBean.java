@@ -34,7 +34,7 @@ import java.net.URLConnection;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.Translate;
@@ -603,20 +603,6 @@ public class StringBean extends NodeVisitor implements Serializable
     //
 
     /**
-     * Appends the link as text between angle brackets to the output.
-     * @param link The link to process.
-     */
-    public void visitLinkTag (LinkTag link)
-    {
-        if (getLinks ())
-        {
-            mBuffer.append ("<");
-            mBuffer.append (link.getLink ());
-            mBuffer.append (">");
-        }
-    }
-
-    /**
      * Appends the text to the output.
      * @param string The text node.
      */
@@ -648,6 +634,13 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         String name;
 
+        if (tag instanceof LinkTag)
+            if (getLinks ())
+            { // appends the link as text between angle brackets to the output.
+                mBuffer.append ("<");
+                mBuffer.append (((LinkTag)tag).getLink ());
+                mBuffer.append (">");
+            }
         name = tag.getTagName ();
         if (name.equalsIgnoreCase ("PRE"))
             mIsPre = true;

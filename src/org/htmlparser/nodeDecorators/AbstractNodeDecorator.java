@@ -30,6 +30,7 @@ import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.visitors.NodeVisitor;
 
 public abstract class AbstractNodeDecorator implements Node {
     protected Node delegate;
@@ -38,8 +39,9 @@ public abstract class AbstractNodeDecorator implements Node {
         this.delegate = delegate;
     }
 
-    public void accept(Object visitor) {
-        delegate.accept(visitor);
+    public void accept (NodeVisitor visitor)
+    {
+        delegate.accept (visitor);
     }
 
     public void collectInto(NodeList list, NodeFilter filter) {

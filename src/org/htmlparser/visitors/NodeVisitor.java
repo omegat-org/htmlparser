@@ -28,10 +28,7 @@ package org.htmlparser.visitors;
 
 import org.htmlparser.RemarkNode;
 import org.htmlparser.StringNode;
-import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.ImageTag;
-import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.TitleTag;
+import org.htmlparser.Tag;
 
 /**
  * The base class for the 'Visitor' pattern.
@@ -42,9 +39,6 @@ import org.htmlparser.tags.TitleTag;
  * <code>beginParsing()</code>, then <code>visitXXX()</code> according to the
  * types of nodes encountered in depth-first order and finally
  * <code>finishedParsing()</code>.<p>
- * There are currently three specialized <code>visitXXX()</code> calls for
- * titles, images and links. Thes call their specialized visit, and then
- * perform the generic processing.
  * Typical code to print all the link tags:
  * <pre>
  * import org.htmlparser.Parser;
@@ -57,9 +51,10 @@ import org.htmlparser.tags.TitleTag;
  *     public Visitor ()
  *     {
  *     }
- *     public void visitLinkTag (LinkTag linkTag)
+ *     public void visitTag (Tag tag)
  *     {
- *         System.out.println (linkTag);
+ *         if (tag instanceof LinkTag)
+ *             System.out.println (tag);
  *     }
  *     public static void main (String[] args) throws ParserException
  *     {
@@ -74,17 +69,35 @@ public abstract class NodeVisitor
 {
     private boolean mRecurseChildren;
     private boolean mRecurseSelf;
-    
+
+    /**
+     * Creates a node visitor that recurses itself and it's children.
+     */
     public NodeVisitor ()
     {
         this (true);
     }
     
+    /**
+     * Creates a node visitor that recurses itself and it's children
+     * only if <code>recurseChildren</code> is <code>true</code>.
+     * @param recurseChildren If <code>true</code>, the visitor will
+     * visit children, otherwise only the top level nodes are recursed.
+     */
     public NodeVisitor (boolean recurseChildren)
     {
         this (recurseChildren, true);
     }
     
+    /**
+     * Creates a node visitor that recurses itself only if
+     * <code>recurseSelf</code> is <code>true</code> and it's children
+     * only if <code>recurseChildren</code> is <code>true</code>.
+     * @param recurseChildren If <code>true</code>, the visitor will
+     * visit children, otherwise only the top level nodes are recursed.
+     * @param recurseSelf If <code>true</code>, the visitor will
+     * visit the top level node.
+     */
     public NodeVisitor (boolean recurseChildren, boolean recurseSelf)
     {
         mRecurseChildren = recurseChildren;
@@ -99,25 +112,38 @@ public abstract class NodeVisitor
     {
     }
 
+    /**
+     * Called for each <code>Tag</code> visited.
+     * @param tag The tag being visited.
+     */
     public void visitTag (Tag tag)
     {
-        
     }
     
+    /**
+     * Called for each <code>Tag</code> visited that is an end tag.
+     * @param tag The end tag being visited.
+     */
     public void visitEndTag (Tag tag)
     {
-        
     }
     
-    public void visitStringNode (StringNode stringNode)
+    /**
+     * Called for each <code>StringNode</code> visited.
+     * @param string The string node being visited.
+     */
+    public void visitStringNode (StringNode string)
     {
     }
     
-    public void visitRemarkNode (RemarkNode remarkNode)
+    /**
+     * Called for each <code>RemarkNode</code> visited.
+     * @param remark The remark node being visited.
+     */
+    public void visitRemarkNode (RemarkNode remark)
     {
-        
     }
-    
+
     /**
      * Override this method if you wish to do special
      * processing upon completion of parsing.
@@ -126,24 +152,19 @@ public abstract class NodeVisitor
     {
     }
 
-    public void visitLinkTag (LinkTag linkTag)
-    {
-    }
-    
-    public void visitImageTag (ImageTag imageTag)
-    {
-    }
-    
-    public void visitTitleTag (TitleTag titleTag)
-    {
-        
-    }
-
+    /**
+     * Depth traversal predicate.
+     * @return <code>true</code> if children are to be visited.
+     */
     public boolean shouldRecurseChildren ()
     {
         return (mRecurseChildren);
     }
     
+    /**
+     * Self traversal predicate.
+     * @return <code>true</code> if a node itself is to be visited.
+     */
     public boolean shouldRecurseSelf ()
     {
         return (mRecurseSelf);

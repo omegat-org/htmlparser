@@ -27,8 +27,9 @@
 package org.htmlparser.visitors;
 
 import java.util.Locale;
-
 import org.htmlparser.tags.LinkTag;
+
+import org.htmlparser.Tag;
 
 public class LinkFindingVisitor extends NodeVisitor
 {
@@ -48,10 +49,11 @@ public class LinkFindingVisitor extends NodeVisitor
         this.linkTextToFind = linkTextToFind.toUpperCase (this.locale);
     }
 
-    public void visitLinkTag(LinkTag linkTag)
+    public void visitTag(Tag tag)
     {
-        if (-1 != linkTag.getLinkText ().toUpperCase (locale).indexOf (linkTextToFind))
-            count++;
+        if (tag instanceof LinkTag)
+            if (-1 != ((LinkTag)tag).getLinkText ().toUpperCase (locale).indexOf (linkTextToFind))
+                count++;
     }
 
     public boolean linkTextFound()

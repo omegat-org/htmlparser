@@ -303,19 +303,6 @@ public class LinkTag extends CompositeTag
     }
 
     /**
-     * Link visiting code.
-     * Invokes <code>visitLinkTag()</code> on the visitor and then
-     * invokes the normal tag processing.
-     * @param visitor The <code>NodeVisitor</code> object to invoke 
-     * <code>visitLinkTag()</code> on.
-     */
-    public void accept (NodeVisitor visitor)
-    {
-        visitor.visitLinkTag (this);
-        super.accept (visitor);
-    }
-    
-    /**
      * Extract the link from the HREF attribute.
      * @return The URL from the HREF attibute. This is absolute if the tag has
      * a valid page.

@@ -39,6 +39,7 @@ import org.htmlparser.lexer.Page;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SpecialHashtable;
 import org.htmlparser.util.Translate;
+import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * TagNode represents a generic tag.
@@ -716,8 +717,17 @@ public class TagNode
         return getAttributes ();
     }
 
-    public void accept (Object visitor)
+    /**
+     * Default tag visiting code.
+     * Based on <code>isEndTag()</code>, calls either <code>visitTag()</code> or
+     * <code>visitEndTag()</code>.
+     */
+    public void accept (NodeVisitor visitor)
     {
+        if (isEndTag ())
+            visitor.visitEndTag (this);
+        else
+            visitor.visitTag (this);
     }
 
     /**

@@ -33,7 +33,7 @@ import org.htmlparser.StringNode;
 import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.Tag;
+import org.htmlparser.Tag;
 
 public class UrlModifyingVisitor extends NodeVisitor {
     private String linkPrefix;
@@ -47,14 +47,6 @@ public class UrlModifyingVisitor extends NodeVisitor {
         modifiedResult = new StringBuffer();
     }
 
-    public void visitLinkTag(LinkTag linkTag) {
-        linkTag.setLink(linkPrefix + linkTag.getLink());
-    }
-
-    public void visitImageTag(ImageTag imageTag) {
-        imageTag.setImageURL(linkPrefix + imageTag.getImageURL());
-    }
-
     public void visitRemarkNode (RemarkNode remarkNode)
     {
         modifiedResult.append (remarkNode.toHtml());
@@ -66,7 +58,12 @@ public class UrlModifyingVisitor extends NodeVisitor {
     }
 
     public void visitTag(Tag tag)
-    {   // process only those nodes that won't be processed by an end tag,
+    {
+        if (tag instanceof LinkTag)
+            ((LinkTag)tag).setLink(linkPrefix + ((LinkTag)tag).getLink());
+        else if (tag instanceof ImageTag)
+            ((ImageTag)tag).setImageURL(linkPrefix + ((ImageTag)tag).getImageURL());
+        // process only those nodes that won't be processed by an end tag,
         // nodes without parents or parents without an end tag, since
         // the complete processing of all children should happen before
         // we turn this node back into html text
