@@ -1,3 +1,11 @@
+Integration Build 1.2 - 20021215
+--------------------------------
+[1] Modified API of HTMLImageTag (refactored name of image loc), HTMLLinkTag (added getters)
+[2] Fixed bug 650457 - removeEscapeCharacters() incorrect
+[3] Fixed bug 652263 - HTMLParser and null feedback
+[4] Changed encoding used from 8859_4 to 8859_1
+[5] HTMLRemarkNode returns string data in toPlainTextString() (This is a rollback)
+
 Integration Build 1.2 - 20021208
 --------------------------------
 [1] Fixed bug in base href scanner - would always expect href
@@ -5,6 +13,7 @@ Integration Build 1.2 - 20021208
 [3] Refactored HTMLRenderer to use the Visitor pattern- enabling
 connections with links and images
 [4] HTMLStringNode returns a blank string in toPlainTextString()
+[5] HTMLFormTag returns string information in toPlainTextString()
 
 Integration Build 1.2 - 20021201
 --------------------------------
@@ -12,7 +21,6 @@ Integration Build 1.2 - 20021201
 nodeBegin and nodeEnd.
 [2] Refactored Testing framework - to reduce the code size substantially.
 [3] HTMLFormScanner improved to include Input,TextArea, Select and Option scanners within
-
 
 Integration Build 1.2 - 20021125
 --------------------------------
@@ -40,14 +48,15 @@ Integration Build 1.2 - 20021031
 [8] HTMLLinkScanner: added flags for javascript, ftp, http, https
 [9] HTMLLinkTag: constructor for new flags, methods isJavascriptLink, setJavascriptLink, etc...
 
-Integration Build 1.2 - 20021018
+Integration Build 1.2 - 20021016
 --------------------------------
 [1] Fixed bug 621117 - JSP tags not recognized if within string node
-[2] Fixed bug 617228 - Links with &gt; symbol in query strings were not
+[2] Fixed bug 617228 - Links with > symbol in query strings were not
 being recognized.
 [3] build.xml completely automatic - no manual changes needed before running
 [4] build.xml included in release package, inside src.zip
 [5] Refactored HTMLTag - design modified, introduced HTMLTagParser helper class
+[6] Optimized scanning process - 20% faster now
 
 Integration Build 1.2 - 20021002
 --------------------------------
@@ -104,7 +113,7 @@ character on the last line was causing a parser crash
 [4] Fixed bug in HTMLParameterParser.parseParameters(), due to which
 params with spaces before = were not being picked up
 [5] Made massive API changes - throwing exceptions and using HTMLEnumeration
-[6] Fixed HTMLRemarkNode bug - we can recognize stuff like &lt;!--&gt; now.
+[6] Fixed HTMLRemarkNode bug - we can recognize stuff like <!--> now.
 [7] Fixed HTMLImageScanner bug - we can now fix image tags like
 IMG SRC"somepic.jpg" - the missing equal to can be deduced
 [8] Fixed HTMLLinkScanner bug - end tags within a link were not being included
@@ -167,7 +176,7 @@ Integration Build 1.2 - 20020623
 [3] Added testcases for script scanner
 [4] Refactored HTMLTagScanner (removed extractField)
 [5] Fixed bug in HTMLLinkScanner - would crash on freshmeat.net,
-bcos of &lt;a&gt;Revision&lt;/a&gt;. Now this is being treated as three
+bcos of <a>Revision</a>. Now this is being treated as three
 seperate nodes(tag, string node, end tag)
 [6] Fixed ant script bug, not allowing it to be run from the command
 line by issuing the ant command.
@@ -197,11 +206,11 @@ Integration Build 1.2 - 20020512
 --------------------------------
 [1] Made Link Scanner more fault tolerant.
 Can handle bad links like
-&lt;A HREF="..."&gt;&lt;IMG&gt;&lt;/td&gt;&lt;td ...&gt;&lt;A href=".."&gt;...&lt;/a&gt;
+<A HREF="..."><IMG></td><td ...><A href="..">...</a>
 
-In the above, the first link is correctly ended before&lt;/td&gt;
+In the above, the first link is correctly ended before</td>
 
-&lt;A HREF="..."&gt;&lt;IMG&gt;&lt;A HREF="..."&gt;...&lt;/a&gt;
+<A HREF="..."><IMG><A HREF="...">...</a>
 
 The first link is correctly ended before the second link begins
 
@@ -221,7 +230,7 @@ Nightly Build 1.2 - 20020503
 ----------------------------
 [1] Major fix - Dirty parsing of erroneous inverted commas possible
 [2] Tags spread out on multiple lines, with blank lines in between are supported
-[3] Bug in HTMLStringNode fixed, so as to be able to parse tag characters &lt; and &gt;
+[3] Bug in HTMLStringNode fixed, so as to be able to parse tag characters < and >
 [4] Image tag parameters not being retrieved, bug fixed
 [5] Added HTMLFormScanner, HTMLFrameScanner, HTMLFormTag, HTMLFrameTag - but these
 are not yet integrated with the code, pending testcases.
@@ -237,8 +246,8 @@ and leaves the responsibility of processing to the particular scanner.
 but for the beginning of an xml tag
 [4] HTMLTag bug - if a link is spread over two lines, the parser would crash.
 [5] Dynamic Page Parsing supported (urls need not end with .html anymore)
-[6] Dirty HTML of the form &lt;A HREF="http://www.somelink.com"&gt;abcd&lt;A&gt;, is now correctly 
-handled. The second &lt;A&gt; is taken as &lt;/A&gt;.
+[6] Dirty HTML of the form <A HREF="http://www.somelink.com">abcd<A>, is now correctly 
+handled. The second <A> is taken as </A>.
 
 Maintenance Release ver 1.04
 ----------------------------
@@ -286,7 +295,7 @@ Bugs fixed :
 [2] HTMLLinkScanner : Scanning of URLs with a slash in the end of the base url, and a slash in the beginning of a link, 
 would result in two slashes in the generated link
 [3] Null Pointer Exception caused by HTMLLinkScanner, when tags beginning with A are wrongly identified as link tags.
-[4] HTMLScriptScanner parsing bug, if &lt;/script&gt; is in the same line as &lt;script&gt;, it isnt correctly parsed and gives
+[4] HTMLScriptScanner parsing bug, if </script> is in the same line as <script>, it isnt correctly parsed and gives
 a null pointer exception
 [5] HTMLImageScanner bug : When parsing images without inverted commas, it crashes.
 [6] HTMLLinkScanner Bug : When parsing links without inverted commas in href, it crashes.
