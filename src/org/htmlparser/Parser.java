@@ -298,7 +298,7 @@ public class Parser
 	 * @param feedback The HTMLParserFeedback object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
-     * @see #Parser(URLConnection,HTMLParserFeedback)
+     * @see #Parser(URLConnection,ParserFeedback)
 	 */
 	public Parser(String resourceLocn, ParserFeedback feedback) throws ParserException
 	{
@@ -340,7 +340,7 @@ public class Parser
      * A DefaultHTMLParserFeedback object is used for feedback.
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
-     * @see #Parser(URLConnection,HTMLParserFeedback)
+     * @see #Parser(URLConnection,ParserFeedback)
      */
     public Parser (URLConnection connection) throws ParserException
     {
@@ -740,7 +740,7 @@ public class Parser
      * the name to findCharset() to render it into canonical form.
      * If the charset parameter is not found in the given string, the default
      * character set is returned.
-     * @see #findCharset(String,String)
+     * @see ParserHelper#findCharset
      * @see #DEFAULT_CHARSET
      */
     protected String getCharset(String content)
@@ -1029,7 +1029,6 @@ public class Parser
 	 * children, one of which would be the body. This is still evolving, and in 
 	 * future releases, you might see consolidation of Html - to provide you 
 	 * with methods to access the body and the head.
-	 * @see Html.java
 	 */
 	public void registerDomScanners() {
 		registerScanners();

@@ -415,7 +415,7 @@ public class Tag extends Node
      * filter. The match is based on the string object and not its contents,
      * so ensure that you are using static final filter strings provided
      * in the tag classes.
-     * @see org.htmlparser.Node#collectInto(Vector, String)
+     * @see org.htmlparser.Node#collectInto(NodeList, String)
      */
 	public void collectInto(NodeList collectionList, String filter) {
 		if (thisScanner!=null && thisScanner.getFilter()==filter) 

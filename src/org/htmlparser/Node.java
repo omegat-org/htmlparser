@@ -205,7 +205,7 @@ public abstract class Node implements Serializable {
 	
 	/**
 	 * Get the parent of this tag
-	 * @return
+	 * @return The parent of this node, if it's been set, <code>null</code> otherwise.
 	 */
 	public CompositeTag getParent() {
 		return parent;

@@ -37,8 +37,8 @@ package org.htmlparser.util;
  * the setParserFeedback method.
  *
  * @author Claude Duguay
- * @see HTMLParserFeedback
- * @see DefaultHTMLParserFeedback
+ * @see ParserFeedback
+ * @see DefaultParserFeedback
 **/
 
 public class FeedbackManager

@@ -291,7 +291,7 @@ public abstract class CompositeTag extends Tag {
 	 * it. The string node will retain links to its parents, so 
 	 * further navigation is possible.
 	 * @param searchText
-	 * @return
+	 * @return The list of string nodes (recursively) found.
 	 */
 	public StringNode [] digupStringNode(String searchText) {
 		NodeList nodeList = searchFor(searchText);
