@@ -1,4 +1,4 @@
-HTMLParser Version 1.5 (Integration Build May 22, 2004)
+HTMLParser Version 1.41 (Release Build May 22, 2004)
 *********************************************
 
 Contents of the distribution
@@ -20,23 +20,98 @@ Contents of the distribution
 
 Changes since Version 1.4
 -------------------------
-Configuration Management
-    Removed the need for the Translate class to be packaged with htmllexer.jar.
-    This results in a lighter weight component.
-Refactoring
-    Added Tag interface. Obviated LinkProcessor and moved it's functionality to
-    the Page class.
-Filters
-    Added CssSelectorNodeFilter.
-    
-Enhancement Requests
---------------------
-943593 LinkProcessor.extract(link,base) weird behaviour?
 
 Bug Fixes
 ---------
 919738 Text has not been extracted correctly using StringBean
-936392 ScriptTag visitor fails for comments with '
+936392 ScriptTag visitor fails for comments with ' (duplicate of above)
+
+Changes since Version 1.3
+-------------------------
+Translation
+    Character entity encoding and decoding has been revamped, leading to
+    higher throughput and less memory churn.
+Beans
+    The StringBean can now be used as a visitor for parsers external to the bean.
+Decorators
+    The node decorator package has been added to provide support for the
+    delegate model.
+Lexer
+    A new lexer i/o subsystem has been added. This provides accurate line number
+    and character position data, tag and attribute names maintain their original
+    case, and attributes maintain their original order. Line numbers reported by
+    tags are now zero based, not one based. The node count for parsing goes up
+    in most cases because whitespace is strictly maintained, i.e. every
+    whitespace (i.e. newline) now counts as a StringNode too. Storage of
+    attributes is now in a Vector which means the element 0 Attribute is
+    actually the name of the tag, rather than having the $TAGNAME entry in a
+    HashTable. The htmllexer.jar is this new i/o subsystem broken out and made
+    JDK 1.1 compliant, the htmlparser.jar, which includes everything in
+    htmllexer.jar, is not necessarily intended to be used in JDK 1.1
+    environments. Some support for JIS escape sequences has been added.
+Tags
+    Zero arg tag constructors have been added. Attribute maintenance
+    (add/remove/edit) improved. There is no EndTag class any more. Just a
+    generic tag that responds true to isEndTag(). Improvements to form tag
+    handling, getting <input> and <textarea> tags nested within other tags.
+    Improvements to applet tag handling regarding parameters and codebases.
+Scanners
+    The concept of scanners has been completely reworked. Applications register
+    tags not scanners to express interest in parsing only some tags. The default
+    is now to parse all tags, which is equivalent to the old registerDOMTags(),
+    so some extra nesting of tags will need to be handled. CompositeTagScanner
+    logic has been improved to try and match unclosed open tags when an
+    unexpected end tag is encountered. This change also moved recursion off the
+    JDK stack, eliminating most StackOverflow exceptions. Also, a CompositeTag's
+    "startTag()" is "this", and the CompositeTagScanner just adds children.
+    The ScriptScanner will now decrypt Microsoft Script Encoder encrypted script
+    tags. The plaintext is available via ScriptTag.getScriptCode().
+Filters
+    A new powerful filtering capability has been added, which makes extracting
+    specific tags very easy.
+Applications
+    New example applications Thumbelina and SiteCapturer.
+    A mainline has been added to the Translate class to encode/decode stdin to
+    stdout.
+
+Bug Fixes
+---------
+911565 isValued() and isEmpty() don't work
+902121 StringBean throws NullPointerException.
+900128 RemarkNode.setText() does not set Text
+900125 Style Tag Children not grouped
+899413 bug in javascript end detection.
+891058 Bug in lexer
+865279 Documentation
+851882 zero length alt tag causes bug in ImageScanner
+839264 toHtml() parse error in Javascripts with "form" keyword
+833592 DOCTYPE element is not parsed correctly
+832530 empty attribute causes parser to fail
+826764 ParserException occurs only when using setInputHTML() instea
+825820 Words conjoined
+825645 <input> not getting parsed inside table
+813838 links not parsed correctly
+805598 attribute src in tag img sometimes not correctly parsed
+801118 two " characters at the end of an attribute value problem
+798554 Applet Tag does not update codebase data
+798553 setInputHtml does not set text
+798552 Sample for node iterator incorrect
+789439 Japanese page causes OutOfMemory Exception
+788746 parser crashes on comments like <!-- foobar --!>
+786869 LinkExtractor Sample not working
+784767 irc://server/channel urls are HTTPLike?
+778781 SRC-attribute suppression in IMG-tags
+772700 Jsp Tags are not parsed correctly when in quoted attributes
+765413 typo
+761798 Error reading next element.
+757337 Standalone attributes should remain standalone
+755929 Empty string attr. value causes attr parsing to be stopped
+753012 IMG SRC not parsed v1.3 & v1.4
+753003 <IMG> within <A> missed when followed by <MAP>
+750117 StackOverFlow while Node-Iteration
+749295 Problem Parsing Table
+745566 StackOverflowError on select with too many unclosed options
+744610 getLink() Erroneous for Relative Links from Files on Windows
 
 Acknowledgements
 ----------------
@@ -72,8 +147,6 @@ The following people have contributed important bug reports, feature ideas :
 [29] Nick Burch
 [30] Gernot Fricke
 [31] Anthony Labarre
-[32] Alberto Nacher
-[33] Rogers George
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 

@@ -51,7 +51,6 @@ public class AllTests extends ParserTestCase
         suite.addTestSuite(TagFindingVisitorTest.class);
         suite.addTestSuite(TextExtractingVisitorTest.class);
         suite.addTestSuite(UrlModifyingVisitorTest.class);
-        suite.addTestSuite(ScriptCommentTest.class);
 
         return suite;
     }

@@ -43,6 +43,7 @@ import org.htmlparser.lexer.Page;
 import org.htmlparser.lexer.nodes.NodeFactory;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.IteratorImpl;
+import org.htmlparser.util.LinkProcessor;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -72,14 +73,14 @@ public class Parser
      * The floating point version number.
      */
     public final static double
-    VERSION_NUMBER = 1.5
+    VERSION_NUMBER = 1.41
     ;
 
     /**
      * The type of version.
      */
     public final static String
-    VERSION_TYPE = "Integration Build"
+    VERSION_TYPE = "Release Build"
     ;
 
     /**
@@ -605,38 +606,6 @@ public class Parser
     }
 
     /**
-     * Turn spaces into %20.
-     * @param url The url containing spaces.
-     * @return The URL with spaces as %20 sequences.
-     */
-    public static String fixSpaces (String url)
-    {
-        int index;
-        int length;
-        char ch;
-        StringBuffer returnURL;
-
-        index = url.indexOf (' ');
-        if (-1 != index)
-        {
-            length = url.length ();
-            returnURL = new StringBuffer (length * 3);
-            returnURL.append (url.substring (0, index));
-            for (int i = index; i < length; i++)
-            {
-                ch = url.charAt (i);
-                if (ch==' ')
-                    returnURL.append ("%20");
-                else
-                    returnURL.append (ch);
-            }
-            url = returnURL.toString ();
-        }
-
-        return (url);
-    }
-
-    /**
      * Opens a connection based on a given string.
      * The string is either a file, in which case <code>file://localhost</code>
      * is prepended to a canonical path derived from the string, or a url that
@@ -658,7 +627,7 @@ public class Parser
 
         try
         {
-            url = new URL (fixSpaces (string));
+            url = new URL (LinkProcessor.fixSpaces (string));
             ret =  openConnection (url, feedback);
         }
         catch (MalformedURLException murle)
@@ -672,7 +641,7 @@ public class Parser
                 if (!resource.startsWith ("/"))
                     buffer.append ("/");
                 buffer.append (resource);
-                url = new URL (fixSpaces (buffer.toString ()));
+                url = new URL (LinkProcessor.fixSpaces (buffer.toString ()));
                 ret = openConnection (url, feedback);
                 if (null != feedback)
                     feedback.info (url.toExternalForm ());
