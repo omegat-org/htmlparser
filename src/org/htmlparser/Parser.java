@@ -95,9 +95,9 @@ import org.htmlparser.visitors.NodeVisitor;
  * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * // In this example, we are registering all the common scanners
  * parser.registerScanners(); 
- * for (NodeIterator i = parser.elements();e.hasMoreNodes();) {
- * 	Node node = i.nextNode();
- *	node.print();
+ * for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
+ *  Node node = i.nextNode();
+ *  node.print();
  * }
  * </pre> Below is some sample code to parse Yahoo.com and print only the text
  * information. This scanning will run faster, as there are no scanners
@@ -106,13 +106,13 @@ import org.htmlparser.visitors.NodeVisitor;
  * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * // In this example, none of the scanners need to be registered
  * // as a string node is not a tag to be scanned for.
- * for (NodeIterator i = parser.elements();e.hasMoreNodes();) {
- *	Node node = i.nextNode();
- *	if (node instanceof StringNode) {        	
- * 		StringNode stringNode =
- *		(StringNode)node;        
- * 		System.out.println(stringNode.getText());    
- * 	} 
+ * for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
+ *  Node node = i.nextNode();
+ *  if (node instanceof StringNode) {           
+ *      StringNode stringNode =
+ *      (StringNode)node;        
+ *      System.out.println(stringNode.getText());    
+ *  } 
  * }
  * </pre>
  * The above snippet will print out only the text contents in the html document.<br>
@@ -121,12 +121,12 @@ import org.htmlparser.visitors.NodeVisitor;
  * <pre>
  * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
  * parser.addScanner(new LinkScanner("-l"));
- * for (NodeIterator i = parser.elements();e.hasMoreNodes();) {
- * 	Node node = i.nextNode();    
- * 	if (node instanceof LinkTag) {
- * 		LinkTag linkTag = (LinkTag)node;        
- * 		System.out.println(linkTag.getLink());    
- * 	} 
+ * for (NodeIterator i = parser.elements();i.hasMoreNodes();) {
+ *  Node node = i.nextNode();    
+ *  if (node instanceof LinkTag) {
+ *      LinkTag linkTag = (LinkTag)node;        
+ *      System.out.println(linkTag.getLink());    
+ *  } 
  * }
  * </pre>
  *  @see Parser#elements() 
@@ -135,10 +135,10 @@ public class Parser
     implements
         Serializable
 {
-	// Please don't change the formatting of the version variables below.
-	// This is done so as to facilitate ant script processing.
+    // Please don't change the formatting of the version variables below.
+    // This is done so as to facilitate ant script processing.
 
-	/**
+    /**
      * The floating point version number.
      */
     public final static double
@@ -163,8 +163,8 @@ public class Parser
      * The display version.
      */
     public final static String 
-	VERSION_STRING = "" + VERSION_NUMBER + " (" + VERSION_TYPE + " " + VERSION_DATE + ")"
-	;
+    VERSION_STRING = "" + VERSION_NUMBER + " (" + VERSION_TYPE + " " + VERSION_DATE + ")"
+    ;
 
     // End of formatting
 
@@ -182,31 +182,31 @@ public class Parser
     protected static final String CHARSET_STRING = "charset";
 
 
-	/**
-	 * This object is used by the StringParser to create new StringNodes at runtime, based on 
-	 * use configurations of the factory
-	 */
-	private StringNodeFactory stringNodeFactory;
+    /**
+     * This object is used by the StringParser to create new StringNodes at runtime, based on 
+     * use configurations of the factory
+     */
+    private StringNodeFactory stringNodeFactory;
 
-	/**
-	 * Feedback object.
-	 */
-	protected ParserFeedback feedback;
-	
-	/**
-	 * The URL or filename to be parsed.
-	 */
-	protected String resourceLocn;
-	
-	/** 
-	 * The html reader associated with this parser.
-	 */
-	protected transient NodeReader reader;
+    /**
+     * Feedback object.
+     */
+    protected ParserFeedback feedback;
+    
+    /**
+     * The URL or filename to be parsed.
+     */
+    protected String resourceLocn;
+    
+    /** 
+     * The html reader associated with this parser.
+     */
+    protected transient NodeReader reader;
 
     /**
      * The list of scanners to apply at the top level.
      */
-	private Map scanners;
+    private Map scanners;
 
     /**
      * The encoding being used to decode the connection input stream.
@@ -223,13 +223,13 @@ public class Parser
      */
     protected transient BufferedInputStream input;
 
-	/**
-	 * Variable to store lineSeparator.
-	 * This is setup to read <code>line.separator</code> from the System property.
-	 * However it can also be changed using the mutator methods.
-	 * This will be used in the toHTML() methods in all the sub-classes of Node.
-	 */
-	protected static String lineSeparator = System.getProperty("line.separator", "\n");
+    /**
+     * Variable to store lineSeparator.
+     * This is setup to read <code>line.separator</code> from the System property.
+     * However it can also be changed using the mutator methods.
+     * This will be used in the toHTML() methods in all the sub-classes of Node.
+     */
+    protected static String lineSeparator = System.getProperty("line.separator", "\n");
 
     /**
      * A quiet message sink.
@@ -247,14 +247,14 @@ public class Parser
     // Static methods
     //
 
-	/**
-	 * @param lineSeparatorString New Line separator to be used
-	 */
-	public static void setLineSeparator(String lineSeparatorString)
-	{
-		lineSeparator = lineSeparatorString;	
-	}
-	
+    /**
+     * @param lineSeparatorString New Line separator to be used
+     */
+    public static void setLineSeparator(String lineSeparatorString)
+    {
+        lineSeparator = lineSeparatorString;    
+    }
+    
     /**
      * Return the version string of this parser.
      * @return A string of the form:
@@ -297,41 +297,41 @@ public class Parser
         character_set = DEFAULT_CHARSET;
         url_conn = null;
         input = null;
-		Tag.setTagParser (new TagParser (getFeedback ()));
+        Tag.setTagParser (new TagParser (getFeedback ()));
     }
 
     /**
-	 * This constructor enables the construction of test cases, with readers
-	 * associated with test string buffers. It can also be used with readers of the user's choice
-	 * streaming data into the parser.<p/>
-	 * <B>Important:</B> If you are using this constructor, and you would like to use the parser
-	 * to parse multiple times (multiple calls to parser.elements()), you must ensure the following:<br>
-	 * <ul>
-	 * <li>Before the first parse, you must mark the reader for a length that you anticipate (the size of the stream).</li>
-	 * <li>After the first parse, calls to elements() must be preceded by calls to :
-	 * <pre>
-	 * parser.getReader().reset();
-	 * </pre>
-	 * </li>
-	 * </ul>
-	 * @param rd The reader to draw characters from.
-	 * @param fb The object to use when information,
+     * This constructor enables the construction of test cases, with readers
+     * associated with test string buffers. It can also be used with readers of the user's choice
+     * streaming data into the parser.<p/>
+     * <B>Important:</B> If you are using this constructor, and you would like to use the parser
+     * to parse multiple times (multiple calls to parser.elements()), you must ensure the following:<br>
+     * <ul>
+     * <li>Before the first parse, you must mark the reader for a length that you anticipate (the size of the stream).</li>
+     * <li>After the first parse, calls to elements() must be preceded by calls to :
+     * <pre>
+     * parser.getReader().reset();
+     * </pre>
+     * </li>
+     * </ul>
+     * @param rd The reader to draw characters from.
+     * @param fb The object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
-	 */
-	public Parser(NodeReader rd, ParserFeedback fb) 
-	{
+     */
+    public Parser(NodeReader rd, ParserFeedback fb) 
+    {
         setFeedback (fb);
         setScanners (null);
         resourceLocn = null;
         reader = null;
         character_set = DEFAULT_CHARSET;
         url_conn = null;
-		input = null;
-	    setReader (rd);
-		Tag.setTagParser(new TagParser(feedback));
+        input = null;
+        setReader (rd);
+        Tag.setTagParser(new TagParser(feedback));
     }
-	
+    
     /**
      * Constructor for custom HTTP access.
      * @param connection A fully conditioned connection. The connect()
@@ -353,50 +353,50 @@ public class Parser
         setConnection (connection);
     }
 
-	/**
-	 * Creates a Parser object with the location of the resource (URL or file)
-	 * You would typically create a DefaultHTMLParserFeedback object and pass it in.
-	 * @param resourceLocn Either the URL or the filename (autodetects).
+    /**
+     * Creates a Parser object with the location of the resource (URL or file)
+     * You would typically create a DefaultHTMLParserFeedback object and pass it in.
+     * @param resourceLocn Either the URL or the filename (autodetects).
      * A standard HTTP GET is performed to read the content of the URL.
-	 * @param feedback The HTMLParserFeedback object to use when information,
+     * @param feedback The HTMLParserFeedback object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
      * @see #Parser(URLConnection,ParserFeedback)
-	 */
-	public Parser(String resourceLocn, ParserFeedback feedback) throws ParserException
-	{
+     */
+    public Parser(String resourceLocn, ParserFeedback feedback) throws ParserException
+    {
         this (ParserHelper.openConnection (resourceLocn, feedback), feedback);
     }
 
-	/**
-	 * Creates a Parser object with the location of the resource (URL or file).
-	 * A DefaultHTMLParserFeedback object is used for feedback.
-	 * @param resourceLocn Either the URL or the filename (autodetects).
-	 */
-	public Parser(String resourceLocn) throws ParserException
-	{
-		this (resourceLocn, stdout);
-	}
-	
-	/**
-	 * This constructor is present to enable users to plugin their own readers. 
-	 * A DefaultHTMLParserFeedback object is used for feedback. It can also be used with readers of the user's choice
-	 * streaming data into the parser.<p/>
-	 * <B>Important:</B> If you are using this constructor, and you would like to use the parser
-	 * to parse multiple times (multiple calls to parser.elements()), you must ensure the following:<br>
-	 * <ul>
-	 * <li>Before the first parse, you must mark the reader for a length that you anticipate (the size of the stream).</li>
-	 * <li>After the first parse, calls to elements() must be preceded by calls to :
-	 * <pre>
-	 * parser.getReader().reset();
-	 * </pre>
-	 * </li>
+    /**
+     * Creates a Parser object with the location of the resource (URL or file).
+     * A DefaultHTMLParserFeedback object is used for feedback.
+     * @param resourceLocn Either the URL or the filename (autodetects).
+     */
+    public Parser(String resourceLocn) throws ParserException
+    {
+        this (resourceLocn, stdout);
+    }
+    
+    /**
+     * This constructor is present to enable users to plugin their own readers. 
+     * A DefaultHTMLParserFeedback object is used for feedback. It can also be used with readers of the user's choice
+     * streaming data into the parser.<p/>
+     * <B>Important:</B> If you are using this constructor, and you would like to use the parser
+     * to parse multiple times (multiple calls to parser.elements()), you must ensure the following:<br>
+     * <ul>
+     * <li>Before the first parse, you must mark the reader for a length that you anticipate (the size of the stream).</li>
+     * <li>After the first parse, calls to elements() must be preceded by calls to :
+     * <pre>
+     * parser.getReader().reset();
+     * </pre>
+     * </li>
      * @param reader The source for HTML to be parsed.
-	 */
-	public Parser(NodeReader reader) 
-	{
-		this (reader, stdout);	
-	}	
+     */
+    public Parser(NodeReader reader) 
+    {
+        this (reader, stdout);  
+    }   
 
     /**
      * Constructor for non-standard access.
@@ -420,7 +420,7 @@ public class Parser
     {
         if ((null == getConnection ()) || /*redundant*/(null == getURL ()))
             if (null != getReader ());
-//	commented out by Somik - why are we not allowed to serialize parsers without url
+//  commented out by Somik - why are we not allowed to serialize parsers without url
 //                throw new IOException ("can only serialize parsers with a URL");
         out.defaultWriteObject ();
     }
@@ -620,55 +620,55 @@ public class Parser
         }
     }
 
-	/**
-	 * Returns the reader associated with the parser
-	 * @return NodeReader
-	 */
-	public NodeReader getReader() {
-		return reader;
-	}
+    /**
+     * Returns the reader associated with the parser
+     * @return NodeReader
+     */
+    public NodeReader getReader() {
+        return reader;
+    }
 
-	/**
-	 * Get the number of scanners registered currently in the scanner.
-	 * @return int number of scanners registered
-	 */
-	public int getNumScanners() {
-		return scanners.size();	
-	}
-	
-	/**
-	 * This method is to be used to change the set of scanners in the current parser.
-	 * @param newScanners Vector holding scanner objects to be used during the parsing process.
-	 */
-	public void setScanners(Map newScanners)
+    /**
+     * Get the number of scanners registered currently in the scanner.
+     * @return int number of scanners registered
+     */
+    public int getNumScanners() {
+        return scanners.size(); 
+    }
+    
+    /**
+     * This method is to be used to change the set of scanners in the current parser.
+     * @param newScanners Vector holding scanner objects to be used during the parsing process.
+     */
+    public void setScanners(Map newScanners)
     {
-		scanners = (null == newScanners) ? new HashMap() : newScanners;
-	}
-	
-	/**
-	 * Get an enumeration of scanners registered currently in the parser
-	 * @return Enumeration of scanners currently registered in the parser
-	 */
-	public Map getScanners() {
-		return scanners;
-	}
+        scanners = (null == newScanners) ? new HashMap() : newScanners;
+    }
+    
+    /**
+     * Get an enumeration of scanners registered currently in the parser
+     * @return Enumeration of scanners currently registered in the parser
+     */
+    public Map getScanners() {
+        return scanners;
+    }
 
-	/**
-	 * Sets the feedback object used in scanning.
-	 * @param fb The new feedback object to use.
-	 */
-	public void setFeedback(ParserFeedback fb)
+    /**
+     * Sets the feedback object used in scanning.
+     * @param fb The new feedback object to use.
+     */
+    public void setFeedback(ParserFeedback fb)
     {
         feedback = (null == fb) ? noFeedback : fb;
-	}
+    }
 
-	/**
-	 * Returns the feedback.
-	 * @return HTMLParserFeedback
-	 */
-	public ParserFeedback getFeedback() {
-		return feedback;
-	}
+    /**
+     * Returns the feedback.
+     * @return HTMLParserFeedback
+     */
+    public ParserFeedback getFeedback() {
+        return feedback;
+    }
 
     //
     // Internal methods
@@ -814,7 +814,7 @@ public class Parser
         ret = DEFAULT_CHARSET;
         if (null != content)
         {
-			index = content.indexOf(CHARSET_STRING);
+            index = content.indexOf(CHARSET_STRING);
             
             if (index != -1)
             {
@@ -826,7 +826,7 @@ public class Parser
                     if (index != -1)
                         content = content.substring(0, index);
 
-					//remove any double quotes from around charset string
+                    //remove any double quotes from around charset string
                     if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
                         content = content.substring (1, content.length () - 1);
 
@@ -838,14 +838,14 @@ public class Parser
                     // Charset names are not case-sensitive;
                     // that is, case is always ignored when comparing charset names.
                     if (!ret.equalsIgnoreCase(content))
-					{
+                    {
                         feedback.info (
                             "detected charset \""
                             + content
                             + "\", using \""
                             + ret
                             + "\"");
-					}
+                    }
                 }
             }
         }
@@ -857,362 +857,362 @@ public class Parser
     // Public methods
     //
 
-	/**
-	 * Add a new Tag Scanner.
-	 * In typical situations where you require a no-frills parser, use the registerScanners() method to add the most
-	 * common parsers. But when you wish to either compose a parser with only certain scanners registered, use this method.
-	 * It is advantageous to register only the scanners you want, in order to achieve faster parsing speed. This method 
-	 * would also be of use when you have developed custom scanners, and need to register them into the parser.
-	 * @param scanner TagScanner object (or derivative) to be added to the list of registered scanners
-	 */
-	public void addScanner(TagScanner scanner) {
-		String ids[] = scanner.getID();
-		for (int i=0;i<ids.length;i++) {
-			scanners.put(ids[i],scanner);
-		}
-		scanner.setFeedback(feedback);
-	}
-	
-	/**
-	 * Returns an iterator (enumeration) to the html nodes. Each node can be a tag/endtag/
-	 * string/link/image<br>
-	 * This is perhaps the most important method of this class. In typical situations, you will need to use
-	 * the parser like this :
-	 * <pre>
-	 * Parser parser = new Parser("http://www.yahoo.com");
-	 * parser.registerScanners();
-	 * for (NodeIterator i = parser.elements();i.hasMoreElements();) {
-	 *    Node node = i.nextHTMLNode();
-	 *    if (node instanceof StringNode) {
-	 *      // Downcasting to StringNode
-	 *      StringNode stringNode = (StringNode)node;
-	 *      // Do whatever processing you want with the string node
-	 *      System.out.println(stringNode.getText());
-	 *    }
-	 *    // Check for the node or tag that you want
-	 *    if (node instanceof ...) {
-	 *      // Downcast, and process
-	 *    }
-	 * }
-	 * </pre>
-	 */
-	public NodeIterator elements() throws ParserException
+    /**
+     * Add a new Tag Scanner.
+     * In typical situations where you require a no-frills parser, use the registerScanners() method to add the most
+     * common parsers. But when you wish to either compose a parser with only certain scanners registered, use this method.
+     * It is advantageous to register only the scanners you want, in order to achieve faster parsing speed. This method 
+     * would also be of use when you have developed custom scanners, and need to register them into the parser.
+     * @param scanner TagScanner object (or derivative) to be added to the list of registered scanners
+     */
+    public void addScanner(TagScanner scanner) {
+        String ids[] = scanner.getID();
+        for (int i=0;i<ids.length;i++) {
+            scanners.put(ids[i],scanner);
+        }
+        scanner.setFeedback(feedback);
+    }
+    
+    /**
+     * Returns an iterator (enumeration) to the html nodes. Each node can be a tag/endtag/
+     * string/link/image<br>
+     * This is perhaps the most important method of this class. In typical situations, you will need to use
+     * the parser like this :
+     * <pre>
+     * Parser parser = new Parser("http://www.yahoo.com");
+     * parser.registerScanners();
+     * for (NodeIterator i = parser.elements();i.hasMoreElements();) {
+     *    Node node = i.nextHTMLNode();
+     *    if (node instanceof StringNode) {
+     *      // Downcasting to StringNode
+     *      StringNode stringNode = (StringNode)node;
+     *      // Do whatever processing you want with the string node
+     *      System.out.println(stringNode.getText());
+     *    }
+     *    // Check for the node or tag that you want
+     *    if (node instanceof ...) {
+     *      // Downcast, and process
+     *    }
+     * }
+     * </pre>
+     */
+    public NodeIterator elements() throws ParserException
     {
         boolean remove_scanner = false;
         IteratorImpl ret;
 
         ret = new IteratorImpl (reader, resourceLocn, feedback);
-  		ret = createIteratorImpl(remove_scanner, ret);
+        ret = createIteratorImpl(remove_scanner, ret);
 
         return (ret);
-	}
+    }
 
-	public IteratorImpl createIteratorImpl(
-		boolean remove_scanner,
-		IteratorImpl ret)
-		throws ParserException {
-		Node node;
-		MetaTag meta;
-		String httpEquiv;
-		String charset;
-		EndTag end;
-		  if (null != url_conn)
-		        try
-		        {
-		            if (null == scanners.get ("-m"))
-		            {
-		                addScanner (new MetaTagScanner ("-m"));
-		                remove_scanner = true;
-		            }
-		
-		            /* pre-read up to </HEAD> looking for charset directive */
-		            while (null != (node = ret.peek ()))
-		            {
-		                if (node instanceof MetaTag)
-		                {   // check for charset on Content-Type
-		                    meta = (MetaTag)node;
-		                    httpEquiv = meta.getAttribute ("HTTP-EQUIV");
-		                    if ("Content-Type".equalsIgnoreCase (httpEquiv))
-		                    {
-		                        charset = getCharset (meta.getAttribute ("CONTENT"));
-		                        if (!charset.equalsIgnoreCase (character_set))
-		                        {   // oops, different character set, restart
-		                            character_set = charset;
-		                            recreateReader ();
-		                            ret = new IteratorImpl (reader, resourceLocn, feedback);
-		                        }
-		                        // once we see the Content-Type meta tag we're finished the pre-read
-		                        break;
-		                    }
-		                }
-		                else if (node instanceof EndTag)
-		                {
-		                    end = (EndTag)node;
-		                    if (end.getTagName ().equalsIgnoreCase ("HEAD"))
-		                        // or, once we see the </HEAD> tag we're finished the pre-read
-		                        break;
-		                }
-		            }
-		        }
-		        catch (UnsupportedEncodingException uee)
-		        {
-		            String msg = "elements() : The content of " + url_conn.getURL ().toExternalForm () + " has an encoding which is not supported";
-		            ParserException ex = new ParserException (msg, uee);
-		            feedback.error (msg, ex);
-		            throw ex;
-		        }
-		        catch (IOException ioe)
-		        {
-		            String msg = "elements() : Error in opening a connection to " + url_conn.getURL ().toExternalForm ();
-		            ParserException ex = new ParserException (msg, ioe);
-		            feedback.error (msg, ex);
-		            throw ex;
-		        }
-		        finally
-		        {
-		            if (remove_scanner)
-		                scanners.remove ("-m");
-		        }
-		return ret;
-	}
-	
-	/**
-	 * Flush the current scanners registered. The registered scanners list becomes empty with this call.
-	 */
-	public void flushScanners() {
-		scanners = new Hashtable();	
-	}
-	
-	/**
-	 * Return the scanner registered in the parser having the
-	 * given id
-	 * @param id The id of the requested scanner
-	 * @return TagScanner The Tag Scanner
-	 */
-	public TagScanner getScanner(String id) {
-		return (TagScanner)scanners.get(id);
-	}
+    public IteratorImpl createIteratorImpl(
+        boolean remove_scanner,
+        IteratorImpl ret)
+        throws ParserException {
+        Node node;
+        MetaTag meta;
+        String httpEquiv;
+        String charset;
+        EndTag end;
+          if (null != url_conn)
+                try
+                {
+                    if (null == scanners.get ("-m"))
+                    {
+                        addScanner (new MetaTagScanner ("-m"));
+                        remove_scanner = true;
+                    }
+        
+                    /* pre-read up to </HEAD> looking for charset directive */
+                    while (null != (node = ret.peek ()))
+                    {
+                        if (node instanceof MetaTag)
+                        {   // check for charset on Content-Type
+                            meta = (MetaTag)node;
+                            httpEquiv = meta.getAttribute ("HTTP-EQUIV");
+                            if ("Content-Type".equalsIgnoreCase (httpEquiv))
+                            {
+                                charset = getCharset (meta.getAttribute ("CONTENT"));
+                                if (!charset.equalsIgnoreCase (character_set))
+                                {   // oops, different character set, restart
+                                    character_set = charset;
+                                    recreateReader ();
+                                    ret = new IteratorImpl (reader, resourceLocn, feedback);
+                                }
+                                // once we see the Content-Type meta tag we're finished the pre-read
+                                break;
+                            }
+                        }
+                        else if (node instanceof EndTag)
+                        {
+                            end = (EndTag)node;
+                            if (end.getTagName ().equalsIgnoreCase ("HEAD"))
+                                // or, once we see the </HEAD> tag we're finished the pre-read
+                                break;
+                        }
+                    }
+                }
+                catch (UnsupportedEncodingException uee)
+                {
+                    String msg = "elements() : The content of " + url_conn.getURL ().toExternalForm () + " has an encoding which is not supported";
+                    ParserException ex = new ParserException (msg, uee);
+                    feedback.error (msg, ex);
+                    throw ex;
+                }
+                catch (IOException ioe)
+                {
+                    String msg = "elements() : Error in opening a connection to " + url_conn.getURL ().toExternalForm ();
+                    ParserException ex = new ParserException (msg, ioe);
+                    feedback.error (msg, ex);
+                    throw ex;
+                }
+                finally
+                {
+                    if (remove_scanner)
+                        scanners.remove ("-m");
+                }
+        return ret;
+    }
+    
+    /**
+     * Flush the current scanners registered. The registered scanners list becomes empty with this call.
+     */
+    public void flushScanners() {
+        scanners = new Hashtable(); 
+    }
+    
+    /**
+     * Return the scanner registered in the parser having the
+     * given id
+     * @param id The id of the requested scanner
+     * @return TagScanner The Tag Scanner
+     */
+    public TagScanner getScanner(String id) {
+        return (TagScanner)scanners.get(id);
+    }
 
-	/**
-	 * Parse the given resource, using the filter provided
-	 */
-	public void parse(String filter) throws Exception
-	{
-		Node node;
-		for (NodeIterator e=elements();e.hasMoreNodes();)
-		{
-			node = e.nextNode();
-	  	  	if (node!=null)
-			{
-			 	if (filter==null)
-				System.out.println(node.toString()); 
-				else
-				{
-					// There is a filter. Find if the associated filter of this node
-					// matches the specified filter
-					if (!(node instanceof Tag)) continue;
-					Tag tag=(Tag)node;
-					TagScanner scanner = tag.getThisScanner();
-					if (scanner==null) 
-						continue;
-					
-					String tagFilter = scanner.getFilter();
-					if (tagFilter==null) continue;
-					if (tagFilter.equals(filter))
-						System.out.println(node.toString()); 
-				}		
-			}
-			else System.out.println("Node is null");
-		}
+    /**
+     * Parse the given resource, using the filter provided
+     */
+    public void parse(String filter) throws Exception
+    {
+        Node node;
+        for (NodeIterator e=elements();e.hasMoreNodes();)
+        {
+            node = e.nextNode();
+            if (node!=null)
+            {
+                if (filter==null)
+                System.out.println(node.toString()); 
+                else
+                {
+                    // There is a filter. Find if the associated filter of this node
+                    // matches the specified filter
+                    if (!(node instanceof Tag)) continue;
+                    Tag tag=(Tag)node;
+                    TagScanner scanner = tag.getThisScanner();
+                    if (scanner==null) 
+                        continue;
+                    
+                    String tagFilter = scanner.getFilter();
+                    if (tagFilter==null) continue;
+                    if (tagFilter.equals(filter))
+                        System.out.println(node.toString()); 
+                }       
+            }
+            else System.out.println("Node is null");
+        }
 
-	}
-	
-	/**
-	 * This method should be invoked in order to register some common scanners. The scanners that get added are : <br>
-	 * LinkScanner    (filter key "-l")<br>
-	 * HTMLImageScanner   (filter key "-i")<br>
-	 * HTMLScriptScanner  (filter key "-s") <br>
-	 * HTMLStyleScanner   (filter key "-t") <br>
-	 * HTMLJspScanner     (filter key "-j") <br>
-	 * HTMLAppletScanner  (filter key "-a") <br>
-	 * HTMLMetaTagScanner (filter key "-m") <br>
-	 * HTMLTitleScanner   (filter key "-t") <br>
-	 * HTMLDoctypeScanner (filter key "-d") <br>
-	 * HTMLFormScanner    (filter key "-f") <br>
-	 * HTMLFrameSetScanner(filter key "-r") <br>
-	 * HTMLBaseHREFScanner(filter key "-b") <br>
-	 * <br>
-	 * Call this method after creating the Parser object. e.g. <BR>
-	 * <pre>
-	 * Parser parser = new Parser("http://www.yahoo.com");
-	 * parser.registerScanners();
-	 * </pre>
-	 */ 
-	public void registerScanners() {
-		if (scanners.size()>0) {
-			System.err.println("registerScanners() should be called first, when no other scanner has been registered.");
-			System.err.println("Other scanners already exist, hence this method call wont have any effect");
-			return;
-		}
-		LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
-		// Note - The BaseHREF and Image scanners share the same
-		// link processor - internally linked up with the factory
-		// method in the link scanner class
-		addScanner(linkScanner);
-		addScanner(linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
-		addScanner(new ScriptScanner("-s"));
-		addScanner(new StyleScanner("-t"));
-		addScanner(new JspScanner("-j"));
-		addScanner(new AppletScanner("-a"));
-		addScanner(new MetaTagScanner("-m"));
-		addScanner(new TitleScanner("-T"));
-		addScanner(new DoctypeScanner("-d"));
-		addScanner(new FormScanner("-f",this));
-		addScanner(new FrameSetScanner("-r"));	
-		addScanner(linkScanner.createBaseHREFScanner("-b"));
-		addScanner(new BulletListScanner("-bulletList",this));
-	//	addScanner(new SpanScanner("-p"));
-		addScanner(new DivScanner("-div"));
-		addScanner(new TableScanner(this));
-	}
-	
-	/**
-	 * Make a call to registerDomScanners(), instead of registerScanners(),
-	 * when you are interested in retrieving a Dom representation of the html
-	 * page. Upon parsing, you will receive an Html object - which will contain
-	 * children, one of which would be the body. This is still evolving, and in 
-	 * future releases, you might see consolidation of Html - to provide you 
-	 * with methods to access the body and the head.
-	 */
-	public void registerDomScanners() {
-		registerScanners();
-		addScanner(new HtmlScanner());
-		addScanner(new BodyScanner());
-		addScanner(new HeadScanner());
-	}
-	
-	/**
-	 * Removes a specified scanner object. You can create
-	 * an anonymous object as a parameter. This method
-	 * will use the scanner's key and remove it from the 
-	 * registry of scanners.
-	 * e.g.
-	 * <pre>
-	 * removeScanner(new FormScanner(""));
-	 * </pre>
-	 * @param scanner TagScanner object to be removed from the list of registered scanners
-	 */
-	public void removeScanner(TagScanner scanner) {
-		scanners.remove(scanner.getID()[0]);
-	}
+    }
+    
+    /**
+     * This method should be invoked in order to register some common scanners. The scanners that get added are : <br>
+     * LinkScanner    (filter key "-l")<br>
+     * HTMLImageScanner   (filter key "-i")<br>
+     * HTMLScriptScanner  (filter key "-s") <br>
+     * HTMLStyleScanner   (filter key "-t") <br>
+     * HTMLJspScanner     (filter key "-j") <br>
+     * HTMLAppletScanner  (filter key "-a") <br>
+     * HTMLMetaTagScanner (filter key "-m") <br>
+     * HTMLTitleScanner   (filter key "-t") <br>
+     * HTMLDoctypeScanner (filter key "-d") <br>
+     * HTMLFormScanner    (filter key "-f") <br>
+     * HTMLFrameSetScanner(filter key "-r") <br>
+     * HTMLBaseHREFScanner(filter key "-b") <br>
+     * <br>
+     * Call this method after creating the Parser object. e.g. <BR>
+     * <pre>
+     * Parser parser = new Parser("http://www.yahoo.com");
+     * parser.registerScanners();
+     * </pre>
+     */ 
+    public void registerScanners() {
+        if (scanners.size()>0) {
+            System.err.println("registerScanners() should be called first, when no other scanner has been registered.");
+            System.err.println("Other scanners already exist, hence this method call wont have any effect");
+            return;
+        }
+        LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
+        // Note - The BaseHREF and Image scanners share the same
+        // link processor - internally linked up with the factory
+        // method in the link scanner class
+        addScanner(linkScanner);
+        addScanner(linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
+        addScanner(new ScriptScanner("-s"));
+        addScanner(new StyleScanner("-t"));
+        addScanner(new JspScanner("-j"));
+        addScanner(new AppletScanner("-a"));
+        addScanner(new MetaTagScanner("-m"));
+        addScanner(new TitleScanner("-T"));
+        addScanner(new DoctypeScanner("-d"));
+        addScanner(new FormScanner("-f",this));
+        addScanner(new FrameSetScanner("-r"));  
+        addScanner(linkScanner.createBaseHREFScanner("-b"));
+        addScanner(new BulletListScanner("-bulletList",this));
+    //  addScanner(new SpanScanner("-p"));
+        addScanner(new DivScanner("-div"));
+        addScanner(new TableScanner(this));
+    }
+    
+    /**
+     * Make a call to registerDomScanners(), instead of registerScanners(),
+     * when you are interested in retrieving a Dom representation of the html
+     * page. Upon parsing, you will receive an Html object - which will contain
+     * children, one of which would be the body. This is still evolving, and in 
+     * future releases, you might see consolidation of Html - to provide you 
+     * with methods to access the body and the head.
+     */
+    public void registerDomScanners() {
+        registerScanners();
+        addScanner(new HtmlScanner());
+        addScanner(new BodyScanner());
+        addScanner(new HeadScanner());
+    }
+    
+    /**
+     * Removes a specified scanner object. You can create
+     * an anonymous object as a parameter. This method
+     * will use the scanner's key and remove it from the 
+     * registry of scanners.
+     * e.g.
+     * <pre>
+     * removeScanner(new FormScanner(""));
+     * </pre>
+     * @param scanner TagScanner object to be removed from the list of registered scanners
+     */
+    public void removeScanner(TagScanner scanner) {
+        scanners.remove(scanner.getID()[0]);
+    }
 
-	/**
-	 * The main program, which can be executed from the command line
-	 */
-	public static void main(String [] args)
-	{
-		System.out.println("HTMLParser v"+VERSION_STRING);
-		if (args.length<1 || args[0].equals("-help"))
-		{
-			System.out.println();
-			System.out.println("Syntax : java -jar htmlparser.jar <resourceLocn/website> -l");
-			System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path if not in current directory)");
-			System.out.println("   -l Show only the link tags extracted from the document");
-			System.out.println("   -i Show only the image tags extracted from the document");
-			System.out.println("   -s Show only the Javascript code extracted from the document");
-			System.out.println("   -t Show only the Style code extracted from the document");
-			System.out.println("   -a Show only the Applet tag extracted from the document");
-			System.out.println("   -j Parse JSP tags");	
-			System.out.println("   -m Parse Meta tags");		
-			System.out.println("   -T Extract the Title");
-			System.out.println("   -f Extract forms");
-			System.out.println("   -r Extract frameset");
-			System.out.println("   -help This screen");
-			System.out.println();
-			System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
-			System.out.println();
-			System.out.println("Example : java -jar htmlparser.jar http://www.yahoo.com");
-			System.out.println();
-			System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
-			System.exit(-1);
-		}
-		try {
-			Parser parser = new Parser(args[0]);
+    /**
+     * The main program, which can be executed from the command line
+     */
+    public static void main(String [] args)
+    {
+        System.out.println("HTMLParser v"+VERSION_STRING);
+        if (args.length<1 || args[0].equals("-help"))
+        {
+            System.out.println();
+            System.out.println("Syntax : java -jar htmlparser.jar <resourceLocn/website> -l");
+            System.out.println("   <resourceLocn> the name of the file to be parsed (with complete path if not in current directory)");
+            System.out.println("   -l Show only the link tags extracted from the document");
+            System.out.println("   -i Show only the image tags extracted from the document");
+            System.out.println("   -s Show only the Javascript code extracted from the document");
+            System.out.println("   -t Show only the Style code extracted from the document");
+            System.out.println("   -a Show only the Applet tag extracted from the document");
+            System.out.println("   -j Parse JSP tags"); 
+            System.out.println("   -m Parse Meta tags");        
+            System.out.println("   -T Extract the Title");
+            System.out.println("   -f Extract forms");
+            System.out.println("   -r Extract frameset");
+            System.out.println("   -help This screen");
+            System.out.println();
+            System.out.println("HTML Parser home page : http://htmlparser.sourceforge.net");
+            System.out.println();
+            System.out.println("Example : java -jar htmlparser.jar http://www.yahoo.com");
+            System.out.println();
+            System.out.println("If you have any doubts, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page instead of mailing any of the contributors directly. You will be surprised with the quality of open source support. ");
+            System.exit(-1);
+        }
+        try {
+            Parser parser = new Parser(args[0]);
             System.out.println("Parsing " + parser.getURL ());
-			parser.registerScanners();
-			try {
-				if (args.length==2)
-				{
-					parser.parse(args[1]);
-				} else
-				parser.parse(null);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		catch (ParserException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void visitAllNodesWith(NodeVisitor visitor) throws ParserException {
-		Node node;
-		for (NodeIterator e = elements();e.hasMoreNodes();) {
-			node = e.nextNode();
-			node.accept(visitor);
-		}
-		visitor.finishedParsing();
-	}
-	
-	/** Initializes the parser with the given input HTML String.
-	 * @param inputHTML the input HTML that is to be parsed.
-	 */
-	public void setInputHTML(String inputHTML) {
-	  if ("".equals(inputHTML)) {
-		reader = new NodeReader(new StringReader(inputHTML),"");      
-	  }
-	}	
-	
-	public Node [] extractAllNodesThatAre(Class nodeType) throws ParserException {
-		NodeList nodeList = new NodeList();
-		for (NodeIterator e = elements();e.hasMoreNodes();) {
-			e.nextNode().collectInto(nodeList,nodeType);
-		}
-		return nodeList.toNodeArray();
-	}
-	
-	/**
-	 * Creates the parser on an input string.
-	 * @param inputHTML
-	 * @return Parser
-	 */
-	public static Parser createParser(String inputHTML) {
-		NodeReader reader =	
-			new NodeReader(new StringReader(inputHTML),"");
-		return new Parser(reader);
-	}
-	
-	public static Parser createLinkRecognizingParser(String inputHTML) {
-		Parser parser = createParser(inputHTML);
-		parser.addScanner(new LinkScanner(LinkTag.LINK_TAG_FILTER));
-		return parser;
-	}
+            parser.registerScanners();
+            try {
+                if (args.length==2)
+                {
+                    parser.parse(args[1]);
+                } else
+                parser.parse(null);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch (ParserException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void visitAllNodesWith(NodeVisitor visitor) throws ParserException {
+        Node node;
+        for (NodeIterator e = elements();e.hasMoreNodes();) {
+            node = e.nextNode();
+            node.accept(visitor);
+        }
+        visitor.finishedParsing();
+    }
+    
+    /** Initializes the parser with the given input HTML String.
+     * @param inputHTML the input HTML that is to be parsed.
+     */
+    public void setInputHTML(String inputHTML) {
+      if ("".equals(inputHTML)) {
+        reader = new NodeReader(new StringReader(inputHTML),"");      
+      }
+    }   
+    
+    public Node [] extractAllNodesThatAre(Class nodeType) throws ParserException {
+        NodeList nodeList = new NodeList();
+        for (NodeIterator e = elements();e.hasMoreNodes();) {
+            e.nextNode().collectInto(nodeList,nodeType);
+        }
+        return nodeList.toNodeArray();
+    }
+    
+    /**
+     * Creates the parser on an input string.
+     * @param inputHTML
+     * @return Parser
+     */
+    public static Parser createParser(String inputHTML) {
+        NodeReader reader = 
+            new NodeReader(new StringReader(inputHTML),"");
+        return new Parser(reader);
+    }
+    
+    public static Parser createLinkRecognizingParser(String inputHTML) {
+        Parser parser = createParser(inputHTML);
+        parser.addScanner(new LinkScanner(LinkTag.LINK_TAG_FILTER));
+        return parser;
+    }
 
-	/**
-	 * @return String lineSeparator that will be used in toHTML()
-	 */
-	public static String getLineSeparator() {
-		return lineSeparator;
-	}
+    /**
+     * @return String lineSeparator that will be used in toHTML()
+     */
+    public static String getLineSeparator() {
+        return lineSeparator;
+    }
 
-	public StringNodeFactory getStringNodeFactory() {
-		if (stringNodeFactory == null)
-			stringNodeFactory = new StringNodeFactory();
-		return stringNodeFactory;
-	}
-	
-	public void setStringNodeFactory(StringNodeFactory stringNodeFactory) {
-		this.stringNodeFactory = stringNodeFactory;	
-	}		
+    public StringNodeFactory getStringNodeFactory() {
+        if (stringNodeFactory == null)
+            stringNodeFactory = new StringNodeFactory();
+        return stringNodeFactory;
+    }
+    
+    public void setStringNodeFactory(StringNodeFactory stringNodeFactory) {
+        this.stringNodeFactory = stringNodeFactory; 
+    }       
 }
