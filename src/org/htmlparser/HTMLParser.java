@@ -453,7 +453,9 @@ public class HTMLParser
 			resourceLocn=HTMLLinkProcessor.fixSpaces(resourceLocn);
 			URL url = new URL(resourceLocn);
 			URLConnection uc = url.openConnection();
-			return new HTMLReader(new BufferedReader(new InputStreamReader(uc.getInputStream(),"8859_4")),resourceLocn);
+            // the default charset should be iso-8859-1,
+            // see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
+			return new HTMLReader(new BufferedReader(new InputStreamReader(uc.getInputStream(),"8859_1")),resourceLocn);
 		}
 		catch (Exception e) {
 			String msg="HTMLParser.openURLConnection() : Error in opening a URL connection to "+resourceLocn;
