@@ -171,6 +171,33 @@ public class NodeReader extends BufferedReader
 	public TagScanner getPreviousOpenScanner() {
 		return previousOpenScanner;
 	}
+
+    /**
+     * Returns true if the text at <code>pos</code> in <code>line</code> should be scanned as a tag.
+     * Basically an open angle followed by a known special character or a letter.
+     * @param line The current line being parsed.
+     * @param pos The position in the line to examine.
+     * @return <code>true</code> if we think this is the start of a tag.
+     */
+    private boolean beginTag (String line, int pos)
+    {
+        char ch;
+        boolean ret;
+        
+        ret = false;
+        
+        if (pos + 2 <= line.length ())
+            if ('<' == line.charAt (pos))
+            {
+                ch = line.charAt (pos + 1);
+                // the order of these tests might be optimized for speed
+                if ('/' == ch || '%' == ch || Character.isLetter (ch) || '!' == ch || '>' == ch)
+                    ret = true;
+            }
+
+        return (ret);
+    }
+
 	/**
 	 * Read the next element
 	 * @return Node - The next node
@@ -191,14 +218,17 @@ public class NodeReader extends BufferedReader
 				}
 				while (line!=null && line.length()==0);
 	
-			} else
-			posInLine=node.elementEnd()+1;
-			if (line==null) return null;
+			}
+            else
+                posInLine=node.elementEnd()+1;
+			if (line==null)
+                return null;
             
-            if ('<' == line.charAt (posInLine))
+            if (beginTag (line, posInLine))
             {
                 node = remarkNodeParser.find(this,line,posInLine);
-                if (node!=null) return node;
+                if (node!=null)
+                    return node;
                 node = Tag.find(this,line,posInLine);
                 if (node!=null)
                 {

@@ -63,11 +63,6 @@ public class StringParser {
 		for (int i=position;(i<inputLen && state!=PARSE_COMPLETED_STATE);i++)
 		{
 			ch  = input.charAt(i);
-			// When the input has ended but no text is found, we end up returning null
-			if (ch=='<' && state==BEFORE_PARSE_BEGINS_STATE)
-			{
-				return null;
-			}
 			// The following conditionals are a bug fix
 			// done by Roger Sollberger. They correspond to a
 			// testcase in HTMLStringNodeTest (testTagCharsInStringNode)
