@@ -12,6 +12,78 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20030810
+--------------------------------
+
+2003-08-10 19:36  derrickoswald
+
+	* src/org/htmlparser/tests/lexerTests/: AllTests.java,
+	PageIndexTests.java, PageTests.java:
+
+	Unit tests for second drop of new io subsystem.
+	
+2003-08-10 19:33  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java, lexer/Cursor.java,
+	lexer/PageIndex.java, lexer/package.html,
+	tests/utilTests/AllTests.java, tests/utilTests/SortTest.java,
+	util/sort/Ordered.java, util/sort/Sort.java,
+	util/sort/Sortable.java, util/sort/package.html:
+
+	Second drop for new io subsystem.
+	
+2003-08-02 12:22  derrickoswald
+
+	* src/org/htmlparser/: parserHelper/AttributeParser.java,
+	parserHelper/SpecialHashtable.java, tags/Tag.java,
+	tests/scannersTests/LabelScannerTest.java,
+	tests/tagTests/FrameSetTagTest.java,
+	tests/tagTests/FrameTagTest.java, tests/tagTests/InputTagTest.java,
+	tests/tagTests/TagTest.java,
+	tests/temporaryFailures/AttributeParserTest.java,
+	tests/temporaryFailures/TagParserTest.java:
+
+	Fixed bug #757337 Standalone attributes should remain standalone
+	
+	Changing to a HashMap was not adopted for two reasons. The first is that it would break Java 1.1.x
+	compatibility (which I believe we still maintain, although I haven't checked lately), and using a HashMap
+	would return the attributes in a different order, leading to a *lot* of broken tests that rely on toHTML()
+	returning a specific string with attributes in a certain order (if I'm going to fix a bunch of tests I would
+	like the attributes to come out in the order they were originally, so this will need an AttributeStorage class
+	when the attribute parser is rewritten).
+	
+	The solution adopted is to subclass HashTable and store two special values, which are new constants in
+	the Tag class.  For naive programs, and for backward compatibility, this SpecialHashtable class translates
+	these constants into null and "" respectively, so the old behavior is the same.
+	
+	However, savvy programs, and the toHTML() method in the Tag class can call getRaw() on this hashtable
+	to get at these special constants and behave appropriately. For this specific bug, toHTML returns the
+	stand-alone attribute as is, but the missing value case is also handled.
+	
+2003-08-02 09:07  derrickoswald
+
+	* src/org/htmlparser/tags/FormTag.java:
+
+	Change name back to getFormTextareas.
+	
+2003-07-29 23:09  derrickoswald
+
+	* src/org/htmlparser/tags/FormTag.java:
+
+	Change name to getFormTextAreas for consistency.
+	
+2003-07-29 23:06  derrickoswald
+
+	* src/org/htmlparser/: tags/FormTag.java, util/NodeList.java:
+
+	Added recursive input and textarea harvesting to FormTag.
+	
+2003-07-29 19:24  derrickoswald
+
+	* build.xml:
+
+	Exclude lexer package, include third party libraries, don't build doc tars.
+
 Integration Build 1.4 - 20030727
 --------------------------------
 
