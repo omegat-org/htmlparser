@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20021208 - A java-based parser for HTML
+// HTMLParser Library v1_2_20021214 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -44,17 +44,17 @@ public class DefaultHTMLParserFeedback
     /**
      * Constructor argument for a quiet feedback.
      */
-    public static String QUIET = "Quiet";
+    public static final int QUIET = 0;
 
     /**
      * Constructor argument for a normal feedback.
      */
-    public static String NORMAL = "Normal";
+    public static final int NORMAL = 1;
 
     /**
      * Constructor argument for a debugging feedback.
      */
-    public static String DEBUG = "Debug";
+    public static final int DEBUG = 2;
 
     /**
      * Verbosity level.
@@ -65,7 +65,7 @@ public class DefaultHTMLParserFeedback
      *   QUIET = 0;
      * </pre>
      */
-    protected int mLevel;
+    protected int mode;
 
     /**
      * Construct a feedback object of the given type.
@@ -76,16 +76,11 @@ public class DefaultHTMLParserFeedback
      *   QUIET - no messages
      * </pre>
      */
-    public DefaultHTMLParserFeedback (String mode)
+    public DefaultHTMLParserFeedback (int mode)
     {
-        if (mode.equals (DEBUG))
-            mLevel = 2;
-        else if (mode.equals (NORMAL))
-            mLevel = 1;
-        else if (mode.equals (QUIET))
-            mLevel = 0;
-        else
+		if (mode<QUIET||mode>DEBUG) 
             throw new IllegalArgumentException ("illegal mode (" + mode + "), must be one of: QUIET, NORMAL, DEBUG");
+        this.mode = mode;
     }
 
     /**
@@ -102,7 +97,7 @@ public class DefaultHTMLParserFeedback
      */
     public void info (String message)
     {
-        if (!(0 == mLevel))
+        if (mode!=QUIET)
             System.out.println ("INFO: " + message);
     }
     
@@ -112,7 +107,7 @@ public class DefaultHTMLParserFeedback
      */
     public void warning (String message)
     {
-        if (!(0 == mLevel))
+        if (mode!=QUIET)
             System.out.println ("WARNING: " + message);
     }
     
@@ -123,11 +118,11 @@ public class DefaultHTMLParserFeedback
      */
     public void error (String message, HTMLParserException exception)
     {
-        if (!(0 == mLevel))
+        if (mode!=QUIET)
         {
             System.out.println ("ERROR: " + message);
-            if (2 == mLevel && (null != exception))
-                exception.printStackTrace (System.out);
+            if (mode == DEBUG && (exception!=null))
+                exception.printStackTrace ();
         }
     }
 }
