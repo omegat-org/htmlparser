@@ -186,9 +186,9 @@ public class StringBean extends NodeVisitor implements Serializable
         mLinks = false;
         mReplaceSpace = true;
         mCollapse = true;
-		mBuffer = new StringBuffer (4096);
-		mIsScript = false;
-		mIsPre = false;
+        mBuffer = new StringBuffer (4096);
+        mIsScript = false;
+        mIsPre = false;
         mIsStyle = false;
     }
 
@@ -341,7 +341,7 @@ public class StringBean extends NodeVisitor implements Serializable
                 }
                 finally
                 {
-                    mBuffer = null;
+                    mBuffer = new StringBuffer (4096);
                 }
              }
             catch (ParserException pe)
@@ -412,10 +412,10 @@ public class StringBean extends NodeVisitor implements Serializable
     public String getStrings ()
     {
         if (null == mStrings)
-			if (0 == mBuffer.length ())
-				setStrings ();
-			else
-				updateStrings (mBuffer.toString ());
+        if (0 == mBuffer.length ())
+            setStrings ();
+        else
+            updateStrings (mBuffer.toString ());
 
         return (mStrings);
     }

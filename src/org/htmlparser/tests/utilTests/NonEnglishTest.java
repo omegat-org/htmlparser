@@ -26,46 +26,34 @@
 
 package org.htmlparser.tests.utilTests;
 
-
-import junit.framework.TestSuite;
-
+import org.htmlparser.beans.StringBean;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.ParserException;
 
 /**
- * Insert the type's description here.
- * Creation date: (6/17/2001 6:07:04 PM)
+ * Test case for bug #1161137 Non English Character web page.
+ * Submitted by Michael (tilosdcal@users.sourceforge.net)
  */
-public class AllTests extends ParserTestCase
+public class NonEnglishTest extends ParserTestCase
 {
     static
     {
-        System.setProperty ("org.htmlparser.tests.utilTests.AllTests", "AllTests");
+        System.setProperty ("org.htmlparser.tests.utilTests.NonEnglishTest", "NonEnglishTest");
     }
 
-    /**
-     * AllTests constructor comment.
-     * @param name java.lang.String
-     */
-    public AllTests(String name) {
+    public NonEnglishTest (String name)
+    {
         super(name);
     }
 
-    /**
-     * Insert the method's description here.
-     * Creation date: (6/17/2001 6:07:15 PM)
-     * @return junit.framework.TestSuite
-     */
-    public static TestSuite suite()
+    public void testNonEnglishCharacters() throws ParserException 
     {
-        TestSuite suite = new TestSuite("Utility Tests");
-
-        suite.addTestSuite(BeanTest.class);
-        suite.addTestSuite(CharacterTranslationTest.class);
-        suite.addTestSuite(HTMLParserUtilsTest.class);
-        suite.addTestSuite(NodeListTest.class);
-        suite.addTestSuite(NonEnglishTest.class);
-        suite.addTestSuite(SortTest.class);
-
-        return suite;
+        StringBean sb;
+        
+        sb = new StringBean ();
+        sb.setURL ("http://www.kobe-np.co.jp/");
+        sb.getStrings ();
+        sb.setURL ("http://book.asahi.com/"); // this used to throw an exception
+        sb.getStrings ();
     }
 }
