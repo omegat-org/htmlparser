@@ -28,6 +28,7 @@
       <format property="TODAY_STRING" pattern="MMM dd, yyyy"/>
     </tstamp>
     <property name="versionTag" value="${versionQualifier}_${TODAY}"/>
+    <echo message="today is ${TODAY_STRING}"/>
     <echo message="versionTag=${versionTag}"/>
 
     <!-- retrieve VERSION_XXX properties from Parser.java  -->
@@ -189,6 +190,19 @@
 
     <!-- Create the javadoc directory -->
     <mkdir dir="${dist}/docs/javadoc"/>
+    
+    <property name="javadoc.doctitle" value="&lt;h1>HTML Parser ${versionNumber}&lt;/h1>"/>
+    <property name="javadoc.header" value="&lt;A HREF=&quot;http://htmlparser.sourceforge.net&quot; target=&quot;_top&quot;>HTML Parser Home Page&lt;/A>"/>
+    <property name="javadoc.footer" value="&amp;copy; 2003 Somik Raha&lt;div align=&quot;right&quot;&gt;${TODAY_STRING}&lt;/div&gt;"/>
+    <property name="javadoc.bottom" value="HTML Parser is an open source library released under
+    &lt;A HREF=&quot;http://www.opensource.org/licenses/lgpl-license.html&quot;&gt;LGPL&lt;/A&gt;.&lt;BR&gt;
+    If you want to be notified when new releases of HTML Parser are available, join the
+    &lt;A HREF=&quot;http://lists.sourceforge.net/lists/listinfo/htmlparser-announce&quot;&gt;HTML Parser Announcement List&lt;/A&gt;.&lt;BR&gt;
+    If you have questions about the usage of the parser, join the
+    &lt;A HREF=&quot;http://lists.sourceforge.net/lists/listinfo/htmlparser-user&quot;&gt;HTML Parser User List&lt;/A&gt;.&lt;BR&gt;
+    If you want to join as a developer, please sign up on the
+    &lt;A HREF=&quot;http://lists.sourceforge.net/lists/listinfo/htmlparser-developer&quot;&gt;HTML Parser Developer List&lt;/A&gt;.&lt;BR&gt;
+    &lt;div align=&quot;right&quot;&gt;&lt;A HREF=&quot;http://sourceforge.net/projects/htmlparser&quot;&gt;&lt;img src=&quot;http://sourceforge.net/sflogo.php?group_id=24399&amp;type=1&quot; width=&quot;88&quot; height=&quot;31&quot; border=&quot;0&quot; alt=&quot;SourceForge.net Logo&quot;&gt;&lt;/A&gt;&lt;/div&gt;"/>
 
     <javadoc packagenames="org.htmlparser.*"
            sourcepath="${src}"
@@ -198,14 +212,11 @@
            author="true"
            version="true"
            use="true"
-           windowtitle="HTML Parser ${versionTag}">
-      <doctitle><![CDATA[<h1>HTML Parser ${versionTag}</h1>]]></doctitle>
-      <header><![CDATA[<A HREF="http://htmlparser.sourceforge.net" target="_top">HTML Parser Home Page</A>]]></header>
-      <bottom><![CDATA[HTML Parser is an open source library released under LGPL. <BR> If you want to be notified when a new release of HTML Parser is out, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-announce">HTML Parser Announcement List</A>.<BR>
-If you have questions about the usage of the parser, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-user">HTML Parser User List</A>. 
-<BR>
-If you want to join as a developer, please sign up on the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-developer">HTML Parser Developer List</A>.<BR> All three lists can be joined from the <A HREF="http://htmlparser.sourceforge.net/mailinglists.html">HTML Parser Mailing Lists Page.</A>  ]]></bottom>
-      <footer>(c) 2003 Somik Raha</footer>
+           windowtitle="HTML Parser ${versionNumber}">
+      <doctitle>${javadoc.doctitle}</doctitle>
+      <header>${javadoc.header}</header>
+      <bottom>${javadoc.bottom}</bottom>
+      <footer>${javadoc.footer}</footer>
       <group title="Main Package" packages="org.htmlparser"/>
       <group title="Example Applications" packages="org.htmlparser.parserapplications"/>
       <group title="Tags" packages="org.htmlparser.tags,org.htmlparser.tags.data"/>
