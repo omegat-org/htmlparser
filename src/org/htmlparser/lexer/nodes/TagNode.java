@@ -192,6 +192,7 @@ public class TagNode extends AbstractNode
         Vector attributes;
         Attribute attribute;
         String value;
+        StringBuffer _value;
         Hashtable ret;
         
         ret = new SpecialHashtable ();
@@ -209,9 +210,21 @@ public class TagNode extends AbstractNode
                 {
                     value = attribute.getValue ();
                     if ('\'' == attribute.getQuote ())
-                        value = "'" + value + "'";
+                    {
+                        _value = new StringBuffer (value.length () + 2);
+                        _value.append ("'");
+                        _value.append (value);
+                        _value.append ("'");
+                        value =  _value.toString ();
+                    }
                     else if ('"' == attribute.getQuote ())
-                        value = "\"" + value + "\"";
+                    {
+                        _value = new StringBuffer (value.length () + 2);
+                        _value.append ("\"");
+                        _value.append (value);
+                        _value.append ("\"");
+                        value =  _value.toString ();
+                    }
                     else if ((null != value) && value.equals (""))
                         value = NOTHING;
                     if (null == value)

@@ -38,7 +38,7 @@ import org.htmlparser.util.sort.Ordered;
  * A bookmark in a page.
  * This class remembers the page it came from and its position within the page.
  */
-public class Cursor implements Ordered
+public class Cursor implements Ordered, Cloneable
 {
     /**
      * This cursor's position.
@@ -104,7 +104,14 @@ public class Cursor implements Ordered
      */
     public Cursor dup ()
     {
-        return (new Cursor (getPage (), getPosition ()));
+        try
+        {
+            return ((Cursor)clone ());
+        }
+        catch (CloneNotSupportedException cnse)
+        {
+            return (new Cursor (getPage (), getPosition ()));
+        }
     }
     
     public String toString ()

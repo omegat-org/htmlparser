@@ -158,6 +158,8 @@ public class Lexer
         boolean done;
         char ch;
         int length;
+        int begin;
+        int end;
         StringNode ret;
         
         cursor = mCursor.dup ();
@@ -173,7 +175,7 @@ public class Lexer
                 if (0 == ch)
                     done = true;
                 // the order of these tests might be optimized for speed:
-                else if ('/' == ch || '%' == ch || Character.isLetter (ch) || '!' == ch)
+                else if ('/' == ch || Character.isLetter (ch) || '!' == ch || '%' == ch)
                 {
                     done = true;
                     cursor.retreat ();
@@ -186,10 +188,12 @@ public class Lexer
                 }
             }
         }
-        length = cursor.getPosition () - mCursor.getPosition ();
+        begin = mCursor.getPosition ();
+        end = cursor.getPosition ();
+        length = end - begin;
         if (0 != length)
         {   // got some characters
-            ret = new StringNode (mPage, mCursor.getPosition (), cursor.getPosition ());
+            ret = new StringNode (mPage, begin, end);
             mCursor = cursor;
         }
         else
@@ -201,32 +205,38 @@ public class Lexer
     private void whitespace (Vector attributes, int[] bookmarks)
     {
         if (bookmarks[1] > bookmarks[0])
-            attributes.addElement (new Attribute (null, mPage.getText (bookmarks[0], bookmarks[1]), (char)0));
+            attributes.addElement (new Attribute (mPage, -1, -1, bookmarks[0], bookmarks[1], (char)0));
+            //attributes.addElement (new Attribute (null, mPage.getText (bookmarks[0], bookmarks[1]), (char)0));
     }
 
     private void standalone (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), null, (char)0));
+        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], -1, -1, (char)0));
+        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), null, (char)0));
     }
 
     private void empty (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), "", (char)0));
+        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[2] + 1, bookmarks[2] + 1, (char)0));
+        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), "", (char)0));
     }
 
     private void naked (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[3], bookmarks[4]), (char)0));
+        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[3], bookmarks[4], (char)0));
+        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[3], bookmarks[4]), (char)0));
     }
 
     private void single_quote (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[4] + 1, bookmarks[5]), '\''));
+        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[4] + 1, bookmarks[5], '\''));
+        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[4] + 1, bookmarks[5]), '\''));
     }
 
     private void double_quote (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[5] + 1, bookmarks[6]), '"'));
+        attributes.addElement (new Attribute (mPage, bookmarks[1], bookmarks[2], bookmarks[5] + 1, bookmarks[6], '"'));
+        //attributes.addElement (new Attribute (mPage.getText (bookmarks[1], bookmarks[2]), mPage.getText (bookmarks[5] + 1, bookmarks[6]), '"'));
     }
 
     /**
@@ -509,7 +519,11 @@ public class Lexer
                 case 4: // prior to the terminating >
                     if ('>' == ch)
                         done = true;
-                    else if (!Character.isWhitespace (ch) || ('!' == ch))
+                    else if (('!' == ch) || ('-' == ch) || Character.isWhitespace (ch))
+                    {
+                        // stay in state 4
+                    }
+                    else
                         state = 2;
                     break;
                 default:

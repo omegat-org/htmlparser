@@ -41,9 +41,9 @@ public class AllTests extends TestCase
 	public static TestSuite suite ()
     {
 		TestSuite suite = new TestSuite ("Lexer Tests");
-		suite.addTestSuite (StreamTests.class);
-		suite.addTestSuite (SourceTests.class);
-		suite.addTestSuite (PageTests.class);
+        suite.addTestSuite (StreamTests.class);
+        suite.addTestSuite (SourceTests.class);
+        suite.addTestSuite (PageTests.class);
         suite.addTestSuite (PageIndexTests.class);
         suite.addTestSuite (LexerTests.class);
         return suite; 

@@ -50,7 +50,7 @@ public class PageIndex implements Sortable
     /**
      * Increment for allocations.
      */
-    protected static final int mIncrement = 10;
+    protected static final int mIncrement = 100;
     
     /**
      * The number of valid elements.

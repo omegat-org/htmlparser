@@ -30,6 +30,8 @@ package org.htmlparser.lexer;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -75,7 +77,7 @@ public class Page
     /**
      * Messages for page not there (404).
      */
-    private String[] mFourOhFour =
+    static private String[] mFourOhFour =
     {
         "The web site you seek cannot be located, but countless more exist",
         "You step in the stream, but the water has moved on. This page is not here.",
@@ -134,7 +136,7 @@ public class Page
      * If null, defaults to the <code>DEFAULT_CHARSET</code>.
      * @exception UnsupportedEncodingException If the given charset is not supported.
      */
-    public Page (Stream stream, String charset)
+    public Page (InputStream stream, String charset)
         throws
             UnsupportedEncodingException
     {
@@ -148,15 +150,15 @@ public class Page
 
     public Page (String text) throws ParserException
     {
-        Stream stream;
+        InputStream stream;
         Page ret;
 
         if (null == text)
             throw new IllegalArgumentException ("text cannot be null");
         try
         {
-            stream = new Stream (new ByteArrayInputStream (text.getBytes (Page.DEFAULT_CHARSET)));
-            mSource = new Source (stream, Page.DEFAULT_CHARSET);
+            stream = new ByteArrayInputStream (text.getBytes (Page.DEFAULT_CHARSET));
+            mSource = new Source (stream, Page.DEFAULT_CHARSET, text.length () + 1);
             mIndex = new PageIndex (this);
         }
         catch (UnsupportedEncodingException uee)
@@ -192,15 +194,16 @@ public class Page
     {
         int i;
         char ret;
-        
-        if (mSource.mOffset < cursor.getPosition ())
+
+        i = cursor.getPosition ();
+        if (mSource.mOffset < i)
             // hmmm, we could skip ahead, but then what about the EOL index
             throw new ParserException ("attempt to read future characters from source");
-        else if (mSource.mOffset == cursor.getPosition ())
+        else if (mSource.mOffset == i)
             try
             {
                 i = mSource.read ();
-                if (-1 == i)
+                if (0 > i)
                     ret = 0;
                 else
                 {
@@ -217,7 +220,7 @@ public class Page
         else
         {
             // historic read
-            ret = mSource.mBuffer[cursor.getPosition ()];
+            ret = mSource.mBuffer[i];
             cursor.advance ();
         }
 
@@ -465,7 +468,6 @@ public class Page
     public void getText (StringBuffer buffer, int start, int end)
     {
         int length;
-        StringBuffer ret;
 
         if ((mSource.mOffset < start) || (mSource.mOffset < end))
             throw new IllegalArgumentException ("attempt to extract future characters from source");
@@ -477,6 +479,31 @@ public class Page
         }
         length = end - start;
         buffer.append (mSource.mBuffer, start, length);
+    }
+
+    /**
+     * Get all text read so far from the source.
+     * @return The text from the source.
+     * @see #getText(StringBuffer)
+     */
+    public String getText ()
+    {
+        StringBuffer ret;
+        
+        ret = new StringBuffer (mSource.mOffset);
+        getText (ret);
+        
+        return (ret.toString ());
+    }
+
+    /**
+     * Put all text read so far from the source into the given buffer.
+     * @param buffer The accumulator for the characters.
+     * @see #getText(StringBuffer,int,int)
+     */
+    public void getText (StringBuffer buffer)
+    {
+        getText (buffer, 0, mSource.mOffset);
     }
 
     //

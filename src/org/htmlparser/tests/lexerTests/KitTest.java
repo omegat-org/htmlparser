@@ -21,11 +21,14 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTMLEditorKit.Parser;
 import javax.swing.text.html.HTMLEditorKit.ParserCallback;
 import org.htmlparser.Node;
+import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.lexer.nodes.AbstractNode;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.util.ParserException;
+import org.htmlparser.util.Translate;
 
 /**
  *
@@ -41,6 +44,31 @@ public class KitTest extends ParserCallback
     {
         mNodes = nodes;
         mIndex = 0;
+    }
+
+    String snowhite (String s)
+    {
+        int length;
+        char ch;
+        StringBuffer ret;
+        
+        length = s.length ();
+        ret = new StringBuffer (length);
+        for (int i = 0; i < length; i++)
+        {
+            ch = s.charAt (i);
+            if (!Character.isWhitespace (ch) && !(160 == (int)ch))
+                ret.append (ch);
+        }
+        
+        return (ret.toString ());
+    }
+
+    boolean match (String s1, String s2)
+    {
+        s1 = snowhite (Translate.decode (s1));
+        s2 = snowhite (Translate.decode (s2));
+        return (s1.equalsIgnoreCase (s2));
     }
 
     public void handleText (char[] data, int pos)
@@ -65,7 +93,7 @@ public class KitTest extends ParserCallback
         {
             node = (Node)mNodes.elementAt (i);
             ours = node.getText ();
-            if (theirs.equalsIgnoreCase (ours))
+            if (match (theirs, ours))
             {
                 match = i;
                 break;
@@ -76,11 +104,30 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            System.out.println ("  ours: " + ours);
-            mIndex++;
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            System.out.println ("ours " + cursor + ": " + ours);
         }
         else
         {
+            boolean skipped = false;
+            for (int i = mIndex; i < match; i++)
+            {
+                ours = ((Node)mNodes.elementAt (i)).toHtml ();
+                if (0 != ours.trim ().length ())
+                {
+                    if (!skipped)
+                        System.out.println ("skipping:");
+                    System.out.println (ours);
+                    skipped = true;
+                }
+            }
+            if (skipped)
+            {
+                System.out.println ("to match:");
+                node = (Node)mNodes.elementAt (match);
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                System.out.println ("@" + cursor + ": " + node.toHtml ());
+            }
 //            System.out.println (" match: " + theirs);
             mIndex = match + 1;
         }
@@ -102,7 +149,7 @@ public class KitTest extends ParserCallback
         {
             node = (Node)mNodes.elementAt (i);
             ours = node.getText ();
-            if (theirs.equalsIgnoreCase (ours))
+            if (match (theirs, ours))
             {
                 match = i;
                 break;
@@ -113,11 +160,30 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            System.out.println ("  ours: " + ours);
-            mIndex++;
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            System.out.println ("ours " + cursor + ": " + ours);
         }
         else
         {
+            boolean skipped = false;
+            for (int i = mIndex; i < match; i++)
+            {
+                ours = ((Node)mNodes.elementAt (i)).toHtml ();
+                if (0 != ours.trim ().length ())
+                {
+                    if (!skipped)
+                        System.out.println ("skipping:");
+                    System.out.println (ours);
+                    skipped = true;
+                }
+            }
+            if (skipped)
+            {
+                System.out.println ("to match:");
+                node = (Node)mNodes.elementAt (match);
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                System.out.println ("@" + cursor + ": " + node.toHtml ());
+            }
 //            System.out.println (" match: " + theirs);
             mIndex = match + 1;
         }
@@ -139,7 +205,7 @@ public class KitTest extends ParserCallback
             if (node instanceof TagNode)
             {
                 ours = ((Attribute)(((TagNode)node).getAttributesEx ().elementAt (0))).getName ();
-                if (theirs.equalsIgnoreCase (ours))
+                if (match (theirs, ours))
                 {
                     match = i;
                     break;
@@ -151,11 +217,30 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            System.out.println ("  ours: " + ours);
-            mIndex++;
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            System.out.println ("ours " + cursor + ": " + ours);
         }
         else
         {
+            boolean skipped = false;
+            for (int i = mIndex; i < match; i++)
+            {
+                ours = ((Node)mNodes.elementAt (i)).toHtml ();
+                if (0 != ours.trim ().length ())
+                {
+                    if (!skipped)
+                        System.out.println ("skipping:");
+                    System.out.println (ours);
+                    skipped = true;
+                }
+            }
+            if (skipped)
+            {
+                System.out.println ("to match:");
+                node = (Node)mNodes.elementAt (match);
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                System.out.println ("@" + cursor + ": " + node.toHtml ());
+            }
 //            System.out.println (" match: " + theirs);
             mIndex = match + 1;
         }
@@ -177,7 +262,7 @@ public class KitTest extends ParserCallback
             if (node instanceof TagNode)
             {
                 ours = ((Attribute)(((TagNode)node).getAttributesEx ().elementAt (0))).getName ().substring (1);
-                if (theirs.equalsIgnoreCase (ours))
+                if (match (theirs, ours))
                 {
                     match = i;
                     break;
@@ -189,11 +274,30 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            System.out.println ("  ours: " + ours);
-            mIndex++;
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            System.out.println ("ours " + cursor + ": " + ours);
         }
         else
         {
+            boolean skipped = false;
+            for (int i = mIndex; i < match; i++)
+            {
+                ours = ((Node)mNodes.elementAt (i)).toHtml ();
+                if (0 != ours.trim ().length ())
+                {
+                    if (!skipped)
+                        System.out.println ("skipping:");
+                    System.out.println (ours);
+                    skipped = true;
+                }
+            }
+            if (skipped)
+            {
+                System.out.println ("to match:");
+                node = (Node)mNodes.elementAt (match);
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                System.out.println ("@" + cursor + ": " + node.toHtml ());
+            }
 //            System.out.println (" match: " + theirs);
             mIndex = match + 1;
         }
@@ -215,12 +319,12 @@ public class KitTest extends ParserCallback
             if (node instanceof TagNode)
             {
                 ours = ((Attribute)(((TagNode)node).getAttributesEx ().elementAt (0))).getName ();
-                if (theirs.equalsIgnoreCase (ours))
+                if (match (theirs, ours))
                 {
                     match = i;
                     break;
                 }
-                else if (theirs.equalsIgnoreCase (ours.substring (1)))
+                if (match (theirs, ours))
                 {
                     match = i;
                     break;
@@ -232,11 +336,30 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            System.out.println ("  ours: " + ours);
-            mIndex++;
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            System.out.println ("ours " + cursor + ": " + ours);
         }
         else
         {
+            boolean skipped = false;
+            for (int i = mIndex; i < match; i++)
+            {
+                ours = ((Node)mNodes.elementAt (i)).toHtml ();
+                if (0 != ours.trim ().length ())
+                {
+                    if (!skipped)
+                        System.out.println ("skipping:");
+                    System.out.println (ours);
+                    skipped = true;
+                }
+            }
+            if (skipped)
+            {
+                System.out.println ("to match:");
+                node = (Node)mNodes.elementAt (match);
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                System.out.println ("@" + cursor + ": " + node.toHtml ());
+            }
 //            System.out.println (" match: " + theirs);
             mIndex = match + 1;
         }
@@ -245,7 +368,7 @@ public class KitTest extends ParserCallback
     
     public void handleError (String errorMsg, int pos)
     {
-//        System.out.println ("******* error @" + pos + " ******** " + errorMsg);
+        System.out.println ("******* error @" + pos + " ******** " + errorMsg);
     }
     
     public void flush () throws BadLocationException
@@ -347,6 +470,7 @@ public class KitTest extends ParserCallback
      */
     public static void main (String[] args) throws ParserException, IOException
     {
+        String link;
         Lexer lexer;
         Node node;
         Vector nodes;
@@ -356,8 +480,12 @@ public class KitTest extends ParserCallback
         
         Element[] elements;
 
+        if (0 == args.length)
+            link = "http://sourceforge.net/projects/htmlparser";
+        else
+            link = args[0];
         // pass through it once to read the entire page
-        URL url = new URL ("http://sourceforge.net/projects/htmlparser");
+        URL url = new URL (link);
         lexer = new Lexer (url.openConnection ());
         nodes = new Vector ();
         while (null != (node = lexer.nextNode ()))

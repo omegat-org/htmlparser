@@ -32,6 +32,8 @@
 
 package org.htmlparser.lexer.nodes;
 
+import org.htmlparser.lexer.Page;
+
 /**
  * An attribute within a tag.
  * <p>If Name is null, it's whitepace and Value has the text.
@@ -45,6 +47,12 @@ package org.htmlparser.lexer.nodes;
  */
 public class Attribute
 {
+    Page mPage;
+    int mNameStart;
+    int mNameEnd;
+    int mValueStart;
+    int mValueEnd;
+
     /**
      * The name of this attribute.
      * The part before the equals sign, or the stand-alone attribute.
@@ -61,6 +69,24 @@ public class Attribute
      * The quote, if any, surrounding the value of the attribute, if any.
      */
     char mQuote;
+
+    /**
+     * Create an attribute.
+     * todo
+     * @param quote The quote, if any, surrounding the value of the attribute,
+     * (i.e. ' or "), or zero if none.
+     */
+    public Attribute (Page page, int name_start, int name_end, int value_start, int value_end, char quote)
+    {
+        mPage = page;
+        mNameStart = name_start;
+        mNameEnd = name_end;
+        mValueStart = value_start;
+        mValueEnd = value_end;
+        mName = null;
+        mValue = null;
+        mQuote = quote;
+    }
 
     /**
      * Create an attribute with the name, value and quote character given.
@@ -83,6 +109,9 @@ public class Attribute
      */
     public String getName ()
     {
+        if (null == mName)
+            if (-1 != mNameStart)
+                mName = mPage.getText (mNameStart, mNameEnd);
         return (mName);
     }
 
@@ -94,6 +123,9 @@ public class Attribute
      */
     public String getValue ()
     {
+        if (null == mValue)
+            if (-1 != mValueStart)
+                mValue = mPage.getText (mValueStart, mValueEnd);
         return (mValue);
     }
 
