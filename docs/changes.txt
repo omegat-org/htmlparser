@@ -1,3 +1,10 @@
+Nightly Build 1.2 - 20020503
+----------------------------
+[1] Major fix - Dirty parsing of erroneous inverted commas possible
+[2] Tags spread out on multiple lines, with blank lines in between are supported
+[3] Bug in HTMLStringNode fixed, so as to be able to parse tag characters < and >
+[4] Image tag parameters not being retrieved, bug fixed
+
 Production Release ver 1.1
 --------------------------
 [1] Added META and TITLE tag scanners
