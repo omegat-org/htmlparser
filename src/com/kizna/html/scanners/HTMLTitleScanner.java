@@ -33,7 +33,7 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 	 */
 	public boolean evaluate(String s, HTMLTagScanner previousOpenScanner) {
 		absorbLeadingBlanks(s);
-		if (s.toUpperCase().equals("TITLE"))
+		if (s.toUpperCase().equals("TITLE") && previousOpenScanner==null)
 		return true; else return false;
 	}
 
@@ -64,7 +64,7 @@ public class HTMLTitleScanner extends HTMLTagScanner {
 				    }
 				} 
 			}
-			while (endFlag==false);
+			while (endFlag==false && node!=null);
 			HTMLTitleTag titleTag = new HTMLTitleTag(tag.elementBegin(),endTag.elementEnd(),title,tag.getText(),tag.getTagLine());
 			return titleTag;		
 		}

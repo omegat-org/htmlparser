@@ -116,4 +116,31 @@ public class HTMLTitleScannerTest extends TestCase {
 	 	assertEquals("Title","SISTEMA TERRA, VOL. VI , No. 1-3, December 1997",titleTag.getTitle());
 	
 	}
+	/**
+	 * If there are duplicates of the title tag, the parser crashes.
+	 * This bug was reported by Claude Duguay
+	 */
+	public void testDoubleTitleTag() throws HTMLParserException{
+		String testHTML = new String(
+		"<html><head><TITLE>\n"+
+		"<html><head><TITLE>\n"+
+		"Double tags can hang the code\n"+
+		"</TITLE></head><body>\n"+
+		"<body><html>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		int i = 0;
+		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
+		parser.addScanner(titleScanner);
+	 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
+			node[i++] = e.nextHTMLNode();
+		}
+	 	assertEquals("Number of nodes expected",7,i);		
+	 	assertTrue("Third tag should be a title tag",node[2] instanceof HTMLTitleTag);
+		HTMLTitleTag titleTag = (HTMLTitleTag)node[2];
+	 	assertEquals("Title","Double tags can hang the code\r\n",titleTag.getTitle());
+	 	
+	}
 }
