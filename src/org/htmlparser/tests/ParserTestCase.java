@@ -142,7 +142,7 @@ public class ParserTestCase extends TestCase {
 			msg.append(node[i].getClass().getName());
 			msg.append("-->\n").append(node[i].toHtml()).append("\n");
 		}
-		assertEquals("Number of nodes parsed didnt match, nodes found were :\n"+msg.toString(),nodeCountExpected,nodeCount);
+		assertEquals("Number of nodes parsed didn't match, nodes found were :\n"+msg.toString(),nodeCountExpected,nodeCount);
 	}
 
 	public void parseAndAssertNodeCount(int nodeCountExpected) throws ParserException {
