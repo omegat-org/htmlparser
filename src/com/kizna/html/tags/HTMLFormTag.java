@@ -1,7 +1,4 @@
-package com.kizna.html.tags;
-
-import java.util.Vector;
-// HTMLParser Library v1.03 - A java-based parser for HTML
+// HTMLParser Library v1.2(20020503) - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -20,13 +17,22 @@ import java.util.Vector;
 //
 // For any questions or suggestions, you can write to me at :
 // Email :somik@kizna.com
-//
-// Postal Address :
+// 
+// Postal Address : 
 // Somik Raha
 // R&D Team
 // Kizna Corporation
-// 2-1-17-6F, Sakamoto Bldg., Moto Azabu, Minato ku, Tokyo, 106 0046, JAPAN
+// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
+// Shibuya-ku, Tokyo, 
+// 150-0012, 
+// JAPAN
+// Tel  :  +81-3-54752646
+// Fax : +81-3-5449-4870
+// Website : www.kizna.com
 
+package com.kizna.html.tags;
+
+import java.util.Vector;
 
 /**
  * Identifies an image tag
