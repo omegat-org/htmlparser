@@ -65,8 +65,8 @@ public class ScriptTagTest extends ParserTestCase{
         parseAndAssertNodeCount(1);
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         ScriptTag scriptTag = (ScriptTag)node[0];
-        assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
-        assertEquals("Script Tag End",28,scriptTag.elementEnd());
+        assertEquals("Script Tag Begin",0,scriptTag.getStartPosition ());
+        assertEquals("Script Tag End",28,scriptTag.getEndPosition ());
         assertEquals("Script Tag Code","Script Code",scriptTag.getScriptCode());
     }
 

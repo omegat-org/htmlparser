@@ -76,7 +76,18 @@ public class RemarkNode
      */
     public String toString()
     {
-        return "Comment Tag : "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+"\n";
+        StringBuffer ret;
+
+        ret = new StringBuffer (1024);
+        ret.append ("Comment Tag : ");
+        ret.append (getText ());
+        ret.append ("; begins at : ");
+        ret.append (getStartPosition ());
+        ret.append ("; ends at : ");
+        ret.append (getEndPosition ());
+        ret.append ("\n");
+
+        return (ret.toString ());
     }
 
     public void collectInto(NodeList collectionList, String filter) {

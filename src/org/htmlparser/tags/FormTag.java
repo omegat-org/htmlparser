@@ -160,7 +160,7 @@ public class FormTag extends CompositeTag
      */
     public String toString()
     {
-        return "FORM TAG : Form at "+getFormLocation()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        return "FORM TAG : Form at "+getFormLocation()+"; begins at : "+getStartPosition ()+"; ends at : "+getEndPosition ();
     }
     
     /**

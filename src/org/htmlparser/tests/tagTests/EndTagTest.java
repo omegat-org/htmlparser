@@ -65,7 +65,7 @@ public class EndTagTest extends ParserTestCase {
         assertTrue("Node should be a Tag",node[2] instanceof Tag);
         Tag endTag = (Tag)node[2];
         assertTrue("Node should be an end Tag",endTag.isEndTag ());
-        assertEquals("endtag element begin",pos,endTag.elementBegin());
-        assertEquals("endtag element end",pos+9,endTag.elementEnd());
+        assertEquals("endtag element begin",pos,endTag.getStartPosition ());
+        assertEquals("endtag element end",pos+9,endTag.getEndPosition ());
     }
 }

@@ -46,6 +46,6 @@ public class DoctypeTag extends Tag
     {
         String guts = toHtml();
         guts = guts.substring (1, guts.length () - 2);
-        return "Doctype Tag : "+guts+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        return "Doctype Tag : "+guts+"; begins at : "+getStartPosition ()+"; ends at : "+getEndPosition ();
     }
 }

@@ -133,7 +133,7 @@ public abstract class TagScanner
     {
         Tag ret;
         
-        ret = createTag(lexer.getPage (), tag.elementBegin(), tag.elementEnd(), tag.getAttributesEx (), tag, url);
+        ret = createTag(lexer.getPage (), tag.getStartPosition (), tag.getEndPosition (), tag.getAttributesEx (), tag, url);
         ret.setThisScanner(this);
 
         return (ret);

@@ -219,8 +219,8 @@ public abstract class CompositeTagScanner extends TagScanner
                         else if (isTagToBeEndedFor (next)) // check DTD
                         {
                             // insert a virtual end tag and backup one node
-                            endTag = createVirtualEndTag (tag, lexer.getPage (), next.elementBegin ());
-                            lexer.setPosition (next.elementBegin ());
+                            endTag = createVirtualEndTag (tag, lexer.getPage (), next.getStartPosition ());
+                            lexer.setPosition (next.getStartPosition ());
                             node = null;
                         }
                         else if (!next.isEndTag ())
@@ -244,7 +244,7 @@ public abstract class CompositeTagScanner extends TagScanner
         if (null == endTag)
             endTag = createVirtualEndTag (tag, lexer.getPage (), lexer.getCursor ().getPosition ());
 
-        composite = (CompositeTag)createTag (lexer.getPage (), tag.elementBegin (), endTag.elementEnd (), tag.getAttributesEx (), tag, endTag, nodeList);
+        composite = (CompositeTag)createTag (lexer.getPage (), tag.getStartPosition (), endTag.getEndPosition (), tag.getAttributesEx (), tag, endTag, nodeList);
         composite.setThisScanner (this);
         for (int i = 0; i < composite.getChildCount (); i++)
             composite.childAt (i).setParent (composite);

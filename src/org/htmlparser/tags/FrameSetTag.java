@@ -47,7 +47,7 @@ public class FrameSetTag extends CompositeTag
      */
     public String toString()
     {
-        return "FRAMESET TAG : begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        return "FRAMESET TAG : begins at : "+getStartPosition ()+"; ends at : "+getEndPosition ();
     }
 
     /**

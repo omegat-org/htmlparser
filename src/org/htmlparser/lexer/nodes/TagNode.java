@@ -576,8 +576,8 @@ public class TagNode
         {
             output = (TagNode)lexer.nextNode ();
             mPage = output.getPage ();
-            nodeBegin = output.elementBegin ();
-            nodeEnd = output.elementEnd ();
+            nodeBegin = output.getStartPosition ();
+            nodeEnd = output.getEndPosition ();
             mAttributes = output.getAttributesEx ();
         }
         catch (ParserException pe)
@@ -641,8 +641,8 @@ public class TagNode
             type = "End";
         else
             type = "Tag";
-        start = new Cursor (getPage (), elementBegin ());
-        end = new Cursor (getPage (), elementEnd ());
+        start = new Cursor (getPage (), getStartPosition ());
+        end = new Cursor (getPage (), getEndPosition ());
         return (type + " (" + start.toString () + "," + end.toString () + "): " + getText ());
     }
 

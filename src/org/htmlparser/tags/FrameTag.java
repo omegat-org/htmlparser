@@ -63,6 +63,6 @@ public class FrameTag extends Tag
      */
     public String toString()
     {
-        return "FRAME TAG : Frame " +getFrameName() + " at "+getFrameLocation()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        return "FRAME TAG : Frame " +getFrameName() + " at "+getFrameLocation()+"; begins at : "+getStartPosition ()+"; ends at : "+getEndPosition ();
     }
 }

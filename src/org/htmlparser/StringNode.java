@@ -69,8 +69,19 @@ public class StringNode
         super (page, start, end);
     }
 
-    public String toString() {
-        return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+    public String toString()
+    {
+        StringBuffer ret;
+
+        ret = new StringBuffer (1024);
+        ret.append ("Text = ");
+        ret.append (getText ());
+        ret.append ("; begins at : ");
+        ret.append (getStartPosition ());
+        ret.append ("; ends at : ");
+        ret.append (getEndPosition ());
+
+        return (ret.toString ());
     }
 
     public void collectInto(NodeList collectionList, String filter) {

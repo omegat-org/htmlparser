@@ -61,8 +61,8 @@ public class RemarkNode extends AbstractNode
         int end;
         String ret;
 
-        start = elementBegin () + 4;
-        end = elementEnd () - 3;
+        start = getStartPosition () + 4;
+        end = getEndPosition () - 3;
         if (start >= end)
             ret = "";
         else
@@ -76,8 +76,9 @@ public class RemarkNode extends AbstractNode
         return (getText());
     }
     
-    public String toHtml() {
-        return (mPage.getText (elementBegin (), elementEnd ()));
+    public String toHtml()
+    {
+        return (mPage.getText (getStartPosition (), getEndPosition ()));
     }
     /**
      * Print the contents of the remark tag.
@@ -87,8 +88,8 @@ public class RemarkNode extends AbstractNode
         Cursor start;
         Cursor end;
 
-        start = new Cursor (getPage (), elementBegin ());
-        end = new Cursor (getPage (), elementEnd ());
+        start = new Cursor (getPage (), getStartPosition ());
+        end = new Cursor (getPage (), getEndPosition ());
         return ("Rem (" + start.toString () + "," + end.toString () + "): " + getText ());
     }
 

@@ -89,7 +89,7 @@ public class StringNode extends AbstractNode
 
     public String toHtml ()
     {
-        return (mPage.getText (elementBegin (), elementEnd ()));
+        return (mPage.getText (getStartPosition (), getEndPosition ()));
     }
 
     public String toString ()
@@ -97,8 +97,8 @@ public class StringNode extends AbstractNode
         Cursor start;
         Cursor end;
 
-        start = new Cursor (getPage (), elementBegin ());
-        end = new Cursor (getPage (), elementEnd ());
+        start = new Cursor (getPage (), getStartPosition ());
+        end = new Cursor (getPage (), getEndPosition ());
         return ("Txt (" + start.toString () + "," + end.toString () + "): " + getText ());
     }
 

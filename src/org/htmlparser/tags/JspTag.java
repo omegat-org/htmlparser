@@ -48,6 +48,6 @@ public class JspTag extends Tag
     {
         String guts = toHtml();
         guts = guts.substring (1, guts.length () - 2);
-        return "JSP/ASP Tag : "+guts+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
+        return "JSP/ASP Tag : "+guts+"; begins at : "+getStartPosition ()+"; ends at : "+getEndPosition ();
     }
 }
