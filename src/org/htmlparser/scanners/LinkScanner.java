@@ -61,15 +61,14 @@ public class LinkScanner extends CompositeTagScanner
 	 * Overriding the default constructor
 	 */
 	public LinkScanner() {
-		super(MATCH_NAME);
-		processor = new LinkProcessor();
+		this("");
 	}
 	
 	/**
 	 * Overriding the constructor to accept the filter 
 	 */
 	public LinkScanner(String filter) {
-		super(filter,MATCH_NAME);
+		super(filter,MATCH_NAME,false);
 		processor = new LinkProcessor();		
 	}
 	

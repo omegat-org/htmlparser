@@ -96,7 +96,7 @@ public class CompositeTagScannerHelper {
 	private Tag createTag() throws ParserException {
 		return scanner.createTag(
 			new TagData(
-				tag.elementBegin(),endTag.elementEnd(),0,0,"","","",tag.isEmptyXmlTag()
+				tag.elementBegin(),endTag.elementEnd(),0,0,"","",url,tag.isEmptyXmlTag()
 			),
 			new CompositeTagData(
 				tag,endTag,nodeList

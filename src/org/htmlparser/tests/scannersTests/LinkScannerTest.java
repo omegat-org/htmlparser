@@ -60,9 +60,11 @@ public class LinkScannerTest extends ParserTestCase
 	}
 
 	public void testErroneousLinkBug() throws ParserException {
-		createParser("<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>");
+		createParser(
+			"<p>Site Comments?<br>" +				"<a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">" +					"Mail Us" +				"<a>" +			"</p>"
+		);
 		parser.registerScanners();
-		parseAndAssertNodeCount(5);
+		parseAndAssertNodeCount(6);
 		// The first node should be a Tag 
 		assertTrue("First node should be a Tag",node[0] instanceof Tag);
 		// The second node should be a HTMLStringNode

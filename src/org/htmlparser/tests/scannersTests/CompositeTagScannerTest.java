@@ -13,6 +13,7 @@ import org.htmlparser.util.ParserException;
 
 public class CompositeTagScannerTest extends ParserTestCase {
 	private CompositeTagScanner scanner;
+	private String url;
 	
 	public CompositeTagScannerTest(String name) {
 		super(name);
@@ -331,6 +332,24 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			"</CUSTOM>",
 			endTag.toHtml()
 		);
+	}
+	
+	public void testUrlBeingProvidedToCreateTag() throws ParserException {
+		createParser("<Custom/>","http://www.yahoo.com");
+		
+		parser.addScanner(new CustomScanner() {
+			public Tag createTag(
+				TagData tagData,
+				CompositeTagData compositeTagData) {
+				url = tagData.getUrlBeingParsed();
+				return super.createTag(
+					tagData,
+					compositeTagData
+				);
+			}
+		});
+		parseAndAssertNodeCount(1);
+		assertStringEquals("url","http://www.yahoo.com",url);		
 	}
 	
 	public static class CustomScanner extends CompositeTagScanner {
