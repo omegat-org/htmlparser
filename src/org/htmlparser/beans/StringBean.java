@@ -44,13 +44,26 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.Translate;
+import org.htmlparser.visitors.NodeVisitor;
 
 /**
  * Extract strings from a URL.
+ * <p>Text within &lt;SCRIPT&gt;&lt;/SCRIPT&gt; tags is removed.</p>
+ * <p>The text within &lt;PRE&gt;&lt;/PRE&gt; tags is not altered.</p>
+ * <p>The property <code>Strings</code>, which is the output property is null
+ * until a URL is set. So a typical usage is:</p>
+ * <pre>
+ *     StringBean sb = new StringBean ();
+ *     sb.setLinks (false);
+ *     sb.setReplaceNonBreakingSpaces (true);
+ *     sb.setCollapse (true);
+ *     sb.setURL ("http://www.netbeans.org"); // the HTTP is performed here
+ *     String s = sb.getStrings ();
+ * </pre>
  * @author Derrick Oswald
  * Created on December 23, 2002, 5:01 PM
  */
-public class StringBean implements Serializable
+public class StringBean extends NodeVisitor implements Serializable
 {
     /**
      * Property name in event where the URL contents changes.
@@ -58,15 +71,29 @@ public class StringBean implements Serializable
     public static final String PROP_STRINGS_PROPERTY = "Strings";
 
     /**
-     * Property name in event where the link request property changes.
+     * Property name in event where the 'embed links' state changes.
      */
     public static final String PROP_LINKS_PROPERTY = "Links";
 
     /**
      * Property name in event where the URL changes.
      */
-
     public static final String PROP_URL_PROPERTY = "URL";
+
+    /**
+     * Property name in event where the 'replace non-breaking spaces' state changes.
+     */
+    public static final String PROP_REPLACE_SPACE_PROPERTY = "ReplaceSpace";
+
+    /**
+     * Property name in event where the 'collapse whitespace' state changes.
+     */
+    public static final String PROP_COLLAPSE_PROPERTY = "Collapse";
+
+    /**
+     * Property name in event where the connection changes.
+     */
+    public static final String PROP_CONNECTION_PROPERTY = "Connection";
 
     /**
      * A newline.
@@ -81,7 +108,12 @@ public class StringBean implements Serializable
     /**
      * Bound property support.
      */
-    protected PropertyChangeSupport propertySupport;
+    protected PropertyChangeSupport mPropertySupport;
+
+    /**
+     * The parser used to extract strings.
+     */
+    protected Parser mParser;
 
     /**
      * The strings extracted from the URL.
@@ -89,28 +121,80 @@ public class StringBean implements Serializable
     protected String mStrings;
     
     /**
-     * If <code>true</code> the link URL is embedded in the text output.
+     * If <code>true</code> the link URLs are embedded in the text output.
      */
     protected boolean mLinks;
-    
-    /**
-     * The parser used to extract strings.
-     */
-    protected Parser parser;
 
-    /** Creates new StringBean */
+    /**
+     * If <code>true</code> regular space characters are substituted for
+     * non-breaking spaces in the text output.
+     */
+    protected boolean mReplaceSpace;
+
+    /**
+     * If <code>true</code> sequences of whitespace characters are replaced with a
+     * single space character.
+     */
+    protected boolean mCollapse;
+
+    /**
+     * The buffer text is stored in while traversing the HTML.
+     */
+    protected StringBuffer mBuffer;
+
+    /**
+     * Set <code>true</code> when traversing a SCRIPT tag.
+     */
+    protected boolean mIsScript;
+
+    /**
+     * Set <code>true</code> when traversing a PRE tag.
+     */
+    protected boolean mIsPre;
+    
+    /** 
+     * Create a StringBean object.
+     * Default property values are set to 'do the right thing':
+     * <p><code>Links</code> is set <code>false</code> so text appears like a
+     * browser would display it, albeit without the colour or underline clues
+     * normally associated with a link.</p>
+     * <p><code>ReplaceNonBreakingSpaces</code> is set <code>true</code>, so
+     * that printing the text works, but the extra information regarding these
+     * formatting marks is available if you set it false.</p>
+     * <p><code>Collapse</code> is set <code>true</code>, so text appears
+     * compact like a browser would display it.</p>
+     */
     public StringBean ()
     {
-        propertySupport = new PropertyChangeSupport (this);
+        super (true, false);
+        mPropertySupport = new PropertyChangeSupport (this);
+        mParser = new Parser ();
         mStrings = null;
         mLinks = false;
-        parser = new Parser ();
+        mReplaceSpace = true;
+        mCollapse = true;
     }
 
     //
     // internals
     //
 
+    /**
+     * Appends a newline to the buffer if there isn't one there already.
+     * Except if the buffer is empty.
+     * @param buffer The buffer to append to.
+     */
+    protected void carriage_return ()
+    {
+        int length;
+        
+        length = mBuffer.length ();
+        if (   (0 != length) // why bother appending newlines to the beginning of a buffer
+        && (   (newline_size <= length) // not enough chars to hold a newline
+        && (!mBuffer.substring (length - newline_size, length).equals (newline))))
+            mBuffer.append (newline);
+    }
+    
     /**
      * Add the given text collapsing whitespace.
      * Use a little finite state machine:
@@ -169,99 +253,93 @@ public class StringBean implements Serializable
                 }
             }
         }
-        
     }
-    
-    /**
-     * Appends a newline to the buffer if there isn't one there already.
-     * Except if the buffer is empty.
-     * @param buffer The buffer to append to.
-     */
-    protected void carriage_return (StringBuffer buffer)
-    {
-        int length;
-        
-        length = buffer.length ();
-        if (   (0 != length) // why bother appending newlines to the beginning of a buffer
-        && (   (newline_size <= length) // not enough chars to hold a newline
-        && (!buffer.substring (length - newline_size, length).equals (newline))))
-            buffer.append (newline);
-    }
-    
+
     /**
      * Extract the text from a page.
-     * @param links if <code>true</code> include hyperlinks in output.
      * @return The textual contents of the page.
      */
-    public String extractStrings (boolean links)
+    protected String extractStrings ()
         throws
             ParserException
     {
-        Node node;
-        Tag tag;
-        boolean preformatted;
-        StringBuffer results;
+        String ret;
 
-        parser.flushScanners ();
-        parser.registerScanners ();
-        results = new StringBuffer (4096);
-        preformatted = false;
-        for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
+        mParser.flushScanners ();
+        mParser.registerScanners ();
+        mIsPre = false;
+        mIsScript = false;
+        mBuffer = new StringBuffer (4096);
+        mParser.visitAllNodesWith (this);
+        ret = mBuffer.toString ();
+        mBuffer = null;
+        
+        return (ret);
+    }
+
+    /**
+     * Assign the <code>Strings</code> property, firing the property change.
+     * @param strings The new value of the <code>Strings</code> property.
+     */
+    protected void updateStrings (String strings)
+    {
+        String oldValue;
+
+        if ((null == mStrings) || !mStrings.equals (strings))
         {
-            node = e.nextNode ();
-            if (node instanceof StringNode)
+            oldValue = mStrings;
+            mStrings = strings;
+            mPropertySupport.firePropertyChange (PROP_STRINGS_PROPERTY, oldValue, strings);
+        }
+    }
+
+    /**
+     * Fetch the URL contents.
+     * Only do work if there is a valid parser with it's URL set.
+     */
+    protected void setStrings ()
+    {
+        if (null != getURL ())
+            try
             {
-                // node is a plain string
-                // cast it to an HTMLStringNode
-                StringNode string = (StringNode)node;
-                // retrieve the data from the object
-                if (preformatted)
-                    results.append (string.getText ());
-                else
-                    collapse (results, Translate.decode (string.getText ()));
-            }
-            else if (node instanceof LinkTag)
-            {
-                // node is a link
-                // cast it to an HTMLLinkTag
-                LinkTag link = (LinkTag)node;
-                // retrieve the data from the object
-                if (preformatted)
-                    results.append (link.getLinkText ());
-                else
-                    collapse (results, Translate.decode (link.getLinkText ()));
-                if (links)
+                mParser.flushScanners ();
+                mParser.registerScanners ();
+                mIsPre = false;
+                mIsScript = false;
+                try
                 {
-                    results.append ("<");
-                    results.append (link.getLink ());
-                    results.append (">");
+                    mBuffer = new StringBuffer (4096);
+                    mParser.visitAllNodesWith (this);
+                    updateStrings (mBuffer.toString ());
+                }
+                finally
+                {
+                    mBuffer = null;
                 }
             }
-            else if (node instanceof FormTag)
+            catch (ParserException pe)
             {
-                FormTag form = (FormTag)node;
-                if (form.breaksFlow ()) // it does
-                    carriage_return (results);
-                if (preformatted)
-                    results.append (form.toPlainTextString ());
-                else
-                    collapse (results, Translate.decode (form.toPlainTextString ()));
+                updateStrings (pe.toString ());
             }
-            else if (node instanceof RemarkNode)
+    }
+
+    /**
+     * Refetch the URL contents.
+     * Only need to worry if there is already a valid parser and it's
+     * been spent fetching the string contents.
+     */
+    private void resetStrings ()
+    {
+        if (null != mStrings)
+            try
             {
-                // skip comments
+                mParser.setURL (getURL ());
+                setStrings ();
             }
-            else if (node instanceof Tag)
+            catch (ParserException pe)
             {
-                tag = (Tag)node;
-                if (tag.breaksFlow ())
-                    carriage_return (results);
-                if (tag.getText ().toUpperCase ().equals ("PRE"))
-                    preformatted = !(tag instanceof EndTag);
+                updateStrings (pe.toString ());
             }
-        }
-        
-        return (results.toString ());
     }
 
     //
@@ -275,7 +353,7 @@ public class StringBean implements Serializable
      */
     public void addPropertyChangeListener (PropertyChangeListener listener)
     {
-        propertySupport.addPropertyChangeListener (listener);
+        mPropertySupport.addPropertyChangeListener (listener);
     }
 
     /**
@@ -285,7 +363,7 @@ public class StringBean implements Serializable
      */
     public void removePropertyChangeListener (PropertyChangeListener listener)
     {
-        propertySupport.removePropertyChangeListener (listener);
+        mPropertySupport.removePropertyChangeListener (listener);
     }
     
     //
@@ -293,56 +371,22 @@ public class StringBean implements Serializable
     //
 
     /**
-     * Getter for property strings.
-     * @return Value of property strings.
+     * Return the textual contents of the URL.
+     * This is the primary output of the bean.
+     * @return The user visible (what would be seen in a browser) text from the URL.
      */
     public String getStrings ()
     {
         if (null == mStrings)
-            try
-            {
-                mStrings = extractStrings (getLinks ());
-                propertySupport.firePropertyChange (PROP_STRINGS_PROPERTY, null, mStrings);
-            }
-            catch (ParserException hpe)
-            {
-                mStrings = hpe.toString ();
-            }
+            setStrings ();
 
         return (mStrings);
     }
 
     /**
-     * Refetch the URL contents.
-     */
-    private void setStrings ()
-    {
-        String url;
-        String strings;
-        String oldValue;
-
-        url = getURL ();
-        if (null != url)
-            try
-            {
-                parser.setURL (getURL ()); // bad: reset the scanner
-                strings = extractStrings (getLinks ());
-                if ((null == mStrings) || !mStrings.equals (strings))
-                {
-                    oldValue = mStrings;
-                    mStrings = strings;
-                    propertySupport.firePropertyChange (PROP_STRINGS_PROPERTY, oldValue, mStrings);
-                }
-            }
-            catch (ParserException hpe)
-            {
-                mStrings = hpe.toString ();
-            }
-    }
-
-    /**
-     * Getter for property links.
-     * @return Value of property links.
+     * Get the current 'include links' state.
+     * @return <code>true</code> if link text is included in the text extracted
+     * from the URL, <code>false</code> otherwise.
      */
     public boolean getLinks ()
     {
@@ -350,8 +394,11 @@ public class StringBean implements Serializable
     }
     
     /**
-     * Setter for property links.
-     * @param links New value of property links.
+     * Set the 'include links' state.
+     * If the setting is changed after the URL has been set, the text from the
+     * URL will be reacquired, which is possibly expensive.
+     * @param links Use <code>true</code> if link text is to be included in the
+     * text extracted from the URL, <code>false</code> otherwise.
      */
     public void setLinks (boolean links)
     {
@@ -359,70 +406,236 @@ public class StringBean implements Serializable
         if (oldValue != links)
         {
             mLinks = links;
-            propertySupport.firePropertyChange (PROP_LINKS_PROPERTY, oldValue, mLinks);
-            setStrings ();
+            mPropertySupport.firePropertyChange (PROP_LINKS_PROPERTY, oldValue, links);
+            resetStrings ();
         }
     }
     
     /**
-     * Getter for property URL.
-     * @return Value of property URL.
+     * Get the current URL.
+     * @return The URL from which text has been extracted, or <code>null</code>
+     * if this property has not been set yet.
      */
     public String getURL ()
     {
-        return (parser.getURL ());
+         return ((null != mParser) ? mParser.getURL () : null);
     }
     
     /**
-     * Setter for property URL.
-     * @param url New value of property URL.
+     * Set the URL to extract strings from.
+     * The text from the URL will be fetched, which may be expensive, so this
+     * property should be set last.
+     * @param url The URL that text should be fetched from.
      */
     public void setURL (String url)
     {
         String old;
+        URLConnection conn;
         
         old = getURL ();
+        conn = getConnection ();
         if (((null == old) && (null != url)) || ((null != old) && !old.equals (url)))
         {
             try
             {
-                parser.setURL (url);
-                propertySupport.firePropertyChange (PROP_URL_PROPERTY, old, getURL ());
+                if (null == mParser)
+                    mParser = new Parser (url);
+                else
+                    mParser.setURL (url);
+                mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, old, getURL ());
+                mPropertySupport.firePropertyChange (PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
                 setStrings ();
             }
-            catch (ParserException hpe)
+            catch (ParserException pe)
             {
-                // failed... now what
+                updateStrings (pe.toString ());
             }
         }
     }
 
     /**
-     * Getter for property Connection.
-     * @return Value of property Connection.
+     * Get the current 'replace non breaking spaces' state.
+     * @return <code>true</code> if non-breaking spaces (character '&#92;u00a0',
+     * numeric character reference &amp;#160; or character entity reference &amp;nbsp;)
+     * are to be replaced with normal spaces (character '&#92;u0020').
      */
-    public URLConnection getConnection ()
+    public boolean getReplaceNonBreakingSpaces ()
     {
-        return (parser.getConnection ());
+        return (mReplaceSpace);
     }
     
     /**
-     * Setter for property Connection.
-     * @param url New value of property Connection.
+     * Set the 'replace non breaking spaces' state.
+     * If the setting is changed after the URL has been set, the text from the
+     * URL will be reacquired, which is possibly expensive.
+     * @param replace_space <code>true</code> if non-breaking spaces (character '&#92;u00a0',
+     * numeric character reference &amp;#160; or character entity reference &amp;nbsp;)
+     * are to be replaced with normal spaces (character '&#92;u0020').
      */
-    public void setConnection (URLConnection connection)
+    public void setReplaceNonBreakingSpaces (boolean replace_space)
     {
-        try
+        boolean oldValue = mReplaceSpace;
+        if (oldValue != replace_space)
         {
-            parser.setConnection (connection);
-            setStrings ();
-        }
-        catch (ParserException hpe)
-        {
-            // failed... now what
+            mReplaceSpace = replace_space;
+            mPropertySupport.firePropertyChange (PROP_REPLACE_SPACE_PROPERTY, oldValue, replace_space);
+            resetStrings ();
         }
     }
 
+    /**
+     * Get the current 'collapse whitespace' state.
+     * If set to <code>true</code> this emulates the operation of browsers
+     * in interpretting text where <quote>user agents should collapse input white
+     * space sequences when producing output inter-word space</quote>.
+     * See HTML specification section 9.1 White space
+     * <a href="http://www.w3.org/TR/html4/struct/text.html#h-9.1">
+     * http://www.w3.org/TR/html4/struct/text.html#h-9.1</a>.
+     * @return <code>true</code> if sequences of whitespace (space '&#92;u0020',
+     * tab '&#92;u0009', form feed '&#92;u000C', zero-width space '&#92;u200B',
+     * carriage-return '\r' and newline '\n') are to be replaced with a single
+     * space.
+     */
+    public boolean getCollapse ()
+    {
+        return (mCollapse);
+    }
+    
+    /**
+     * Set the current 'collapse whitespace' state.
+     * If the setting is changed after the URL has been set, the text from the
+     * URL will be reacquired, which is possibly expensive.
+     * @param collapse_whitespace If <code>true</code>, sequences of whitespace
+     * will be reduced to a single space.
+     */
+    public void setCollapse (boolean collapse_whitespace)
+    {
+        boolean oldValue = mCollapse;
+        if (oldValue != collapse_whitespace)
+        {
+            mCollapse = collapse_whitespace;
+            mPropertySupport.firePropertyChange (PROP_COLLAPSE_PROPERTY, oldValue, collapse_whitespace);
+            resetStrings ();
+        }
+    }
+
+    /**
+     * Get the current connection.
+     * @return The connection that the parser has or <code>null</code> if it
+     * hasn't been set or the parser hasn't been constructed yet.
+     */
+    public URLConnection getConnection ()
+    {
+        return ((null != mParser) ? mParser.getConnection () : null);
+    }
+    
+    /**
+     * Set the parser's connection.
+     * The text from the URL will be fetched, which may be expensive, so this
+     * property should be set last.
+     * @param connection New value of property Connection.
+     */
+    public void setConnection (URLConnection connection)
+    {
+        String url;
+        URLConnection conn;
+        boolean change;
+        
+        url = getURL ();
+        conn = getConnection ();
+        if (((null == conn) && (null != connection)) || ((null != conn) && !conn.equals (connection)))
+        {
+            try
+            {
+                if (null == mParser)
+                    mParser = new Parser (connection);
+                else
+                    mParser.setConnection (connection);
+                mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, url, getURL ());
+                mPropertySupport.firePropertyChange (PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
+                setStrings ();
+            }
+            catch (ParserException pe)
+            {
+                updateStrings (pe.toString ());
+            }
+        }
+    }
+
+    //
+    // NodeVisitor overrides
+    //
+    
+    /**
+     * Appends the link as text between angle brackets to the output.
+     * @param link The link to process.
+     */
+    public void visitLinkTag (LinkTag link)
+    {
+        if (getLinks ())
+        {
+            mBuffer.append ("<");
+            mBuffer.append (link.getLink ());
+            mBuffer.append (">");
+        }
+    }
+
+    /**
+     * Appends the text to the output.
+     * @param string The text node.
+     */
+    public void visitStringNode (StringNode string)
+    {
+        if (!mIsScript)
+        {
+            String text = string.getText ();
+            if (!mIsPre)
+            {
+                text = Translate.decode (text);
+                if (getReplaceNonBreakingSpaces ())
+                    text = text.replace ('\u00a0',' ');
+                if (getCollapse ())
+                    collapse (mBuffer, text);
+                else
+                    mBuffer.append (text);
+            }
+            else
+                mBuffer.append (text);
+        }
+    }
+
+    /**
+     * Possibly resets the state of the PRE and SCRIPT flags.
+     * @param end The end tag.
+     */
+    public void visitEndTag (EndTag end)
+    {
+        String name;
+
+        name = end.getTagName ();
+        if (name.equalsIgnoreCase ("PRE"))
+            mIsPre = false;
+        else if (name.equalsIgnoreCase ("SCRIPT"))
+            mIsScript = false;
+    }
+    
+    /**
+     * Appends a newline to the output if the tag breaks flow, and
+     * possibly sets the state of the PRE and SCRIPT flags.
+     */
+    public void visitTag (Tag tag)
+    {
+        String name;
+
+        name = tag.getTagName ();
+        if (name.equalsIgnoreCase ("PRE"))
+            mIsPre = true;
+        else if (name.equalsIgnoreCase ("SCRIPT"))
+            mIsScript = true;
+        if (tag.breaksFlow ())
+            carriage_return ();
+    }
+    
 //    /**
 //     * Unit test.
 //     */
@@ -430,7 +643,6 @@ public class StringBean implements Serializable
 //    {
 //        StringBean sb = new StringBean ();
 //        sb.setURL ("http://cbc.ca");
-//        sb.setLinks (true);
 //        System.out.println (sb.getStrings ());
 //    }
 }

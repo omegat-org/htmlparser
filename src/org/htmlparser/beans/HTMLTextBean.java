@@ -59,19 +59,6 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
     }
 
     /**
-     * Return the underlying bean object.
-     * Creates a new one if it hasn't been initialized yet.
-     * @return The StringBean this bean uses to fetch text.
-     */
-    protected StringBean getBean ()
-    {
-        if (null == mBean)
-            mBean = new StringBean ();
-
-        return (mBean);
-    }
-
-    /**
      * Return the minimum dimension for this visible bean.
      */
     public Dimension getMinimumSize ()
@@ -114,6 +101,19 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
     //
     // Properties
     //
+
+    /**
+     * Return the underlying bean object.
+     * Creates a new one if it hasn't been initialized yet.
+     * @return The StringBean this bean uses to fetch text.
+     */
+    public StringBean getBean ()
+    {
+        if (null == mBean)
+            mBean = new StringBean ();
+
+        return (mBean);
+    }
 
     /**
      * Getter for property strings.
@@ -163,6 +163,55 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
     public void setURL (String url)
     {
         getBean ().setURL (url);
+    }
+
+    /**
+     * Get the current 'replace non breaking spaces' state.
+     * @return The <code>true</code> if non-breaking spaces (character '\u00a0',
+     * numeric character reference &160; or character entity reference &nbsp;)
+     * are to be replaced with normal spaces (character '\u0020').
+     */
+    public boolean getReplaceNonBreakingSpaces ()
+    {
+        return (getBean ().getReplaceNonBreakingSpaces ());
+    }
+    
+    /**
+     * Set the 'replace non breaking spaces' state.
+     * @param replace_space <code>true</code> if non-breaking spaces (character '\u00a0',
+     * numeric character reference &160; or character entity reference &nbsp;)
+     * are to be replaced with normal spaces (character '\u0020').
+     */
+    public void setReplaceNonBreakingSpaces (boolean replace_space)
+    {
+        getBean ().setReplaceNonBreakingSpaces (replace_space);
+    }
+
+    /**
+     * Get the current 'collapse whitespace' state.
+     * If set to <code>true</code> this emulates the operation of browsers
+     * in interpretting text where auser agents should collapse input white
+     * space sequences when producing output inter-word space.
+     * See HTML specification section 9.1 White space
+     * http://www.w3.org/TR/html4/struct/text.html#h-9.1
+     * @return <code>true</code> if sequences of whitespace (space '\u0020',
+     * tab '\u0009', form feed '\u000C', zero-width space '\u200B',
+     * carriage-return '\r' and newline '\n') are to be replaced with a single
+     * space.
+     */
+    public boolean getCollapse ()
+    {
+        return (getBean ().getCollapse ());
+    }
+    
+    /**
+     * Set the current 'collapse whitespace' state.
+     * @param collapse_whitespace If <code>true</code>, sequences of whitespace
+     * will be reduced to a single space.
+     */
+    public void setCollapse (boolean collapse_whitespace)
+    {
+        getBean ().setCollapse (collapse_whitespace);
     }
 
     /**
