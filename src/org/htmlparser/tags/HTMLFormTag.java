@@ -102,7 +102,8 @@ public class HTMLFormTag extends HTMLTag
 		boolean found=false;
 		for (Enumeration e = formInputVector.elements();e.hasMoreElements() && !found;) {
 			inputTag = (HTMLInputTag)e.nextElement();
-			if (inputTag.getParameter("NAME").equals(name)) {
+			String inputTagName = inputTag.getParameter("NAME");
+			if (inputTagName!=null && inputTagName.equals(name)) {
 				found=true;
 			}
 		}

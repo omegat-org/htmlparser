@@ -65,6 +65,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
+		"<INPUT TYPE=\"submit\">\n"+
 		"</FORM>";
 	
 	public static final String EXPECTED_FORM_HTML_FORMLINE="<FORM METHOD=\""+HTMLFormTag.POST+"\" ACTION=\"http://www.google.com/test/do_login.php\" NAME=\"login_form\" ONSUBMIT=\"return CheckData()\">\r\n";
@@ -78,6 +79,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		"<TR><TD ALIGN=\"center\"><INPUT VALUE=\"Login\" NAME=\"submit\" TYPE=\"submit\"></TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
 		"<INPUT NAME=\"password\" SIZE=\"20\" TYPE=\"hidden\">\r\n"+
+		"<INPUT TYPE=\"submit\">\r\n"+
 		"</FORM>";
 	public static final String EXPECTED_FORM_HTML = EXPECTED_FORM_HTML_FORMLINE+EXPECTED_FORM_HTML_REST_OF_FORM;
 			
