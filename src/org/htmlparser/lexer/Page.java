@@ -301,6 +301,24 @@ public class Page
     }
 
     /**
+     * Close the page by destroying the source of characters.
+     */
+    public void close () throws IOException
+    {
+        getSource ().destroy ();
+    }
+
+    /**
+     * Clean up this page, releasing resources.
+     * Calls <code>close()</code>.
+     * @exception Throwable if <code>close()</code> throws an <code>IOException</code>.
+     */
+    protected void finalize () throws Throwable
+    {
+        close ();
+    }
+    
+    /**
      * Get the connection, if any.
      * @return The connection object for this page, or null if this page
      * is built from a stream or a string.

@@ -45,6 +45,7 @@ import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.filters.TagNameFilter;
+import org.htmlparser.lexer.InputStreamSource;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.tags.BodyTag;
@@ -362,6 +363,63 @@ public class ParserTest extends ParserTestCase
                 i++;
             }
             assertEquals("Expected nodes",20,i);
+        }
+        catch (Exception e)
+        {
+            fail (e.toString ());
+        }
+        finally
+        {
+            file.delete ();
+        }
+    }
+
+    /**
+     * Tests deleting a file held open by the parser.
+     * See bug #1005409 Input file not free by parser
+     */
+    public void testFileDelete ()
+    {
+        String path;
+        File file;
+        PrintWriter out;
+        Parser parser;
+        NodeIterator enumeration;
+
+        path = System.getProperty ("user.dir");
+        if (!path.endsWith (File.separator))
+            path += File.separator;
+        file = new File (path + "delete_me.html");
+        try
+        {
+            out = new PrintWriter (new FileWriter (file));
+            out.println ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+            out.println ("<html>");
+            out.println ("<head>");
+            out.println ("<title>test</title>");
+            out.println ("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">");
+            out.println ("</head>");
+            out.println ("<body>");
+            out.println ("This is a test page ");
+            out.println ("</body>");
+            out.println ("</html>");
+            // fill our 16K buffer on read
+            for (int i = 0; i < InputStreamSource.BUFFER_SIZE; i++)
+                out.println ();
+            out.close ();
+            parser = new Parser (file.getAbsolutePath (), new DefaultParserFeedback(DefaultParserFeedback.QUIET));
+            parser.setNodeFactory (new PrototypicalNodeFactory (true));
+            enumeration = parser.elements ();
+            enumeration.nextNode ();
+            if (-1 != System.getProperty ("os.name").indexOf("Windows"))
+                // linux/unix lets you delete a file even when it's open
+                assertTrue ("file deleted with more available", !file.delete ());
+            // parser.getLexer ().getPage ().close ();
+            parser = null;
+            enumeration = null;
+            System.gc ();
+            System.runFinalization ();
+            assertTrue ("file not deleted after destroy", file.delete ());
         }
         catch (Exception e)
         {
