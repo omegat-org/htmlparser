@@ -196,7 +196,7 @@ HTML Parser Integration Release 1.4-20030727
     <echo message="**********************************"/>
 
     <!-- Compile the java code in ${src} -->
-    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java,org/htmlparser/lexer" debug="on" classpath="src:${commons-logging.jar}" />
+    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java,org/htmlparser/lexer/**" debug="on" classpath="src:${commons-logging.jar}" />
   </target>
 
   <!-- Create the distribution of htmlparser.jar -->
@@ -333,17 +333,18 @@ HTML Parser Integration Release 1.4-20030727
   <target name="Release" depends="versionSource,jar,javadoc,CopyBatch" description="prepare the release files">
   </target>
 
-  <!-- Package the release, creating the docs gzip also for uploading -->
+  <!-- Package the release -->
   <target name="Package" depends="Release,sources" description="glom the release and source files into the distribution zip file">
     <echo message="**********************************"/>
     <echo message="*  Packaging....                 *"/>
     <echo message="**********************************"/>
 
     <mkdir dir="${finalLoc}"/>
+    <mkdir dir="${releaseDir}/lib"/>
+    <copy file="lib/commons-logging.jar" todir="${releaseDir}/lib"/>
+    <copy file="lib/junit.jar" todir="${releaseDir}/lib"/>
     <zip zipfile="${finalLoc}/htmlparser${versionTag}.zip"
        basedir="${releaseDir}"/>
-    <tar tarfile="${finalLoc}/docs.tar" basedir="${dist}/docs"/>
-    <gzip zipfile="${finalLoc}/docs.tar.gz" src="${finalLoc}/docs.tar"/>
   </target>
   
   <!-- Prepare the sources zip, allowing folks to build the code -->
