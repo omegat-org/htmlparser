@@ -80,7 +80,7 @@ public class FormTagTest extends ParserTestCase {
 		NodeList nodeList = formTag.searchFor("USER NAME");
 		assertEquals("Should have found nodes",1,nodeList.size());
 		
-		Node [] nodes = nodeList.toNodeArray();
+		Node[] nodes = nodeList.toNodeArray();
 		
 		assertEquals("Number of nodes found",1,nodes.length);
 		assertType("search result node",StringNode.class,nodes[0]);

@@ -33,8 +33,6 @@ package org.htmlparser.tests.scannersTests;
 
 import java.util.*;
 import junit.framework.TestSuite;
-import org.htmlparser.Node;
-import org.htmlparser.StringNode;
 import org.htmlparser.scanners.LabelScanner;
 import org.htmlparser.tags.LabelTag;
 import org.htmlparser.tests.ParserTestCase;

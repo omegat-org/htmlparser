@@ -57,7 +57,7 @@ public class ObjectCollectionTest extends ParserTestCase {
 		Div div = (Div)node[0];
 		NodeList nodeList = new NodeList();
 		div.collectInto(nodeList,Span.class);
-		Node [] spans = nodeList.toNodeArray();
+		Node[] spans = nodeList.toNodeArray();
 		assertSpanContent(spans);
 	}
 

@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
+import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.Parser;
@@ -40,7 +41,7 @@ public class ParserTestCase extends TestCase {
 		StringReader sr = new StringReader(testHTML);
 		reader =  new NodeReader(new BufferedReader(sr),5000);
 		parser = new Parser(reader,new DefaultParserFeedback());
-		node = new Node[40];
+		node = new AbstractNode[40];
 	}
 
 	protected void createParser(String inputHTML,int numNodes) {
@@ -48,7 +49,7 @@ public class ParserTestCase extends TestCase {
 		StringReader sr = new StringReader(testHTML);
 		reader =  new NodeReader(new BufferedReader(sr),5000);
 		parser = new Parser(reader,new DefaultParserFeedback());
-		node = new Node[numNodes];
+		node = new AbstractNode[numNodes];
 	}
 
 	protected void createParser(String inputHTML, String url) {
@@ -56,7 +57,7 @@ public class ParserTestCase extends TestCase {
 		StringReader sr = new StringReader(testHTML);
 		reader =  new NodeReader(new BufferedReader(sr),url);
 		parser = new Parser(reader,new DefaultParserFeedback());
-		node = new Node[40];
+		node = new AbstractNode[40];
 	}
 
 	protected void createParser(String inputHTML, String url,int numNodes) {
@@ -64,7 +65,7 @@ public class ParserTestCase extends TestCase {
 		StringReader sr = new StringReader(testHTML);
 		reader =  new NodeReader(new BufferedReader(sr),url);
 		parser = new Parser(reader,new DefaultParserFeedback());
-		node = new Node[numNodes];
+		node = new AbstractNode[numNodes];
 	}
 	
 	public void assertStringEquals(String message, String expected, 

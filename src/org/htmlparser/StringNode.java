@@ -35,7 +35,7 @@ import org.htmlparser.visitors.NodeVisitor;
 /**
  * Normal text in the html document is identified and represented by this class.
  */
-public class StringNode extends Node
+public class StringNode extends AbstractNode
 {
 	public static final String STRING_FILTER="-string";
 	/**

@@ -34,6 +34,7 @@ import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.StringNode;
@@ -263,7 +264,7 @@ public abstract class TagScanner
 	/**
 	 * Insert an EndTag in the currentLine, just before the occurence of the provided tag
 	 */
-	public String insertEndTagBeforeNode(Node node, String currentLine) {
+	public String insertEndTagBeforeNode(AbstractNode node, String currentLine) {
 		String newLine = currentLine.substring(0,node.elementBegin());
 		newLine += "</A>";
 		newLine += currentLine.substring(node.elementBegin(),currentLine.length());

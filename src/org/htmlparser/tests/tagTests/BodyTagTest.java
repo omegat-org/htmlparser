@@ -28,11 +28,9 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.Enumeration;
 import java.util.Hashtable;
 import junit.framework.TestSuite;
 import org.htmlparser.Node;
-import org.htmlparser.Parser;
 
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.tags.BodyTag;

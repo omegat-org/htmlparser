@@ -29,6 +29,7 @@
 package org.htmlparser.tests.scannersTests;
 
 
+import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
@@ -245,7 +246,7 @@ public class LinkScannerTest extends ParserTestCase
 	
 		LinkTag linkTag = (LinkTag)node[0];
 		// Get the link data and cross-check
-		Node [] dataNode= new Node[10];
+		Node [] dataNode= new AbstractNode[10];
 		int i = 0;
 		for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();)
 		{
@@ -331,7 +332,7 @@ public class LinkScannerTest extends ParserTestCase
 		LinkTag linkTag = (LinkTag)node[0];
 		assertEquals("Link URL","http://transfer.go.com/cgi/atransfer.pl?goto=http://www.signs.movies.com&name=114332&srvc=nws&context=283&guid=4AD5723D-C802-4310-A388-0B24E1A79689",linkTag.getLink());
 		assertEquals("Link Text","",linkTag.getLinkText());
-		Node [] containedNodes = new Node[10];
+		Node [] containedNodes = new AbstractNode[10];
 		int i=0;
 		for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();) {
 			containedNodes[i++] = e.nextNode();
@@ -483,7 +484,7 @@ public class LinkScannerTest extends ParserTestCase
 		LinkTag linkTag = (LinkTag) node[0];
 		// Get the image tag from the link
 
-		Node insideNodes [] = new Node[10];
+		Node insideNodes [] = new AbstractNode[10];
 		int j =0 ;
 		for (SimpleNodeIterator e = linkTag.children();e.hasMoreNodes();) {
 			insideNodes[j++]= (Node)e.nextNode();

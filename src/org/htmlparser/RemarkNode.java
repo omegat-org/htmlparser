@@ -35,7 +35,7 @@ import org.htmlparser.visitors.NodeVisitor;
 /**
  * The remark tag is identified and represented by this class.
  */
-public class RemarkNode extends Node
+public class RemarkNode extends AbstractNode
 {
 	public final static String REMARK_NODE_FILTER="-r";
 	

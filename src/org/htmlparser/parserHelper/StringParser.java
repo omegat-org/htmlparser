@@ -28,8 +28,9 @@
 
 package org.htmlparser.parserHelper;
 
-import org.htmlparser.Node;
+import org.htmlparser.AbstractNode;
 import org.htmlparser.NodeReader;
+import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 
 public class StringParser {
@@ -72,7 +73,7 @@ public class StringParser {
 	 * @param balance_quotes If <code>true</code> enter ignoring state on
      * encountering quotes.
 	 */		
-	public Node find(NodeReader reader,String input,int position, boolean balance_quotes)
+	public AbstractNode find(NodeReader reader,String input,int position, boolean balance_quotes)
 	{
 		StringBuffer textBuffer = new StringBuffer();
 		int state = BEFORE_PARSE_BEGINS_STATE;
@@ -121,7 +122,7 @@ public class StringParser {
 				do {
 					input = reader.getNextLine();
 					if (input!=null && input.length()==0)
-						textBuffer.append(Node.getLineSeparator());
+						textBuffer.append(Parser.getLineSeparator());
 				}
 				while (input!=null && input.length()==0);
 				
@@ -130,7 +131,7 @@ public class StringParser {
 					state =PARSE_COMPLETED_STATE;
 					
 				} else {
-					textBuffer.append(Node.getLineSeparator());
+					textBuffer.append(Parser.getLineSeparator());
 					inputLen = input.length();
 					i=-1;
 				}

@@ -28,6 +28,7 @@
 
 package org.htmlparser.tests.scannersTests;
 
+import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.RemarkNode;
@@ -308,7 +309,7 @@ public class FormScannerTest extends ParserTestCase {
 		parser = new Parser(url);
         parser.registerScanners ();
         i = 0;
-        nodes = new Node[50];
+        nodes = new AbstractNode[50];
 		for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
 			nodes[i++] = e.nextNode();
         assertEquals ("Expected nodes", 39, i);

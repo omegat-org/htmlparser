@@ -28,7 +28,6 @@
 
 package org.htmlparser.tests.scannersTests;
 
-
 import org.htmlparser.Node;
 import org.htmlparser.scanners.SpanScanner;
 import org.htmlparser.scanners.TableScanner;

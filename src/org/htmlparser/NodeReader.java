@@ -335,7 +335,7 @@ public class NodeReader extends BufferedReader
 	 */
 	public static void setLineSeparator(String lineSeparator)
 	{
-		Node.setLineSeparator(lineSeparator);	
+		Parser.setLineSeparator(lineSeparator);	
 	}
 	
 	/**
@@ -344,7 +344,7 @@ public class NodeReader extends BufferedReader
 	 */ 
 	public static String getLineSeparator()
 	{
-		return (Node.getLineSeparator());
+		return (Parser.getLineSeparator());
 	}
 	/**
 	 * Returns the lineCount.

@@ -31,9 +31,7 @@
 
 package org.htmlparser.tests.scannersTests;
 
-import java.util.*;
 import junit.framework.TestSuite;
-import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
 import org.htmlparser.tests.ParserTestCase;

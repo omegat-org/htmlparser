@@ -60,7 +60,7 @@ public class ObjectFindingVisitor extends NodeVisitor {
 		}
 	}
 
-	public Node [] getTags() {
+	public Node[] getTags() {
 		return tags.toNodeArray();
 	}
 }

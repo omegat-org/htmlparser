@@ -28,7 +28,7 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.Node;
+import org.htmlparser.AbstractNode;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.visitors.NodeVisitor;
 /**
@@ -57,7 +57,7 @@ public class EndTag extends Tag
 	 * @param input Input String
 	 * @param position Position to start parsing from
 	 */
-	public static Node find(String input,int position)
+	public static AbstractNode find(String input,int position)
 	{
 		int state = ENDTAG_BEFORE_PARSING_STATE;
 		StringBuffer tagContents = new StringBuffer();

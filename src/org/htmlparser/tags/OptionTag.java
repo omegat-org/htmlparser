@@ -30,7 +30,6 @@ package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
-import org.htmlparser.util.ParserUtils;
 
 public class OptionTag extends CompositeTag
 {

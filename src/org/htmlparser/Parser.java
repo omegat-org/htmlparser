@@ -216,6 +216,14 @@ public class Parser
      */
     protected transient BufferedInputStream input;
 
+	/**
+	 * Variable to store lineSeparator.
+	 * This is setup to read <code>line.separator</code> from the System property.
+	 * However it can also be changed using the mutator methods.
+	 * This will be used in the toHTML() methods in all the sub-classes of Node.
+	 */
+	protected static String lineSeparator = System.getProperty("line.separator", "\n");
+
     /**
      * A quiet message sink.
      * Use this for no feedback.
@@ -237,9 +245,9 @@ public class Parser
 	/**
 	 * @param lineSeparator New Line separator to be used
 	 */
-	public static void setLineSeparator(String lineSeparator)
+	public static void setLineSeparator(String lineSeparatorString)
 	{
-		Node.setLineSeparator(lineSeparator);	
+		lineSeparator = lineSeparatorString;	
 	}
 	
     /**
@@ -1192,5 +1200,12 @@ public class Parser
 		Parser parser = createParser(inputHTML);
 		parser.addScanner(new LinkScanner(LinkTag.LINK_TAG_FILTER));
 		return parser;
+	}
+
+	/**
+	 * @return String lineSeparator that will be used in toHTML()
+	 */
+	public static String getLineSeparator() {
+		return lineSeparator;
 	}
 }

@@ -36,6 +36,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
+import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
@@ -89,7 +90,7 @@ public class ParserTest extends ParserTestCase {
 		}
 		parser.getReader().mark(5000);
 
-		Node [] node = new Node[500];
+		Node [] node = new AbstractNode[500];
 		int i = 0;
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
 		{
@@ -340,7 +341,7 @@ public class ParserTest extends ParserTestCase {
             out.println ("</html>");
             out.close ();
             parser = new Parser (file.getAbsolutePath ());
-            nodes = new Node[30];
+            nodes = new AbstractNode[30];
             i = 0;
             for (enumeration = parser.elements (); enumeration.hasMoreNodes ();)
             {
@@ -416,7 +417,7 @@ public class ParserTest extends ParserTestCase {
 		
 		parser = new Parser(url);
         i = 0;
-        nodes = new Node[30];
+        nodes = new AbstractNode[30];
 		for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
 			nodes[i++] = e.nextNode();
         assertEquals ("Expected nodes", 14, i);
@@ -550,7 +551,7 @@ public class ParserTest extends ParserTestCase {
 		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
 		
 		parser = new Parser(url);
-		Node node [] = new Node[30];
+		Node node [] = new AbstractNode[30];
 		int i = 0;
 		for (NodeIterator e = parser.elements();e.hasMoreNodes();) {
 			node[i] = e.nextNode();

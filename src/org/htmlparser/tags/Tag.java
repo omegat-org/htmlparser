@@ -33,7 +33,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.htmlparser.Node;
+import org.htmlparser.AbstractNode;
 import org.htmlparser.NodeReader;
 import org.htmlparser.parserHelper.AttributeParser;
 import org.htmlparser.parserHelper.TagParser;
@@ -49,7 +49,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * configure a parser.
  * @author Kaarle Kaila 23.10.2001
  */
-public class Tag extends Node
+public class Tag extends AbstractNode
 {
 	public static final String TYPE = "TAG";
 	/**
@@ -290,12 +290,12 @@ public class Tag extends Node
 	 * @param url URL at which HTML page is located
 	 * @param reader The NodeReader that is to be used for reading the url
 	 */
-	public Node scan(Map scanners,String url,NodeReader reader) throws ParserException
+	public AbstractNode scan(Map scanners,String url,NodeReader reader) throws ParserException
 	{
 		if (tagContents.length()==0) return this;
 		try {
 			boolean found=false;
-			Node retVal=null;
+			AbstractNode retVal=null;
 			// Find the first word in the scanners
 			String firstWord = extractWord(tagContents.toString());
 			// Now, get the scanner associated with this.

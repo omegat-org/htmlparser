@@ -148,7 +148,7 @@ public class RemarkNodeParser {
 			{
 				// We need to continue parsing to the next line
 				//input = reader.getNextLine();
-				tagContents.append(Node.getLineSeparator());
+				tagContents.append(Parser.getLineSeparator());
 				do {
 					input = reader.getNextLine();		
 				}

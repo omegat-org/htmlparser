@@ -669,7 +669,7 @@ public class TagTest extends ParserTestCase
         for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
         {
             Node newNode = e.nextNode ();  // Get the next HTML Node
-            temp = newNode.toHTML ();
+            temp = newNode.toHtml();
         }
         assertNotNull ("No nodes", temp);
         assertEquals ("Incorrect HTML output: ",

@@ -27,6 +27,7 @@
 // Website : http://www.industriallogic.com
 
 package org.htmlparser.parserapplications;
+
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.tags.LinkTag;

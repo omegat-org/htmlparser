@@ -30,8 +30,8 @@ package org.htmlparser.parserHelper;
 
 import java.util.StringTokenizer;
 
-import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
+import org.htmlparser.Parser;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserFeedback;
@@ -288,7 +288,7 @@ public class TagParser {
 				nextLine = ">";
 			} else {
 				// This means this is just a new line, hence add the new line character
-				tag.append(Node.getLineSeparator());
+				tag.append(Parser.getLineSeparator());
 			}
 			
 			// Ensure blank lines are included in tag's 'tagLines'

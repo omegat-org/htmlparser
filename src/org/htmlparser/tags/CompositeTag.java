@@ -29,7 +29,7 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.*;
-import org.htmlparser.Node;
+import org.htmlparser.AbstractNode;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
@@ -92,14 +92,14 @@ public abstract class CompositeTag extends Tag {
 			if (prevNode!=null) {
 				if (prevNode.elementEnd()>node.elementBegin()) {
 					// Its a new line
-					sb.append(lineSeparator);					
+					sb.append(Parser.getLineSeparator());					
 				}
 			}
 			sb.append(node.toHtml());
 			prevNode=node;
 		}
 		if (prevNode.elementEnd()>endTag.elementBegin()) {
-			sb.append(lineSeparator);
+			sb.append(Parser.getLineSeparator());
 		}
 	}
 
@@ -268,7 +268,7 @@ public abstract class CompositeTag extends Tag {
 	public String getChildrenHTML() {
 		StringBuffer buff = new StringBuffer();
 		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
-			Node node = (Node)e.nextNode();
+			AbstractNode node = (AbstractNode)e.nextNode();
 			buff.append(node.toHtml());
 		}
 		return buff.toString();
