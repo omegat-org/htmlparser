@@ -1,4 +1,4 @@
-// HTMLParser Library v1_2_20020811 - A java-based parser for HTML
+// HTMLParser Library v1_2_20020831 - A java-based parser for HTML
 // Copyright (C) Dec 31, 2000 Somik Raha
 //
 // This library is free software; you can redistribute it and/or
@@ -189,6 +189,7 @@ public void testLinkNodeBug5() throws HTMLParserException
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com");
 	HTMLParser parser = new HTMLParser(reader);
+	parser.setLineSeparator("\r\n");
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
