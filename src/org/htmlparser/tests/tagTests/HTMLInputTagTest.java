@@ -36,59 +36,27 @@ import junit.framework.*;
 import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.*;
 
-public class HTMLInputTagTest extends TestCase {
-	
+public class HTMLInputTagTest extends HTMLParserTestCase {
 	private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");
-	private HTMLNode[] node;
-	private int i;
-	
-	/**
-	 * Constructor for HTMLInputTagTest.
-	 * @param arg0
-	 */
+
 	public HTMLInputTagTest(String name) 
 	{
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(HTMLInputTagTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {HTMLInputTagTest.class.getName()});
-	}
-	
-	public void setUp() throws Exception
+	protected void setUp() throws Exception
 	{
 		super.setUp();
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
-
+		createParser(testHTML,"http://www.google.com/test/index.html");
 		parser.addScanner(new HTMLInputTagScanner("-i"));
-		
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-	}
-	
-	public void tearDown() throws Exception
-	{
-		super.tearDown();
 	}
 	
 	public void testToHTML() throws HTMLParserException 
 	{
-		
-		assertEquals("There should be 1 node identified",1,i);	
+		parseAndAssertNodeCount(1);
 		assertTrue("Node 1 should be INPUT Tag",node[0] instanceof HTMLInputTag);
 		HTMLInputTag InputTag;
 		InputTag = (HTMLInputTag) node[0];
@@ -97,8 +65,7 @@ public class HTMLInputTagTest extends TestCase {
 	
 	public void testToString() throws HTMLParserException 
 	{
-		
-		assertEquals("There should be 1 node identified",1,i);	
+		parseAndAssertNodeCount(1);
 		assertTrue("Node 1 should be INPUT Tag",node[0] instanceof HTMLInputTag);
 		HTMLInputTag InputTag;
 		InputTag = (HTMLInputTag) node[0];

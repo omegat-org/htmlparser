@@ -57,7 +57,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 	 */
 	public void testImageTag() throws HTMLParserException
 	{
-		createParser("<IMG alt=Google height=115 src=\"goo/title_homepage4.gif\" width=305>");
+		createParser("<IMG alt=Google height=115 src=\"goo/title_homepage4.gif\" width=305>","http://www.google.com/test/index.html");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
@@ -77,7 +77,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 	 */
 	public void testImageTagBug() throws HTMLParserException
 	{
-		createParser("<IMG alt=Google height=115 src=\"../goo/title_homepage4.gif\" width=305>");
+		createParser("<IMG alt=Google height=115 src=\"../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
@@ -97,7 +97,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 	 */
 	public void testImageTageBug2() throws HTMLParserException
 	{
-		createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>");
+		createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
@@ -114,7 +114,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 	 */
 	public void testImageTagSingleQuoteBug() throws HTMLParserException
 	{
-		createParser("<IMG SRC='abcd.jpg'>");
+		createParser("<IMG SRC='abcd.jpg'>","http://www.cj.com/");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
@@ -133,7 +133,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 	 */
 	public void testNullImageBug() throws HTMLParserException
 	{
-		createParser("<IMG SRC=>");
+		createParser("<IMG SRC=>","http://www.google.com/test/index.html");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
@@ -145,7 +145,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 	}
 
 	public void testToHTML() throws HTMLParserException {
-		createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>");
+		createParser("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>","http://www.google.com/test/test/index.html");
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
 			
