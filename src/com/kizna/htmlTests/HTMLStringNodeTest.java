@@ -252,4 +252,24 @@ public class HTMLStringNodeTest extends TestCase
 		assertEquals("Remark Node contents"," Comment ",remarkNode.getText());
 			
 	}
+	/**
+	 * Based on a bug report submitted by Cedric Rosa, if the last line contains a single character,
+	 * HTMLStringNode does not return the string node correctly.
+	 */
+	public void testLastLineWithOneChar() {
+		String testHTML = new String("a");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		int i = 0;
+		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		{
+			node[i++] = (HTMLNode)e.nextElement();
+		}
+		assertEquals("There should be 1 nodes identified",new Integer(1),new Integer(i));
+		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
+		HTMLStringNode stringNode = (HTMLStringNode)node[0];
+		assertEquals("First String node contents","a",stringNode.getText());
+	}
 }

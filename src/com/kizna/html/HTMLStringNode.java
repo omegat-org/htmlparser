@@ -120,14 +120,14 @@ public class HTMLStringNode extends HTMLNode
 				textBuffer.append(input.charAt(i));
 			}				
 			// Patch by Cedric Rosa
-			if (state==0 && i==input.length()-1)
+			if (state==0 && i==inputLen-1)
 			   state=1;
-			if (state==1 && i==input.length()-1)
+			if (state==1 && i==inputLen-1)
 			{
 				input = reader.getNextLine();
 
 				if (input==null) {
-					textEnd=i-1;
+					textEnd=i;
 					state =2;
 					
 				} else {

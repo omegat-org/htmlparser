@@ -25,7 +25,7 @@ public class PerformanceTest {
 		System.out.println("***************************************");
 		System.out.println("*  Test Without Scanners Registered   *");
 		System.out.println("***************************************");				
-		for (int i=0;i<numTimes;i++) {
+		for (int i=0;i<=numTimes;i++) {
 			// Create the parser object
 			parser = new HTMLParser(file);
 			HTMLNode node;
@@ -34,8 +34,11 @@ public class PerformanceTest {
 				node = (HTMLNode)e.nextElement();
 			}
 			long elapsedTime=System.currentTimeMillis()-start;
+			if (i!=0)
 			sumTimes += elapsedTime;
-			System.out.println("Iteration "+i+" : time taken = "+elapsedTime+" ms");
+			System.out.print("Iteration "+i);
+			if (i==0) System.out.print(" (not counted)");
+			System.out.println(" : time taken = "+elapsedTime+" ms");
 		}
 		avg = sumTimes/(float)numTimes;
 		System.out.println("***************************************");
@@ -49,7 +52,7 @@ public class PerformanceTest {
 		System.out.println("***************************************");
 		System.out.println("*    Test With Scanners Registered    *");
 		System.out.println("***************************************");					
-		for (int i=0;i<numTimes;i++) {
+		for (int i=0;i<=numTimes;i++) {
 			// Create the parser object
 			parser = new HTMLParser(file);
 			parser.registerScanners();
@@ -59,8 +62,11 @@ public class PerformanceTest {
 				node = (HTMLNode)e.nextElement();
 			}
 			long elapsedTime=System.currentTimeMillis()-start;
+			if (i!=0)
 			sumTimes += elapsedTime;
-			System.out.println("Iteration "+i+" : time taken = "+elapsedTime+" ms");
+			System.out.print("Iteration "+i);
+			if (i==0) System.out.print(" (not counted)");
+			System.out.println(" : time taken = "+elapsedTime+" ms");
 		}
 		avg = sumTimes/(float)numTimes;
 		System.out.println("***************************************");
