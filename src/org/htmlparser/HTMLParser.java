@@ -556,4 +556,12 @@ public class HTMLParser
 		return feedback;
 	}
 
+	/**
+	 * Returns the reader associated with the parser
+	 * @return HTMLReader
+	 */
+	public HTMLReader getReader() {
+		return reader;
+	}
+
 }

@@ -32,11 +32,12 @@ import java.io.*;
 import org.htmlparser.*;
 import org.htmlparser.scanners.*;
 import org.htmlparser.tags.*;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.*;
 
 import junit.framework.*;
 
-public class HTMLTextareaTagTest extends TestCase 
+public class HTMLTextareaTagTest extends HTMLParserTestCase 
 {
 	private String testHTML = new String(
 									"<TEXTAREA name=\"Remarks\" >The intervention by the UN proved beneficial</TEXTAREA>" +
@@ -112,16 +113,16 @@ public class HTMLTextareaTagTest extends TestCase
 		assertTrue("Node 5 should be Textarea Tag",node[4] instanceof HTMLTextareaTag);
 		HTMLTextareaTag TextareaTag;
 		TextareaTag = (HTMLTextareaTag) node[0];
-		HTMLTagTest.assertStringEquals("HTML String 1","<TEXTAREA NAME=\"Remarks\">The intervention by the UN proved beneficial</TEXTAREA>",TextareaTag.toHTML());
+		assertStringEquals("HTML String 1","<TEXTAREA NAME=\"Remarks\">The intervention by the UN proved beneficial</TEXTAREA>",TextareaTag.toHTML());
 		TextareaTag = (HTMLTextareaTag) node[1];
-		HTMLTagTest.assertStringEquals("HTML String 2","<TEXTAREA>The capture of the Somali warloard was elusive</TEXTAREA>",TextareaTag.toHTML());
+		assertStringEquals("HTML String 2","<TEXTAREA>The capture of the Somali warloard was elusive</TEXTAREA>",TextareaTag.toHTML());
 		TextareaTag = (HTMLTextareaTag) node[2];
-		HTMLTagTest.assertStringEquals("HTML String 3","<TEXTAREA></TEXTAREA>",TextareaTag.toHTML());
+		assertStringEquals("HTML String 3","<TEXTAREA></TEXTAREA>",TextareaTag.toHTML());
 		TextareaTag = (HTMLTextareaTag) node[3];
-		HTMLTagTest.assertStringEquals("HTML String 4","<TEXTAREA NAME=\"Remarks\">\r\nThe death threats of the organization\r\n"+
+		assertStringEquals("HTML String 4","<TEXTAREA NAME=\"Remarks\">\r\nThe death threats of the organization\r\n"+
 									"refused to intimidate the soldiers</TEXTAREA>",TextareaTag.toHTML());
 		TextareaTag = (HTMLTextareaTag) node[4];
-		HTMLTagTest.assertStringEquals("HTML String 5","<TEXTAREA NAME=\"Remarks\">\r\nThe death threats of the LTTE\r\n" +
+		assertStringEquals("HTML String 5","<TEXTAREA NAME=\"Remarks\">\r\nThe death threats of the LTTE\r\n" +
 									"refused to intimidate the Tamilians\r\n</TEXTAREA>",TextareaTag.toHTML());
 
 	}	

@@ -114,7 +114,7 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		"</FORM>";
 		assertEquals("Length of string",tempString.length(),formTag.toHTML().length());
 
-		HTMLTagTest.assertStringEquals("Raw String",tempString,formTag.toHTML());
+		assertStringEquals("Raw String",tempString,formTag.toHTML());
 	}
 	
 	public void testScanFormWithNoEnding() {

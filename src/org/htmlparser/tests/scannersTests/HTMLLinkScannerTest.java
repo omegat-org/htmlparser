@@ -391,7 +391,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 1 should be a link tag",node[0] instanceof HTMLLinkTag);
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
-		HTMLTagTest.assertStringEquals("Resolved Link","http://transfer.go.com/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",linkTag.getLink());
+		assertStringEquals("Resolved Link","http://transfer.go.com/cgi-bin/view_search?query_text=postdate>20020701&txt_clr=White&bg_clr=Red&url=http://localhost/Testing/Report1.html",linkTag.getLink());
 		assertEquals("Resolved Link Text","20020702 Report 1",linkTag.getLinkText());
 			
 	}

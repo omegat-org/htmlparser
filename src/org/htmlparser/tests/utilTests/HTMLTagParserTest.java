@@ -31,6 +31,7 @@ package org.htmlparser.tests.utilTests;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLTagParser;
+import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.tests.tagTests.HTMLTagTest;
 
 import junit.framework.TestCase;
@@ -44,7 +45,7 @@ import junit.framework.TestSuite;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-public class HTMLTagParserTest extends TestCase {
+public class HTMLTagParserTest extends HTMLParserTestCase {
 	private HTMLTagParser tagParser;
 	/**
 	 * Constructor for HTMLTagParserTest.
@@ -56,12 +57,12 @@ public class HTMLTagParserTest extends TestCase {
     public void testCorrectTag() {
     	HTMLTag tag = new HTMLTag(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">");
 		tagParser.correctTag(tag);
-		HTMLTagTest.assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
+		assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
     }	
 	public void testInsertInvertedCommasCorrectly() {
 		StringBuffer test = new StringBuffer("a b=c d e = f"); 
 		StringBuffer result = tagParser.insertInvertedCommasCorrectly(test);
-		HTMLTagTest.assertStringEquals("Expected Correction","a b=\"c d\" e=\"f\"",result.toString());
+		assertStringEquals("Expected Correction","a b=\"c d\" e=\"f\"",result.toString());
 		
 	}
 	public void testPruneSpaces() {

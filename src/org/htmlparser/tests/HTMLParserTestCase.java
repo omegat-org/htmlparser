@@ -9,6 +9,7 @@ import org.htmlparser.HTMLReader;
 import org.htmlparser.HTMLRemarkNode;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.HTMLLinkScanner;
+import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
@@ -51,6 +52,14 @@ public class HTMLParserTestCase extends TestCase {
 		node = new HTMLNode[20];
 	}
 
+	protected void createParser(String inputHTML, String url,int numNodes) {
+		String testHTML = new String(inputHTML);
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),url);
+		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
+		node = new HTMLNode[numNodes];
+	}
+	
 	public void assertStringEquals(String message,String s1,String s2) {
 		for (int i=0;i<s1.length();i++) {
 			if (s1.charAt(i)!=s2.charAt(i)) {
