@@ -34,7 +34,6 @@ package org.htmlparser;
  */
 public class HTMLRemarkNode extends HTMLNode
 {
-	public final static String BLANK_STRING="";
 	public final static int REMARK_NODE_BEFORE_PARSING_STATE=0;
 	public final static int REMARK_NODE_OPENING_ANGLE_BRACKET_STATE=1;
 	public final static int REMARK_NODE_EXCLAMATION_RECEIVED_STATE=2;
@@ -200,7 +199,7 @@ public class HTMLRemarkNode extends HTMLNode
 		return tagContents;
 	}
 	public String toPlainTextString() {
-		return BLANK_STRING;
+		return tagContents;
 	}
 	public String toHTML() {
 		return "<!--"+lineSeparator+tagContents+lineSeparator+"-->";
