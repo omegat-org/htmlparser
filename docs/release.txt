@@ -1,3 +1,13 @@
+Integration Build 1.2 - 20020721
+--------------------------------
+[1] Fixed HTMLStringNode bug, whereby it wasnt able to 
+skip some wierd Microsoft tags (endif)
+[2] Fixed a deep bug in HTMLTag.java, the parser would crash
+on http://www.cybergeo.presse.fr/culture/weili/weili.htm
+[3] Fixed bug in HTMLTagScanner.java, in absorbLeadingBlanks()
+[4] Fixed bug in HTMLEndTag, allowing more robustness now in 
+scanning malformed end tags
+
 Integration Build 1.2 - 20020707
 --------------------------------
 [1] Fixed major slowdown bug in HTMLStringNode.find().
