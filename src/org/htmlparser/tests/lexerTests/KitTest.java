@@ -1,8 +1,27 @@
-/*
- * KitTest.java
- *
- * Created on August 16, 2003, 2:16 PM
- */
+// HTMLParser Library $Name$ - A java-based parser for HTML
+// Copyright (C) August 26, 2003 Derrick Oswald
+//
+// Revision Control Information
+//
+//    $Source$
+//    $Author$
+//    $Date$
+//    $Revision$
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
 
 package org.htmlparser.tests.lexerTests;
 
@@ -31,21 +50,38 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.Translate;
 
 /**
- *
- * @author  derrick
+ * Compare output from javax.swing.text.html.HTMLEditorKit with Lexer.
+ * This test provides a means of comparing the lexemes from
+ * javax.swing.text.html.HTMLEditorKit.Parser class with the lexemes
+ * produced by the org.htmlparser.lexer.Lexer class.
+ * <blockquote>
+ * The differences have eluded automation since the HTMLEditorKit parser
+ * adds spurious nodes where it thinks elements need closing or it gets
+ * confused.  The intent is to eventually incorporate this into the
+ * 'fit test' and run it against lots of HTML pages, but so far you must
+ * analyse the differences by hand.
+ * </blockquote>
  */
 public class KitTest extends ParserCallback
 {
     Vector mNodes;
     int mIndex;
     
-    /** Creates a new instance of KitTest */
+    /**
+     * Creates a new instance of KitTest
+     * @param nodes The list of lexemes from Lexer to compare with the kit lexemes.
+     */
     public KitTest (Vector nodes)
     {
         mNodes = nodes;
         mIndex = 0;
     }
 
+    /**
+     * Remove whitespace from a string.
+     * @param s The string to crunch.
+     * @return The string with whitespace characters removed.
+     */
     String snowhite (String s)
     {
         int length;
@@ -64,6 +100,12 @@ public class KitTest extends ParserCallback
         return (ret.toString ());
     }
 
+    /**
+     * Check if two strings match.
+     * @param s1 One string.
+     * @param s2 The other string.
+     * @return <code>true</code> if the strings are equivalent ignoring whitespace.
+     */
     boolean match (String s1, String s2)
     {
         s1 = snowhite (Translate.decode (s1));
@@ -71,6 +113,14 @@ public class KitTest extends ParserCallback
         return (s1.equalsIgnoreCase (s2));
     }
 
+    /**
+     * Callback for a text lexeme.
+     * @param data The text extracted from the page.
+     * @param pos The position in the page.
+     * <em>Note: This differs from the Lexer concept of position which is an
+     * absolute location in the HTML input stream. This position is the character
+     * position if the text from the page were displayed in a browser.</em>
+     */
     public void handleText (char[] data, int pos)
     {
         StringBuffer sb;
@@ -133,6 +183,14 @@ public class KitTest extends ParserCallback
         }
     }
     
+    /**
+     * Callback for a remark lexeme.
+     * @param data The text extracted from the page.
+     * @param pos The position in the page.
+     * <em>Note: This differs from the Lexer concept of position which is an
+     * absolute location in the HTML input stream. This position is the character
+     * position if the text from the page were displayed in a browser.</em>
+     */
     public void handleComment (char[] data, int pos)
     {
         StringBuffer sb;
@@ -189,6 +247,15 @@ public class KitTest extends ParserCallback
         }
     }
     
+    /**
+     * Callback for a start tag lexeme.
+     * @param t The tag extracted from the page.
+     * @param a The attributes parsed out of the tag.
+     * @param pos The position in the page.
+     * <em>Note: This differs from the Lexer concept of position which is an
+     * absolute location in the HTML input stream. This position is the character
+     * position if the text from the page were displayed in a browser.</em>
+     */
     public void handleStartTag (HTML.Tag t, MutableAttributeSet a, int pos)
     {
         StringBuffer sb;
@@ -246,6 +313,14 @@ public class KitTest extends ParserCallback
         }
     }
     
+    /**
+     * Callback for an end tag lexeme.
+     * @param t The tag extracted from the page.
+     * @param pos The position in the page.
+     * <em>Note: This differs from the Lexer concept of position which is an
+     * absolute location in the HTML input stream. This position is the character
+     * position if the text from the page were displayed in a browser.</em>
+     */
     public void handleEndTag (HTML.Tag t, int pos)
     {
         StringBuffer sb;
@@ -303,6 +378,15 @@ public class KitTest extends ParserCallback
         }
     }
     
+    /**
+     * Callback for a non-composite tag.
+     * @param t The tag extracted from the page.
+     * @param a The attributes parsed out of the tag.
+     * @param pos The position in the page.
+     * <em>Note: This differs from the Lexer concept of position which is an
+     * absolute location in the HTML input stream. This position is the character
+     * position if the text from the page were displayed in a browser.</em>
+     */
     public void handleSimpleTag (HTML.Tag t, MutableAttributeSet a, int pos)
     {
         StringBuffer sb;
@@ -366,11 +450,22 @@ public class KitTest extends ParserCallback
     }
 
     
+    /**
+     * Callback for an error condition.
+     * @param errorMsg The error condition as a text message.
+     * @param pos The position in the page.
+     * <em>Note: This differs from the Lexer concept of position which is an
+     * absolute location in the HTML input stream. This position is the character
+     * position if the text from the page were displayed in a browser.</em>
+     */
     public void handleError (String errorMsg, int pos)
     {
         System.out.println ("******* error @" + pos + " ******** " + errorMsg);
     }
-    
+
+    /**
+     * Callback for flushing the state, just prior to shutting down the parser.
+     */
     public void flush () throws BadLocationException
     {
     }
@@ -448,6 +543,9 @@ public class KitTest extends ParserCallback
 //            }
 //    }
 
+    /**
+     * Subclass of HTMLEditorKit to expose getParser().
+     */
     class MyKit extends HTMLEditorKit
     {
         public MyKit ()
@@ -459,14 +557,19 @@ public class KitTest extends ParserCallback
             return (super.getParser ());
         }
     }
-    
+
+    /**
+     * Return a editor kit.
+     */
     public MyKit getKit ()
     {
         return (new MyKit ());
     }
 
     /**
-     * @param args the command line arguments
+     * Manline for the test.
+     * @param args the command line arguments.
+     * If present the first array element is used as a URL to parse.
      */
     public static void main (String[] args) throws ParserException, IOException
     {
@@ -498,5 +601,14 @@ public class KitTest extends ParserCallback
         parser = kit.getParser ();
         parser.parse ((Reader)lexer.getPage ().getSource (), (ParserCallback)test, true);
     }
-    
 }
+
+/*
+ * Revision Control Modification History
+ *
+ * $Log$
+ * Revision 1.3  2003/08/27 02:40:24  derrickoswald
+ * Testing cvs keyword substitution.
+ *
+ *
+ */
