@@ -46,10 +46,6 @@ public class CompositeTagData {
 		for (SimpleNodeIterator i = children.elements();i.hasMoreNodes();) {
 			this.children.add(i.nextNode());
 		}	
-//		for (Enumeration e = children.elements();e.hasMoreElements();) {
-//			this.children.add((Node)e.nextElement());
-//		
-//		}
 	}
 
 	public NodeList getChildren() {

@@ -121,5 +121,10 @@ public class NodeList implements Serializable {
 		size--;		
 	}
 	
-	
+	public String toString() {
+		StringBuffer text = new StringBuffer();
+		for (int i=0;i<size;i++)
+			text.append(nodeData[i].toPlainTextString());
+		return text.toString();
+	}
 }

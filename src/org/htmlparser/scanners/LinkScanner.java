@@ -76,7 +76,7 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createLinkTag(String url, String currentLine, Node node, String linkText, int linkBegin, String tagContents, String linkContents, NodeList nodeVector, Tag startTag, Tag endTag) throws ParserException {
+	protected Tag createLinkTag(String url, String currentLine, Node node, int linkBegin, String tagContents, String linkContents, NodeList nodeVector, Tag startTag, Tag endTag) throws ParserException {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
@@ -101,6 +101,7 @@ public class LinkScanner extends CompositeTagScanner
 			javascriptLink = true;
 		}  
 		String accessKey = getAccessKey(startTag);
+		String myLinkText = nodeVector.toString();
 		
 		LinkTag linkTag = new LinkTag(
 			new TagData(
@@ -116,7 +117,7 @@ public class LinkScanner extends CompositeTagScanner
 			),
 			new LinkData(
 				link,
-				linkText,
+				myLinkText,
 				accessKey,
 				mailLink,
 				javascriptLink,
@@ -220,7 +221,7 @@ public class LinkScanner extends CompositeTagScanner
 			previousOpenScanner = this;
 			Node node;
 			
-			String linkText="",tmp;
+			String tmp;
 			int linkBegin, linkEnd;
 			String tagContents =  tag.getText();
 			String linkContents=""; // Kaarle Kaila 23.10.2001
@@ -242,7 +243,6 @@ public class LinkScanner extends CompositeTagScanner
 				{
 					
 					tmp =node.toPlainTextString();
-					linkText += tmp;
 					linkContents += tmp;   // Kaarle Kaila 23.10.2001
 					
 				}
@@ -290,7 +290,7 @@ public class LinkScanner extends CompositeTagScanner
 			{
 				
 				previousOpenScanner = null;
-				return createLinkTag(url,currentLine, node, linkText, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
+				return createLinkTag(url,currentLine, node, linkBegin, tagContents, linkContents, nodeVector,startTag,endTag);
 			}
 			ParserException ex = new ParserException("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine);
 			feedback.error("HTMLLinkScanner.scan() : Could not create link tag from "+currentLine,ex);
