@@ -75,7 +75,7 @@ public class HTMLStringNode implements HTMLNode
 		return textEnd;
 	}
 	/**
-	 * Locate the remark tag withing the input string, by parsing from the given position
+	 * Locate the StringNode within the input string, by parsing from the given position
 	 * @param reader HTML reader to be provided so as to allow reading of next line
 	 * @param input Input String
 	 * @param position Position to start parsing from
