@@ -12,6 +12,100 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.4 - 20030622
+--------------------------------
+
+2003-06-19 13:24  jkerievsky
+ 
+        * src/org/htmlparser/: AbstractNode.java, DecodingNode.java,
+        Node.java, StringNode.java, parserHelper/StringParser.java,
+        tests/DecodingNodeTest.java, util/Translate.java:
+ 
+        added support for StringNode Decoration
+ 
+2003-06-16 23:26  jkerievsky
+ 
+        * src/org/htmlparser/: Node.java, Parser.java, StringNode.java,
+        parserHelper/StringParser.java, tests/AllTests.java,
+        tests/DecodingNodeTest.java:
+ 
+        add setting for parser to perform the Translate.decode() on all StringNodes. This will later be refactored to a Decorator implementation.
+ 
+2003-06-16 21:52  somik
+ 
+        * src/org/htmlparser/tests/: parserHelperTests/AllTests.java,
+        parserHelperTests/AttributeParserTest.java,
+        parserHelperTests/TagParserTest.java,
+        temporaryFailures/AttributeParserTest.java,
+        temporaryFailures/TagParserTest.java:
+ 
+        added temporaryFailures package
+ 
+2003-06-16 21:38  somik
+ 
+        * src/org/htmlparser/tags/Tag.java:
+ 
+        new AttributeParser created every time attributes are to be parsed.
+        Done to achieve thread-safety.
+ 
+2003-06-16 21:35  somik
+ 
+        * src/org/htmlparser/parserHelper/AttributeParser.java:
+ 
+        refactored AttributeParser to be more readable
+ 
+2003-06-16 21:33  somik
+ 
+        * src/org/htmlparser/parserHelper/ScriptScannerHelper.java:
+ 
+        added header
+ 
+2003-06-16 21:32  somik
+ 
+        * src/org/htmlparser/: parserHelper/ScriptScannerHelper.java,
+        scanners/ScriptScanner.java:
+ 
+        created ScriptScannerHelper to allow thread safety in ScriptScanner
+ 
+2003-06-16 20:43  somik
+ 
+        * src/org/htmlparser/scanners/ScriptScanner.java:
+ 
+        updated scriptscanner header
+ 
+2003-06-16 20:43  somik
+ 
+        * src/org/htmlparser/: tests/scannersTests/ScriptScannerTest.java,
+        scanners/ScriptScanner.java,
+        tests/parserHelperTests/AttributeParserTest.java:
+ 
+        fixed ScriptScanner failing tests..
+
+2003-06-13 16:27  jkerievsky
+ 
+        * src/org/htmlparser/: AbstractNode.java, Node.java,
+        NodeReader.java, Parser.java, RemarkNode.java,
+        RemarkNodeParser.java, StringNode.java,
+        parserHelper/StringParser.java, parserHelper/TagParser.java,
+        parserapplications/LinkExtractor.java,
+        parserapplications/Robot.java, tests/ParserTest.java,
+        tests/ParserTestCase.java,
+        tests/scannersTests/FormScannerTest.java,
+        tests/scannersTests/HeadScannerTest.java,
+        tests/scannersTests/ImageScannerTest.java,
+        tests/scannersTests/LabelScannerTest.java,
+        tests/scannersTests/LinkScannerTest.java,
+        tests/scannersTests/SpanScannerTest.java,
+        tests/utilTests/NodeListTest.java, util/NodeList.java,
+        visitors/ObjectFindingVisitor.java, scanners/TagScanner.java,
+        tags/CompositeTag.java, tags/EndTag.java, tags/OptionTag.java,
+        tags/Tag.java, tests/tagTests/BodyTagTest.java,
+        tests/tagTests/FormTagTest.java,
+        tests/tagTests/ObjectCollectionTest.java,
+        tests/tagTests/TagTest.java:
+ 
+        Renamed Node to AbstractNode, extracted the new interface, Node, and moved line separator code from AbstractNode to Parser.
+
 Integration Build 1.4 - 20030601
 --------------------------------
 
