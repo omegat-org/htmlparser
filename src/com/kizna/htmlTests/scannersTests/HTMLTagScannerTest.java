@@ -38,6 +38,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.HTMLReader;
@@ -84,7 +85,7 @@ public class HTMLTagScannerTest extends junit.framework.TestCase
 			"</MESSAGE>"); 
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader = new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLEnumeration e = parser.elements(); 
 	
 		HTMLNode node = e.nextHTMLNode();
@@ -101,7 +102,7 @@ public class HTMLTagScannerTest extends junit.framework.TestCase
 			"<MESSAGE>Test</MESSAGE>");
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader = new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLEnumeration e = parser.elements(); 
 	
 		HTMLNode node = (HTMLNode)e.nextHTMLNode();
@@ -136,7 +137,7 @@ public class HTMLTagScannerTest extends junit.framework.TestCase
 		String testHTML = "<OPTION value=\"#\">Select a destination</OPTION>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode node;
 		HTMLEnumeration e = parser.elements();
 		node = (HTMLNode)e.nextHTMLNode();

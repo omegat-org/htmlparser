@@ -39,6 +39,7 @@ import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.tags.HTMLStyleTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -58,7 +59,7 @@ public class HTMLStyleTagTest extends TestCase {
 		String testHTML = new String("<style>a.h{background-color:#ffee99}</style>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yle.fi/");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
 		parser.registerScanners();

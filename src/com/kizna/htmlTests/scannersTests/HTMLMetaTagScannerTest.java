@@ -37,6 +37,7 @@ import java.io.*;
 import java.util.*;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.HTMLMetaTagScanner;
@@ -74,7 +75,7 @@ public class HTMLMetaTagScannerTest extends TestCase {
 		"<META HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		HTMLMetaTagScanner scanner = new HTMLMetaTagScanner("-t");
 		parser.addScanner(scanner);
@@ -124,7 +125,7 @@ public class HTMLMetaTagScannerTest extends TestCase {
 		);
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		HTMLMetaTagScanner scanner = new HTMLMetaTagScanner("-t");
 		parser.addScanner(scanner);

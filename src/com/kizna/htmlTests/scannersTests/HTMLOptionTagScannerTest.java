@@ -50,7 +50,7 @@ public class HTMLOptionTagScannerTest extends TestCase
 		scanner = new HTMLOptionTagScanner("-i");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[20];
 		scanner = new HTMLOptionTagScanner("-i");
 		parser.addScanner(scanner);

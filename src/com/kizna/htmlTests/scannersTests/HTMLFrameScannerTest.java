@@ -40,6 +40,7 @@ import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.scanners.HTMLFrameScanner;
 import com.kizna.html.tags.HTMLFrameTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -78,7 +79,7 @@ public class HTMLFrameScannerTest extends TestCase {
 		"</frameset>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLFrameScanner(""));

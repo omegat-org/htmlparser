@@ -35,6 +35,7 @@ package com.kizna.htmlTests.scannersTests;
 import java.io.BufferedReader;
 import java.util.Hashtable;
 import com.kizna.html.tags.HTMLLinkTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.HTMLStringNode;
@@ -73,7 +74,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = new String("<a href=\"http://www.kizna.com/servlets/SomeServlet?name=Sam Joseph\" accessKey=1>Click Here</A>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
@@ -92,7 +93,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = new String("<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.registerScanners();
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
@@ -123,7 +124,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		"<a href=s/7509><b>Yahoo! Movies</b></a>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.registerScanners();
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
@@ -169,7 +170,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		"<a href=s/7509><b>Yahoo! Movies</b></a>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.registerScanners();
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
@@ -221,7 +222,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = new String("<a href=\"http://www.kizna.com/servlets/SomeServlet?name=Sam Joseph\">Click Here</A>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
@@ -248,7 +249,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		"nical.html\"> Journalism 3.0</a> by Rajesh Jain");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.setLineSeparator("\r\n");
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		HTMLNode [] node = new HTMLNode[20];
@@ -276,7 +277,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = "<A HREF=\"mytest.html\"> Hello World</A>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));
@@ -297,7 +298,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = "<A HREF=\"abc/def/mytest.html\"> Hello World</A>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));
@@ -318,7 +319,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = "<A HREF=\"../abc/def/mytest.html\"> Hello World</A>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));
@@ -340,7 +341,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = "<A HREF=\"mytest.html\"> <IMG SRC=\"abcd.jpg\">Hello World</A>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));
@@ -395,7 +396,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = "<a>Revision</a>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));
@@ -425,7 +426,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
         "<img src=\"images/46revues.gif\" width=\"100\" height=\"46\" border=\"0\" alt=\"Rejoignez revues.org!\" align=\"middle\"";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));
@@ -444,7 +445,7 @@ public class HTMLLinkScannerTest extends junit.framework.TestCase
 		String testHTML = "<a href=\"http://transfer.go.com/cgi/atransfer.pl?goto=http://www.signs.movies.com&name=114332&srvc=nws&context=283&guid=4AD5723D-C802-4310-A388-0B24E1A79689\" target=\"_new\"><img src=\"http://ad.abcnews.com/ad/sponsors/buena_vista_pictures/bvpi-ban0003.gif\" width=468 height=60 border=\"0\" alt=\"See Signs in Theaters 8-2 - Starring Mel Gibson\" align=><font face=\"verdana,arial,helvetica\" SIZE=\"1\"><b></b></font></a>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://transfer.go.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));

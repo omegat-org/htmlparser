@@ -2,6 +2,7 @@ package com.kizna.htmlTests;
 
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLParser;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -27,7 +28,7 @@ public class PerformanceTest {
 		System.out.println("***************************************");				
 		for (int i=0;i<=numTimes;i++) {
 			// Create the parser object
-			parser = new HTMLParser(file);
+			parser = new HTMLParser(file,new DefaultHTMLParserFeedback());
 			HTMLNode node;
 			long start=System.currentTimeMillis();
 			for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
@@ -54,7 +55,7 @@ public class PerformanceTest {
 		System.out.println("***************************************");					
 		for (int i=0;i<=numTimes;i++) {
 			// Create the parser object
-			parser = new HTMLParser(file);
+			parser = new HTMLParser(file,new DefaultHTMLParserFeedback());
 			parser.registerScanners();
 			HTMLNode node;
 			long start=System.currentTimeMillis();

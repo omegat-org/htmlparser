@@ -44,6 +44,7 @@ import com.kizna.html.scanners.HTMLFormScanner;
 import com.kizna.html.tags.HTMLEndTag;
 import com.kizna.html.tags.HTMLFormTag;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -86,7 +87,7 @@ public class HTMLFormScannerTest extends TestCase {
 		"</FORM>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLFormScanner(""));
@@ -156,7 +157,7 @@ public class HTMLFormScannerTest extends TestCase {
 		"</TABLE>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(new DefaultHTMLParserFeedback(),reader);
 		HTMLNode [] node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLFormScanner(""));

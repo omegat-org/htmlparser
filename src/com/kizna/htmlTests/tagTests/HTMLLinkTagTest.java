@@ -36,6 +36,7 @@ import java.io.BufferedReader;
 import java.util.Enumeration;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
@@ -79,7 +80,7 @@ public void testLinkNodeBug()  throws HTMLParserException
 	String testHTML = new String("<A HREF=\"../test.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -107,7 +108,7 @@ public void testLinkNodeBug2() throws HTMLParserException
 	String testHTML = new String("<A HREF=\"../../test.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/test/index.html");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -134,7 +135,7 @@ public void testLinkNodeBug3() throws HTMLParserException
 	String testHTML = new String("<A HREF=\"/mylink.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -161,7 +162,7 @@ public void testLinkNodeBug4() throws HTMLParserException
 	String testHTML = new String("<A HREF=\"/mylink.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -188,7 +189,7 @@ public void testLinkNodeBug5() throws HTMLParserException
 	"href=http://address.kimo.com.tw/>³q°T¿ý</a>&nbsp;&nbsp;");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	parser.setLineSeparator("\r\n");
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
@@ -227,7 +228,7 @@ public void testLinkNodeBugNullPointerException() throws HTMLParserException
 		"coords=441,0,510,52 href=\"http://www.yahoo.com/r/wn\" shape=RECT>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -248,7 +249,7 @@ public void testLinkNodeMailtoBug() throws HTMLParserException
 	String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -273,7 +274,7 @@ public void testLinkNodeSingleQuoteBug() throws HTMLParserException
 	String testHTML = new String("<A HREF='abcd.html'>hello</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -300,7 +301,7 @@ public void testLinkTag() throws HTMLParserException
 	String testHTML = new String("<A HREF=\"test.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -328,7 +329,7 @@ public void testLinkTagBug() throws HTMLParserException
 	String testHTML = new String("<A HREF=\"../test.html\">abcd</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -356,7 +357,7 @@ public void testNullTagBug() throws HTMLParserException
 	String testHTML = new String("<A HREF=>Something</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -377,7 +378,7 @@ public void testToPlainTextString() throws HTMLParserException {
 	String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLLinkScanner("-l"));
@@ -399,7 +400,7 @@ public void testToPlainTextString() throws HTMLParserException {
 			"nical.html\"> Journalism 3.0</a> by Rajesh Jain");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLLinkScanner("-l"));

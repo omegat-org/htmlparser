@@ -35,6 +35,7 @@ import java.io.BufferedReader;
 import java.util.Hashtable;
 import com.kizna.html.tags.HTMLScriptTag;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -101,7 +102,7 @@ public void testScan() throws HTMLParserException
 	String testHTML = new String("<SCRIPT>document.write(d+\".com\")</SCRIPT>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLScriptScanner("-s"));
@@ -129,7 +130,7 @@ public void testScanBug() throws HTMLParserException
 	String testHTML = new String("<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"../js/DetermineBrowser.js\"></SCRIPT>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 	// Register the image scanner
 	parser.addScanner(new HTMLScriptScanner("-s"));
@@ -172,7 +173,7 @@ public void testScanBugWG() throws HTMLParserException
 	StringReader sr = new StringReader(testHTML1); 
 	HTMLReader reader = new HTMLReader(new 
 	BufferedReader(sr),"http://www.google.com/test/index.html"); 
-	HTMLParser parser = new HTMLParser(reader); 
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 	HTMLNode [] node = new HTMLNode[10]; 
 	// Register the image scanner 
 	parser.addScanner(new HTMLScriptScanner("-s")); 
@@ -210,7 +211,7 @@ public void testScanScriptWithLinks() throws HTMLParserException
 	StringReader sr = new StringReader(testHTML1); 
 	HTMLReader reader = new HTMLReader(new 
 	BufferedReader(sr),"http://www.hardwareextreme.com/"); 
-	HTMLParser parser = new HTMLParser(reader); 
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 	HTMLNode [] node = new HTMLNode[10]; 
 	// Register the image scanner 
 	parser.registerScanners();

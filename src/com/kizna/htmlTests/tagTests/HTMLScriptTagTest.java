@@ -36,6 +36,7 @@ import java.util.*;
 import java.io.*;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
@@ -129,7 +130,7 @@ public class HTMLScriptTagTest extends TestCase{
 		String testHTML = new String("<SCRIPT>document.write(d+\".com\")</SCRIPT>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLScriptScanner("-s"));
@@ -170,7 +171,7 @@ public class HTMLScriptTagTest extends TestCase{
 		StringReader sr = new StringReader(testHTML1); 
 		HTMLReader reader = new HTMLReader(new 
 		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader); 
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 		HTMLNode [] node = new HTMLNode[10]; 
 		// Register the image scanner 
 		parser.addScanner(new HTMLScriptScanner("-s")); 
@@ -212,7 +213,7 @@ public class HTMLScriptTagTest extends TestCase{
 		StringReader sr = new StringReader(testHTML1); 
 		HTMLReader reader = new HTMLReader(new 
 		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader); 
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 		HTMLNode [] node = new HTMLNode[10]; 
 		// Register the image scanner 
 		parser.addScanner(new HTMLScriptScanner("-s")); 

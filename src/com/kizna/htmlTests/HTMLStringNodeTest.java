@@ -34,6 +34,7 @@ package com.kizna.htmlTests;
 import java.io.BufferedReader;
 import com.kizna.html.scanners.HTMLLinkScanner;
 import com.kizna.html.tags.HTMLLinkTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -81,7 +82,7 @@ public class HTMLStringNodeTest extends TestCase {
 		String testHTML = new String("<HTML><HEAD><TITLE>Google</TITLE>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
@@ -108,7 +109,7 @@ public class HTMLStringNodeTest extends TestCase {
 			"Acrobat Reader</A> installed on your computer.");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
@@ -140,7 +141,7 @@ public class HTMLStringNodeTest extends TestCase {
 		String testHTML = new String("<a href=\"http://asgard.ch\">[> ASGARD <]</a>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		HTMLNode [] node = new HTMLNode[10];
 		int i = 0;
@@ -162,7 +163,7 @@ public class HTMLStringNodeTest extends TestCase {
 		String testHTML = new String("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
@@ -185,7 +186,7 @@ public class HTMLStringNodeTest extends TestCase {
 		String testHTML = new String("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
@@ -207,7 +208,7 @@ public class HTMLStringNodeTest extends TestCase {
 		);
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
@@ -226,7 +227,7 @@ public class HTMLStringNodeTest extends TestCase {
 		);
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
@@ -252,7 +253,7 @@ public class HTMLStringNodeTest extends TestCase {
 		String testHTML = new String("a");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {

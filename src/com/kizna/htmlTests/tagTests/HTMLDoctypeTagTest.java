@@ -41,6 +41,7 @@ import com.kizna.html.HTMLReader;
 import com.kizna.html.scanners.HTMLLinkScanner;
 import com.kizna.html.tags.HTMLDoctypeTag;
 import com.kizna.html.tags.HTMLLinkTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -69,7 +70,7 @@ public class HTMLDoctypeTagTest extends TestCase {
 		"</HTML>\n");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		parser.registerScanners();
 		int i = 0;

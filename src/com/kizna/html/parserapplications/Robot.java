@@ -33,6 +33,7 @@
 package com.kizna.html.parserapplications;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -47,7 +48,7 @@ public class Robot {
  */
 public Robot(String resourceLocation) {
 	try {
-	  parser = new HTMLParser(resourceLocation);
+	  parser = new HTMLParser(resourceLocation,new DefaultHTMLParserFeedback());
 	  parser.registerScanners();
 	}
 	catch (HTMLParserException e) {
@@ -90,7 +91,7 @@ public void crawl(HTMLParser parser,int crawlDepth) throws HTMLParserException {
           {
             if (crawlDepth>0)
             {
-              HTMLParser newParser = new HTMLParser(linkTag.getLink());
+              HTMLParser newParser = new HTMLParser(linkTag.getLink(),new DefaultHTMLParserFeedback());
               newParser.registerScanners();
               System.out.print("Crawling to "+linkTag.getLink());
               crawl(newParser,crawlDepth-1);

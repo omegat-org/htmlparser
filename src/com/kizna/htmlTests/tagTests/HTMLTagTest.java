@@ -36,6 +36,7 @@ import java.io.BufferedReader;
 import java.util.Hashtable;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
@@ -81,7 +82,7 @@ public void testBodyTagBug1() throws HTMLParserException {
 	String testHTML = new String("<BODY aLink=#ff0000 bgColor=#ffffff link=#0000cc onload=setfocus() text=#000000\nvLink=#551a8b>");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
  	
 	int i = 0;
@@ -127,7 +128,7 @@ public void testLargeTagBug() throws HTMLParserException {
 	);
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 
 			
@@ -153,7 +154,7 @@ public void testNestedTags() throws HTMLParserException {
 	String line = "<"+s+">";
     StringReader sr = new StringReader(line);
     HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
   	HTMLNode [] node = new HTMLNode[10];
 	int i = 0;
   	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes(); ) {
@@ -178,7 +179,7 @@ public void testNestedTags() throws HTMLParserException {
         String lin1 = "<DIV class=\"userData\" id=\"oLayout\" name=\"oLayout\"></DIV>";
        	StringReader sr = new StringReader(lin1);
     	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	    HTMLParser parser = new HTMLParser(reader);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
         HTMLEnumeration en = parser.elements();
         Hashtable h;
         boolean testEnd=true;  // test end of first part
@@ -213,7 +214,7 @@ public void testNestedTags() throws HTMLParserException {
         String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle Kaaila\">Kaarle's homepage</A><p>Paragraph</p>";
        	StringReader sr = new StringReader(lin1);
     	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	    HTMLParser parser = new HTMLParser(reader);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
         HTMLEnumeration en = parser.elements();
         Hashtable h;
         boolean testEnd=true;  // test end of first part
@@ -285,7 +286,7 @@ public void testNestedTags() throws HTMLParserException {
         String lin1 = "<G href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaila\">Kaarle's homepage</G><p>Paragraph</p>";
        	StringReader sr = new StringReader(lin1);
     	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	    HTMLParser parser = new HTMLParser(reader);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
         HTMLEnumeration en = parser.elements();
         Hashtable h;
         boolean testEnd=true;  // test end of first part
@@ -357,7 +358,7 @@ public void testNestedTags() throws HTMLParserException {
         String lin1 = "<A yourParameter = \"Kaarle\">Kaarle's homepage</A>";
        	StringReader sr = new StringReader(lin1);
     	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	    HTMLParser parser = new HTMLParser(reader);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
         HTMLEnumeration en = parser.elements();
         Hashtable h;
         boolean testEnd=true;  // test end of first part
@@ -422,7 +423,7 @@ public void testNestedTags() throws HTMLParserException {
 	
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[100];
 		// Register the image scanner
 		parser.registerScanners();
@@ -454,7 +455,7 @@ public void testToHTML() throws HTMLParserException {
 	);
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[10];
 
 			
@@ -491,7 +492,7 @@ public void testToHTML() throws HTMLParserException {
         HTMLNode node=null;
        	StringReader sr = new StringReader(data);
     	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	    HTMLParser parser = new HTMLParser(reader);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
         HTMLEnumeration en = parser.elements();
         String result="";
         try {
@@ -532,7 +533,7 @@ public void testToHTML() throws HTMLParserException {
         String lin1 = "<A href=\"http://www.iki.fi/kaila\" myParameter yourParameter=\"Kaarle\">Kaarle's homepage</A><p>Paragraph</p>";
        	StringReader sr = new StringReader(lin1);
     	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	    HTMLParser parser = new HTMLParser(reader);
+	    HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
         HTMLEnumeration en = parser.elements();
         String result="";
         try {
@@ -551,7 +552,7 @@ public void testToHTML() throws HTMLParserException {
 		StringReader sr = new StringReader(testHTML1); 
 		HTMLReader reader = new HTMLReader(new 
 		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader); 
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 		HTMLNode [] node = new HTMLNode[10]; 
 		
 		
@@ -576,7 +577,7 @@ public void testToHTML() throws HTMLParserException {
 		StringReader sr = new StringReader(testHTML1); 
 		HTMLReader reader = new HTMLReader(new 
 		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader); 
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 		HTMLNode [] node = new HTMLNode[10]; 
 				
 		int i = 0; 
@@ -595,7 +596,7 @@ public void testToHTML() throws HTMLParserException {
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader = new HTMLReader(new 
 		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader); 
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 		HTMLNode [] node = new HTMLNode[10]; 
 				
 		int i = 0; 
@@ -616,7 +617,7 @@ public void testToHTML() throws HTMLParserException {
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader = new HTMLReader(new 
 		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader); 
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 		HTMLNode [] node = new HTMLNode[10]; 
 				
 		int i = 0; 
@@ -638,7 +639,7 @@ public void testToHTML() throws HTMLParserException {
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader = new HTMLReader(new 
 		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader); 
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 		HTMLNode [] node = new HTMLNode[10]; 
 				
 		int i = 0; 
@@ -658,7 +659,7 @@ public void testToHTML() throws HTMLParserException {
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader = new HTMLReader(new 
 		BufferedReader(sr),"http://www.google.com/test/index.html"); 
-		HTMLParser parser = new HTMLParser(reader); 
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback()); 
 		HTMLNode [] node = new HTMLNode[10]; 
 				
 		int i = 0; 
@@ -690,7 +691,7 @@ public void testToHTML() throws HTMLParserException {
 		String testHTML = "<html><body><>text</body></html>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		parser.registerScanners();
 		int i = 0;
@@ -710,7 +711,7 @@ public void testToHTML() throws HTMLParserException {
 		String testHTML = "<html><body>text<></body></html>";
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		parser.registerScanners();
 		int i = 0;

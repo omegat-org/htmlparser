@@ -36,6 +36,7 @@ import java.io.BufferedReader;
 import java.util.Enumeration;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
@@ -81,7 +82,7 @@ public class HTMLImageTagTest extends TestCase
 		String testHTML = new String("<IMG alt=Google height=115 src=\"goo/title_homepage4.gif\" width=305>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i"));
@@ -109,7 +110,7 @@ public class HTMLImageTagTest extends TestCase
 		String testHTML = new String("<IMG alt=Google height=115 src=\"../goo/title_homepage4.gif\" width=305>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i"));
@@ -137,7 +138,7 @@ public class HTMLImageTagTest extends TestCase
 		String testHTML = new String("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i"));
@@ -162,7 +163,7 @@ public class HTMLImageTagTest extends TestCase
 		String testHTML = new String("<IMG SRC='abcd.jpg'>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i"));
@@ -189,7 +190,7 @@ public class HTMLImageTagTest extends TestCase
 		String testHTML = new String("<IMG SRC=>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
@@ -209,7 +210,7 @@ public class HTMLImageTagTest extends TestCase
 		String testHTML = new String("<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i"));

@@ -35,6 +35,7 @@ package com.kizna.htmlTests;
 import com.kizna.html.scanners.HTMLLinkScanner;
 import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -105,7 +106,7 @@ public void testRemarkNodeBug() throws HTMLParserException
 		"</TEST>\n");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[20];
 	int i = 0;
 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -139,7 +140,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		"</TEST>\n");
 	StringReader sr = new StringReader(testHTML);
 	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
+	HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 	HTMLNode [] node = new HTMLNode[20];
 	int i = 0;
 	for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -170,7 +171,7 @@ public void testToPlainTextString() throws HTMLParserException {
 			"</TEST>\n");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -191,7 +192,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		String testHTML = new String("&nbsp;<![endif]>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -220,7 +221,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		"-->");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -242,7 +243,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		String testHTML = new String("<!-->");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -265,7 +266,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		String testHTML = new String("<!-- <A> -->");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -293,7 +294,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		"ssd -->");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.setLineSeparator("\n");
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
@@ -318,7 +319,7 @@ public void testToPlainTextString() throws HTMLParserException {
 		String testHTML = new String("<!-- -- -->");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)

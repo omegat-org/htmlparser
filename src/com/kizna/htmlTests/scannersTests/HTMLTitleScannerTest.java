@@ -40,6 +40,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import com.kizna.html.scanners.*;
 import com.kizna.html.tags.HTMLTitleTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.*;
@@ -74,7 +75,7 @@ public class HTMLTitleScannerTest extends TestCase {
 		String testHTML = new String("<html><head><title>Yahoo!</title><base href=http://www.yahoo.com/ target=_top><meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.icra.org/ratingsv02.html\" l r (cz 1 lz 1 nz 1 oz 1 vz 1) gen true for \"http://www.yahoo.com\" r (cz 1 lz 1 nz 1 oz 1 vz 1) \"http://www.rsac.org/ratingsv01.html\" l r (n 0 s 0 v 0 l 0) gen true for \"http://www.yahoo.com\" r (n 0 s 0 v 0 l 0))'><style>a.h{background-color:#ffee99}</style></head>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
@@ -102,7 +103,7 @@ public class HTMLTitleScannerTest extends TestCase {
 		"</HEAD>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
@@ -129,7 +130,7 @@ public class HTMLTitleScannerTest extends TestCase {
 		"<body><html>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
@@ -152,7 +153,7 @@ public class HTMLTitleScannerTest extends TestCase {
 		"<TITLE>KRP VALIDATION<PROCESS/TITLE>");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		int i = 0;
 		try {

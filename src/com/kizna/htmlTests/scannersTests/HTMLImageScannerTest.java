@@ -40,6 +40,7 @@ import com.kizna.html.*;
 import com.kizna.html.tags.HTMLImageTag;
 import com.kizna.html.tags.HTMLLinkTag;
 import com.kizna.html.tags.HTMLTag;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.HTMLImageScanner;
@@ -76,7 +77,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		String testHTML = "<IMG SRC=\"../abc/def/mypic.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi?abcdefg");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
@@ -120,7 +121,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		String testHTML = "<IMG width=1 height=1 alt=\"a\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi?abcdefg");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i"));
@@ -144,7 +145,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		String testHTML = "<IMG SRC=\"mypic.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
@@ -165,7 +166,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		String testHTML = "<IMG SRC=\"abc/def/mypic.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
@@ -186,7 +187,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		String testHTML = "<IMG SRC=\"../abc/def/mypic.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
@@ -208,7 +209,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		String testHTML = "<IMG SRC=\"../abc/def/Hello World.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-l"));
@@ -226,7 +227,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		String testHTML = "<IMG SRC=\"../abc/def/Hello \r\nWorld.jpg\">";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com/ghi");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		parser.setLineSeparator("\r\n");
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
@@ -251,7 +252,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		"<input type=submit value=Search> <a href=r/so>advanced search</a></td></tr></table><table border=0 cellspacing=0 cellpadding=3 width=640><tr><td nowrap align=center><table border=0 cellspacing=0 cellpadding=0><tr><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif\" width=20 height=20 border=0></a></td><td> &nbsp; &nbsp; <a href=s/1048><b>Yahooligans!</b></a> - <a href=s/5282>Eet & Ern</a>, <a href=s/5283>Games</a>, <a href=s/5284>Science</a>, <a href=s/5285>Sports</a>, <a href=s/5286>Movies</a>, <a href=s/1048>more</a> &nbsp; &nbsp; </td><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif\" width=20 height=20 border=0></a></td></tr></table></td></tr><tr><td nowrap align=center><small><b>Shop</b>&nbsp;\n";
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[10];
 		// Register the image scanner
 		parser.addScanner(new HTMLImageScanner("-i"));
@@ -280,7 +281,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[100];
 		// Register the image scanner
 		parser.registerScanners();
@@ -314,7 +315,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 	
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cia.gov");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[100];
 		// Register the image scanner
 		parser.registerScanners();
@@ -338,7 +339,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cybergeo.presse.fr/REVGEO/ttsavoir/joly.htm"); 
 
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[100];
 		// Register the image scanner
 		parser.registerScanners();
@@ -362,7 +363,7 @@ public class HTMLImageScannerTest extends junit.framework.TestCase
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.htmlparser.org/subdir1/subdir2"); 
 
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[100];
 		// Register the image scanner
 		parser.registerScanners();

@@ -44,9 +44,11 @@ import java.util.*;
 import com.kizna.html.scanners.*;
 import com.kizna.html.tags.HTMLTag;
 import com.kizna.html.util.ChainedException;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLLinkProcessor;
 import com.kizna.html.util.HTMLParserException;
+import com.kizna.html.util.HTMLParserFeedback;
 /**
  * This is the class that the user will use, either to get an iterator into 
  * the html page or to directly parse the page and print the results
@@ -125,8 +127,9 @@ public class HTMLParser
 	 * This constructor enables the construction of test cases, with readers
 	 * associated with test string buffers. 
 	 * @param reader com.kizna.html.HTMLReader
+	 * @param feedback HTMLParserFeedback
 	 */
-	public HTMLParser(HTMLReader reader) 
+	public HTMLParser(HTMLReader reader,HTMLParserFeedback feedback) 
 	{
 		this.reader = reader;
 		reader.setParser(this);
@@ -134,9 +137,11 @@ public class HTMLParser
 	}
 	/**
 	 * Creates a HTMLParser object with the location of the resource (URL or file)
+	 * You would typicall create a DefaultHTMLParserFeedback object and pass it in
 	 * @param resourceLocn Either the URL or the filename (autodetects)
+	 * @param feedback HTMLParserFeedback
 	 */
-	public HTMLParser(String resourceLocn) throws HTMLParserException
+	public HTMLParser(String resourceLocn,HTMLParserFeedback feedback) throws HTMLParserException
 	{
 		try {
 			this.resourceLocn = resourceLocn;
@@ -286,7 +291,7 @@ public class HTMLParser
 		else	
 		System.out.println("Parsing file "+args[0]+"...");
 		try {
-			HTMLParser parser = new HTMLParser(args[0]);
+			HTMLParser parser = new HTMLParser(args[0],new DefaultHTMLParserFeedback());
 			parser.registerScanners();
 			try {
 				if (args.length==2)

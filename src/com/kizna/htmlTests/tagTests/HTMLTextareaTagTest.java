@@ -46,7 +46,7 @@ public class HTMLTextareaTagTest extends TestCase
 		super.setUp();
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[20];
 
 		parser.addScanner(new HTMLTextareaTagScanner("-t"));

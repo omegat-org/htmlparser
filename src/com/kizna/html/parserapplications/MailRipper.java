@@ -33,6 +33,7 @@
 package com.kizna.html.parserapplications;
 import com.kizna.html.scanners.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 
@@ -53,7 +54,7 @@ public class MailRipper {
  */
 public MailRipper(String resourceLocation) {
 	try {
-	  parser = new HTMLParser(resourceLocation);
+	  parser = new HTMLParser(resourceLocation,new DefaultHTMLParserFeedback());
 	  parser.registerScanners();
 	}
 	catch (HTMLParserException e) {

@@ -34,6 +34,7 @@ package com.kizna.htmlTests.tagTests;
 import java.io.BufferedReader;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
+import com.kizna.html.util.DefaultHTMLParserFeedback;
 import com.kizna.html.util.HTMLEnumeration;
 import com.kizna.html.util.HTMLParserException;
 import com.kizna.html.scanners.*;
@@ -99,7 +100,7 @@ public class HTMLJspTagTest extends TestCase
 			"%>\n");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		// Register the Jsp Scanner
 		parser.addScanner(new HTMLJspScanner("-j"));	
@@ -169,7 +170,7 @@ public class HTMLJspTagTest extends TestCase
 			"%>\n");
 		StringReader sr = new StringReader(testHTML);
 		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-		HTMLParser parser = new HTMLParser(reader);
+		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		HTMLNode [] node = new HTMLNode[20];
 		// Register the Jsp Scanner
 		parser.addScanner(new HTMLJspScanner("-j"));	
