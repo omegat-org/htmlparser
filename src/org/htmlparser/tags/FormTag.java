@@ -67,15 +67,26 @@ public class FormTag extends CompositeTag
 		this.formURL = compositeTagData.getStartTag().getAttribute("ACTION");
 	    this.formName = compositeTagData.getStartTag().getAttribute("NAME");
       	this.formMethod = compositeTagData.getStartTag().getAttribute("METHOD");
-      	this.formInputList = compositeTagData.getChildren().searchFor(InputTag.class);
-      	this.textAreaList = compositeTagData.getChildren().searchFor(TextareaTag.class);
+      	this.formInputList = compositeTagData.getChildren().searchFor(InputTag.class, true);
+      	this.textAreaList = compositeTagData.getChildren().searchFor(TextareaTag.class, true);
 	}
 	
 	/**
-	 * @return Vector Input elements in the form
+     * Get the list of input fields.
+	 * @return Input elements in the form.
 	 */
-	public NodeList getFormInputs() {
+	public NodeList getFormInputs()
+    {
 		return formInputList;
+	}
+	
+	/**
+     * Get the list of text areas.
+	 * @return Textarea elements in the form
+	 */
+	public NodeList getFormtextAreas()
+    {
+		return textAreaList;
 	}
 	
 	/**

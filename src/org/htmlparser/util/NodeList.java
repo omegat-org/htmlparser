@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 import org.htmlparser.Node;
+import org.htmlparser.tags.CompositeTag;
 
 public class NodeList implements Serializable {
 	private static final int INITIAL_CAPACITY=10;
@@ -54,6 +55,16 @@ public class NodeList implements Serializable {
 		if (size==capacity) 
 			adjustVectorCapacity();
 		nodeData[size++]=node;
+	}
+
+    /**
+     * Add another node list to this one.
+     * @param list The list to add.
+     */
+	public void add (NodeList list)
+    {
+        for (int i = 0; i < list.size; i++)
+            add (list.nodeData[i]);
 	}
 
     /**
@@ -152,14 +163,38 @@ public class NodeList implements Serializable {
 			text.append(nodeData[i].toPlainTextString());
 		return text.toString();
 	}
-	
-	public NodeList searchFor(Class classType) {
-		NodeList foundList = new NodeList();
-		Node node;
-		for (int i=0;i<size;i++) {
-			if (nodeData[i].getClass().getName().equals(classType.getName())) 
-				foundList.add(nodeData[i]);
-		}
-		return foundList;
-	}	
+
+    /**
+     * Search for nodes of the given type non-recursively.
+     * @param classType The class to search for.
+     */
+	public NodeList searchFor (Class classType)
+    {
+        return (searchFor (classType, false));
+	}
+    
+    /**
+     * Search for nodes of the given type recursively.
+     * @param classType The class to search for.
+     * @param recursive If <code>true<code> digs into the children recursively.
+     */
+    public NodeList searchFor (Class classType, boolean recursive)
+    {
+        String name;
+        Node node;
+        NodeList ret;
+        
+        ret = new NodeList ();
+        name = classType.getName ();
+        for (int i = 0; i < size; i++)
+        {
+            node = nodeData[i];
+            if (node.getClass ().getName ().equals (name))
+                ret.add (node);
+            if (recursive && node instanceof CompositeTag)
+                ret.add (((CompositeTag)node).getChildren ().searchFor (classType, recursive));
+        }
+
+        return (ret);
+    }
 }
