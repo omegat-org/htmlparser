@@ -123,14 +123,15 @@ public class HTMLRemarkNode extends HTMLNode
 					tagContents.append(prevChar);
 				}
 			} 
-			if (state==REMARK_NODE_ACCEPTING_STATE && ch == '-')
-			{
-				state=REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE;
-			} 
-			if (state==REMARK_NODE_ACCEPTING_STATE && ch == '<')
-			{
-				state=REMARK_NODE_ILLEGAL_STATE;
-			} 
+			if (state==REMARK_NODE_ACCEPTING_STATE) {
+				if (ch == '-') {
+					state=REMARK_NODE_CLOSING_FIRST_DASH_RECEIVED_STATE;
+				} else
+				if (ch == '<')
+				{
+					state=REMARK_NODE_ILLEGAL_STATE;
+				} 
+			}
 			if (state==REMARK_NODE_ACCEPTING_STATE)
 			{
 				// We can append contents now		
