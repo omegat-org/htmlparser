@@ -32,6 +32,7 @@
 
 package com.kizna.html.tags;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 /**
@@ -78,8 +79,7 @@ public class HTMLFormTag extends HTMLTag
 	{
 		return formURL;
 	}
-	public String getFormMethod()
-	{
+	public String getFormMethod() {
       if(formMethod==null)
       {
          formMethod = "GET";
@@ -87,8 +87,19 @@ public class HTMLFormTag extends HTMLTag
       //System.out.println("formMethod   "+formMethod);
 		return formMethod;
 	}
-	public String getFormName()
-	{
+	public HTMLTag getInputTag(String name) {
+		HTMLTag inputTag=null;
+		boolean found=false;
+		for (Enumeration e = formInputVector.elements();e.hasMoreElements() && !found;) {
+			inputTag = (HTMLTag)e.nextElement();
+			if (inputTag.getParameter("NAME").equals(name)) {
+				found=true;
+			}
+		}
+		if (found)
+		return inputTag; else return null;
+	}
+	public String getFormName() {
 		return formName;
 	}
 	public void setFormInputs(Vector formInputVector)

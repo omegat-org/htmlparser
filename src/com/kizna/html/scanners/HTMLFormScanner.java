@@ -85,50 +85,21 @@ public class HTMLFormScanner extends HTMLTagScanner
    */
 	public String extractFormLocn(HTMLTag tag,String url)
 	{
-		Hashtable table = tag.parseParameters();
-      //System.out.println("table in form locn  "+table.toString());
-      String contentLink = null;
-      String formMethod = null;
-		String formName=  (String)table.get("NAME");
-      String formURL = (String)table.get("ACTION");
-      try{
-         formMethod = (String)table.get("ACTION");
-      }
-      catch(Exception e)
-      {
-         formMethod = "GET";
-      }
-      //System.out.println("formURL  "+formURL);
+		String formURL= tag.getParameter("ACTION");
 		if (formURL==null) return ""; else
 		return (new HTMLLinkProcessor()).extract(formURL, url);
 	}
 
-	public String extractFormName(HTMLTag tag,String url)
+	public String extractFormName(HTMLTag tag)
 	{
-		Hashtable table = tag.parseParameters();
-      //System.out.println("table in form locn  "+table.toString());
-      String contentLink = null;
-		String formName=  (String)table.get("NAME");
-		if (formName==null) return ""; else
-		return (new HTMLLinkProcessor()).extract(formName, url);
+		return tag.getParameter("NAME");
 	}
 
-	public String extractFormMethod(HTMLTag tag,String url)
+	public String extractFormMethod(HTMLTag tag)
 	{
-		Hashtable table = tag.parseParameters();
-      //System.out.println("table in form locn  "+table.toString());
-      String contentLink = null;
-      String formMethod = "GET";
-      formMethod = (String)table.get("METHOD");
-      //System.out.println("formMethod is  "+formMethod);
-      if(formMethod!=null)
-      {
-   		return formMethod;
-      }
-      else
-      {
-         return "GET";
-      }
+		String method = tag.getParameter("METHOD");
+		if (method==null) method = "GET";
+		return method;
 
 	}
 
@@ -146,165 +117,36 @@ public class HTMLFormScanner extends HTMLTagScanner
 	public HTMLNode scan(HTMLTag tag,String url,HTMLReader reader,String currentLine) throws IOException
 	{
 		HTMLNode node;
-      Vector inputVector = new Vector();
+      	Vector inputVector = new Vector();
 		String link,formText="",name="",method="GET";
-		int linkBegin, linkEnd;
+		int linkBegin=-1, linkEnd=-1;
 
-		// Yes, the tag is a link
-		// Extract the link
-		//link = extractRefreshLocn(tag.getText(),url);
-		String tmp;
-		String tagContents =  tag.getText();
-		String formContents=""; // Kaarle Kaila 23.10.2001
-		// Yes, the tag is a link
-		// Extract the link
 		link = extractFormLocn(tag,url);
-      name = extractFormName(tag,url);
-      method = extractFormMethod(tag,url);
-
-		//link = extractLink(tag.getText(),url);
-		// Check if its a mailto link
-      //System.out.println("form in linkscanner   "+link+" name  "+name+"  method  "+method);
-
-		String accessKey = getAccessKey(tag.getText());
-      //System.out.println("accessKey  "+accessKey);
+    	name = extractFormName(tag);
+	    method = extractFormMethod(tag);
 		linkBegin = tag.elementBegin();
-		// Get the next element, which is string, till </a> is encountered
-		boolean endFlag=false;
-		Vector nodeVector = new Vector();
-      String input = null;
-      String inputName, inputValue, inputSrc = "";
-		String inputType = "";
-      do
+	    boolean endFlag = false;
+	    do
 		{
 			node = reader.readElement();
-         //System.out.println("node reader.readElement()  ");
-         //node.print();
-         if(node instanceof HTMLTag)
-         {
-            //System.out.println("its an instance of HTMLTag");
-
-            //String value = getParameter("value");
-            HTMLTag tag_1 = (HTMLTag)node;
-            Hashtable h = tag_1.parseParameters();
-            try{
-               input = (String)h.get("$<TAGNAME>$");
-            }
-            catch(Exception e)
-            {
-               input = null;
-            }
-            if(input!=null && input.equalsIgnoreCase("input"))
-            {
-               HashMap inputHashMap = new HashMap();
-               //System.out.println("the tag is of type input h.toString()  "+h.toString());
-               try{
-                  inputType = (String)h.get("TYPE");
-               }
-               catch(NullPointerException ne)
-               {
-                  ne.printStackTrace();
-                  inputType = "TEXT";
-               }
-               //System.out.println("inputType  "+inputType);
-                  if(inputType!=null)
-                  {
-                     //System.out.println("inputType in IF "+inputType);
-                  }
-                  else
-                  {
-                     inputType = "TEXT";
-                  }
-                  if(inputType.equalsIgnoreCase("IMAGE")){
-                     inputName = (String)h.get("NAME");
-                     inputSrc = (String)h.get("SRC");
-                     inputHashMap.put("TYPE", (String)inputType);
-                     inputHashMap.put("NAME", (String)inputName);
-                     inputHashMap.put("SRC", (String)inputSrc);
-                     inputVector.add(inputHashMap);
-                  }
-                  else
-                  {
-                     inputName = (String)h.get("NAME");
-                     inputValue = (String)h.get("VALUE");
-                     inputHashMap.put("TYPE", (String)inputType);
-                     inputHashMap.put("NAME", (String)inputName);
-                     inputHashMap.put("VALUE", (String)inputValue);
-                     inputVector.add(inputHashMap);
-                  }
-               //System.out.println("inputType   "+inputType+"  inputName  "+inputName);
-            }
-            //System.out.println("tag_1.parseParameters()  "+h.toString());
-            //System.out.println("h.get($<TAGNAME>$)  "+(h.get("$<TAGNAME>$")).toString());
-            /*System.out.println("tag.getText() "+tag_1.getText()+"  tag.getParameter()  "+tag_1.getParameter("VALUE")+
-            "  tag.getTag()  "+tag_1.getTag()+"  tag.getTagLine()  "+tag_1.getTagLine()+
-            "tag_1.TAGNAME  "+tag_1.TAGNAME);*/
-         }
-         else
-         {
-            //System.out.println("its not an instance of HTMLTag");
-         }
-
-			if (node instanceof HTMLRemarkNode)
-			{
-
-				tmp =((HTMLRemarkNode)node).getText();
-				formText += tmp;
-				formContents += tmp;   // Kaarle Kaila 23.10.2001
-            //System.out.println("node in FS HTMLRemarkNode "+tmp);
-            //node.print();
-
-			}
-			if (node instanceof HTMLStringNode)
-			{
-
-				tmp =((HTMLStringNode)node).getText();
-				formText += tmp;
-				formContents += tmp;   // Kaarle Kaila 23.10.2001
-            //System.out.println("node in FS HTMLStringNode "+tmp);
-            //node.print();
-
-			}
 			if (node instanceof HTMLEndTag)
 			{
-			    tmp = ((HTMLEndTag)node).getContents();
-             //System.out.println("tmp in HTMLEndTag  "+tmp);
-			    formContents += "</" + tmp  ;   // Kaarle Kaila 23.10.2001
-				//char ch = tmp.charAt(0);
-				if (tmp.equalsIgnoreCase("form")) endFlag=true; else endFlag=false;
-            //System.out.println("node in FS HTMLEndNode "+tmp);
-            ///node.print();
+				HTMLEndTag endTag = (HTMLEndTag)node;
+				if (endTag.getContents().toUpperCase().equals("FORM")) {
+					endFlag=true;
+					linkEnd = endTag.elementEnd();
+				}
 			}
-			else nodeVector.addElement(node);
+			else 
+			if (node instanceof HTMLTag) {
+				HTMLTag thisTag=(HTMLTag)node;
+				if (thisTag.getText().toUpperCase().indexOf("INPUT")==0)
+				inputVector.addElement(thisTag);
+			}
 		}
 		while (endFlag==false);
-		if (node instanceof HTMLEndTag)
-		{
-			// The link has been completed
-			// Create the link object and return it
-			// HTMLLinkNode Constructor got one extra parameter
-			// Kaarle Kaila 23.10.2001
-			linkEnd = node.elementEnd();
-         //System.out.println("node in FS HTMLStringNode1 ");
-            //node.print();
-         /*System.out.println("linkText  "+formText+" linkBegin "+linkBegin+" linkEnd  "+linkEnd+
-         "  accessKey  "+accessKey+"  currentLine  "+currentLine+"  tagContents  "+tagContents+"  linkContents  "+formContents);*/
-         for(int ii=0;ii<nodeVector.size();ii++)
-         {
-            //System.out.println("nodeVector(ii)  "+(nodeVector.elementAt(ii)).toString());
-         }
-			//HTMLLinkTag linkTag = new HTMLLinkTag(link,linkText,linkBegin,linkEnd,accessKey,currentLine,nodeVector,mailLink,tagContents,linkContents);
-			//return linkTag;
-		}
-
-
-
-		linkBegin = tag.elementBegin();
-		linkEnd = tag.elementEnd();
 		HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector);
-      formTag.setFormName(name);
-		formTag.setFormInputs(inputVector);
-      formTag.setThisScanner(this);
+        formTag.setThisScanner(this);
 		return formTag;
 	}
 
