@@ -1,0 +1,16 @@
+<html><head><title>Feedback Mechanism</title></head><body><DIV CLASS="wikitext"><P><B>Feedback Mechanism</B></P><P>The parser has a feedback mechanism that allows you to obtain feedback about the parsing process. You can get to know if there were any errors, or any warnings, or any general information. Warnings occur when the parser has encountered dirty html, but was able to fix it and continue. Errors occur when the parser was not able to handle the html.</P><P>An understanding of the feedback mechanism is useful if you wish to perform logging, or turn off the default feedback and incorporate your own.</P><P>When you create a parser object without specifying any feedback object, the parser creates a default feedback object - DefaultHTMLParserFeedback. This works in three modes - NORMAL, QUIET and DEBUG, and when no feedback object is specified, it defaults to normal. In this mode, all information, warnings and errors are sent to standard output.</P><PRE>HTMLParser parser = new HTMLParser(someUrl);</PRE><P>The above code snippet shows the default configuration - the feedback object is created in the normal mode. You can turn off the messages by turning the feedback mechanism to the quiet mode. This can be done in two ways :</P><PRE>HTMLParser parser = new HTMLParser(someUrl,null);
+Java2html</PRE><P>or</P><PRE>HTMLParser parser = new HTMLParser(someUrl,new DefaultHTMLParserFeedback(DefaultHTMLParserFeedback.QUIET));</PRE><P>In this mode, there is no feedback on standard output.
+For debugging purposes, you can use the debug mode to receive all stack traces of exceptions that are thrown.</P><PRE>HTMLParser parser = new HTMLParser(someUrl,new DefaultHTMLParserFeedback(DefaultHTMLParserFeedback.DEBUG));</PRE><P>If you wish to add a file logger- you can write your own custom feedback class like this :</P><PRE>public class FileFeedback implements HTMLParserFeedback{
+  public FileFeedback(String file) {
+    // .. Initialize the file for logging
+  }
+  public void warning(String message) {
+    // .. log the warning message
+  }
+  public void info(String message) {
+    // .. log the info message
+  }
+  public void error(String message) {
+    // .. log the error message
+  }
+}</PRE><P>You can supply an object of this type to the parser in the constructor, and accordingly channel the feedback.</P></DIV><DIV ID="actionbar" CLASS="toolbar"><HR NOSHADE="noshade" CLASS="printer"/><P CLASS="editdate">Last edited on Friday, March 21, 2003 11:51:12 am.</P><HR NOSHADE="noshade" CLASS="toolbar"/></body></html>
