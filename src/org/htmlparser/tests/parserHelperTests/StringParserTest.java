@@ -197,4 +197,13 @@ public class StringParserTest extends ParserTestCase {
 			metaTag.getAttribute("CONTENT")
 		);
 	}
+	
+	public void testStringWithLineBreaks() throws Exception {
+		createParser("Testing &\nRefactoring");
+		parseAndAssertNodeCount(1);
+		assertType("first node",StringNode.class,node[0]);
+		StringNode stringNode = (StringNode)node[0];
+		assertStringEquals("text","Testing &\r\nRefactoring",stringNode.toPlainTextString());
+	}
+	
 }

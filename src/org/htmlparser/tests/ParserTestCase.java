@@ -122,7 +122,7 @@ public class ParserTestCase extends TestCase {
 					   	expected + 
 					   	" \n\n**** COMPLETE STRING ACTUAL***\n" + actual
 					);
-					assertTrue(errorMsg.toString(),false);
+					fail(errorMsg.toString());
 			}
         	
 		}
@@ -229,6 +229,8 @@ public class ParserTestCase extends TestCase {
 		
 		String expected = expectedNode.toPlainTextString().trim();
 		String actual = actualNode.toPlainTextString().trim();
+		expected = expected.replaceAll("\n"," ");
+		actual = actual.replaceAll("\n"," ");
 		displayMessage = "String value mismatch\nEXPECTED:"+expected+"\nACTUAL:"+actual+displayMessage; 
 		assertStringEquals(displayMessage,expected,actual);
 		
@@ -399,7 +401,7 @@ public class ParserTestCase extends TestCase {
 
 	public static String removeEscapeCharacters(String inputString) {
 		inputString = ParserUtils.removeChars(inputString,'\r');
-		inputString = ParserUtils.removeChars(inputString,'\n');
+		inputString = inputString.replaceAll("\n"," ");
 		inputString = ParserUtils.removeChars(inputString,'\t');
 		return inputString;
 	}

@@ -41,6 +41,10 @@ public class AssertXmlEqualsTest extends ParserTestCase {
 		assertXmlEquals("text","<hello>   My name is Nothing</hello>","<hello>My name is Nothing  </hello>");
 	}
 	
+	public void testStringWithLineBreaks() throws Exception {
+		assertXmlEquals("string with line breaks","testing & refactoring","testing &\nrefactoring");
+	}
+	
 	public static TestSuite suite() {
 		return new TestSuite(AssertXmlEqualsTest.class);
 	}
