@@ -44,13 +44,13 @@ public class BadTagIdentifier {
 		badTags.identify("http://www.amazon.com");
 	}
 	
-	private void identify(String string) 
+	private void identify(String url) 
 		throws Exception{
 		String [] tagsBeingChecked = 
 		{"TABLE","DIV","SPAN"};
 		
 		Parser parser =
-			new Parser("http://www.amazon.com");
+			new Parser(url);
 		TagFindingVisitor tagFinder =
 			new TagFindingVisitor(tagsBeingChecked, true);
 		parser.visitAllNodesWith(tagFinder);
