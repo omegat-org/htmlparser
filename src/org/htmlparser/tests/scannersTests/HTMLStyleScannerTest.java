@@ -98,8 +98,8 @@ public class HTMLStyleScannerTest extends HTMLParserTestCase
 	 	parseAndAssertNodeCount(5);
 		assertTrue(node[4] instanceof HTMLStyleTag);
 		HTMLStyleTag styleTag = (HTMLStyleTag)node[4];
-		String expectedCode = "<!--\r\n\r\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\r\n"+
-		"//\r\n-->";
+		String expectedCode = "<!--\r\n"+"body,td,a,p,.h{font-family:arial,sans-serif;} .h{font-size: 20px;} .h{color:} .q{text-decoration:none; color:#0000cc;}\r\n"+
+		"//-->";
 		assertStringEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
 	}
 }

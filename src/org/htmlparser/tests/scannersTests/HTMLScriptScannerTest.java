@@ -167,7 +167,7 @@ public class HTMLScriptScannerTest extends HTMLParserTestCase
 		// Check the data in the applet tag 
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0];
 		String scriptCode = scriptTag.getScriptCode();	  
-		String expectedCode = "<!--\r\n\r\n"+
+		String expectedCode = "<!--\r\n"+
 						  "  function validateForm()\r\n"+
 						  "  {\r\n"+
 						  "     var i = 10;\r\n"+
@@ -175,7 +175,28 @@ public class HTMLScriptScannerTest extends HTMLParserTestCase
 						  "     i = i - 1 ; \r\n"+
 						  "     return true;\r\n"+
 						  "  }\r\n"+
-						  "// \r\n-->";
+						  "// -->";
 		assertStringEquals("Expected Code",expectedCode,scriptCode);
 	}
+	
+	/**
+	 * Submitted by Dhaval Udani - reproducing bug 664404
+	 * @throws HTMLParserException
+	 */
+	public void testScriptTagComments() throws 
+	HTMLParserException 
+	{ 
+		String testHtml = 	
+		"<SCRIPT LANGUAGE=\"JavaScript\">\r\n"+ 
+			"<!--\r\n"+ 
+			"// -->\r\n"+ 
+		"</SCRIPT>";
+		createParser(testHtml); 
+	
+		parser.addScanner(new HTMLScriptScanner("-s")); 
+		parseAndAssertNodeCount(1); 
+		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0]; 
+		assertStringEquals("scriptag html",testHtml,scriptTag.toHTML()); 
+	} 
+	
 }

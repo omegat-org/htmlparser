@@ -69,7 +69,7 @@ public class HTMLRemarkNode extends HTMLNode
 		return tagContents;
 	}
 	public String toHTML() {
-		return "<!--"+lineSeparator+tagContents+lineSeparator+"-->";
+		return "<!--"+tagContents+"-->";
 	}
 	/**
 	 * Print the contents of the remark tag.
