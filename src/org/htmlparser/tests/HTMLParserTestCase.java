@@ -2,12 +2,16 @@ package org.htmlparser.tests;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.Iterator;
 
 import junit.framework.TestCase;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLStringNode;
+import org.htmlparser.tags.HTMLEndTag;
+import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -124,4 +128,116 @@ public class HTMLParserTestCase extends TestCase {
 		parseNodes();
 		assertNodeCount(nodeCountExpected);
 	}
+
+	public void assertXMLEquals(String displayMessage, String expected, String result) throws Exception {
+		displayMessage = "\n\n"+displayMessage+
+		"\n\nExpected XML:\n"+expected+
+		"\n\nActual XML:\n"+result;
+		expected = removeEscapeCharacters(expected);
+		result   = removeEscapeCharacters(result);
+		HTMLParser expectedParser = HTMLParser.createParser(expected);
+		HTMLParser resultParser   = HTMLParser.createParser(result);
+		HTMLNode expectedNode, actualNode;
+		HTMLEnumeration actualEnumeration = resultParser.elements();
+		for (HTMLEnumeration e = expectedParser.elements();e.hasMoreNodes();) {
+			expectedNode = e.nextNode();
+			actualNode   = actualEnumeration.nextNode();
+			assertEquals(
+				"the two nodes should be the same type",
+				expectedNode.getClass().getName(),
+				actualNode.getClass().getName()
+			);
+			assertTagEquals(
+				displayMessage,
+				expectedNode,
+				actualNode,
+				actualEnumeration
+			);
+			assertStringNodeEquals(
+				displayMessage, 
+				expectedNode, 
+				actualNode
+			);			
+		}
+	}
+
+	private void assertStringNodeEquals(
+		String displayMessage,
+		HTMLNode expectedNode,
+		HTMLNode actualNode) {
+		if (expectedNode instanceof HTMLStringNode) {
+			HTMLStringNode expectedString = 
+				(HTMLStringNode)expectedNode;
+			HTMLStringNode actualString = 
+				(HTMLStringNode)actualNode;
+			assertStringEquals(
+				displayMessage,
+				expectedString.getText(), 
+				actualString.getText()
+			);
+		}
+	}
+
+	private void assertTagEquals(
+		String displayMessage,
+		HTMLNode expectedNode,
+		HTMLNode actualNode,
+		HTMLEnumeration actualEnumeration)
+		throws HTMLParserException {
+		
+		if (expectedNode instanceof HTMLTag) {
+			HTMLTag expectedTag = (HTMLTag)expectedNode;
+			HTMLTag actualTag   = (HTMLTag)actualNode;
+			assertTagEquals(displayMessage, expectedTag, actualTag);
+			if (isTagAnXmlEndTag(expectedTag)) {
+				if (!isTagAnXmlEndTag(actualTag)) {
+					HTMLNode tempNode =
+						actualEnumeration.nextNode();
+					assertTrue(
+						"should be an end tag but was "+
+						tempNode.getClass().getName(),
+						tempNode instanceof HTMLEndTag
+					);
+					actualTag = (HTMLEndTag)tempNode;
+					assertEquals(
+						"expected end tag",
+						expectedTag.getTagName(),
+						actualTag.getTagName()
+					);
+				}
+			} 
+		}
+	}
+
+	private boolean isTagAnXmlEndTag(HTMLTag expectedTag) {
+		return expectedTag.getText().lastIndexOf('/')==expectedTag.getText().length()-1;
+	}
+
+
+	private void assertTagEquals(String displayMessage, HTMLTag expectedTag, HTMLTag actualTag) {
+		Iterator i = expectedTag.getAttributes().keySet().iterator();
+		while (i.hasNext()) {
+			String key = (String)i.next();
+			String expectedValue = 
+				expectedTag.getParameter(key);
+			String actualValue =
+				actualTag.getParameter(key);
+			assertStringEquals(
+				"\nvalue for key "+key+" in tag "+expectedTag.getTagName()+" expected="+expectedValue+" but was "+actualValue+
+				"\n\nComplete Tag expected:\n"+expectedTag.toHTML()+
+				"\n\nComplete Tag actual:\n"+actualTag.toHTML()+
+				displayMessage,
+				expectedValue,
+				actualValue
+			);
+								
+		}
+	}
+
+	public String removeEscapeCharacters(String inputString) {
+		inputString = inputString.replaceAll("\r","");
+		inputString = inputString.replaceAll("\n","");
+		inputString = inputString.replaceAll("\t","");
+		return inputString;
+	}	
 }

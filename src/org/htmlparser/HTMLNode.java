@@ -178,5 +178,4 @@ public abstract class HTMLNode
 	}
 
 	public abstract void accept(HTMLVisitor visitor);
-	
 }

@@ -312,7 +312,7 @@ public class HTMLParser
         setFeedback (fb);
         setScanners (null);
         setReader (rd);
-		HTMLTag.setTagParser(new HTMLTagParser(feedback));
+		HTMLTag.setTagParser(new TagParser(feedback));
 	}
 	
     /**
