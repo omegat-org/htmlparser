@@ -6,6 +6,7 @@ Integration Build 1.3 - 20030420
 [3] added line-break condition in assertXmlEquals
 [4] added fit testing framework
 [5] added parent association for each node
+[6] added digupStringNode() and findPositionOf(Node) to CompositeTag
 
 Integration Build 1.3 - 20030413
 --------------------------------
