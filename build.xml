@@ -339,10 +339,9 @@ HTML Parser Integration Release 1.4-20030727
     <echo message="*  Packaging....                 *"/>
     <echo message="**********************************"/>
 
+    <copy file="lib/commons-logging.jar" todir="${dist}/lib"/>
+    <copy file="lib/junit.jar" todir="${dist}/lib"/>
     <mkdir dir="${finalLoc}"/>
-    <mkdir dir="${releaseDir}/lib"/>
-    <copy file="lib/commons-logging.jar" todir="${releaseDir}/lib"/>
-    <copy file="lib/junit.jar" todir="${releaseDir}/lib"/>
     <zip zipfile="${finalLoc}/htmlparser${versionTag}.zip"
        basedir="${releaseDir}"/>
   </target>
