@@ -363,6 +363,7 @@ HTML Parser Integration Release 1.5-20040522
       <group title="Utility" packages="org.htmlparser.util,org.htmlparser.util.sort"/>
       <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
     </javadoc>
+    <copy file="resources/inherit.gif" tofile="${docs}/javadoc/resources/inherit.gif" overwrite="true"/>
     <delete file="${resources}/HtmlTaglet.class"/>
   </target>
 
