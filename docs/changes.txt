@@ -2,6 +2,8 @@ Integration Build 1.3 - 20030330
 --------------------------------
 [1] fixed bug (an enhancement really) 694477 quotes in content-type header
 [2] fix bug #699886 and #707447 by using a buffered stream reader with infinite mark
+[3] fixed bug in CompositeTagScanner, filter not being set correctly
+
 
 Integration build 1.3 - 20030323
 --------------------------------
