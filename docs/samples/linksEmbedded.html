@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Extracting Embedded Links</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<h2>Extracting Embedded Links / Images</h2>
+<p>The architecture of the parser makes it very easy to extract embedded links 
+  or images from a page. All you need to do is to use the method <a href="../javadoc/org/htmlparser/HTMLNode.html#collectInto(java.util.Vector,java.lang.String)">node.collectInto()</a></p>
+<p>Here's how you collect links from a page : 
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+   <td align="right" valign="top">
+    <code>
+     <font color="#808080">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>
+11<br>12<br>13<br>14<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#c0c0c0">&nbsp;&nbsp;</font><font color="#000000">HTMLParser&nbsp;parser&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser</font><font color="#000000">(</font><font color="#990000">&#34;http://www.yahoo.com&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;parser.registerScanners</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;</font><font color="#c00000">int&nbsp;</font><font color="#000000">i&nbsp;=&nbsp;</font><font color="#990000">0</font><font color="#000000">;<br>
+&nbsp;&nbsp;Vector&nbsp;collectionVector&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">Vector</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;HTMLNode&nbsp;node;<br>
+&nbsp;&nbsp;</font><font color="#0000c0">for&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLEnumeration&nbsp;e&nbsp;=&nbsp;parser.elements</font><font color="#000000">()</font><font color="#000000">;e.hasMoreNodes</font><font color="#000000">()</font><font color="#000000">;</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">node&nbsp;=&nbsp;e.nextHTMLNode</font><font color="#000000">()</font><font color="#000000">;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;node.<strong>collectInto</strong></font><font color="#000000">(collectionVector,HTMLLinkTag.LINK_TAG_FILTER);<br>
+        &nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;</font><font color="#008000">//&nbsp;All&nbsp;items&nbsp;in&nbsp;the 
+        collection&nbsp;vector&nbsp;should&nbsp;be&nbsp;links<br>
+        &nbsp;&nbsp;</font><font color="#0000c0">for&nbsp;</font><font color="#000000">(Enumeration&nbsp;e&nbsp;=&nbsp;collectionVector.elements();e.hasMoreElements();)&nbsp;{<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;HTMLLinkTag&nbsp;linkTag&nbsp;=&nbsp;(HTMLLinkTag)e.nextElement();<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#008000">//&nbsp;you&nbsp;can&nbsp;now&nbsp;process&nbsp;the&nbsp;links&nbsp;as&nbsp;you&nbsp;like<br>
+        &nbsp;&nbsp;</font><font color="#000000">}</font></code> </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>Line 8 is of particular importance here. Once you specify the collecting parameter, 
+  and the filter, the node matches itself against the filter. If the node contains 
+  a lot of nodes within it, then it can run through them passing your filter to 
+  each child node. </p>
+<p>For extracting images, line 8 will change to 
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+   <td align="right" valign="top">
+    <code>
+     <font color="#808080">
+.<br>8<br>.<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#c0c0c0"><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">node.collectInto(collectionVector,HTMLImageTag.IMAGE_TAG_FILTER);<br>
+&nbsp;&nbsp;</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>You must accordingly change line 12 to :
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+      <td align="right" valign="top"> <code> <font color="#808080"> 12<br>
+        ..<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#c0c0c0">&nbsp;&nbsp;</font><font color="#000000">HTMLImageTag&nbsp;imageTag&nbsp;=&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLImageTag</font><font color="#000000">)</font><font color="#000000">e.nextElement</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>Thats all there is to it! </p>
+<p><a href="index.html">Back to Samples</a><br>
+  <a href="../index.html">Back to HTMLParser Home Page</a></p>
+</body>
+</html>

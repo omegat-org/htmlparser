@@ -8,70 +8,27 @@
 </head>
 <body text="#000000" bgcolor="#FFFFFF" link="#3333FF" vlink="#FF6600" alink="#FFCC00">
 
-<h1>
-<span 
-      style="FONT-SIZE: 18pt; FONT-WEIGHT: normal; mso-bidi-font-size: 16.0pt">HTML
-Parser v 1.1<O:P></O:P></span></h1>
+<h1> <span 
+      style="FONT-SIZE: 18pt; FONT-WEIGHT: normal; mso-bidi-font-size: 16.0pt">HTMLParser 
+  v 1.2<O:P></O:P></span></h1>
 
 <div 
-      class=MsoNormal><![if !supportEmptyParas]><![endif]><O:P></O:P></div>
+      class=MsoNormal><O:P></O:P></div>
 
-<div class=MsoNormal>This is an open source parser for HTML, which was
-made by Somik Raha during development of a product at Kizna Corporation.
-Since this is not our main line of products, Kizna Corporation has decided
-to open source this, so that it may benefit other developers. This is released
-under <a href="http://www.gnu.org/copyleft/lesser.html">LGPL</a>. Kizna
-Corporation disclaims all copyright of this product.
-
-<p><b>Production Release 1.1 is out! (Apr-17-2002)</b></div>
-<div class=MsoNormal><a href="http://prdownloads.sourceforge.net/htmlparser/htmlparser1_1.zip">Download
-it here</a></div>
-<br>
-<div class=MsoNormal><b>Production Release 1.1 contains : </b><BR>
-[1] Added META and TITLE tag scanners<BR>
-[2] Fixed spaces bug in HTMLLinkScanner and HTMLImageScanner. The parser<BR>
-now supports links or urls with spaces in them. Functionality
-modification - HTMLTag no longer absorbs spaces. It reports data as is,
-and leaves the responsibility of processing to the particular scanner.<BR>
-[3] Fixed XML parsing bug - isXMLTagFound() in HTMLTagScanner - it no longer checks for equality, but for the beginning of an xml tag<BR>
-[4] HTMLTag bug - if a link is spread over two lines, the parser would crash.<BR>
-[5] Dynamic Page Parsing supported (urls need not end with .html anymore)<BR>
-[6] Dirty HTML of the form &lt;A HREF="http://www.somelink.com"&gt;abcd&lt;A&gt;, is now correctly handled. The second &lt;A&gt; is taken as &lt;/A&gt;.<BR>
- <BR>
-
-<div class=MsoNormal><b>Maintenance Release 1.04 contains :</b>
-<p>[1] Bug fix in HTMLTag, now caught by test case in HTMLTagTest. Will cause incorrect parsing for JSP tags, which have end tag symbols in inverted commas.
-[2] Bug fix in HTMLLinkParser - would crash for link tags which have no link in them. Test case also added. 
-[3] More test cases added, for ImageTag as well, and HTMLTag also.
-<BR>
-<br>
-<div class=MsoNormal><b>Maintenance Release 1.03 contains :</b>
-<p>[1] Bug fix in HTMLRemarkNode, now caught by test case in HTMLRemarkNodeTest. Will cause incorrect parsing if remarks are spread across lines.
-
-
-<div class=MsoNormal>
-<p><b>Maintenance Release 1.02 contains :</b>
-
-<p>[1] Bug fix in HTMLStyleScanner, now caught by test case in HTMLStyleScannerTest
-- would end up crashing on parsing google.
-<p>[2] Changed encoding support to 8859_4 for English and most European
-languages - this fixes some crashes observed on Finnish pages
-<p><b>Maintenance Release 1.01 contains :</b>
-<p>[1] Bug fix in HTMLStyleScanner, which was causing the parser to crash
-on encountering style tags.
-<p><b>Version 1.00 contains :</b>
-<p>[1] Major architecture overhaul - significant change : no more static
-scanner registration. Architecture has been simplified a lot.
-<br>[2] Major bug fixes - several bugs have been fixed, lots of testcases
-added, and stability vastly improved.
-<br>[3] Improved documentation - The javadoc is now substantial. Please
-look at the javadoc for the HTMLParser class, especially the elements()
-method. This has a lot of info to get you started.
-<p>With this release, HTMLParser has made the transition from an alpha
-to a <b>beta</b> stage. Modifications hereafter will be only of a maintenance
-nature and API is not expected to change.</div>
-
-<p><br>This project is hosted at SourceForge
-<br><a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=24399&type=1" width="88" height="31" border="0" alt="SourceForge.net Logo"></a>
+<div class=MsoNormal>Welcome to the homepage of HTMLParser - a super-fast real-time 
+  parser for real-world HTML. What has attracted most users to HTMLParser has 
+  been its simplicity in design, speed and ability to handle streaming real-world 
+  html. 
+  <p>The production release of HTMLParser 1.2 will be out shortly (in a few weeks, 
+    hopefully before New Year's). The current integration release - Candidate 
+    5 - is most likely to be designated as v1.2 production, if no bug reports 
+    come in. 
+  <p>You can download Candidate 5 (c5) from the <a href="http://sourceforge.net/project/showfiles.php?group_id=24399&release_id=126918">download 
+    page</a>. 
+  <p>Before you bother downloading the parser, you would probably want to check 
+    our &quot;simple design&quot; claim. Check <a href="samples/index.html">sample 
+    programs</a> to see how simple it is to parse HTML using HTMLParser. 
+  <p> <a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=24399&type=1" width="88" height="31" border="0" alt="SourceForge.net Logo"></a> 
+</div>
 </body>
 </html>
