@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<p><strong>Extracting Text Content from a Web Page</strong></p>
+<p>Extracting text from html is made simple because of the HTMLNode interface. 
+  HTMLNode allows the usage of toPlainString() uniformly for all nodes. Thereby, 
+  it is possible for us to get the plain string representation of a node if any. 
+  Some html elements might give meaningful implementations for this - such as 
+  title tags, links, string nodes, etc..</p>
+<p>The program below demonstrates the usage of toPlainString(). It is provided 
+  in the parserApplications package (in the download bundle, this will be in src.zip).</p>
+<p> 
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+   <td align="right" valign="top">
+    <code>
+     <font color="#808080">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>
+11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>
+21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>
+31<br>32<br>33<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#0000c0">import&nbsp;</font><font color="#000000">org.htmlparser.util.HTMLEnumeration;<br>
+</font><font color="#0000c0">import&nbsp;</font><font color="#000000">org.htmlparser.util.HTMLParserException;<br>
+<br>
+</font><font color="#0000c0">import&nbsp;</font><font color="#000000">org.htmlparser.HTMLNode;<br>
+</font><font color="#0000c0">import&nbsp;</font><font color="#000000">org.htmlparser.HTMLParser;<br>
+<br>
+</font><font color="#0000c0">public&nbsp;class&nbsp;</font><font color="#000000">StringExtractor&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;</font><font color="#0000c0">private&nbsp;</font><font color="#000000">String&nbsp;resource;<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#000000">StringExtractor</font><font color="#000000">(</font><font color="#000000">String&nbsp;resource</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">this</font><font color="#000000">.resource&nbsp;=&nbsp;resource;<br>
+&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#000000">String&nbsp;extractStrings</font><font color="#000000">()&nbsp;</font><font color="#0000c0">throws&nbsp;</font><font color="#000000">HTMLParserException&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">HTMLParser&nbsp;parser&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser</font><font color="#000000">(</font><font color="#000000">resource</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;HTMLNode&nbsp;node;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;StringBuffer&nbsp;results=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">StringBuffer</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">for&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLEnumeration&nbsp;e&nbsp;=&nbsp;parser.elements</font><font color="#000000">()</font><font color="#000000">;e.hasMoreNodes</font><font color="#000000">()</font><font color="#000000">;</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">node&nbsp;=&nbsp;e.nextHTMLNode</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results.append</font><font color="#000000">(</font><font color="#000000">node.toPlainTextString</font><font color="#000000">())</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">return&nbsp;</font><font color="#000000">results.toString</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;static&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">main</font><font color="#000000">(</font><font color="#000000">String</font><font color="#000000">[]&nbsp;</font><font color="#000000">args</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;Running&nbsp;StringExtractor..&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;StringExtractor&nbsp;se&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">StringExtractor</font><font color="#000000">(</font><font color="#000000">args</font><font color="#000000">[</font><font color="#990000">0</font><font color="#000000">])</font><font color="#000000">;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">try&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;Strings=&nbsp;&nbsp;&#34;</font><font color="#000000">+se.extractStrings</font><font color="#000000">())</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">catch&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLParserException&nbsp;e</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">e.printStackTrace</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;}<br>
+</font><font color="#000000">}</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>If you've already gone through the previous example - <a href="links.html">Extracting 
+  Links / Mail addresses from a Web Page</a>, you would have noticed that there 
+  is no registration of scanners in this example. This is because, extracting 
+  strings, remarks and basic tags are the default capabilities of the parser. 
+  However, if you add parser.registerScanners() after creating the parser, the 
+  results that you get will be quite different. For one, you will not get any 
+  javascript code - this is because script scanners handle it, and the script 
+  tag wont render code to plain text (try this program on http://www.yahoo.com).</p>
+<p>The interesting thing about this program is that there is no need to downcast 
+  - thus saving a lot of processor time. This is possible because all tags conform 
+  to the HTMLNode interface - which allows you to uniformly get string representations.</p>
+<p><a href="index.html">Back to Samples</a><br>
+  <a href="../index.html">Back to HTMLParser Home Page</a></p>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Link and Mail Extractor </title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<p><strong>Extracting Links and Mail Addresses from a Webpage</strong></p>
+<p>We are going to extract links from a given URL. This program is provided in 
+  the parserApplications package (in the download bundle, this will be in src.zip).</p>
+<p> 
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+      <td align="right" valign="top"> <code> <font color="#808080"> 1<br>
+        2<br>
+        3<br>
+        4<br>
+        5<br>
+        6<br>
+        7<br>
+        8<br>
+        9<br>
+        10<br>
+        11<br>
+        12<br>
+        13<br>
+        14<br>
+        15<br>
+        16<br>
+        <a name="17"></a>17<br>
+        <a name="18"></a>18<br>
+        19<br>
+        20<br>
+        21<br>
+        22<br>
+        23<br>
+        24<br>
+        25<br>
+        26<br>
+        27<br>
+        28<br>
+        29<br>
+        30<br>
+        <a name="31"></a>31<br>
+        32<br>
+        33<br>
+        34<br>
+        35<br>
+        36<br>
+        37<br>
+        38<br>
+        39<br>
+        40<br>
+        41<br>
+        42<br>
+        43<br>
+        44<br>
+        45<br>
+        46<br>
+        47<br>
+        48<br>
+        49<br>
+        50<br>
+        </font> </code> </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+      <td valign="top"> <code> <font color="#0000c0">import&nbsp;</font><font color="#000000"></font><font color="#000000">org.htmlparser.HTMLNode;<br>
+</font><font color="#0000c0">import&nbsp;</font><font color="#000000">org.htmlparser.HTMLParser;<br>
+</font><font color="#0000c0">import&nbsp;</font><font color="#000000">org.htmlparser.tags.HTMLLinkTag;<br>
+</font><font color="#0000c0">import&nbsp;</font><font color="#000000">org.htmlparser.util.HTMLEnumeration;<br>
+</font><font color="#0000c0">import&nbsp;</font><font color="#000000">org.htmlparser.util.HTMLParserException;<br>
+<br>
+</font><font color="#008000">/**<br>
+&nbsp;*&nbsp;LinkExtractor&nbsp;extracts&nbsp;all&nbsp;the&nbsp;links&nbsp;from&nbsp;the&nbsp;given&nbsp;webpage<br>
+&nbsp;*&nbsp;and&nbsp;prints&nbsp;them&nbsp;on&nbsp;standard&nbsp;output.<br>
+&nbsp;*/<br>
+</font><font color="#0000c0">public&nbsp;class&nbsp;</font><font color="#000000">LinkExtractor&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;</font><font color="#0000c0">private&nbsp;</font><font color="#000000">String&nbsp;location;<br>
+&nbsp;&nbsp;</font><font color="#0000c0">private&nbsp;</font><font color="#000000">HTMLParser&nbsp;parser;<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#000000">LinkExtractor</font><font color="#000000">(</font><font color="#000000">String&nbsp;location</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">this</font><font color="#000000">.location&nbsp;=&nbsp;location;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">try&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">this</font><font color="#000000">.parser&nbsp;&nbsp;&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser</font><font color="#000000">(</font><font color="#000000">location</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#008000">//&nbsp;Create&nbsp;the&nbsp;parser&nbsp;object<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">parser.registerScanners</font><font color="#000000">()</font><font color="#000000">;&nbsp;</font><font color="#008000">//&nbsp;Register&nbsp;standard&nbsp;scanners&nbsp;(Very&nbsp;Important)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">catch&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLParserException&nbsp;e</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">e.printStackTrace</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">extractLinks</font><font color="#000000">()&nbsp;</font><font color="#0000c0">throws&nbsp;</font><font color="#000000">HTMLParserException&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">HTMLNode&nbsp;node;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;HTMLLinkTag&nbsp;linkTag;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;Parsing&nbsp;&#34;</font><font color="#000000">+location+</font><font color="#990000">&#34;&nbsp;for&nbsp;links...&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">for&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLEnumeration&nbsp;e&nbsp;=&nbsp;parser.elements</font><font color="#000000">()</font><font color="#000000">; 
+        e.hasMoreNodes</font><font color="#000000">()</font><font color="#000000">;</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">node&nbsp;=&nbsp;e.nextHTMLNode</font><font color="#000000">()</font><font color="#000000">;&nbsp;&nbsp;</font><font color="#008000">//&nbsp;Get&nbsp;the&nbsp;next&nbsp;HTML&nbsp;Node<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">node&nbsp;</font><font color="#0000c0">instanceof&nbsp;</font><font color="#000000">HTMLLinkTag</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">linkTag&nbsp;=&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLLinkTag</font><font color="#000000">)</font><font color="#000000">node;&nbsp;</font><font color="#008000">//&nbsp;Downcast&nbsp;to&nbsp;a&nbsp;Link&nbsp;Tag<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">linkTag.print</font><font color="#000000">()</font><font color="#000000">;&nbsp;</font><font color="#008000">//&nbsp;Print&nbsp;it<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;static&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">main</font><font color="#000000">(</font><font color="#000000">String</font><font color="#000000">[]&nbsp;</font><font color="#000000">args</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">args.length&lt;</font><font color="#990000">0</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.err.println</font><font color="#000000">(</font><font color="#990000">&#34;Syntax&nbsp;Error&nbsp;:&nbsp;Please&nbsp;provide&nbsp;the&nbsp;location(URL&nbsp;or&nbsp;file)&nbsp;to&nbsp;parse&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit</font><font color="#000000">(</font><font color="#000000">-</font><font color="#990000">1</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">LinkExtractor&nbsp;linkExtractor&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">LinkExtractor</font><font color="#000000">(</font><font color="#000000">args</font><font color="#000000">[</font><font color="#990000">0</font><font color="#000000">])</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">try&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">linkExtractor.extractLinks</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">catch&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLParserException&nbsp;e</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">e.printStackTrace</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;}<br>
+</font><font color="#000000">}</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+
+
+
+<p>Let us look at whats really happening here. In <a href="#17">line 17</a>, we 
+  are creating a parser object that will work on a given location. The location 
+  can be a URL or a file. In <a href="#18">line 18</a>, we ask the parser to register 
+  itself with certain standard scanners, that give it the capability to handle 
+  special tags (like links, images, etc..). If line 18 is not provided, the program 
+  will not output any link tags.</p>
+<p>The extractLinks() method is the heart of the program. All it really has a 
+  loop that utilizes an iterator - called HTMLEnumeration. HTMLEnumeration has 
+  a really simple interface - hasMoreNodes() and nextHTMLNode(). This is very 
+  similar to java's own Enumeration (hasMoreElements() and nextElement()). The 
+  reason of not using Enumeration and instead having our own version of it - is 
+  that we'd like to save previous CPU time on the downcasts. Since we know that 
+  we're only dealing with HTMLNode objects, we'd like to directly return them. 
+</p>
+<p>Every call to nextHTMLNode() advances the parser to the next object. Please 
+  remember that this is a streaming parser, and the elements are coming in real 
+  time. </p>
+<p>Now, we'd like to filter out all objects except links. <a href="#31">Line 31</a> 
+  accomplishes this. We check if the node is an instance of HTMLLinkTag. If it 
+  is, then this is the link object that has just been parsed from the webpage. 
+  We can make a call to its print() method, or we can print it the way we like, 
+  using its interface methods such as getLink() and getLinkText(). Try making 
+  the following modifications to Line 33.</p>
+<p> 
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+      <td align="right" valign="top"> <code> <font color="#808080"> 33<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;&lt;A&nbsp;HREF=\&#34;&#34;</font><font color="#000000">+linkTag.getLink</font><font color="#000000">()</font><font color="#000000">+</font><font color="#990000">&#34;\&#34;&gt;&#34;</font><font color="#000000">+linkTag.getLinkText</font><font color="#000000">()</font><font color="#000000">+</font><font color="#990000">&#34;&lt;/A&gt;&#34;</font><font color="#000000">)</font><font color="#000000">;</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>As you can see, you can get to the data in the tag very easily. You might want 
+  to print or format this however you like, but if you want to reconstruct the 
+  html as it appeared (as we've tried to do above), then you could use the toHTML 
+  method.</p>
+<!-- ======================================================== -->
+<!-- = Java Sourcecode to HTML automatically converted code = -->
+<!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+<!-- =     Further information: http://www.java2html.de     = -->
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+      <td align="right" valign="top"> <code> <font color="#808080"> 33<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#000000">linkTag.toHTML</font><font color="#000000">())</font><font color="#000000">;</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>We can also check if the link is a mailto link, using the method HTMLLinkTag.isMailLink(). 
+  Suppose we wish to modify the above program to print all the email addresses 
+  from a webpage, we'd only have to modify line 33 to : </p>
+<p>
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+      <td align="right" valign="top"> <code> <font color="#808080"> 33<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">linkTag.isMailLink</font><font color="#000000">())&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#000000">linkTag.getLink</font><font color="#000000">())</font><font color="#000000">;</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p><a href="index.html">Back to Samples</a><br>
+  <a href="../index.html">Back to HTMLParser Home Page</a></p>
+</body>
+</html>

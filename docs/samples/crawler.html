@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<h2><strong>Web Crawler</strong> </h2>
+<p>A crawler is a program that picks up a page and follows all the links on the 
+  page. Crawlers are used in search engines to index all the pages on a website, 
+  starting only from the first page (as long as it is linked).</p>
+<p>There are several crawlers out there, but few are good quality open-source 
+  crawlers. The problem is most crawlers could fail if the parser they use is 
+  not powerful. Using HTMLParser, it is possible to crawl through dirty html - 
+  with great speed. </p>
+<p>There are two types of crawlers</p>
+<ul>
+  <li>Breadth First</li>
+  <li>Depth First</li>
+</ul>
+<p><strong>Breadth First crawlers </strong>use the BFS (Breadth-First Search) 
+  algorithm. Here's a brief description :</p>
+<ol>
+  <li>Get all links from the starting page and add to the queue</li>
+  <li>Pick first link from queue, get all links on this page, and add to queue</li>
+  <li>Repeat Step 2, until queue is empty</li>
+</ol>
+<p><strong>Depth First crawlers</strong> use the DFS (Depth-First Search) algorithm. 
+  Here's a brief description :</p>
+<ol>
+  <li>Get first link that has not yet been visited, from the starting page.</li>
+  <li>Visit link and get first non-visited link</li>
+  <li>Repeat Step 2, until there are no further non-visited links.</li>
+  <li>Go to next non-visited link in the previous level of recursion, and repeat 
+    step 2, until no more non-visited links are present</li>
+</ol>
+<p>BFS crawlers are simple to write. DFS can be slightly more involved, so we 
+  shall present a simple DFS crawler program below. This is a basic program, and 
+  is included in the <a href="http://htmlparser.sourceforge.net/javadoc/org/htmlparser/parserapplications/package-summary.html">org.htmlparser.parserapplications</a> 
+  package - <a href="http://htmlparser.sourceforge.net/javadoc/org/htmlparser/parserapplications/Robot.html">Robot.java</a>. 
+  Feel free to modify it to add functionality to it.
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+   <td align="right" valign="top">
+    <code>
+     <font color="#808080">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>
+11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>
+21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>
+31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>
+41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>
+51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>
+61<br>62<br>63<br>64<br>65<br>66<br>67<br>68<br>69<br>70<br>
+71<br>72<br>73<br>74<br>75<br>76<br>77<br>78<br>79<br>80<br>
+81<br>82<br>83<br>84<br>85<br>86<br>87<br>88<br>89<br>90<br>
+91<br>92<br>93<br>94<br>95<br>96<br>97<br>98<br>99<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#0000c0">public&nbsp;class&nbsp;</font><font color="#000000">Robot&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;</font><font color="#0000c0">private&nbsp;</font><font color="#000000">org.htmlparser.HTMLParser&nbsp;parser;<br>
+&nbsp;&nbsp;</font><font color="#008000">/**<br>
+&nbsp;&nbsp;&nbsp;*&nbsp;Robot&nbsp;crawler&nbsp;-&nbsp;Provide&nbsp;the&nbsp;starting&nbsp;url&nbsp;<br>
+&nbsp;&nbsp;&nbsp;*/<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#000000">Robot</font><font color="#000000">(</font><font color="#000000">String&nbsp;resourceLocation</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">try&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">parser&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser</font><font color="#000000">(</font><font color="#000000">resourceLocation,new&nbsp;DefaultHTMLParserFeedback</font><font color="#000000">())</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser.registerScanners</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">catch&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLParserException&nbsp;e</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.err.println</font><font color="#000000">(</font><font color="#990000">&#34;Error,&nbsp;could&nbsp;not&nbsp;create&nbsp;parser&nbsp;object&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;</font><font color="#008000">/**<br>
+&nbsp;&nbsp;&nbsp;*&nbsp;Crawl&nbsp;using&nbsp;a&nbsp;given&nbsp;crawl&nbsp;depth.<br>
+&nbsp;&nbsp;&nbsp;*&nbsp;</font><font color="#005500">@param&nbsp;</font><font color="#008000">crawlDepth&nbsp;Depth&nbsp;of&nbsp;crawling<br>
+&nbsp;&nbsp;&nbsp;*/<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">crawl</font><font color="#000000">(</font><font color="#c00000">int&nbsp;</font><font color="#000000">crawlDepth</font><font color="#000000">)&nbsp;</font><font color="#0000c0">throws&nbsp;</font><font color="#000000">HTMLParserException<br>
+&nbsp;&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">try&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">crawl</font><font color="#000000">(</font><font color="#000000">parser,crawlDepth</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">catch&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLParserException&nbsp;e</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">throw&nbsp;new&nbsp;</font><font color="#000000">HTMLParserException</font><font color="#000000">(</font><font color="#990000">&#34;HTMLParserException&nbsp;at&nbsp;crawl(&#34;</font><font color="#000000">+crawlDepth+</font><font color="#990000">&#34;)&#34;</font><font color="#000000">,e</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;</font><font color="#008000">/**<br>
+&nbsp;&nbsp;&nbsp;*&nbsp;Crawl&nbsp;using&nbsp;a&nbsp;given&nbsp;parser&nbsp;object,&nbsp;and&nbsp;a&nbsp;given&nbsp;crawl&nbsp;depth.<br>
+&nbsp;&nbsp;&nbsp;*&nbsp;</font><font color="#005500">@param&nbsp;</font><font color="#008000">parser&nbsp;HTMLParser&nbsp;object<br>
+&nbsp;&nbsp;&nbsp;*&nbsp;</font><font color="#005500">@param&nbsp;</font><font color="#008000">crawlDepth&nbsp;Depth&nbsp;of&nbsp;crawling<br>
+&nbsp;&nbsp;&nbsp;*/<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">crawl</font><font color="#000000">(</font><font color="#000000">HTMLParser&nbsp;parser,int&nbsp;crawlDepth</font><font color="#000000">)&nbsp;</font><font color="#0000c0">throws&nbsp;</font><font color="#000000">HTMLParserException&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;&nbsp;crawlDepth&nbsp;=&nbsp;&#34;</font><font color="#000000">+crawlDepth</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">for&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLEnumeration&nbsp;e&nbsp;=&nbsp;parser.elements</font><font color="#000000">()</font><font color="#000000">;e.hasMoreNodes</font><font color="#000000">()</font><font color="#000000">;</font><font color="#000000">)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">HTMLNode&nbsp;node&nbsp;=&nbsp;e.nextHTMLNode</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">node&nbsp;</font><font color="#0000c0">instanceof&nbsp;</font><font color="#000000">HTMLLinkTag</font><font color="#000000">)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">HTMLLinkTag&nbsp;linkTag&nbsp;=&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLLinkTag</font><font color="#000000">)</font><font color="#000000">node;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">!linkTag.isMailLink</font><font color="#000000">())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">linkTag.getLink</font><font color="#000000">()</font><font color="#000000">.toUpperCase</font><font color="#000000">()</font><font color="#000000">.indexOf</font><font color="#000000">(</font><font color="#990000">&#34;HTM&#34;</font><font color="#000000">)</font><font color="#000000">!=-</font><font color="#990000">1&nbsp;</font><font color="#000000">||&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linkTag.getLink</font><font color="#000000">()</font><font color="#000000">.toUpperCase</font><font color="#000000">()</font><font color="#000000">.indexOf</font><font color="#000000">(</font><font color="#990000">&#34;COM&#34;</font><font color="#000000">)</font><font color="#000000">!=-</font><font color="#990000">1&nbsp;</font><font color="#000000">||<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linkTag.getLink</font><font color="#000000">()</font><font color="#000000">.toUpperCase</font><font color="#000000">()</font><font color="#000000">.indexOf</font><font color="#000000">(</font><font color="#990000">&#34;ORG&#34;</font><font color="#000000">)</font><font color="#000000">!=-</font><font color="#990000">1</font><font color="#000000">)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">crawlDepth&gt;</font><font color="#990000">0</font><font color="#000000">)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">HTMLParser&nbsp;newParser&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">HTMLParser</font><font color="#000000">(</font><font color="#000000">linkTag.getLink</font><font color="#000000">()</font><font color="#000000">,new&nbsp;DefaultHTMLParserFeedback</font><font color="#000000">())</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newParser.registerScanners</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print</font><font color="#000000">(</font><font color="#990000">&#34;Crawling&nbsp;to&nbsp;&#34;</font><font color="#000000">+linkTag.getLink</font><font color="#000000">())</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;crawl</font><font color="#000000">(</font><font color="#000000">newParser,crawlDepth-</font><font color="#990000">1</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">else&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#000000">linkTag.getLink</font><font color="#000000">())</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;static&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">main</font><font color="#000000">(</font><font color="#000000">String</font><font color="#000000">[]&nbsp;</font><font color="#000000">args</font><font color="#000000">)&nbsp;<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;Robot&nbsp;Crawler&nbsp;v&#34;</font><font color="#000000">+HTMLParser.VERSION_STRING</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">args.length&lt;</font><font color="#990000">2&nbsp;</font><font color="#000000">||&nbsp;args</font><font color="#000000">[</font><font color="#990000">0</font><font color="#000000">]</font><font color="#000000">.equals</font><font color="#000000">(</font><font color="#990000">&#34;-help&#34;</font><font color="#000000">))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">System.out.println</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;Syntax&nbsp;:&nbsp;java&nbsp;-classpath&nbsp;htmlparser.jar&nbsp;org.htmlparser.parserapplications.Robot&nbsp;&lt;resourceLocn/website&gt;&nbsp;&lt;depth&gt;&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;&nbsp;&nbsp;&nbsp;&lt;resourceLocn&gt;&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;parsed&nbsp;(with&nbsp;complete&nbsp;path&nbsp;&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;not&nbsp;in&nbsp;current&nbsp;directory)&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;&nbsp;&nbsp;&nbsp;&lt;depth&gt;&nbsp;No&nbsp;of&nbsp;links&nbsp;to&nbsp;be&nbsp;followed&nbsp;from&nbsp;each&nbsp;link&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;&nbsp;&nbsp;&nbsp;-help&nbsp;This&nbsp;screen&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;HTML&nbsp;Parser&nbsp;home&nbsp;page&nbsp;:&nbsp;http://htmlparser.sourceforge.net&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;Example&nbsp;:&nbsp;java&nbsp;-classpath&nbsp;htmlparser.jar&nbsp;com.kizna.parserapplications.Robot&nbsp;http://www.google.com&nbsp;3&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;If&nbsp;you&nbsp;have&nbsp;any&nbsp;doubts,&nbsp;please&nbsp;join&nbsp;the&nbsp;HTMLParser&nbsp;mailing&nbsp;list&nbsp;(user/developer)&nbsp;from&nbsp;the&nbsp;HTML&nbsp;Parser&nbsp;home&nbsp;page&nbsp;instead&nbsp;of&nbsp;mailing&nbsp;any&nbsp;of&nbsp;the&nbsp;contributors&nbsp;directly.&nbsp;You&nbsp;will&nbsp;be&nbsp;surprised&nbsp;with&nbsp;the&nbsp;quality&nbsp;of&nbsp;open&nbsp;source&nbsp;support.&nbsp;&#34;</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit</font><font color="#000000">(</font><font color="#000000">-</font><font color="#990000">1</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">String&nbsp;resourceLocation=</font><font color="#990000">&#34;&#34;</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#c00000">int&nbsp;</font><font color="#000000">crawlDepth&nbsp;=&nbsp;</font><font color="#990000">1</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">args.length!=</font><font color="#990000">0</font><font color="#000000">)&nbsp;</font><font color="#000000">resourceLocation&nbsp;=&nbsp;args</font><font color="#000000">[</font><font color="#990000">0</font><font color="#000000">]</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">args.length==</font><font color="#990000">2</font><font color="#000000">)&nbsp;</font><font color="#000000">crawlDepth=Integer.valueOf</font><font color="#000000">(</font><font color="#000000">args</font><font color="#000000">[</font><font color="#990000">1</font><font color="#000000">])</font><font color="#000000">.intValue</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Robot&nbsp;robot&nbsp;=&nbsp;</font><font color="#0000c0">new&nbsp;</font><font color="#000000">Robot</font><font color="#000000">(</font><font color="#000000">resourceLocation</font><font color="#000000">)</font><font color="#000000">;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println</font><font color="#000000">(</font><font color="#990000">&#34;Crawling&nbsp;Site&nbsp;&#34;</font><font color="#000000">+resourceLocation</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">try&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">robot.crawl</font><font color="#000000">(</font><font color="#000000">crawlDepth</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">catch&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLParserException&nbsp;e</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">e.printStackTrace</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;}<br>
+</font><font color="#000000">}</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>The method that does the crawling is the recursive method crawl(parser,depth). 
+  The crawler goes about creating multiple parsers and moving through sites using 
+  the DFS approach.</p>
+<p>You have to be careful of the depth provided to the crawler. Studying the time 
+  taken to map all the links is itself an interesting research project. A word 
+  of caution, some sites dont like crawlers going through them. They would have 
+  a file called robots.txt in the root directory which should be accessed to know 
+  the rules and honor them. <a href="http://www.ebrandmanagement.com/whitepapers/robots2.htm">Read 
+  more about this</a>. The above program is only a demonstration program. Please 
+  note that it will only follow links that have &quot;.com&quot;, &quot;.htm&quot; 
+  or &quot;.org&quot; ending. In real-life situations, you'd also want to support 
+  dynamic links.</p>
+<p>Before you set out to design an open-source or commercia crawler, please study 
+  what others have already researched in this area.</p>
+<p><strong>Some Useful Links on Crawlers</strong></p>
+<ul>
+  <li><a href="http://support.inktomi.com/products/search/support/docs/wp-spider/default.htm">Inktomi's 
+    Paper</a></li>
+  <li><a href="http://www.searchtools.com/robots/robots-articles.html">Collection 
+    of Crawler Links</a></li>
+</ul>
+<p><a href="index.html">Back to Samples</a><br>
+  <a href="../index.html">Back to HTMLParser Home Page</a></p>
+</body>
+</html>

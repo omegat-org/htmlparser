@@ -8,18 +8,46 @@
 </head>
 <body text="#000000" bgcolor="#FFFFFF" link="#3333FF" vlink="#FF6600" alink="#FFCC00">
 
-<h1>
-<font size=+2>HTML Parser Design Documentation</font></h1>
-<b><a href="basicpackage.html">HTML Parser Basic Package</a></b>
-<br>All initial users of HTML Parser should go through this documentation
-to get started.
-<p><b><a href="tags.html">HTML Parser Tags and Nodes</a></b>
-<br>Users should go through this to get a deeper understanding of the parser.
-<p><b><a href="scanner.html">The Scanner - Tag Hierarchy</a></b>
-<br>Useful if you wish to extend the capability of the parser to support
-your own tag set.
-<br>Advanced users and developers should go through this.
-<p><b><a href="../javadoc/index.html">Javadoc</a></b>
-<br>You can browse the javadoc of all the classes from this link.
+<h1> <font size=+2>HTMLParser Documentation</font></h1>
+<table width="75%" border="0">
+  <tr> 
+    <td><p><b><a href="../javadoc/index.html">Javadoc</a></b> <br>
+        You can browse the javadoc of all the classes from this link. The Javadoc 
+        of the classes, particularly <a href="http://htmlparser.sourceforge.net/javadoc/org/htmlparser/HTMLParser.html">HTMLParser</a>, 
+        contains a lot of information that will help you understand how to use 
+        the parser. If you're the quintessential java programmer who just needs 
+        good javadoc to get started, this is the place to look. We recommend you 
+        focus initially on the <a href="http://htmlparser.sourceforge.net/javadoc/org/htmlparser/package-summary.html">org.htmlparser</a> 
+        and <a href="http://htmlparser.sourceforge.net/javadoc/org/htmlparser/tags/package-summary.html">org.htmlparser.tags</a> 
+        packages. <br>
+        <br>
+      </p></td>
+  </tr>
+  <tr> 
+    <td><a href="../samples/index.html"><strong>Getting Started</strong></a><br>
+      There's no better way of getting started than to look at <a href="../samples/index.html">Sample 
+      programs</a> made with the parser. You should find most of the programs 
+      that you'd ever want to make. Most of the Sample Programs have design commentaries, 
+      so you can also treat this as a tutorial on the parser and its design. <br> 
+      <br> </td>
+  </tr>
+  <tr> 
+    <td><a href="design.html"><strong>Design</strong></a><br>
+      The design of HTML Parser has evolved over a period of time (over a year 
+      now) with input from various experts. A lot of refactorings have taken place, 
+      and a couple of patterns have come in which makes for interesting study. 
+      If you are the OO-nerd who loves to understand hierarchies and frameworks, 
+      you might find this interesting. <br>
+      <br>
+    </td>
+  </tr>
+  <tr>
+    <td><p><a href="tests.html"><strong>Test-driven Development<br>
+        </strong></a>We'll take a look at the testing framework in place - this 
+        is a must-see for developers on the htmlparser project, in order to follow 
+        the XP paradigm of Test-Driven Development.</p>
+      </td>
+  </tr>
+</table>
 </body>
 </html>
