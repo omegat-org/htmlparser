@@ -52,4 +52,10 @@ public class TableTag extends CompositeTag {
 		return (TableRow)rows.get(i);
 	}
 
+	public String toString() {
+		return 
+			"TableTag\n" +			"********\n"+
+			toHtml();
+	}
+
 }

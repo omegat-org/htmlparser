@@ -114,22 +114,22 @@ public class FormScanner extends CompositeTagScanner
 	 * @param reader The reader object responsible for reading the html page
 	 * @param currentLine The current line (automatically provided by Tag)
 	 */
-	public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
-	{
-		if (linkScannerAlreadyOpen) {
-			String newLine = insertEndTagBeforeNode(tag, currentLine);
-			reader.changeLine(newLine);
-			return new EndTag(
-				new TagData(
-					tag.elementBegin(),
-					tag.elementBegin()+3,
-					"A",
-					currentLine
-				)
-			);
-		}
-		return super.scan(tag,url,reader,currentLine);
-	}
+//	public Tag scan(Tag tag,String url,NodeReader reader,String currentLine) throws ParserException
+//	{
+//		if (linkScannerAlreadyOpen) {
+//			String newLine = insertEndTagBeforeNode(tag, currentLine);
+//			reader.changeLine(newLine);
+//			return new EndTag(
+//				new TagData(
+//					tag.elementBegin(),
+//					tag.elementBegin()+3,
+//					"A",
+//					currentLine
+//				)
+//			);
+//		}
+//		return super.scan(tag,url,reader,currentLine);
+//	}
 
 
 	/**
@@ -175,6 +175,12 @@ public class FormScanner extends CompositeTagScanner
 			
 		}	
 		return match;
+	}
+
+	public Tag scan(Tag tag, String url, NodeReader reader, String currLine)
+		throws ParserException {
+		// TODO Auto-generated method stub
+		return super.scan(tag, url, reader, currLine);
 	}
 
 }

@@ -61,6 +61,7 @@ import org.htmlparser.scanners.OptionTagScanner;
 import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.scanners.SelectTagScanner;
 import org.htmlparser.scanners.StyleScanner;
+import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.scanners.TextareaTagScanner;
 import org.htmlparser.scanners.TitleScanner;
@@ -1011,7 +1012,7 @@ public class Parser
 		addScanner(new OptionTagScanner("-option"));
 	//	addScanner(new SpanScanner("-p"));
 	//	addScanner(new DivScanner("-div"));
-//		addScanner(new TableScanner(this));
+		addScanner(new TableScanner(this));
 	}
 	
 	/**
