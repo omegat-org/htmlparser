@@ -32,19 +32,11 @@
 
 package org.htmlparser.lexer;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URLConnection;
-import java.net.UnknownHostException;
-import java.util.Random;
+import java.io.*;
+import java.lang.reflect.*;
+import java.net.*;
 
-import org.htmlparser.util.ParserException;
+import org.htmlparser.util.*;
 
 /**
  * Represents the contents of an HTML page.
@@ -149,7 +141,6 @@ public class Page
     public Page (String text) throws ParserException
     {
         InputStream stream;
-        Page ret;
 
         if (null == text)
             throw new IllegalArgumentException ("text cannot be null");
