@@ -11,7 +11,9 @@ Integration Build 1.2 - 20021215
 [9] Major design improvement, implemented Collection-Parameter pattern - in HTMLNode.collectInto()
 [10] Fixed reset crash bug. Reader providers have to explicitly call mark and reset now. This is 
      now documented in HTMLParser.java.
-
+[11] Fixed bug 649269 in HTMLLinkTag.isHttpLink(), now correctly identifies relative links as Http
+	 links.
+	
 Integration Build 1.2 - 20021208
 --------------------------------
 [1] Fixed bug in base href scanner - would always expect href
