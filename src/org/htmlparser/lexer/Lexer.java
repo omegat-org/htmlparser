@@ -266,6 +266,11 @@ public class Lexer
                 ch = mPage.getCharacter (probe);
                 if (0 == ch)
                     ret = makeString (probe);
+                else if ('%' == ch)
+                {
+                    probe.retreat ();
+                    ret = parseJsp (probe);
+                }
                 else if ('/' == ch || '%' == ch || Character.isLetter (ch))
                 {
                     probe.retreat ();
@@ -971,6 +976,152 @@ public class Lexer
             ret = null;
         
         return (ret);
+    }
+
+    /**
+     * Parse a java server page node.
+     * Scan characters until "%&gt;" is encountered, or the input stream is
+     * exhausted, in which case <code>null</code> is returned.
+     * @param cursor The position at which to start scanning.
+     */
+    protected Node parseJsp (Cursor cursor)
+        throws
+            ParserException
+    {
+        boolean done;
+        char ch;
+        int state;
+        Vector attributes;
+        int code;
+        Node ret;
+
+        done = false;
+        state = 0;
+        code = 0;
+        attributes = new Vector ();
+        // <%xyz%>
+        // 012223d
+        // <%=xyz%>
+        // 0122223d
+        // <%@xyz%d
+        // 0122223d
+        while (!done)
+        {
+            ch = mPage.getCharacter (cursor);
+            switch (state)
+            {
+                case 0: // prior to the percent
+                    switch (ch)
+                    {
+                        case '%': // <%
+                            state = 1;
+                            break;
+                        // case 0:   // <\0
+                        // case '>': // <>
+                        default:
+                            done = true;
+                            break;
+                    }
+                    break;
+                case 1: // prior to the optional qualifier
+                    switch (ch)
+                    {
+                        case 0:   // <%\0
+                        case '>': // <%>
+                            done = true;
+                            break;
+                        case '=': // <%=
+                        case '@': // <%@
+                            code = cursor.getPosition ();
+                            attributes.addElement (new PageAttribute (mPage, mCursor.getPosition () + 1, code, -1, -1, (char)0));
+                            state = 2;
+                            break;
+                        default:  // <%x
+                            code = cursor.getPosition () - 1;
+                            attributes.addElement (new PageAttribute (mPage, mCursor.getPosition () + 1, code, -1, -1, (char)0));
+                            state = 2;
+                            break;
+                    }
+                    break;
+                case 2: // prior to the closing percent
+                    switch (ch)
+                    {
+                        case 0:   // <%x\0
+                        case '>': // <%x>
+                            done = true;
+                            break;
+                        case '\'':
+                        case '"':// <%???"
+                            state = ch;
+                            break;
+                        case '%': // <%???%
+                            state = 3;
+                            break;
+                        default:  // <%???x
+                            break;
+                    }
+                    break;
+                case 3:
+                    switch (ch)
+                    {
+                        case 0:   // <%x??%\0
+                            done = true;
+                            break;
+                        case '>':
+                            state = 4;
+                            done = true;
+                            break;
+                        default:  // <%???%x
+                            state = 2;
+                            break;
+                    }
+                    break;
+                case '"':
+                    switch (ch)
+                    {
+                        case 0:   // <%x??"\0
+                            done = true;
+                            break;
+                        case '"':
+                            state = 2;
+                            break;
+                        default:  // <%???'??x
+                            break;
+                    }
+                    break;
+                case '\'':
+                    switch (ch)
+                    {
+                        case 0:   // <%x??'\0
+                            done = true;
+                            break;
+                        case '\'':
+                            state = 2;
+                            break;
+                        default:  // <%???"??x
+                            break;
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException ("how the fuck did we get in state " + state);
+            }
+        }
+
+        if (4 == state) // normal exit
+        {
+            if (0 != code)
+            {
+                state = cursor.getPosition () - 2; // reuse state
+                attributes.addElement (new PageAttribute (mPage, code, state, -1, -1, (char)0));
+                attributes.addElement (new PageAttribute (mPage, state, state + 1, -1, -1, (char)0));
+            }
+            else
+                throw new IllegalStateException ("jsp with no code!");
+        }
+        else
+            return (parseString (cursor, true)); // hmmm, true?
+
+        return (makeTag (cursor, attributes));
     }
 
     //

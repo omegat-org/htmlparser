@@ -844,4 +844,18 @@ public class ParserTest extends ParserTestCase
             file.delete ();
         }
     }
+    /**
+     * Test reproducing a java.lang.StackOverflowError.
+     */
+    public void testXMLTypeToString () throws Exception
+    {
+        String guts;
+        String output;
+                                                                                                                                                        
+        guts = "TD width=\"69\"/";
+        createParser ("<" + guts + ">");
+        parseAndAssertNodeCount (1);
+        output = node[0].toString (); // this was where StackOverflow was thrown
+        assertTrue ("bad toString()", -1 != output.indexOf (guts));
+    }
 }

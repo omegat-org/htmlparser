@@ -733,5 +733,60 @@ public class LexerTests extends ParserTestCase
         assertStringEquals ("conjoined text", expected, buffer.toString ());
     }
 
+    /**
+     * Check for StackOverflow error.
+     */
+    public void testStackOverflow ()
+        throws
+            ParserException
+    {
+        NodeIterator iterator;
+        Node node;
+        String html;
+                                                                                                                                                        
+        html = "<a href = \"http://test.com\" />";
+        createParser (html);
+        for (iterator = parser.elements (); iterator.hasMoreNodes (); )
+        {
+            node = iterator.nextNode ();
+            String text = node.toHtml ();
+            assertStringEquals ("no overflow", html, text);
+        }
+        html = "<a href=\"http://test.com\"/>";
+        createParser (html);
+        for (iterator = parser.elements (); iterator.hasMoreNodes (); )
+        {
+            node = iterator.nextNode ();
+            String text = node.toHtml ();
+            assertStringEquals ("no overflow", html, text);
+        }
+        html = "<a href = \"http://test.com\"/>";
+        createParser (html);
+        for (iterator = parser.elements (); iterator.hasMoreNodes (); )
+        {
+            node = iterator.nextNode ();
+            String text = node.toHtml ();
+            assertStringEquals ("no overflow", html, text);
+        }
+    }
+
+    /**
+     * See bug #880283 Character "&gt;" erroneously inserted by Lexer
+     */
+    public void testJsp () throws ParserException
+    {
+        String html;
+        Lexer lexer;
+        Node node;
+        
+        html = "<% out.urlEncode('abc') + \"<br>\" + out.urlEncode('xyz') %>";
+        lexer = new Lexer (html);
+        node = lexer.nextNode ();
+        if (node == null)
+            fail ("too few nodes");
+        else
+            assertStringEquals ("bad html", html, node.toHtml());
+        assertNull ("too many nodes", lexer.nextNode ());
+    }
 }
 
