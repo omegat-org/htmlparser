@@ -153,14 +153,17 @@ public class HTMLLinkProcessor {
 		return link;
 	}
 	public static String fixSpaces(String url) {
-		StringBuffer returnURL=new StringBuffer();
-		char ch;
-		for (int i=0;i<url.length();i++) {
-			ch = url.charAt(i);
-			if (ch==' ') returnURL.append("%20"); else
-			returnURL.append(ch);
+		int index = url.indexOf(' ');
+		if (index==-1) return url; else {
+			StringBuffer returnURL=new StringBuffer(url.substring(0,index));
+			char ch;
+			for (int i=index;i<url.length();i++) {
+				ch = url.charAt(i);
+				if (ch==' ') returnURL.append("%20"); else
+				returnURL.append(ch);
+			}
+			return returnURL.toString();
 		}
-		return returnURL.toString();
 	}
 		public static String removeEscapeCharacters(String link)
 		{
