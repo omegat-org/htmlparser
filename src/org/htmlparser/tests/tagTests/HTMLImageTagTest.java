@@ -65,7 +65,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 		// The node should be an HTMLImageTag
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("The image locn","http://www.google.com/test/goo/title_homepage4.gif",imageTag.getImageLocation());
+		assertEquals("The image locn","http://www.google.com/test/goo/title_homepage4.gif",imageTag.getImageURL());
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 		// The node should be an HTMLImageTag
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("The image locn","http://www.google.com/goo/title_homepage4.gif",imageTag.getImageLocation());
+		assertEquals("The image locn","http://www.google.com/goo/title_homepage4.gif",imageTag.getImageURL());
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 		// The node should be an HTMLImageTag
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("The image locn","http://www.google.com/goo/title_homepage4.gif",imageTag.getImageLocation());
+		assertEquals("The image locn","http://www.google.com/goo/title_homepage4.gif",imageTag.getImageURL());
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Image incorrect","http://www.cj.com/abcd.jpg",imageTag.getImageLocation());	
+		assertEquals("Image incorrect","http://www.cj.com/abcd.jpg",imageTag.getImageURL());	
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class HTMLImageTagTest extends HTMLParserTestCase
 		// The node should be an HTMLLinkTag
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("The image location","",imageTag.getImageLocation());
+		assertEquals("The image location","",imageTag.getImageURL());
 	}
 
 	public void testToHTML() throws HTMLParserException {

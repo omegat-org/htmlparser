@@ -58,7 +58,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageLocation());
+		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageURL());
 	}
 	
 	public void testEvaluate() 
@@ -93,7 +93,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Expected Image Locn","",imageTag.getImageLocation());		
+		assertEquals("Expected Image Locn","",imageTag.getImageURL());		
 		assertEquals("Image width","1",imageTag.getParameter("WIDTH"));
 		assertEquals("Image height","1",imageTag.getParameter("HEIGHT"));
 		assertEquals("alt","a",imageTag.getParameter("ALT"));
@@ -107,7 +107,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Expected Link","http://www.yahoo.com/mypic.jpg",imageTag.getImageLocation());
+		assertEquals("Expected Link","http://www.yahoo.com/mypic.jpg",imageTag.getImageURL());
 	}
 	
 	public void testRelativeImageScan2() throws HTMLParserException {
@@ -116,7 +116,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageLocation());
+		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageURL());
 	}
 	
 	public void testRelativeImageScan3() throws HTMLParserException {
@@ -126,7 +126,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageLocation());
+		assertEquals("Expected Link","http://www.yahoo.com/abc/def/mypic.jpg",imageTag.getImageURL());
 	}
 	
 	/**
@@ -141,7 +141,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Expected Link","http://www.yahoo.com/abc/def/Hello World.jpg",imageTag.getImageLocation());		
+		assertEquals("Expected Link","http://www.yahoo.com/abc/def/Hello World.jpg",imageTag.getImageURL());		
 	}
 	
 	public void testImageWithNewLineChars() throws HTMLParserException
@@ -155,7 +155,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
 		String exp = new String("http://www.yahoo.com/abc/def/Hello World.jpg");
 		//assertEquals("Length of image",exp.length(),imageTag.getImageLocation().length());
-		assertStringEquals("Expected Image",exp,imageTag.getImageLocation());		
+		assertStringEquals("Expected Image",exp,imageTag.getImageURL());		
 	}
 	
 	/**
@@ -178,11 +178,11 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		assertEquals("Number of nodes identified should be 3",3,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageLocation());		
+		assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageURL());		
 		HTMLImageTag imageTag2 = (HTMLImageTag)node[1];
-		assertEquals("Expected Image 2","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif",imageTag2.getImageLocation());
+		assertEquals("Expected Image 2","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif",imageTag2.getImageURL());
 		HTMLImageTag imageTag3 = (HTMLImageTag)node[2];
-		assertEquals("Expected Image 3","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif",imageTag3.getImageLocation());	
+		assertEquals("Expected Image 3","http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif",imageTag3.getImageURL());	
 	}
 	
 	/**
@@ -205,7 +205,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		assertEquals("Number of tags within the link",1,j);
 		assertTrue("Tag within link should be an image tag",node2[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node2[0];
-		assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageLocation());		
+		assertEquals("Expected Image","http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif",imageTag.getImageURL());		
 	}
 	
 	/**
@@ -224,7 +224,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		assertTrue("Node identified should be HTMLImageTag",node[1] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[1];
 		// Get the data from the node
-		assertEquals("Image location","http://www.cia.gov/graphics/images_home2/cia_banners_template3_01.gif",imageTag.getImageLocation());
+		assertEquals("Image location","http://www.cia.gov/graphics/images_home2/cia_banners_template3_01.gif",imageTag.getImageURL());
 		assertEquals("Alt Value","Central Intelligence Agency, Director of Central Intelligence",imageTag.getParameter("ALT"));
 		assertEquals("Width","241",imageTag.getParameter("WIDTH"));	
 		assertEquals("Height","49",imageTag.getParameter("HEIGHT"));
@@ -238,7 +238,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);	
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Image Location","http://www.cybergeo.presse.fr/images/lines/li065.jpg",imageTag.getImageLocation());
+		assertEquals("Image Location","http://www.cybergeo.presse.fr/images/lines/li065.jpg",imageTag.getImageURL());
 		
 	}
 
@@ -254,7 +254,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(1);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);	
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageLocation());
+		assertEquals("Image Location","http://www.htmlparser.org/images/spacer.gif",imageTag.getImageURL());
 		assertEquals("Width","1",imageTag.getParameter("WIDTH"));
 		assertEquals("Height","1",imageTag.getParameter("HEIGHT"));
 		assertEquals("Alt","",imageTag.getParameter("ALT"));

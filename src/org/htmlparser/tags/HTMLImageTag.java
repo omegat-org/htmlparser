@@ -54,7 +54,7 @@ public class HTMLImageTag extends HTMLTag
 	/**
 	 * Returns the location of the image
 	 */
-	public String getImageLocation()
+	public String getImageURL()
 	{
 		return imageURL;
 	}
@@ -64,6 +64,10 @@ public class HTMLImageTag extends HTMLTag
 	}
 	public String toHTML(HTMLRenderer renderer) {
 		return renderer.renderImagesToHTML(this);
+	}
+
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
 	}
 
 }

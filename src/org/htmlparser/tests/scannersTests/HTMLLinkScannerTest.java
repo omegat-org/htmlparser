@@ -255,7 +255,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 	
 		// Check the contents of each data node
 		HTMLImageTag imageTag = (HTMLImageTag)dataNode[0];
-		assertEquals("Image URL","http://www.yahoo.com/abcd.jpg",imageTag.getImageLocation());
+		assertEquals("Image URL","http://www.yahoo.com/abcd.jpg",imageTag.getImageURL());
 		HTMLStringNode stringNode = (HTMLStringNode)dataNode[1];
 		assertEquals("String Contents","Hello World",stringNode.getText());
 	}
@@ -334,7 +334,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		assertEquals("There should be 5 contained nodes in the link tag",5,i);
 		assertTrue("First contained node should be an image tag",containedNodes[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)containedNodes[0];
-		assertEquals("Image Location","http://ad.abcnews.com/ad/sponsors/buena_vista_pictures/bvpi-ban0003.gif",imageTag.getImageLocation());
+		assertEquals("Image Location","http://ad.abcnews.com/ad/sponsors/buena_vista_pictures/bvpi-ban0003.gif",imageTag.getImageURL());
 		assertEquals("Image Height","60",imageTag.getParameter("HEIGHT"));
 		assertEquals("Image Width","468",imageTag.getParameter("WIDTH"));
 		assertEquals("Image Border","0",imageTag.getParameter("BORDER"));
@@ -486,6 +486,6 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 		assertEquals("Number of contained internal nodes",1,j);
 		assertTrue(insideNodes[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)insideNodes[0];
-		assertEquals("Image Tag Location","http://www.fedpage.com/images\\register.gif",imageTag.getImageLocation());
+		assertEquals("Image Tag Location","http://www.fedpage.com/images\\register.gif",imageTag.getImageURL());
 	}
 }
