@@ -100,6 +100,9 @@ public class HTMLEndTag extends HTMLTag
 					tagEnd=i;			
 				}
 			}
+            else if (state == ENDTAG_BEFORE_PARSING_STATE)
+                // text before the end tag
+                return (null);
 		}
 		// If parsing did not complete, it might be possible to accept
 		if (state==ENDTAG_BEGIN_PARSING_STATE) {

@@ -190,7 +190,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 	 * The bug has been reproduced and fixed.
 	 */
 	public void testMultipleLineBug() throws HTMLParserException {
-		createParser("<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font> <a \n"+
+		createParser("<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font><a \n"+
 		"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
 		"nical.html\"> Journalism 3.0</a> by Rajesh Jain");
 		HTMLParser.setLineSeparator("\r\n");
@@ -242,7 +242,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 	 */
 	public void testScan() throws HTMLParserException
 	{
-		createParser("<A HREF=\"mytest.html\"> <IMG SRC=\"abcd.jpg\">Hello World</A>","http://www.yahoo.com");
+		createParser("<A HREF=\"mytest.html\"><IMG SRC=\"abcd.jpg\">Hello World</A>","http://www.yahoo.com");
 		// Register the image scanner
 		HTMLLinkScanner linkScanner = new HTMLLinkScanner("-l");
 		parser.addScanner(linkScanner);

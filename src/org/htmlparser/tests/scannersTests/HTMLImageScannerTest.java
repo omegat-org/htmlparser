@@ -170,7 +170,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();) {
 			thisNode = (HTMLNode)e.nextNode();
 			if (thisNode instanceof HTMLImageTag)
-			node[i++] = thisNode;
+                node[i++] = thisNode;
 		}	
 		assertEquals("Number of nodes identified should be 3",3,i);
 		assertTrue("Node identified should be HTMLImageTag",node[0] instanceof HTMLImageTag);
@@ -210,7 +210,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 	 * by Annette Doyle
 	 */
 	public void testImageTagOnMultipleLines() throws HTMLParserException {
-		createParser("  <td rowspan=3><img height=49 \n\n"+
+		createParser("<td rowspan=3><img height=49 \n\n"+
 	      "alt=\"Central Intelligence Agency, Director of Central Intelligence\" \n\n"+
 	      "src=\"graphics/images_home2/cia_banners_template3_01.gif\" \n\n"+
 	      "width=241></td>","http://www.cia.gov"); 

@@ -115,8 +115,7 @@ public class HTMLStringNode extends HTMLNode
 			}					
 			if (state==BEFORE_PARSE_BEGINS_STATE)
 			{
-				if (ch!=' ') state=PARSE_HAS_BEGUN_STATE;
-				else textBuffer.append(input.charAt(i));
+				state=PARSE_HAS_BEGUN_STATE;
 			}
 			if (state==PARSE_HAS_BEGUN_STATE || state==PARSE_IGNORE_STATE)
 			{

@@ -150,6 +150,11 @@ public class HTMLRemarkNode extends HTMLNode
 			{
 				if (ch == '-')
 				state=REMARK_NODE_FIRST_DASH_RECEIVED_STATE;
+                else if (ch == '>')
+                {
+ 					state=REMARK_NODE_ACCEPTED_STATE;
+ 					tagEnd=i;
+                }
 				else state=REMARK_NODE_ILLEGAL_STATE;
 			} 
 			if (state==REMARK_NODE_OPENING_ANGLE_BRACKET_STATE)

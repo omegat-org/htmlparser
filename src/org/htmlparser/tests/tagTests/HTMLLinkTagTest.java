@@ -269,7 +269,7 @@ public class HTMLLinkTagTest extends HTMLParserTestCase
 	
 	public void testToHTML() throws HTMLParserException {
 		createParser("<A HREF='mailto:somik@yahoo.com'>hello</A>\n"+
-			"<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font> <a \n"+
+			"<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font><a \n"+
 			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
 			"nical.html\"> Journalism 3.0</a> by Rajesh Jain","http://www.cj.com/");
 		HTMLParser.setLineSeparator("\r\n");

@@ -79,6 +79,9 @@ public class HTMLTagParser {
 		state = checkIllegalState(state, ch, tag);
 		state = checkFinishedState(state, ch, tag);
 		state = toggleIgnoringState(state, ch);
+		if (state==TAG_BEFORE_PARSING_STATE && ch!='<') {
+            state= TAG_ILLEGAL_STATE;
+        }
 		if (state==TAG_IGNORE_DATA_STATE && ch=='<') {
 			state = TAG_IGNORE_BEGIN_TAG_STATE;
 		}
@@ -152,6 +155,7 @@ public class HTMLTagParser {
 		{
 			state = TAG_ILLEGAL_STATE;
 		}
+
 		return state;
 	}
 	

@@ -178,9 +178,6 @@ public class HTMLReader extends BufferedReader
 			node = HTMLRemarkNode.find(this,line,posInLine);
 			if (node!=null) return node;
 	
-			node = HTMLStringNode.find(this,line,posInLine);
-			if (node!=null) return node;
-			
 			node = HTMLTag.find(this,line,posInLine);
 			if (node!=null)
 			{
@@ -202,11 +199,12 @@ public class HTMLReader extends BufferedReader
 				}
 			}
 	
-			// If we couldnt get a string, then it is probably an end tag
-			
 			node = HTMLEndTag.find(line,posInLine);
 			if (node!=null) return node;
 	
+			node = HTMLStringNode.find(this,line,posInLine);
+			if (node!=null) return node;
+			
 		
 			return null;
 		}

@@ -282,11 +282,27 @@ public class HTMLTag extends HTMLNode
 	}
 
 	/**
+	 * Gets the nodeBegin.
+	 * @return The nodeBegin value.
+	 */
+	public int getTagBegin() {
+		return (nodeBegin);
+	}
+	
+	/**
 	 * Sets the nodeEnd.
 	 * @param nodeEnd The nodeEnd to set
 	 */
 	public void setTagEnd(int tagEnd) {
 		this.nodeEnd = tagEnd;
+	}
+    
+	/**
+	 * Gets the nodeEnd.
+	 * @return The nodeEnd value.
+	 */
+	public int getTagEnd() {
+		return (nodeEnd);
 	}
 
     public void setTagLine(java.lang.String newTagLine) {
