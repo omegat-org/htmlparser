@@ -52,15 +52,15 @@ import org.htmlparser.visitors.NodeVisitor;
 public class Tag extends Node
 {
 	public static final String TYPE = "TAG";
-    /**
-    * Constant used as value for the value of the tag name
-    * in parseParameters  (Kaarle Kaila 3.8.2001)
-    */
-    public final static String TAGNAME = "$<TAGNAME>$";
-    public final static String EMPTYTAG = "$<EMPTYTAG>$";
+	/**
+	 * Constant used as value for the value of the tag name
+	 * in parseParameters  (Kaarle Kaila 3.8.2001)
+	 */
+	public final static String TAGNAME = "$<TAGNAME>$";
+	public final static String EMPTYTAG = "$<EMPTYTAG>$";
 	private final static int TAG_BEFORE_PARSING_STATE=1;
-    private final static int TAG_BEGIN_PARSING_STATE=2;
-    private final static int TAG_FINISHED_PARSING_STATE=3;
+	private final static int TAG_BEGIN_PARSING_STATE=2;
+	private final static int TAG_FINISHED_PARSING_STATE=3;
 	private final static int TAG_ILLEGAL_STATE=4;
 	private final static int TAG_IGNORE_DATA_STATE=5;
 	private final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
@@ -70,14 +70,14 @@ public class Tag extends Node
 	private static TagParser tagParser;
 	/**
 	 * Tag contents will have the contents of the comment tag.
-     */
+	 */
 	protected StringBuffer tagContents;
 	private boolean emptyXmlTag = false;
 	/**
-	* tag parameters parsed into this hashtable
-	* not implemented yet
-	* added by Kaarle Kaila 23.10.2001
-	*/
+	 * tag parameters parsed into this hashtable
+	 * not implemented yet
+	 * added by Kaarle Kaila 23.10.2001
+	 */
 	protected Hashtable attributes=null;
 
 	/**
@@ -87,6 +87,16 @@ public class Tag extends Node
 	protected TagScanner thisScanner=null;
 	private java.lang.String tagLine;
 
+	/**
+	 * The combined text of all the lines spanned by this tag
+	 */
+	private String[] tagLines;
+
+	/**
+	 * The line number on which this tag starts
+	 */
+	private int startLine;
+  
     /**
      * Set of tags that breaks the flow.
      */
@@ -134,9 +144,11 @@ public class Tag extends Node
 	public Tag(TagData tagData)
 	{
 		super(tagData.getTagBegin(),tagData.getTagEnd());
+		this.startLine = tagData.getStartLine();
 		this.tagContents = new StringBuffer();
 		this.tagContents.append(tagData.getTagContents());
 		this.tagLine = tagData.getTagLine();
+		this.tagLines = new String[] {tagData.getTagLine()};
 		this.emptyXmlTag = tagData.isEmptyXmlTag();
 	}
 
@@ -223,6 +235,14 @@ public class Tag extends Node
 	}
 
 	/**
+	 * Returns the combined text of all the lines spanned by this tag
+	 * @return java.lang.String
+	 */
+	public String[] getTagLines() {
+		return tagLines;
+	}
+
+	/**
 	 * Return the text contained in this tag
 	 */
 	public String getText() {
@@ -264,7 +284,7 @@ public class Tag extends Node
 
 		return (ret.toString ());
 	}
-
+	
 	/**
 	 * Scan the tag to see using the registered scanners, and attempt identification.
 	 * @param url URL at which HTML page is located
@@ -340,7 +360,7 @@ public class Tag extends Node
 	public void setTagEnd(int tagEnd) {
 		this.nodeEnd = tagEnd;
 	}
-    
+	
 	/**
 	 * Gets the nodeEnd.
 	 * @return The nodeEnd value.
@@ -349,9 +369,34 @@ public class Tag extends Node
 		return (nodeEnd);
 	}
 
-    public void setTagLine(java.lang.String newTagLine) {
-	    tagLine = newTagLine;
-    }
+	/**
+	 * Gets the line number on which this tag starts.
+	 * @return the start line number
+	 */
+	public int getTagStartLine() {
+		return startLine;
+	}
+
+	/**
+	 * Gets the line number on which this tag ends.
+	 * @return the end line number
+	 */
+	public int getTagEndLine() {
+		return startLine + tagLines.length - 1;
+	}
+	
+	public void setTagLine(java.lang.String newTagLine) {
+		tagLine = newTagLine;
+		
+		// Note: Incur the overhead of resizing each time (versus
+		// preallocating a larger array), since the average tag
+		// generally doesn't span multiple lines
+		String[] newTagLines = new String[tagLines.length + 1];
+		for (int i = 0; i < tagLines.length; i++)
+			newTagLines[i] = tagLines[i];
+		newTagLines[tagLines.length] = newTagLine;
+		tagLines = newTagLines;
+	}
 
 	public void setText(String text) {
 		tagContents = new StringBuffer(text);

@@ -38,8 +38,8 @@ import org.htmlparser.util.ParserFeedback;
 
 public class TagParser {
 	public final static int TAG_BEFORE_PARSING_STATE=1;
-    public final static int TAG_BEGIN_PARSING_STATE=1<<2;
-    public final static int TAG_FINISHED_PARSING_STATE=1<<3;
+	public final static int TAG_BEGIN_PARSING_STATE=1<<2;
+	public final static int TAG_FINISHED_PARSING_STATE=1<<3;
 	public final static int TAG_ILLEGAL_STATE=1<<4;
 	public final static int TAG_IGNORE_DATA_STATE=1<<5;	    
 	public final static int TAG_IGNORE_BEGIN_TAG_STATE=1<<6;
@@ -57,8 +57,9 @@ public class TagParser {
 		int state = TAG_BEFORE_PARSING_STATE;
 		int i=position;
 		char ch;
-        char[] ignorechar = new char[1]; // holds the character we're looking for when in TAG_IGNORE_DATA_STATE
-		Tag tag = new Tag(new TagData(0,0,"",input));
+		char[] ignorechar = new char[1]; // holds the character we're looking for when in TAG_IGNORE_DATA_STATE
+		Tag tag = new Tag(new TagData(position, 0, reader.getLastLineNumber(), 0, "", input, "", false));
+
 		Bool encounteredQuery = new Bool(false);
 		while (i<tag.getTagLine().length() && 
 				state!=TAG_FINISHED_PARSING_STATE && 
@@ -78,7 +79,7 @@ public class TagParser {
 			}
 			return tag;
 		} else
-		return null;	
+			return null;
 	}
 
 	private int automataInput(Bool encounteredQuery, int i, int state,char ch, Tag tag, int pos, char[] ignorechar) {
@@ -86,8 +87,8 @@ public class TagParser {
 		state = checkFinishedState(encounteredQuery, i, state, ch, tag, pos);
 		state = toggleIgnoringState(state, ch, ignorechar);
 		if (state==TAG_BEFORE_PARSING_STATE && ch!='<') {
-            state= TAG_ILLEGAL_STATE;
-        }
+			state= TAG_ILLEGAL_STATE;
+		}
 		if (state==TAG_IGNORE_DATA_STATE && ch=='<') {
 			// If the next tag char is is close tag, then
 			// this is legal, we should continue
@@ -95,7 +96,7 @@ public class TagParser {
 				state = TAG_IGNORE_BEGIN_TAG_STATE;
 		}
 		if (state==TAG_IGNORE_BEGIN_TAG_STATE && ch=='>') {
-				state = TAG_IGNORE_DATA_STATE;
+			state = TAG_IGNORE_DATA_STATE;
 		}
 		checkIfAppendable(encounteredQuery, state, ch, tag);
 		state = checkBeginParsingState(i, state, ch, tag);
@@ -276,8 +277,10 @@ public class TagParser {
 			// The while loop below is a bug fix contributed by
 			// Annette Doyle - see testcase HTMLImageScannerTest.testImageTagOnMultipleLines()
 			// Further modified by Somik Raha, to remove bug - HTMLTagTest.testBrokenTag
+			int numLinesAdvanced = 0;
 			do {
-				nextLine = reader.getNextLine();		
+				nextLine = reader.getNextLine();
+				numLinesAdvanced++;
 			}
 			while (nextLine!=null && nextLine.length()==0);
 			if (nextLine==null) {
@@ -287,6 +290,10 @@ public class TagParser {
 				// This means this is just a new line, hence add the new line character
 				tag.append(Node.getLineSeparator());
 			}
+			
+			// Ensure blank lines are included in tag's 'tagLines'
+			while (--numLinesAdvanced > 0)
+				tag.setTagLine("");
 
 			// We need to continue parsing to the next line
 			tag.setTagLine(nextLine);
