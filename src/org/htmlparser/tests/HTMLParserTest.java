@@ -128,7 +128,4 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		assertEquals("Expected nodes",12,i);
 		//System.out.println("************ Finished Testing URL ************");
 	}
-	public static TestSuite suite() {
-		return new TestSuite(HTMLParserTest.class);
-	}
 }

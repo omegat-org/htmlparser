@@ -54,11 +54,6 @@ public class HTMLRemarkNodeTest extends HTMLParserTestCase
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		TestSuite suite = new TestSuite(HTMLRemarkNodeTest.class);
-		return suite;
-	}
 	/**
 	 * The bug being reproduced is this : <BR>
 	 * &lt;!-- saved from url=(0022)http://internet.e-mail --&gt;

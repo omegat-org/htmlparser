@@ -57,16 +57,7 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 	public HTMLStringNodeTest(String name) {
 		super(name);
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 11:22:36 AM)
-	 * @return junit.framework.TestSuite
-	 */
-	public static TestSuite suite() 
-	{
-		TestSuite suite = new TestSuite(HTMLStringNodeTest.class);
-		return suite;
-	}
+	
 	/**
 	 * The bug being reproduced is this : <BR>
 	 * &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Google&lt;/TITLE&gt; <BR>
@@ -83,6 +74,7 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 		HTMLStringNode stringNode = (HTMLStringNode)node[3];
 		assertEquals("Text of the StringNode","Google",stringNode.getText());
 	}
+	
 	/**
 	 * Bug reported by Kaarle Kaila of Nokia<br>
 	 * For the following HTML :

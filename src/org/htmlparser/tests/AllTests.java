@@ -53,12 +53,12 @@ public static void main(String[] args) {
 public static TestSuite suite() {
 	TestSuite suite = new TestSuite();
 	
-	suite.addTest(HTMLStringNodeTest.suite());
-	suite.addTest(HTMLRemarkNodeTest.suite());
-	suite.addTest(HTMLParserTest.suite());
-	suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());
-	suite.addTest(org.htmlparser.tests.utilTests.AllTests.suite());
-	suite.addTest(org.htmlparser.tests.tagTests.AllTests.suite());
+	suite.addTestSuite(HTMLStringNodeTest.class);
+	suite.addTestSuite(HTMLRemarkNodeTest.class);
+	suite.addTestSuite(HTMLParserTest.class);
+	suite.addTestSuite(org.htmlparser.tests.scannersTests.AllTests.class);
+	suite.addTestSuite(org.htmlparser.tests.utilTests.AllTests.class);
+	suite.addTestSuite(org.htmlparser.tests.tagTests.AllTests.class);
 	return suite;
 } 
 }
