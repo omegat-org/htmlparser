@@ -144,4 +144,20 @@ public class AttributeParserTest extends ParserTestCase {
 			(String)table.get("HREF")
 		);
     }
+    
+    public void testQuestionMarksInAttributes() {
+		getParameterTableFor(
+			"a href=\"mailto:sam@neurogrid.com?subject=Site Comments\""
+    	);
+		assertStringEquals(
+			"href",
+			"mailto:sam@neurogrid.com?subject=Site Comments",
+			(String)table.get("HREF")
+		);
+		assertStringEquals(
+			"tag name",
+			"A",
+			(String)table.get(Tag.TAGNAME)
+		);
+    }
 }

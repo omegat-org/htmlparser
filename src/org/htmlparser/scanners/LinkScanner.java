@@ -124,24 +124,6 @@ public class LinkScanner extends CompositeTagScanner
 		boolean retVal;
 		char ch = s.charAt(0);
 		
-		// Is it a dirty html tag (should have been end tag but is begin)
-		if ((ch=='a' || ch=='A')) {
-			if (previousOpenScanner!=null) {
-				StringBuffer msg= new StringBuffer();
-				msg.append("<");
-				msg.append(s);
-				msg.append(">");
-				msg.append(DIRTY_TAG_MESSAGE);
-				feedback.warning(msg.toString());
-				// This is dirty HTML. Assume the current tag is
-				// not a new link tag - but an end tag. This is actually a really wild bug - 
-				// Internet Explorer actually parses such tags.
-				// So - we shall then proceed to fool the scanner into sending an endtag of type </A>
-				// For this - set the dirty flag to true and return
-				return true;  
-			} 
-		}
-		
 		if (s.length()<5) retVal = false; else
 		if ((ch=='a' || ch=='A') && (s.charAt(1)==' ' || s.charAt(1)=='\n' || s.charAt(1)=='\r')) retVal = true; else retVal = false;
 
@@ -154,10 +136,10 @@ public class LinkScanner extends CompositeTagScanner
 		return retVal;
 	
 	}
-  /**
-   * Extract the link from the given string. The URL of the actual html page is also 
-   * provided.    
-   */
+    /**
+     * Extract the link from the given string. The URL of the actual html page is also 
+     * provided.    
+     */
 	public String extractLink(Tag tag,String url) throws ParserException
 	{
 		try {

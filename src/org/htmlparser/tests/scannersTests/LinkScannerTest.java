@@ -85,7 +85,7 @@ public class LinkScannerTest extends ParserTestCase
 	 */
 	public void testErroneousLinkBugFromYahoo2() throws ParserException {
 		createParser(
-			"<td>" +				"<a href=s/8741>" +				"<img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>" +				"</img>" +			"</td>" +			"<td nowrap> &nbsp;\n"+
+			"<td>" +				"<a href=s/8741>" +				"<img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>" +			"</td>" +			"<td nowrap> &nbsp;\n"+
 				"<a href=s/7509><b>Yahoo! Movies</b></a>" +			"</td>","http://www.yahoo.com");
 		parser.registerScanners();
 		Node linkNodes [] = parser.extractAllNodesThatAre(LinkTag.class);
@@ -108,8 +108,11 @@ public class LinkScannerTest extends ParserTestCase
 	 * </pre>
 	 */
 	public void testErroneousLinkBugFromYahoo() throws ParserException {
-		createParser("<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></img>This is a test\n"+
-		"<a href=s/7509><b>Yahoo! Movies</b></a>","http://www.yahoo.com");
+		createParser(
+			"<a href=s/8741>" +				"<img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" " +					 "height=16 " +					 "width=16 " +					 "border=0>" +				"This is a test\n"+
+				"<a href=s/7509>" +					"<b>Yahoo! Movies</b>" +				"</a>",
+			"http://www.yahoo.com"
+		);
 
 		parser.registerScanners();
 		parseAndAssertNodeCount(2);
@@ -304,7 +307,7 @@ public class LinkScannerTest extends ParserTestCase
 	public void testBrokenLink() throws ParserException {
 		createParser(
 			"<a href=\"faq.html\">" +				"<br>\n"+
-        		"<img src=\"images/46revues.gif\" " +        			 "width=\"100\" " +        			 "height=\"46\" " +        			 "border=\"0\" " +        			 "alt=\"Rejoignez revues.org!\" " +        			 "align=\"middle\"",
+        		"<img src=\"images/46revues.gif\" " +        			 "width=\"100\" " +        			 "height=\"46\" " +        			 "border=\"0\" " +        			 "alt=\"Rejoignez revues.org!\" " +        			 "align=\"middle\">",
 			"http://www.yahoo.com"
 		);
 		// Register the image scanner
