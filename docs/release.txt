@@ -1,12 +1,12 @@
-HTMLParser Version 1.5 (Integration Build Mar 06, 2005)
+HTMLParser Version 1.5 (Integration Build Mar 13, 2005)
 *********************************************
 
 Contents of the distribution
 ----------------------------
   (i) jar files - lib directory
-      HTML Parser jars: htmlparser.jar, lexer.jar and thumbelina.jar.
-      Also thirdparty jar files checkstyle-all-3.1.jar, commons-logging.jar,
-      fit.jar and junit.jar.
+      HTML Parser jars: htmlparser.jar, lexer.jar, thumbelina.jar and
+      filterbuilder.jar.
+      Also thirdparty jar files checkstyle-all-3.1.jar, fit.jar and junit.jar.
 
  (ii) source code - src.zip
       Also contains necessary resources, and build file. Unzip this
@@ -40,7 +40,16 @@ Configuration Management
     This results in a lighter weight component.
     Updated the logo and included the LGPL license.
     Fixed the Windows batch files.
+	Added optional "classes" property to build.xml. This directory is where
+    class files are put. It defaults to src.
+	To use:
+	    ant -Dclasses=classdir <target>
+	where classdir is/will-be a peer directory to src.
 Refactoring
+	Added static STRICT flag to ScriptScanner to revert to legacy handling of
+    broken ETAGO (</). If STRICT is true, scan according to HTML specification,
+    else if false, scan with quote smart state machine which heuristically
+    yields the correct parse.
     Obviated LinkProcessor and moved it's functionality to the Page class.
     Added Tag, Text and Remark interfaces and moved concrete node
     implementations to the nodes package, removing the lexer.nodes package.
@@ -62,23 +71,28 @@ Filters
     
 Enhancement Requests
 --------------------
-943593 LinkProcessor.extract(link,base) weird behaviour?
-943197 Accept gzip / deflate content encodings
-874000 Remove specialized tag signatures from NodeVisitor
-1000063 FilterBean
+1160345 NodeList.visitAllNodesWith
 1017249	HTML Client Doesn't Support Cookies but will follow redirect
 1010586	Add support for password protected URL
 1000739	Add support for proxy scenario
+1000063 FilterBean
+943593 LinkProcessor.extract(link,base) weird behaviour?
+943197 Accept gzip / deflate content encodings
+874000 Remove specialized tag signatures from NodeVisitor
 
 Bug Fixes
 ---------
+1161137 Non English Character web page
+1160010 NullPointerException in addCookies
 1153508 CVS sources do not compile
+1121401 No Parsing with yahoo!
 1104627 Parser Crash reading javascript
 1061869 Crashing when trying to capture link to XLS document
 1056438 Byte Order Mark
 1044707 mark()/reset() issues
 1024045 StringBean crashes on an URL
 1021925 StyleTag with missing linefeed prevents page from parsing
+1018884 'compile' ant task from build.xml messes up ./src directory
 1005409 Input file not free by parser.
 998195 SiteCatpurer just crashed
 995703 Parser Crash

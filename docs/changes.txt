@@ -15,6 +15,75 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.5 - 20050313
+--------------------------------
+
+2005-03-13 09:51  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java, lexer/Page.java,
+	lexer/Source.java, lexerapplications/tabby/Tabby.java,
+	scanners/ScriptDecoder.java, tests/lexerTests/TagTests.java,
+	util/IteratorImpl.java:
+
+	Bug #1121401 No Parsing with yahoo!
+	By default nio.charset.CharsetDecoder replaces characters it cannot
+	represent in the current encoding with zero, which was the value
+	returned by the page when the Stream reached EOF.
+	This changes the Page return value to (char)Source.EOF (-1) when
+	the end of stream is encountered.
+	
+2005-03-12 16:39  derrickoswald
+
+	* src/org/htmlparser/beans/: BeanyBaby.java, LinkBean.java:
+
+	Fix bean example, stop sharing connections.
+	
+2005-03-12 15:27  derrickoswald
+
+	* build.xml, lib/commons-logging.jar:
+
+	Bug #1018884 'compile' ant task from build.xml messes up ./src directory
+	Added optional "classes" property to build.xml.
+	This directory is where class files are put. It defaults to src.
+	To use:
+	    build -Dclasses=classdir <target>
+	where classdir is a peer directory to src.
+	Removed unused commons-logging.jar while I was in there.
+	
+2005-03-12 12:53  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	scanners/ScriptScanner.java,
+	tests/scannersTests/ScriptScannerTest.java:
+
+	Add STRICT flag to ScriptScanner to revert to legacy handling of broken ETAGO (</).
+	If STRICT is true, scan according to HTML specification, else if false, scan with
+	quote smart state machine which heuristically yields the correct parse.
+	
+2005-03-12 08:39  derrickoswald
+
+	* src/org/htmlparser/:
+	tests/visitorsTests/UrlModifyingVisitorTest.java,
+	util/NodeList.java:
+
+	RFE #1160345 NodeList.visitAllNodesWith
+	Added visitAllNodesWith to the NodeList class.
+	
+2005-03-12 07:52  derrickoswald
+
+	* src/org/htmlparser/: beans/StringBean.java,
+	tests/utilTests/AllTests.java, tests/utilTests/NonEnglishTest.java:
+
+	Bug #1161137 Non English Character web page
+	Reinitialize the string buffer after encoding change exception processing.
+	
+2005-03-12 06:52  derrickoswald
+
+	* src/org/htmlparser/http/ConnectionManager.java:
+
+	Bug #1160010 NullPointerException in addCookies
+	Add test for null expiry date.
+
 Integration Build 1.5 - 20050306
 --------------------------------
 2005-03-06 21:18  derrickoswald
