@@ -32,41 +32,32 @@ import java.util.Vector;
 import org.htmlparser.util.*;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-/**
- * Insert the type's description here.
- * Creation date: (12/25/2001 12:48:52 PM)
- * @author: Administrator
- */
+
 public class HTMLLinkProcessorTest extends junit.framework.TestCase {
-	private HTMLLinkProcessor linkProcessor;
+	private HTMLLinkProcessor lp;
 
 	public HTMLLinkProcessorTest(String name) {
 		super(name);
 	}
 
 	protected void setUp() {
-		linkProcessor = new HTMLLinkProcessor();
-	}
-
-	public static TestSuite suite() {
-		TestSuite suite = new TestSuite(HTMLLinkProcessorTest.class);
-		return suite;
+		lp = new HTMLLinkProcessor();
 	}
 
 	public void testRemoveFirstSlashIfFound() {
 		String testString= "/abcdefg";
 		String expected = "abcdefg";
-		String result = linkProcessor.removeFirstSlashIfFound(testString);
+		String result = lp.removeFirstSlashIfFound(testString);
 		assertEquals("Ordinary Test",expected,result);
 	
 		testString = null;
-		result = linkProcessor.removeFirstSlashIfFound(testString);
+		result = lp.removeFirstSlashIfFound(testString);
 		assertNull("Null test, result should be null",result);
 	}
 
 	public void testRemoveFirstSlashIfFound2() {
 		String testString= "";
-		String result = linkProcessor.removeFirstSlashIfFound(testString);
+		String result = lp.removeFirstSlashIfFound(testString);
 		assertNull("Result should have been null",result);
 	}
 	
@@ -76,7 +67,6 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		String link3 = "myprotocol://geocities.com/someplace/something.zip";
 		String link4 = "https://www.geocities.com/someplace/something.zip";
 		String url = "http://www.geocities.com";
-		HTMLLinkProcessor lp = new HTMLLinkProcessor();
 		assertEquals("Shouldnt be a relative link","ftp://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link1,url));
 		assertEquals("Shouldnt be a relative link","gopher://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link2,url));
 		assertEquals("Shouldnt be a relative link","myprotocol://geocities.com/someplace/something.zip",lp.checkIfLinkIsRelative(link3,url));
@@ -86,7 +76,6 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 	public void testCheckIfLinkIsRelative2() {
 		String link = "newpage.html";
 		String url = "http://www.mysite.com/books/some.asp";
-		HTMLLinkProcessor lp = new HTMLLinkProcessor();
 		assertEquals("Should be a relative link","http://www.mysite.com/books/newpage.html",lp.checkIfLinkIsRelative(link,url));
 	}	
 
@@ -95,7 +84,6 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 		String resourceLoc2 = "myfilehttp.dat";		
 		assertTrue(resourceLoc1+" should be a url",HTMLLinkProcessor.isURL(resourceLoc1));
 		assertTrue(resourceLoc2+" should not be a url",!HTMLLinkProcessor.isURL(resourceLoc2));	
-		
 		String resourceLoc3 = "file://localhost/D:/java/jdk1.3/docs/api/overview-summary.html";
 		assertTrue(resourceLoc3+" should be a url",HTMLLinkProcessor.isURL(resourceLoc3));
 		
@@ -103,7 +91,6 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 
 	public void testCheckIfLinkIsRelativeDoubleSlashBug() {
 		String link = "/someplace/somepage.html";
-		HTMLLinkProcessor lp = new HTMLLinkProcessor();
 		String url = "http://www.google.com/someDirectory/";
 		String url2 = "www.google.com/someDirectory/";
 		assertEquals("relative link","http://www.google.com/someplace/somepage.html",lp.checkIfLinkIsRelative(link,url));
@@ -112,7 +99,6 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 	
 	public void testSlashIsFirstChar() {
 		String link = "/someplace/somepage.html";
-		HTMLLinkProcessor lp = new HTMLLinkProcessor();
 		String url = "http://www.google.com/someDirectory/";
 		String url2 = "www.google.com/someDirectory/";
 		assertEquals("relative link","http://www.google.com/someplace/somepage.html",lp.processSlashIsFirstChar(link,url));
@@ -122,7 +108,6 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 
 	public void testAddDirectoriesToVector() {
 		String url = "http://www.mysite.com/books/some.asp";
-		HTMLLinkProcessor lp = new HTMLLinkProcessor();
 		Vector directories = new Vector();
 		lp.addDirectoriesToVector(directories,url);
 		assertEquals("Size of Vector",4,directories.size());
@@ -138,7 +123,6 @@ public class HTMLLinkProcessorTest extends junit.framework.TestCase {
 
 	public void testFixSpaces() {
 		String url = "http://htmlparser.sourceforge.net/test/This is a Test Page.html";
-		HTMLLinkProcessor lp = new HTMLLinkProcessor();
 		String fixedURL = lp.fixSpaces(url);
 		int index = fixedURL.indexOf(" ");
 		assertEquals("Expected","http://htmlparser.sourceforge.net/test/This%20is%20a%20Test%20Page.html",fixedURL);

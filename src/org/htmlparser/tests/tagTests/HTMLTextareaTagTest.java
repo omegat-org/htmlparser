@@ -48,53 +48,23 @@ public class HTMLTextareaTagTest extends HTMLParserTestCase
 									"<TEXTAREA name=\"Remarks\">The death threats of the LTTE\n" +
 									"refused to intimidate the Tamilians\n</TEXTAREA>"
 									);
-	private HTMLNode[] node;
-	private int i;
-	
-	/**
-	 * Constructor for HTMLTextareaTagTest.
-	 * @param arg0
-	 */
+
 	public HTMLTextareaTagTest(String name) 
 	{
 		super(name);
 	}
 	
-	public static TestSuite suite() 
-	{
-		return new TestSuite(HTMLTextareaTagTest.class);
-	}
-	
-	public static void main(String[] args) 
-	{
-		new junit.awtui.TestRunner().start(new String[] {HTMLTextareaTagTest.class.getName()});
-	}
-	
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
-		HTMLParser parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
-		node = new HTMLNode[20];
-
+		createParser(testHTML);
 		parser.addScanner(new HTMLTextareaTagScanner("-t"));
-		
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
+		parseAndAssertNodeCount(5);
 	}
 	
-	public void tearDown() throws Exception
-	{
-		super.tearDown();
-	}
 	
 	public void testGetSetValue()
 	{
-		assertEquals("There should be 5 nodes identified",5,i);
 		assertTrue("Node 1 should be Textarea Tag",node[0] instanceof HTMLTextareaTag);
 		HTMLTextareaTag TextareaTag;
 		TextareaTag = (HTMLTextareaTag) node[0];
@@ -104,8 +74,6 @@ public class HTMLTextareaTagTest extends HTMLParserTestCase
 	
 	public void testToHTML() throws HTMLParserException 
 	{
-		
-		assertEquals("There should be 5 nodes identified",5,i);	
 		assertTrue("Node 1 should be Textarea Tag",node[0] instanceof HTMLTextareaTag);
 		assertTrue("Node 2 should be Textarea Tag",node[1] instanceof HTMLTextareaTag);
 		assertTrue("Node 3 should be Textarea Tag",node[2] instanceof HTMLTextareaTag);
@@ -130,8 +98,6 @@ public class HTMLTextareaTagTest extends HTMLParserTestCase
 	
 	public void testToString() throws HTMLParserException 
 	{
-		
-		assertEquals("There should be 4 nodes identified",5,i);	
 		assertTrue("Node 1 should be Textarea Tag",node[0] instanceof HTMLTextareaTag);
 		assertTrue("Node 2 should be Textarea Tag",node[1] instanceof HTMLTextareaTag);
 		assertTrue("Node 3 should be Textarea Tag",node[2] instanceof HTMLTextareaTag);

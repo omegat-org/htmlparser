@@ -44,15 +44,9 @@ import org.htmlparser.*;
 
 public class HTMLTitleScannerTest extends HTMLParserTestCase {
 
-	public HTMLTitleScannerTest(String arg0) {
-		super(arg0);
+	public HTMLTitleScannerTest(String name) {
+		super(name);
 	}
-
-	public static TestSuite suite() 
-	{
-		TestSuite suite = new TestSuite(HTMLTitleScannerTest.class);
-		return suite;
-	}	
 
 	public void testEvaluate() {
 		HTMLTitleScanner scanner = new HTMLTitleScanner("-t");
