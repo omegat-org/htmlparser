@@ -65,6 +65,7 @@ public class StringBean implements Serializable
     /**
      * Property name in event where the URL changes.
      */
+
     public static final String PROP_URL_PROPERTY = "URL";
 
     /**
@@ -80,7 +81,7 @@ public class StringBean implements Serializable
     /**
      * Bound property support.
      */
-    protected PropertyChangeSupport mPropertySupport;
+    protected PropertyChangeSupport propertySupport;
 
     /**
      * The strings extracted from the URL.
@@ -95,15 +96,15 @@ public class StringBean implements Serializable
     /**
      * The parser used to extract strings.
      */
-    protected Parser mParser;
+    protected Parser parser;
 
     /** Creates new StringBean */
     public StringBean ()
     {
-        mPropertySupport = new PropertyChangeSupport (this);
+        propertySupport = new PropertyChangeSupport (this);
         mStrings = null;
         mLinks = false;
-        mParser = new Parser ();
+        parser = new Parser ();
     }
 
     //
@@ -201,11 +202,11 @@ public class StringBean implements Serializable
         boolean preformatted;
         StringBuffer results;
 
-        mParser.flushScanners ();
-        mParser.registerScanners ();
+        parser.flushScanners ();
+        parser.registerScanners ();
         results = new StringBuffer (4096);
         preformatted = false;
-        for (NodeIterator e = mParser.elements (); e.hasMoreNodes ();)
+        for (NodeIterator e = parser.elements (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
             if (node instanceof StringNode)
@@ -274,7 +275,7 @@ public class StringBean implements Serializable
      */
     public void addPropertyChangeListener (PropertyChangeListener listener)
     {
-        mPropertySupport.addPropertyChangeListener (listener);
+        propertySupport.addPropertyChangeListener (listener);
     }
 
     /**
@@ -284,7 +285,7 @@ public class StringBean implements Serializable
      */
     public void removePropertyChangeListener (PropertyChangeListener listener)
     {
-        mPropertySupport.removePropertyChangeListener (listener);
+        propertySupport.removePropertyChangeListener (listener);
     }
     
     //
@@ -301,7 +302,7 @@ public class StringBean implements Serializable
             try
             {
                 mStrings = extractStrings (getLinks ());
-                mPropertySupport.firePropertyChange (PROP_STRINGS_PROPERTY, null, mStrings);
+                propertySupport.firePropertyChange (PROP_STRINGS_PROPERTY, null, mStrings);
             }
             catch (ParserException hpe)
             {
@@ -324,13 +325,13 @@ public class StringBean implements Serializable
         if (null != url)
             try
             {
-                mParser.setURL (getURL ()); // bad: reset the scanner
+                parser.setURL (getURL ()); // bad: reset the scanner
                 strings = extractStrings (getLinks ());
                 if ((null == mStrings) || !mStrings.equals (strings))
                 {
                     oldValue = mStrings;
                     mStrings = strings;
-                    mPropertySupport.firePropertyChange (PROP_STRINGS_PROPERTY, oldValue, mStrings);
+                    propertySupport.firePropertyChange (PROP_STRINGS_PROPERTY, oldValue, mStrings);
                 }
             }
             catch (ParserException hpe)
@@ -358,7 +359,7 @@ public class StringBean implements Serializable
         if (oldValue != links)
         {
             mLinks = links;
-            mPropertySupport.firePropertyChange (PROP_LINKS_PROPERTY, oldValue, mLinks);
+            propertySupport.firePropertyChange (PROP_LINKS_PROPERTY, oldValue, mLinks);
             setStrings ();
         }
     }
@@ -369,7 +370,7 @@ public class StringBean implements Serializable
      */
     public String getURL ()
     {
-        return (mParser.getURL ());
+        return (parser.getURL ());
     }
     
     /**
@@ -385,8 +386,8 @@ public class StringBean implements Serializable
         {
             try
             {
-                mParser.setURL (url);
-                mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, old, getURL ());
+                parser.setURL (url);
+                propertySupport.firePropertyChange (PROP_URL_PROPERTY, old, getURL ());
                 setStrings ();
             }
             catch (ParserException hpe)
@@ -402,7 +403,7 @@ public class StringBean implements Serializable
      */
     public URLConnection getConnection ()
     {
-        return (mParser.getConnection ());
+        return (parser.getConnection ());
     }
     
     /**
@@ -413,7 +414,7 @@ public class StringBean implements Serializable
     {
         try
         {
-            mParser.setConnection (connection);
+            parser.setConnection (connection);
             setStrings ();
         }
         catch (ParserException hpe)

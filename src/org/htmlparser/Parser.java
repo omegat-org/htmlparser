@@ -45,10 +45,12 @@ import java.util.Hashtable;
 import org.htmlparser.parserHelper.ParserHelper;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.AppletScanner;
+import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.scanners.BulletScanner;
 import org.htmlparser.scanners.DoctypeScanner;
 import org.htmlparser.scanners.FormScanner;
 import org.htmlparser.scanners.FrameSetScanner;
+import org.htmlparser.scanners.HtmlScanner;
 import org.htmlparser.scanners.InputTagScanner;
 import org.htmlparser.scanners.JspScanner;
 import org.htmlparser.scanners.LinkScanner;
@@ -926,9 +928,23 @@ public class Parser
 		addScanner(new BulletScanner("-bullet"));
 	//	addScanner(new SpanScanner("-p"));
 	//	addScanner(new DivScanner("-div"));
-	//	addScanner(new TableScanner(this));
+//		addScanner(new TableScanner(this));
 	}
 	
+	/**
+	 * Make a call to registerDomScanners(), instead of registerScanners(),
+	 * when you are interested in retrieving a Dom representation of the html
+	 * page. Upon parsing, you will receive an Html object - which will contain
+	 * children, one of which would be the body. This is still evolving, and in 
+	 * future releases, you might see consolidation of Html - to provide you 
+	 * with methods to access the body and the head.
+	 * @see Html.java
+	 */
+	public void registerDomScanners() {
+		registerScanners();
+		addScanner(new HtmlScanner());
+		addScanner(new BodyScanner("-body"));
+	}
 	/**
 	 * Removes a specified scanner object.
 	 * @param scanner TagScanner object to be removed from the list of registered scanners

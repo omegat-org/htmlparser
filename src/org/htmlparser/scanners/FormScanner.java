@@ -69,6 +69,7 @@ public class FormScanner extends CompositeTagScanner
 	{
 		super(filter,MATCH_ID);
 	}
+	
   /**
    * Extract the location of the image, given the string to be parsed, and the url
    * of the html page in which this tag exists.

@@ -31,8 +31,10 @@ package org.htmlparser.tags;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.htmlparser.Node;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 /**
  * HTMLAppletTag represents an &lt;Applet&gt; tag
@@ -51,13 +53,32 @@ public class AppletTag extends CompositeTag
 	 * @param tagContents java.lang.String
 	 * @param tagLine java.lang.String
 	 */
-	public AppletTag(TagData tagData,CompositeTagData compositeTagData,String appletClass,String archive,String codeBase, Hashtable appletParams) 
+	public AppletTag(TagData tagData,CompositeTagData compositeTagData) 
 	{
 		super(tagData,compositeTagData);
-		this.appletClass = appletClass;
-		this.codeBase = codeBase;
-		this.archive = archive;
-		this.appletParams = appletParams;
+		this.appletClass = compositeTagData.getStartTag().getAttribute("CLASS");
+		this.codeBase = compositeTagData.getStartTag().getAttribute("CODEBASE");
+		this.archive = compositeTagData.getStartTag().getAttribute("ARCHIVE");
+		NodeList children = compositeTagData.getChildren();
+		appletParams = new Hashtable();
+		createAppletParamsTable(children);
+	}
+
+	public void createAppletParamsTable(NodeList children) {
+		for (int i=0;i<children.size();i++) { 
+			Node node = children.elementAt(i);
+			if (node instanceof Tag) {
+				Tag tag = (Tag)node;
+				if (tag.getTagName().equals("PARAM")) {
+					String paramName = tag.getAttribute("NAME");
+					if (paramName!=null && paramName.length()!=0)
+					{
+						String paramValue = tag.getAttribute("VALUE");
+						appletParams.put(paramName,paramValue);
+					}
+				}
+			}
+		}
 	}
 	
 	public java.lang.String getAppletClass() {
