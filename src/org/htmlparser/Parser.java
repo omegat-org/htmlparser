@@ -384,6 +384,18 @@ public class Parser
     //
 
     /**
+     * Return the version string of this parser.
+     * @return A string of the form:
+     * <pre>
+     * "[floating point number] [description]"
+     * </pre>
+     */
+    public String getVersion ()
+    {
+        return (VERSION_STRING);
+    }
+
+    /**
      * Set the connection for this parser.
      * This method sets four of the fields in the parser object;
      * <code>resourceLocn</code>, <code>url_conn</code>, <code>character_set</code>

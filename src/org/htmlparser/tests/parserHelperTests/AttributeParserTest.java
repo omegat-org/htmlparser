@@ -30,6 +30,7 @@ package org.htmlparser.tests.parserHelperTests;
 
 import java.util.Hashtable;
 
+import org.htmlparser.Parser;
 import org.htmlparser.parserHelper.AttributeParser;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
@@ -130,22 +131,6 @@ public class AttributeParserTest extends ParserTestCase {
 		);
     }
     
-    /**
-     * attributes are not parsed correctly, when they contain
-     * scriptlets.
-     * Submitted by Cory Seefurth
-     */
-    public void testJspWithinAttributes() {
-		getParameterTableFor(
-			"a href=\"<%=Application(\"sURL\")%>/literature/index.htm"
-        );
-		assertStringEquals(
-			"href",
-			"<%=Application(\"sURL\")%>/literature/index.htm",
-			(String)table.get("HREF")
-		);
-    }
-    
     public void testQuestionMarksInAttributes() {
 		getParameterTableFor(
 			"a href=\"mailto:sam@neurogrid.com?subject=Site Comments\""
@@ -177,14 +162,47 @@ public class AttributeParserTest extends ParserTestCase {
     }
 
     /**
-     * Case of script in attributes.
+     * Test attributes when they contain scriptlets.
+     * Submitted by Cory Seefurth
+     * See also feature request #725376 Handle script in attributes.
+     * Only perform this test if it's version 1.4 or higher.
      */
-    public void testScriptedTag () {
-		getParameterTableFor("body onLoad=defaultStatus=''");
-        String name = (String)table.get(Tag.TAGNAME);
-		assertNotNull ("No Tag.TAGNAME", name);
-        assertStringEquals("tag name parsed incorrectly", "BODY", name);
-        String value = (String)table.get ("ONLOAD");
-        assertStringEquals ("parameter parsed incorrectly", "defaultStatus=''", value);
+    public void testJspWithinAttributes()
+    {
+        Parser parser;
+        
+        parser = new Parser ();
+        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        {
+            getParameterTableFor(
+                "a href=\"<%=Application(\"sURL\")%>/literature/index.htm"
+            );
+            assertStringEquals(
+                "href",
+                "<%=Application(\"sURL\")%>/literature/index.htm",
+                (String)table.get("HREF")
+            );
+        }
+    }
+    
+    /**
+     * Test Script in attributes.
+     * See feature request #725376 Handle script in attributes.
+     * Only perform this test if it's version 1.4 or higher.
+     */
+    public void testScriptedTag ()
+    {
+        Parser parser;
+        
+        parser = new Parser ();
+        if (1.4 <= Double.parseDouble (parser.getVersion ().substring (0, parser.getVersion ().indexOf (' '))))
+        {
+            getParameterTableFor("body onLoad=defaultStatus=''");
+            String name = (String)table.get(Tag.TAGNAME);
+            assertNotNull ("No Tag.TAGNAME", name);
+            assertStringEquals("tag name parsed incorrectly", "BODY", name);
+            String value = (String)table.get ("ONLOAD");
+            assertStringEquals ("parameter parsed incorrectly", "defaultStatus=''", value);
+        }
     }
 }
