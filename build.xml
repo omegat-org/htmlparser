@@ -1,4 +1,4 @@
-<project name="HTMLParser" default="dist" basedir=".">
+<project name="HTMLParser" default="Package" basedir=".">
 
   <!-- set global properties for this build -->
   <property name="src" value="src"/>

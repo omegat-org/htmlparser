@@ -7,6 +7,8 @@ Integration Build 1.2 - 20020623
 [5] Fixed bug in HTMLLinkScanner - would crash on freshmeat.net,
 bcos of <a>Revision</a>. Now this is being treated as three
 seperate nodes(tag, string node, end tag)
+[6] Fixed ant script bug, not allowing it to be run from the command
+line by issuing the ant command.
 
 Integration Build 1.2 - 20020616
 --------------------------------
