@@ -179,6 +179,11 @@ public class HTMLParser
 	{
 		this(resourceLocn,new DefaultHTMLParserFeedback());
 	}
+	
+	public HTMLParser(HTMLReader reader) 
+	{
+		this(reader,new DefaultHTMLParserFeedback());	
+	}	
 		
 	/**
 	 * Add a new Tag Scanner.
