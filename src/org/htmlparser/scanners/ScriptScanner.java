@@ -56,6 +56,10 @@ public class ScriptScanner extends CompositeTagScanner {
 		super(filter,MATCH_NAME,true,true);
 	}
 
+	public ScriptScanner(String filter, String[] nameOfTagToMatch) {
+		super(filter,nameOfTagToMatch,true,true);
+	}
+	
 	public String [] getID() {
 		return MATCH_NAME;
 	}
@@ -88,10 +92,6 @@ public class ScriptScanner extends CompositeTagScanner {
 				if (endTagLoc!=-1) {
 					endTagFound = true;
 					endTag = (EndTag)EndTag.find(line,endTagLoc);
-					if (endTag.elementBegin()==0)
-						scriptContents.append(
-							Node.getLineSeparator()
-						);
 					if (sameLine) 
 						scriptContents.append(
 							getCodeBetweenStartAndEndTags(
@@ -99,8 +99,10 @@ public class ScriptScanner extends CompositeTagScanner {
 								startTag,
 								endTagLoc)
 						);
-					else 
+					else {
+						scriptContents.append(Node.getLineSeparator());
 						scriptContents.append(line.substring(0,endTagLoc));
+					}
 					
 					reader.setPosInLine(endTag.elementEnd());
 				} else {

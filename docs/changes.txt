@@ -3,7 +3,7 @@ Integration Build 1.3 - 20030412
 [1] reimplement StringBean as NodeVisitor, testStringBeanListener now succeeds
 [2] Implemented feature request 702541 (Tags created by CompositeTagScanner
     now have startLine and endLine information in their TagData)
-[3] Modified ScriptScanner to allow for subclassing
+[3] Modified ScriptScanner to allow for subclassing and fixed minor bug
 
 Integration Build 1.3 - 20030405
 --------------------------------

@@ -212,7 +212,27 @@ public class ScriptScannerTest extends ParserTestCase
 	 */
 	public void testScriptTagsGeneratedByScriptCode() throws Exception {
 		createParser(
-			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 " +			"Transitional//EN\">" +			"<html>" +			"<head>" +			"<title>Untitled Document</title>" +			"<meta http-equiv=\"Content-Type\" content=\"text/html; " +			"charset=iso-8859-1\">" +			"</head>" +			"<script language=\"JavaScript\">" +			"document.write(\"<script " +			"language=\\\"JavaScript\\\">\");" +			"document.write(\"function onmousedown" +			"(event)\");" +			"document.write(\"{ // do something\"); " +			"document.write(\"}\"); " +			"// parser thinks this is the end tag. " +			"document.write(\"</script>\");" +			"</script>" +			"<body>" +			"</body>" +			"</html>"
+			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 " +
+			"Transitional//EN\">" +
+			"<html>" +
+			"<head>" +
+			"<title>Untitled Document</title>" +
+			"<meta http-equiv=\"Content-Type\" content=\"text/html; " +
+			"charset=iso-8859-1\">" +
+			"</head>" +
+			"<script language=\"JavaScript\">" +
+			"document.write(\"<script " +
+			"language=\\\"JavaScript\\\">\");" +
+			"document.write(\"function onmousedown" +
+			"(event)\");" +
+			"document.write(\"{ // do something\"); " +
+			"document.write(\"}\"); " +
+			"// parser thinks this is the end tag. " +
+			"document.write(\"</script>\");" +
+			"</script>" +
+			"<body>" +
+			"</body>" +
+			"</html>"
 		);
 		parser.registerScanners();
 		Node scriptNodes [] =
@@ -225,7 +245,14 @@ public class ScriptScannerTest extends ParserTestCase
 		ScriptTag scriptTag = (ScriptTag)scriptNodes[0];
 		assertStringEquals(
 			"script code",
-			"document.write(\"<script " +			"language=\\\"JavaScript\\\">\");" +			"document.write(\"function onmousedown" +			"(event)\");" +			"document.write(\"{ // do something\"); " +			"document.write(\"}\"); " +			"// parser thinks this is the end tag. " +			"document.write(\"</script>\");",
+			"document.write(\"<script " +
+			"language=\\\"JavaScript\\\">\");" +
+			"document.write(\"function onmousedown" +
+			"(event)\");" +
+			"document.write(\"{ // do something\"); " +
+			"document.write(\"}\"); " +
+			"// parser thinks this is the end tag. " +
+			"document.write(\"</script>\");",
 			scriptTag.getScriptCode()
 		);
 		
@@ -478,4 +505,34 @@ public class ScriptScannerTest extends ParserTestCase
 	
 	}	
 
+	/**
+	 * There was a bug in the ScriptScanner when there was multiline script and
+	 * the last line did not have a newline before the end script tag. For example:
+	 * 
+	 * &lt;script&gt;alert()
+	 * alert()&lt;/script&gt;
+	 * 
+	 * Would generate the following "scriptCode()" result:
+	 * alert()alert()
+	 *
+	 * But should actually return:
+	 * alert()
+	 * alert() 
+	 *
+	 * This was fixed in ScriptScanner, which this test verifies
+	 */ 
+	public void testScriptCodeExtractionWithNewlines() throws ParserException {
+		String scriptContents = "alert()\r\nalert()";
+		createParser("<script>" + scriptContents + "</script>");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertType("script",ScriptTag.class,node[0]);
+		ScriptTag scriptTag = (ScriptTag)node[0];
+		assertStringEquals(
+			"script code",
+			scriptContents,
+			scriptTag.getScriptCode()
+		);
+	}
+	
 }
