@@ -25,6 +25,8 @@
 // 2583 Cedar Street, Berkeley, 
 // CA 94708, USA
 // Website : http://www.industriallogic.com
+//
+// This interface was contributed by Joshua Kerievsky
 
 package org.htmlparser;
 
