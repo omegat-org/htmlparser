@@ -6,6 +6,9 @@ Integration Build 1.2 - 20021031
 [4] Fixed bug 624045 (in HTMLParameterParser) - erroneous space key removed
 [5] Added HTMLRenderer and external rendering support in HTMLNode.
 [6] Line no and details incorporated for feedback and exceptions
+[7] HTMLLinkProcessor: "javascript:" recognition
+[8] HTMLLinkScanner: added flags for javascript, ftp, http, https
+[9] HTMLLinkTag: constructor for new flags, methods isJavascriptLink, setJavascriptLink, etc...
 
 Integration Build 1.2 - 20021016
 --------------------------------
