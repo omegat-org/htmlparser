@@ -123,7 +123,10 @@ public class HTMLParser
 	 */
 	protected boolean readFlag = false;
 	private Hashtable scanners = new Hashtable();
-	
+	/**
+	 * Keeps track if a connection was opened to a file or url
+	 */
+	private boolean connectionOpened=true;
 	/**
 	 * Feedback object
 	 */
@@ -147,7 +150,18 @@ public class HTMLParser
 		this.feedback = feedback;
 		HTMLTag.setTagParser(new HTMLTagParser(feedback));		
 		reader.setParser(this);
-	
+		markBeginningOfStream(reader);
+		connectionOpened=false;
+	}
+
+
+	public void markBeginningOfStream(HTMLReader reader) {
+		try {
+			reader.mark(5000);
+		}
+		catch (IOException e) {
+			feedback.error("Could not mark the current location of the reader",new HTMLParserException(e));
+		}
 	}
 	
 	
@@ -246,8 +260,12 @@ public class HTMLParser
 				{
 					node = reader.readElement();
 					readFlag=true;
-				   if (node==null)
+				   if (node==null) {
+				   		// Parser has completed. 
+				   		// Re-initialize
+				   		if (!connectionOpened) resetReader(); else openConnection();
 						return false;
+					}
 					else
 						return true;
 				}
@@ -262,6 +280,12 @@ public class HTMLParser
 					throw ex;
 				}
 
+			}
+			public void resetReader() throws HTMLParserException, IOException {
+				if (!reader.markSupported()) throw new HTMLParserException("Mark is not supported!");
+				reader.reset();
+				reader.setLineCount(1);
+				reader.setPosInLine(-1);
 			}
 			public HTMLNode nextHTMLNode() throws HTMLParserException
 			{

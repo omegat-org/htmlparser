@@ -274,4 +274,20 @@ public class HTMLReader extends BufferedReader
 		return line;
 	}
 
+	/**
+	 * Sets the lineCount.
+	 * @param lineCount The lineCount to set
+	 */
+	public void setLineCount(int lineCount) {
+		this.lineCount = lineCount;
+	}
+
+	/**
+	 * Sets the posInLine.
+	 * @param posInLine The posInLine to set
+	 */
+	public void setPosInLine(int posInLine) {
+		this.posInLine = posInLine;
+	}
+
 }

@@ -59,6 +59,7 @@ public static TestSuite suite() {
 	
 	suite.addTest(HTMLStringNodeTest.suite());
 	suite.addTest(HTMLRemarkNodeTest.suite());
+	suite.addTest(HTMLParserTest.suite());
 	suite.addTest(com.kizna.htmlTests.scannersTests.AllTests.suite());
 	suite.addTest(com.kizna.htmlTests.utilTests.AllTests.suite());
 	suite.addTest(com.kizna.htmlTests.tagTests.AllTests.suite());
