@@ -223,7 +223,7 @@ public class NodeReader extends BufferedReader
             else if (dontReadNextLine) {
             	dontReadNextLine = false;
             } else
-                posInLine=node.elementEnd()+1;
+                posInLine = getLastReadPosition() + 1;
 			if (line==null)
                 return null;
             
