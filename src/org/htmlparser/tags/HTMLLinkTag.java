@@ -65,6 +65,19 @@ public class HTMLLinkTag extends HTMLTag
 	 * <p>
 	 * In order to get the contents of the link tag, use the method linkData(), 
 	 * which returns an enumeration of nodes encapsulated within the link.
+	 * <p>
+	 * The following code will get all the images inside a link tag.
+	 * <pre>
+	 * HTMLNode node ;
+	 * HTMLImageTag imageTag;
+	 * for (Enumeration e=linkTag.linkData();e.hasMoreElements();) {
+	 * 		node = (HTMLNode)e.nextElement();
+	 * 		if (node instanceof HTMLImageTag) {
+	 * 			imageTag = (HTMLImageTag)node;
+	 * 			// Process imageTag
+	 * 		}
+	 * }
+	 * </pre>
 	 * @link The URL to which the link points to
 	 * @linkText The text which is stored inside this link tag
 	 * @linkBegin The beginning position of the link tag
