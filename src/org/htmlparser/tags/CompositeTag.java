@@ -483,7 +483,7 @@ public class CompositeTag extends Tag
             }
         }
         
-        if (null != getEndTag ())
+        if ((null != getEndTag ()) && (this != getEndTag ())) // 2nd guard handles <tag/>
             // eliminate virtual tags
 //            if (!(getEndTag ().getStartPosition () == getEndTag ().getEndPosition ()))
             {
