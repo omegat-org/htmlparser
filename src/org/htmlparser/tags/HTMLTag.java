@@ -33,7 +33,7 @@ import java.util.*;
 import org.htmlparser.parserHelper.ParameterParser;
 import org.htmlparser.parserHelper.TagParser;
 import org.htmlparser.scanners.HTMLTagScanner;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.visitors.HTMLVisitor;
 import org.htmlparser.HTMLNode;
@@ -126,7 +126,7 @@ public class HTMLTag extends HTMLNode
 	 * a tagData object.
 	 * @param tagData The data for this tag
 	 */
-	public HTMLTag(HTMLTagData tagData)
+	public HTMLTag(TagData tagData)
 	{
 		super(tagData.getTagBegin(),tagData.getTagEnd());
 		this.tagContents = new StringBuffer();

@@ -32,10 +32,18 @@ package org.htmlparser.tags;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLFormTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.FormData;
+import org.htmlparser.tags.data.TagData;
 
+/**
+ * @author ili
+ *
+ * To change this generated comment edit the template variable "typecomment":
+ * Window>Preferences>Java>Templates.
+ * To enable and disable the creation of type comments go to
+ * Window>Preferences>Java>Code Generation.
+ */
 /**
  * Represents a FORM tag.
  */
@@ -50,25 +58,20 @@ public class HTMLFormTag extends CompositeTag
 
 	private Vector textAreaVector;
    	
-   	/**
-   	 * A form tag - contains information contained in the form tag.
-   	 * @param formURL URL to which form data will be sent
-   	 * @param formName Name of the form
-   	 * @param formMethod GET or POST
-   	 * @param formBegin Beginning of the form 
-   	 * @param formEnd End of the form
-   	 * @param tagLine The tag line where this tag occurred
-   	 * @param formInputVector The vector of INPUT elements
-   	 * @param allNodesVector The vector of all elements in the FORM
-   	 */
-	public HTMLFormTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData, HTMLFormTagData formTagData)
+	/**
+	 * Constructor takes in tagData, compositeTagData, formTagData
+	 * @param tagData
+	 * @param compositeTagData
+	 * @param formTagData
+	 */
+	public HTMLFormTag(TagData tagData, CompositeTagData compositeTagData, FormData formData)
 	{
 		super(tagData,compositeTagData);
-		this.formURL = formTagData.getFormURL();
-	    this.formName = formTagData.getFormName();
-      	this.formMethod = formTagData.getFormMethod();
-      	this.formInputVector = formTagData.getFormInputVector();
-      	this.textAreaVector = formTagData.getTextAreaVector();
+		this.formURL = formData.getFormURL();
+	    this.formName = formData.getFormName();
+      	this.formMethod = formData.getFormMethod();
+      	this.formInputVector = formData.getFormInputVector();
+      	this.textAreaVector = formData.getTextAreaVector();
 	}
 	
 	/**

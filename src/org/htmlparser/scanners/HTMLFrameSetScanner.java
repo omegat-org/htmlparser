@@ -35,8 +35,8 @@ package org.htmlparser.scanners;
 //////////////////
 import org.htmlparser.tags.HTMLFrameSetTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 /**
  * Scans for the Frame Tag. This is a subclass of HTMLTagScanner, and is called using a
@@ -63,8 +63,8 @@ public class HTMLFrameSetScanner extends CompositeTagScanner
 	}
 
 	protected HTMLTag createTag(
-		HTMLTagData tagData,
-		HTMLCompositeTagData compositeTagData) {
+		TagData tagData,
+		CompositeTagData compositeTagData) {
 		return new HTMLFrameSetTag(tagData,compositeTagData);
 	}
 

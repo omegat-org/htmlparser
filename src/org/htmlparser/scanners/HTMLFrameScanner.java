@@ -37,7 +37,7 @@ import java.util.Hashtable;
 
 import org.htmlparser.tags.HTMLFrameTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 /**
@@ -99,7 +99,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 		return ids;
 	}
 
-	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url) throws HTMLParserException {
+	protected HTMLTag createTag(TagData tagData, HTMLTag tag, String url) throws HTMLParserException {
 		String frameUrl = extractFrameLocn(tag,url);
 		String frameName = extractFrameName(tag,url);
 		

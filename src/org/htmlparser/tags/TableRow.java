@@ -2,14 +2,14 @@ package org.htmlparser.tags;
 
 import java.util.List;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 public class TableRow extends CompositeTag {
 	private List columnsList;
 	public TableRow(
-		HTMLTagData tagData,
-		HTMLCompositeTagData compositeTagData,
+		TagData tagData,
+		CompositeTagData compositeTagData,
 		List columnsList) {
 		super(tagData, compositeTagData);
 		this.columnsList = columnsList;

@@ -30,8 +30,8 @@ package org.htmlparser.tags;
 
 import java.util.List;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserUtils;
 
 public class HTMLSelectTag extends CompositeTag
@@ -40,8 +40,8 @@ public class HTMLSelectTag extends CompositeTag
 	private List optionTagList;
 	
 	public HTMLSelectTag(
-		HTMLTagData tagData, 
-		HTMLCompositeTagData compositeTagData,
+		TagData tagData, 
+		CompositeTagData compositeTagData,
 		List optionTagList)
 	{
 		super(tagData,compositeTagData);

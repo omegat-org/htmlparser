@@ -33,7 +33,7 @@ import org.htmlparser.util.*;
 
 public class HTMLInputTag extends HTMLTag
 {
-	public HTMLInputTag(HTMLTagData tagData) {
+	public HTMLInputTag(TagData tagData) {
 		super(tagData);
 	}
 		

@@ -8,8 +8,8 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.TableColumn;
 import org.htmlparser.tags.TableRow;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 public class TableRowScanner extends CompositeTagScanner {
 	private final static String MATCH_STRING [] = { "TR" };
@@ -33,8 +33,8 @@ public class TableRowScanner extends CompositeTagScanner {
 	}
 
 	protected HTMLTag createTag(
-		HTMLTagData tagData,
-		HTMLCompositeTagData compositeTagData) {
+		TagData tagData,
+		CompositeTagData compositeTagData) {
 		return new TableRow(tagData,compositeTagData,columns);
 	}
 

@@ -7,8 +7,8 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserException;
 
 public abstract class CompositeTagScanner extends HTMLTagScanner {
@@ -66,12 +66,12 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 		while (endTagFound==false && node!=null);
 		if (removeScanners)
 			reader.getParser().setScanners(tempScanners);
-		return createTag(new HTMLTagData(
+		return createTag(new TagData(
 				startTag.elementBegin(),
 				endTag.elementEnd(),
 				startTag.getText(),
 				currLine				
-			), new HTMLCompositeTagData(
+			), new CompositeTagData(
 				startTag,endTag,childVector
 			)
 		);
@@ -82,7 +82,7 @@ public abstract class CompositeTagScanner extends HTMLTagScanner {
 	protected void childNodeEncountered(HTMLNode node) {
 	}
 
-	protected abstract HTMLTag createTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData);
+	protected abstract HTMLTag createTag(TagData tagData, CompositeTagData compositeTagData);
 
 
 }

@@ -34,8 +34,8 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.HTMLScriptScanner;
 import org.htmlparser.tags.HTMLScriptTag;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
 
@@ -60,8 +60,8 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 		childVector.add(stringNode);
 		HTMLScriptTag scriptTag = 
 		new HTMLScriptTag(
-			new HTMLTagData(0,10,"Tag Contents","tagline"),
-			new HTMLCompositeTagData(null,null,childVector)
+			new TagData(0,10,"Tag Contents","tagline"),
+			new CompositeTagData(null,null,childVector)
 		);
 		
 		assertNotNull("Script Tag object creation",scriptTag);

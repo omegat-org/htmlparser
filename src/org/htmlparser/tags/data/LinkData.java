@@ -1,6 +1,6 @@
 package org.htmlparser.tags.data;
 
-public class HTMLLinkTagData {
+public class LinkData {
 	private String link;
 	private String linkText;
 	private String accessKey;
@@ -8,7 +8,7 @@ public class HTMLLinkTagData {
 	private boolean javascriptLink;
 	private String linkContents;
 	
-	public HTMLLinkTagData(String link,String linkText,String accessKey,boolean mailLink,
+	public LinkData(String link,String linkText,String accessKey,boolean mailLink,
 	boolean javascriptLink, String linkContents) {
 		this.link = link;
 		this.linkText = linkText;

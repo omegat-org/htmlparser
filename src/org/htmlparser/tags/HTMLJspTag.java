@@ -28,7 +28,7 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 
 /**
  * The JSP/ASP tags like &lt;%&#46;&#46;&#46;%&gt; can be identified by this class.
@@ -42,7 +42,7 @@ public class HTMLJspTag extends HTMLTag
 	 * @param nodeEnd ending position of the tag
 	 * @param tagContents contents of the remark tag
 	 */
-	public HTMLJspTag(HTMLTagData tagData)
+	public HTMLJspTag(TagData tagData)
 	{
 		super(tagData);
 	}

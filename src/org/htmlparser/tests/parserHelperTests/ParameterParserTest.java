@@ -32,7 +32,7 @@ import java.util.Hashtable;
 
 import org.htmlparser.parserHelper.ParameterParser;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 
 import junit.framework.TestCase;
 
@@ -50,7 +50,7 @@ public class ParameterParserTest extends TestCase {
 	}
 	
 	public void getParameterTableFor(String tagContents) {
-		tag = new HTMLTag(new HTMLTagData(0,0,tagContents,""));
+		tag = new HTMLTag(new TagData(0,0,tagContents,""));
 		table = parser.parseAttributes(tag);
 		
 	}

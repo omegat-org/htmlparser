@@ -29,7 +29,7 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.visitors.HTMLVisitor;
 /**
  * HTMLEndTag can identify closing tags, like &lt;/A&gt;, &lt;/FORM&gt;, etc.
@@ -48,7 +48,7 @@ public class HTMLEndTag extends HTMLTag
 	 * @param nodeEnd Ending position of the end tag
 	 * @param tagContents Text contents of the tag
 	 */
-	public HTMLEndTag(HTMLTagData tagData)
+	public HTMLEndTag(TagData tagData)
 	{
 		super(tagData);
 	}
@@ -111,7 +111,7 @@ public class HTMLEndTag extends HTMLTag
 			state=ENDTAG_FINISHED_PARSING_STATE;
 		}		
 		if (state==ENDTAG_FINISHED_PARSING_STATE)
-		return new HTMLEndTag(new HTMLTagData(tagBegin,tagEnd,tagContents.toString(),input));
+		return new HTMLEndTag(new TagData(tagBegin,tagEnd,tagContents.toString(),input));
 		else return null;	
 	}
 	public String toPlainTextString() {

@@ -36,7 +36,7 @@ import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.SimpleEnumeration;
@@ -148,7 +148,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 	public void testExtractLinkInvertedCommasBug() throws HTMLParserException
 	{
 		String tagContents = "a href=r/anorth/top.html";
-		HTMLTag tag = new HTMLTag(new HTMLTagData(0,0,tagContents,""));
+		HTMLTag tag = new HTMLTag(new TagData(0,0,tagContents,""));
 		String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
 		HTMLLinkScanner scanner = new HTMLLinkScanner("-l");
 		assertEquals("Extracted Link","r/anorth/top.html",scanner.extractLink(tag,url));
@@ -271,7 +271,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 
 	public void testReplaceFaultyTagWithEndTag() throws HTMLParserException {
 		String currentLine = "<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>";
-		HTMLTag tag = new HTMLTag(new HTMLTagData(85,87,"a",currentLine));
+		HTMLTag tag = new HTMLTag(new TagData(85,87,"a",currentLine));
 		HTMLLinkScanner linkScanner = new HTMLLinkScanner();
 		String newLine = linkScanner.replaceFaultyTagWithEndTag(tag,currentLine);
 		assertEquals("Expected replacement","<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us</A></p>",newLine);
@@ -279,7 +279,7 @@ public class HTMLLinkScannerTest extends HTMLParserTestCase
 
 	public void testInsertEndTagBeforeTag() throws HTMLParserException {
 		String currentLine = "<a href=s/7509><b>Yahoo! Movies</b></a>";
-		HTMLTag tag = new HTMLTag(new HTMLTagData(0,14,"a href=s/7509",currentLine));
+		HTMLTag tag = new HTMLTag(new TagData(0,14,"a href=s/7509",currentLine));
 		HTMLLinkScanner linkScanner = new HTMLLinkScanner();
 		String newLine = linkScanner.insertEndTagBeforeNode(tag,currentLine);
 		assertEquals("Expected insertion","</A><a href=s/7509><b>Yahoo! Movies</b></a>",newLine);

@@ -28,15 +28,15 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 /**
  * A Title Tag
  */
 public class HTMLTitleTag extends CompositeTag {
 	
-	public HTMLTitleTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
+	public HTMLTitleTag(TagData tagData, CompositeTagData compositeTagData) {
 		super(tagData,compositeTagData);
 	}
 	

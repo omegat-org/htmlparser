@@ -36,8 +36,8 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.HTMLAppletTag;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserException;
 /**
  * Used to scan for applet tags.
@@ -138,13 +138,13 @@ public class HTMLAppletScanner extends HTMLTagScanner {
 				"Table contents : "+msg.toString());
 			}	
 			HTMLAppletTag appTag = new HTMLAppletTag(
-				new HTMLTagData(
+				new TagData(
 					node.elementBegin(),
 					node.elementEnd(),
 					tag.getText(),
 					currLine
 				),
-				new HTMLCompositeTagData(
+				new CompositeTagData(
 					startTag,
 					endTag,
 					childrenVector

@@ -32,7 +32,7 @@ package org.htmlparser.scanners;
 /////////////////////////
 import org.htmlparser.tags.HTMLDoctypeTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserException;
 
 /**
@@ -57,7 +57,7 @@ public class HTMLDoctypeScanner extends HTMLTagScanner {
 		return ids;
 	}
 
-	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+	protected HTMLTag createTag(TagData tagData, HTMLTag tag, String url)
 		throws HTMLParserException {
 		String tagContents = tag.getText();	
 		tagContents=tagContents.substring(9,tagContents.length());

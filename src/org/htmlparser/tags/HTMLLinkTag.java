@@ -30,9 +30,9 @@
 package org.htmlparser.tags;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLLinkTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.LinkData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.SimpleEnumeration;
 import org.htmlparser.visitors.HTMLVisitor;
 /**
@@ -94,17 +94,17 @@ public class HTMLLinkTag extends CompositeTag
 	 * The link tag processes all its contents in collectInto().
 	 * @param tagData The data relating to the tag.
 	 * @param compositeTagData The data regarding the composite structure of the tag.
-	 * @param linkTagData The data specific to the link tag.
+	 * @param linkData The data specific to the link tag.
 	 * @see #linkData()
 	 */
-	public HTMLLinkTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData,HTMLLinkTagData linkTagData) {
+	public HTMLLinkTag(TagData tagData,CompositeTagData compositeTagData,LinkData linkData) {
 		super(tagData,compositeTagData);  
-		this.link = linkTagData.getLink();
-		this.linkText = linkTagData.getLinkText();
-		this.accessKey = linkTagData.getAccessKey();
-		this.mailLink = linkTagData.isMailLink();
-		this.linkContents = linkTagData.getLinkContents();  
-		this.javascriptLink = linkTagData.isJavascriptLink();
+		this.link = linkData.getLink();
+		this.linkText = linkData.getLinkText();
+		this.accessKey = linkData.getAccessKey();
+		this.mailLink = linkData.isMailLink();
+		this.linkContents = linkData.getLinkContents();  
+		this.javascriptLink = linkData.isJavascriptLink();
 	}
 	/**
 	 * Returns the accesskey element if any inside this link tag

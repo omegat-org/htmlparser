@@ -30,7 +30,7 @@ package org.htmlparser.scanners;
 
 import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserException;
 
 public class HTMLInputTagScanner extends HTMLTagScanner
@@ -51,7 +51,7 @@ public class HTMLInputTagScanner extends HTMLTagScanner
 		return ids;
 	}
 	
-	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+	protected HTMLTag createTag(TagData tagData, HTMLTag tag, String url)
 		throws HTMLParserException {
 		return new HTMLInputTag(tagData);
 	}

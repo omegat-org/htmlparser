@@ -35,7 +35,7 @@ import java.util.Hashtable;
 
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserUtils;
@@ -108,7 +108,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 		return ids;
 	}
 
-	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+	protected HTMLTag createTag(TagData tagData, HTMLTag tag, String url)
 		throws HTMLParserException {
 		String link = extractImageLocn(tag,url);
 		return new HTMLImageTag(tagData, link);

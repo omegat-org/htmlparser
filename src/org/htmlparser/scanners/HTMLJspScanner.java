@@ -34,7 +34,7 @@ package org.htmlparser.scanners;
 /////////////////////////
 import org.htmlparser.tags.HTMLJspTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserException;
 
 public class HTMLJspScanner extends HTMLTagScanner {
@@ -57,7 +57,7 @@ public class HTMLJspScanner extends HTMLTagScanner {
 		return ids;
 	}
 
-	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+	protected HTMLTag createTag(TagData tagData, HTMLTag tag, String url)
 		throws HTMLParserException {
 		String tagContents = tagData.getTagContents();
 		tagData.setTagContents(tagContents.substring(1,tagContents.length()-1));

@@ -41,9 +41,9 @@ import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLLinkTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.LinkData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.util.HTMLParserUtils;
@@ -83,18 +83,18 @@ public class HTMLLinkScanner extends HTMLTagScanner
 		// Kaarle Kaila 23.10.2001
 		linkEnd = node.elementEnd();
 		HTMLLinkTag linkTag = new HTMLLinkTag(
-			new HTMLTagData(
+			new TagData(
 				linkBegin,
 				linkEnd,
 				tagContents,
 				currentLine
 			),
-			new HTMLCompositeTagData(
+			new CompositeTagData(
 				startTag,
 				endTag,
 				nodeVector
 			),
-			new HTMLLinkTagData(
+			new LinkData(
 				link,
 				linkText,
 				accessKey,
@@ -246,7 +246,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 					String newLine = replaceFaultyTagWithEndTag(tag, currentLine);
 					reader.changeLine(newLine);
 					return new HTMLEndTag(
-						new HTMLTagData(
+						new TagData(
 							tag.elementBegin(),
 							tag.elementBegin()+3,
 							"A",
@@ -260,7 +260,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 					String newLine = insertEndTagBeforeNode(tag, currentLine);
 					reader.changeLine(newLine);
 					return new HTMLEndTag(
-						new HTMLTagData(
+						new TagData(
 							tag.elementBegin(),
 							tag.elementBegin()+3,
 							"A",
@@ -342,7 +342,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 							reader.changeLine(newLine);
 							endFlag = true;
 							endTag = new HTMLEndTag(
-								new HTMLTagData(
+								new TagData(
 									node.elementBegin(),
 									node.elementBegin()+3,
 									"A",
@@ -360,7 +360,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			{
 				if (node==null)  {
 					// Add an end link tag
-					endTag = new HTMLEndTag(new HTMLTagData(0,3,"A","</A>"));
+					endTag = new HTMLEndTag(new TagData(0,3,"A","</A>"));
 					node = endTag;
 				}
 				previousOpenLinkScanner = null;

@@ -28,8 +28,8 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleEnumeration;
 
@@ -44,7 +44,7 @@ public class HTMLFrameSetTag extends CompositeTag
 	protected String frameURL;
    	protected String frameName;
    	protected NodeList frames;
-	public HTMLFrameSetTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData) {
+	public HTMLFrameSetTag(TagData tagData,CompositeTagData compositeTagData) {
 		super(tagData,compositeTagData);
       	this.frames = compositeTagData.getChildren();
 	}

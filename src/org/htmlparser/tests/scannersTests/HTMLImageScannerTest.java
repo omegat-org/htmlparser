@@ -33,7 +33,7 @@ import org.htmlparser.scanners.HTMLImageScanner;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLLinkProcessor;
@@ -69,7 +69,7 @@ public class HTMLImageScannerTest extends HTMLParserTestCase
 	 */
 	public void testExtractImageLocnInvertedCommasBug() throws HTMLParserException
 	{
-		HTMLTag tag = new HTMLTag(new HTMLTagData(0,0,"img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo",""));
+		HTMLTag tag = new HTMLTag(new TagData(0,0,"img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo",""));
 		String link = "img width=638 height=53 border=0 usemap=\"#m\" src=http://us.a1.yimg.com/us.yimg.com/i/ww/m5v5.gif alt=Yahoo";
 		String url = "c:\\cvs\\html\\binaries\\yahoo.htm";
 		HTMLImageScanner scanner = new HTMLImageScanner("-i",new HTMLLinkProcessor());

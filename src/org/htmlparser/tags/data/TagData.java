@@ -1,12 +1,12 @@
 package org.htmlparser.tags.data;
 
-public class HTMLTagData {
+public class TagData {
 	private int tagBegin;
 	private int tagEnd;
 	private String tagContents;
 	private String tagLine;
 	
-	public HTMLTagData(int tagBegin, int tagEnd, String tagContents,String tagLine) {
+	public TagData(int tagBegin, int tagEnd, String tagContents,String tagLine) {
 		this.tagBegin = tagBegin;
 		this.tagEnd   = tagEnd;
 		this.tagContents = tagContents;

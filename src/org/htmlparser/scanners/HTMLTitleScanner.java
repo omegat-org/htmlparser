@@ -31,8 +31,8 @@ package org.htmlparser.scanners;
 
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTitleTag;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 /**
  * Scans title tags.
@@ -55,8 +55,8 @@ public class HTMLTitleScanner extends CompositeTagScanner {
 	} 
 
 	protected HTMLTag createTag(
-		HTMLTagData tagData,
-		HTMLCompositeTagData compositeTagData) {
+		TagData tagData,
+		CompositeTagData compositeTagData) {
 		return new HTMLTitleTag(tagData,compositeTagData);
 	}
 

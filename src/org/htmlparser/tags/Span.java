@@ -1,11 +1,11 @@
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 public class Span extends CompositeTag {
 
-	public Span(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
+	public Span(TagData tagData, CompositeTagData compositeTagData) {
 		super(tagData, compositeTagData);
 	}
 

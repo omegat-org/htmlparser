@@ -7,12 +7,12 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.NodeList;
 
-public class HTMLCompositeTagData {
+public class CompositeTagData {
 	private HTMLTag startTag;
 	private HTMLTag endTag;
 	private NodeList children;
 	
-	public HTMLCompositeTagData(
+	public CompositeTagData(
 		HTMLTag startTag, HTMLTag endTag, Vector children) {
 		this.startTag = startTag;
 		this.endTag   = endTag;

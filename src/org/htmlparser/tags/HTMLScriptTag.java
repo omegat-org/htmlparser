@@ -28,8 +28,8 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 /**
  * A HTMLScriptTag represents a JavaScript node
@@ -49,7 +49,7 @@ public class HTMLScriptTag extends CompositeTag {
 	 * @param type The type parameter
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public HTMLScriptTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData) 
+	public HTMLScriptTag(TagData tagData,CompositeTagData compositeTagData) 
 	{
 		super(tagData,compositeTagData);
 		this.scriptCode = getChildrenHTML();

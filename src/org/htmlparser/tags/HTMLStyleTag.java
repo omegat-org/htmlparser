@@ -28,8 +28,8 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 /**
  * A HTMLStyleTag represents a &lt;style&gt; tag
@@ -43,7 +43,7 @@ public class HTMLStyleTag extends CompositeTag {
 	 * @param styleCode The style code b/w the tags
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public HTMLStyleTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData) {
+	public HTMLStyleTag(TagData tagData,CompositeTagData compositeTagData) {
 		super(tagData,compositeTagData);
 	}
 	/**

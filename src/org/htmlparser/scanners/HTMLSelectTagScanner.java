@@ -35,8 +35,8 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.HTMLOptionTag;
 import org.htmlparser.tags.HTMLSelectTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 
 public class HTMLSelectTagScanner extends CompositeTagScanner
@@ -60,8 +60,8 @@ public class HTMLSelectTagScanner extends CompositeTagScanner
 
 
 	protected HTMLTag createTag(
-		HTMLTagData tagData,
-		HTMLCompositeTagData compositeTagData) {
+		TagData tagData,
+		CompositeTagData compositeTagData) {
 		return new HTMLSelectTag(tagData,compositeTagData,optionTags);
 	}
 	

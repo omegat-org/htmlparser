@@ -31,8 +31,8 @@ package org.htmlparser.tags;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleEnumeration;
 import org.htmlparser.visitors.HTMLVisitor;
@@ -41,7 +41,7 @@ public abstract class CompositeTag extends HTMLTag {
 	protected HTMLTag startTag, endTag;
 	protected NodeList childTags; 
 
-	public CompositeTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData) {
+	public CompositeTag(TagData tagData, CompositeTagData compositeTagData) {
 		super(tagData);
 		this.childTags = compositeTagData.getChildren();
 		this.startTag  = compositeTagData.getStartTag();
@@ -52,6 +52,10 @@ public abstract class CompositeTag extends HTMLTag {
 		return childTags.elements();
 	}
 
+	public HTMLNode getChild(int index) {
+		return childTags.elementAt(index);	
+	}
+	
 	public String toPlainTextString() {
 		StringBuffer stringRepresentation = new StringBuffer();
 		for (SimpleEnumeration e=children();e.hasMoreNodes();) {
@@ -149,7 +153,8 @@ public abstract class CompositeTag extends HTMLTag {
 
 	/**
 	 * Collect all objects that are of a certain type
-	 * Note that this will not check for parent types
+	 * Note that this will not check for parent types, and will not 
+	 * recurse through child tags
 	 * @param classType
 	 * @return NodeList
 	 */

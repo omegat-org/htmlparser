@@ -42,9 +42,9 @@ import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.HTMLTextareaTag;
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLFormTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.FormData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 
@@ -122,7 +122,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 			String newLine = insertEndTagBeforeNode(tag, currentLine);
 			reader.changeLine(newLine);
 			return new HTMLEndTag(
-				new HTMLTagData(
+				new TagData(
 					tag.elementBegin(),
 					tag.elementBegin()+3,
 					"A",
@@ -199,18 +199,18 @@ public class HTMLFormScanner extends HTMLTagScanner
 				"Input Vector contents : "+msg.toString());
 			}		
 			HTMLFormTag formTag = new HTMLFormTag(
-				new HTMLTagData(
+				new TagData(
 					linkBegin,
 					formEnd,
 					"",
 					currentLine
 				),
-				new HTMLCompositeTagData(
+				new CompositeTagData(
 					startFormTag,
 					endFormTag,
 					nodeVector
 				),
-				new HTMLFormTagData(
+				new FormData(
 					link,
 					name,
 					method,

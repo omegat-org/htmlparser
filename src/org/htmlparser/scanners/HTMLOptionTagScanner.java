@@ -89,7 +89,7 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 			while (!endTagFound);
 			HTMLOptionTag lOptionTag = 
 			new HTMLOptionTag(
-				new HTMLTagData(
+				new TagData(
 					0, node.elementEnd(), tag.getText(),currLine
 				), 
 				text.toString()

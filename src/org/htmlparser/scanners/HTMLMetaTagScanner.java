@@ -32,7 +32,7 @@ import java.util.Hashtable;
 
 import org.htmlparser.tags.HTMLMetaTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLParserException;
 
 public class HTMLMetaTagScanner extends HTMLTagScanner {
@@ -46,7 +46,7 @@ public class HTMLMetaTagScanner extends HTMLTagScanner {
 		return ids;
 	}
 
-	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+	protected HTMLTag createTag(TagData tagData, HTMLTag tag, String url)
 		throws HTMLParserException {
 		Hashtable table = tag.getAttributes();
 		String metaTagName = (String)table.get("NAME");					

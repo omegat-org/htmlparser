@@ -35,7 +35,7 @@ public class HTMLOptionTag extends HTMLTag
 {
 	private String value;
 	
-	public HTMLOptionTag(HTMLTagData tagData, String text)
+	public HTMLOptionTag(TagData tagData, String text)
 	{
 		super(tagData);
 		this.value = text;

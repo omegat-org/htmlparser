@@ -63,7 +63,7 @@ public class TagParser {
 		StringBuffer tagContents = new StringBuffer();
 		i=position;
 		char ch;
-		HTMLTag tag = new HTMLTag(new HTMLTagData(0,0,"",input));
+		HTMLTag tag = new HTMLTag(new TagData(0,0,"",input));
 		encounteredQuery = false;
 		while (i<tag.getTagLine().length()&& state!=TAG_FINISHED_PARSING_STATE && state!=TAG_ILLEGAL_STATE)
 		{

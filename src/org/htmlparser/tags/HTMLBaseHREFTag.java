@@ -29,7 +29,7 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 
 /**
  * @author Somik Raha
@@ -42,7 +42,7 @@ import org.htmlparser.tags.data.HTMLTagData;
 public class HTMLBaseHREFTag extends HTMLTag {
 	private String baseUrl;
 
-	public HTMLBaseHREFTag(HTMLTagData tagData, String baseUrl) {
+	public HTMLBaseHREFTag(TagData tagData, String baseUrl) {
 		super(tagData);
 		this.baseUrl = baseUrl;
 	}

@@ -30,7 +30,7 @@ package org.htmlparser.scanners;
 
 import org.htmlparser.tags.HTMLBaseHREFTag;
 import org.htmlparser.tags.HTMLTag;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 
@@ -52,7 +52,7 @@ public class HTMLBaseHREFScanner extends HTMLTagScanner {
 		return ids;
 	}
 
-	protected HTMLTag createTag(HTMLTagData tagData, HTMLTag tag, String url)
+	protected HTMLTag createTag(TagData tagData, HTMLTag tag, String url)
 		throws HTMLParserException {
 		String baseUrl = (String)tag.getAttribute("HREF");
 		String absoluteBaseUrl="";

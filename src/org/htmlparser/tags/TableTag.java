@@ -2,15 +2,15 @@ package org.htmlparser.tags;
 
 import java.util.List;
 
-import org.htmlparser.tags.data.HTMLCompositeTagData;
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.CompositeTagData;
+import org.htmlparser.tags.data.TagData;
 
 public class TableTag extends CompositeTag {
 	private List rows;
 	
 	public TableTag(
-		HTMLTagData tagData,
-		HTMLCompositeTagData compositeTagData,
+		TagData tagData,
+		CompositeTagData compositeTagData,
 		List rows) {
 		super(tagData, compositeTagData);
 		this.rows = rows;

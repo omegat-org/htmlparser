@@ -28,7 +28,7 @@
 
 package org.htmlparser.tags;
 
-import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.tags.data.TagData;
 import org.htmlparser.visitors.HTMLVisitor;
 
 /**
@@ -48,7 +48,7 @@ public class HTMLImageTag extends HTMLTag
      * @param tagData Specifies character position and content of the tag.
 	 * @param imageURL Location of the image.
 	 */
-	public HTMLImageTag(HTMLTagData tagData,String imageURL)
+	public HTMLImageTag(TagData tagData,String imageURL)
 	{
 		super(tagData);
 		this.imageURL = imageURL;
