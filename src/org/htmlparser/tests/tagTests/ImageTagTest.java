@@ -199,19 +199,6 @@ public class ImageTagTest extends ParserTestCase
         assertTrue ("bad source", "http://i.cnn.net/cnn/images/1.gif".equals (img.getImageURL ()));
     }
 
-    // see bug #778781  SRC-attribute suppression in IMG-tags
-//    HTML before parse:
-//    <img src="images/first" alt="first">
-//    <img src="images/second" alt="">
-//    <img alt="third" src="images/third">
-//    <img alt="" src="images/fourth">
-//
-//    HTML after parse:
-//    <IMG ALT="first" SRC="images/first">
-//    <IMG ALT="" SRC="images/second">
-//    <IMG ALT="third" SRC="images/third">
-//    <IMG ALT="">
-
     public void testDynamicRelativeImageScan() throws ParserException {
         createParser("<IMG SRC=\"../abc/def/mypic.jpg\">","http://www.yahoo.com/ghi?abcdefg");
         parseAndAssertNodeCount(1);

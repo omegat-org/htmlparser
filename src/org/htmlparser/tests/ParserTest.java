@@ -28,7 +28,10 @@
 
 package org.htmlparser.tests;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
@@ -748,5 +751,101 @@ public class ParserTest extends ParserTestCase
             i++;
         }
         assertEquals("Expected nodes",21,i);
+    }
+
+    /**
+     * See bug #826764 ParserException occurs only when using setInputHTML() instea
+     */
+    public void testSetInputHTML () throws Exception
+    {
+        String html;
+        String path;
+        File file;
+        PrintWriter out;
+        Node[] nodes;
+
+        html = "<html></html>";
+        createParser (html);
+        path = System.getProperty ("user.dir");
+        if (!path.endsWith (File.separator))
+            path += File.separator;
+        file = new File (path + "delete_me.html");
+        try
+        {
+            out = new PrintWriter (new FileWriter (file));
+            out.print ("<html>\r\n");
+            out.print ("<head>\r\n");
+            out.print ("<!-- BEGIN TYPE -->\r\n");
+            out.print ("<!-- NAVIGATION -->\r\n");
+            out.print ("<!-- END TYPE -->\r\n");
+            out.print ("<!-- BEGIN TITLE -->\r\n");
+            out.print ("<title>Einstiegsseite</title>\r\n");
+            out.print ("<!-- END TITLE -->\r\n");
+            out.print ("</head>\r\n");
+            out.print ("<body>\r\n");
+            out.print ("<ul>\r\n");
+            out.print ("<li>\r\n");
+            out.print ("<!-- BEGIN ITEM -->\r\n");
+            out.print ("<!-- BEGIN REF -->\r\n");
+            out.print ("<a href=\"kapitel1/index.html\">\r\n");
+            out.print ("<!-- END REF -->\r\n");
+            out.print ("<!-- BEGIN REFTITLE -->\r\n");
+            out.print ("Kapitel 1\r\n");
+            out.print ("<!-- END REFTITLE -->\r\n");
+            out.print ("</a>\r\n");
+            out.print ("<!-- END ITEM -->\r\n");
+            out.print ("</li>\r\n");
+            out.print ("<li>\r\n");
+            out.print ("<!-- BEGIN ITEM -->\r\n");
+            out.print ("<!-- BEGIN REF -->\r\n");
+            out.print ("<a href=\"kapitel2/index.html\">\r\n");
+            out.print ("<!-- END REF -->\r\n");
+            out.print ("<!-- BEGIN REFTITLE -->\r\n");
+            out.print ("Kapitel 2\r\n");
+            out.print ("<!-- END REFTITLE -->\r\n");
+            out.print ("</a>\r\n");
+            out.print ("<!-- END ITEM -->\r\n");
+            out.print ("</li>\r\n");
+            out.print ("<li>\r\n");
+            out.print ("<!-- BEGIN ITEM -->\r\n");
+            out.print ("<!-- BEGIN REF -->\r\n");
+            out.print ("<a href=\"kapitel3/index.html\">\r\n");
+            out.print ("<!-- END REF -->\r\n");
+            out.print ("<!-- BEGIN REFTITLE -->\r\n");
+            out.print ("Kapitel 3\r\n");
+            out.print ("<!-- END REFTITLE -->\r\n");
+            out.print ("</a>\r\n");
+            out.print ("<!-- END ITEM -->\r\n");
+            out.print ("</li>\r\n");
+            out.print ("</ul>\r\n");
+            out.print ("</body>\r\n");
+            out.print ("</html>");
+            out.close ();
+            DataInputStream stream = new DataInputStream (
+                new BufferedInputStream (new FileInputStream (file)));
+            byte[] buffer = new byte[(int)file.length ()];
+            stream.readFully (buffer);
+            html = new String (buffer);
+            try
+            {
+                parser.setInputHTML (html);
+                nodes = parser.extractAllNodesThatAre (LinkTag.class);
+            }
+            catch (ParserException e)
+            {
+                e.printStackTrace ();
+                nodes = new Node[0];
+            }
+            int count = nodes.length;
+            assertTrue ("node count", 3 == nodes.length);
+        }
+        catch (Exception e)
+        {
+            fail (e.toString ());
+        }
+        finally
+        {
+            file.delete ();
+        }
     }
 }

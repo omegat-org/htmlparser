@@ -36,6 +36,7 @@ import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class ScriptScannerTest extends ParserTestCase
@@ -557,5 +558,27 @@ public class ScriptScannerTest extends ParserTestCase
         assertStringEquals("Expected Code",javascript,scriptCode);
     }
 
+    /**
+     * See bug #839264 toHtml() parse error in Javascripts with "form" keyword
+     * Contributed by Ivan Wang (xj92wang)
+     */
+    public void testScriptsWithForm ()
+        throws
+            ParserException
+    {
+        String teststring = "<SCRIPT LANGUAGE=\"JAVASCRIPT\">" +
+            "function valForm(frm) { " + 
+            " for (n=0; n<this.form.test; n++) this.form.nb++; "+
+            "}"+
+            "</SCRIPT>";
+        StringBuffer htmlBuffer = new StringBuffer ();
 
+        createParser (teststring);
+        for (NodeIterator i = parser.elements (); i.hasMoreNodes ();)
+        {
+            Node tnode = i.nextNode ();
+            htmlBuffer.append (tnode.toHtml ());
+        }
+        assertStringEquals ("bad html", teststring, htmlBuffer.toString ());
+    }
 }

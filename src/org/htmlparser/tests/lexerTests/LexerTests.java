@@ -696,5 +696,55 @@ public class LexerTests extends ParserTestCase
         }
     }
 
+    /**
+     * See bug #825820 Words conjoined
+     */
+    public void testConjoined ()
+        throws
+            ParserException
+    {
+        StringBuffer buffer;
+        NodeIterator iterator;
+        Node node;
+        String expected;
+
+        expected = "The Title\nThis is the body.";
+        String html1 = "<html><title>The Title\n</title>" +
+            "<body>This is <a href=\"foo.html\">the body</a>.</body></html>";
+        createParser (html1);
+        buffer = new StringBuffer ();
+        for (iterator = parser.elements (); iterator.hasMoreNodes (); )
+        {
+            node = iterator.nextNode ();
+            String text = node.toPlainTextString ();
+            buffer.append (text);
+        }
+        assertStringEquals ("conjoined text", expected, buffer.toString ());
+
+        String html2 = "<html><title>The Title</title>\n" +
+            "<body>This is <a href=\"foo.html\">the body</a>.</body></html>";
+        createParser (html2);
+        buffer = new StringBuffer ();
+        for (iterator = parser.elements (); iterator.hasMoreNodes (); )
+        {
+            node = iterator.nextNode ();
+            String text = node.toPlainTextString ();
+            buffer.append (text);
+        }
+        assertStringEquals ("conjoined text", expected, buffer.toString ());
+        
+        String html3 = "<html><title>The Title</title>" +
+            "<body>\nThis is <a href=\"foo.html\">the body</a>.</body></html>";
+        createParser (html3);
+        buffer = new StringBuffer ();
+        for (iterator = parser.elements (); iterator.hasMoreNodes (); )
+        {
+            node = iterator.nextNode ();
+            String text = node.toPlainTextString ();
+            buffer.append (text);
+        }
+        assertStringEquals ("conjoined text", expected, buffer.toString ());
+    }
+
 }
 

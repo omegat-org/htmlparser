@@ -844,4 +844,17 @@ public class LinkTagTest extends ParserTestCase {
         LinkTag linkTag = (LinkTag)node[0];
         assertEquals("link text","<< An Empire Reborn: Chapter 2 <<",linkTag.getLinkText());
     }
+
+    /**
+     * See bug #813838 links not parsed correctly
+     */
+    public void testPlainText() throws Exception
+    {
+        String html = "<a href=Cities/><b>Cities</b></a>";
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertType("node", LinkTag.class, node[0]);
+        LinkTag linkTag = (LinkTag)node[0];
+        assertEquals ("plain text", "Cities", linkTag.toPlainTextString ());
+    }
 }

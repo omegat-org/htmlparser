@@ -193,11 +193,11 @@ public class JspTagTest extends ParserTestCase
     /**
      * See bug #772700 Jsp Tags are not parsed correctly when in quoted attributes.
      */
-//   public void testJspTagsInQuotedAttribes() throws ParserException
-//   {
-//      // this test seems to mess up....
-//      testJspTagsInAttributes("<img alt=\"<%=altText1%>\" src=\"<%=imgUrl1%>\" border=\"<%=borderToggle%>\">");
-//   }
+   public void testJspTagsInQuotedAttribes() throws ParserException
+   {
+      // this test seems to mess up....
+      testJspTagsInAttributes("<img alt=\"<%=altText1%>\" src=\"<%=imgUrl1%>\" border=\"<%=borderToggle%>\">");
+   }
 
     private void testJspTagsInAttributes(String html) throws ParserException
     {

@@ -37,6 +37,7 @@ import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.lexer.nodes.PageAttribute;
+import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeIterator;
@@ -518,5 +519,86 @@ public class AttributeTests extends ParserTestCase
         assertTrue ("No attribute should be called va'lue", !table.containsKey ("VA'LUE"));
         assertTrue ("Attribute missing", table.containsKey ("OTHER"));
         assertEquals ("Attribute has wrong value", "fred", (String)table.get ("OTHER"));
+    }
+    
+    /**
+     * see bug #778781 SRC-attribute suppression in IMG-tags
+     * & #753012 IMG SRC not parsed v1.3 & v1.4
+     * & #755929 Empty string attr. value causes attr parsing to be stopped
+     * & #778781 SRC-attribute suppression in IMG-tags
+     * & #832530 empty attribute causes parser to fail
+     * & #851882 zero length alt tag causes bug in ImageScanner
+     *
+     *    HTML before parse:
+     *    <img src="images/first" alt="first">"
+     *    <img src="images/second" alt="">
+     *    <img alt="third" src="images/third">
+     *    <img alt="" src="images/fourth">
+     *
+     *    HTML after parse:
+     *    <IMG ALT="first" SRC="images/first">
+     *    <IMG ALT="" SRC="images/second">
+     *    <IMG ALT="third" SRC="images/third">
+     *    <IMG ALT="">
+     */
+    public void testSrcAndAlt () throws ParserException
+    {
+        String html = "<img src=\"images/first\" alt=\"first\">";
+
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+        ImageTag img = (ImageTag)node[0];
+        assertTrue ("bad source", "images/first".equals (img.getImageURL ()));
+        assertTrue ("bad alt", "first".equals (img.getAttribute ("alt")));
+        assertStringEquals ("toHtml()", html, img.toHtml ());
+    }
+
+    /**
+     * see bug #778781 SRC-attribute suppression in IMG-tags
+     */
+    public void testSrcAndEmptyAlt () throws ParserException
+    {
+        String html = "<img src=\"images/second\" alt=\"\">";
+
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+        ImageTag img = (ImageTag)node[0];
+        assertTrue ("bad source", "images/second".equals (img.getImageURL ()));
+        assertTrue ("bad alt", "".equals (img.getAttribute ("alt")));
+        assertStringEquals ("toHtml()", html, img.toHtml ());
+    }
+
+    /**
+     * see bug #778781 SRC-attribute suppression in IMG-tags
+     */
+    public void testAltAndSrc () throws ParserException
+    {
+        String html = "<img alt=\"third\" src=\"images/third\">";
+
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+        ImageTag img = (ImageTag)node[0];
+        assertTrue ("bad source", "images/third".equals (img.getImageURL ()));
+        assertTrue ("bad alt", "third".equals (img.getAttribute ("alt")));
+        assertStringEquals ("toHtml()", html, img.toHtml ());
+    }
+
+    /**
+     * see bug #778781 SRC-attribute suppression in IMG-tags
+     */
+    public void testEmptyAltAndSrc () throws ParserException
+    {
+        String html = "<img alt=\"\" src=\"images/third\">";
+
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be an ImageTag", node[0] instanceof ImageTag);
+        ImageTag img = (ImageTag)node[0];
+        assertTrue ("bad source", "images/third".equals (img.getImageURL ()));
+        assertTrue ("bad alt", "".equals (img.getAttribute ("alt")));
+        assertStringEquals ("toHtml()", html, img.toHtml ());
     }
 }

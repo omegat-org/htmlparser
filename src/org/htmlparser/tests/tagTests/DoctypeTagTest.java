@@ -28,8 +28,10 @@
 
 package org.htmlparser.tests.tagTests;
 
+import org.htmlparser.Node;
 import org.htmlparser.tags.DoctypeTag;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 public class DoctypeTagTest extends ParserTestCase {
@@ -43,7 +45,8 @@ public class DoctypeTagTest extends ParserTestCase {
         super(name);
     }
 
-    public void testToHTML() throws ParserException {
+    public void testToHTML() throws ParserException
+    {
         String testHTML = new String(
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"+
         "<HTML>\n"+
@@ -60,5 +63,23 @@ public class DoctypeTagTest extends ParserTestCase {
         assertTrue("First node should be a DoctypeTag",node[0] instanceof DoctypeTag);
         DoctypeTag docTypeTag = (DoctypeTag)node[0];
         assertStringEquals("toHTML()","<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">",docTypeTag.toHtml());
+    }
+
+    /**
+     * See bug #833592 DOCTYPE element is not parsed correctly
+     * Contributed by Trevor Watson (t007).
+     */
+    public void DocTypeElementTest () throws ParserException
+    {
+        final String DOCTYPE = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">";
+        final String HTML = DOCTYPE + "\n<HTML>\n  <HEAD>\n    <TITLE>HTMLParserDocTypeBugTest</TITLE>\n  </HEAD>\n  <BODY>\n    HTMLParser DOCTYPE node bug test.\n  </BODY>\n</HTML>";
+
+        createParser(HTML);
+
+        NodeIterator e = parser.elements();
+        Node node = e.nextNode();
+
+        // First node is doctype
+        assertStringEquals("Doctype element output is incorrect.", DOCTYPE, node.toHtml());
     }
 }

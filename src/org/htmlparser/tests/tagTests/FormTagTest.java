@@ -527,4 +527,45 @@ public class FormTagTest extends ParserTestCase {
         assertTrue ("only 1 child", 1 == texTag.getChildCount ());
         assertStringEquals ("text contents", "\n					   The text.\n					", texTag.getChild (0).toHtml ());
     }
+
+    /**
+     * From bug #825645 <input> not getting parsed inside table
+     */
+    public void testInputInTable () throws Exception
+    {
+        FormTag formTag;
+        NodeList nl;
+        InputTag inpTag;
+
+        String html = "<html>\n" +
+            "<body>\n" +
+            "<form action=\"/cgi-bin/test.pl\" method=\"post\">\n" +
+            "<table><tr><td>\n" +
+            "<INPUT type=hidden NAME=\"test1\" VALUE=\"insidetable\">\n" +
+            "</td></tr>\n" +
+            "</table>\n" +
+            "<INPUT type=hidden NAME=\"Test2\"\n" +
+            "VALUE=\"outsidetable\">\n" +
+            "<INPUT type=hidden name=\"a\" value=\"b\">\n" +
+            "</form>\n" +
+            "</body>\n" +
+            "</html>\n";
+        createParser (html);
+        formTag =
+            (FormTag)(parser.extractAllNodesThatAre (
+                FormTag.class
+            )[0]);
+        assertNotNull ("Should have found a form tag",formTag);
+        nl = formTag.getFormInputs ();
+        assertTrue ("3 inputs", 3 == nl.size ());
+        inpTag = (InputTag)nl.elementAt (0);
+        assertStringEquals ("name", "test1", inpTag.getAttribute ("name"));
+        assertStringEquals ("value", "insidetable", inpTag.getAttribute ("value"));
+        inpTag = (InputTag)nl.elementAt (1);
+        assertStringEquals ("name", "Test2", inpTag.getAttribute ("name"));
+        assertStringEquals ("value", "outsidetable", inpTag.getAttribute ("value"));
+        inpTag = (InputTag)nl.elementAt (2);
+        assertStringEquals ("name", "a", inpTag.getAttribute ("name"));
+        assertStringEquals ("value", "b", inpTag.getAttribute ("value"));
+    }
 }

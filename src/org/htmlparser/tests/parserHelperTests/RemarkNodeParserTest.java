@@ -365,6 +365,7 @@ public class RemarkNodeParserTest extends ParserTestCase
 
     /**
      * Test a comment ending with !--.
+     * See bug #788746 parser crashes on comments like <!-- foobar --!>
      */
     public void testExclamationComment ()
         throws
@@ -382,6 +383,8 @@ public class RemarkNodeParserTest extends ParserTestCase
             );
         parser.setNodeFactory (new PrototypicalNodeFactory (true));
         parseAndAssertNodeCount (18);
+        assertTrue("Node should be a RemarkNode but was " + node[12], node[12] instanceof RemarkNode);
+        assertStringEquals ("remark text", "<!-- foobar --!>", node[12].toHtml ());
     }
 
 }
