@@ -11,7 +11,6 @@
   <property name="versionNumber" value="${versionMajor}.${versionMinor}"/>
   <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
   <property name="src" value="src"/>
-  <property name="build" value="build"/>
   <property name="docs" value="docs"/>
   <property name="resources" value="resources"/>
   <property name="dist"  value="release/htmlparser${versionQualifier}"/>
@@ -91,6 +90,21 @@
     <!-- ant has a changelog task already, but it outputs XML and doesn't unify dates or spit them out in chronological order -->
     <!-- cvschangelog daysinpast="7" destfile="changelog.xml" / -->
     <!-- so we use cvs2cl instead -->
+    <!--
+      Note: This relies on being able to perform cvs operations to
+      cvs.htmlparser.sorceforge.net by default, so you need to have
+      environment variables CVSROOT and CVS_RSH set up and the ssh-agent
+      loaded and primed.
+      $ ssh-agent
+      $ ssh-add
+      $ CVSROOT=:ext:derrickoswald@cvs.htmlparser.sorceforge.net:/cvsroot/htmlparser
+      $ export CVSROOT
+      $ CVS_RSH=ssh
+      $ export CVS_RSH
+      At this point you should be able to ssh to sourceforge without answering
+      password prompts:
+      $ ssh -l derrickoswald shell.sourceforge.net
+    -->
     <echo message="**********************************"/>
     <echo message="*  Creating change log           *"/>
     <echo message="**********************************"/>
@@ -107,15 +121,8 @@
     <echo message="*  Compiling....                 *"/>
     <echo message="**********************************"/>
 
-    <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}"/>
-    <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" />
-    <!--  Copy images from ${src} into ${build} -->
-    <mkdir dir="${build}/org/htmlparser/beans/images"/>
-    <copy todir="${build}/org/htmlparser/beans/images">
-        <fileset dir="${src}/org/htmlparser/beans/images" includes="Chain16.gif Chain32.gif Knot16.gif Knot32.gif"/>
-    </copy>
+    <!-- Compile the java code in ${src} -->
+    <javac srcdir="${src}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**,org/htmlparser/util/Generate.java" debug="on" />
   </target>
 
   <!-- Create the distribution of htmlparser.jar -->
@@ -127,8 +134,12 @@
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
 
-    <!-- Put everything in ${build} into the htmlparser.jar file -->
-    <jar jarfile="${dist}/lib/htmlparser.jar" basedir="${build}" manifest="${resources}/Manifest.mf">
+    <!-- Put classes and images into the htmlparser.jar file -->
+    <jar jarfile="${dist}/lib/htmlparser.jar"
+      basedir="${src}"
+      includes="**/*.class **/*.gif"
+      excludes="org/htmlparser/tests/**/*.class,org/htmlparser/util/Generate.class"
+      manifest="${resources}/Manifest.mf">
       <manifest>
         <section name="org/htmlparser/Parser.class">
           <attribute name="Java-Bean" value="True"/>
@@ -186,8 +197,8 @@
            author="true"
            version="true"
            use="true"
-           windowtitle="HTML Parser ${version}">
-      <doctitle><![CDATA[<h1>HTML Parser ${version}</h1>]]></doctitle>
+           windowtitle="HTML Parser ${versionTag}">
+      <doctitle><![CDATA[<h1>HTML Parser ${versionTag}</h1>]]></doctitle>
       <header><![CDATA[<A HREF="http://htmlparser.sourceforge.net" target="_top">HTML Parser Home Page</A>]]></header>
       <bottom><![CDATA[HTML Parser is an open source library released under LGPL. <BR> If you want to be notified when a new release of HTML Parser is out, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-announce">HTML Parser Announcement List</A>.<BR>
 If you have questions about the usage of the parser, join the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-user">HTML Parser User List</A>. 
@@ -230,7 +241,7 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
      </copy>
   </target>
 
-  <!-- The release directory structuring finishes here -->  
+  <!-- The release directory structuring finishes here -->
   <target name="Release" depends="versionSource,jar,javadoc,CopyBatch" description="prepare the release files">
   </target>
 
@@ -241,7 +252,7 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
     <echo message="**********************************"/>
 
     <mkdir dir="${finalLoc}"/>
-    <zip zipfile="${finalLoc}/htmlparser${version}.zip"
+    <zip zipfile="${finalLoc}/htmlparser${versionTag}.zip"
        basedir="${releaseDir}"/>
     <tar tarfile="${finalLoc}/docs.tar" basedir="${dist}/docs"/>
     <gzip zipfile="${finalLoc}/docs.tar.gz" src="${finalLoc}/docs.tar"/>
@@ -271,15 +282,17 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
     <delete dir="${dist}/sources"/>
   </target>
 
-  <!-- Clean up -->
-  <target name="htmlparser" depends="Package" description="vacuous, same as Package">
+  <!-- Perform the htmlparser integration -->
+  <target name="htmlparser" depends="Package" description="same as Package plus cleanup">
     <echo message="**********************************"/>
     <echo message="*  Cleaning up and finishing.... *"/>
     <echo message="**********************************"/>
 
-    <!-- Delete the ${build} and ${dist} directory trees --> 
-    <delete dir="${build}"/>
-    <!-- Delete the release directory also -->
+    <!-- delete the release directory -->
     <delete dir="${releaseDir}"/> 
+    <!-- delete the classes -->
+    <delete>
+      <fileset dir="${src}" includes="**/*.class"/>
+    </delete>
   </target>
 </project>
