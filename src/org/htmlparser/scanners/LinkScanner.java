@@ -33,7 +33,6 @@ package org.htmlparser.scanners;
 // Java Imports //
 //////////////////
 import java.util.Hashtable;
-import java.util.Vector;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
@@ -45,6 +44,7 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.LinkData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.ParserUtils;
 /**
@@ -76,7 +76,7 @@ public class LinkScanner extends CompositeTagScanner
 		processor = new LinkProcessor();		
 	}
 	
-	protected Tag createLinkTag(String url, String currentLine, Node node, String linkText, int linkBegin, String tagContents, String linkContents, Vector nodeVector, Tag startTag, Tag endTag) throws ParserException {
+	protected Tag createLinkTag(String url, String currentLine, Node node, String linkText, int linkBegin, String tagContents, String linkContents, NodeList nodeVector, Tag startTag, Tag endTag) throws ParserException {
 		int linkEnd;
 		// The link has been completed
 		// Create the link object and return it
@@ -101,7 +101,7 @@ public class LinkScanner extends CompositeTagScanner
 			javascriptLink = true;
 		}  
 		String accessKey = getAccessKey(startTag);
-			
+		
 		LinkTag linkTag = new LinkTag(
 			new TagData(
 				linkBegin,
@@ -230,7 +230,7 @@ public class LinkScanner extends CompositeTagScanner
 			linkBegin = tag.elementBegin();
 			// Get the next element, which is string, till </a> is encountered
 			boolean endFlag=false;
-			Vector nodeVector = new Vector();
+			NodeList nodeVector = new NodeList();
 			Tag startTag = tag;
 			Tag endTag   = null;
 			
@@ -275,10 +275,10 @@ public class LinkScanner extends CompositeTagScanner
 								)
 							);
 							node = endTag;
-						} else nodeVector.addElement(node);
+						} else nodeVector.add(node);
 					}
 				} 
-				else if (node!=null) nodeVector.addElement(node);
+				else if (node!=null) nodeVector.add(node);
 			}
 			while (endFlag==false && node!=null);
 			if (node==null)  {

@@ -29,7 +29,6 @@
 package org.htmlparser.scanners;
 
 import java.util.Hashtable;
-import java.util.Vector;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
@@ -37,6 +36,7 @@ import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public abstract class CompositeTagScanner extends TagScanner {
@@ -73,7 +73,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 			boolean endTagFound = false;
 			Node node=tag;
 			
-			Vector childVector = new Vector();
+			NodeList childVector = new NodeList();
 			
 			Hashtable tempScanners=null;
 			if (removeScanners) {
@@ -98,7 +98,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 					}
 				} 
 				if (!endTagFound){
-					childVector.addElement(node);
+					childVector.add(node);
 					childNodeEncountered(node);
 				}
 			}

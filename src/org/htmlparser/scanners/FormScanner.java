@@ -46,6 +46,7 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.FormData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.LinkProcessor;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -134,8 +135,9 @@ public class FormScanner extends TagScanner
 			Node node;
 			Tag startFormTag = tag;
 			Tag endFormTag = null;
-	      	Vector inputVector = new Vector(), textAreaVector = new Vector(), 
-	      	nodeVector = new Vector();
+	      	Vector inputVector = new Vector(), 
+	      	textAreaVector = new Vector();
+	      	NodeList nodeVector = new NodeList();
 			
 			String link,name="",method="GET";
 			int linkBegin=-1, formEnd=-1;
@@ -185,7 +187,7 @@ public class FormScanner extends TagScanner
 				if (node instanceof TextareaTag) {
 					textAreaVector.addElement(node);
 				}
-				if (!dontPutTag) nodeVector.addElement(node);
+				if (!dontPutTag) nodeVector.add(node);
 			}
 			while (endFlag==false && node!=null);
 			restoreScanners(reader,oldScanners);

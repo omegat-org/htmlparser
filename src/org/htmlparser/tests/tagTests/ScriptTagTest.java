@@ -28,8 +28,6 @@
 
 package org.htmlparser.tests.tagTests;
 
-import java.util.Vector;
-
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.ScriptScanner;
@@ -37,6 +35,7 @@ import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class ScriptTagTest extends ParserTestCase{
@@ -56,7 +55,7 @@ public class ScriptTagTest extends ParserTestCase{
 	public void testCreation() {
 		StringNode stringNode = 
 			new StringNode(new StringBuffer("Script Code"),0,0);
-		Vector childVector = new Vector();
+		NodeList childVector = new NodeList();
 		childVector.add(stringNode);
 		ScriptTag scriptTag = 
 		new ScriptTag(

@@ -28,12 +28,9 @@
 
 package org.htmlparser.tags.data;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
-import org.htmlparser.Node;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.SimpleNodeIterator;
 
 public class CompositeTagData {
 	private Tag startTag;
@@ -41,14 +38,18 @@ public class CompositeTagData {
 	private NodeList children;
 	
 	public CompositeTagData(
-		Tag startTag, Tag endTag, Vector children) {
+		Tag startTag, Tag endTag, NodeList children) {
 		this.startTag = startTag;
 		this.endTag   = endTag;
 		this.children = new NodeList();
 		if (children!=null)
-		for (Enumeration e = children.elements();e.hasMoreElements();) {
-			this.children.add((Node)e.nextElement());
-		}
+		for (SimpleNodeIterator i = children.elements();i.hasMoreNodes();) {
+			this.children.add(i.nextNode());
+		}	
+//		for (Enumeration e = children.elements();e.hasMoreElements();) {
+//			this.children.add((Node)e.nextElement());
+//		
+//		}
 	}
 
 	public NodeList getChildren() {

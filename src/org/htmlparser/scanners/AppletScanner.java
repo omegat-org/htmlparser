@@ -30,7 +30,6 @@
 package org.htmlparser.scanners;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 
 import org.htmlparser.Node;
 import org.htmlparser.tags.AppletTag;
@@ -38,6 +37,7 @@ import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 /**
  * Used to scan for applet tags.
@@ -105,7 +105,7 @@ public class AppletScanner extends TagScanner {
 			Tag endTag=null;
 			Node node = null;
 			boolean endScriptFound=false;
-			Vector childrenVector=new Vector();
+			NodeList childrenVector=new NodeList();
 			Hashtable table = new Hashtable();
 			do {
 				node = reader.readElement();
@@ -125,7 +125,7 @@ public class AppletScanner extends TagScanner {
 						table.put(paramName,paramValue);
 					}
 				}
-				if (!endScriptFound) childrenVector.addElement(node);
+				if (!endScriptFound) childrenVector.add(node);
 			}
 			while (!endScriptFound && node!=null);
 			if (node==null && endScriptFound==false) {
