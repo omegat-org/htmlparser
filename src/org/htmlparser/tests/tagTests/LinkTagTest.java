@@ -353,6 +353,23 @@ public class LinkTagTest extends ParserTestCase {
 			new LinkData("https://www.someurl.com","","",false,false)
 		);
 		assertTrue("This is a https link",linkTag2.isHTTPLikeLink());
+    }
 
-	}	
+	/**
+	 * Bug #738504 MailLink != HTTPLink
+	 */
+	public void testMailToIsNotAHTTPLink () throws ParserException
+	{
+        LinkTag link;
+
+		createParser ("<A HREF='mailto:derrickoswald@users.sourceforge.net'>Derrick</A>","http://sourceforge.net");
+		// Register the link scanner
+		parser.addScanner (new LinkScanner ("-l"));
+			
+		parseAndAssertNodeCount (1);
+		assertTrue ("Node should be a HTMLLinkTag", node[0] instanceof LinkTag);
+		link = (LinkTag)node[0];
+        assertTrue ("bug #738504 MailLink != HTTPLink", !link.isHTTPLink ());
+        assertTrue ("bug #738504 MailLink != HTTPSLink", !link.isHTTPSLink ());
+	}
 }

@@ -159,9 +159,9 @@ public class LinkTag extends CompositeTag
 	 *
 	 * @return flag indicating if this link is an HTTP link
 	 */
-    public boolean isHTTPLink() {
-    	if (!isFTPLink() && !isHTTPSLink() && !isJavascriptLink()) return true;
-    	else return false;
+    public boolean isHTTPLink()
+    {
+    	return (!isFTPLink() && !isHTTPSLink() && !isJavascriptLink() && !isMailLink());
 	}
 
 	/**
