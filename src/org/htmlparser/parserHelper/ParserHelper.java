@@ -48,8 +48,9 @@ public class ParserHelper implements Serializable {
 	/**
 	 * Opens a connection based on a given string.
 	 * The string is either a file, in which case <code>file://localhost</code>
-	 * is prepended (with an intervening slash if required), or a url that
+	 * is prepended to a canonical path derived from the string, or a url that
 	 * begins with one of the known protocol strings, i.e. <code>http://</code>.
+     * Embedded spaces are silently converted to %20 sequences.
 	 * @param string The name of a file or a url.
 	 * @param feedback The object to use for messages or <code>null</code> for no feedback.
 	 * @exception ParserException if the string is not a valid url or file.
@@ -64,28 +65,21 @@ public class ParserHelper implements Serializable {
 	    StringBuffer buffer;
 	    URLConnection ret;
 	
-	    // for a while we warn people about spaces in their URL
-	    resource = LinkProcessor.fixSpaces (string);
-	    if (!resource.equals (string) && (null != feedback))
-	        feedback.warning ("URL containing spaces was adjusted to \""
-	            + resource
-	            + "\", use HTMLLinkProcessor.fixSpaces()");
-	
 	    try
 	    {
-	        url = new URL (resource);
+	        url = new URL (LinkProcessor.fixSpaces (string));
 	        ret =  ParserHelper.openConnection (url, feedback);
 	    }
 	    catch (MalformedURLException murle)
 	    {   // try it as a file
-	        buffer = new StringBuffer (prefix.length () + string.length () + 1);
-	        buffer.append (prefix);
-	        if (!string.startsWith (File.separator))
-	            buffer.append ("/");
-	        buffer.append (resource);
 	        try
 	        {
-	            url = new URL (buffer.toString ());
+                File file = new File (string);
+                resource = file.getCanonicalPath ();
+                buffer = new StringBuffer (prefix.length () + resource.length ());
+                buffer.append (prefix);
+                buffer.append (resource);
+	            url = new URL (LinkProcessor.fixSpaces (buffer.toString ()));
 	            ret = ParserHelper.openConnection (url, feedback);
 	            if (null != feedback)
 	                feedback.info (url.toExternalForm ());
@@ -98,6 +92,14 @@ public class ParserHelper implements Serializable {
 	                feedback.error (msg, ex);
 	            throw ex;
 	        }
+	        catch (IOException ioe)
+            {
+	            String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
+	            ParserException ex = new ParserException (msg, ioe);
+	            if (null != feedback)
+	                feedback.error (msg, ex);
+	            throw ex;
+            }
 	    }
 	    
 	    return (ret);
