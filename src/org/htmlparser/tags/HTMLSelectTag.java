@@ -28,22 +28,35 @@
 
 package org.htmlparser.tags;
 
-import java.util.*;
+import java.util.List;
 
-import org.htmlparser.tags.data.*;
-import org.htmlparser.util.*;
+import org.htmlparser.tags.data.HTMLCompositeTagData;
+import org.htmlparser.tags.data.HTMLTagData;
+import org.htmlparser.util.HTMLParserUtils;
 
 public class HTMLSelectTag extends HTMLCompositeTag
 {
+	private HTMLOptionTag[] optionTags=null;
+	private List optionTagList;
 	
-	public HTMLSelectTag(HTMLTagData tagData, HTMLCompositeTagData compositeTagData)
+	public HTMLSelectTag(
+		HTMLTagData tagData, 
+		HTMLCompositeTagData compositeTagData,
+		List optionTagList)
 	{
 		super(tagData,compositeTagData);
+		this.optionTagList = optionTagList;
 	}
 	
-	public Vector getOptionTags()
+	public HTMLOptionTag [] getOptionTags()
 	{
-		return childTags;
+		if (optionTags==null) {
+			optionTags = new HTMLOptionTag[optionTagList.size()];
+			for (int i=0;i<optionTagList.size();i++) {
+				optionTags[i] = (HTMLOptionTag)optionTagList.get(i);	
+			}
+		}
+		return optionTags;
 	}
 	
 	public String toString() 

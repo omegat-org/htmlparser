@@ -33,6 +33,7 @@ package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.scanners.HTMLOptionTagScanner;
 import org.htmlparser.scanners.HTMLSelectTagScanner;
+import org.htmlparser.tags.HTMLOptionTag;
 import org.htmlparser.tags.HTMLSelectTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.util.HTMLParserException;
@@ -50,6 +51,7 @@ public class HTMLSelectTagTest extends HTMLParserTestCase
 									"<option value=\"Niece\">Niece\n" +
 									"</select>"
 									);
+	private HTMLSelectTag selectTag;
 	
 	public HTMLSelectTagTest(String name) 
 	{
@@ -62,13 +64,12 @@ public class HTMLSelectTagTest extends HTMLParserTestCase
 		parser.addScanner(new HTMLSelectTagScanner("-s"));
 		parser.addScanner(new HTMLOptionTagScanner("-o"));
 		parseAndAssertNodeCount(1);
+		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);
+		selectTag = (HTMLSelectTag) node[0];
 	}
 	
 	public void testToHTML() throws HTMLParserException 
 	{
-		assertTrue("Node 1 should be Select Tag",node[0] instanceof HTMLSelectTag);
-		HTMLSelectTag selectTag;
-		selectTag = (HTMLSelectTag) node[0];
 		assertStringEquals("HTML String","<SELECT NAME=\"Nominees\">\r\n"+
 									"<OPTION VALUE=\"Spouse\">Spouse</OPTION>\r\n"+
 									"<OPTION VALUE=\"Father\"></OPTION>\r\n"+
@@ -98,6 +99,11 @@ public class HTMLSelectTagTest extends HTMLParserTestCase
 							selectTag.toString());
 	}
 
-
+	public void testGetOptionTags() {
+		HTMLOptionTag [] optionTags = selectTag.getOptionTags();
+		assertEquals("option tag array length",7,optionTags.length);
+		assertEquals("option tag 1","Spouse",optionTags[0].getValue());
+		assertEquals("option tag 7","Niece\r\n",optionTags[6].getValue());
+	}
 		
 }
