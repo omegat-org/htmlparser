@@ -42,14 +42,21 @@ public abstract class CompositeTagScanner extends TagScanner {
 	private boolean removeScanners;
 	private boolean stringNodeIgnoreMode;
 	private TagScanner previousOpenScanner = null;
+	private boolean allowSelfChildren;
 	
 	public CompositeTagScanner(String [] nameOfTagToMatch) {
 		this("",nameOfTagToMatch,false,false);
 	}
 
 	public CompositeTagScanner(String filter, String [] nameOfTagToMatch) {
-		this(filter,nameOfTagToMatch,false,false);
+		this(filter,nameOfTagToMatch,true);
 	}
+
+	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, boolean allowSelfChildren) {
+		this(filter,nameOfTagToMatch,false,false);
+		this.allowSelfChildren = allowSelfChildren;	
+	}
+
 	public CompositeTagScanner(String filter, String [] nameOfTagToMatch, boolean removeScanners, boolean stringNodeIgnoreMode) {
 		super(filter);
 		this.nameOfTagToMatch = nameOfTagToMatch;
@@ -236,5 +243,9 @@ public abstract class CompositeTagScanner extends TagScanner {
 		return tag.getText().length()==1;
 	}
 
+
+	public boolean isAllowSelfChildren() {
+		return allowSelfChildren;
+	}
 
 }

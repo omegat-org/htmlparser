@@ -4,6 +4,7 @@ import org.htmlparser.Node;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.tags.CompositeTag;
+import org.htmlparser.tags.EndTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
@@ -297,14 +298,59 @@ public class CompositeTagScannerTest extends ParserTestCase {
 			customTag.toHtml()
 		);
 	}
+	
+	public void testCompositeTagWithSelfChildren() throws ParserException {
+		createParser(
+			"<custom>" +
+			"<custom>something</custom>" +
+			"</custom>"
+		);
+		parser.addScanner(new CustomScanner(false));
+		parser.addScanner(new AnotherScanner());
+		parseAndAssertNodeCount(3);
 		
+		CustomTag customTag = (CustomTag)node[0];
+		int x = customTag.getChildCount();
+		assertEquals("child count",0,customTag.getChildCount());
+		assertFalse("custom tag should not be xml end tag",customTag.isEmptyXmlTag());
+		
+		assertStringEquals(
+			"first custom tag html",
+			"<CUSTOM></CUSTOM>",
+			customTag.toHtml()
+		);
+		customTag = (CustomTag)node[1];
+		assertStringEquals(
+			"first custom tag html",
+			"<CUSTOM>something</CUSTOM>",
+			customTag.toHtml()
+		);
+		EndTag endTag = (EndTag)node[2];
+		assertStringEquals(
+			"first custom tag html",
+			"</CUSTOM>",
+			endTag.toHtml()
+		);
+	}
+	
 	public static class CustomScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "CUSTOM" };
-		public CustomScanner() { super("", MATCH_NAME); }
-		public String[] getID() { return MATCH_NAME; }
+		public CustomScanner() { 
+			this(true); 
+		}
+		
+		public CustomScanner(boolean selfChildrenAllowed) { 
+			super("", MATCH_NAME, selfChildrenAllowed); 
+		}
+		
+		public String[] getID() { 
+			return MATCH_NAME; 
+		}
+		
 		public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
 			return new CustomTag(tagData, compositeTagData);
 		}
+		
 		protected boolean isBrokenTag() {
 			return false;
 		}
@@ -312,8 +358,13 @@ public class CompositeTagScannerTest extends ParserTestCase {
 	
 	public static class AnotherScanner extends CompositeTagScanner {
 		private static final String MATCH_NAME [] = { "ANOTHER" };
-		public AnotherScanner() { super("", MATCH_NAME); }
-		public String[] getID() { return MATCH_NAME; }
+		public AnotherScanner() { 
+			super("", MATCH_NAME,true); 
+		}
+		
+		public String[] getID() { 
+			return MATCH_NAME; 
+		}
 		
 		public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
 			return new AnotherTag(tagData, compositeTagData);

@@ -50,6 +50,9 @@ public class CompositeTagScannerHelper {
 			do {
 				currentNode = reader.readElement();
 				if (currentNode==null) continue;
+				if (currentNode instanceof Tag) 
+					doForceCorrectionCheckOn((Tag)currentNode);
+					
 				doEmptyXmlTagCheckOn(currentNode);
 				if (!endTagFound)
 					doChildAndEndTagCheckOn(currentNode);					
@@ -120,11 +123,28 @@ public class CompositeTagScannerHelper {
 			if (tag.isEmptyXmlTag()) {
 				endTag = possibleEndTag;
 				endTagFound = true;			
-			} else
-			if (scanner.isTagToBeEndedFor(possibleEndTag.getTagName())) {
-				createCorrectionEndTagBefore(possibleEndTag.elementBegin());
-				endTagFound = true;			
-			}
+			} 
 		}
+	}
+
+	private void doForceCorrectionCheckOn(Tag possibleEndTag) {
+		if (isEndTagMissing(possibleEndTag)) {
+			createCorrectionEndTagBefore(possibleEndTag.elementBegin());
+			endTagFound = true;			
+		}
+	}
+
+	private boolean isEndTagMissing(Tag possibleEndTag) {
+		return 
+			scanner.isTagToBeEndedFor(possibleEndTag.getTagName()) || 
+			isSelfChildTagRecievedIncorrectly(possibleEndTag);
+	}
+
+	private boolean isSelfChildTagRecievedIncorrectly(Tag possibleEndTag) {
+		return (
+			!(possibleEndTag instanceof EndTag) &&
+			!scanner.isAllowSelfChildren() && 
+			possibleEndTag.getTagName().equals(tag.getTagName())
+		);
 	}
 }
