@@ -26,10 +26,4 @@ public class BulletScanner extends CompositeTagScanner {
 	public String[] getID() {
 		return MATCH_STRING;
 	}
-
-	protected boolean isBrokenTag() {
-		return false;
-	}
-
-
 }
