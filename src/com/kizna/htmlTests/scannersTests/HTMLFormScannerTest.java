@@ -76,9 +76,9 @@ public class HTMLFormScannerTest extends TestCase {
 		assertNotNull("Input Submit Tag should not be null",submitTag);
 		assertNull("Input dummy tag should be null",dummyTag);
 		
-		assertEquals("Input Name Tag","<INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\">",nameTag.toRawString());
-		assertEquals("Input Password Tag","<INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\">",passwdTag.toRawString());
-		assertEquals("Input Submit Tag","<INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\">",submitTag.toRawString());
+		assertEquals("Input Name Tag","<INPUT TYPE=\"text\" NAME=\"name\" SIZE=\"20\">",nameTag.toHTML());
+		assertEquals("Input Password Tag","<INPUT TYPE=\"password\" NAME=\"passwd\" SIZE=\"20\">",passwdTag.toHTML());
+		assertEquals("Input Submit Tag","<INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\">",submitTag.toHTML());
 		
 		assertEquals("Raw String","<FORM METHOD=\"post\" ACTION=\"do_login.php\" NAME=\"login_form\" onSubmit=\"return CheckData()\">\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
@@ -90,7 +90,7 @@ public class HTMLFormScannerTest extends TestCase {
 		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
-		"</FORM>",formTag.toRawString());
+		"</FORM>",formTag.toHTML());
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLFormScannerTest.class);

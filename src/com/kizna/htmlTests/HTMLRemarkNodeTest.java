@@ -144,10 +144,10 @@ public void testToPlainTextString() {
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof HTMLRemarkNode);
 		HTMLRemarkNode remarkNode = (HTMLRemarkNode)node[0];
-		assertEquals("Raw String of the remarkNode #1","<!--\n saved from url=(0022)http://internet.e-mail \n-->",remarkNode.toRawString());	
+		assertEquals("Raw String of the remarkNode #1","<!--\n saved from url=(0022)http://internet.e-mail \n-->",remarkNode.toHTML());	
 		// The sixth node should be a HTMLRemarkNode 
 		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof HTMLRemarkNode);
 		remarkNode = (HTMLRemarkNode)node[5];
-		assertEquals("Raw String of the remarkNode #6","<!--\n\n   Whats gonna happen now ?\n\n-->",remarkNode.toRawString());			
+		assertEquals("Raw String of the remarkNode #6","<!--\n\n   Whats gonna happen now ?\n\n-->",remarkNode.toHTML());			
 	}
 }

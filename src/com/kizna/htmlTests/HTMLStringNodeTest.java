@@ -199,9 +199,9 @@ public void testToRawString() {
 	assertEquals("There should be 10 nodes identified",new Integer(10),new Integer(i));
 	assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
 	HTMLStringNode stringNode = (HTMLStringNode)node[3];
-	assertEquals("First String Node","This is the Title",stringNode.toRawString());
+	assertEquals("First String Node","This is the Title",stringNode.toHTML());
 	assertTrue("Eighth Node identified must be a string node",node[7] instanceof HTMLStringNode);
 	stringNode = (HTMLStringNode)node[7];
-	assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toRawString());
+	assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHTML());
 }
 }

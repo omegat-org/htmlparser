@@ -56,7 +56,7 @@ public class HTMLAppletTagTest extends TestCase {
 		"<PARAM NAME=\"Param1\" VALUE=\"Value1\">\n"+
 		"<PARAM NAME=\"Age\" VALUE=\"23\">\n"+
 		"</APPLET>";
-		assertEquals("Raw String",expectedRawString,appletTag.toRawString());				
+		assertEquals("Raw String",expectedRawString,appletTag.toHTML());				
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLAppletTagTest.class);

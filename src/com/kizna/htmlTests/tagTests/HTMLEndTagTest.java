@@ -38,7 +38,7 @@ public class HTMLEndTagTest extends TestCase {
 		// The node should be an HTMLLinkTag
 		assertTrue("Node should be a HTMLEndTag",node[1] instanceof HTMLEndTag);
 		HTMLEndTag endTag = (HTMLEndTag)node[1];
-		assertEquals("Raw String","</HTML>",endTag.toRawString());
+		assertEquals("Raw String","</HTML>",endTag.toHTML());
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLEndTagTest.class);

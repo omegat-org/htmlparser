@@ -177,7 +177,7 @@ public class HTMLRemarkNode extends HTMLNode
 	public String toPlainTextString() {
 		return tagContents;
 	}
-	public String toRawString() {
+	public String toHTML() {
 		return "<!--\n"+tagContents+"\n-->";
 	}
 	/**

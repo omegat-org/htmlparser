@@ -189,7 +189,7 @@ public void testNullImageBug()
 		// The node should be an HTMLImageTag
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 		HTMLImageTag imageTag = (HTMLImageTag)node[0];
-		assertEquals("The image locn","<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>",imageTag.toRawString());
+		assertEquals("The image locn","<IMG alt=Google height=115 src=\"../../goo/title_homepage4.gif\" width=305>",imageTag.toHTML());
 		assertEquals("Alt","Google",imageTag.getParameter("alt"));
 		assertEquals("Height","115",imageTag.getParameter("height"));
 		assertEquals("Width","305",imageTag.getParameter("width"));

@@ -94,7 +94,7 @@ public void setLanguage(java.lang.String newLanguage) {
 public void setType(java.lang.String newType) {
 	type = newType;
 }
-public String toRawString() {
+public String toHTML() {
 	StringBuffer sb = new StringBuffer();
 	sb.append("<"+tagContents+">");
 	if (isEndOfLineCharState()) sb.append("\r\n");	

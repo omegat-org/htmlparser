@@ -376,11 +376,11 @@ public void testToPlainTextString() {
 		assertEquals("There should be 1 node identified",new Integer(9),new Integer(i));
 		assertTrue("First Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
 		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
-		assertEquals("Link Raw Text","<A HREF='mailto:somik@yahoo.com'>hello</A>",linkTag.toRawString());
+		assertEquals("Link Raw Text","<A HREF='mailto:somik@yahoo.com'>hello</A>",linkTag.toHTML());
 		assertTrue("Eighth Node should be a HTMLLinkTag",node[7] instanceof HTMLLinkTag);
 		linkTag = (HTMLLinkTag)node[7];
 		assertEquals("Link Raw Text","<a \n"+
 			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
-			"nical.html\"> Journalism 3.0</A>",linkTag.toRawString());
+			"nical.html\"> Journalism 3.0</A>",linkTag.toHTML());
 	}
 }

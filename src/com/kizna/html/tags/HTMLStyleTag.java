@@ -71,7 +71,7 @@ public String toString()
 	/**
 	 * @see HTMLNode#toRawString()
 	 */
-	public String toRawString() {
+	public String toHTML() {
 		return "<STYLE>"+getStyleCode()+"</STYLE>";
 	}
 

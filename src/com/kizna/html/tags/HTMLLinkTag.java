@@ -151,7 +151,7 @@ public void setNodeVector(java.util.Vector newNodeVector) {
 		}
 		return sb.toString();
 	}
-	public String toRawString() {
+	public String toHTML() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<");
 		sb.append(tagContents.toString());
@@ -159,7 +159,7 @@ public void setNodeVector(java.util.Vector newNodeVector) {
 		HTMLNode node;
 		for (Enumeration e = linkData();e.hasMoreElements();) {
 			node = (HTMLNode)e.nextElement();
-			sb.append(node.toRawString());
+			sb.append(node.toHTML());
 		}
 		sb.append("</A>");
 		return sb.toString();

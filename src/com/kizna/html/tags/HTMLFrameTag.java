@@ -41,41 +41,28 @@ public class HTMLFrameTag extends HTMLTag
 	 * The URL where the image is stored.
 	 */
 	protected String frameURL;
-   protected String frameName;
-	/**
-	 * Constructor creates an HTMLImageNode object, which stores the location
-	 * where the image is to be found.
-	 * @imageURL location of the image
-	 * @imageBegin Beginning position of the image tag
-	 * @imageEnd Ending position of the image tag
-	 */
-	public HTMLFrameTag(String frameURL,int frameBegin, int frameEnd,String tagLine)
-	{
-		super(frameBegin,frameEnd,"",tagLine);
-		this.frameURL = frameURL;
-	}
-	public HTMLFrameTag(String frameURL, String frameName, int frameBegin, int frameEnd,String tagLine)
-	{
-		super(frameBegin,frameEnd,"",tagLine);
+    protected String frameName;
+	public HTMLFrameTag(String frameURL, String frameName, String frameContents,int frameBegin, int frameEnd,String tagLine) {
+		super(frameBegin,frameEnd,frameContents,tagLine);
 		this.frameURL = frameURL;
       this.frameName = frameName;
 	}
 	/**
 	 * Returns the location of the image
 	 */
-	public String getFrameLocation()
-	{
+	public String getFrameLocation() {
 		return frameURL;
 	}
-	public String getFrameName()
-	{
+	public String getFrameName() {
 		return frameName;
 	}
 	/**
-	 * Print the contents of the HTMLImageNode
+	 * Print the contents of the HTMLFrameTag
 	 */
-	public String toString()
-	{
+	public String toString() {
 		return "FRAME TAG : Image at "+frameURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}
+	public String toHTML() {
+		return super.toHTML();
+	}	
 }

@@ -102,7 +102,7 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 			if (endTag.getContents().toUpperCase().equals("STYLE")) {
 				endStyleFound = true;
 			}
-		} else buff.append(node.toRawString());
+		} else buff.append(node.toHTML());
 	}
 	while (!endStyleFound);
 	HTMLStyleTag styleTag = new HTMLStyleTag(tag.elementBegin(),endTag.elementEnd(),buff.toString(),currentLine);

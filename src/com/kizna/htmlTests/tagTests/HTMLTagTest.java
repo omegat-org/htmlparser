@@ -376,13 +376,13 @@ public void testToRawString() {
 	// The node should be an HTMLTag
 	assertTrue("1st Node should be a HTMLTag",node[0] instanceof HTMLTag);
 	HTMLTag tag = (HTMLTag)node[0];
-	assertEquals("Raw String of the tag","<MYTAG abcd\nefgh\nijkl\nmnop>",tag.toRawString());
+	assertEquals("Raw String of the tag","<MYTAG abcd\nefgh\nijkl\nmnop>",tag.toHTML());
 	assertTrue("2nd Node should be a HTMLTag",node[1] instanceof HTMLTag);
 	assertTrue("5th Node should be a HTMLTag",node[4] instanceof HTMLTag);
 	tag = (HTMLTag)node[1];
-	assertEquals("Raw String of the tag","<TITLE>",tag.toRawString());
+	assertEquals("Raw String of the tag","<TITLE>",tag.toHTML());
 	tag = (HTMLTag)node[4];
-	assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toRawString());
+	assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toHTML());
 	
 }
     public void testWithLink(){

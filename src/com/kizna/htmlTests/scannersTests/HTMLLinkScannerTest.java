@@ -107,7 +107,7 @@ public void testErroneousLinkBugFromYahoo2() {
 	// Verify the link data
 	assertEquals("Link Text","",linkTag.getLinkText());
 	// Verify the reconstruction html
-	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></A>",linkTag.toRawString());
+	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0></A>",linkTag.toHTML());
 	// Verify the tags in between
 	assertTrue("Second node should be an end tag",node[1] instanceof HTMLEndTag);
 	assertTrue("Third node should be an HTMLTag",node[2] instanceof HTMLTag);		
@@ -153,7 +153,7 @@ public void testErroneousLinkBugFromYahoo() {
 	// Verify the link data
 	assertEquals("Link Text","This is a test\r\n",linkTag.getLinkText());
 	// Verify the reconstruction html
-	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>This is a test\r\n</A>",linkTag.toRawString());
+	assertEquals("Raw String","<a href=s/8741><img src=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" height=16 width=16 border=0>This is a test\r\n</A>",linkTag.toHTML());
 }
 
 /**

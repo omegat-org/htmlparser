@@ -109,7 +109,7 @@ public void testExtractType()
 		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
 		// Check the data in the applet tag
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0];
-		assertEquals("Expected Raw String","<SCRIPT>document.write(d+\".com\")</SCRIPT>",scriptTag.toRawString());
+		assertEquals("Expected Raw String","<SCRIPT>document.write(d+\".com\")</SCRIPT>",scriptTag.toHTML());
 	}
 	/** 
 	* Bug check by Wolfgang Germund 2002-06-02 
@@ -164,7 +164,7 @@ public void testExtractType()
 		// Check the data in the applet tag 
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node 
 		[1]; 
-		assertEquals("Expected Script Code",testHTML2,scriptTag.toRawString()); 
+		assertEquals("Expected Script Code",testHTML2,scriptTag.toHTML()); 
 	} 
 	public void testParamExtraction() {
 		StringBuffer sb1 = new StringBuffer(); 

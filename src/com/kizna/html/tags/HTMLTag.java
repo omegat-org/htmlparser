@@ -515,7 +515,7 @@ public void setEndOfLineCharState(boolean newEndOfLineCharState) {
 	public String toPlainTextString() {
 		return "";
 	}
-	public String toRawString() {
+	public String toHTML() {
 		if (endOfLineCharState) return "<"+tagContents+">\r\n"; else
 		return "<"+tagContents+">";
 	}

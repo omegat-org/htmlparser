@@ -181,7 +181,7 @@ public void testToRawString()
 	// The first node should be an HTMLJspTag
 	assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof HTMLJspTag);
 	HTMLJspTag tag = (HTMLJspTag)node[0];
-	assertEquals("Raw String of the first JSP tag","<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>",tag.toRawString());
+	assertEquals("Raw String of the first JSP tag","<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>",tag.toHTML());
 
 
 	// The third node should be an HTMLJspTag
@@ -196,12 +196,12 @@ public void testToRawString()
 		"    else \n"+
 		"        if(transfer.validate(request))\n"+
 		"            %>";
-	assertEquals("Raw String of the second JSP tag",expected,tag2.toRawString());
+	assertEquals("Raw String of the second JSP tag",expected,tag2.toHTML());
 	assertTrue("Node 4 should be an HTMLJspTag",node[4] instanceof HTMLJspTag);
 	HTMLJspTag tag4 = (HTMLJspTag)node[4];
 	expected = "<%\n"+ 
 		"%>";
-	assertEquals("Raw String of the fourth JSP tag",expected,tag4.toRawString());
+	assertEquals("Raw String of the fourth JSP tag",expected,tag4.toHTML());
 	
 }
 }

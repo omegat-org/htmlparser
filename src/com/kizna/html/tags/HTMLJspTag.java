@@ -64,7 +64,7 @@ public class HTMLJspTag extends HTMLTag
 	{
 		return tagEnd;
 	}
-	public String toRawString() {
+	public String toHTML() {
 		return "<%"+tagContents+"%>";
 	}
 		/**

@@ -146,7 +146,7 @@ public HTMLNode scan(HTMLTag tag, String url, HTMLReader reader,String currentLi
 			if (prevNode!=null) {
 				if (prevNode.elementEnd() > node.elementBegin()) buff.append("\r\n");
 			}
-			buff.append(node.toRawString());
+			buff.append(node.toHTML());
 
 			prevNode = node;
 		}

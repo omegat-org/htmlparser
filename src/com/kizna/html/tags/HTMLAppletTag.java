@@ -197,9 +197,9 @@ public void setMisc(java.util.Vector newMisc) {
 	/**
 	 * @see HTMLNode#toRawString()
 	 */
-	public String toRawString() {
+	public String toHTML() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(super.toRawString()+"\n");
+		sb.append(super.toHTML()+"\n");
 		for (Enumeration e = getParameterNames();e.hasMoreElements();) {
 			String paramName = (String)e.nextElement();
 			String paramValue = getParameter(paramName);

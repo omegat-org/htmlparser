@@ -146,7 +146,7 @@ public class HTMLStringNode extends HTMLNode
 	public String toPlainTextString() {
 		return text;
 	}
-	public String toRawString() {
+	public String toHTML() {
 		return text;
 	}
 public String toString() {

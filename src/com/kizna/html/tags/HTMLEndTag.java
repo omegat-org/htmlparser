@@ -139,7 +139,7 @@ public class HTMLEndTag extends HTMLNode
 	public String toPlainTextString() {
 		return "";
 	}
-	public String toRawString() {
+	public String toHTML() {
 		return "</"+tagContents+">";
 	}
 public String toString() {

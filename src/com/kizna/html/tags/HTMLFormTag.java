@@ -131,7 +131,7 @@ public class HTMLFormTag extends HTMLTag
 	public void setAllNodesVector(Vector allNodesVector) {
 		this.allNodesVector = allNodesVector;
 	}
-	public String toRawString() {
+	public String toHTML() {
 		StringBuffer rawBuffer = new StringBuffer();
 		HTMLNode node,prevNode=null;
 		for (Enumeration e = allNodesVector.elements();e.hasMoreElements();) {
@@ -142,7 +142,7 @@ public class HTMLFormTag extends HTMLTag
 					rawBuffer.append("\n");					
 				}
 			}
-			rawBuffer.append(node.toRawString());
+			rawBuffer.append(node.toHTML());
 			prevNode=node;
 		}
 		return rawBuffer.toString();		

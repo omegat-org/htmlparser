@@ -65,7 +65,7 @@ public class HTMLTitleTag extends HTMLTag {
 	public String toPlainTextString() {
 		return title;
 	}
-	public String toRawString() {
+	public String toHTML() {
 		return "<TITLE>"+title+"</TITLE>";
 	}
 	public String toString() {

@@ -97,7 +97,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 	    frameName = extractFrameName(tag,url);
 		frameBegin = tag.elementBegin();
 		frameEnd = tag.elementEnd();
-		HTMLFrameTag frameTag = new HTMLFrameTag(frame, frameName, frameBegin,frameEnd,currentLine);
+		HTMLFrameTag frameTag = new HTMLFrameTag(frame, frameName, tag.getText(), frameBegin,frameEnd,currentLine);
 		frameTag.setThisScanner(this);
 		frameTag.setParsed(tag.getParsed());
 		return frameTag;

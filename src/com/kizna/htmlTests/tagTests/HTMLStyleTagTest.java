@@ -35,7 +35,7 @@ public class HTMLStyleTagTest extends TestCase {
 	 	assertEquals("Number of nodes expected",1,i);
 		assertTrue(node[0] instanceof HTMLStyleTag);
 		HTMLStyleTag styleTag = (HTMLStyleTag)node[0];
-		assertEquals("Raw String","<STYLE>a.h{background-color:#ffee99}</STYLE>",styleTag.toRawString());
+		assertEquals("Raw String","<STYLE>a.h{background-color:#ffee99}</STYLE>",styleTag.toHTML());
 	}
 	public static TestSuite suite() {
 		return new TestSuite(HTMLStyleTagTest.class);
