@@ -558,7 +558,7 @@ public void testToHTML() {
 
     }
     public void testIncorrectInvertedCommas() {
-    	String testHTML = new String("<META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"\">"); 
+    	String testHTML = new String("<META NAME=\"Author\" CONTENT = \"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"\">"); 
 		
 		StringReader sr = new StringReader(testHTML); 
 		HTMLReader reader = new HTMLReader(new 
@@ -577,8 +577,6 @@ public void testToHTML() {
 		HTMLTag tag = (HTMLTag)node[0];
 		assertStringEquals("Node contents","META NAME=\"Author\" CONTENT=\"DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.\"",tag.getText()); 
 		Hashtable table = tag.getParsed();
-		for (Enumeration e = table.keys();e.hasMoreElements();)
-		System.out.println((String)e.nextElement());
 		assertEquals("Meta Content","DORIER-APPRILL E., GERVAIS-LAMBONY P., MORICONI-EBRARD F., NAVEZ-BOUCHANINE F.",tag.getParameter("CONTENT"));
     	
     }    
