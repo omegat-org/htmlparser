@@ -1,3 +1,7 @@
+Integration build 1.3 - 20030104
+--------------------------------
+[1] Assume charset is correct for JVM's without Charset class to check it
+
 Integration build 1.3 - 20021228
 --------------------------------
 [1] Add URLConnection constructors to HTMLParser
