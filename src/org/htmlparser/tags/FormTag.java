@@ -139,7 +139,7 @@ public class FormTag extends CompositeTag
 	}
 
 	/**
-	 * @return String The contents of the HTMLFormTag
+	 * @return String The contents of the FormTag
 	 */
 	public String toString() {
 		return "FORM TAG : Form at "+formURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
