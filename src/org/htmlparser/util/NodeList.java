@@ -100,4 +100,18 @@ public class NodeList {
 		System.arraycopy(nodeData, 0, nodeArray, 0, size);		
 		return nodeArray;
 	}
+	
+	public String asString() {
+		StringBuffer buff = new StringBuffer();
+		for (int i=0;i<size;i++) 
+			buff.append(nodeData[i].toPlainTextString());	
+		return buff.toString();
+	}
+	
+	public String asHtml() {
+		StringBuffer buff = new StringBuffer();
+		for (int i=0;i<size;i++) 
+			buff.append(nodeData[i].toHTML());	
+		return buff.toString();
+	}
 }

@@ -115,5 +115,11 @@ public class HTMLParserUtils
 		inputString = HTMLParserUtils.removeChars(inputString,'\n');
 		inputString = HTMLParserUtils.removeChars(inputString,'\t');
 		return inputString;
+	}
+
+	public static String removeLeadingBlanks(String plainText) {
+		while (plainText.indexOf(' ')==0) 
+			plainText=plainText.substring(1);
+		return plainText;
 	}	
 }

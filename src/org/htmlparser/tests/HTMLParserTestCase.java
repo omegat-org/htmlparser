@@ -257,5 +257,21 @@ public class HTMLParserTestCase extends TestCase {
 		inputString = HTMLParserUtils.removeChars(inputString,'\n');
 		inputString = HTMLParserUtils.removeChars(inputString,'\t');
 		return inputString;
+	}
+
+	public void assertType(
+		String message, 
+		Class expectedType, 
+		Object object) {
+		String expectedTypeName = expectedType.getName();
+		String actualTypeName   = object.getClass().getName();
+		if (!actualTypeName.equals(expectedTypeName)) {
+			fail(
+				message+" should have been of type\n"+
+				expectedTypeName+
+				" but was of type \n"+
+				actualTypeName
+			);
+		} 
 	}	
 }

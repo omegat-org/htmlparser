@@ -34,13 +34,13 @@ import org.htmlparser.HTMLNode;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.util.NodeList;
 
-public class TagFindingVisitor extends HTMLVisitor {
-	private String tagNameToFind;
+public class ObjectFindingVisitor extends HTMLVisitor {
+	private Class classTypeToFind;
 	private int count = 0;
 	private NodeList tags;
 	
-	public TagFindingVisitor(String tagNameToFind) {
-		this.tagNameToFind = tagNameToFind;
+	public ObjectFindingVisitor(Class classTypeToFind) {
+		this.classTypeToFind = classTypeToFind;
 		this.tags = new NodeList();
 	}
 	
@@ -49,7 +49,7 @@ public class TagFindingVisitor extends HTMLVisitor {
 	}
 
 	public void visitTag(HTMLTag tag) {
-		if (tag.getTagName().equalsIgnoreCase(tagNameToFind)) {
+		if (tag.getClass().getName().equals(classTypeToFind.getName())) {
 			count++;
 			tags.add(tag);
 		}

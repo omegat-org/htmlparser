@@ -137,7 +137,7 @@ public abstract class CompositeTag extends HTMLTag {
 		HTMLNode node;
 		if (!caseSensitive) searchString = searchString.toUpperCase();
 		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
-			node = (HTMLNode)e.nextNode();
+			node = e.nextNode();
 			String nodeTextString = node.toPlainTextString(); 
 			if (!caseSensitive) nodeTextString=nodeTextString.toUpperCase();
 			if (nodeTextString.indexOf(searchString)!=-1) {
@@ -147,6 +147,22 @@ public abstract class CompositeTag extends HTMLTag {
 		return foundVector;
 	}
 
+	/**
+	 * Collect all objects that are of a certain type
+	 * Note that this will not check for parent types
+	 * @param classType
+	 * @return NodeList
+	 */
+	public NodeList searchFor(Class classType) {
+		NodeList foundVector = new NodeList();
+		HTMLNode node;
+		for (SimpleEnumeration e = children();e.hasMoreNodes();) {
+			node = e.nextNode();
+			if (node.getClass().getName().equals(classType.getName())) 
+				foundVector.add(node);
+		}
+		return foundVector;
+	}
 	/** 
 	 * Searches for any node whose text representation contains the search
 	 * string. Collects all such nodes in a NodeList.
@@ -192,4 +208,9 @@ public abstract class CompositeTag extends HTMLTag {
 		endTag.accept(visitor);
 	}
 	
+
+	public void acceptWithoutRecursing(HTMLVisitor visitor) {
+		visitor.visitTag(this);
+	}
+
 }

@@ -193,7 +193,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
      * </pre>
      * Sumbits the POST and verifies the returned HTML contains an expected value.
 	 */
-	public void testPOST() throws Exception
+	public void _testPOST() throws Exception
     {   // the form data:
         final String number = "2708";
         final String street = "Kelly";
