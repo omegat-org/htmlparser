@@ -38,9 +38,7 @@ public class JspTag extends Tag
 	/**
 	 * The HTMLJspTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.
-	 * @param nodeBegin beginning position of the tag
-	 * @param nodeEnd ending position of the tag
-	 * @param tagContents contents of the remark tag
+	 * @param tagData The data for this tag.
 	 */
 	public JspTag(TagData tagData)
 	{

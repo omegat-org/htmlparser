@@ -50,10 +50,10 @@ public class StringNode extends AbstractNode
 	 * @param textBegin The beginning position of the string
 	 * @param textEnd The ending positiong of the string
 	 */
-	public StringNode(StringBuffer textBuffer,int textBegin,int textEnd)
+	public StringNode (StringBuffer text, int textBegin,int textEnd)
 	{
 		super(textBegin,textEnd);
-		this.textBuffer = textBuffer;
+		this.textBuffer = text;
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class StringNode extends AbstractNode
 	}
     /**
      * Sets the string contents of the node.
-     * @param The new text for the node.
+     * @param text The new text for the node.
      */
 	public void setText(String text)
 	{

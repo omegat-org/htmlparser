@@ -169,7 +169,7 @@ public abstract class CompositeTag extends Tag {
 	 *  NodeList nodeList = formTag.searchFor("Hello World");
 	 * </code>
 	 * @param searchString search criterion
-	 * @param caseSensitivie specify whether this search should be case
+	 * @param caseSensitive specify whether this search should be case
 	 * sensitive
 	 * @return NodeList Collection of nodes whose string contents or
 	 * representation have the searchString in them
@@ -245,8 +245,8 @@ public abstract class CompositeTag extends Tag {
 	 * string node's position. Faster than calling findPositionOf(text) 
 	 * again. Note that the position is at a linear level alone - there 
 	 * is no recursion in this method.
-	 * @param text
-	 * @return int
+	 * @param searchNode The child node to find.
+	 * @return The offset of the child tag or -1 if it was not found.
 	 */
 	public int findPositionOf(Node searchNode) {
 		Node node;

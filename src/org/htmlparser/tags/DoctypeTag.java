@@ -36,12 +36,10 @@ import org.htmlparser.tags.data.TagData;
  */
 public class DoctypeTag extends Tag
 {
-			/**
+    /**
 	 * The HTMLDoctypeTag is constructed by providing the beginning posn, ending posn
 	 * and the tag contents.
-	 * @param nodeBegin beginning position of the tag
-	 * @param nodeEnd ending position of the tag
-	 * @param tagContents contents of the remark tag
+	 * @param tagData The data for this tag.
 	 */
 	public DoctypeTag(TagData tagData)
 	{

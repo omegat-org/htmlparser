@@ -48,10 +48,8 @@ public class AppletTag extends CompositeTag
 
 	/**
 	 * HTMLAppletTag constructor comment.
-	 * @param nodeBegin int
-	 * @param nodeEnd int
-	 * @param tagContents java.lang.String
-	 * @param tagLine java.lang.String
+	 * @param tagData The data for this tag.
+	 * @param compositeTagData The data for this composite tag.
 	 */
 	public AppletTag(TagData tagData,CompositeTagData compositeTagData) 
 	{

@@ -388,32 +388,32 @@ public class Tag extends AbstractNode
     }
 
     /**
-	 * Sets the nodeBegin.
-	 * @param nodeBegin The nodeBegin to set
+	 * Sets the tagBegin.
+	 * @param tagBegin The starting position of the tag.
 	 */
 	public void setTagBegin(int tagBegin) {
 		this.nodeBegin = tagBegin;
 	}
 
 	/**
-	 * Gets the nodeBegin.
-	 * @return The nodeBegin value.
+	 * Gets the tagBegin.
+	 * @return The nstarting position of the tag.
 	 */
 	public int getTagBegin() {
 		return (nodeBegin);
 	}
 	
 	/**
-	 * Sets the nodeEnd.
-	 * @param nodeEnd The nodeEnd to set
+	 * Sets the tagEnd.
+	 * @param tagEnd The ending position of the tag.
 	 */
 	public void setTagEnd(int tagEnd) {
 		this.nodeEnd = tagEnd;
 	}
 	
 	/**
-	 * Gets the nodeEnd.
-	 * @return The nodeEnd value.
+	 * Gets the tagEnd.
+	 * @return The ending position of the tag.
 	 */
 	public int getTagEnd() {
 		return (nodeEnd);

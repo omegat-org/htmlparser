@@ -44,9 +44,7 @@ public class EndTag extends Tag
 	
 	/**
 	 * Constructor takes 3 arguments to construct an EndTag object.
-	 * @param nodeBegin Beginning position of the end tag
-	 * @param nodeEnd Ending position of the end tag
-	 * @param tagContents Text contents of the tag
+	 * @param tagData The data for this tag.
 	 */
 	public EndTag(TagData tagData)
 	{
