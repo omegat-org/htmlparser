@@ -229,7 +229,6 @@ public class HTMLTag extends HTMLNode
 	 */
 	public Hashtable getParsed() {
 		if (parsed == null) {
-			System.out.println("parsed was null, parsing params");
 	    	parsed = parseParameters();
 	    } 		
 		return parsed;

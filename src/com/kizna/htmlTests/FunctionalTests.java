@@ -32,9 +32,7 @@ public class FunctionalTests extends TestCase {
 		// First count the image tags as is
 		int imgTagCount;
 		imgTagCount = findImageTagCount();
-		//System.out.println("Counted  "+imgTagCount+" image tags regularly");
 		int parserImgTagCount = countImageTagsWithHTMLParser();
-		//System.out.println("Counted "+parserImgTagCount+" image tags thru HTML Parser");
 		assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);	
 	}
 	public int findImageTagCount() {
@@ -42,7 +40,6 @@ public class FunctionalTests extends TestCase {
 		try {
 			URL url = new URL("http://www.yahoo.com");
 			InputStream is = url.openStream();
-			//System.out.println("Opened Input Stream");
 			BufferedReader reader;
 			reader = new BufferedReader(new InputStreamReader(is));	
 			imgTagCount = countImageTagsWithoutHTMLParser(reader);
@@ -65,7 +62,6 @@ public class FunctionalTests extends TestCase {
 			node = (HTMLNode)e.nextElement();
 			if (node instanceof HTMLImageTag) {
 				parserImgTagCount++;				
-				//System.out.println(((HTMLImageTag)node).getTagLine());
 			}		
 		}
 		return parserImgTagCount;
@@ -76,7 +72,6 @@ public class FunctionalTests extends TestCase {
 		int imgTagCount = 0;
 		do {
 			line = reader.readLine();
-			//System.out.println(line);
 			if (line!=null) {
 				// Check the line for image tags
 				String newline = line.toUpperCase();
@@ -85,7 +80,6 @@ public class FunctionalTests extends TestCase {
 					fromIndex = newline.indexOf("<IMG",fromIndex+1);
 					if (fromIndex!=-1) {
 						imgTagCount++;
-						//System.out.println(line);
 					}
 				}
 				while (fromIndex!=-1);

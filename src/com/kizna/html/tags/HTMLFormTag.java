@@ -72,11 +72,10 @@ public class HTMLFormTag extends HTMLTag
 		return formURL;
 	}
 	public String getFormMethod() {
-      if(formMethod==null)
-      {
-         formMethod = "GET";
-      }
-      //System.out.println("formMethod   "+formMethod);
+      	if(formMethod==null)
+      	{	
+         	formMethod = "GET";
+      	}
 		return formMethod;
 	}
 	public HTMLTag getInputTag(String name) {

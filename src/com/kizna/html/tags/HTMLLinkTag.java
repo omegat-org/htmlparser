@@ -172,7 +172,7 @@ public void setNodeVector(java.util.Vector newNodeVector) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Link to : "+link + "; titled : "+linkText+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+ ", AccessKey=");
 		if (accessKey==null) sb.append("null\n");
-		else System.out.println(accessKey+"\n");
+		else sb.append(accessKey+"\n");
 		if (linkData()!=null) 
 		{
 			sb.append("  "+"LinkData\n");

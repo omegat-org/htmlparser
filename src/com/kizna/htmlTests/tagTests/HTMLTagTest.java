@@ -209,14 +209,12 @@ public void testNestedTags() {
                 // linkscanner has eaten up this piece
                 if ( en.hasMoreElements()) {
                     o = en.nextElement();        
-                   // System.out.println("snode = " + o );
                     snode = (HTMLStringNode)o;   
                     assertEquals("Value of element",snode.getText(),"Kaarle's homepage");
                 }
 
                 if (en.hasMoreElements()) {
                     o = en.nextElement();        
-                  //  System.out.println("etag = " + o );
                     etag = (HTMLEndTag)o;        
                     assertEquals("endtag of link",etag.getContents(),"A");
                 }
@@ -226,7 +224,6 @@ public void testNestedTags() {
                 o = en.nextElement();        
                 
                 tag = (HTMLTag)o;        
-            //    tag.print();
                 assertEquals("following paragraph begins",tag.getText(),"p");
             }
             if (en.hasMoreElements()) {
@@ -274,7 +271,6 @@ public void testNestedTags() {
                 href = (String)h.get("HREF");
                 myValue = (String)h.get("MYPARAMETER");
                 nice = (String)h.get("YOURPARAMETER");
-//                    System.out.println("KKK" + a + "|" + tag.getText());
                 assertEquals ("The tagname should be G",a,"G");
                 assertEquals ("Check the http address",href,"http://www.iki.fi/kaila");
                 assertEquals ("myValue is empty",myValue,"");
@@ -283,14 +279,12 @@ public void testNestedTags() {
             }
             if (en.hasMoreElements()) {
                 o = en.nextElement();        
-//                System.out.println("snode = " + o );
                 snode = (HTMLStringNode)o;   
                 assertEquals("The text of the element",snode.getText(),"Kaarle's homepage");
             }
 
             if (en.hasMoreElements()) {
                 o = en.nextElement();        
-//                System.out.println("etag = " + o );
                 etag = (HTMLEndTag)o;        
                 assertEquals("Endtag is G",etag.getContents(),"G");
             }
@@ -298,19 +292,16 @@ public void testNestedTags() {
             if (en.hasMoreElements()) {
                 o = en.nextElement();        
                 
-//                System.out.println("ptag = " + o );
                 tag = (HTMLTag)o;        
                 assertEquals("Follow up by p-tag",tag.getText(),"p");
             }
             if (en.hasMoreElements()) {
                 o = en.nextElement();        
-//                System.out.println("snode = " + o );
                 snode = (HTMLStringNode)o;   
                 assertEquals("Verify the paragraph text",snode.getText(),"Paragraph");
             }            
             if (en.hasMoreElements()) {
                 o = en.nextElement();        
-//                System.out.println("etag = " + o );
                 etag = (HTMLEndTag)o;        
                 assertEquals("Still patragraph endtag",etag.getContents(),"p");
             }
@@ -425,7 +416,6 @@ public void testToRawString() {
                     result += snode.getText();
                 }
                 else {
-                  //  System.out.println("etag = " + o );
                     etag = (HTMLEndTag)o;        
                     result += "</" + etag.getContents() + ">";
                 }
@@ -464,7 +454,6 @@ public void testToRawString() {
                     result += snode.getText();
                 }
                 else {
-                  //  System.out.println("etag = " + o );
                     etag = (HTMLEndTag)o;        
                     result += "</" + etag.getContents() + ">";
                 }

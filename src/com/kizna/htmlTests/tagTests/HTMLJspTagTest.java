@@ -106,7 +106,6 @@ public void testJspTag()
 	for (Enumeration e = parser.elements();e.hasMoreElements();)
 	{
 		node[i++] = (HTMLNode)e.nextElement();
-		node[i-1].print();
 	}
 	assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
 	// The first node should be an HTMLJspTag
@@ -177,7 +176,6 @@ public void testToRawString()
 	for (Enumeration e = parser.elements();e.hasMoreElements();)
 	{
 		node[i++] = (HTMLNode)e.nextElement();
-		node[i-1].print();
 	}
 	assertEquals("There should be 5 nodes identified",new Integer(5),new Integer(i));
 	// The first node should be an HTMLJspTag

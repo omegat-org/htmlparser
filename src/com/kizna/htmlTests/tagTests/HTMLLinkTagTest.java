@@ -162,8 +162,6 @@ public void testLinkNodeBug5()
 	int i = 0;
 	for (Enumeration e = parser.elements();e.hasMoreElements();)
 	{
-		if (i==3) 
-			System.out.println("Start Tracing");
 		node[i++] = (HTMLNode)e.nextElement();
 	}
 			
@@ -203,10 +201,7 @@ public void testLinkNodeBugNullPointerException()
 	{
 		node[i++] = (HTMLNode)e.nextElement();
 	}
-	assertEquals("There should be 1 node identified",new Integer(6),new Integer(i));
-//	assert("Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
-	//HTMLLinkTag linkNode = (HTMLLinkTag)node[0];
-	//assertEquals("Link incorrect","http://www.cj.com/mylink.html",linkNode.getLink());	
+	assertEquals("There should be 6 nodes identified",new Integer(6),new Integer(i));
 }
 /**
  * This bug occurs when there is a null pointer exception thrown while scanning a tag using HTMLLinkScanner.

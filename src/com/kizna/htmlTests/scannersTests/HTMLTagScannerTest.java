@@ -88,7 +88,6 @@ public void testExtractXMLData() {
 	HTMLNode node = (HTMLNode)e.nextElement();
 	
 	String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
-	System.out.println("Result = "+result);
 	assertEquals("Result","Abhi\r\nSri\r\n",result);
 }
 public void testExtractXMLDataSingle() {
@@ -102,7 +101,6 @@ public void testExtractXMLDataSingle() {
 	HTMLNode node = (HTMLNode)e.nextElement();
 	
 	String result = HTMLTagScanner.extractXMLData(node,"MESSAGE",reader);
-	System.out.println("Result = "+result);
 	assertEquals("Result","Test",result);
 }
 /**
@@ -117,7 +115,7 @@ public void testTagExtraction()
 	HTMLTag tag = HTMLTag.find(reader,testHTML,0);
 		
 	assertNotNull(tag);
-	tag.print();
+
 }
 /**
  * Captures bug reported by Raghavender Srimantula

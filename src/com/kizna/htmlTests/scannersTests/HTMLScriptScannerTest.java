@@ -163,9 +163,7 @@ public void testScanBugWG()
 	assertTrue("Node should be a script tag",node[1] 
 	instanceof HTMLScriptTag); 
 	// Check the data in the applet tag 
-	HTMLScriptTag scriptTag = (HTMLScriptTag)node 
-	[1];
-	System.out.println("Expected Script Code= "+testHTML2+", script code = "+scriptTag.getScriptCode());
+	HTMLScriptTag scriptTag = (HTMLScriptTag)node[1];
 	assertStringEquals("Expected Script Code",testHTML2,scriptTag.getScriptCode()); 
 }
 }

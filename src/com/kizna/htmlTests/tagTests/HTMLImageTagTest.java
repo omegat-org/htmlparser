@@ -62,7 +62,6 @@ public void testImageTag()
 	assertTrue("Node should be a HTMLImageTag",node[0] instanceof HTMLImageTag);
 	HTMLImageTag imageTag = (HTMLImageTag)node[0];
 	assertEquals("The image locn","http://www.google.com/test/goo/title_homepage4.gif",imageTag.getImageLocation());
-	System.out.println(imageTag.getTagLine());
 }
 /**
  * The bug being reproduced is this : <BR>

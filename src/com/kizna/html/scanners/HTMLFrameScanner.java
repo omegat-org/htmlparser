@@ -62,9 +62,7 @@ public class HTMLFrameScanner extends HTMLTagScanner
 	public String extractFrameLocn(HTMLTag tag,String url)
 	{
 		Hashtable table = tag.parseParameters();
-      System.out.println("table has  "+table.toString());
 		String relativeFrame =  (String)table.get("SRC");
-      //System.out.println("relativeLink for image is  "+relativeLink);
 		if (relativeFrame==null) return ""; else
 		return (new HTMLLinkProcessor()).extract(relativeFrame,url);
 	}
