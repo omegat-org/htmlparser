@@ -166,6 +166,31 @@ public class HTMLParserUtilsTest extends ParserTestCase {
             "Trim all spaces but not the ones inside the string",
             ParserUtils.trimSpacesBeginEnd("<DIV>  Trim all spaces but not the ones inside the string </DIV>", "<>DIV/")
         );
+        assertStringEquals(
+            "modified text",
+            "0",
+            ParserUtils.trimSpacesBeginEnd("0", "")
+        );
+        assertStringEquals(
+            "modified text",
+            "verifying the last char x",
+            ParserUtils.trimSpacesBeginEnd("verifying the last char x", "")
+        );
+        assertStringEquals(
+            "modified text",
+            "verifying the last char x",
+            ParserUtils.trimSpacesBeginEnd("verifying the last char x ", "")
+        );
+        assertStringEquals(
+            "modified text",
+            "x verifying the first char",
+            ParserUtils.trimSpacesBeginEnd("x verifying the first char", "")
+        );
+        assertStringEquals(
+            "modified text",
+            "x verifying the first char",
+            ParserUtils.trimSpacesBeginEnd(" x verifying the first char", "")
+        );
     }
     
     public void testTagsMethods() {
@@ -214,6 +239,42 @@ public class HTMLParserUtilsTest extends ParserTestCase {
                 "modified text",
                 " ALL OK",
                 ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", new String[] {"DIV"}, false, true)
+            );
+            // Test trimAllTags method
+            assertStringEquals(
+                "modified text",
+                "  +12.5  ALL OK",
+                ParserUtils.trimAllTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", false)
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimAllTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", true)
+            );
+            assertStringEquals(
+                "modified text",
+                "  +12.5 ",
+                ParserUtils.trimAllTags("<DIV><DIV>  +12.5 </DIV></DIV>", false)
+            );
+            assertStringEquals(
+                "modified text",
+                "",
+                ParserUtils.trimAllTags("<DIV><DIV>  +12.5 </DIV></DIV>", true)
+            );
+            assertStringEquals(
+                "modified text",
+                " YYY ",
+                ParserUtils.trimAllTags("<XXX> YYY <ZZZ>", false)
+            );
+            assertStringEquals(
+                "modified text",
+                "YYY",
+                ParserUtils.trimAllTags("YYY", false)
+            );
+            assertStringEquals(
+                "modified text",
+                "> OK <",
+                ParserUtils.trimAllTags("> OK <", true)
             );
         }
         catch (Exception e)
@@ -273,6 +334,29 @@ public class HTMLParserUtilsTest extends ParserTestCase {
                 " ALL OK",
                 ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, true)
             );
+            NodeFilter filterTableRow = new TagNameFilter("TR");
+            NodeFilter filterTableColumn = new TagNameFilter("TD");
+            OrFilter filterOr = new OrFilter(filterTableRow, filterTableColumn);
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<TR><TD>  +12.5 </TD></TR> ALL OK", filterOr)
+            );
+            assertStringEquals(
+                "modified text",
+                "<TD>  +12.5 </TD> ALL OK",
+                ParserUtils.trimTags("<TR><TD>  +12.5 </TD></TR> ALL OK", filterOr, false, false)
+            );
+            assertStringEquals(
+                "modified text",
+                "  +12.5  ALL OK",
+                ParserUtils.trimTags("<TR><TD>  +12.5 </TD></TR> ALL OK", filterOr, true, false)
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<TR><TD>  +12.5 </TD></TR> ALL OK", filterOr, false, true)
+            );
         }
         catch (Exception e)
         {
@@ -330,6 +414,29 @@ public class HTMLParserUtilsTest extends ParserTestCase {
                 "modified text",
                 " ALL OK",
                 ParserUtils.trimTags("<DIV><DIV>  +12.5 </DIV></DIV> ALL OK", filter, false, true)
+            );
+            NodeFilter filterTableRow = new NodeClassFilter(TableRow.class);
+            NodeFilter filterTableColumn = new NodeClassFilter(TableColumn.class);
+            OrFilter filterOr = new OrFilter(filterTableRow, filterTableColumn);
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<TR><TD>  +12.5 </TD></TR> ALL OK", filterOr)
+            );
+            assertStringEquals(
+                "modified text",
+                "<TD>  +12.5 </TD> ALL OK",
+                ParserUtils.trimTags("<TR><TD>  +12.5 </TD></TR> ALL OK", filterOr, false, false)
+            );
+            assertStringEquals(
+                "modified text",
+                "  +12.5  ALL OK",
+                ParserUtils.trimTags("<TR><TD>  +12.5 </TD></TR> ALL OK", filterOr, true, false)
+            );
+            assertStringEquals(
+                "modified text",
+                " ALL OK",
+                ParserUtils.trimTags("<TR><TD>  +12.5 </TD></TR> ALL OK", filterOr, false, true)
             );
         }
         catch (Exception e)
