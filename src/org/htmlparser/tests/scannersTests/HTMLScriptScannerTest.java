@@ -113,7 +113,6 @@ public class HTMLScriptScannerTest extends HTMLParserTestCase
 		parseAndAssertNodeCount(2);
 		
 		StringBuffer sb2 = new StringBuffer();
-		sb2.append("\r\n"); // !!! CRLF from the TAG Line 
 		sb2.append("if(navigator.appName.indexOf(\"Netscape\") != -1)\r\n"); 
 		sb2.append(" document.write ('xxx');\r\n"); 
 		sb2.append("else\r\n"); 
@@ -168,7 +167,7 @@ public class HTMLScriptScannerTest extends HTMLParserTestCase
 		// Check the data in the applet tag 
 		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0];
 		String scriptCode = scriptTag.getScriptCode();	  
-		String expectedCode = "\r\n<!--\r\n\r\n"+
+		String expectedCode = "<!--\r\n\r\n"+
 						  "  function validateForm()\r\n"+
 						  "  {\r\n"+
 						  "     var i = 10;\r\n"+

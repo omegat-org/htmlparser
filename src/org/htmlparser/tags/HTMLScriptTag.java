@@ -49,33 +49,22 @@ public class HTMLScriptTag extends HTMLCompositeTag {
 	 * @param type The type parameter
 	 * @param tagLine The current line being parsed, where the tag was found	 
 	 */
-	public HTMLScriptTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData,String scriptCode,String language, String type) 
+	public HTMLScriptTag(HTMLTagData tagData,HTMLCompositeTagData compositeTagData) 
 	{
 		super(tagData,compositeTagData);
-		this.scriptCode = scriptCode;
-		this.language = language; 
-		this.type = type;
+		this.scriptCode = getChildrenHTML();
+		this.language = getParameter("LANGUAGE"); 
+		this.type = getParameter("TYPE");
 	}
-	/**
-	 * Get the language of the script
-	 * Creation date: (6/4/2001 1:09:34 PM)
-	 * @return java.lang.String
-	 */
+
 	public java.lang.String getLanguage() {
 		return language;
 	}
-	/**
-	 * Get the javascript code in this tag
-	 * @return java.lang.String
-	 */
+
 	public java.lang.String getScriptCode() {
 		return scriptCode;
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/4/2001 1:09:34 PM)
-	 * @return java.lang.String
-	 */
+
 	public java.lang.String getType() {
 		return type;
 	}

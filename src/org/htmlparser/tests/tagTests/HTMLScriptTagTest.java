@@ -28,10 +28,12 @@
 
 package org.htmlparser.tests.tagTests;
 
+import java.util.Vector;
+
 import org.htmlparser.HTMLParser;
+import org.htmlparser.HTMLStringNode;
 import org.htmlparser.scanners.HTMLScriptScanner;
 import org.htmlparser.tags.HTMLScriptTag;
-import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
 import org.htmlparser.tags.data.HTMLTagData;
 import org.htmlparser.tests.HTMLParserTestCase;
@@ -52,40 +54,24 @@ public class HTMLScriptTagTest extends HTMLParserTestCase{
 	}
 
 	public void testCreation() {
+		HTMLStringNode stringNode = 
+			new HTMLStringNode(new StringBuffer("Script Code"),0,0);
+		Vector childVector = new Vector();
+		childVector.add(stringNode);
 		HTMLScriptTag scriptTag = 
 		new HTMLScriptTag(
 			new HTMLTagData(0,10,"Tag Contents","tagline"),
-			new HTMLCompositeTagData(null,null,null),
-			"Script Code","english","text"
+			new HTMLCompositeTagData(null,null,childVector)
 		);
+		
 		assertNotNull("Script Tag object creation",scriptTag);
 		assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
 		assertEquals("Script Tag End",10,scriptTag.elementEnd());
-		assertEquals("Script Tag Language","english",scriptTag.getLanguage());		
 		assertEquals("Script Tag Contents","Tag Contents",scriptTag.getText());
 		assertEquals("Script Tag Code","Script Code",scriptTag.getScriptCode());
-		assertEquals("Script Tag Type","text",scriptTag.getType());
 		assertEquals("Script Tag Line","tagline",scriptTag.getTagLine());
 	}
 
-	public void testExtractLanguage() 
-	{
-		scriptScanner.extractLanguage(new HTMLTag(new HTMLTagData(10,10,"script language=\"JavaScript\"","")));
-		assertEquals("JavaScript",scriptScanner.getLanguage());
-	
-		scriptScanner.extractLanguage(new HTMLTag(new HTMLTagData(10,10,"SCRIPT TYPE=\"text/javascript\"","")));
-		assertEquals("",scriptScanner.getLanguage());
-		
-	}
-
-	public void testExtractType() 
-	{
-		scriptScanner.extractType(new HTMLTag(new HTMLTagData(10,10,"script language=\"JavaScript\"","")));
-		assertEquals("",scriptScanner.getType());
-	
-		scriptScanner.extractType(new HTMLTag(new HTMLTagData(10,10,"SCRIPT TYPE=\"text/javascript\"","")));
-		assertEquals("text/javascript",scriptScanner.getType());	
-	}
 
 	public void testToHTML() throws HTMLParserException {
 		createParser("<SCRIPT>document.write(d+\".com\")</SCRIPT>");

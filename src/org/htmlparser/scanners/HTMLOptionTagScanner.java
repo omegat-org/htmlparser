@@ -65,11 +65,11 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 				if (node instanceof HTMLEndTag)
 				{
 					endTag = (HTMLEndTag)node;
-					String lEndTagString = endTag.getText().toUpperCase();
-					if (lEndTagString.equals("OPTION") || lEndTagString.equals("SELECT")) 
+					String endTagString = endTag.getText().toUpperCase();
+					if (endTagString.equals("OPTION") || endTagString.equals("SELECT")) 
 					{
 						endTagFound = true;
-						if (lEndTagString.equals("SELECT"))
+						if (endTagString.equals("SELECT"))
 						{
 							node = prevNode;
 						}

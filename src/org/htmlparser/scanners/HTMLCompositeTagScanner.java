@@ -1,11 +1,11 @@
 package org.htmlparser.scanners;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLTag;
 import org.htmlparser.tags.data.HTMLCompositeTagData;
@@ -14,17 +14,22 @@ import org.htmlparser.util.HTMLParserException;
 
 public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 	protected String nameOfTagToMatch;
+	private boolean removeScanners;
+	private boolean stringNodeIgnoreMode;
 
 	public HTMLCompositeTagScanner(String nameOfTagToMatch) {
-		super();
-		this.nameOfTagToMatch = nameOfTagToMatch;
+		this("",nameOfTagToMatch,false,false);
 	}
 
 	public HTMLCompositeTagScanner(String filter, String nameOfTagToMatch) {
-		super(filter);
-		this.nameOfTagToMatch = nameOfTagToMatch;
+		this(filter,nameOfTagToMatch,false,false);
 	}
-
+	public HTMLCompositeTagScanner(String filter, String nameOfTagToMatch, boolean removeScanners, boolean stringNodeIgnoreMode) {
+		this.nameOfTagToMatch = nameOfTagToMatch;
+		this.removeScanners = removeScanners;
+		this.stringNodeIgnoreMode = stringNodeIgnoreMode;
+	}
+	
 	public HTMLTag scan(HTMLTag tag, String url, HTMLReader reader,String currLine)
 		throws HTMLParserException {
 		HTMLTag startTag = tag;
@@ -33,10 +38,19 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 		HTMLNode node;
 		
 		Vector childVector = new Vector();
-		List flavorList = new ArrayList();
+		
+		Hashtable tempScanners=null;
+		if (removeScanners) {
+			tempScanners = reader.getParser().getScanners();
+			reader.getParser().flushScanners();
+		}
 		
 		do {
+			if (stringNodeIgnoreMode)
+				HTMLStringNode.setIgnoreStateMode(true);
 			node = reader.readElement();
+			if (stringNodeIgnoreMode)
+				HTMLStringNode.setIgnoreStateMode(false);
 			if (node instanceof HTMLEndTag) {
 				endTag = (HTMLTag)node;
 				if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch)) 
@@ -48,7 +62,8 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 			}
 		}
 		while (endTagFound==false && node!=null);
-		
+		if (removeScanners)
+			reader.getParser().setScanners(tempScanners);
 		return createTag(new HTMLTagData(
 				startTag.elementBegin(),
 				endTag.elementEnd(),
