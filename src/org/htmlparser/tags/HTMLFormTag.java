@@ -230,7 +230,11 @@ public class HTMLFormTag extends HTMLTag
 			node.collectInto(collectionVector,filter);
 		}
 	}
-
+	
+	/**
+	 * Find the textarea tag matching the given name
+	 * @param name Name of the textarea tag to be found within the form
+	 */
 	public HTMLTextareaTag getTextAreaTag(String name) {
 		HTMLTextareaTag textareaTag=null;
 		boolean found = false;
@@ -244,4 +248,15 @@ public class HTMLFormTag extends HTMLTag
 		return textareaTag;
 	}
 
+	public Vector searchFor(String searchString) {
+		Vector foundVector = new Vector();
+		HTMLNode node;
+		for (Enumeration e = allNodesVector.elements();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			if (node.toPlainTextString().toUpperCase().indexOf(searchString.toUpperCase())!=-1) {
+				foundVector.addElement(node);
+			}	
+		}
+		return foundVector;
+	}
 }

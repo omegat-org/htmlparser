@@ -30,10 +30,13 @@ package org.htmlparser.tests.tagTests;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import org.htmlparser.HTMLNode;
 import org.htmlparser.HTMLParser;
 import org.htmlparser.HTMLReader;
+import org.htmlparser.HTMLStringNode;
 import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tests.HTMLParserTestCase;
 import org.htmlparser.tests.scannersTests.HTMLFormScannerTest;
@@ -73,7 +76,28 @@ public class HTMLFormTagTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
 		HTMLFormTag formTag = (HTMLFormTag)node[0];
-		System.out.println(formTag.toPlainTextString());
 		assertStringEquals("Form Tag string representation","&nbsp;User NamePassword&nbsp;&nbsp;",formTag.toPlainTextString());
+	}
+	
+	public void testSearchFor() throws HTMLParserException {
+		createParser(HTMLFormScannerTest.FORM_HTML);
+
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Node 0 should be Form Tag",node[0] instanceof HTMLFormTag);
+		HTMLFormTag formTag = (HTMLFormTag)node[0];
+		Vector nodeVector = formTag.searchFor("User Name");
+		assertNotNull("Should have found nodes",nodeVector);
+		
+		HTMLNode [] nodes = new HTMLNode[10];
+		int i = 0;
+		for (Enumeration e = nodeVector.elements();e.hasMoreElements();) {
+			nodes[i++] = (HTMLNode)e.nextElement();	
+		}
+		
+		assertEquals("Number of nodes founs",1,i);
+		assertTrue("Should have found a string node",nodes[0] instanceof HTMLStringNode);
+		HTMLStringNode stringNode = (HTMLStringNode)nodes[0];
+		assertEquals("Expected contents of string node","User Name",stringNode.getText());
 	}
 }
