@@ -27,12 +27,14 @@ import com.kizna.html.util.HTMLParserException;
 public class HTMLLinkScanner extends HTMLTagScanner
 {
 	private HTMLTagScanner previousOpenLinkScanner=null;
+	private HTMLLinkProcessor processor;
 	/**
 	 * Overriding the default constructor
 	 */
 	public HTMLLinkScanner()
 	{
 		super();
+		processor = new HTMLLinkProcessor();
 	}
 	/**
 	 * Overriding the constructor to accept the filter 
@@ -40,6 +42,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 	public HTMLLinkScanner(String filter)
 	{
 		super(filter);
+		processor = new HTMLLinkProcessor();		
 	}
 	protected HTMLTag createLinkTag(String currentLine, HTMLNode node, boolean mailLink, String link, String linkText, String accessKey, int linkBegin, String tagContents, String linkContents, Vector nodeVector) {
 		int linkEnd;
@@ -103,7 +106,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 				relativeLink = removeChars(relativeLink,'\n');
 				relativeLink = removeChars(relativeLink,'\r');
 			}
-			return (new HTMLLinkProcessor()).extract(relativeLink,url);
+			return processor.extract(relativeLink,url);
 		}
 		catch (Exception e) {
 			String msg; 

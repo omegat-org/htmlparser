@@ -59,12 +59,14 @@ import com.kizna.html.util.HTMLParserException;
 public class HTMLImageScanner extends HTMLTagScanner
 {
 	private Hashtable table;
+	private HTMLLinkProcessor processor;
 	/**
 	 * Overriding the default constructor
 	 */
 	public HTMLImageScanner()
 	{
 		super();
+		processor = new HTMLLinkProcessor();
 	}
 	/**
 	 * Overriding the constructor to accept the filter 
@@ -72,6 +74,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 	public HTMLImageScanner(String filter)
 	{
 		super(filter);
+		processor = new HTMLLinkProcessor();
 	}
 	/**
 	 * Template Method, used to decide if this scanner can handle the Image tag type. If 
@@ -116,7 +119,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 				} 
 			}
 			if (relativeLink==null) return ""; else
-			return (new HTMLLinkProcessor()).extract(relativeLink,url);		
+			return processor.extract(relativeLink,url);		
 		}
 		catch (Exception e) {
 			throw new HTMLParserException("HTMLImageScanner.extractImageLocn() : Error in extracting image location, relativeLink = "+relativeLink+", url = "+url,e);

@@ -135,6 +135,8 @@ public class HTMLParser
 		reader.setParser(this);
 	
 	}
+	
+	
 	/**
 	 * Creates a HTMLParser object with the location of the resource (URL or file)
 	 * You would typicall create a DefaultHTMLParserFeedback object and pass it in
@@ -150,6 +152,16 @@ public class HTMLParser
 		catch (Exception e) {
 			throw new HTMLParserException("Error in constructing the parser object for resource "+resourceLocn,e);
 		}
+	}
+
+	/**
+	 * Creates a HTMLParser object with the location of the resource (URL or file)
+	 * You would typicall create a DefaultHTMLParserFeedback object and pass it in
+	 * @param resourceLocn Either the URL or the filename (autodetects)
+	 */
+	public HTMLParser(String resourceLocn) throws HTMLParserException
+	{
+		this(resourceLocn,new DefaultHTMLParserFeedback());
 	}
 		
 	/**
