@@ -43,11 +43,10 @@ public class CompositeTagScannerHelper {
 		this.endTag = null;
 		this.nodeList = new NodeList();
 		this.endTagFound = false;
-		this.startingLineNumber = reader.getLastLineNumber();
-		this.endingLineNumber = -1;
 	}
 		
 	public Tag scan() throws ParserException {
+		this.startingLineNumber = reader.getLastLineNumber();
 		scanner.beforeScanningStarts();
 		Node currentNode = tag;
 		doEmptyXmlTagCheckOn(currentNode);
