@@ -26,7 +26,7 @@
 	<echo message="version=${version}"/>
 	<echo message="displayVersion=${displayVersion}"/>
 	
-	<loadproperties srcFile="${src}/com/kizna/html/HTMLParser.java">
+	<loadproperties srcFile="${src}/org/htmlparser/HTMLParser.java">
       <filterchain>
         <linecontains>
           <contains value="VERSION_STRING"/>
@@ -37,7 +37,7 @@
     <property name="previousDisplayVersion" value="${VERSION_STRING}"/>
 	<echo message="Detected Previous Display Version = ${previousDisplayVersion}"/>
 	
-	<loadfile srcFile="${src}/com/kizna/html/HTMLParser.java" property="previousVersion">
+	<loadfile srcFile="${src}/org/htmlparser/HTMLParser.java" property="previousVersion">
 	  <filterchain>
 	   	<headfilter lines="1"/>
   	  	<filterreader classname="org.apache.tools.ant.filters.StripLineBreaks">
@@ -64,7 +64,8 @@
 	  <include name="**/*.java"/>
 	  <replacefilter token="${previousVersion}"/>
 	</replace>
-  	<replace file="${src}/com/kizna/html/HTMLParser.java" token="${previousDisplayVersion}" value="${displayVersion}"/>
+  	<replace file="${src}/org/htmlparser/HTMLParser.java" token="${previousDisplayVersion}" value="${displayVersion}"/>
+  	<replace file="${docs}/release.txt" token="${previousDisplayVersion}" value="${displayVersion}"/>  	
   </target>
   
   <target name="compile" depends="versionSource">
@@ -73,7 +74,7 @@
     <echo message="**********************************"/>
 
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}/com/kizna/html" destdir="${build}"/>
+    <javac srcdir="${src}" destdir="${build}" includes="org/htmlparser/**" excludes="org/htmlparser/tests/**" debug="on" />
   </target>
 
   <!-- Create the distribution of htmlparser.jar -->
@@ -98,9 +99,10 @@
     <!-- Create the javadoc directory -->
     <mkdir dir="${dist}/docs/javadoc"/>
 
-    <javadoc packagenames="com.kizna.html.*"
+    <javadoc packagenames="org.htmlparser.*"
            sourcepath="${src}"
            defaultexcludes="yes"
+           excludepackagenames="org.htmlparser.tests.*"
            destdir="${dist}/docs/javadoc"
            author="true"
            version="true"
@@ -113,10 +115,10 @@ If you have questions about the usage of the parser, join the <A HREF="http://li
 <BR>
 If you want to join as a developer, please sign up on the <A HREF="http://lists.sourceforge.net/lists/listinfo/htmlparser-developer">HTMLParser Developer List</A>.<BR> All three lists can be joined from the <A HREF="http://htmlparser.sourceforge.net/mailinglists.html">HTMLParser Mailing Lists Page.</A>  ]]></bottom>
       <footer>(c) Dec 31, 2000 Somik Raha</footer>
-      <group title="HTMLParser Main Package" packages="com.kizna.html"/>
-      <group title="HTMLParser Tags" packages="com.kizna.html.tags"/>
-      <group title="HTMLParser Scanners" packages="com.kizna.html.scanners"/>
-      <group title="HTMLParser Utility Packages (of developer interest only)" packages="com.kizna.html.util"/>
+      <group title="HTMLParser Main Package" packages="org.htmlparser"/>
+      <group title="HTMLParser Tags" packages="org.htmlparser.tags"/>
+      <group title="HTMLParser Scanners" packages="org.htmlparser.scanners"/>
+      <group title="HTMLParser Utility Packages (of developer interest only)" packages="org.htmlparser.util"/>
     </javadoc>         
   </target>
 
@@ -192,9 +194,9 @@ If you want to join as a developer, please sign up on the <A HREF="http://lists.
     <echo message="*  Cleaning up and finishing.... *"/>
     <echo message="**********************************"/>
 
-    <!-- Delete the ${build} and ${dist} directory trees -->
-    <delete dir="${build}"/>
+    <!-- Delete the ${build} and ${dist} directory trees --> 
+      <!--  <delete dir="${build}"/>-->
     <!-- Delete the release directory also -->
-    <delete dir="${releaseDir}"/>
+<!--    <delete dir="${releaseDir}"/> -->
   </target>
 </project>
