@@ -50,7 +50,8 @@ public class CompositeTagScannerHelper {
 		if (!endTagFound) { 
 			do {
 				currentNode = reader.readElement();
-				if (currentNode==null) continue;
+				if (currentNode==null) continue; 
+				currLine = reader.getCurrentLine();
 				if (currentNode instanceof Tag) 
 					doForceCorrectionCheckOn((Tag)currentNode);
 					
@@ -106,18 +107,19 @@ public class CompositeTagScannerHelper {
 
 	private void doChildAndEndTagCheckOn(Node currentNode) {
 		if (currentNode instanceof EndTag) {
-			endTag = (Tag)currentNode;
-			if (isExpectedEndTagFound())
+			EndTag possibleEndTag = (EndTag)currentNode;
+			if (isExpectedEndTag(possibleEndTag)) {
 				endTagFound = true;
+				endTag = possibleEndTag;
+				return;
+			}
 		}
-		else { 
-			nodeList.add(currentNode);
-			scanner.childNodeEncountered(currentNode);
-		}	
+		nodeList.add(currentNode);
+		scanner.childNodeEncountered(currentNode);
 	}
 
-	private boolean isExpectedEndTagFound() {
-		return endTag.getTagName().equals(tag.getTagName());
+	private boolean isExpectedEndTag(EndTag possibleEndTag) {
+		return possibleEndTag.getTagName().equals(tag.getTagName());
 	}
 
 	private void doEmptyXmlTagCheckOn(Node currentNode) {

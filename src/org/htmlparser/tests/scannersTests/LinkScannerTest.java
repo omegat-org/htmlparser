@@ -96,7 +96,7 @@ public class LinkScannerTest extends ParserTestCase
 		// Verify the link data
 		assertStringEquals("Link Text","",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertStringEquals("toHTML","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></IMG></A>",linkTag.toHtml());
+		assertStringEquals("toHTML","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></A>",linkTag.toHtml());
 	}
 	
 	/**
@@ -122,7 +122,7 @@ public class LinkScannerTest extends ParserTestCase
 		// Verify the link data
 		assertEquals("Link Text","This is a test\r\n",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertStringEquals("toHTML()","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></IMG>This is a test\r\n</A>",linkTag.toHtml());
+		assertStringEquals("toHTML()","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\">This is a test\r\n</A>",linkTag.toHtml());
 	}
 	
 	public void testEvaluate() 
@@ -302,8 +302,11 @@ public class LinkScannerTest extends ParserTestCase
 	 * A really bad link tag sends parser into infinite loop
 	 */
 	public void testBrokenLink() throws ParserException {
-		createParser("<a href=\"faq.html\"><br>\n"+
-        "<img src=\"images/46revues.gif\" width=\"100\" height=\"46\" border=\"0\" alt=\"Rejoignez revues.org!\" align=\"middle\"","http://www.yahoo.com");
+		createParser(
+			"<a href=\"faq.html\">" +				"<br>\n"+
+        		"<img src=\"images/46revues.gif\" " +        			 "width=\"100\" " +        			 "height=\"46\" " +        			 "border=\"0\" " +        			 "alt=\"Rejoignez revues.org!\" " +        			 "align=\"middle\"",
+			"http://www.yahoo.com"
+		);
 		// Register the image scanner
 		parser.addScanner(new LinkScanner("-l"));
 				
