@@ -1057,7 +1057,7 @@ public class Lexer
      * Return CDATA as a text node.
      * According to appendix <a href="http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data">
      * B.3.2 Specifying non-HTML data</a> of the
-     * <a href="http://www.w3.org/TR/html4/">HTML 4.01 Specification</a>:
+     * <a href="http://www.w3.org/TR/html4/">HTML 4.01 Specification</a>:<br>
      * <quote>
      * <b>Element content</b><br>
      * When script or style data is the content of an element (SCRIPT and STYLE),
@@ -1073,15 +1073,34 @@ public class Lexer
         throws
             ParserException
     {
+        return (parseCDATA (false));
+    }
+
+    /**
+     * Return CDATA as a text node.
+     * Slightly less rigid than {@link #parseCDATA()} this method provides for
+     * parsing CDATA that may contain quoted strings that have embedded
+     * ETAGO ("&lt;/") delimiters and skips single and multiline comments.
+     * @param quotesmart If <code>true</code> the strict definition of CDATA is
+     * extended to allow for single or double quoted ETAGO ("&lt;/") sequences.
+     * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
+     * @see #parseCDATA()
+     */
+    public Node parseCDATA (boolean quotesmart)
+        throws
+            ParserException
+    {
         int start;
         int state;
         boolean done;
+        char quote;
         char ch;
         int end;
 
         start = mCursor.getPosition ();
         state = 0;
         done = false;
+        quote = 0;
         while (!done)
         {
             ch = mPage.getCharacter (mCursor);
@@ -1093,8 +1112,70 @@ public class Lexer
                         case 0: // end of input
                             done = true;
                             break;
+                        case '\'':
+                            if (quotesmart)
+                                if (0 == quote)
+                                    quote = '\''; // enter quoted state
+                                else if ('\'' == quote)
+                                    quote = 0; // exit quoted state
+                            break;
+                        case '"':
+                            if (quotesmart)
+                                if (0 == quote)
+                                    quote = '"'; // enter quoted state
+                                else if ('"' == quote)
+                                    quote = 0; // exit quoted state
+                            break;
+                        case '\\':
+                            if (quotesmart)
+                                if (0 != quote)
+                                {
+                                    ch = mPage.getCharacter (mCursor); // try to consume escaped character
+                                    if (0 == ch)
+                                        mCursor.retreat ();
+                                    else if (  (ch != '\\') && (ch != quote))
+                                        mCursor.retreat (); // unconsume char if character was not an escapable char.
+                                }
+                            break;
+                        case '/':
+                            if (quotesmart)
+                                if (0 == quote)
+                                {
+                                    // handle multiline and double slash comments (with a quote)
+                                    ch = mPage.getCharacter (mCursor);
+                                    if (0 == ch)
+                                        mCursor.retreat ();
+                                    else if ('/' == ch)
+                                    {
+                                        do
+                                            ch = mPage.getCharacter (mCursor);
+                                        while ((ch != 0) && (ch != '\n'));
+                                    }
+                                    else if ('*' == ch)
+                                    {
+                                        do
+                                        {
+                                            do
+                                                ch = mPage.getCharacter (mCursor);
+                                            while ((ch != 0) && (ch != '*'));
+                                            ch = mPage.getCharacter (mCursor);
+                                            if (ch == '*')
+                                                mCursor.retreat ();
+                                        }
+                                        while ((ch != 0) && (ch != '/'));
+                                    }
+                                    else
+                                        mCursor.retreat ();
+                                }
+                            break;
                         case '<':
-                            state = 1;
+                            if (quotesmart)
+                            {
+                                if (0 == quote)
+                                    state = 1;
+                            }
+                            else
+                                state = 1;
                             break;
                         default:
                             break;

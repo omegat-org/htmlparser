@@ -51,6 +51,31 @@ public class ScriptScanner
         CompositeTagScanner
 {
     /**
+     * Strict parsing of CDATA flag.
+     * If this flag is set true, the parsing of script is performed without
+     * regard to quotes. This means that erroneous script such as:
+     * <pre>
+     * document.write("&lt;/script&gt");
+     * </pre>
+     * will be parsed in strict accordance with appendix
+     * <a href="http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data">
+     * B.3.2 Specifying non-HTML data</a> of the
+     * <a href="http://www.w3.org/TR/html4/">HTML 4.01 Specification</a> and
+     * hence will be split into two or more nodes. Correct javascript would
+     * escape the ETAGO:
+     * <pre>
+     * document.write("&lt;\/script&gt");
+     * </pre>
+     * If true, CDATA parsing will stop at the first ETAGO ("&lt;/") no matter
+     * whether it is quoted or not. If false, balanced quotes (either single or
+     * double) will shield an ETAGO. Beacuse of the possibility of quotes within
+     * single or multiline comments, these are also parsed. In most cases,
+     * users prefer non-strict handling since there is so much broken script
+     * out in the wild.
+     */
+    public static boolean STRICT = false;
+
+    /**
      * Create a script scanner.
      */
     public ScriptScanner()
@@ -86,7 +111,7 @@ public class ScriptScanner
                 ((ScriptTag)tag).setScriptCode (code);
             }
         }
-        content = lexer.parseCDATA ();
+        content = lexer.parseCDATA (!STRICT);
         position = lexer.getPosition ();
         node = lexer.nextNode (false);
         if (null != node)
