@@ -106,6 +106,8 @@ public class ParserHelper implements Serializable {
                 resource = file.getCanonicalPath ();
                 buffer = new StringBuffer (prefix.length () + resource.length ());
                 buffer.append (prefix);
+                if (!resource.startsWith ("/"))
+                    buffer.append ("/");
                 buffer.append (resource);
 	            url = new URL (LinkProcessor.fixSpaces (buffer.toString ()));
 	            ret = ParserHelper.openConnection (url, feedback);
