@@ -124,7 +124,7 @@ public class TagScannerTest extends ParserTestCase
         String test = "hello\r\nworld\r\n\tqsdsds";
         TagScanner scanner = new TagScanner() {
             public Tag scan(Tag tag,String url,Lexer lexer) { return null;}
-            public boolean evaluate(String s,TagScanner previousOpenScanner) { return false; }
+            public boolean evaluate(Tag tag,TagScanner previousOpenScanner) { return false; }
             public String [] getID() { return null; }
             protected Tag createTag (Page page, int start, int end, Vector attributes, Tag tag, String url) { return null; }
         };

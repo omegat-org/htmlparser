@@ -62,13 +62,6 @@ public class BaseHREFScannerTest extends ParserTestCase {
         assertEquals("Url2","http://www.google.com",modifiedUrl2);
     }
 
-    public void testEvaluate() {
-        String testData1 = "BASE HREF=\"http://www.abc.com/\"";
-        assertTrue("Data 1 Should have evaluated true",scanner.evaluate(testData1,null));
-        String testData2 = "Base href=\"http://www.abc.com/\"";
-        assertTrue("Data 2 Should have evaluated true",scanner.evaluate(testData2,null));
-    }
-
     public void testScan() throws ParserException{
         createParser("<html><head><TITLE>test page</TITLE><BASE HREF=\"http://www.abc.com/\"><a href=\"home.cfm\">Home</a>...</html>","http://www.google.com/test/index.html");
         LinkScanner linkScanner = new LinkScanner("-l");

@@ -56,7 +56,8 @@ import org.htmlparser.util.ParserFeedback;
  * to do like setting the BASE url for the page when a BASE tag is encountered.
  * <br>
  * If you wish to write your own scanner, then you must implement scan().
- * You MAY implement evaluate() as well, if your evaluation logic is not based on a simple text match.
+ * You MAY implement evaluate() as well, if your evaluation logic is not based
+ * on a match of the tag name.
  * You MUST implement getID() - which identifies your scanner uniquely in the hashtable of scanners.
  *
  * <br>
@@ -135,88 +136,90 @@ public abstract class TagScanner
         return (ret);
     }
 
-  /**
-   * This method is used to decide if this scanner can handle this tag type. If the
-   * evaluation returns true, the calling side makes a call to scan().
-   * <strong>This method has to be implemented meaningfully only if a first-word match with
-   * the scanner id does not imply a match (or extra processing needs to be done).
-   * Default returns true</strong>
-   * @param tagContents The complete text contents of the Tag.
-   * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-   * scan has begun, and hence allows us to write scanners that can work with dirty html
-   */
-  public boolean evaluate(String tagContents,TagScanner previousOpenScanner) {
-    return true;
-  }
-
-  /**
-   * Pull the text between two matching capitalized 'XML' tags.
-   * @deprecated This reads ahead on your iterator and doesn't put them back if it's not an XML tag.
-   */
-  public static String extractXMLData (Node node, String tagName, NodeIterator iterator)
+    /**
+     * This method is used to decide if this scanner can handle this tag type. If the
+     * evaluation returns true, the calling side makes a call to scan().
+     * <strong>This method has to be implemented meaningfully only if a first-word match with
+     * the scanner id does not imply a match (or extra processing needs to be done).
+     * Default returns true</strong>
+     * @param tag The tag with a name that matches a value from {@link #getID}.
+     * @param previousOpenScanner Indicates any previous scanner which hasn't
+     * completed, before the current scan has begun, and hence allows us to
+     * write scanners that can work with dirty html.
+     */
+    public boolean evaluate (Tag tag, TagScanner previousOpenScanner)
+    {
+        return (true);
+    }
+    
+    /**
+     * Pull the text between two matching capitalized 'XML' tags.
+     * @deprecated This reads ahead on your iterator and doesn't put them back if it's not an XML tag.
+     */
+    public static String extractXMLData (Node node, String tagName, NodeIterator iterator)
     throws
-        ParserException
-  {
-      try
-      {
-          String xmlData = "";
-          
-          boolean xmlTagFound = isXMLTagFound (node, tagName);
-          if (xmlTagFound)
-          {
-              try
-              {
-                  do
-                  {
-                      node = iterator.nextNode ();
-                      if (node!=null)
-                      {
-                          if (node instanceof StringNode)
-                          {
-                              StringNode stringNode = (StringNode)node;
-                              if (xmlData.length ()>0)
-                                xmlData+=" ";
-                              xmlData += stringNode.getText ();
-                          }
-                          else
-                              if (!(node instanceof Tag && ((Tag)node).isEndTag ()))
-                                xmlTagFound = false;
-                      }
-                  }
-                  while (node instanceof StringNode);
-                  
-              }
-              
-              catch (Exception e)
-              {
-                  throw new ParserException ("TagScanner.extractXMLData() : error while trying to find xml tag",e);
-              }
-          }
-          // check end tag matches start tag
-          if (xmlTagFound)
-          {
-              if (node!=null)
-              {
-                  if (node instanceof Tag && ((Tag)node).isEndTag ())
-                  {
-                      Tag endTag = (Tag)node;
-                      if (!endTag.getTagName ().equals (tagName))
-                          xmlTagFound = false;
-                  }
-                  
-              }
-              
-          }
-          if (xmlTagFound)
-             return xmlData;
-          else
-              return null;
-      }
-      catch (Exception e)
-      {
-          throw new ParserException ("TagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
-      }
-  }
+    ParserException
+    {
+        try
+        {
+            String xmlData = "";
+            
+            boolean xmlTagFound = isXMLTagFound (node, tagName);
+            if (xmlTagFound)
+            {
+                try
+                {
+                    do
+                    {
+                        node = iterator.nextNode ();
+                        if (node!=null)
+                        {
+                            if (node instanceof StringNode)
+                            {
+                                StringNode stringNode = (StringNode)node;
+                                if (xmlData.length ()>0)
+                                    xmlData+=" ";
+                                xmlData += stringNode.getText ();
+                            }
+                            else
+                                if (!(node instanceof Tag && ((Tag)node).isEndTag ()))
+                                    xmlTagFound = false;
+                        }
+                    }
+                    while (node instanceof StringNode);
+                    
+                }
+                
+                catch (Exception e)
+                {
+                    throw new ParserException ("TagScanner.extractXMLData() : error while trying to find xml tag",e);
+                }
+            }
+            // check end tag matches start tag
+            if (xmlTagFound)
+            {
+                if (node!=null)
+                {
+                    if (node instanceof Tag && ((Tag)node).isEndTag ())
+                    {
+                        Tag endTag = (Tag)node;
+                        if (!endTag.getTagName ().equals (tagName))
+                            xmlTagFound = false;
+                    }
+                    
+                }
+                
+            }
+            if (xmlTagFound)
+                return xmlData;
+            else
+                return null;
+        }
+        catch (Exception e)
+        {
+            throw new ParserException ("TagScanner.extractXMLData() : Error occurred while trying to extract xml tag",e);
+        }
+    }
 
     public String getFilter() {
         return filter;

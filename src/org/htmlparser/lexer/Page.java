@@ -714,12 +714,7 @@ public class Page
      */
     public String getText (int start, int end)
     {
-        StringBuffer ret;
-
-        ret = new StringBuffer (Math.abs (end - start));
-        getText (ret, start, end);
-
-        return (ret.toString ());
+        return (new String (mSource.mBuffer, start, end - start));
     }
 
     /**
@@ -755,12 +750,7 @@ public class Page
      */
     public String getText ()
     {
-        StringBuffer ret;
-
-        ret = new StringBuffer (mSource.mOffset);
-        getText (ret);
-
-        return (ret.toString ());
+        return (new String (mSource.mBuffer, 0, mSource.mOffset));
     }
 
     /**

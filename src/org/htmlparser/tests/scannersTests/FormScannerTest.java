@@ -87,16 +87,6 @@ public class FormScannerTest extends ParserTestCase {
         super(name);
     }
 
-    public void testEvaluate() {
-        String line1="form method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
-        String line2="FORM method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
-        String line3="Form method=\"post\" onsubmit=\"return implementsearch()\" name=frmsearch id=form";
-        FormScanner formScanner = new FormScanner("",Parser.createParser(""));
-        assertTrue("Line 1",formScanner.evaluate(line1,null));
-        assertTrue("Line 2",formScanner.evaluate(line2,null));
-        assertTrue("Line 3",formScanner.evaluate(line3,null));
-    }
-
     public void assertTypeNameSize(String description,String type,String name,String size,InputTag inputTag) {
         assertEquals(description+" type",type,inputTag.getAttribute("TYPE"));
         assertEquals(description+" name",name,inputTag.getAttribute("NAME"));

@@ -156,6 +156,7 @@ public class TagNode
         String ref;
         StringBuffer buffer;
         char quote;
+        Attribute attribute;
 
         // first determine if there's whitespace in the value
         // and while we'return at it find a suitable quote character
@@ -202,7 +203,15 @@ public class TagNode
         }
         else
             quote = 0;
-        setAttribute (key, value, quote);
+        attribute = getAttributeEx (key);
+        if (null != attribute)
+        {   // see if we can splice it in rather than replace it
+            attribute.setValue (value);
+            if (0 != quote)
+                attribute.setQuote (quote);
+        }
+        else
+            setAttribute (key, value, quote);
     }
 
     /**
@@ -593,14 +602,23 @@ public class TagNode
      */
     public String toHtml ()
     {
-        StringBuffer ret;
+        int length;
+        int size;
         Vector attributes;
         Attribute attribute;
+        StringBuffer ret;
 
-        ret = new StringBuffer ();
+        length = 2;
         attributes = getAttributesEx ();
+        size = attributes.size ();
+        for (int i = 0; i < size; i++)
+        {
+            attribute = (Attribute)attributes.elementAt (i);
+            length += attribute.getLength ();
+        }
+        ret = new StringBuffer (length);
         ret.append ("<");
-        for (int i = 0; i < attributes.size (); i++)
+        for (int i = 0; i < size; i++)
         {
             attribute = (Attribute)attributes.elementAt (i);
             attribute.toString (ret);

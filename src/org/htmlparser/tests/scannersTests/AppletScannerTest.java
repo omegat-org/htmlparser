@@ -46,13 +46,6 @@ public class AppletScannerTest extends ParserTestCase
         super(name);
     }
 
-    public void testEvaluate()
-    {
-        AppletScanner scanner = new AppletScanner("-a");
-        boolean retVal = scanner.evaluate("   Applet ",null);
-        assertEquals("Evaluation of APPLET tag",new Boolean(true),new Boolean(retVal));
-    }
-
     public void testScan() throws ParserException
     {
         String [][]paramsData = {{"Param1","Value1"},{"Name","Somik"},{"Age","23"}};

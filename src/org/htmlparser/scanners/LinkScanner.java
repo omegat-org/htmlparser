@@ -88,31 +88,14 @@ public class LinkScanner extends CompositeTagScanner
     }
 
     /**
-     * Template Method, used to decide if this scanner can handle the Link tag type. If
-     * the evaluation returns true, the calling side makes a call to scan().
-     * @param s The complete text contents of the Tag.
-     * @param previousOpenScanner Indicates any previous scanner which hasnt completed, before the current
-     * scan has begun, and hence allows us to write scanners that can work with dirty html
+     * Check if we can handle this tag.
+     * @param tag The generic tag with the name A.
+     * @param previousOpenScanner Indicates any previous scanner which hasn't
+     * completed, before the current scan has begun.
      */
-    public boolean evaluate (String s, TagScanner previousOpenScanner)
+    public boolean evaluate (Tag tag, TagScanner previousOpenScanner)
     {
-        char ch;
-        boolean ret;
-
-        // eat up leading blanks
-        s = absorbLeadingBlanks (s);
-        if (5 > s.length ())
-            ret = false;
-        else
-        {
-            ch = s.charAt (0);
-            if ((ch=='a' || ch=='A') && Character.isWhitespace (s.charAt (1)))
-                ret = -1 != s.toUpperCase().indexOf ("HREF");
-            else
-                ret = false;
-        }
-
-        return (ret);
+        return (null != tag.getAttributeEx ("HREF"));
     }
 
     public BaseHrefScanner createBaseHREFScanner(String filter) {

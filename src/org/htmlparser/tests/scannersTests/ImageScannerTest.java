@@ -30,6 +30,7 @@ package org.htmlparser.tests.scannersTests;
 import org.htmlparser.AbstractNode;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.lexer.nodes.TagNode;
 import org.htmlparser.scanners.ImageScanner;
 import org.htmlparser.scanners.TableScanner;
 import org.htmlparser.tags.ImageTag;
@@ -67,7 +68,9 @@ public class ImageScannerTest extends ParserTestCase
     public void testEvaluate()
     {
         ImageScanner scanner = new ImageScanner("-i",new LinkProcessor());
-        boolean retVal = scanner.evaluate("   img ",null);
+        Tag tag = new Tag ();
+        tag.setTagName ("img");
+        boolean retVal = scanner.evaluate (tag ,null);
         assertEquals("Evaluation of IMG tag",new Boolean(true),new Boolean(retVal));
     }
 

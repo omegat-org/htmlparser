@@ -1072,7 +1072,7 @@ public class Parser
             name = ret.getTagName ();
             scanner = (TagScanner)scanners.get (name);
             save = mScanner;
-            if ((null != scanner) && scanner.evaluate (ret.getText (), save))
+            if ((null != scanner) && scanner.evaluate (ret, save))
             {
                 mScanner = scanner;
                 try

@@ -52,10 +52,9 @@ public class TitleScanner extends CompositeTagScanner {
         return MATCH_NAME;
     }
 
-    public boolean evaluate(String tagNameBeingChecked, TagScanner previousOpenScanner) {
-        absorbLeadingBlanks(tagNameBeingChecked);
-        return (tagNameBeingChecked.toUpperCase ().startsWith (MATCH_NAME[0]) && ((null == previousOpenScanner)
-        || !previousOpenScanner.getID ()[0].equals  ("TITLE")));
+    public boolean evaluate(Tag tag, TagScanner previousOpenScanner)
+    {
+        return ((null == previousOpenScanner) || !previousOpenScanner.getID ()[0].equals  ("TITLE"));
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException

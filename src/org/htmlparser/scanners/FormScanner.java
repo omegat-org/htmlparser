@@ -114,14 +114,13 @@ public class FormScanner extends CompositeTagScanner
         return MATCH_ID;
     }
 
-    public boolean evaluate(String s, TagScanner previousOpenScanner)
+    public boolean evaluate(Tag tag, TagScanner previousOpenScanner)
     {
-        if (previousOpenScanner instanceof LinkScanner) {
+        if (previousOpenScanner instanceof LinkScanner)
+        {
             linkScannerAlreadyOpen = true;
             StringBuffer msg= new StringBuffer();
-                msg.append("<");
-                msg.append(s);
-                msg.append(">");
+                msg.append(tag.toHtml ());
                 msg.append(PREVIOUS_DIRTY_LINK_MESSAGE);
                 feedback.warning(msg.toString());
                 // This is dirty HTML. Assume the current tag is
@@ -132,7 +131,7 @@ public class FormScanner extends CompositeTagScanner
         }
         else
             linkScannerAlreadyOpen = false;
-        return super.evaluate(s, previousOpenScanner);
+        return super.evaluate(tag, previousOpenScanner);
     }
 
     public Tag createTag(Page page, int start, int end, Vector attributes, Tag startTag, Tag endTag, NodeList children) throws ParserException

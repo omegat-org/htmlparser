@@ -32,6 +32,7 @@ import org.htmlparser.scanners.FrameScanner;
 import org.htmlparser.scanners.FrameSetScanner;
 import org.htmlparser.tags.FrameSetTag;
 import org.htmlparser.tags.FrameTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
@@ -44,16 +45,6 @@ public class FrameSetScannerTest extends ParserTestCase {
 
     public FrameSetScannerTest(String name) {
         super(name);
-    }
-
-    public void testEvaluate() {
-        String line1="frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\"";
-        String line2="FRAMESET rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\"";
-        String line3="Frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\"";
-        FrameSetScanner frameSetScanner = new FrameSetScanner("");
-        assertTrue("Line 1",frameSetScanner.evaluate(line1,null));
-        assertTrue("Line 2",frameSetScanner.evaluate(line2,null));
-        assertTrue("Line 3",frameSetScanner.evaluate(line3,null));
     }
 
     public void testScan() throws ParserException {

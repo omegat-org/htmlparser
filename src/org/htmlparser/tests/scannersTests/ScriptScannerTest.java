@@ -48,13 +48,6 @@ public class ScriptScannerTest extends ParserTestCase
         super(name);
     }
 
-    public void testEvaluate()
-    {
-        ScriptScanner scanner = new ScriptScanner("-s");
-        boolean retVal = scanner.evaluate("   script ",null);
-        assertEquals("Evaluation of SCRIPT tag",new Boolean(true),new Boolean(retVal));
-    }
-
     public void testScan() throws ParserException
     {
         String testHtml = "<SCRIPT>document.write(d+\".com\")</SCRIPT>";

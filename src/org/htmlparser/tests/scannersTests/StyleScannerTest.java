@@ -43,13 +43,6 @@ public class StyleScannerTest extends ParserTestCase
         super(name);
     }
 
-    public void testEvaluate()
-    {
-        StyleScanner scanner = new StyleScanner("-s");
-        boolean retVal = scanner.evaluate("style ",null);
-        assertEquals("Evaluation of STYLE tag",new Boolean(true),new Boolean(retVal));
-    }
-
     public void testScan() throws ParserException
     {
         createParser("<STYLE TYPE=\"text/css\"><!--\n\n"+

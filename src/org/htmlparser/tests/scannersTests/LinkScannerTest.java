@@ -83,7 +83,7 @@ public class LinkScannerTest extends ParserTestCase
         assertEquals("Text of the StringNode","Site Comments?",stringNode.getText());
         assertTrue("Third node should be a tag",node[2] instanceof Tag);
         assertTrue("Fourth node should be a link",node[3] instanceof LinkTag);
-        // LinkScanner.evaluate() says anythin less than 5 characters isn't a link:
+        // LinkScanner.evaluate() says no HREF means it isn't a link:
         assertTrue("Fifth node should be a tag",node[4] instanceof Tag); 
         assertTrue("Sixth node should be a tag",node[5] instanceof Tag);
     }
@@ -157,7 +157,10 @@ public class LinkScannerTest extends ParserTestCase
     public void testEvaluate()
     {
         LinkScanner scanner = new LinkScanner("-l");
-        boolean retVal = scanner.evaluate("   a href ",null);
+        Tag tag = new Tag ();
+        tag.setTagName ("a");
+        tag.setAttribute ("href", "https://www.redhat.com/");
+        boolean retVal = scanner.evaluate(tag,null);
         assertEquals("Evaluation of the Link tag",new Boolean(true),new Boolean(retVal));
     }
 
