@@ -50,6 +50,7 @@ import junit.framework.TestSuite;
 
 public class HTMLRemarkNodeTest extends HTMLParserTestCase 
 {
+	
 	public HTMLRemarkNodeTest(String name) {
 		super(name);
 	}

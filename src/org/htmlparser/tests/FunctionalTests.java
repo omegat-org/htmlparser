@@ -47,13 +47,10 @@ import junit.framework.TestSuite;
 
 public class FunctionalTests extends TestCase {
 
-	/**
-	 * Constructor for FunctionalTests.
-	 * @param arg0
-	 */
 	public FunctionalTests(String arg0) {
 		super(arg0);
 	}
+
 	/**
 	 * Based on a suspected bug report by Annette Doyle,
 	 * to check if the no of image tags are correctly 
@@ -72,6 +69,7 @@ public class FunctionalTests extends TestCase {
 		}
 			
 	}
+
 	public int findImageTagCount() {
 		int imgTagCount = 0;
 		try {
@@ -90,6 +88,7 @@ public class FunctionalTests extends TestCase {
 		}
 		return imgTagCount;
 	}
+
 	public int countImageTagsWithHTMLParser() throws HTMLParserException {
 		HTMLParser parser = new HTMLParser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
 		parser.addScanner(new HTMLImageScanner("-i",new HTMLLinkProcessor()));
@@ -125,6 +124,7 @@ public class FunctionalTests extends TestCase {
 		while (line!=null);
 		return imgTagCount;
 	}
+
 	public static TestSuite suite() {
 		return new TestSuite(FunctionalTests.class);
 	}

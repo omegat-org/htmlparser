@@ -28,28 +28,18 @@
 
 package org.htmlparser.tests;
 import junit.framework.TestSuite;
-/**
- * Insert the type's description here.
- * Creation date: (6/17/2001 6:07:04 PM)
- * @author: Administrator
- */
+
 public class AllTests extends junit.framework.TestCase 
 {
-	/**
-	 * AllTests constructor comment.
-	 * @param name java.lang.String
-	 */
+
 	public AllTests(String name) {
 		super(name);
 	}
+
 	public static void main(String[] args) {
 		new junit.awtui.TestRunner().start(new String[] {"org.htmlparser.tests.AllTests"});
 	}
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (6/17/2001 6:07:15 PM)
-	 * @return junit.framework.TestSuite
-	 */
+
 	public static TestSuite suite() {
 		TestSuite suite = new TestSuite();
 		

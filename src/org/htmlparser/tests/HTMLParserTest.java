@@ -44,14 +44,6 @@ import org.htmlparser.util.HTMLParserException;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * @author Somik Raha
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
 public class HTMLParserTest extends HTMLParserTestCase {
 
 	public HTMLParserTest(String name) {
@@ -73,6 +65,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		}
 		assertEquals("There should be 1 node identified (second call to parser.elements())",1,i);
 	}
+
 	/**
 	 * This testcase needs you to be online.
 	 */

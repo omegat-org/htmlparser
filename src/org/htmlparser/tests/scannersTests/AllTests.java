@@ -49,44 +49,33 @@
 package org.htmlparser.tests.scannersTests;
 
 import junit.framework.TestSuite;
-/**
- * Insert the type's description here.
- * Creation date: (6/17/2001 6:07:04 PM)
- * @author: Administrator
- */
+
 public class AllTests extends junit.framework.TestCase 
 {
-/**
- * AllTests constructor comment.
- * @param name java.lang.String
- */
-public AllTests(String name) {
-	super(name);
-}
-/**
- * Insert the method's description here.
- * Creation date: (6/17/2001 6:07:15 PM)
- * @return junit.framework.TestSuite
- */
-public static TestSuite suite() {
-	TestSuite suite = new TestSuite();
-	suite.addTestSuite(HTMLTagScannerTest.class);
-	suite.addTestSuite(HTMLAppletScannerTest.class);
-	suite.addTestSuite(HTMLScriptScannerTest.class);
-	suite.addTestSuite(HTMLImageScannerTest.class);
-	suite.addTestSuite(HTMLLinkScannerTest.class);
-	suite.addTestSuite(HTMLStyleScannerTest.class);	
-	suite.addTestSuite(HTMLMetaTagScannerTest.class);			
-	suite.addTestSuite(HTMLTitleScannerTest.class);				
-	suite.addTestSuite(HTMLFormScannerTest.class);	
-	suite.addTestSuite(HTMLFrameScannerTest.class);	
-	suite.addTestSuite(HTMLFrameSetScannerTest.class);
-	suite.addTestSuite(HTMLInputTagScannerTest.class);
-	suite.addTestSuite(HTMLOptionTagScannerTest.class);
-	suite.addTestSuite(HTMLSelectTagScannerTest.class);
-	suite.addTestSuite(HTMLTextareaTagScannerTest.class);
-	suite.addTestSuite(HTMLBaseHREFScannerTest.class);
-	suite.addTestSuite(HTMLJspScannerTest.class);	
-	return suite;
-}
+
+	public AllTests(String name) {
+		super(name);
+	}
+	
+	public static TestSuite suite() {
+		TestSuite suite = new TestSuite();
+		suite.addTestSuite(HTMLTagScannerTest.class);
+		suite.addTestSuite(HTMLAppletScannerTest.class);
+		suite.addTestSuite(HTMLScriptScannerTest.class);
+		suite.addTestSuite(HTMLImageScannerTest.class);
+		suite.addTestSuite(HTMLLinkScannerTest.class);
+		suite.addTestSuite(HTMLStyleScannerTest.class);	
+		suite.addTestSuite(HTMLMetaTagScannerTest.class);			
+		suite.addTestSuite(HTMLTitleScannerTest.class);				
+		suite.addTestSuite(HTMLFormScannerTest.class);	
+		suite.addTestSuite(HTMLFrameScannerTest.class);	
+		suite.addTestSuite(HTMLFrameSetScannerTest.class);
+		suite.addTestSuite(HTMLInputTagScannerTest.class);
+		suite.addTestSuite(HTMLOptionTagScannerTest.class);
+		suite.addTestSuite(HTMLSelectTagScannerTest.class);
+		suite.addTestSuite(HTMLTextareaTagScannerTest.class);
+		suite.addTestSuite(HTMLBaseHREFScannerTest.class);
+		suite.addTestSuite(HTMLJspScannerTest.class);	
+		return suite;
+	}
 }

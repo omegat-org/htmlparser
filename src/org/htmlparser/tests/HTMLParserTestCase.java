@@ -18,18 +18,11 @@ import org.htmlparser.util.HTMLParserException;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * @author Somik Raha
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
 public class HTMLParserTestCase extends TestCase {
 	protected HTMLParser parser;
 	protected HTMLNode node [];
 	protected int nodeCount;
+
 	public HTMLParserTestCase(String name) {
 		super(name);
 	}
@@ -41,6 +34,7 @@ public class HTMLParserTestCase extends TestCase {
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[20];
 	}
+
 	protected void createParser(String inputHTML,int numNodes) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
@@ -48,6 +42,7 @@ public class HTMLParserTestCase extends TestCase {
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[numNodes];
 	}
+
 	protected void createParser(String inputHTML, String url) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
@@ -55,6 +50,7 @@ public class HTMLParserTestCase extends TestCase {
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[20];
 	}
+
 	public void assertStringEquals(String message,String s1,String s2) {
 		for (int i=0;i<s1.length();i++) {
 			if (s1.charAt(i)!=s2.charAt(i)) {
@@ -69,6 +65,7 @@ public class HTMLParserTestCase extends TestCase {
 			}
 		}
 	}    
+
 	public void parseNodes() throws HTMLParserException{
 		nodeCount = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -76,9 +73,11 @@ public class HTMLParserTestCase extends TestCase {
 			node[nodeCount++] = e.nextHTMLNode();
 		}	
 	}
+
 	public void assertNodeCount(int nodeCountExpected) {
 		assertEquals("Number of nodes parsed",nodeCountExpected,nodeCount);
 	}
+
 	public void parseAndAssertNodeCount(int nodeCountExpected) throws HTMLParserException {
 		parseNodes();
 		assertNodeCount(nodeCountExpected);

@@ -38,6 +38,7 @@ import org.htmlparser.util.HTMLParserException;
 public class PerformanceTest {
 	private int numTimes;
 	private String file;
+
 	/**
 	 * Try to parse the given page the given no of times
 	 * Print average time taken
@@ -48,6 +49,7 @@ public class PerformanceTest {
 		this.file = file;
 		this.numTimes = numTimes;		
 	}
+
 	public void beginTestWithoutScanners() throws HTMLParserException {
 		HTMLParser parser;
 		long sumTimes=0;
@@ -75,6 +77,7 @@ public class PerformanceTest {
 		System.out.println("Average Time : "+avg+" ms");
 		System.out.println("***************************************");
 	}
+
 	public void beginTestWithScanners() throws HTMLParserException {
 		HTMLParser parser;
 		long sumTimes=0;

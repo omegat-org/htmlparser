@@ -44,16 +44,9 @@ import org.htmlparser.HTMLStringNode;
 import java.io.StringReader;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-/**
- * Insert the type's description here.
- * Creation date: (6/17/2001 3:59:52 PM)
- * @author: Administrator
- */
+
 public class HTMLStringNodeTest extends HTMLParserTestCase {
-	/**
-	 * HTMLStringNodeTest constructor comment.
-	 * @param name java.lang.String
-	 */
+
 	public HTMLStringNodeTest(String name) {
 		super(name);
 	}
@@ -121,10 +114,6 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 		assertEquals("http://asgard.ch",linkTag.getLink());
 	}
 	
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (5/6/2002 11:25:26 PM)
-	 */
 	public void testToPlainTextString() throws HTMLParserException {
 		createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		parseAndAssertNodeCount(10);
@@ -136,10 +125,6 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toPlainTextString());
 	}
 	
-	/**
-	 * Insert the method's description here.
-	 * Creation date: (5/6/2002 11:25:26 PM)
-	 */
 	public void testToHTML() throws HTMLParserException {
 		createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		parseAndAssertNodeCount(10);
@@ -150,6 +135,7 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 		stringNode = (HTMLStringNode)node[7];
 		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHTML());
 	}
+
 	public void testEmptyLines() throws HTMLParserException {
 		createParser(
 		"David Nirenberg (Center for Advanced Study in the Behavorial Sciences, Stanford).<br>\n"+
@@ -159,6 +145,7 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 		parseAndAssertNodeCount(4);
 		assertTrue("Third Node identified must be a string node",node[2] instanceof HTMLStringNode);
 	}
+
 	/**
 	 * This is a bug reported by John Zook (586222), where the first few chars
 	 * before a remark is being missed, if its on the same line.
@@ -179,6 +166,7 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 		assertEquals("Remark Node contents"," Comment ",remarkNode.getText());
 			
 	}
+
 	/**
 	 * Based on a bug report submitted by Cedric Rosa, if the last line contains a single character,
 	 * HTMLStringNode does not return the string node correctly.
