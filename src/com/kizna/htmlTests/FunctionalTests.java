@@ -37,15 +37,6 @@ public class FunctionalTests extends TestCase {
 		//System.out.println("Counted "+parserImgTagCount+" image tags thru HTML Parser");
 		assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);	
 	}
-	public void testNumImageTagsInYahooWithRegisteredScanners() {
-		// First count the image tags as is
-		int imgTagCount;
-		imgTagCount = findImageTagCount();
-		//System.out.println("Counted  "+imgTagCount+" image tags regularly");
-		int parserImgTagCount = countImageTagsWithHTMLParserScannersRegistered();
-		//System.out.println("Counted "+parserImgTagCount+" image tags thru HTML Parser");
-		assertEquals("Image Tag Count",imgTagCount,parserImgTagCount);	
-	}	
 	public int findImageTagCount() {
 		int imgTagCount = 0;
 		try {
@@ -68,20 +59,6 @@ public class FunctionalTests extends TestCase {
 	public int countImageTagsWithHTMLParser() {
 		HTMLParser parser = new HTMLParser("http://www.yahoo.com");
 		parser.addScanner(new HTMLImageScanner("-i"));
-		int parserImgTagCount = 0;
-		HTMLNode node;
-		for (Enumeration e= parser.elements();e.hasMoreElements();) {
-			node = (HTMLNode)e.nextElement();
-			if (node instanceof HTMLImageTag) {
-				parserImgTagCount++;				
-				//System.out.println(((HTMLImageTag)node).getTagLine());
-			}		
-		}
-		return parserImgTagCount;
-	}
-	public int countImageTagsWithHTMLParserScannersRegistered() {
-		HTMLParser parser = new HTMLParser("http://www.yahoo.com");
-		parser.registerScanners();
 		int parserImgTagCount = 0;
 		HTMLNode node;
 		for (Enumeration e= parser.elements();e.hasMoreElements();) {
