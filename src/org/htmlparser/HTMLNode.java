@@ -43,6 +43,7 @@ public abstract class HTMLNode
     implements
         Serializable
 {
+	public static final String TYPE="NODE";
 	/** 
 	 * The beginning position of the tag in the line
 	 */
@@ -178,4 +179,7 @@ public abstract class HTMLNode
 	}
 
 	public abstract void accept(HTMLVisitor visitor);
+	public String getType() {
+		return TYPE;
+	}
 }

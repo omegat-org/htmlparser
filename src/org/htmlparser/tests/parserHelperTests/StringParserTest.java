@@ -54,7 +54,7 @@ public class StringParserTest extends HTMLParserTestCase {
 		createParser("<HTML><HEAD><TITLE>Google</TITLE>");
 		parseAndAssertNodeCount(5);
 		// The fourth node should be a HTMLStringNode-  with the text - Google
-		assertTrue("Fourth node should be a HTMLStringNode",node[3] instanceof HTMLStringNode);
+		assertTrue("Fourth node should be a HTMLStringNode",node[3].getType()==HTMLStringNode.TYPE);
 		HTMLStringNode stringNode = (HTMLStringNode)node[3];
 		assertEquals("Text of the StringNode","Google",stringNode.getText());
 	}
@@ -76,7 +76,7 @@ public class StringParserTest extends HTMLParserTestCase {
 		parser.addScanner(new HTMLLinkScanner("-l"));
 		parseAndAssertNodeCount(3);
 		// The first node should be a HTMLStringNode-  with the text - view these documents, you must have 
-		assertTrue("First node should be a HTMLStringNode",node[0] instanceof HTMLStringNode);
+		assertTrue("First node should be a HTMLStringNode",node[0].getType()==HTMLStringNode.TYPE);
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
 		assertEquals("Text of the StringNode","view these documents, you must have ",stringNode.getText());
 		assertTrue("Second node should be a link node",node[1] instanceof HTMLLinkTag);
@@ -84,7 +84,7 @@ public class StringParserTest extends HTMLParserTestCase {
 		assertEquals("Link is","http://www.adobe.com",linkNode.getLink());
 		assertEquals("Link text is","Adobe \r\nAcrobat Reader",linkNode.getLinkText());
 	
-		assertTrue("Third node should be a string node",node[2] instanceof HTMLStringNode);
+		assertTrue("Third node should be a string node",node[2].getType()==HTMLStringNode.TYPE);
 		HTMLStringNode stringNode2 = (HTMLStringNode)node[2];
 		assertEquals("Contents of third node"," installed on your computer.",stringNode2.getText());
 	}
@@ -108,10 +108,10 @@ public class StringParserTest extends HTMLParserTestCase {
 	public void testToPlainTextString() throws HTMLParserException {
 		createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		parseAndAssertNodeCount(10);
-		assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
+		assertTrue("Fourth Node identified must be a string node",node[3].getType()==HTMLStringNode.TYPE);
 		HTMLStringNode stringNode = (HTMLStringNode)node[3];
 		assertEquals("First String Node","This is the Title",stringNode.toPlainTextString());
-		assertTrue("Eighth Node identified must be a string node",node[7] instanceof HTMLStringNode);
+		assertTrue("Eighth Node identified must be a string node",node[7].getType()==HTMLStringNode.TYPE);
 		stringNode = (HTMLStringNode)node[7];
 		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toPlainTextString());
 	}
@@ -119,10 +119,10 @@ public class StringParserTest extends HTMLParserTestCase {
 	public void testToHTML() throws HTMLParserException {
 		createParser("<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, this is the HTML Parser</BODY></HTML>");
 		parseAndAssertNodeCount(10);
-		assertTrue("Fourth Node identified must be a string node",node[3] instanceof HTMLStringNode);
+		assertTrue("Fourth Node identified must be a string node",node[3].getType()==HTMLStringNode.TYPE);
 		HTMLStringNode stringNode = (HTMLStringNode)node[3];
 		assertEquals("First String Node","This is the Title",stringNode.toHTML());
-		assertTrue("Eighth Node identified must be a string node",node[7] instanceof HTMLStringNode);
+		assertTrue("Eighth Node identified must be a string node",node[7].getType()==HTMLStringNode.TYPE);
 		stringNode = (HTMLStringNode)node[7];
 		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHTML());
 	}
@@ -134,7 +134,7 @@ public class StringParserTest extends HTMLParserTestCase {
 		"<br>"
 		);
 		parseAndAssertNodeCount(4);
-		assertTrue("Third Node identified must be a string node",node[2] instanceof HTMLStringNode);
+		assertTrue("Third Node identified must be a string node",node[2].getType()==HTMLStringNode.TYPE);
 	}
 
 	/**
@@ -146,9 +146,9 @@ public class StringParserTest extends HTMLParserTestCase {
 		"Before Comment <!-- Comment --> After Comment"
 		);
 		parseAndAssertNodeCount(3);
-		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
-		assertTrue("Second node should be HTMLRemarkNode",node[1] instanceof HTMLRemarkNode);
-		assertTrue("Third node should be HTMLStringNode",node[2] instanceof HTMLStringNode);
+		assertTrue("First node should be HTMLStringNode",node[0].getType()==HTMLStringNode.TYPE);
+		assertTrue("Second node should be HTMLRemarkNode",node[1].getType()==HTMLRemarkNode.TYPE);
+		assertTrue("Third node should be HTMLStringNode",node[2].getType()==HTMLStringNode.TYPE);
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
 		assertEquals("First String node contents","Before Comment ",stringNode.getText());
 		HTMLStringNode stringNode2 = (HTMLStringNode)node[2];
@@ -165,7 +165,7 @@ public class StringParserTest extends HTMLParserTestCase {
 	public void testLastLineWithOneChar() throws HTMLParserException {
 		createParser("a");
 		parseAndAssertNodeCount(1);
-		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
+		assertTrue("First node should be HTMLStringNode",node[0].getType()==HTMLStringNode.TYPE);
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
 		assertEquals("First String node contents","a",stringNode.getText());
 	}
@@ -173,7 +173,7 @@ public class StringParserTest extends HTMLParserTestCase {
 	public void testStringWithEmptyLine() throws HTMLParserException {
 		createParser("a\n\nb");
 		parseAndAssertNodeCount(1);
-		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
+		assertTrue("First node should be HTMLStringNode",node[0].getType()==HTMLStringNode.TYPE);
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
 		assertStringEquals("First String node contents","a\r\n\r\nb",stringNode.getText());
 	}	

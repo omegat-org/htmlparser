@@ -50,7 +50,7 @@ public abstract class HTMLCompositeTagScanner extends HTMLTagScanner {
 			node = reader.readElement();
 			if (stringNodeIgnoreMode)
 				reader.getStringParser().setIgnoreStateMode(false);
-			if (node instanceof HTMLEndTag) {
+			if (node!=null && node.getType()==HTMLEndTag.TYPE) {
 				endTag = (HTMLTag)node;
 				for (int i=0;i<nameOfTagToMatch.length && !endTagFound;i++) {
 					if (endTag.getText().equalsIgnoreCase(nameOfTagToMatch[i])) 

@@ -313,7 +313,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			{
 				node = reader.readElement();
 	
-				if (node instanceof HTMLStringNode)
+				if (node !=null && node.getType()==HTMLStringNode.TYPE)
 				{
 					
 					tmp =((HTMLStringNode)node).getText();
@@ -321,7 +321,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 					linkContents += tmp;   // Kaarle Kaila 23.10.2001
 					
 				}
-				if (node instanceof HTMLEndTag)
+				if (node!=null && node.getType()==HTMLEndTag.TYPE)
 				{
 				    tmp = ((HTMLEndTag)node).getText();
 				    linkContents += "</" + tmp  ;   // Kaarle Kaila 23.10.2001
@@ -356,7 +356,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 				else if (node!=null) nodeVector.addElement(node);
 			}
 			while (endFlag==false && node!=null);
-			if (node instanceof HTMLEndTag || node==null)
+			if (node==null || node.getType()==HTMLEndTag.TYPE)
 			{
 				if (node==null)  {
 					// Add an end link tag

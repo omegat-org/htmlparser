@@ -135,7 +135,7 @@ public abstract class HTMLTagScanner
 	      do {
 	        node = reader.readElement();
 	        if (node!=null) {
-	          if (node instanceof HTMLStringNode) {
+	          if (node.getType()==HTMLStringNode.TYPE) {
 	            HTMLStringNode stringNode = (HTMLStringNode)node;
 	            if (xmlData.length()>0) xmlData+=" ";
 	        xmlData += stringNode.getText();
@@ -180,7 +180,7 @@ public abstract class HTMLTagScanner
 	 */
 	public static boolean isXMLTagFound(HTMLNode node, String tagName) {
 		boolean xmlTagFound=false;
-		if (node instanceof HTMLTag) {
+		if (node.getType()==HTMLTag.TYPE) {
 			HTMLTag tag = (HTMLTag)node;
 		    if (tag.getText().toUpperCase().indexOf(tagName)==0) {
 		      xmlTagFound=true;

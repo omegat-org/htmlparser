@@ -47,6 +47,7 @@ import org.htmlparser.HTMLReader;
  */
 public class HTMLTag extends HTMLNode
 {
+	public static final String TYPE = "TAG";
     /**
     * Constant used as value for the value of the tag name
     * in parseParameters  (Kaarle Kaila 3.8.2001)
@@ -419,6 +420,10 @@ public class HTMLTag extends HTMLNode
 
 	public void accept(HTMLVisitor visitor) {
 		visitor.visitTag(this);
+	}
+
+	public String getType() {
+		return TYPE;
 	}
 
 }

@@ -36,6 +36,7 @@ import org.htmlparser.visitors.HTMLVisitor;
  */
 public class HTMLEndTag extends HTMLTag
 {
+	public final static String TYPE="END_TAG";
 	public final static int ENDTAG_BEFORE_PARSING_STATE=0;
     public final static int ENDTAG_WAIT_FOR_SLASH_STATE=1;
     public final static int ENDTAG_BEGIN_PARSING_STATE=2;
@@ -125,6 +126,10 @@ public class HTMLEndTag extends HTMLTag
 	
 	public void accept(HTMLVisitor visitor) {
 		visitor.visitEndTag(this);
+	}
+
+	public String getType() {
+		return TYPE;
 	}
 
 }

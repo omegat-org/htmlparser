@@ -38,6 +38,7 @@ import org.htmlparser.visitors.*;
  */
 public class HTMLStringNode extends HTMLNode
 {
+	public static final String TYPE="STRING_NODE";
 	public static final String STRING_FILTER="-string";
 	/**
 	 * The text of the string.
@@ -82,6 +83,8 @@ public class HTMLStringNode extends HTMLNode
 		visitor.visitStringNode(this);
 	}
 
-
+	public String getType() {
+		return TYPE;
+	}
 
 }

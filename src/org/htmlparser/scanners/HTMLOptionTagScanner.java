@@ -62,7 +62,7 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 			do 
 			{
 				node = reader.readElement();
-				if (node instanceof HTMLEndTag)
+				if (node!=null && node.getType()==HTMLEndTag.TYPE)
 				{
 					endTag = (HTMLEndTag)node;
 					String endTagString = endTag.getText().toUpperCase();
@@ -75,7 +75,7 @@ public class HTMLOptionTagScanner extends HTMLTagScanner
 						}
 					}
 				}
-				else if (node instanceof HTMLStringNode)
+				else if (node!=null && node.getType()==HTMLStringNode.TYPE)
 				{
 					text.append(node.toHTML());
 				}
