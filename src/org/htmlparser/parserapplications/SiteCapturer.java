@@ -51,6 +51,7 @@ import org.htmlparser.tags.FrameTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
+import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -438,9 +439,22 @@ public class SiteCapturer
             bookmark = mPages.size ();
             // fetch the page and gather the list of nodes
             mParser.setURL (url);
-            list = new NodeList ();
-            for (NodeIterator e = mParser.elements (); e.hasMoreNodes (); )
-                list.add (e.nextNode ()); // URL conversion occurs in the tags
+            try
+            {
+	            list = new NodeList ();
+	            for (NodeIterator e = mParser.elements (); e.hasMoreNodes (); )
+	                list.add (e.nextNode ()); // URL conversion occurs in the tags
+            }
+            catch (EncodingChangeException ece)
+            {
+                // fix bug #998195 SiteCatpurer just crashed
+                // try again with the encoding now set correctly
+                // hopefully mPages, mImages, mCopied and mFinished won't be corrupted
+                mParser.reset ();
+	            list = new NodeList ();
+	            for (NodeIterator e = mParser.elements (); e.hasMoreNodes (); )
+	                list.add (e.nextNode ());
+            }
 
             // handle robots meta tag according to http://www.robotstxt.org/wc/meta-user.html
             // <meta name="robots" content="index,follow" />
