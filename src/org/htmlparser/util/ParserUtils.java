@@ -26,7 +26,6 @@
 
 package org.htmlparser.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -1097,8 +1096,7 @@ public class ParserUtils
  	
         Parser parser = new Parser();
         Lexer lexer = new Lexer();
-        String defCharSet = new Page().DEFAULT_CHARSET;
-        Page page = new Page(new ByteArrayInputStream(input.getBytes(defCharSet)), defCharSet);
+        Page page = new Page(input);
         lexer.setPage(page);
         parser.setLexer(lexer);
         

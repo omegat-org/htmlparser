@@ -33,9 +33,11 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import org.htmlparser.lexer.InputStreamSource;
 
 import org.htmlparser.lexer.Stream;
 import org.htmlparser.lexer.Source;
+import org.htmlparser.lexer.StringSource;
 import org.htmlparser.tests.ParserTestCase;
 
 public class SourceTests extends ParserTestCase
@@ -64,45 +66,45 @@ public class SourceTests extends ParserTestCase
     /**
      * Test initialization with a null value.
      */
-    public void testNull () throws IOException
+    public void testInputStreamSourceNull () throws IOException
     {
         Source source;
 
-        source = new Source (null);
+        source = new InputStreamSource (null);
         assertTrue ("erroneous character", -1 == source.read ());
     }
 
     /**
-     * Test initialization with a null charset name.
+     * Test initialization of a InputStreamSource with a zero length byte array.
      */
-    public void testEmpty () throws IOException
+    public void testInputStreamSourceEmpty () throws IOException
     {
         Source source;
 
-        source = new Source (new Stream (new ByteArrayInputStream (new byte[0])), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (new byte[0])), null);
         assertTrue ("erroneous character", -1 == source.read ());
     }
 
     /**
-     * Test initialization with an input stream having only one byte.
+     * Test initialization of a InputStreamSource with an input stream having only one byte.
      */
-    public void testOneByte () throws IOException
+    public void testInputStreamSourceOneByte () throws IOException
     {
         Source source;
 
-        source = new Source (new Stream (new ByteArrayInputStream (new byte[] { (byte)0x42 })), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (new byte[] { (byte)0x42 })), null);
         assertTrue ("erroneous character", 'B' == source.read ());
         assertTrue ("extra character", -1 == source.read ());
     }
 
     /**
-     * Test close.
+     * Test closing a InputStreamSource.
      */
-    public void testClose () throws IOException
+    public void testInputStreamSourceClose () throws IOException
     {
         Source source;
 
-        source = new Source (new Stream (new ByteArrayInputStream ("hello word".getBytes ())), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream ("hello word".getBytes ())), null);
         assertTrue ("no character", -1 != source.read ());
         source.destroy ();
         try
@@ -117,9 +119,9 @@ public class SourceTests extends ParserTestCase
    }
 
     /**
-     * Test reset.
+     * Test resetting a InputStreamSource.
      */
-    public void testReset () throws IOException
+    public void testInputStreamSourceReset () throws IOException
     {
         String reference;
         Source source;
@@ -127,7 +129,7 @@ public class SourceTests extends ParserTestCase
         int c;
 
         reference = "Now is the time for all good men to come to the aid of the party";
-        source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         buffer = new StringBuffer (reference.length ());
         while (-1 != (c = source.read ()))
             buffer.append ((char)c);
@@ -141,9 +143,9 @@ public class SourceTests extends ParserTestCase
     }
 
     /**
-     * Test reset in the middle of reading.
+     * Test resetting a InputStreamSource in the middle of reading.
      */
-    public void testMidReset () throws IOException
+    public void testInputStreamSourceMidReset () throws IOException
     {
         String reference;
         Source source;
@@ -151,7 +153,7 @@ public class SourceTests extends ParserTestCase
         int c;
 
         reference = "Now is the time for all good men to come to the aid of the party";
-        source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         buffer = new StringBuffer (reference.length ());
         for (int i = 0; i < 25; i++)
             buffer.append ((char)source.read ());
@@ -165,9 +167,9 @@ public class SourceTests extends ParserTestCase
     }
 
     /**
-     * Test mark/reset in the middle of reading.
+     * Test mark/reset of a InputStreamSource in the middle of reading.
      */
-    public void testMarkReset () throws IOException
+    public void testInputStreamSourceMarkReset () throws IOException
     {
         String reference;
         Source source;
@@ -175,7 +177,7 @@ public class SourceTests extends ParserTestCase
         int c;
 
         reference = "Now is the time for all good men to come to the aid of the party";
-        source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         assertTrue ("not markable", source.markSupported ());
         buffer = new StringBuffer (reference.length ());
         for (int i = 0; i < 25; i++)
@@ -191,9 +193,9 @@ public class SourceTests extends ParserTestCase
     }
 
     /**
-     * Test skip.
+     * Test skipping a InputStreamSource.
      */
-    public void testSkip () throws IOException
+    public void testInputStreamSourceSkip () throws IOException
     {
         String part1;
         String part2;
@@ -207,7 +209,7 @@ public class SourceTests extends ParserTestCase
         part2 = "for all good men ";
         part3 = "to come to the aid of the party";
         reference = part1 + part2 + part3;
-        source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         buffer = new StringBuffer (reference.length ());
         for (int i = 0; i < part1.length (); i++)
             buffer.append ((char)source.read ());
@@ -219,16 +221,16 @@ public class SourceTests extends ParserTestCase
     }
 
     /**
-     * Test multi-byte read.
+     * Test multi-byte read with a InputStreamSource.
      */
-    public void testMultByte () throws IOException
+    public void testInputStreamSourceMultByte () throws IOException
     {
         String reference;
         Source source;
         char[] buffer;
 
         reference = "Now is the time for all good men to come to the aid of the party";
-        source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         buffer = new char[reference.length ()];
         source.read (buffer, 0, buffer.length);
         assertTrue ("string incorrect", reference.equals (new String (buffer)));
@@ -237,9 +239,9 @@ public class SourceTests extends ParserTestCase
     }
 
     /**
-     * Test positioned multi-byte read.
+     * Test positioned multi-byte read with a InputStreamSource.
      */
-    public void testPositionedMultByte () throws IOException
+    public void testInputStreamSourcePositionedMultByte () throws IOException
     {
         String part1;
         String part2;
@@ -254,7 +256,7 @@ public class SourceTests extends ParserTestCase
         part2 = "for all good men ";
         part3 = "to come to the aid of the party";
         reference = part1 + part2 + part3;
-        source = new Source (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (reference.getBytes (DEFAULT_CHARSET))), null);
         buffer = new char[reference.length ()];
         for (int i = 0; i < part1.length (); i++)
             buffer[i] = (char)source.read ();
@@ -269,13 +271,13 @@ public class SourceTests extends ParserTestCase
     }
 
     /**
-     * Test ready.
+     * Test ready of a InputStreamSource.
      */
-    public void testReady () throws IOException
+    public void testInputStreamSourceReady () throws IOException
     {
         Source source;
 
-        source = new Source (new Stream (new ByteArrayInputStream (new byte[] { (byte)0x42, (byte)0x62 })), null);
+        source = new InputStreamSource (new Stream (new ByteArrayInputStream (new byte[] { (byte)0x42, (byte)0x62 })), null);
         assertTrue ("ready?", !source.ready ());
         assertTrue ("erroneous character", 'B' == source.read ());
         assertTrue ("not ready", source.ready ());
@@ -299,8 +301,7 @@ public class SourceTests extends ParserTestCase
         Source source;
         int index;
 
-        // pick a big file
-        link = "http://htmlparser.sourceforge.net/HTMLParser_Coverage.html";
+        link = "http://htmlparser.sourceforge.net";
         try
         {
             url = new URL (link);
@@ -309,7 +310,7 @@ public class SourceTests extends ParserTestCase
             in = new InputStreamReader (new BufferedInputStream (connection1.getInputStream ()), "UTF-8");
             connection2 = url.openConnection ();
             connection2.connect ();
-            source = new Source (new Stream (connection2.getInputStream ()), "UTF-8");
+            source = new InputStreamSource (new Stream (connection2.getInputStream ()), "UTF-8");
             index = 0;
             while (-1 != (c1 = in.read ()))
             {
@@ -327,5 +328,228 @@ public class SourceTests extends ParserTestCase
         {
             fail ("bad url " + link);
         }
+    }
+
+    /**
+     * Test initialization of a StringSource with a null value.
+     */
+    public void testStringSourceNull () throws IOException
+    {
+        Source source;
+
+        source = new StringSource (null);
+        assertTrue ("erroneous character", -1 == source.read ());
+    }
+
+    /**
+     * Test initialization of a StringSource with a zero length string.
+     */
+    public void testStringSourceEmpty () throws IOException
+    {
+        Source source;
+
+        source = new StringSource ("");
+        assertTrue ("erroneous character", -1 == source.read ());
+    }
+
+    /**
+     * Test initialization of a StringSource with a one character string.
+     */
+    public void testStringSourceOneCharacter () throws IOException
+    {
+        Source source;
+
+        source = new StringSource (new String ("B"));
+        assertTrue ("erroneous character", 'B' == source.read ());
+        assertTrue ("extra character", -1 == source.read ());
+    }
+
+    /**
+     * Test closing a StringSource.
+     */
+    public void testStringSourceClose () throws IOException
+    {
+        Source source;
+
+        source = new StringSource ("hello word");
+        assertTrue ("no character", -1 != source.read ());
+        source.destroy ();
+        try
+        {
+            source.read ();
+            fail ("not closed");
+        }
+        catch (IOException ioe)
+        {
+            // expected outcome
+        }
+   }
+
+    /**
+     * Test resetting a StringSource.
+     */
+    public void testStringSourceReset () throws IOException
+    {
+        String reference;
+        Source source;
+        StringBuffer buffer;
+        int c;
+
+        reference = "Now is the time for all good men to come to the aid of the party";
+        source = new StringSource (reference);
+        buffer = new StringBuffer (reference.length ());
+        while (-1 != (c = source.read ()))
+            buffer.append ((char)c);
+        assertTrue ("string incorrect", reference.equals (buffer.toString ()));
+        source.reset ();
+        buffer.setLength (0);
+        while (-1 != (c = source.read ()))
+            buffer.append ((char)c);
+        assertTrue ("string incorrect", reference.equals (buffer.toString ()));
+        source.close ();
+    }
+
+    /**
+     * Test resetting a StringSource in the middle of reading.
+     */
+    public void testStringSourceMidReset () throws IOException
+    {
+        String reference;
+        Source source;
+        StringBuffer buffer;
+        int c;
+
+        reference = "Now is the time for all good men to come to the aid of the party";
+        source = new StringSource (reference);
+        buffer = new StringBuffer (reference.length ());
+        for (int i = 0; i < 25; i++)
+            buffer.append ((char)source.read ());
+        source.reset ();
+        for (int i = 0; i < 25; i++)
+            source.read ();
+        while (-1 != (c = source.read ()))
+            buffer.append ((char)c);
+        assertTrue ("string incorrect", reference.equals (buffer.toString ()));
+        source.close ();
+    }
+
+    /**
+     * Test mark/reset of a StringSource in the middle of reading.
+     */
+    public void testStringSourceMarkReset () throws IOException
+    {
+        String reference;
+        Source source;
+        StringBuffer buffer;
+        int c;
+
+        reference = "Now is the time for all good men to come to the aid of the party";
+        source = new StringSource (reference);
+        assertTrue ("not markable", source.markSupported ());
+        buffer = new StringBuffer (reference.length ());
+        for (int i = 0; i < 25; i++)
+            buffer.append ((char)source.read ());
+        source.mark (88);
+        for (int i = 0; i < 25; i++)
+            source.read ();
+        source.reset ();
+        while (-1 != (c = source.read ()))
+            buffer.append ((char)c);
+        assertTrue ("string incorrect", reference.equals (buffer.toString ()));
+        source.close ();
+    }
+
+    /**
+     * Test skipping a StringSource.
+     */
+    public void testStringSourceSkip () throws IOException
+    {
+        String part1;
+        String part2;
+        String part3;
+        String reference;
+        Source source;
+        StringBuffer buffer;
+        int c;
+
+        part1 = "Now is the time ";
+        part2 = "for all good men ";
+        part3 = "to come to the aid of the party";
+        reference = part1 + part2 + part3;
+        source = new StringSource (reference);
+        buffer = new StringBuffer (reference.length ());
+        for (int i = 0; i < part1.length (); i++)
+            buffer.append ((char)source.read ());
+        source.skip (part2.length ());
+        while (-1 != (c = source.read ()))
+            buffer.append ((char)c);
+        assertTrue ("string incorrect", (part1 + part3).equals (buffer.toString ()));
+        source.close ();
+    }
+
+    /**
+     * Test multi-byte read with a StringSource.
+     */
+    public void testStringSourceMultByte () throws IOException
+    {
+        String reference;
+        Source source;
+        char[] buffer;
+
+        reference = "Now is the time for all good men to come to the aid of the party";
+        source = new StringSource (reference);
+        buffer = new char[reference.length ()];
+        source.read (buffer, 0, buffer.length);
+        assertTrue ("string incorrect", reference.equals (new String (buffer)));
+        assertTrue ("extra character", -1 == source.read ());
+        source.close ();
+    }
+
+    /**
+     * Test positioned multi-byte read with a StringSource.
+     */
+    public void testStringSourcePositionedMultByte () throws IOException
+    {
+        String part1;
+        String part2;
+        String part3;
+        String reference;
+        Source source;
+        char[] buffer;
+        int c;
+        int length;
+
+        part1 = "Now is the time ";
+        part2 = "for all good men ";
+        part3 = "to come to the aid of the party";
+        reference = part1 + part2 + part3;
+        source = new StringSource (reference);
+        buffer = new char[reference.length ()];
+        for (int i = 0; i < part1.length (); i++)
+            buffer[i] = (char)source.read ();
+        length = source.read (buffer, part1.length (), part2.length ());
+        assertTrue ("incorrect length", part2.length () == length);
+        length += part1.length ();
+        for (int i = 0; i < part3.length (); i++)
+            buffer[i + length] = (char)source.read ();
+        assertTrue ("string incorrect", reference.equals (new String (buffer)));
+        assertTrue ("extra character", -1 == source.read ());
+        source.close ();
+    }
+
+    /**
+     * Test ready of a StringSource.
+     */
+    public void testStringSourceReady () throws IOException
+    {
+        Source source;
+
+        source = new StringSource ("Bb");
+        assertTrue ("ready?", source.ready ());
+        assertTrue ("erroneous character", 'B' == source.read ());
+        assertTrue ("not ready", source.ready ());
+        assertTrue ("erroneous character", 'b' == source.read ());
+        assertTrue ("ready?", !source.ready ());
+        assertTrue ("extra character", -1 == source.read ());
     }
 }

@@ -26,7 +26,6 @@
 
 package org.htmlparser.lexer;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -42,7 +41,6 @@ import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
-import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.ParserException;
 
 /**
@@ -56,7 +54,7 @@ public class Page
 {
     /**
      * The default charset.
-     * This should be <code>ISO-8859-1</code>,
+     * This should be <code>{@value}</code>,
      * see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
      * Another alias is "8859_1".
      */
@@ -64,7 +62,7 @@ public class Page
 
     /**
      * The default content type.
-     * In the absence of alternate information, assume html content.
+     * In the absence of alternate information, assume html content ({@value}).
      */
     public static final String DEFAULT_CONTENT_TYPE = "text/html";
 
@@ -154,33 +152,44 @@ public class Page
             throw new IllegalArgumentException ("stream cannot be null");
         if (null == charset)
             charset = DEFAULT_CHARSET;
-        mSource = new Source (stream, charset);
+        mSource = new InputStreamSource (stream, charset);
         mIndex = new PageIndex (this);
         mConnection = null;
         mUrl = null;
         mBaseUrl = null;
     }
 
-    public Page (String text)
+    /**
+     * Construct a page from the given string.
+     * @param text The HTML text.
+     * @param charset <em>Optional</em>. The character set encoding that will
+     * be reported by {@link #getEncoding}. If charset is <code>null</code>
+     * the default character set is used.
+     */
+    public Page (String text, String charset)
     {
         InputStream stream;
 
         if (null == text)
             throw new IllegalArgumentException ("text cannot be null");
-        try
-        {
-            stream = new ByteArrayInputStream (text.getBytes (Page.DEFAULT_CHARSET));
-            mSource = new Source (stream, Page.DEFAULT_CHARSET, text.length () + 1);
-            mIndex = new PageIndex (this);
-        }
-        catch (UnsupportedEncodingException uee)
-        {
-            // this is unlikely, so we cover it up with a runtime exception
-            throw new IllegalStateException (uee.getMessage ());
-        }
+        if (null == charset)
+            charset = DEFAULT_CHARSET;
+        mSource = new StringSource (text, charset);
+        mIndex = new PageIndex (this);
         mConnection = null;
         mUrl = null;
         mBaseUrl = null;
+    }
+
+    /**
+     * Construct a page from the given string.
+     * The page will report that it is using an encoding of
+     * {@link #DEFAULT_CHARSET}.
+     * @param text The HTML text.
+     */
+    public Page (String text)
+    {
+        this (text, null);
     }
 
     //
@@ -368,7 +377,7 @@ public class Page
             }
             try
             {
-                mSource = new Source (stream, charset);
+                mSource = new InputStreamSource (stream, charset);
             }
             catch (UnsupportedEncodingException uee)
             {
@@ -382,7 +391,7 @@ public class Page
 //                msg.append (DEFAULT_CHARSET);
 //                System.out.println (msg.toString ());
                 charset = DEFAULT_CHARSET;
-                mSource = new Source (stream, charset);
+                mSource = new InputStreamSource (stream, charset);
             }
         }
         catch (IOException ioe)
@@ -481,10 +490,10 @@ public class Page
         char ret;
 
         i = cursor.getPosition ();
-        if (mSource.mOffset < i)
+        if (mSource.offset () < i)
             // hmmm, we could skip ahead, but then what about the EOL index
             throw new ParserException ("attempt to read future characters from source");
-        else if (mSource.mOffset == i)
+        else if (mSource.offset () == i)
             try
             {
                 i = mSource.read ();
@@ -505,7 +514,16 @@ public class Page
         else
         {
             // historic read
-            ret = mSource.mBuffer[i];
+            try
+            {
+                ret = mSource.getCharacter (i);
+            }
+            catch (IOException ioe)
+            {
+                throw new ParserException (
+                    "can't read a character at position "
+                    + i, ioe);
+            }
             cursor.advance ();
         }
 
@@ -515,7 +533,7 @@ public class Page
             ret = '\n';
 
             // check for a \n in the next position
-            if (mSource.mOffset == cursor.getPosition ())
+            if (mSource.offset () == cursor.getPosition ())
                 try
                 {
                     i = mSource.read ();
@@ -543,8 +561,18 @@ public class Page
                         "problem reading a character at position "
                         + cursor.getPosition (), ioe);
                 }
-            else if ('\n' == mSource.mBuffer[cursor.getPosition ()])
-                cursor.advance ();
+            else
+                try
+                {
+                    if ('\n' == mSource.getCharacter (cursor.getPosition ()))
+                        cursor.advance ();
+                }
+                catch (IOException ioe)
+                {
+                    throw new ParserException (
+                        "can't read a character at position "
+                        + cursor.getPosition (), ioe);
+                }
         }
         if ('\n' == ret)
             // update the EOL index in any case
@@ -688,7 +716,7 @@ public class Page
      */
     public String getEncoding ()
     {
-        return (mSource.getEncoding ());
+        return (getSource ().getEncoding ());
     }
 
     /**
@@ -716,46 +744,7 @@ public class Page
         throws
             ParserException
     {
-        String encoding;
-        InputStream stream;
-        char[] buffer;
-        int offset;
-        char[] new_chars;
-
-        encoding = getEncoding ();
-        if (!encoding.equalsIgnoreCase (character_set))
-        {
-            stream = getSource ().getStream ();
-            try
-            {
-                buffer = mSource.mBuffer;
-                offset = mSource.mOffset;
-                stream.reset ();
-                mSource = new Source (stream, character_set);
-                if (0 != offset)
-                {
-                    new_chars = new char[offset];
-                    if (offset != mSource.read (new_chars))
-                        throw new ParserException ("reset stream failed");
-                    for (int i = 0; i < offset; i++)
-                        if (new_chars[i] != buffer[i])
-                            throw new EncodingChangeException ("character mismatch (new: "
-                            + new_chars[i]
-                            + " != old: "
-                            + buffer[i]
-                            + ") for encoding change from "
-                            + encoding
-                            + " to "
-                            + character_set
-                            + " at character offset "
-                            + offset);
-                }
-            }
-            catch (IOException ioe)
-            {
-                throw new ParserException (ioe.getMessage (), ioe);
-            }
-        }
+        getSource ().setEncoding (character_set);
     }
 
     /**
@@ -898,7 +887,24 @@ public class Page
      */
     public String getText (int start, int end)
     {
-        return (new String (mSource.mBuffer, start, end - start));
+        String ret;
+        
+        try
+        {
+            ret = mSource.getString (start, end - start);
+        }
+        catch (IOException ioe)
+        {
+            throw new IllegalArgumentException (
+                "can't get the "
+                + (end - start)
+                + "characters at position "
+                + start
+                + " - "
+                + ioe.getMessage ());
+        }
+        
+        return (ret);
     }
 
     /**
@@ -915,7 +921,7 @@ public class Page
     {
         int length;
 
-        if ((mSource.mOffset < start) || (mSource.mOffset < end))
+        if ((mSource.offset () < start) || (mSource.offset () < end))
             throw new IllegalArgumentException ("attempt to extract future characters from source");
         if (end < start)
         {
@@ -924,7 +930,20 @@ public class Page
             start = length;
         }
         length = end - start;
-        buffer.append (mSource.mBuffer, start, length);
+        try
+        {
+            mSource.getCharacters (buffer, start, length);
+        }
+        catch (IOException ioe)
+        {
+            throw new IllegalArgumentException (
+                "can't get the "
+                + (end - start)
+                + "characters at position "
+                + start
+                + " - "
+                + ioe.getMessage ());
+        }
     }
 
     /**
@@ -934,7 +953,19 @@ public class Page
      */
     public String getText ()
     {
-        return (new String (mSource.mBuffer, 0, mSource.mOffset));
+        String ret;
+
+        try
+        {
+            ret = mSource.getString (0, mSource.offset ());
+        }
+        catch (IOException ioe)
+        {
+            throw new IllegalArgumentException (
+                "can't get all the previous characters - " + ioe.getMessage ());
+        }
+
+        return (ret);
     }
 
     /**
@@ -944,7 +975,7 @@ public class Page
      */
     public void getText (StringBuffer buffer)
     {
-        getText (buffer, 0, mSource.mOffset);
+        getText (buffer, 0, mSource.offset ());
     }
 
     /**
@@ -962,16 +993,29 @@ public class Page
     {
         int length;
 
-        if ((mSource.mOffset < start) || (mSource.mOffset < end))
+        if ((mSource.offset () < start) || (mSource.offset () < end))
             throw new IllegalArgumentException ("attempt to extract future characters from source");
         if (end < start)
-        {
+        {   // swap
             length = end;
             end = start;
             start = length;
         }
         length = end - start;
-        System.arraycopy (mSource.mBuffer, start, array, offset, length);
+        try
+        {
+            mSource.getCharacters (array, offset, start, end);
+        }
+        catch (IOException ioe)
+        {
+            throw new IllegalArgumentException (
+                "can't get the "
+                + (end - start)
+                + "characters at position "
+                + start
+                + " - "
+                + ioe.getMessage ());
+        }
     }
 
     /**
@@ -996,12 +1040,12 @@ public class Page
             if (line <= size)
                 end = mIndex.elementAt (line);
             else
-                end = mSource.mOffset;
+                end = mSource.offset ();
         }
         else // current line
         {
             start = mIndex.elementAt (line - 1);
-            end = mSource.mOffset;
+            end = mSource.offset ();
         }
         
             
@@ -1029,15 +1073,15 @@ public class Page
         int start;
         String ret;
 
-        if (mSource.mOffset > 0)
+        if (mSource.offset () > 0)
         {
             buffer = new StringBuffer (43);
-            start = mSource.mOffset - 40;
+            start = mSource.offset () - 40;
             if (0 > start)
                 start = 0;
             else
                 buffer.append ("...");
-            getText (buffer, start, mSource.mOffset);
+            getText (buffer, start, mSource.offset ());
             ret = buffer.toString ();
         }
         else
