@@ -35,7 +35,9 @@ import java.util.Vector;
 import org.htmlparser.Node;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.lexer.nodes.Attribute;
 import org.htmlparser.parserHelper.CompositeTagScannerHelper;
+import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -184,11 +186,129 @@ public abstract class CompositeTagScanner extends TagScanner
             endTagEnderSet.add(endTagEnders[i]);
     }
 
-    public Tag scan (Tag tag, String url, Lexer lexer) throws ParserException 
+    /**
+     * Collect the children.
+     * Performs an immediate call to {@link #shouldCreateEndTagAndExit} to
+     * allow subclasses to override the scan is a primitive way. If
+     * <code>true</code>, returns a virtual end tag and repositions the lexer
+     * to re-read that same tag.<p>
+     * Otherwise, calls {@link #beforeScanningStarts} and begins scanning.
+     * An initial test is performed for an empty XML tag, in which case
+     * the start tag and end tag of the returned tag are the same and it has
+     * no children.<p>
+     * If it's not an empty XML tag, the lexer is repeatedly asked for
+     * subsequent nodes until an end tag is found or a node is encountered
+     * that matches the tag ender set or end tag ender set, or a node of
+     * the same type is found and {@link #isAllowSelfChildren} returns
+     * <code>false</code>. In all but the first case, a virtual end tag
+     * is created. Each node found that is not the end tag is added to
+     * the list of children and a call made to {@link #childNodeEncountered}.<p>
+     * The scanner's {@link #createTag} method is called with details about
+     * the start tag, end tag and children. The attributes from the start tag
+     * will wind up duplicated in the newly created tag, so the start tag is
+     * kind of redundant (and may be removed in subsequent refactoring).
+     * @param tag The tag this scanner is responsible for. This will be the
+     * start (and possibly end) tag passed to {@link #createTag}.
+     * @param url The url for the page the tag is discovered on.
+     * @param lexer The source of subsequent nodes.
+     * @return The scanner specific tag from the call to {@link #createTag}.,
+     * or the virtual end tag if {@link #shouldCreateEndTagAndExit} returned
+     * <code>true</code>.
+     */
+    public Tag scan (Tag tag, String url, Lexer lexer) throws ParserException
     {
-        CompositeTagScannerHelper helper =
-            new CompositeTagScannerHelper(this, tag, lexer, balance_quotes);
-        return helper.scan();
+        Node node;
+        NodeList nodeList;
+        Tag endTag;
+        CompositeTag composite;
+        Tag ret;
+        
+        if (shouldCreateEndTagAndExit ())
+        {
+            ret = createVirtualEndTag (tag, lexer.getPage (), tag.elementBegin ());
+            lexer.setPosition (tag.elementBegin ());
+        }
+        else
+        {
+            beforeScanningStarts ();
+            nodeList = new NodeList ();
+            endTag = null;
+            
+            if (tag.isEmptyXmlTag ())
+                endTag = tag;
+            else
+                do
+                {
+                    node = lexer.nextNode (balance_quotes);
+                    if (null != node)
+                    {
+                        if (node instanceof Tag)
+                        {
+                            Tag end = (Tag)node;
+                            // check for normal end tag
+                            if (end.isEndTag () && end.getTagName ().equals (tag.getTagName ()))
+                            {
+                                endTag = end;
+                                node = null;
+                            }
+                            else if (isTagToBeEndedFor (end) || // check DTD
+                                (   // check for child of same name not allowed
+                                    !(end.isEndTag ()) &&
+                                    !isAllowSelfChildren () &&
+                                    end.getTagName ().equals (tag.getTagName ())
+                                ))
+                            {
+                                endTag = createVirtualEndTag (tag, lexer.getPage (), end.elementBegin ());
+                                lexer.setPosition (end.elementBegin ());
+                                node = null;
+                            }
+                        }
+                        
+                        if (null != node)
+                        {
+                            nodeList.add (node);
+                            childNodeEncountered (node);
+                        }
+                    }
+                }
+            while (null != node);
+            
+            if (null == endTag)
+                endTag = createVirtualEndTag (tag, lexer.getPage (), lexer.getCursor ().getPosition ());
+            
+            composite = (CompositeTag)createTag (lexer.getPage (), tag.elementBegin (), endTag.elementEnd (), tag.getAttributesEx (), tag, endTag, nodeList);
+            for (int i = 0; i < composite.getChildCount (); i++)
+                composite.childAt (i).setParent (composite);
+            ret = composite;
+        }
+        
+        return (ret);
+    }
+
+    /**
+     * Creates an end tag with the same name as the given tag.
+     * NOTE: This does not call the {@link #createTag} method, but may in the
+     * future after refactoring.
+     * @param tag The tag to end.
+     * @param page The page the tag is on (virtually).
+     * @param position The offset into the page at which the tag is to
+     * be anchored.
+     * @return An end tag with the name "/" + tag.getTagName() and a start
+     * and end position at the given position. The fact these are equal may
+     * be used to distinguish it as a virtual tag.
+     */
+    protected Tag createVirtualEndTag (Tag tag, Page page, int position)
+    {
+        Tag ret;
+        String name;
+        Vector attributes;
+        
+        name = "/" + tag.getRawTagName();
+        attributes = new Vector ();
+        attributes.addElement (new Attribute (name, (String)null));
+        ret = new Tag (page, position, position, attributes);
+        
+        return (ret);
     }
 
     /**
@@ -227,7 +347,7 @@ public abstract class CompositeTagScanner extends TagScanner
      * @param attributes The contents of the tag as a list of {@list Attribute} objects.
      * @param startTag The tag that begins the composite tag.
      * @param endTag The tag that ends the composite tag. Note this could be a
-     * virtual tag created to satisfy  the scanner (check is it's starting and
+     * virtual tag created to satisfy the scanner (check if it's starting and
      * ending position are the same).
      * @param children The list of nodes contained within the ebgin end tag pair.
      */
