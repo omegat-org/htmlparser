@@ -65,7 +65,17 @@ public class PageTests extends TestCase
 
         try
         {
-            page = new Page (null);
+            page = new Page ((URLConnection)null);
+            assertTrue ("null value in constructor", false);
+        }
+        catch (IllegalArgumentException iae)
+        {
+            // expected outcome
+        }
+
+        try
+        {
+            page = new Page ((String)null);
             assertTrue ("null value in constructor", false);
         }
         catch (IllegalArgumentException iae)

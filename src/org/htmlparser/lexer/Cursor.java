@@ -78,7 +78,54 @@ public class Cursor implements Ordered
     {
         return (mPosition);
     }
+
+    /**
+     * Move the cursor position ahead one character.
+     */
+    public void advance ()
+    {
+        mPosition++;
+    }
+
+    /**
+     * Move the cursor position back one character.
+     */
+    public void retreat ()
+    {
+        mPosition--;
+        if (0 > mPosition)
+            mPosition = 0;
+    }
+
+    /**
+     * Make a new cursor just like this one.
+     * @return The new cursor positioned where <code>this</code> one is,
+     * and referring to the same page.
+     */
+    public Cursor dup ()
+    {
+        return (new Cursor (getPage (), getPosition ()));
+    }
+    
+    public String toString ()
+    {
+        int row;
+        int column;
+        StringBuffer ret;
         
+        ret = new StringBuffer (9 * 3 + 3); // three ints and delimiters
+        ret.append (getPosition ());
+        row = mPage.row (this);
+        column = mPage.column (this);
+        ret.append ("[");
+        ret.append (row);
+        ret.append (",");
+        ret.append (column);
+        ret.append ("]");
+        
+        return (ret.toString ());
+    }
+
     //
     // Ordered interface
     //

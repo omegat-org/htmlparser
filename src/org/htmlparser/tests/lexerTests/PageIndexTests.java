@@ -122,11 +122,9 @@ public class PageIndexTests extends TestCase
 
             // test for correct position
             if (0 <= pos - 1)
-                assertTrue ("search error less " + pos + " " + index.elementAt (pos - 1) + " " + n, index.elementAt (pos - 1) < n);
+                assertTrue ("search error less " + pos + " " + index.elementAt (pos - 1) + " " + n, index.elementAt (pos - 1) <= n);
             if (pos + 1 < index.size ())
                 assertTrue ("search error greater " + pos + " " + index.elementAt (pos + 1) + " " + n, index.elementAt (pos + 1) > n);
-                    
-            assertTrue ("wrong position", pos == index.add (n));
         }
 
         list = index.get ();

@@ -205,7 +205,17 @@ public class PageIndex implements Sortable
      */
     public int row (Cursor cursor)
     {
-        return (Sort.bsearch (this, cursor));
+        int ret;
+        
+        ret = Sort.bsearch (this, cursor);
+        // handle line transition, the search returns the index if it matches
+        // exactly one of the line end positions, so we advance one line if
+        // it's equal to the offset at the row index, since that position is
+        // actually the beginning of the next line
+        if ((ret < mCount) && (cursor.getPosition () == mIndices[ret]))
+            ret++;
+        
+        return (ret);
     }
 
     /**
@@ -228,12 +238,11 @@ public class PageIndex implements Sortable
         int row;
         int previous;
 
-        row = Sort.bsearch (this, cursor);
-        // note, this shouldn't be zero if the first element of each index is offset zero
+        row = row (cursor);
         if (0 != row)
             previous = this.elementAt (row - 1);
         else
-            previous = this.elementAt (0);
+            previous = 0;
         
         return (cursor.getPosition () - previous);
     }

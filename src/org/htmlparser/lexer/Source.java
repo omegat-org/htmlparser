@@ -79,7 +79,7 @@ public class Source extends Reader
     /**
      * The offset of the next byte returned by read().
      */
-    protected int mOffset;
+    public volatile int mOffset;
 
     /**
      * The bookmark.
@@ -174,23 +174,14 @@ public class Source extends Reader
     //
 
     /**
-     * Close the stream.  Once a stream has been closed, further read(),
-     * ready(), mark(), or reset() invocations will throw an IOException.
-     * Closing a previously-closed stream, however, has no effect.
-     * @exception IOException  If an I/O error occurs
+     * Does nothing.
+     * It's supposed to close the stream, but use destroy() instead.
+     * @see #destroy
      */
     public void close () throws IOException
     {
-        mStream = null;
-        if (null != mReader)
-            mReader.close ();
-        mReader = null;
-        mBuffer = null;
-        mLevel = 0;
-        mOffset = 0;
-        mMark = -1;
     }
-    
+
     /**
      * Read a single character.
      * This method will block until a character is available,
@@ -341,5 +332,39 @@ public class Source extends Reader
         }
         
         return (ret);
+    }
+    
+    //
+    // Methods not in your Daddy's Reader
+    //
+
+    /**
+     * Undo the read of a single character.
+     * @exception IOException If no characters have been read.
+     */
+    public void unread () throws IOException
+    {
+        if (0 < mOffset)
+            mOffset--;
+        else
+            throw new IOException ("can't unread no characters");
+    }
+
+    /**
+     * Close the stream.  Once a stream has been closed, further read(),
+     * ready(), mark(), or reset() invocations will throw an IOException.
+     * Closing a previously-closed stream, however, has no effect.
+     * @exception IOException  If an I/O error occurs
+     */
+    public void destroy () throws IOException
+    {
+        mStream = null;
+        if (null != mReader)
+            mReader.close ();
+        mReader = null;
+        mBuffer = null;
+        mLevel = 0;
+        mOffset = 0;
+        mMark = -1;
     }
 }

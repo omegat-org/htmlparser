@@ -105,7 +105,7 @@ public class SourceTests extends TestCase
 
         source = new Source (new Stream (new ByteArrayInputStream ("hello word".getBytes ())), null);
         assertTrue ("no character", -1 != source.read ());
-        source.close ();
+        source.destroy ();
         try
         {
             source.read ();

@@ -74,6 +74,22 @@ then why should you.
 <LI>line 11, offset 0, to line 11, offset 7, html tag</LI>
 <LI>line 11, offset 7, to line 11, offset 8, string node "\n"</LI>
 </OL>
+<p>Stream, Source, Page and Lexer
+<p>The package is arranged in four levels, <CODE>Stream</CODE>,
+<CODE>Source</CODE> <CODE>Page</CODE> and <CODE>Lexer</CODE> in the order of lowest to
+highest.
+A <CODE>Stream</CODE> is raw bytes from the URLConnection or file. It has no
+intelligence. A <CODE>Source</CODE> is raw characters, hence it knows about the
+encoding scheme used and can be reset if a different encoding is detected after
+partially reading in the text. A <CODE>Page</CODE> provides characters from the
+source while maintaining the index of line numbers, and hence can be thought of
+as an array of strings corresponding to source file lines, but it doesn't
+actually store any text, relying on the buffering within the
+<CODE>Source</CODE> instead. The <CODE>Lexer</CODE> contains the actual lexeme parsing
+code. It reads characters from the page, keeping track of where it is with a
+<CODE>Cursor</CODE> and creates the array of nodes using various state
+machines.
+<p>
 The following are some design goals and 'invariants' within the package, if you
 are attempting to understand or modify it. Things that differ substantially from
 previous implementations are highlighted in <B>bold</B>.
@@ -87,36 +103,26 @@ be performed.
 <DT>Text Fidelity
 <DD>Besides complete coverage, the <B>nodes do not contain copies of the text</B>,
 but instead simply contain offsets into a single large buffer that contains the
-text read from the HTML source. Thus there is no lost whitespace or text
-formatting elements either outside or within tags. Upper and lower case text is
-preserved.
+text read from the HTML source. Even within tags, the attributes list can
+contain whitespace, thus there is no lost whitespace or text formatting 
+either outside or within tags. Upper and lower case text is preserved.
 <DT>Line Endings
 <DD><B>End of line characters are just whitespace.</B> There is no distinction
 made between end of line characters (or pairs of characters on Windows) and
 other whitespace. The text is not read in line by line so nodes (tags) can easily span
 multiple lines with no special processing. Line endings are not transformed
 between platforms, i.e. Unix line endings are not converted to Windows line
-endings by this level.  Each node will have a starting and ending
-<CODE>Cursor</CODE>, from which you can get the line number and offset within
-the HTML source, for error messages for example, but in general ignore line
+endings by this level.  Each node will has a starting and ending location, which
+the page can use to extract the text. To facilitate formatting error and log messages
+the page can turn these offsets into row and column numbers. In general ignore line
 breaks in the source if at all possible.
-<DT>Stream, Source and Page
-<DD>The package is arranged in three levels, <CODE>Stream</CODE>,
-<CODE>Source</CODE> and <CODE>Page</CODE> in the order of lowest to highest.
-A <CODE>Stream</CODE> is raw bytes from the URLConnection or file. It has no
-intelligence. A <CODE>Source</CODE> is raw characters, hence it knows about the
-encoding scheme used and can be reset if a different encoding is detected after
-partially reading in the text. A <CODE>Page</CODE> is the highest level and
-contains the actual lexeme parsing code. It reads from the source and creates
-the array of nodes (<CODE>NodeList</CODE>) using a state machine. 
 <DT>One Parser, One Scan
-<DD>The major lexeme state machine has the following minor state machines corresponding
+<DD>The Lexer has the following state machines corresponding
 (roughly) to the <B>four parsers it replaces</B> (StringParser, RemarkNodeParser,
-AttributeParser. TagParser):
-<LI>in text</LI>
-<LI>in comment</LI>
-<LI>in quote</LI>
-<LI>in tag</LI>
+TagParser & AttributeParser):
+<LI>in text - parseString()</LI>
+<LI>in comment - parseRemark()</LI>
+<LI>in tag - parseTag()</LI>
 By integrating the four state machines into one, a single pass over the text is
 all that's needed for a low level parse of the HTML source. In previous
 implementations, the attributes were parsed on a second scan after the initial

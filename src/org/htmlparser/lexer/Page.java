@@ -28,6 +28,7 @@
 
 package org.htmlparser.lexer;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -43,10 +44,8 @@ import org.htmlparser.util.ParserException;
 
 /**
  * Represents the contents of an HTML page.
- * Contains a character array of the page downloaded so far,
- * a String with those characters in it,
- * and an index of positions of line separators (actually the first
- * character position on the next line).
+ * Contains the source of characters and an index of positions of line
+ * separators (actually the first character position on the next line).
  */
 public class Page
 {
@@ -67,16 +66,6 @@ public class Page
      * The source of characters.
      */
     protected Source mSource;
-
-    /**
-     * The characters read so far from the source.
-     */
-    protected char[] mCharacters;
-    
-    /**
-     * The string representation of the source.
-     */
-    protected String mString;
 
     /**
      * Character positions of the first character in each line.
@@ -101,7 +90,7 @@ public class Page
     };
 
     /**
-     * Construct a page reading from a URL.
+     * Construct a page reading from a URL connection.
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
      * @exception IOException If an i/o exception occurs creating the
@@ -112,9 +101,6 @@ public class Page
      * HTTP header is not supported.
      */
     public Page (URLConnection connection) throws ParserException
-//        throws
-//            IOException,
-//            UnsupportedEncodingException
     {
         if (null == connection)
             throw new IllegalArgumentException ("connection cannot be null");
@@ -138,9 +124,145 @@ public class Page
         {
             throw new ParserException ("oops2", ioe);
         }
-        mCharacters = null;
-        mString = null;
         mIndex = new PageIndex (this);
+    }
+
+    /**
+     * Construct a page from a stream encoded with the given charset.
+     * @param stream The source of bytes.
+     * @param charset The encoding used.
+     * If null, defaults to the <code>DEFAULT_CHARSET</code>.
+     * @exception UnsupportedEncodingException If the given charset is not supported.
+     */
+    public Page (Stream stream, String charset)
+        throws
+            UnsupportedEncodingException
+    {
+        if (null == stream)
+            throw new IllegalArgumentException ("stream cannot be null");
+        if (null == charset)
+            charset = DEFAULT_CHARSET;
+        mSource = new Source (stream, charset);
+        mIndex = new PageIndex (this);
+    }
+
+    public Page (String text) throws ParserException
+    {
+        Stream stream;
+        Page ret;
+
+        if (null == text)
+            throw new IllegalArgumentException ("text cannot be null");
+        try
+        {
+            stream = new Stream (new ByteArrayInputStream (text.getBytes (Page.DEFAULT_CHARSET)));
+            mSource = new Source (stream, Page.DEFAULT_CHARSET);
+            mIndex = new PageIndex (this);
+        }
+        catch (UnsupportedEncodingException uee)
+        {
+            throw new ParserException ("problem making a page", uee);
+        }
+    }
+
+    /**
+     * Get the source this page is reading from.
+     */
+    public Source getSource ()
+    {
+        return (mSource);
+    }
+
+    /**
+     * Read the character at the cursor position.
+     * The cursor position can be behind or equal to the current source position.
+     * Returns end of lines (EOL) as \n, by converting \r and \r\n to \n,
+     * and updates the end-of-line index accordingly
+     * Advances the cursor position by one (or two in the \r\n case).
+     * @param cursor The position to read at.
+     * @return The character at that position, and modifies the cursor to
+     * prepare for the next read. If the source is exhausted a zero is returned.
+     * @exception ParserException If an IOException on the underlying source
+     * occurs, or an attemp is made to read characters in the future (the
+     * cursor position is ahead of the underlying stream)
+     */
+    public char getCharacter (Cursor cursor)
+        throws
+            ParserException
+    {
+        int i;
+        char ret;
+        
+        if (mSource.mOffset < cursor.getPosition ())
+            // hmmm, we could skip ahead, but then what about the EOL index
+            throw new ParserException ("attempt to read future characters from source");
+        else if (mSource.mOffset == cursor.getPosition ())
+            try
+            {
+                i = mSource.read ();
+                if (-1 == i)
+                    ret = 0;
+                else
+                {
+                    ret = (char)i;
+                    cursor.advance ();
+                }
+            }
+            catch (IOException ioe)
+            {
+                throw new ParserException (
+                    "problem reading a character at position "
+                    + cursor.getPosition (), ioe);
+            }
+        else
+        {
+            // historic read
+            ret = mSource.mBuffer[cursor.getPosition ()];
+            cursor.advance ();
+        }
+
+        // handle \r
+        if ('\r' == ret)
+        {   // switch to single character EOL
+            ret = '\n';
+
+            // check for a \n in the next position
+            if (mSource.mOffset == cursor.getPosition ())
+                try
+                {
+                    i = mSource.read ();
+                    if (-1 == i)
+                    { 
+                        // do nothing
+                    }
+                    else if ('\n' == (char)i)
+                        cursor.advance ();
+                    else
+                        try
+                        {
+                            mSource.unread ();
+                        }
+                        catch (IOException ioe)
+                        {
+                            throw new ParserException (
+                                "can't unread a character at position "
+                                + cursor.getPosition (), ioe);
+                        }
+                }
+                catch (IOException ioe)
+                {
+                    throw new ParserException (
+                        "problem reading a character at position "
+                        + cursor.getPosition (), ioe);
+                }
+            else if ('\n' == mSource.mBuffer[cursor.getPosition ()])
+                cursor.advance ();
+        }
+        if ('\n' == ret)
+            // update the EOL index in any case
+            mIndex.add (cursor);
+
+        return (ret);
     }
 
     /**
@@ -293,6 +415,70 @@ public class Page
 		return (ret);
 	}
 
+    /**
+     * Get the line number for a cursor.
+     * @param cursor The character offset into the page.
+     * @return The line number the character is in.
+     */
+    public int row (Cursor cursor)
+    {
+        return (mIndex.row (cursor));
+    }
+
+    /**
+     * Get the column number for a cursor.
+     * @param cursor The character offset into the page.
+     * @return The character offset into the line this cursor is on.
+     */
+    public int column (Cursor cursor)
+    {
+        return (mIndex.column (cursor));
+    }
+
+    /**
+     * Get the text identified by the given limits.
+     * @param start The starting position, zero based.
+     * @param end The ending position
+     * (exclusive, i.e. the character at the ending position is not included),
+     * zero based.
+     * @return The text from <code>start</code> to <code>end</code>.
+     * @see #getText(StringBuffer, int, int)
+     */
+    public String getText (int start, int end)
+    {
+        StringBuffer ret;
+        
+        ret = new StringBuffer (Math.abs (end - start));
+        getText (ret, start, end);
+        
+        return (ret.toString ());
+    }
+
+    /**
+     * Put the text identified by the given limits into the given buffer.
+     * @param buffer The accumulator for the characters.
+     * @param start The starting position, zero based.
+     * @param end The ending position
+     * (exclusive, i.e. the character at the ending position is not included),
+     * zero based.
+     */
+    public void getText (StringBuffer buffer, int start, int end)
+    {
+        int length;
+        StringBuffer ret;
+
+        if ((mSource.mOffset < start) || (mSource.mOffset < end))
+            throw new IllegalArgumentException ("attempt to extract future characters from source");
+        if (end < start)
+        {
+            length = end;
+            end = start;
+            start = length;
+        }
+        length = end - start;
+        buffer.append (mSource.mBuffer, start, length);
+    }
+
     //
     // Bean patterns
     //
@@ -306,4 +492,5 @@ public class Page
 //        logger.setLevel (java.util.logging.Level.FINEST);
         return (mLog);
     }
+
 }
