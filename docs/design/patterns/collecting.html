@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Collecting Parameter</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<h2>Collecting Parameter </h2>
+<p>HTMLNode uses a collecting parameter to allow clients to collect nodes of their 
+  choice, even embedded nodes.
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+   <td align="right" valign="top">
+    <code>
+     <font color="#808080">
+1<br>2<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#c0c0c0">&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;abstract&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">collectInto</font><font color="#000000">(</font><font color="#000000">Vector&nbsp;collectionVector,String&nbsp;filter</font><font color="#000000">)</font><font color="#000000">;<br>
+</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>Most tags follow the default implementation in HTMLTag.
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+   <td align="right" valign="top">
+    <code>
+     <font color="#808080">
+1<br>2<br>3<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#c0c0c0">&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">collectInto</font><font color="#000000">(</font><font color="#000000">Vector&nbsp;collectionVector,&nbsp;String&nbsp;filter</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">thisScanner!=</font><font color="#0000c0">null&nbsp;</font><font color="#000000">&amp;&amp;&nbsp;thisScanner.getFilter</font><font color="#000000">()</font><font color="#000000">==filter</font><font color="#000000">)&nbsp;</font><font color="#000000">collectionVector.add</font><font color="#000000">(</font><font color="#0000c0">this</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;}</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>But, some tags like HTMLLinkTag and HTMLFormTag have different implementations 
+  - iterating over their contents. 
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+  <br>
+  Below is the code from HTMLLinkTag : </p>
+<center>
+  <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+   <td align="right" valign="top">
+    <code>
+     <font color="#808080">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#c0c0c0">&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">collectInto</font><font color="#000000">(</font><font color="#000000">Vector&nbsp;collectionVector,&nbsp;String&nbsp;filter</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">if&nbsp;</font><font color="#000000">(</font><font color="#000000">filter==LINK_TAG_FILTER</font><font color="#000000">)&nbsp;</font><font color="#000000">collectionVector.add</font><font color="#000000">(</font><font color="#0000c0">this</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#0000c0">else&nbsp;</font><font color="#000000">{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">HTMLNode&nbsp;node;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">for&nbsp;</font><font color="#000000">(</font><font color="#000000">Enumeration&nbsp;e=nodeVector.elements</font><font color="#000000">()</font><font color="#000000">;e.hasMoreElements</font><font color="#000000">()</font><font color="#000000">;</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">node&nbsp;=&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLNode</font><font color="#000000">)</font><font color="#000000">e.nextElement</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node.collectInto</font><font color="#000000">(</font><font color="#000000">collectionVector,filter</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;</font><font color="#000000">}</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p>Below is the code from HTMLFormTag: 
+  <!-- ======================================================== -->
+  <!-- = Java Sourcecode to HTML automatically converted code = -->
+  <!-- =   J2H V2.0  2002 by Markus Gebhard  markus@jave.de   = -->
+  <!-- =     Further information: http://www.java2html.de     = -->
+</p>
+
+<center>
+ <table  align="center" border="2" cellpadding="3" cellspacing="0" bgcolor="#FFFBF0">
+   <tr>
+  <!-- start line numbers -->
+   <td align="right" valign="top">
+    <code>
+     <font color="#808080">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>
+   </font>
+    </code>
+   </td>
+  <!-- end line numbers -->
+  <!-- start source code -->
+   <td valign="top">
+    <code>
+<font color="#c0c0c0">&nbsp;&nbsp;</font><font color="#0000c0">public&nbsp;</font><font color="#c00000">void&nbsp;</font><font color="#000000">collectInto</font><font color="#000000">(</font><font color="#000000">Vector&nbsp;collectionVector,&nbsp;String&nbsp;filter</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">super</font><font color="#000000">.collectInto</font><font color="#000000">(</font><font color="#000000">collectionVector,&nbsp;filter</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;HTMLNode&nbsp;node;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000c0">for&nbsp;</font><font color="#000000">(</font><font color="#000000">Enumeration&nbsp;e&nbsp;=&nbsp;allNodesVector.elements</font><font color="#000000">()</font><font color="#000000">;e.hasMoreElements</font><font color="#000000">()</font><font color="#000000">;</font><font color="#000000">)&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">node&nbsp;=&nbsp;</font><font color="#000000">(</font><font color="#000000">HTMLNode</font><font color="#000000">)</font><font color="#000000">e.nextElement</font><font color="#000000">()</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node.collectInto</font><font color="#000000">(</font><font color="#000000">collectionVector,filter</font><font color="#000000">)</font><font color="#000000">;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}<br>
+&nbsp;&nbsp;</font><font color="#000000">}</font></code>
+    
+   </td>
+  </tr>
+  <!-- end source code -->
+  <!-- start J2H link -->
+   <tr>
+    <td colspan=2 align=right>
+<small>
+<a href="http://www.java2html.de" target="_blank">Java2html</a>
+</small>
+    </td>
+   </tr>
+  <!-- end J2H link -->
+ </table>
+</center>
+<!-- =       END of automatically generated HTML code       = -->
+<!-- ======================================================== -->
+<p><a href="../design.html">HTMLParser - Patterns Used</a><br>
+  <a href="../../index.html">Back to HTMLParser Home Page</a></p>
+</body>
+</html>
