@@ -20,15 +20,12 @@
 // 
 // Postal Address : 
 // Somik Raha
-// R&D Team
-// Kizna Corporation
-// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
-// Shibuya-ku, Tokyo, 
-// 150-0012, 
-// JAPAN
-// Tel  :  +81-3-54752646
-// Fax : +81-3-5449-4870
-// Website : www.kizna.com
+// Extreme Programmer & Coach
+// Industrial Logic Corporation
+// 2583 Cedar Street, Berkeley, 
+// CA 94708, USA
+// Email : somik@industriallogic.com
+// Website : http://www.industriallogic.com
 
 package com.kizna.html.scanners;
 //////////////////
