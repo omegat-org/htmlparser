@@ -132,7 +132,6 @@ public abstract class CompositeTagScanner extends TagScanner {
 		super(filter);
 		this.nameOfTagToMatch = nameOfTagToMatch;
 		this.allowSelfChildren = allowSelfChildren;
-		System.out.println("Scanner for "+nameOfTagToMatch[0]+" allowSelfChildren: "+allowSelfChildren);
 		this.tagEnderSet = new HashSet();
 		for (int i=0;i<tagEnders.length;i++)
 			tagEnderSet.add(tagEnders[i]);
