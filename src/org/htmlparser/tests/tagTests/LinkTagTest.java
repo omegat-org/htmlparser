@@ -145,7 +145,7 @@ public class LinkTagTest extends ParserTestCase {
 	}
 	
 	/**
-	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using HTMLLinkScanner.
+	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using LinkScanner.
 	 * Creation date: (7/1/2001 2:42:13 PM)
 	 */
 	public void testLinkNodeBugNullPointerException() throws ParserException
@@ -161,7 +161,7 @@ public class LinkTagTest extends ParserTestCase {
 	}
 
 	/**
-	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using HTMLLinkScanner.
+	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using LinkScanner.
 	 * Creation date: (7/1/2001 2:42:13 PM)
 	 */
 	public void testLinkNodeMailtoBug() throws ParserException
@@ -178,7 +178,7 @@ public class LinkTagTest extends ParserTestCase {
 	}
 	
 	/**
-	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using HTMLLinkScanner.
+	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using LinkScanner.
 	 * Creation date: (7/1/2001 2:42:13 PM)
 	 */
 	public void testLinkNodeSingleQuoteBug() throws ParserException

@@ -115,7 +115,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * This is an example of adding a link scanner.
  * <pre>
  * Parser parser = new Parser("http://www.yahoo.com",new DefaultHTMLParserFeedback());
- * parser.addScanner(new HTMLLinkScanner("-l"));
+ * parser.addScanner(new LinkScanner("-l"));
  * for (NodeIterator i = parser.elements();e.hasMoreNodes();) {
  * 	Node node = i.nextNode();    
  * 	if (node instanceof LinkTag) {
@@ -1014,7 +1014,7 @@ public class Parser
 	
 	/**
 	 * This method should be invoked in order to register some common scanners. The scanners that get added are : <br>
-	 * HTMLLinkScanner    (filter key "-l")<br>
+	 * LinkScanner    (filter key "-l")<br>
 	 * HTMLImageScanner   (filter key "-i")<br>
 	 * HTMLScriptScanner  (filter key "-s") <br>
 	 * HTMLStyleScanner   (filter key "-t") <br>

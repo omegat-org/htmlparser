@@ -101,7 +101,7 @@ public class ImageTagTest extends ParserTestCase
 	}
 
 	/**
-	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using HTMLLinkScanner.
+	 * This bug occurs when there is a null pointer exception thrown while scanning a tag using LinkScanner.
 	 * Creation date: (7/1/2001 2:42:13 PM)
 	 */
 	public void testImageTagSingleQuoteBug() throws ParserException

@@ -72,11 +72,11 @@ public class LinkTag extends CompositeTag
 	 * The following code will get all the images inside a link tag.
 	 * <pre>
 	 * Node node ;
-	 * HTMLImageTag imageTag;
+	 * ImageTag imageTag;
 	 * for (Enumeration e=linkTag.linkData();e.hasMoreElements();) {
 	 * 		node = (Node)e.nextElement();
-	 * 		if (node instanceof HTMLImageTag) {
-	 * 			imageTag = (HTMLImageTag)node;
+	 * 		if (node instanceof ImageTag) {
+	 * 			imageTag = (ImageTag)node;
 	 * 			// Process imageTag
 	 * 		}
 	 * }
@@ -88,7 +88,7 @@ public class LinkTag extends CompositeTag
 	 * Vector imageCollectionVector = new Vector();
 	 * for (NodeIterator e = parser.elements();e.hasMoreNode();) {
 	 * 		node = e.nextHTMLNode();
-	 * 		node.collectInto(imageCollectionVector,HTMLImageTag.IMAGE_FILTER);
+	 * 		node.collectInto(imageCollectionVector,ImageTag.IMAGE_FILTER);
 	 * }
 	 * </pre>
 	 * The link tag processes all its contents in collectInto().

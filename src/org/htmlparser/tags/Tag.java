@@ -432,7 +432,7 @@ public class Tag extends Node
 	/**
 	 * Sometimes, a scanner may need to request a re-evaluation of the
 	 * attributes in a tag. This may happen when there is some correction
-	 * activity. An example of its usage can be found in HTMLImageTag.
+	 * activity. An example of its usage can be found in ImageTag.
 	 * <br>
 	 * <B>Note:<B> This is an intensive task, hence call only when
 	 * really necessary
