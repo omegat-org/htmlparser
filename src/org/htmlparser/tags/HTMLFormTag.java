@@ -47,6 +47,8 @@ public class HTMLFormTag extends HTMLTag
    	protected String formMethod;
    	protected Vector formInputVector;
    	protected Vector allNodesVector;
+
+	private Vector textAreaVector;
    	/**
    	 * A form tag - contains information contained in the form tag.
    	 * @param formURL URL to which form data will be sent
@@ -59,7 +61,7 @@ public class HTMLFormTag extends HTMLTag
    	 * @param allNodesVector The vector of all elements in the FORM
    	 */
 	public HTMLFormTag(String formURL,String formName, String formMethod, int formBegin, int formEnd,
-                      String tagLine, Vector formInputVector, Vector allNodesVector)
+                      String tagLine, Vector formInputVector, Vector textAreaVector, Vector allNodesVector)
 	{
 		super(formBegin,formEnd,"",tagLine);
 		this.formURL = formURL;
@@ -67,6 +69,7 @@ public class HTMLFormTag extends HTMLTag
       	this.formMethod = formMethod;
       	this.formInputVector = formInputVector;
       	this.allNodesVector = allNodesVector;
+      	this.textAreaVector = textAreaVector;
 	}
 	/**
 	 * @return Vector Input elements in the form
@@ -226,6 +229,19 @@ public class HTMLFormTag extends HTMLTag
 			node = (HTMLNode)e.nextElement();
 			node.collectInto(collectionVector,filter);
 		}
+	}
+
+	public HTMLTextareaTag getTextAreaTag(String name) {
+		HTMLTextareaTag textareaTag=null;
+		boolean found = false;
+		for (Enumeration e=textAreaVector.elements();e.hasMoreElements() && !found;) {
+			textareaTag = (HTMLTextareaTag)e.nextElement();
+			String textAreaName = textareaTag.getParameter("NAME");
+			if (textAreaName!=null && textAreaName.equals(name)) {
+				found = true;
+			}
+		}
+		return textareaTag;
 	}
 
 }

@@ -50,6 +50,7 @@ import org.htmlparser.HTMLParser;
 import org.htmlparser.tags.HTMLEndTag;
 import org.htmlparser.tags.HTMLImageTag;
 import org.htmlparser.tags.HTMLInputTag;
+import org.htmlparser.tags.HTMLTextareaTag;
 import org.htmlparser.util.HTMLLinkProcessor;
 import org.htmlparser.util.HTMLParserException;
 import org.htmlparser.tags.HTMLFormTag;
@@ -62,6 +63,7 @@ import org.htmlparser.tags.HTMLFormTag;
  */
 public class HTMLFormScanner extends HTMLTagScanner
 {
+	private Vector textAreaVector;
  	/**
 	 * HTMLFormScanner constructor comment.
 	 */
@@ -123,7 +125,9 @@ public class HTMLFormScanner extends HTMLTagScanner
 	{
 		try {
 			HTMLNode node;
-	      	Vector inputVector = new Vector(), nodeVector = new Vector();
+	      	Vector inputVector = new Vector(), textAreaVector = new Vector(), 
+	      	nodeVector = new Vector();
+			
 			String link,name="",method="GET";
 			int linkBegin=-1, linkEnd=-1;
 	
@@ -165,6 +169,9 @@ public class HTMLFormScanner extends HTMLTagScanner
 				else 
 				if (node instanceof HTMLInputTag) {
 					inputVector.addElement(node);
+				} else 
+				if (node instanceof HTMLTextareaTag) {
+					textAreaVector.addElement(node);
 				}
 				nodeVector.addElement(node);
 			}
@@ -179,7 +186,7 @@ public class HTMLFormScanner extends HTMLTagScanner
 				throw new HTMLParserException("HTMLFormScanner.scan() : Went into a potential infinite loop - tags must be malformed.\n"+
 				"Input Vector contents : "+msg.toString());
 			}		
-			HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,nodeVector);
+			HTMLFormTag formTag = new HTMLFormTag(link,name,method,linkBegin,linkEnd,currentLine,inputVector,textAreaVector,nodeVector);
 			return formTag;
 		}
 		catch (Exception e) {

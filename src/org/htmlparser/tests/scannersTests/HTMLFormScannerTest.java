@@ -43,6 +43,7 @@ import org.htmlparser.tags.HTMLFormTag;
 import org.htmlparser.tags.HTMLInputTag;
 import org.htmlparser.tags.HTMLLinkTag;
 import org.htmlparser.tags.HTMLTag;
+import org.htmlparser.tags.HTMLTextareaTag;
 import org.htmlparser.util.DefaultHTMLParserFeedback;
 import org.htmlparser.util.HTMLEnumeration;
 import org.htmlparser.util.HTMLParserException;
@@ -64,6 +65,8 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\"><INPUT TYPE=\"submit\" NAME=\"submit\" VALUE=\"Login\"></TD></TR>\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\n"+
+		"<TEXTAREA name=\"Description\" rows=\"15\" cols=\"55\" wrap=\"virtual\" class=\"composef\" tabindex=\"5\">Contents of TextArea</TEXTAREA>\n"+
+//		"<TEXTAREA name=\"AnotherDescription\" rows=\"15\" cols=\"55\" wrap=\"virtual\" class=\"composef\" tabindex=\"5\">\n"+
 		"<INPUT TYPE=\"hidden\" NAME=\"password\" SIZE=\"20\">\n"+
 		"<INPUT TYPE=\"submit\">\n"+
 		"</FORM>";
@@ -78,6 +81,8 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\"><INPUT VALUE=\"Login\" NAME=\"submit\" TYPE=\"submit\"></TD></TR>\r\n"+
 		"<TR><TD ALIGN=\"center\">&nbsp;</TD></TR>\r\n"+
+		"<TEXTAREA TABINDEX=\"5\" ROWS=\"15\" COLS=\"55\" CLASS=\"composef\" NAME=\"Description\" WRAP=\"virtual\">Contents of TextArea</TEXTAREA>\r\n"+
+//		"<TEXTAREA TABINDEX=\"5\" ROWS=\"15\" COLS=\"55\" CLASS=\"composef\" NAME=\"AnotherDescription\" WRAP=\"virtual\">\r\n"+
 		"<INPUT NAME=\"password\" SIZE=\"20\" TYPE=\"hidden\">\r\n"+
 		"<INPUT TYPE=\"submit\">\r\n"+
 		"</FORM>";
@@ -129,6 +134,9 @@ public class HTMLFormScannerTest extends HTMLParserTestCase {
 		assertTypeNameSize("Input Password Tag","password","passwd","20",passwdTag);
 		assertTypeNameValue("Input Submit Tag","submit","submit","Login",submitTag);
 		
+		HTMLTextareaTag textAreaTag = formTag.getTextAreaTag("description");
+		assertNotNull("Text Area Tag should have been found",textAreaTag);
+		assertEquals("Text Area Tag Contents","Contents of TextArea",textAreaTag.getValue());
 		
 		assertEquals("Length of string",EXPECTED_FORM_HTML.length(),formTag.toHTML().length());
 
