@@ -34,12 +34,15 @@ package com.kizna.htmlTests;
 
 import com.kizna.html.scanners.HTMLLinkScanner;
 import com.kizna.html.tags.HTMLLinkTag;
+import com.kizna.html.tags.HTMLTag;
 
 import java.util.Enumeration;
 import com.kizna.html.HTMLReader;
 import com.kizna.html.HTMLParser;
 import com.kizna.html.HTMLNode;
 import com.kizna.html.HTMLRemarkNode;
+import com.kizna.html.HTMLStringNode;
+
 import java.io.BufferedReader;
 import java.io.StringReader;
 import junit.framework.TestCase;
@@ -182,4 +185,25 @@ public void testToPlainTextString() {
 		remarkNode = (HTMLRemarkNode)node[5];
 		assertEquals("Raw String of the remarkNode #6","<!--\n\n   Whats gonna happen now ?\n\n-->",remarkNode.toHTML());			
 	}
+	public void testNonRemarkNode() {
+		String testHTML = new String("&nbsp;<![endif]>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		int i = 0;
+		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		{
+			node[i++] = (HTMLNode)e.nextElement();
+		}
+		assertEquals("There should be 2 nodes identified",new Integer(2),new Integer(i));
+		// The first node should be a HTMLRemarkNode
+		assertTrue("First node should be a string node",node[0] instanceof HTMLStringNode);
+		assertTrue("Second node should be a HTMLTag",node[1] instanceof HTMLTag);
+		HTMLStringNode stringNode = (HTMLStringNode)node[0];
+		HTMLTag tag = (HTMLTag)node[1];
+		assertEquals("Text contents","&nbsp;",stringNode.getText());
+		assertEquals("Tag Contents","![endif]",tag.getText());
+		
+	}	
 }
