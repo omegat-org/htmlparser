@@ -25,23 +25,19 @@
 // 2583 Cedar Street, Berkeley, 
 // CA 94708, USA
 // Website : http://www.industriallogic.com
- 
 
 package org.htmlparser;
 
-import java.io.Serializable;
+import java.io.*;
 
-import org.htmlparser.util.NodeList;
-import org.htmlparser.visitors.NodeVisitor;
-
+import org.htmlparser.tags.*;
+import org.htmlparser.util.*;
+import org.htmlparser.visitors.*;
 
 /**
  * A Node interface is implemented by all types of nodes (tags, string elements, etc)
  */
-public abstract class Node
-    implements
-        Serializable
-{
+public abstract class Node implements Serializable {
 	/** 
 	 * The beginning position of the tag in the line
 	 */
@@ -53,31 +49,41 @@ public abstract class Node
 	protected int nodeEnd;
 
 	/**
+	 * If parent of this tag
+	 */
+	protected CompositeTag parent;
+	
+	/**
 	 * Variable to store lineSeparator.
 	 * This is setup to read <code>line.separator</code> from the System property.
 	 * However it can also be changed using the mutator methods.
 	 * This will be used in the toHTML() methods in all the sub-classes of Node.
 	 */
-    protected static String lineSeparator = System.getProperty ("line.separator", "\n");
-
+	protected static String lineSeparator = System.getProperty("line.separator", "\n");
+	
 	public Node(int nodeBegin, int nodeEnd) {
 		this.nodeBegin = nodeBegin;
-		this.nodeEnd = nodeEnd;
+		this.nodeEnd   = nodeEnd;
+		this.parent    = null;
+	}
+
+	public Node(int nodeBegin, int nodeEnd, CompositeTag parent) {
+		this.nodeBegin = nodeBegin;
+		this.nodeEnd   = nodeEnd;
+		this.parent    = parent;
 	}
 
 	/**
 	 * @param lineSeparator New Line separator to be used
 	 */
-	public static void setLineSeparator(String lineSeparator)
-	{
-		Node.lineSeparator = lineSeparator;	
+	public static void setLineSeparator(String lineSeparator) {
+		Node.lineSeparator = lineSeparator;
 	}
-	
+
 	/**
 	 * @return String lineSeparator that will be used in toHTML()
 	 */
-	public static String getLineSeparator()
-	{
+	public static String getLineSeparator() {
 		return Node.lineSeparator;
 	}
 
@@ -94,14 +100,14 @@ public abstract class Node
 	 * </pre>
 	 */
 	public abstract String toPlainTextString();
-	
+
 	/**
 	 * This method will make it easier when using html parser to reproduce html pages (with or without modifications)
 	 * Applications reproducing html can use this method on nodes which are to be used or transferred as they were 
 	 * recieved, with the original html
 	 */
 	public abstract String toHtml();
-	
+
 	/**
 	 * Return the string representation of the node.
 	 * Subclasses must define this method, and this is typically to be used in the manner<br>
@@ -109,7 +115,7 @@ public abstract class Node
 	 * @return java.lang.String
 	 */
 	public abstract String toString();
-	
+
 	/**
 	 * Collect this node and its child nodes (if-applicable) into the collection parameter, provided the node
 	 * satisfies the filtering criteria. <P/>
@@ -143,8 +149,8 @@ public abstract class Node
 	 * 
 	 * To find out if your desired tag has filtering support, check the API of the tag.
 	 */
-	public abstract void collectInto(NodeList collectionList,String filter);
-	
+	public abstract void collectInto(NodeList collectionList, String filter);
+
 	/**
 	 * Collect this node and its child nodes (if-applicable) into the collection parameter, provided the node
 	 * satisfies the filtering criteria. <P/>
@@ -173,29 +179,44 @@ public abstract class Node
 			collectionList.add(this);
 		}
 	}
-	
+
 	/**
 	 * Returns the beginning position of the tag.
 	 */
-	public int elementBegin()
-	{
+	public int elementBegin() {
 		return nodeBegin;
 	}
 
 	/**
 	 * Returns the ending position fo the tag
 	 */
-	public int elementEnd()
-	{
+	public int elementEnd() {
 		return nodeEnd;
 	}
 
 	public abstract void accept(NodeVisitor visitor);
-	
+
 	/**
 	 * @deprecated - use toHtml() instead
 	 */
 	public final String toHTML() {
 		return toHtml();
 	}
+	
+	/**
+	 * Get the parent of this tag
+	 * @return
+	 */
+	public CompositeTag getParent() {
+		return parent;
+	}
+
+	/**
+	 * Sets the parent of this tag
+	 * @param tag
+	 */
+	public void setParent(CompositeTag tag) {
+		parent = tag;
+	}
+
 }

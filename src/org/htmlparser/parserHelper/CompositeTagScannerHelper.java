@@ -28,15 +28,11 @@
 
 package org.htmlparser.parserHelper;
 
-import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
-import org.htmlparser.scanners.CompositeTagScanner;
-import org.htmlparser.tags.EndTag;
-import org.htmlparser.tags.Tag;
-import org.htmlparser.tags.data.CompositeTagData;
-import org.htmlparser.tags.data.TagData;
-import org.htmlparser.util.NodeList;
-import org.htmlparser.util.ParserException;
+import org.htmlparser.*;
+import org.htmlparser.scanners.*;
+import org.htmlparser.tags.*;
+import org.htmlparser.tags.data.*;
+import org.htmlparser.util.*;
 
 public class CompositeTagScannerHelper {
 	private CompositeTagScanner scanner;
@@ -134,7 +130,9 @@ public class CompositeTagScannerHelper {
 	}
 
 	private Tag createTag() throws ParserException {
-		return scanner.createTag(
+		CompositeTag newTag = 
+		 	(CompositeTag)
+		 	scanner.createTag(
 			new TagData(
 				tag.elementBegin(),
 				endTag.elementEnd(),
@@ -149,6 +147,11 @@ public class CompositeTagScannerHelper {
 				tag,endTag,nodeList
 			)
 		);
+		for (int i=0;i<newTag.getChildCount();i++) {
+			Node child = newTag.childAt(i);
+			child.setParent(newTag);
+		}
+		return newTag;
 	}
 
 	private void doChildAndEndTagCheckOn(Node currentNode) {

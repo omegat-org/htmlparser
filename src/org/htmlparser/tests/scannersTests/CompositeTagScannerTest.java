@@ -427,6 +427,58 @@ public class CompositeTagScannerTest extends ParserTestCase {
 		);
 	}
 	
+	public void testParentConnections() throws ParserException {
+		createParser(
+			"<custom>" +
+			"<custom>something</custom>" +
+			"</custom>"
+		);
+		parser.addScanner(new CustomScanner(false));
+		parser.addScanner(new AnotherScanner());
+		parseAndAssertNodeCount(3);
+		
+		CustomTag customTag = (CustomTag)node[0];
+		
+		assertStringEquals(
+			"first custom tag html",
+			"<CUSTOM></CUSTOM>",
+			customTag.toHtml()
+		);
+		assertNull(
+			"first custom tag should have no parent",
+			customTag.getParent()
+		);
+		
+		customTag = (CustomTag)node[1];
+		assertStringEquals(
+			"first custom tag html",
+			"<CUSTOM>something</CUSTOM>",
+			customTag.toHtml()
+		);
+		assertNull(
+			"second custom tag should have no parent",
+			customTag.getParent()
+		);
+	
+		Node firstChild = customTag.childAt(0);
+		assertType("firstChild",StringNode.class,firstChild);
+		CompositeTag parent = firstChild.getParent();
+		assertNotNull("first child parent should not be null",parent);
+		assertSame("parent and custom tag should be the same",customTag,parent);
+		
+		EndTag endTag = (EndTag)node[2];
+		assertStringEquals(
+			"first custom tag html",
+			"</CUSTOM>",
+			endTag.toHtml()
+		);
+		assertNull(
+			"end tag should have no parent",
+			endTag.getParent()
+		);
+
+	}
+	
 	public void testUrlBeingProvidedToCreateTag() throws ParserException {
 		createParser("<Custom/>","http://www.yahoo.com");
 		
