@@ -36,123 +36,246 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
+
 /**
- * HTMLAppletTag represents an &lt;Applet&gt; tag
+ * AppletTag represents an &lt;Applet&gt; tag.
+ * It extends a basic tag by providing accessors to the class, codebase,
+ * archive and parameters.
  */
 public class AppletTag extends CompositeTag 
 {
-	private java.lang.String codeBase;
-	private java.lang.String archive;
-	private java.lang.String appletClass;
-	private Hashtable appletParams;
+    /**
+     * Create a new AppletTag with the dats given.
+     * @param tagData The data for this tag.
+     * @param compositeTagData The data for this composite tag.
+     */
+    public AppletTag (TagData tagData,CompositeTagData compositeTagData) 
+    {
+        super(tagData,compositeTagData);
+    }
 
-	/**
-	 * HTMLAppletTag constructor comment.
-	 * @param tagData The data for this tag.
-	 * @param compositeTagData The data for this composite tag.
-	 */
-	public AppletTag(TagData tagData,CompositeTagData compositeTagData) 
-	{
-		super(tagData,compositeTagData);
-		this.appletClass = compositeTagData.getStartTag().getAttribute("CODE");
-		this.codeBase = compositeTagData.getStartTag().getAttribute("CODEBASE");
-		this.archive = compositeTagData.getStartTag().getAttribute("ARCHIVE");
-		NodeList children = compositeTagData.getChildren();
-		appletParams = new Hashtable();
-		createAppletParamsTable(children);
-	}
+    /**
+     * Extract the applet <code>PARAM</code> tags from the child list.
+     * @return The list of applet parameters (keys and values are String objects).
+     */
+    public Hashtable createAppletParamsTable ()
+    {
+        NodeList kids;
+        Node node;
+        Tag tag;
+        String paramName;
+        String paramValue;
+        Hashtable ret;
 
-	public void createAppletParamsTable(NodeList children) {
-		for (int i=0;i<children.size();i++) { 
-			Node node = children.elementAt(i);
-			if (node instanceof Tag) {
-				Tag tag = (Tag)node;
-				if (tag.getTagName().equals("PARAM")) {
-					String paramName = tag.getAttribute("NAME");
-					if (paramName!=null && paramName.length()!=0)
-					{
-						String paramValue = tag.getAttribute("VALUE");
-						appletParams.put(paramName,paramValue);
-					}
-				}
-			}
-		}
-	}
-	
-	public java.lang.String getAppletClass() {
-		return appletClass;
-	}
-	
-	public Hashtable getAppletParams() {
-		return appletParams;
-	}
-	
-	public java.lang.String getArchive() {
-		return archive;
-	}
-	
-	public java.lang.String getCodeBase() {
-		return codeBase;
-	}
-	
-	public String getAttribute(String key)
-	{
-		return (String)appletParams.get(key);
-	}
-	
-	public Enumeration getParameterNames() 
-	{
-		return appletParams.keys();	
-	}
-	
-	public void setAppletClass(java.lang.String newAppletClass) {
-		appletClass = newAppletClass;
-	}
-	
-	public void setAppletParams(Hashtable newAppletParams) {
-		appletParams = newAppletParams;
-	}
-	
-	public void setArchive(java.lang.String newArchive) {
-		archive = newArchive;
-	}
-	
-	public void setCodeBase(java.lang.String newCodeBase) {
-		codeBase = newCodeBase;
-	}
-	
-	public String toString()
-	{
-		StringBuffer sb = new StringBuffer();
-		sb.append("Applet Tag\n");
-		sb.append("**********\n");
-		sb.append("Class Name = "+appletClass+"\n");
-		sb.append("Archive = "+archive+"\n");
-		sb.append("Codebase = "+codeBase+"\n");
-		Enumeration params = appletParams.keys();
-		if (params==null)
-		sb.append("No Params found.\n");
-		else
-		{
-			int cnt = 0;
-			for (;params.hasMoreElements();)
-			{
-				String paramName = (String)params.nextElement();
-				String paramValue = (String)appletParams.get(paramName);
-				sb.append((cnt++)+": Parameter name = "+paramName+", Parameter value = "+paramValue+"\n");
-			}
-		}
-		if (children()==null)
-		sb.append("No Miscellaneous items\n"); else
-		{
-			sb.append("Miscellaneous items :\n");
-			for (SimpleNodeIterator e = children();e.hasMoreNodes();)
-			{
-				sb.append(((Tag)e.nextNode()).toString());
-			}
-		}
-		sb.append("End of Applet Tag\n");
-		sb.append("*****************\n");
-		return sb.toString();
-	}
+        ret = new Hashtable ();
+        kids = getChildren ();
+        for (int i = 0; i < kids.size (); i++)
+        { 
+            node = children.elementAt(i);
+            if (node instanceof Tag)
+            {
+                tag = (Tag)node;
+                if (tag.getTagName().equals ("PARAM"))
+                {
+                    paramName = tag.getAttribute ("NAME");
+                    if (null != paramName && 0 != paramName.length ())
+                    {
+                        paramValue = tag.getAttribute ("VALUE");
+                        ret.put (paramName,paramValue);
+                    }
+                }
+            }
+        }
+        
+        return (ret);
+    }
+
+    /**
+     * Get the class name of the applet.
+     * @return The value of the <code>CODE</code> attribute.
+     */
+    public String getAppletClass ()
+    {
+        return (getAttribute ("CODE"));
+    }
+
+    /**
+     * Get the applet parameters.
+     * @return The list of parameter values (keys and values are String objects).
+     */
+    public Hashtable getAppletParams ()
+    {
+        return (createAppletParamsTable ());
+    }
+    
+    /**
+     * Get the jar file of the applet.
+     * @return The value of the <code>ARCHIVE</code> attribute, or <code>null</code> if it wasn't specified.
+     */
+    public String getArchive()
+    {
+        return (getAttribute ("ARCHIVE"));
+    }
+    
+    /**
+     * Get the code base of the applet.
+     * @return The value of the <code>CODEBASE</code> attribute, or <code>null</code> if it wasn't specified.
+     */
+    public String getCodeBase()
+    {
+        return (getAttribute ("CODEBASE"));
+    }
+
+    /**
+     * Get the <code>PARAM<code> tag with the given name.
+     * <em>NOTE: This was called (erroneously) getAttribute() in previous versions.</em>
+     * @param key The applet parameter name to get.
+     * @return The value of the parameter or <code>null</code> if there is no parameter of that name.
+     */
+    public String getParameter (String key)
+    {
+        return ((String)(getAppletParams ().get (key)));
+    }
+
+    /**
+     * Get an enumeration over the (String) parameter names.
+     * @return An enumeration of the <code>PARAM<code> tag <code>NAME<code> attributes.
+     */
+    public Enumeration getParameterNames () 
+    {
+        return (getAppletParams ().keys ());
+    }
+
+    /**
+     * Set the <code>CODE<code> attribute.
+     * @param The new applet class.
+     */
+    public void setAppletClass (String newAppletClass)
+    {
+        setAttribute ("CODE", newAppletClass);
+    }
+    
+    /**
+     * Set the enclosed <code>PARM<code> children.
+     * @param The new parameters.
+     */
+    public void setAppletParams (Hashtable newAppletParams)
+    {
+        NodeList kids;
+        Node node;
+        Tag tag;
+        String paramName;
+        String paramValue;
+        String s;
+        TagData tagData;
+        
+        kids = getChildren ();
+        // erase appletParams from kids
+        for (int i = 0; i < kids.size (); )
+        {
+            node = kids.elementAt (i);
+            if (node instanceof Tag)
+                if (((Tag)node).getTagName ().equals ("PARAM"))
+                    kids.remove (i);
+                else
+                    i++;
+            else
+                i++;
+        }
+        
+        // add newAppletParams to kids
+        for (Enumeration e = newAppletParams.keys (); e.hasMoreElements (); )
+        {
+            paramName = (String)e.nextElement ();
+            paramValue = (String)newAppletParams.get (paramName);
+            s = "PARAM VALUE=\"" + paramValue + "\" NAME=\"" + paramName + "\"";
+            tagData = new TagData (0, 0, 0, 0, s, s, "", false); // what, no URL?
+            kids.add (new Tag (tagData));
+        }
+        
+        //set kids as new children
+        setChildren (kids);
+    }
+    
+    /**
+     * Set the <code>ARCHIVE<code> attribute.
+     * @param The new archive file.
+     */
+    public void setArchive (String newArchive)
+    {
+        setAttribute ("ARCHIVE", newArchive);
+    }
+    
+    /**
+     * Set the <code>CODEBASE<code> attribute.
+     * @param The new applet code base.
+     */
+    public void setCodeBase (String newCodeBase)
+    {
+        setAttribute ("CODEBASE", newCodeBase);
+    }
+
+    /**
+     * Output a string representing this applet tag.
+     * @return A string showing the contents of the applet tag.
+     */
+    public String toString ()
+    {
+        Hashtable parameters;
+        Enumeration params;
+        String paramName;
+        String paramValue;
+        boolean found;
+        Node node;
+        StringBuffer ret;
+        
+        ret = new StringBuffer(500);
+        ret.append ("Applet Tag\n");
+        ret.append ("**********\n");
+        ret.append ("Class Name = ");
+        ret.append (getAppletClass ());
+        ret.append ("\n");
+        ret.append ("Archive = ");
+        ret.append (getArchive ());
+        ret.append ("\n");
+        ret.append ("Codebase = ");
+        ret.append (getCodeBase ());
+        ret.append ("\n");
+        parameters = getAppletParams ();
+        params = parameters.keys ();
+        if (null == params)
+            ret.append ("No Params found.\n");
+        else
+            for (int cnt = 0; params.hasMoreElements (); cnt++)
+            {
+                paramName = (String)params.nextElement ();
+                paramValue = (String)parameters.get (paramName);
+                ret.append (cnt);
+                ret.append (": Parameter name = ");
+                ret.append (paramName);
+                ret.append (", Parameter value = ");
+                ret.append (paramValue);
+                ret.append ("\n");
+            }
+        found = false;
+        for (SimpleNodeIterator e = children (); e.hasMoreNodes ();)
+        {
+            node = e.nextNode ();
+            if (node instanceof Tag)
+                if (((Tag)node).getTagName ().equals ("PARAM"))
+                    continue;
+            if (!found)
+                ret.append ("Miscellaneous items :\n");
+            else
+                ret.append (" ");
+            found = true;
+            ret.append (node.toString ());
+        }
+        if (found)
+            ret.append ("\n");
+        ret.append ("End of Applet Tag\n");
+        ret.append ("*****************\n");
+
+        return (ret.toString ());
+    }
 }
