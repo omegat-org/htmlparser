@@ -51,8 +51,10 @@ public class HTMLParserTest extends HTMLParserTestCase {
 	public HTMLParserTest(String name) {
 		super(name);
 	}
-	public void testElements() throws HTMLParserException {
-		createParser("<SomeHTML>");
+	public void testElements() throws Exception {
+		StringBuffer hugeData = new StringBuffer();
+		for (int i=0;i<5001;i++) hugeData.append('a');
+		createParser(hugeData.toString());
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
 		{
@@ -60,18 +62,21 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		}
 		assertEquals("There should be 1 node identified",1,i);
 		// Now try getting the elements again
-		i = 0;
-		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
-		{
-			node[i++] = e.nextHTMLNode();
-		}
-		assertEquals("There should be 1 node identified (second call to parser.elements())",1,i);
+//		i = 0;
+//		reader.reset();
+//		reader.setLineCount(1);
+//		reader.setPosInLine(-1);
+//		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
+//		{
+//			node[i++] = e.nextHTMLNode();
+//		}
+//		assertEquals("There should be 1 node identified (second call to parser.elements())",1,i);
 	}
 
 	/**
 	 * This testcase needs you to be online.
 	 */
-	public void testElementsFromWeb() throws HTMLParserException {
+	public void testElementsFromWeb() throws Exception {
 		HTMLParser parser;
 		try {
 			parser = new HTMLParser("http://www.google.com");
@@ -79,6 +84,8 @@ public class HTMLParserTest extends HTMLParserTestCase {
 		catch (Exception e ){
 			throw new HTMLParserException("You must be offline! This test needs you to be connected to the internet.",e);
 		}
+		parser.getReader().mark(5000);
+
 		HTMLNode [] node = new HTMLNode[500];
 		int i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)
@@ -86,6 +93,7 @@ public class HTMLParserTest extends HTMLParserTestCase {
 			node[i++] = e.nextHTMLNode();
 		}
 		int cnt = i;
+		parser.getReader().reset();
 		// Now try getting the elements again
 		i = 0;
 		for (HTMLEnumeration e = parser.elements();e.hasMoreNodes();)

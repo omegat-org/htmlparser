@@ -288,4 +288,11 @@ public class HTMLReader extends BufferedReader
 		this.posInLine = posInLine;
 	}
 
+
+	public void reset() throws IOException {
+		super.reset();
+		lineCount = 1;
+		posInLine = -1;
+	}
+
 }

@@ -23,7 +23,8 @@ public class HTMLParserTestCase extends TestCase {
 	protected HTMLParser parser;
 	protected HTMLNode node [];
 	protected int nodeCount;
-
+	protected HTMLReader reader;
+	
 	public HTMLParserTestCase(String name) {
 		super(name);
 	}
@@ -31,7 +32,7 @@ public class HTMLParserTestCase extends TestCase {
 	protected void createParser(String inputHTML) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+		reader =  new HTMLReader(new BufferedReader(sr),5000);
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[20];
 	}
@@ -39,7 +40,7 @@ public class HTMLParserTestCase extends TestCase {
 	protected void createParser(String inputHTML,int numNodes) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+		reader =  new HTMLReader(new BufferedReader(sr),5000);
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[numNodes];
 	}
@@ -47,7 +48,7 @@ public class HTMLParserTestCase extends TestCase {
 	protected void createParser(String inputHTML, String url) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),url);
+		reader =  new HTMLReader(new BufferedReader(sr),url);
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[20];
 	}
@@ -55,7 +56,7 @@ public class HTMLParserTestCase extends TestCase {
 	protected void createParser(String inputHTML, String url,int numNodes) {
 		String testHTML = new String(inputHTML);
 		StringReader sr = new StringReader(testHTML);
-		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),url);
+		reader =  new HTMLReader(new BufferedReader(sr),url);
 		parser = new HTMLParser(reader,new DefaultHTMLParserFeedback());
 		node = new HTMLNode[numNodes];
 	}

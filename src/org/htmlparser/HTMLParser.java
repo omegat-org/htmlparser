@@ -145,7 +145,17 @@ public class HTMLParser
 	// End of formatting
 	/**
 	 * This constructor enables the construction of test cases, with readers
-	 * associated with test string buffers. 
+	 * associated with test string buffers. It can also be used with readers of the user's choice
+	 * streaming data into the parser.<p/>
+	 * <B>Important:</B> If you are using this constructor, and you would like to use the parser
+	 * to parse multiple times (multiple calls to parser.elements()), you must ensure the following:<br>
+	 * <ul>
+	 * <li>Before the first parse, you must mark the reader for a length that you anticipate (the size of the stream).</li>
+	 * <li>After the first parse, calls to elements() must be preceded by calls to :
+	 * <pre>
+	 * parser.getReader().reset();
+	 * </pre>
+	 * </li>
 	 * @param reader org.htmlparser.HTMLReader
 	 * @param feedback The HTMLParserFeedback object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
@@ -160,19 +170,8 @@ public class HTMLParser
             this.feedback = feedback;
 		HTMLTag.setTagParser(new HTMLTagParser(feedback));		
 		reader.setParser(this);
-		markBeginningOfStream(reader);
 		connectionOpened=false;
 	}
-
-	public void markBeginningOfStream(HTMLReader reader) {
-		try {
-			reader.mark(5000);
-		}
-		catch (IOException e) {
-			feedback.error("Could not mark the current location of the reader",new HTMLParserException(e));
-		}
-	}
-	
 	
 	/**
 	 * Creates a HTMLParser object with the location of the resource (URL or file)
@@ -212,8 +211,18 @@ public class HTMLParser
 	}
 	
 	/**
-	 * This method is present to enable users to plugin their own readers.
-	 * A DefaultHTMLParserFeedback object is used for feedback.
+	 * This constructor is present to enable users to plugin their own readers. 
+	 * A DefaultHTMLParserFeedback object is used for feedback. It can also be used with readers of the user's choice
+	 * streaming data into the parser.<p/>
+	 * <B>Important:</B> If you are using this constructor, and you would like to use the parser
+	 * to parse multiple times (multiple calls to parser.elements()), you must ensure the following:<br>
+	 * <ul>
+	 * <li>Before the first parse, you must mark the reader for a length that you anticipate (the size of the stream).</li>
+	 * <li>After the first parse, calls to elements() must be preceded by calls to :
+	 * <pre>
+	 * parser.getReader().reset();
+	 * </pre>
+	 * </li>
      * @param reader The source for HTML to be parsed.
 	 */
 	public HTMLParser(HTMLReader reader) 
@@ -284,8 +293,7 @@ public class HTMLParser
 				   if (node==null) {
 				   		// Parser has completed. 
 				   		// Re-initialize
-				   		if (!connectionOpened) resetReader(); else openConnection();
-						return false;
+				   		return false;
 					}
 					else
 						return true;
@@ -301,12 +309,6 @@ public class HTMLParser
 					throw ex;
 				}
 
-			}
-			public void resetReader() throws HTMLParserException, IOException {
-				if (!reader.markSupported()) throw new HTMLParserException("Mark is not supported!");
-				reader.reset();
-				reader.setLineCount(1);
-				reader.setPosInLine(-1);
 			}
 			public HTMLNode nextHTMLNode() throws HTMLParserException
 			{
