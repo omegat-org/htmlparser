@@ -262,6 +262,7 @@ public class Tag extends Node
 			String firstWord = extractWord(tagContents.toString());
 			// Now, get the scanner associated with this.
 			TagScanner scanner = (TagScanner)scanners.get(firstWord);
+			
 			// Now do a deep check
 			if (scanner != null &&
 					scanner.evaluate(
@@ -351,7 +352,7 @@ public class Tag extends Node
 	 * do not need to override toHTML().
 	 * @see org.htmlparser.HTMLNode#toHTML()
 	 */
-	public String toHTML() {
+	public String toHtml() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<");
 		sb.append(getTagName());

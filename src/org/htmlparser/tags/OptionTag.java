@@ -49,7 +49,7 @@ public class OptionTag extends Tag
 		this.value = value;
 	}
 
-	public String toHTML()
+	public String toHtml()
 	{
 		String lHTMLString = ParserUtils.toHTML(this);
 		

@@ -197,7 +197,7 @@ public class ScriptScannerTest extends ParserTestCase
 		parser.addScanner(new ScriptScanner("-s")); 
 		parseAndAssertNodeCount(1); 
 		ScriptTag scriptTag = (ScriptTag)node[0]; 
-		assertStringEquals("scriptag html",testHtml,scriptTag.toHTML()); 
+		assertStringEquals("scriptag html",testHtml,scriptTag.toHtml()); 
 	} 
 	
 	/**

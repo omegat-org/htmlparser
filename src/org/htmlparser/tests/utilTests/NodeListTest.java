@@ -95,7 +95,7 @@ public class NodeListTest extends ParserTestCase {
 			public void collectInto(NodeList collectionList, String filter) {
 			}
 	
-			public String toHTML() {
+			public String toHtml() {
 				return null;
 			}
 	

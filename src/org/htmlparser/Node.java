@@ -100,7 +100,7 @@ public abstract class Node
 	 * Applications reproducing html can use this method on nodes which are to be used or transferred as they were 
 	 * recieved, with the original html
 	 */
-	public abstract String toHTML();
+	public abstract String toHtml();
 	
 	/**
 	 * Return the string representation of the node.
@@ -191,5 +191,11 @@ public abstract class Node
 	}
 
 	public abstract void accept(NodeVisitor visitor);
-
+	
+	/**
+	 * @deprecated - use toHtml() instead
+	 */
+	public final String toHTML() {
+		return toHtml();
+	}
 }

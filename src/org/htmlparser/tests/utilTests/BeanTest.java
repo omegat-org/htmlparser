@@ -126,8 +126,8 @@ public class BeanTest extends TestCase
         while (enumeration.hasMoreNodes ())
             assertEquals (
                 "Nodes before and after serialization differ",
-                ((Node)vector.remove (0)).toHTML (),
-                ((Node)enumeration.nextNode ()).toHTML ());
+                ((Node)vector.remove (0)).toHtml (),
+                ((Node)enumeration.nextNode ()).toHtml ());
     }
     
     public void testSerializableScanners ()
@@ -155,8 +155,8 @@ public class BeanTest extends TestCase
         while (enumeration.hasMoreNodes ())
             assertEquals (
                 "Nodes before and after serialization differ",
-                ((Node)vector.remove (0)).toHTML (),
-                ((Node)enumeration.nextNode ()).toHTML ());
+                ((Node)vector.remove (0)).toHtml (),
+                ((Node)enumeration.nextNode ()).toHtml ());
     }
 
     public void testSerializableStringBean ()

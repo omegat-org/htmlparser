@@ -94,7 +94,7 @@ public class LinkScannerTest extends ParserTestCase
 		// Verify the link data
 		assertEquals("Link Text","",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertStringEquals("toHTML","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></IMG></A>",linkTag.toHTML());
+		assertStringEquals("toHTML","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></IMG></A>",linkTag.toHtml());
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class LinkScannerTest extends ParserTestCase
 		// Verify the link data
 		assertEquals("Link Text","This is a test\r\n",linkTag.getLinkText());
 		// Verify the reconstruction html
-		assertStringEquals("toHTML()","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></IMG>This is a test\r\n</A>",linkTag.toHTML());
+		assertStringEquals("toHTML()","<A HREF=\"s/8741\"><IMG BORDER=\"0\" WIDTH=\"16\" SRC=\"http://us.i1.yimg.com/us.yimg.com/i/i16/mov_popc.gif\" HEIGHT=\"16\"></IMG>This is a test\r\n</A>",linkTag.toHtml());
 	}
 	
 	public void testEvaluate() 

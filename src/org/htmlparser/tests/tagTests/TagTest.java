@@ -374,13 +374,13 @@ public class TagTest extends ParserTestCase
 		// The node should be an HTMLTag
 		assertTrue("1st Node should be a HTMLTag",node[0] instanceof Tag);
 		Tag tag = (Tag)node[0];
-		assertStringEquals("toHTML()","<MYTAG EFGH=\"\" ABCD=\"\" MNOP=\"\" IJKL=\"\">",tag.toHTML());
+		assertStringEquals("toHTML()","<MYTAG EFGH=\"\" ABCD=\"\" MNOP=\"\" IJKL=\"\">",tag.toHtml());
 		assertTrue("2nd Node should be a HTMLTag",node[1] instanceof Tag);
 		assertTrue("5th Node should be a HTMLTag",node[4] instanceof Tag);
 		tag = (Tag)node[1];
-		assertEquals("Raw String of the tag","<TITLE>",tag.toHTML());
+		assertEquals("Raw String of the tag","<TITLE>",tag.toHtml());
 		tag = (Tag)node[4];
-		assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toHTML());
+		assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toHtml());
 	}
 
 
@@ -401,7 +401,7 @@ public class TagTest extends ParserTestCase
         try {
             while (en.hasMoreNodes()) {
                 node = en.nextNode();
-                result += node.toHTML();
+                result += node.toHtml();
             }
             String expected = "<A YOURPARAMETER=\"Kaarle\" MYPARAMETER=\"\" HREF=\"http://www.iki.fi/kaila\">Kaarle's homepage</A><P>Paragraph</P>";
             assertStringEquals("Check collected contents to original", expected, result);
@@ -428,7 +428,7 @@ public class TagTest extends ParserTestCase
        try {
            while (en.hasMoreNodes()) {
                node = en.nextNode();
-               result = node.toHTML();
+               result = node.toHtml();
            }
            String expected = "<INPUT VALUE=\"foobar\" NAME=\"foo\" TYPE=\"text\"/>";
            assertStringEquals("Check collected contents to original", expected, result);
@@ -538,7 +538,7 @@ public class TagTest extends ParserTestCase
 		assertTrue("First node should be an HTMLtag",node[0] instanceof Tag);
 		Tag htmlTag = (Tag)node[0];
 		String expectedHTML = "<TEXTAREA NAME=\"JohnDoe\">";
-		assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHTML());
+		assertStringEquals("Expected HTML",expectedHTML,htmlTag.toHtml());
 	}
 	public void testIgnoreState() throws ParserException {
 		String testHTML = "<A \n"+

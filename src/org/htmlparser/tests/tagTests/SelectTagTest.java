@@ -79,7 +79,7 @@ public class SelectTagTest extends ParserTestCase
 									"<OPTION VALUE=\"Nephew\">Nephew</OPTION>\r\n"+
 									"<OPTION VALUE=\"Niece\">Niece\r\n</OPTION>"+
 									"</SELECT>",
-									selectTag.toHTML());
+									selectTag.toHtml());
 	}	
 	
 	

@@ -37,15 +37,22 @@ import org.htmlparser.tags.Tag;
 
 public abstract class NodeVisitor {
 	private boolean recurseChildren;
-	
+	private boolean recurseSelf;
+		
 	public NodeVisitor() {
 		this(true);	
 	}
 	
 	public NodeVisitor(boolean recurseChildren) {
-		this.recurseChildren = recurseChildren;	
+		this.recurseChildren = recurseChildren;
+		this.recurseSelf = true;	
 	}
 	
+	public NodeVisitor(boolean recurseChildren,boolean recurseSelf) {
+		this.recurseChildren = recurseChildren;
+		this.recurseSelf = recurseSelf;	
+	}
+
 	public void visitTag(Tag tag) {
 		
 	}
@@ -69,6 +76,10 @@ public abstract class NodeVisitor {
 	
 	public boolean shouldRecurseChildren() {
 		return recurseChildren;
+	}
+	
+	public boolean shouldRecurseSelf() {
+		return recurseSelf;
 	}
 
 }

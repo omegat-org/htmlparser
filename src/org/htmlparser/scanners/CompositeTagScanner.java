@@ -114,7 +114,7 @@ public abstract class CompositeTagScanner extends TagScanner {
 			StringBuffer msg = new StringBuffer();
 			msg.append("Exception occurred in CompositeTagScanner.scan(),\n");
 			msg.append("current tag being processed is : ");
-			msg.append(tag.toHTML());
+			msg.append(tag.toHtml());
 			if (endTag==null) 
 				msg.append("\n no </"+tag.getTagName()+"> end tag was found!");
 			throw new ParserException(msg.toString(),e);

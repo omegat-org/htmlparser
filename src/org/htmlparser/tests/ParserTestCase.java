@@ -187,7 +187,8 @@ public class ParserTestCase extends TestCase {
 				actualNodeName
 			);
 			assertTagEquals(
-				displayMessage,
+				displayMessage+"\n"+
+				"previous matched node : "+prevNodeHtml,
 				expectedNode,
 				actualNode,
 				actualEnumeration
@@ -272,7 +273,7 @@ public class ParserTestCase extends TestCase {
 			if (key==Tag.TAGNAME) {
 				expectedValue = ParserUtils.removeChars(expectedValue,'/');
 				actualValue = ParserUtils.removeChars(actualValue,'/');
-				assertEquals("tag name",expectedValue,actualValue);
+				assertEquals(displayMessage+"\ntag name",expectedValue,actualValue);
 				continue;
 			}
 				

@@ -142,7 +142,7 @@ public class JspTagTest extends ParserTestCase
 		// The first node should be an HTMLJspTag
 		assertTrue("Node 1 should be an HTMLJspTag",node[0] instanceof JspTag);
 		JspTag tag = (JspTag)node[0];
-		assertEquals("Raw String of the first JSP tag","<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>",tag.toHTML());
+		assertEquals("Raw String of the first JSP tag","<%@ taglib uri=\"/WEB-INF/struts.tld\" prefix=\"struts\" %>",tag.toHtml());
 	
 	
 		// The third node should be an HTMLJspTag
@@ -157,12 +157,12 @@ public class JspTagTest extends ParserTestCase
 			"    else \r\n"+
 			"        if(transfer.validate(request))\r\n"+
 			"            %>";
-		assertEquals("Raw String of the second JSP tag",expected,tag2.toHTML());
+		assertEquals("Raw String of the second JSP tag",expected,tag2.toHtml());
 		assertTrue("Node 4 should be an HTMLJspTag",node[4] instanceof JspTag);
 		JspTag tag4 = (JspTag)node[4];
 		expected = "<%\r\n"+ 
 			"%>";
-		assertEquals("Raw String of the fourth JSP tag",expected,tag4.toHTML());
+		assertEquals("Raw String of the fourth JSP tag",expected,tag4.toHtml());
 		
 	}
 	public void testSpecialCharacters() throws ParserException {
@@ -175,7 +175,7 @@ public class JspTagTest extends ParserTestCase
 		parseAndAssertNodeCount(1);
 		//assertTrue("Node should be a jsp tag",node[1] instanceof HTMLJspTag);
 		JspTag jspTag = (JspTag)node[0]; 
-		assertEquals("jsp toHTML()","<% for (i=0;i<j;i++);%>",jspTag.toHTML());
+		assertEquals("jsp toHTML()","<% for (i=0;i<j;i++);%>",jspTag.toHtml());
 	}	
 
 }

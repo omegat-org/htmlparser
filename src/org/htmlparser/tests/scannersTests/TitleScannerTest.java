@@ -116,6 +116,6 @@ public class TitleScannerTest extends ParserTestCase {
 		parseAndAssertNodeCount(7);
 		assertTrue(node[2] instanceof TitleTag);
 		TitleTag titleTag = (TitleTag) node[2];
-		assertStringEquals("HTML Rendering","<TITLE><%=gTitleString%></TITLE>",titleTag.toHTML());				
+		assertStringEquals("HTML Rendering","<TITLE><%=gTitleString%></TITLE>",titleTag.toHtml());				
 	}
 }

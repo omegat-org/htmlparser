@@ -117,7 +117,7 @@ public class EndTag extends Tag
 	public String toPlainTextString() {
 		return "";
 	}
-	public String toHTML() {
+	public String toHtml() {
 		return "</"+getTagName()+">";
 	}
 	public String toString() {

@@ -82,7 +82,7 @@ public class ScriptTagTest extends ParserTestCase{
 		assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
 		// Check the data in the applet tag
 		ScriptTag scriptTag = (ScriptTag)node[0];
-		assertEquals("Expected Raw String","<SCRIPT>document.write(d+\".com\")</SCRIPT>",scriptTag.toHTML());
+		assertEquals("Expected Raw String","<SCRIPT>document.write(d+\".com\")</SCRIPT>",scriptTag.toHtml());
 	}
 	
 	/** 
@@ -128,7 +128,7 @@ public class ScriptTagTest extends ParserTestCase{
 		// Check the data in the applet tag 
 		ScriptTag scriptTag = (ScriptTag)node 
 		[1]; 
-		assertStringEquals("Expected Script Code",expectedHTML,scriptTag.toHTML()); 
+		assertStringEquals("Expected Script Code",expectedHTML,scriptTag.toHtml()); 
 	} 
 	
 	public void testParamExtraction() throws ParserException {
@@ -163,7 +163,7 @@ public class ScriptTagTest extends ParserTestCase{
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
 		ScriptTag scriptTag = (ScriptTag)node[0]; 
-		assertStringEquals("Script toHTML()","<SCRIPT LANGUAGE=\"javascript\">\r\nvar lower = '<%=lowerValue%>';\r\n</SCRIPT>",scriptTag.toHTML());
+		assertStringEquals("Script toHTML()","<SCRIPT LANGUAGE=\"javascript\">\r\nvar lower = '<%=lowerValue%>';\r\n</SCRIPT>",scriptTag.toHtml());
 	}	
 
 	public void testSingleApostropheParsingBug() throws ParserException {
@@ -176,7 +176,7 @@ public class ScriptTagTest extends ParserTestCase{
 		parseAndAssertNodeCount(1);
 		assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
 		ScriptTag scriptTag = (ScriptTag)node[0]; 
-		assertStringEquals("Script toHTML()","<SCRIPT SRC=\"<%=sourceFileName%>\"></SCRIPT>",scriptTag.toHTML());
+		assertStringEquals("Script toHTML()","<SCRIPT SRC=\"<%=sourceFileName%>\"></SCRIPT>",scriptTag.toHtml());
 	}
 	
 }

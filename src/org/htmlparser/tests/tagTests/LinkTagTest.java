@@ -278,10 +278,10 @@ public class LinkTagTest extends ParserTestCase {
 		parseAndAssertNodeCount(9);
 		assertTrue("First Node should be a HTMLLinkTag",node[0] instanceof LinkTag);
 		LinkTag linkTag = (LinkTag)node[0];
-		assertStringEquals("Link Raw Text","<A HREF=\"mailto:somik@yahoo.com\">hello</A>",linkTag.toHTML());
+		assertStringEquals("Link Raw Text","<A HREF=\"mailto:somik@yahoo.com\">hello</A>",linkTag.toHtml());
 		assertTrue("Eighth Node should be a HTMLLinkTag",node[7] instanceof LinkTag);
 		linkTag = (LinkTag)node[7];
-		assertStringEquals("Link Raw Text","<A HREF=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\r\nnical.html\"> Journalism 3.0</A>",linkTag.toHTML());
+		assertStringEquals("Link Raw Text","<A HREF=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\r\nnical.html\"> Journalism 3.0</A>",linkTag.toHtml());
 	}
 
 	public void testTypeHttps() throws ParserException{

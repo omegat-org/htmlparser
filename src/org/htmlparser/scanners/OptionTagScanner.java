@@ -77,7 +77,7 @@ public class OptionTagScanner extends TagScanner
 				}
 				else if (node instanceof StringNode)
 				{
-					text.append(node.toHTML());
+					text.append(node.toHtml());
 				}
 				else 
 				{

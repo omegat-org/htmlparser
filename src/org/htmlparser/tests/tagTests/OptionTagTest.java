@@ -72,27 +72,27 @@ public class OptionTagTest extends ParserTestCase
 		}
 		OptionTag OptionTag;
 		OptionTag = (OptionTag) node[0];
-		assertStringEquals("HTML String","<OPTION VALUE=\"Google Search\">Google</OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION VALUE=\"Google Search\">Google</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[1];
-		assertStringEquals("HTML String","<OPTION VALUE=\"AltaVista Search\">AltaVista</OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION VALUE=\"AltaVista Search\">AltaVista</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[2];
-		assertStringEquals("HTML String","<OPTION VALUE=\"Lycos Search\"></OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION VALUE=\"Lycos Search\"></OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[3];
-		assertStringEquals("HTML String","<OPTION>Yahoo!</OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION>Yahoo!</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[4];
-		assertStringEquals("HTML String","<OPTION>Hotmail</OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION>Hotmail</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[5];
-		assertStringEquals("HTML String","<OPTION VALUE=\"ICQ Messenger\"></OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION VALUE=\"ICQ Messenger\"></OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[6];
-		assertStringEquals("HTML String","<OPTION>Mailcity\r\n</OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION>Mailcity\r\n</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[7];
-		assertStringEquals("HTML String","<OPTION>Indiatimes\r\n</OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION>Indiatimes\r\n</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[8];
-		assertStringEquals("HTML String","<OPTION>Rediff\r\n</OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION>Rediff\r\n</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[9];
-		assertStringEquals("HTML String","<OPTION>Cricinfo</OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION>Cricinfo</OPTION>",OptionTag.toHtml());
 		OptionTag = (OptionTag) node[10];
-		assertStringEquals("HTML String","<OPTION VALUE=\"Microsoft Passport\"></OPTION>",OptionTag.toHTML());
+		assertStringEquals("HTML String","<OPTION VALUE=\"Microsoft Passport\"></OPTION>",OptionTag.toHtml());
 	}	
 	
 	public void testToString() throws ParserException 

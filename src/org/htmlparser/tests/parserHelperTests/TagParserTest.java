@@ -49,7 +49,7 @@ public class TagParserTest extends ParserTestCase {
 		assertStringEquals(
 			"html",
 			"<IMG BORDER=\"0\" ALT=\"Marshall Field's\" WIDTH=\"87\" SRC=\"http://g-images.amazon.com/images/G/01/merchants/logos/marshall-fields-logo-20.gif\" HEIGHT=\"20\">",
-			tag.toHTML()
+			tag.toHtml()
 		);
 	}
 }

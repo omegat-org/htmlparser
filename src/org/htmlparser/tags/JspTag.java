@@ -46,7 +46,7 @@ public class JspTag extends Tag
 	{
 		super(tagData);
 	}
-	public String toHTML() {
+	public String toHtml() {
 		return "<%"+tagContents+"%>";
 	}
 		/**

@@ -50,7 +50,7 @@ public class BaseHrefTagTest extends ParserTestCase {
 		parseAndAssertNodeCount(1);
 		assertTrue("Should be a base tag but was "+node[0].getClass().getName(),node[0] instanceof BaseHrefTag);
 		BaseHrefTag baseTag = (BaseHrefTag)node[0];
-		assertStringEquals("Base Tag HTML","<BASE TARGET=\"_top\">",baseTag.toHTML());
+		assertStringEquals("Base Tag HTML","<BASE TARGET=\"_top\">",baseTag.toHtml());
 	}
 
 }

@@ -63,7 +63,7 @@ public abstract class CompositeTag extends Tag {
 	}
 
 	public void putStartTagInto(StringBuffer sb) {
-		sb.append(startTag.toHTML());
+		sb.append(startTag.toHtml());
 	}
 
 	protected void putChildrenInto(StringBuffer sb) {
@@ -76,7 +76,7 @@ public abstract class CompositeTag extends Tag {
 					sb.append(lineSeparator);					
 				}
 			}
-			sb.append(node.toHTML());
+			sb.append(node.toHtml());
 			prevNode=node;
 		}
 		if (prevNode.elementEnd()>endTag.elementBegin()) {
@@ -85,10 +85,10 @@ public abstract class CompositeTag extends Tag {
 	}
 
 	protected void putEndTagInto(StringBuffer sb) {
-		sb.append(endTag.toHTML());
+		sb.append(endTag.toHtml());
 	}
 
-	public String toHTML() {
+	public String toHtml() {
 		StringBuffer sb = new StringBuffer();
 		putStartTagInto(sb);
 		putChildrenInto(sb);
@@ -232,7 +232,7 @@ public abstract class CompositeTag extends Tag {
 		StringBuffer buff = new StringBuffer();
 		for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
 			Node node = (Node)e.nextNode();
-			buff.append(node.toHTML());
+			buff.append(node.toHtml());
 		}
 		return buff.toString();
 	}
@@ -247,8 +247,8 @@ public abstract class CompositeTag extends Tag {
 			}
 			endTag.accept(visitor);
 		}
-			else
-				visitor.visitTag(this);
+		if (visitor.shouldRecurseSelf())
+			visitor.visitTag(this);
 	}
 
 

@@ -124,7 +124,7 @@ public class FormScannerTest extends ParserTestCase {
 		assertEquals("Text Area Tag Contents","Contents of TextArea",textAreaTag.getValue());
 		assertNull("Should have been null",formTag.getTextAreaTag("junk"));
 		
-		assertStringEquals("toHTML",EXPECTED_FORM_HTML,formTag.toHTML());
+		assertStringEquals("toHTML",EXPECTED_FORM_HTML,formTag.toHtml());
 	}
 	
 	public void testScanFormWithNoEnding() {

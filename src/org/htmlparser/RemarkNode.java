@@ -68,7 +68,7 @@ public class RemarkNode extends Node
 	public String toPlainTextString() {
 		return tagContents;
 	}
-	public String toHTML() {
+	public String toHtml() {
 		return "<!--"+tagContents+"-->";
 	}
 	/**

@@ -52,7 +52,7 @@ public class LabelScannerTest extends ParserTestCase {
 		//  check the title node
 		LabelTag labelTag = (LabelTag) node[0];
 		assertEquals("Label","This is a label tag",labelTag.getLabel());
-		assertStringEquals("Label","<LABEL>This is a label tag</LABEL>",labelTag.toHTML());
+		assertStringEquals("Label","<LABEL>This is a label tag</LABEL>",labelTag.toHtml());
 		assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
 	}
 	
@@ -65,7 +65,7 @@ public class LabelScannerTest extends ParserTestCase {
 		assertTrue(node[0] instanceof LabelTag);
 		//  check the title node
 		LabelTag labelTag = (LabelTag) node[0];
-		assertStringEquals("Label","<LABEL><%=labelValue%></LABEL>",labelTag.toHTML());
+		assertStringEquals("Label","<LABEL><%=labelValue%></LABEL>",labelTag.toHtml());
 		assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
 	}
 	
@@ -79,7 +79,7 @@ public class LabelScannerTest extends ParserTestCase {
 		//  check the title node
 		LabelTag labelTag = (LabelTag) node[0];
 		assertEquals("Label value","Span within label",labelTag.getLabel());
-		assertStringEquals("Label","<LABEL><SPAN>Span within label</SPAN></LABEL>",labelTag.toHTML());
+		assertStringEquals("Label","<LABEL><SPAN>Span within label</SPAN></LABEL>",labelTag.toHtml());
 		assertEquals("Label Scanner",labelScanner,labelTag.getThisScanner());
 	}
 	

@@ -121,11 +121,11 @@ public class RemarkNodeParserTest extends ParserTestCase
 		// The first node should be a HTMLRemarkNode
 		assertTrue("First node should be a HTMLRemarkNode",node[0] instanceof RemarkNode);
 		RemarkNode remarkNode = (RemarkNode)node[0];
-		assertStringEquals("Raw String of the remarkNode #1","<!-- saved from url=(0022)http://internet.e-mail -->",remarkNode.toHTML());	
+		assertStringEquals("Raw String of the remarkNode #1","<!-- saved from url=(0022)http://internet.e-mail -->",remarkNode.toHtml());	
 		// The sixth node should be a HTMLRemarkNode 
 		assertTrue("Sixth node should be a HTMLRemarkNode",node[5] instanceof RemarkNode);
 		remarkNode = (RemarkNode)node[5];
-		assertStringEquals("Raw String of the remarkNode #6","<!--\r\n   Whats gonna happen now ?\r\n-->",remarkNode.toHTML());			
+		assertStringEquals("Raw String of the remarkNode #6","<!--\r\n   Whats gonna happen now ?\r\n-->",remarkNode.toHtml());			
 	}
 	
 	public void testNonRemarkNode() throws ParserException {

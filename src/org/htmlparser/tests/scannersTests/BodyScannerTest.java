@@ -51,7 +51,7 @@ public class BodyScannerTest extends ParserTestCase {
 		// check the body node
 		BodyTag bodyTag = (BodyTag) node[4];
 		assertEquals("Body","This is a body tag",bodyTag.getBody());
-		assertEquals("Body","<BODY>This is a body tag</BODY>",bodyTag.toHTML());
+		assertEquals("Body","<BODY>This is a body tag</BODY>",bodyTag.toHtml());
 		assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
 	}
 		
@@ -64,7 +64,7 @@ public class BodyScannerTest extends ParserTestCase {
 	 	assertTrue(node[4] instanceof BodyTag);
 		// check the body node
 		BodyTag bodyTag = (BodyTag) node[4];
-		assertEquals("Body","<BODY><%=BodyValue%></BODY>",bodyTag.toHTML());
+		assertEquals("Body","<BODY><%=BodyValue%></BODY>",bodyTag.toHtml());
 		assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
 	}
 	
@@ -77,7 +77,7 @@ public class BodyScannerTest extends ParserTestCase {
 	 	assertTrue(node[4] instanceof BodyTag);
 		// check the body node
 		BodyTag bodyTag = (BodyTag) node[4];
-		assertEquals("Body","<BODY>before jsp<%=BodyValue%>after jsp</BODY>",bodyTag.toHTML());
+		assertEquals("Body","<BODY>before jsp<%=BodyValue%>after jsp</BODY>",bodyTag.toHtml());
 		assertEquals("Body Scanner",bodyScanner,bodyTag.getThisScanner());
 	}
 		

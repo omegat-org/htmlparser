@@ -112,7 +112,7 @@ public class NodeList implements Serializable {
 	public String asHtml() {
 		StringBuffer buff = new StringBuffer();
 		for (int i=0;i<size;i++) 
-			buff.append(nodeData[i].toHTML());	
+			buff.append(nodeData[i].toHtml());	
 		return buff.toString();
 	}
 	

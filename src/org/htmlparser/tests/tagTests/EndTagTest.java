@@ -47,6 +47,6 @@ public class EndTagTest extends ParserTestCase {
 		// The node should be an HTMLLinkTag
 		assertTrue("Node should be a HTMLEndTag",node[1] instanceof EndTag);
 		EndTag endTag = (EndTag)node[1];
-		assertEquals("Raw String","</HTML>",endTag.toHTML());
+		assertEquals("Raw String","</HTML>",endTag.toHtml());
 	}
 }

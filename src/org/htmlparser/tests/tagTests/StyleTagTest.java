@@ -45,7 +45,7 @@ public class StyleTagTest extends ParserTestCase {
 	 	parseAndAssertNodeCount(1);
 		assertTrue(node[0] instanceof StyleTag);
 		StyleTag styleTag = (StyleTag)node[0];
-		assertEquals("Raw String","<STYLE>a.h{background-color:#ffee99}</STYLE>",styleTag.toHTML());
+		assertEquals("Raw String","<STYLE>a.h{background-color:#ffee99}</STYLE>",styleTag.toHtml());
 	}
 	
 	/**
@@ -68,6 +68,6 @@ public class StyleTagTest extends ParserTestCase {
 		"<!--"+
 		"{something....something}"+
 		"-->"+
-		"</STYLE>",styleTag.toHTML());
+		"</STYLE>",styleTag.toHtml());
 	}	
 }

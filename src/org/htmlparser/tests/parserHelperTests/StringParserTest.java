@@ -122,10 +122,10 @@ public class StringParserTest extends ParserTestCase {
 		parseAndAssertNodeCount(10);
 		assertTrue("Fourth Node identified must be a string node",node[3] instanceof StringNode);
 		StringNode stringNode = (StringNode)node[3];
-		assertEquals("First String Node","This is the Title",stringNode.toHTML());
+		assertEquals("First String Node","This is the Title",stringNode.toHtml());
 		assertTrue("Eighth Node identified must be a string node",node[7] instanceof StringNode);
 		stringNode = (StringNode)node[7];
-		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHTML());
+		assertEquals("Second string node","Hello World, this is the HTML Parser",stringNode.toHtml());
 	}
 
 	public void testEmptyLines() throws ParserException {

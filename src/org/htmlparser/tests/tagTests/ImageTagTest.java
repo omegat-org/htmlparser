@@ -145,7 +145,7 @@ public class ImageTagTest extends ParserTestCase
 		// The node should be an HTMLImageTag
 		assertTrue("Node should be a HTMLImageTag",node[0] instanceof ImageTag);
 		ImageTag imageTag = (ImageTag)node[0];
-		assertStringEquals("The image locn","<IMG WIDTH=\"305\" ALT=\"Google\" SRC=\"../../goo/title_homepage4.gif\" HEIGHT=\"115\">",imageTag.toHTML());
+		assertStringEquals("The image locn","<IMG WIDTH=\"305\" ALT=\"Google\" SRC=\"../../goo/title_homepage4.gif\" HEIGHT=\"115\">",imageTag.toHtml());
 		assertEquals("Alt","Google",imageTag.getAttribute("alt"));
 		assertEquals("Height","115",imageTag.getAttribute("height"));
 		assertEquals("Width","305",imageTag.getAttribute("width"));

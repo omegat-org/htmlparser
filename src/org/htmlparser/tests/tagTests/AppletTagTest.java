@@ -65,6 +65,6 @@ public class AppletTagTest extends ParserTestCase {
 		"<PARAM VALUE=\"Somik\" NAME=\"Name\">\r\n"+
 		"<PARAM VALUE=\"23\" NAME=\"Age\">\r\n"+
 		"</APPLET>";
-		assertStringEquals("toHTML()",expectedRawString,appletTag.toHTML());				
+		assertStringEquals("toHTML()",expectedRawString,appletTag.toHtml());				
 	}
 }

@@ -68,7 +68,7 @@ public class StringNode extends Node
 	public String toPlainTextString() {
 		return textBuffer.toString();
 	}
-	public String toHTML() {
+	public String toHtml() {
 		return textBuffer.toString();
 	}
 	public String toString() {

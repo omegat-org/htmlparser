@@ -57,7 +57,7 @@ public class InputTagTest extends ParserTestCase {
 		assertTrue("Node 1 should be INPUT Tag",node[0] instanceof InputTag);
 		InputTag InputTag;
 		InputTag = (InputTag) node[0];
-		assertEquals("HTML String","<INPUT NAME=\"Google\" TYPE=\"text\">",InputTag.toHTML());
+		assertEquals("HTML String","<INPUT NAME=\"Google\" TYPE=\"text\">",InputTag.toHtml());
 	}
 	
 	public void testToString() throws ParserException 
@@ -87,7 +87,7 @@ public class InputTagTest extends ParserTestCase {
 		InputTag = (InputTag) node[0];
 		assertStringEquals("HTML String", 
 			"<INPUT CHECKED=\"\" NAME=\"cbCheck\" TYPE=\"checkbox\">",
-			InputTag.toHTML());
+			InputTag.toHtml());
 	}
 	
 }
