@@ -48,7 +48,6 @@ public class TagParser {
 	public final static String ENCOUNTERED_QUERY_MESSAGE = "TagParser : Encountered > after a query. Accepting without correction and continuing parsing";
 	
 	private ParserFeedback feedback;
-//	private boolean encounteredQuery;
 
 	public TagParser(ParserFeedback feedback) {
 		this.feedback = feedback;
@@ -306,7 +305,7 @@ public class TagParser {
 		}		
 		return ++i;
 	}	
-	
+	// Class provided for thread safety in TagParser
 	class Bool {
 		private boolean boolValue;
 		

@@ -1,5 +1,7 @@
 package org.htmlparser.tests.visitorsTests;
 
+import org.htmlparser.Node;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.TagFindingVisitor;
 
@@ -61,4 +63,10 @@ public class TagFindingVisitorTest extends ParserTestCase {
 		assertEquals("BODY end tag found", 1, visitor.getEndTagCount(1));
 	}
 
+
+	public void assertTagNameShouldBe(String message, Node node, String expectedTagName) {
+		Tag tag = (Tag)node;
+		assertStringEquals(message,expectedTagName,tag.getTagName());
+	}
 }
+
