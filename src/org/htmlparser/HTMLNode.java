@@ -129,49 +129,6 @@ public abstract class HTMLNode
 	public abstract String toString();
 	
 	/**
-	 * Return the string representation of the node as per the renderer.
-	 * This allows plugging in of user-defined renderers, which can render
-	 * the nodes without modifying the base parser design.
-	 * <br><br>
-	 * Code would now look like :
-	 * <pre>
-	 * HTMLNode node;
-	 * for (Enumeration e = parser.elements();e.hasMoreElements();) {
-	 * 		node = (HTMLNode)e.nextElement();
-	 * 		System.out.println(node.toHTML(renderer));
-	 * }
-	 * </pre>
-	 * <br>
-	 * The renderer could do just about anything, starting from taking care of
-	 * uniformly saving the page to a disk, to doing special processing
-	 * for nodes, such as links and images (if you are writing a crawler)
-	 * <br>
-	 * <br>
-	 * For eg. <br>
-	 * <pre>
-	 * public class MyRenderer implements HTMLRenderer {
-	 * 		public String render(HTMLNode node) {
-	 * 			if (node instanceof HTMLLinkTag) {
-	 * 				HTMLLinkTag linkTag = (HTMLLinkTag)node;
-	 * 				// process linkTag contents 
-	 * 				// to return modified link pointing to local disk
-	 * 			} else
-	 * 			if (node instanceof HTMLImageTag) {
-	 * 				HTMLImageTag imageTag = (HTMLImageTag)node;
-	 * 				// process imageTag contents
-	 * 				// to return modified image pointing to local disk
-	 * 				// Crawlers could even start threads to get the relevant
-	 * 				// resource from the internet
-	 * 			} else return node.toHTML();
-	 * 		}
-	 * }
-	 * </pre>
-	 */
-	public String toHTML(HTMLRenderer renderer) {
-		return toHTML();
-	}
-	
-	/**
 	 * Collect this node and its child nodes (if-applicable) into the collection parameter, provided the node
 	 * satisfies the filtering criteria. <P/>
 	 * 
