@@ -459,12 +459,17 @@ public class Page
     public String getContentType ()
     {
         URLConnection connection;
+        String content;
         String ret;
 
         ret = DEFAULT_CONTENT_TYPE;
         connection = getConnection ();
         if (null != connection)
-            ret = connection.getContentType ();
+        {
+            content = connection.getContentType ();
+            if (null != content)
+                ret = content;
+        }
 
         return (ret);
     }
