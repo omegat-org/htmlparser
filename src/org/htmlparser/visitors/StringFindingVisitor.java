@@ -35,18 +35,41 @@ import org.htmlparser.HTMLStringNode;
 public class StringFindingVisitor extends HTMLVisitor {
 	private boolean stringFound = false;
 	private String stringToFind;
+	private int foundCount;
+	private boolean multipleSearchesWithinStrings;
 	
 	public StringFindingVisitor(String stringToFind) {
 		this.stringToFind = stringToFind.toUpperCase();
+		foundCount = 0;
+		multipleSearchesWithinStrings = false;
+	}
+	
+	public void doMultipleSearchesWithinStrings() {
+		multipleSearchesWithinStrings = true;
 	}
 	
 	public void visitStringNode(HTMLStringNode stringNode) {
-		if (stringNode.getText().toUpperCase().indexOf(stringToFind) != -1)
-			stringFound = true; 
+		String stringToBeSearched = stringNode.getText().toUpperCase();
+		if (!multipleSearchesWithinStrings && 
+			stringToBeSearched.indexOf(stringToFind) != -1) {
+			stringFound = true;
+			foundCount++;
+		} else if (multipleSearchesWithinStrings) {
+			int index = -1;
+			do {
+				index = stringToBeSearched.indexOf(stringToFind, index+1);
+				if (index!=-1)
+					foundCount++; 
+			} while (index != -1);
+		}
 	}
 	
 	public boolean stringWasFound() {
 		return stringFound;
 	}	
+	
+	public int stringFoundCount() {
+		return foundCount;
+	}
 
 }
