@@ -1,0 +1,351 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; I) [Netscape]">
+</head>
+<body>
+<b><u>Mail Ripper</u></b><b><u></u></b>
+<p>Mail Ripper will run through a specified web page, and lift all the
+mail addresses on the page.
+<br>The entire logic of the program is contained in the method rip() (lines
+115-). It is exceedingly simple to write code like this, due to the abstraction
+provided by the HTMLLinkTag. The isMailLink() method can be used to find
+out if a link is a mail address. If it is, its picked up.
+<br>&nbsp;
+<center><table BORDER=2 CELLSPACING=0 CELLPADDING=3 BGCOLOR="#FFFBF0" >
+<caption>&nbsp;</caption>
+
+<tr>
+<td COLSPAN="2">
+<center><b><tt><font size=+2>MailRipper.java&nbsp;</font></tt></b></center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center><!-- start line numbers --></center>
+</td>
+
+<td ALIGN=RIGHT VALIGN=TOP><tt><font color="#808080">1</font></tt>
+<br><tt><font color="#808080">2</font></tt>
+<br><tt><font color="#808080">3</font></tt>
+<br><tt><font color="#808080">4</font></tt>
+<br><tt><font color="#808080">5</font></tt>
+<br><tt><font color="#808080">6</font></tt>
+<br><tt><font color="#808080">7</font></tt>
+<br><tt><font color="#808080">8</font></tt>
+<br><tt><font color="#808080">9</font></tt>
+<br><tt><font color="#808080">10</font></tt>
+<br><tt><font color="#808080">11</font></tt>
+<br><tt><font color="#808080">12</font></tt>
+<br><tt><font color="#808080">13</font></tt>
+<br><tt><font color="#808080">14</font></tt>
+<br><tt><font color="#808080">15</font></tt>
+<br><tt><font color="#808080">16</font></tt>
+<br><tt><font color="#808080">17</font></tt>
+<br><tt><font color="#808080">18</font></tt>
+<br><tt><font color="#808080">19</font></tt>
+<br><tt><font color="#808080">20</font></tt>
+<br><tt><font color="#808080">21</font></tt>
+<br><tt><font color="#808080">22</font></tt>
+<br><tt><font color="#808080">23</font></tt>
+<br><tt><font color="#808080">24</font></tt>
+<br><tt><font color="#808080">25</font></tt>
+<br><tt><font color="#808080">26</font></tt>
+<br><tt><font color="#808080">27</font></tt>
+<br><tt><font color="#808080">28</font></tt>
+<br><tt><font color="#808080">29</font></tt>
+<br><tt><font color="#808080">30</font></tt>
+<br><tt><font color="#808080">31</font></tt>
+<br><tt><font color="#808080">32</font></tt>
+<br><tt><font color="#808080">33</font></tt>
+<br><tt><font color="#808080">34</font></tt>
+<br><tt><font color="#808080">35</font></tt>
+<br><tt><font color="#808080">36</font></tt>
+<br><tt><font color="#808080">37</font></tt>
+<br><tt><font color="#808080">38</font></tt>
+<br><tt><font color="#808080">39</font></tt>
+<br><tt><font color="#808080">40</font></tt>
+<br><tt><font color="#808080">41</font></tt>
+<br><tt><font color="#808080">42</font></tt>
+<br><tt><font color="#808080">43</font></tt>
+<br><tt><font color="#808080">44</font></tt>
+<br><tt><font color="#808080">45</font></tt>
+<br><tt><font color="#808080">46</font></tt>
+<br><tt><font color="#808080">47</font></tt>
+<br><tt><font color="#808080">48</font></tt>
+<br><tt><font color="#808080">49</font></tt>
+<br><tt><font color="#808080">50</font></tt>
+<br><tt><font color="#808080">51</font></tt>
+<br><tt><font color="#808080">52</font></tt>
+<br><tt><font color="#808080">53</font></tt>
+<br><tt><font color="#808080">54</font></tt>
+<br><tt><font color="#808080">55</font></tt>
+<br><tt><font color="#808080">56</font></tt>
+<br><tt><font color="#808080">57</font></tt>
+<br><tt><font color="#808080">58</font></tt>
+<br><tt><font color="#808080">59</font></tt>
+<br><tt><font color="#808080">60</font></tt>
+<br><tt><font color="#808080">61</font></tt>
+<br><tt><font color="#808080">62</font></tt>
+<br><tt><font color="#808080">63</font></tt>
+<br><tt><font color="#808080">64</font></tt>
+<br><tt><font color="#808080">65</font></tt>
+<br><tt><font color="#808080">66</font></tt>
+<br><tt><font color="#808080">67</font></tt>
+<br><tt><font color="#808080">68</font></tt>
+<br><tt><font color="#808080">69</font></tt>
+<br><tt><font color="#808080">70</font></tt>
+<br><tt><font color="#808080">71</font></tt>
+<br><tt><font color="#808080">72</font></tt>
+<br><tt><font color="#808080">73</font></tt>
+<br><tt><font color="#808080">74</font></tt>
+<br><tt><font color="#808080">75</font></tt>
+<br><tt><font color="#808080">76</font></tt>
+<br><tt><font color="#808080">77</font></tt>
+<br><tt><font color="#808080">78</font></tt>
+<br><tt><font color="#808080">79</font></tt>
+<br><tt><font color="#808080">80</font></tt>
+<br><tt><font color="#808080">81</font></tt>
+<br><tt><font color="#808080">82</font></tt>
+<br><tt><font color="#808080">83</font></tt>
+<br><tt><font color="#808080">84</font></tt>
+<br><tt><font color="#808080">85</font></tt>
+<br><tt><font color="#808080">86</font></tt>
+<br><tt><font color="#808080">87</font></tt>
+<br><tt><font color="#808080">88</font></tt>
+<br><tt><font color="#808080">89</font></tt>
+<br><tt><font color="#808080">90</font></tt>
+<br><tt><font color="#808080">91</font></tt>
+<br><tt><font color="#808080">92</font></tt>
+<br><tt><font color="#808080">93</font></tt>
+<br><tt><font color="#808080">94</font></tt>
+<br><tt><font color="#808080">95</font></tt>
+<br><tt><font color="#808080">96</font></tt>
+<br><tt><font color="#808080">97</font></tt>
+<br><tt><font color="#808080">98</font></tt>
+<br><tt><font color="#808080">99</font></tt>
+<br><tt><font color="#808080">100</font></tt>
+<br><tt><font color="#808080">101</font></tt>
+<br><tt><font color="#808080">102</font></tt>
+<br><tt><font color="#808080">103</font></tt>
+<br><tt><font color="#808080">104</font></tt>
+<br><tt><font color="#808080">105</font></tt>
+<br><tt><font color="#808080">106</font></tt>
+<br><tt><font color="#808080">107</font></tt>
+<br><tt><font color="#808080">108</font></tt>
+<br><tt><font color="#808080">109</font></tt>
+<br><tt><font color="#808080">110</font></tt>
+<br><tt><font color="#808080">111</font></tt>
+<br><tt><font color="#808080">112</font></tt>
+<br><tt><font color="#808080">113</font></tt>
+<br><tt><font color="#808080">114</font></tt>
+<br><tt><font color="#808080">115</font></tt>
+<br><tt><font color="#808080">116</font></tt>
+<br><tt><font color="#808080">117</font></tt>
+<br><tt><font color="#808080">118</font></tt>
+<br><tt><font color="#808080">119</font></tt>
+<br><tt><font color="#808080">120</font></tt>
+<br><tt><font color="#808080">121</font></tt>
+<br><tt><font color="#808080">122</font></tt></td>
+
+<td>
+<center><!-- end line numbers --><!-- start source code --></center>
+</td>
+
+<td><tt><font color="#0000C0">package </font><font color="#000000">com.kizna.parserapplications;</font></tt>
+<p><tt><font color="#008000">// HTMLParser Library v1.00 - A java-based
+parser for HTML</font></tt>
+<br><tt><font color="#008000">// Copyright (C) Dec 31, 2000 Somik Raha</font></tt>
+<br><tt><font color="#008000">//</font></tt>
+<br><tt><font color="#008000">// This library is free software; you can
+redistribute it and/or</font></tt>
+<br><tt><font color="#008000">// modify it under the terms of the GNU Lesser
+General Public</font></tt>
+<br><tt><font color="#008000">// License as published by the Free Software
+Foundation; either</font></tt>
+<br><tt><font color="#008000">// version 2.1 of the License, or (at your
+option) any later version.</font></tt>
+<br><tt><font color="#008000">//</font></tt>
+<br><tt><font color="#008000">// This library is distributed in the hope
+that it will be useful,</font></tt>
+<br><tt><font color="#008000">// but WITHOUT ANY WARRANTY; without even
+the implied warranty of</font></tt>
+<br><tt><font color="#008000">// MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.&nbsp; See the GNU</font></tt>
+<br><tt><font color="#008000">// Lesser General Public License for more
+details.</font></tt>
+<br><tt><font color="#008000">//</font></tt>
+<br><tt><font color="#008000">// You should have received a copy of the
+GNU Lesser General Public</font></tt>
+<br><tt><font color="#008000">// License along with this library; if not,
+write to the Free Software</font></tt>
+<br><tt><font color="#008000">// Foundation, Inc., 59 Temple Place, Suite
+330, Boston, MA&nbsp; 02111-1307&nbsp; USA</font></tt>
+<br><tt><font color="#008000">//</font></tt>
+<br><tt><font color="#008000">// For any questions or suggestions, you
+can write to me at :</font></tt>
+<br><tt><font color="#008000">// Email :somik@kizna.com</font></tt>
+<br><tt><font color="#008000">//&nbsp;</font></tt>
+<br><tt><font color="#008000">// Postal Address :&nbsp;</font></tt>
+<br><tt><font color="#008000">// Somik Raha</font></tt>
+<br><tt><font color="#008000">// R&amp;D Team</font></tt>
+<br><tt><font color="#008000">// Kizna Corporation</font></tt>
+<br><tt><font color="#008000">// 2-1-17-6F, Sakamoto Bldg., Moto Azabu,
+Minato ku, Tokyo, 106 0046, JAPAN</font></tt>
+<p><tt><font color="#008000">// HTMLParser Library v0.82 - A java-based
+parser for HTML</font></tt>
+<br><tt><font color="#008000">// Copyright (C) Dec 31, 2000 Somik Raha</font></tt>
+<br><tt><font color="#008000">//</font></tt>
+<br><tt><font color="#008000">// This library is free software; you can
+redistribute it and/or</font></tt>
+<br><tt><font color="#008000">// modify it under the terms of the GNU Lesser
+General Public</font></tt>
+<br><tt><font color="#008000">// License as published by the Free Software
+Foundation; either</font></tt>
+<br><tt><font color="#008000">// version 2.1 of the License, or (at your
+option) any later version.</font></tt>
+<br><tt><font color="#008000">//</font></tt>
+<br><tt><font color="#008000">// This library is distributed in the hope
+that it will be useful,</font></tt>
+<br><tt><font color="#008000">// but WITHOUT ANY WARRANTY; without even
+the implied warranty of</font></tt>
+<br><tt><font color="#008000">// MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.&nbsp; See the GNU</font></tt>
+<br><tt><font color="#008000">// Lesser General Public License for more
+details.</font></tt>
+<br><tt><font color="#008000">//</font></tt>
+<br><tt><font color="#008000">// You should have received a copy of the
+GNU Lesser General Public</font></tt>
+<br><tt><font color="#008000">// License along with this library; if not,
+write to the Free Software</font></tt>
+<br><tt><font color="#008000">// Foundation, Inc., 59 Temple Place, Suite
+330, Boston, MA&nbsp; 02111-1307&nbsp; USA</font></tt>
+<br><tt><font color="#008000">//</font></tt>
+<br><tt><font color="#008000">// For any questions or suggestions, you
+can write to me at :</font></tt>
+<br><tt><font color="#008000">// Email :somik@kizna.com</font></tt>
+<br><tt><font color="#008000">//&nbsp;</font></tt>
+<br><tt><font color="#008000">// Postal Address :&nbsp;</font></tt>
+<br><tt><font color="#008000">// Somik Raha</font></tt>
+<br><tt><font color="#008000">// R&amp;D Team</font></tt>
+<br><tt><font color="#008000">// Kizna Corporation</font></tt>
+<br><tt><font color="#008000">// 2-1-17-6F, Sakamoto Bldg., Moto Azabu,
+Minato ku, Tokyo, 106 0046, JAPAN</font></tt>
+<p><tt><font color="#0000C0">import </font><font color="#000000">com.kizna.html.scanners.*;</font></tt>
+<br><tt><font color="#0000C0">import </font><font color="#000000">com.kizna.html.tags.*;</font></tt>
+<br><tt><font color="#0000C0">import </font><font color="#000000">java.util.Vector;</font></tt>
+<br><tt><font color="#0000C0">import </font><font color="#000000">java.util.Enumeration;</font></tt>
+<br><tt><font color="#0000C0">import </font><font color="#000000">com.kizna.html.*;</font></tt>
+<br>&nbsp;
+<p><tt><font color="#008000">/**</font></tt>
+<br><tt><font color="#008000">&nbsp;* MailRipper will rip out all the mail
+addresses from a given web page</font></tt>
+<br><tt><font color="#008000">&nbsp;* Pass a web site (or html file on
+your local disk) as an argument.</font></tt>
+<br><tt><font color="#008000">&nbsp;*/</font></tt>
+<br><tt><font color="#0000C0">public class </font><font color="#000000">MailRipper
+{</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">private
+</font><font color="#000000">com.kizna.html.HTMLParser parser;</font></tt>
+<br><tt><font color="#008000">/**</font></tt>
+<br><tt><font color="#008000">&nbsp;* MailRipper c'tor takes the url to
+be ripped</font></tt>
+<br><tt><font color="#008000">&nbsp;* </font><font color="#005500">@param
+</font><font color="#008000">resourceLocation url to be ripped</font></tt>
+<br><tt><font color="#008000">&nbsp;*/</font></tt>
+<br><tt><font color="#0000C0">public </font><font color="#000000">MailRipper(String
+resourceLocation) {</font></tt>
+<br><tt><font color="#000000">&nbsp; parser = </font><font color="#0000C0">new
+</font><font color="#000000">HTMLParser(resourceLocation);</font></tt>
+<br><tt><font color="#000000">&nbsp; parser.registerScanners();</font></tt>
+<br><tt><font color="#000000">}</font></tt>
+<br><tt><font color="#0000C0">public static </font><font color="#C00000">void
+</font><font color="#000000">main(String[] args) {</font></tt>
+<br><tt><font color="#000000">&nbsp; System.out.println(</font><font color="#990000">"Mail
+Ripper v"</font><font color="#000000">+HTMLParser.VERSION_STRING);</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">if </font><font color="#000000">(args.length&lt;1
+|| args[</font><font color="#990000">0</font><font color="#000000">].equals(</font><font color="#990000">"-help"</font><font color="#000000">))</font></tt>
+<br><tt><font color="#000000">&nbsp; {</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println();</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"Syntax
+: java -classpath htmlparser.jar com.kizna.parserapplications.MailRipper
+&lt;resourceLocn/website>"</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println();</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"&nbsp;&nbsp;
+&lt;resourceLocn> the name of the file to be parsed (with complete path
+"</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if not in current directory)"</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"&nbsp;&nbsp;
+-help This screen"</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println();</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"HTML
+Parser home page : http://htmlparser.sourceforge.net"</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println();</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"Example
+: java -classpath htmlparser.jar com.kizna.parserapplications.MailRipper
+http://htmlparser.sourceforge.net"</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println();</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"If
+you have any doubts, please join the HTMLParser mailing list (user/developer)
+from the HTML Parser home page instead of mailing any of the contributors
+directly. You will be surprised with the quality of open source support.
+"</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.exit(-</font><font color="#990000">1</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp; }&nbsp;</font></tt>
+<br><tt><font color="#000000">&nbsp; String resourceLocation = </font><font color="#990000">"http://htmlparser.sourceforge.net"</font><font color="#000000">;</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">if </font><font color="#000000">(args.length!=</font><font color="#990000">0</font><font color="#000000">)
+resourceLocation = args[</font><font color="#990000">0</font><font color="#000000">];</font></tt>
+<p><tt><font color="#000000">&nbsp; MailRipper ripper = </font><font color="#0000C0">new
+</font><font color="#000000">MailRipper(resourceLocation);&nbsp;</font></tt>
+<br><tt><font color="#000000">&nbsp; System.out.println(</font><font color="#990000">"Ripping
+Site "</font><font color="#000000">+resourceLocation);</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">for </font><font color="#000000">(Enumeration
+e=ripper.rip();e.hasMoreElements();) {</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; HTMLLinkTag tag = (HTMLLinkTag)e.nextElement();</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"Ripped
+mail address : "</font><font color="#000000">+tag.getLink());</font></tt>
+<br><tt><font color="#000000">&nbsp; }</font></tt>
+<br><tt><font color="#000000">}</font></tt>
+<br><tt><font color="#008000">/**</font></tt>
+<br><tt><font color="#008000">&nbsp;* Rip all mail addresses from the given
+url, and return an enumeration of such mail addresses.</font></tt>
+<br><tt><font color="#008000">&nbsp;* </font><font color="#005500">@return
+</font><font color="#008000">Enumeration of mail addresses (a vector of
+HTMLLinkTag)</font></tt>
+<br><tt><font color="#008000">&nbsp;*/</font></tt>
+<br><tt><font color="#0000C0">public </font><font color="#000000">Enumeration
+rip() {</font></tt>
+<br><tt><font color="#000000">&nbsp; HTMLNode node;</font></tt>
+<br><tt><font color="#000000">&nbsp; Vector mailAddresses = </font><font color="#0000C0">new
+</font><font color="#000000">Vector();</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">for </font><font color="#000000">(Enumeration
+e = parser.elements();e.hasMoreElements();)</font></tt>
+<br><tt><font color="#000000">&nbsp; {</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; node = (HTMLNode)e.nextElement();</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; </font><font color="#0000C0">if
+</font><font color="#000000">(node </font><font color="#0000C0">instanceof
+</font><font color="#000000">HTMLLinkTag)</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; {</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HTMLLinkTag
+linkTag = (HTMLLinkTag)node;</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font color="#0000C0">if
+</font><font color="#000000">(linkTag.isMailLink()) mailAddresses.addElement(linkTag);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; }</font></tt>
+<br><tt><font color="#000000">&nbsp; }</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">return
+</font><font color="#000000">mailAddresses.elements();&nbsp;</font></tt>
+<br><tt><font color="#000000">}</font></tt>
+<br><tt><font color="#000000">}</font></tt></td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT COLSPAN="2"><a href="http://www.java2html.de">Java2html</a></td>
+</tr>
+</table></center>
+<!-- =       END of automatically generated HTML code       = --><!-- ======================================================== -->
+<p><a href="basicpackage.html">BACK</a>
+</body>
+</html>

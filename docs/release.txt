@@ -1,0 +1,87 @@
+Maintenance Release ver 1.04
+----------------------------
+[1] Bug fix in HTMLTag, now caught by test case in HTMLTagTest. Will cause incorrect parsing for JSP tags, which have end tag symbols in inverted commas. 
+[2] Bug fix in HTMLLinkParser - would crash for link tags which have no link in them. Test case also added. 
+[3] More test cases added, for ImageTag as well, and HTMLTag also. 
+
+Maintenance Release ver 1.03
+----------------------------
+This version contains the following bug fix :
+[1] Bug in HTMLRemarkNode, now caught by test case in HTMLRemarkNodeTest. Will cause incorrect parsing if remarks are spread across lines.
+
+Maintenance Release ver 1.02
+----------------------------
+This version contains the following bug fix :
+[1] Bug in HTMLStyleScanner, now caught by test case in HTMLStyleScannerTest - would end up crashing on parsing google.
+[2] Changed encoding support to 8859_4 for English and most European languages - this fixes some crashes observed on finnish pages
+
+Maintenance Release ver 1.01
+----------------------------
+[1] Bug in HTMLStyleScanner fixed
+
+Release Notes for Ver 1.00
+--------------------------
+This version contains :
+[1] Major architecture overhaul - significant change : no more static scanner registration. Architecture has been simplified a lot.
+[2] Major bug fixes - several bugs have been fixed, lots of testcases added, and stability vastly improved.
+[3] Improved documentation - The javadoc is now substantial. Please look at the javadoc for the HTMLParser class, especially the elements() method. This has a lot of info to get you started.
+
+From this release, HTML Parser enters the beta stage (Alpha stage is finally over - phew!). From now on, the API will not be changed significantly, and future releases would be of a maintenance nature.
+
+Q1. What are the contents of the distribution ? 
+Q2. Which part of the source code should I analyze to be able to use it in my project ? 
+Q3. How do I extend the capability of this library ? 
+*********************************************************
+Q1. What are the contents of the distribution ?
+
+A1. The distribution contains :
+    (i) binary jar file - htmlparser.jar
+    (ii) source code - src.zip
+    (iii) javadoc folder - Check the documentation for the HTMLParser class (especially the elements() method)
+    (iv) Executing scripts - There are three scripts :
+         (a) runParser.bat  : Runs the html parser
+         (b) runCrawler.bat : Runs the robot crawler
+         (c) runRipper.bat  : Runs the mail ripper   
+         All three batch files assume that java 1.2 (or upwards) is visible in your path.
+
+Issue the following command : 
+java -jar htmlparser.jar myURL (or runParser myURL)
+
+The following are legal examples of usage: 
+java -jar htmlparser.jar http://www.yahoo.com  (or runParser http://www.yahoo.com)
+java -jar htmlparser.jar http://www.google.com -l (or runParser http://www.google.com -l)
+java -jar htmlparser.jar c:\html\test.html (or runParser c:\html\test.html)
+
+To see a list of options, simply type : 
+java -jar htmlparser.jar 
+
+and the switches allowed will be shown. 
+  
+---------- *** ------------
+Q2. Which part of the source code should I analyze to be able to use it in my project ?
+
+Go through HTMLParser.java very carefully. It will show you how to use the framework. You can control the parsing process by picking up the Enumeration through the elements() method. The javadoc of the elements() method provides code samples. 
+
+Also go through the package com.kizna.parserapplications. The two applications here, Robot and MailRipper, have been expressly written for the purpose of demonstrating the usage of htmlparser.
+
+---------- *** ------------
+
+Q3. How do I extend the capability of this library ?
+
+You need to extend the HTMLTagScanner in order to take advantage of existing code to identify a generic tag. You could add further processing code based on the tag contents. For more information on how to do this, examine the code of the scanners in the com.kizna.html.scanners package. The scanners basically use a Template Method+Factory Method approach. You need to override the evaluate() and scan() methods, and register your scanner to the parser before you begin parsing.
+
+This process is not complex, and is especially simple if you have a prior understanding of TM and FM (Refer Design Patterns by Erich Gamma, et al). You can take advantage of the parsing data available to you from the reader, so make sure that you are fully aware of the API of the HTMLReader.
+---------- *** ------------
+
+Acknowledgements :
+The following people have contributed important bug reports, feature ideas :
+[1] Kaarle Kaaila
+[2] Taras Bendik
+[3] Allen G Fogelson
+[4] Manpreet Singh
+[5] Roger Kjensrud
+[6] Nash Tsai
+[7] Rodney S Foley
+[8] Serge Kruppa
+
+If you find any bugs, please go to http://sourceforge.net/projects/htmlparser and click on the Bugs link. You can open a bug case here. You will be amazed at the speed of fixing.

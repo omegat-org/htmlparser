@@ -1,0 +1,157 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Somik Raha">
+   <meta name="GENERATOR" content="Mozilla/4.61 [en] (WinNT; I) [Netscape]">
+   <title>String Filter Example</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#3333FF" vlink="#FF6600" alink="#FFCC00">
+&nbsp;
+<br><b>HTML String Filter Example</b>
+<br>We shall write a program to filter out all tags and print only plain
+text elements. The listing below shows you how you can do this very easily
+with HTMLParser.
+<p><!-- ======================================================== --><!-- = Java Sourcecode to HTML automatically converted code = --><!-- =   J2H V1.1  2001 by Markus Gebhard  markus@jave.de   = --><!-- =     Further information: http://www.java2html.de     = -->
+<center><table BORDER=2 CELLSPACING=0 CELLPADDING=3 BGCOLOR="#FFFBF0" >
+<caption>&nbsp;</caption>
+
+<tr>
+<td COLSPAN="2">
+<center><b><tt><font size=+2>HTMLStringFilter.java&nbsp;</font></tt></b></center>
+</td>
+</tr>
+
+<tr>
+<td>
+<center><!-- start line numbers --></center>
+</td>
+
+<td ALIGN=RIGHT VALIGN=TOP><tt><font color="#808080">1</font></tt>
+<br><tt><font color="#808080">2</font></tt>
+<br><tt><font color="#808080">3</font></tt>
+<br><tt><font color="#808080">4</font></tt>
+<br><tt><font color="#808080">5</font></tt>
+<br><tt><font color="#808080">6</font></tt>
+<br><tt><font color="#808080">7</font></tt>
+<br><tt><font color="#808080">8</font></tt>
+<br><tt><font color="#808080">9</font></tt>
+<br><tt><font color="#808080">10</font></tt>
+<br><tt><font color="#808080">11</font></tt>
+<br><tt><font color="#808080">12</font></tt>
+<br><tt><font color="#808080">13</font></tt>
+<br><tt><font color="#808080">14</font></tt>
+<br><tt><font color="#808080">15</font></tt>
+<br><tt><font color="#808080">16</font></tt>
+<br><tt><font color="#808080">17</font></tt>
+<br><tt><font color="#808080">18</font></tt>
+<br><tt><font color="#808080">19</font></tt>
+<br><tt><font color="#808080">20</font></tt>
+<br><tt><font color="#808080">21</font></tt>
+<br><tt><font color="#808080">22</font></tt>
+<br><tt><font color="#808080">23</font></tt>
+<br><tt><font color="#808080">24</font></tt>
+<br><tt><font color="#808080">25</font></tt>
+<br><tt><font color="#808080">26</font></tt>
+<br><tt><font color="#808080">27</font></tt>
+<br><tt><font color="#808080">28</font></tt>
+<br><tt><font color="#808080">29</font></tt>
+<br><tt><font color="#808080">30</font></tt>
+<br><tt><font color="#808080">31</font></tt>
+<br><tt><font color="#808080">32</font></tt>
+<br><tt><font color="#808080">33</font></tt>
+<br><tt><font color="#808080">34</font></tt>
+<br><tt><font color="#808080">35</font></tt>
+<br><tt><font color="#808080">36</font></tt>
+<br><tt><font color="#808080">37</font></tt>
+<br><tt><font color="#808080">38</font></tt>
+<br><tt><font color="#808080">39</font></tt>
+<br><tt><font color="#808080">40</font></tt></td>
+
+<td>
+<center><!-- end line numbers --><!-- start source code --></center>
+</td>
+
+<td><tt><font color="#008000">// Program to filter out everything except
+strings from a html document</font></tt>
+<br><tt><font color="#008000">// To run this program, pass it an argument
+- either a url or an html file on your&nbsp;</font></tt>
+<br><tt><font color="#008000">// hard disk (If its a file, remember to
+use two back-slashes instead of one)</font></tt>
+<p><tt><font color="#0000C0">import </font><font color="#000000">com.kizna.html.HTMLParser;</font></tt>
+<br><tt><font color="#0000C0">import </font><font color="#000000">com.kizna.html.HTMLNode;</font></tt>
+<br><tt><font color="#0000C0">import </font><font color="#000000">com.kizna.html.HTMLStringNode;</font></tt>
+<br><tt><font color="#0000C0">import </font><font color="#000000">java.util.Enumeration;</font></tt>
+<p><tt><font color="#0000C0">public class </font><font color="#000000">HTMLStringFilter
+{</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">private
+</font><font color="#000000">HTMLParser parser;</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">public
+</font><font color="#000000">HTMLStringFilter(String someURL) {</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; buildMyParser(someURL);</font></tt>
+<br><tt><font color="#000000">&nbsp; }</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">public
+</font><font color="#C00000">void </font><font color="#000000">buildMyParser(String
+someURL) {</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; parser = </font><font color="#0000C0">new
+</font><font color="#000000">HTMLParser(someURL);&nbsp;&nbsp; </font><font color="#008000">//
+Create the parser object</font></tt>
+<br><tt><font color="#008000">&nbsp;&nbsp;&nbsp; </font><font color="#000000">parser.registerScanners();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font><font color="#008000">// Register the standard scanners</font></tt>
+<br><tt><font color="#008000">&nbsp; </font><font color="#000000">}</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">public
+</font><font color="#C00000">void </font><font color="#000000">parse()
+{</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; HTMLNode node;</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; </font><font color="#008000">//
+Run through an enumeration of html elements, and pick up&nbsp;</font></tt>
+<br><tt><font color="#008000">&nbsp;&nbsp;&nbsp; // only those that are
+plain string.</font></tt>
+<br><tt><font color="#008000">&nbsp;&nbsp;&nbsp; </font><font color="#0000C0">for
+</font><font color="#000000">(Enumeration e=parser.elements();e.hasMoreElements();)
+{</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; node = (HTMLNode)e.nextElement();&nbsp;&nbsp;&nbsp;
+</font><font color="#008000">// Cast the element to HTMLNode</font></tt>
+<p><tt><font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font color="#0000C0">if
+</font><font color="#000000">(node </font><font color="#0000C0">instanceof
+</font><font color="#000000">HTMLStringNode) {</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font><font color="#008000">// Node is a plain string&nbsp;</font></tt>
+<br><tt><font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+// Cast it to an HTMLStringNode</font></tt>
+<br><tt><font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font><font color="#000000">HTMLStringNode stringNode = (HTMLStringNode)node;</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font><font color="#008000">// Retrieve the data from the object and print
+it</font></tt>
+<br><tt><font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font><font color="#000000">System.out.println(stringNode.getText());</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; }</font></tt>
+<br><tt><font color="#000000">&nbsp; }</font></tt>
+<br><tt><font color="#000000">&nbsp; </font><font color="#0000C0">public
+static </font><font color="#C00000">void </font><font color="#000000">main(String
+[] args) {</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; HTMLStringFilter filter
+= </font><font color="#0000C0">new </font><font color="#000000">HTMLStringFilter(args[</font><font color="#990000">0</font><font color="#000000">]);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; System.out.println(</font><font color="#990000">"Extracting
+plain text elements from "</font><font color="#000000">+args[</font><font color="#990000">0</font><font color="#000000">]+</font><font color="#990000">"..."</font><font color="#000000">);</font></tt>
+<br><tt><font color="#000000">&nbsp;&nbsp;&nbsp; filter.parse();</font></tt>
+<br><tt><font color="#000000">&nbsp; }</font></tt>
+<br><tt><font color="#000000">}</font></tt></td>
+</tr>
+
+<tr>
+<td ALIGN=RIGHT COLSPAN="2"><a href="http://www.java2html.de">Java2html</a></td>
+</tr>
+</table></center>
+<!-- =       END of automatically generated HTML code       = --><!-- ======================================================== -->
+<p>The parse() method demonstrates how you would get the information regarding
+the nodes parsed, from an enumeration. When you write applications with
+the html parser, you will be typically writing similar loops. Inside the
+loop, you will need to provide the conditional logic to analyze what the
+node is. In this case, we are checking to see if its an HTMLStringNode.
+You could have your own type of processing based on your application requirement.
+<p><a href="basicpackage.html">BACK</a>
+</body>
+</html>
