@@ -5,6 +5,7 @@ Integration build 1.3 - 20030104
 [3] Switch to swingui junit runner by default
 [4] Half baked beans
 [5] Fix javadoc warnings in JDK 1.4
+[6] Added StringFindingVisitor + test code + new visitors packages
 
 Integration build 1.3 - 20021228
 --------------------------------
