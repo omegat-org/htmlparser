@@ -138,6 +138,7 @@ public class StringParser {
 
 			}
 		}
-		return new StringNode(textBuffer,textBegin,textEnd);
+		return new StringNode(textBuffer, textBegin, textEnd,
+				  				reader.getParser().shouldDecodeNodes());
 	}
 }

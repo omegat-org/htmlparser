@@ -103,6 +103,7 @@ public class AllTests extends junit.framework.TestCase
 		TestSuite suite = new TestSuite("HTMLParser Tests");
 		TestSuite basic = new TestSuite("Basic Tests");
 		basic.addTestSuite(ParserTest.class);
+		basic.addTestSuite(DecodingNodeTest.class);
         suite.addTest(basic);
 		suite.addTest(org.htmlparser.tests.scannersTests.AllTests.suite());
 		suite.addTest(org.htmlparser.tests.utilTests.AllTests.suite());

@@ -182,6 +182,13 @@ public class Parser
     protected static final String CHARSET_STRING = "charset";
 
 	/**
+	 * Flag to tell the parser to decode nodes while parsing.  
+	 * Decoding occurs via the method, org.htmlparser.util.Translate.decode()
+	 */
+	private boolean shouldDecodeNodes = false;
+
+
+	/**
 	 * Feedback object.
 	 */
 	protected ParserFeedback feedback;
@@ -1207,5 +1214,16 @@ public class Parser
 	 */
 	public static String getLineSeparator() {
 		return lineSeparator;
+	}
+
+	/**
+	 * Tells the parser to decode nodes using org.htmlparser.util.Translate.decode()
+	 */
+	public void setNodeDecoding(boolean shouldDecodeNodes) {
+			this.shouldDecodeNodes = shouldDecodeNodes;
+		}
+
+	public boolean shouldDecodeNodes() {
+		return shouldDecodeNodes;
 	}
 }

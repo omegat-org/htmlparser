@@ -30,6 +30,7 @@
 package org.htmlparser;
 
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.Translate;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
@@ -37,7 +38,13 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public class StringNode extends AbstractNode
 {
+	/**
+	 * boolean to tell whether decoding of this node should happen or not. 
+	 */	
+	private boolean shouldDecode = false;;
+	
 	public static final String STRING_FILTER="-string";
+	
 	/**
 	 * The text of the string.
 	 */	
@@ -56,6 +63,11 @@ public class StringNode extends AbstractNode
 		
 	}
 	
+	public StringNode(StringBuffer textBuffer, int textBegin, int textEnd,
+						boolean shouldDecode) {
+		this(textBuffer, textBegin, textEnd);
+		this.shouldDecode = shouldDecode;					
+	}
 
 	/**
 	 * Returns the text of the string line
@@ -72,12 +84,22 @@ public class StringNode extends AbstractNode
 	{
 		textBuffer = new StringBuffer (text);
 	}
+	
 	public String toPlainTextString() {
-		return textBuffer.toString();
+		return nodeContents();
 	}
+	
 	public String toHtml() {
-		return textBuffer.toString();
+		return nodeContents();
 	}
+
+	private String nodeContents() {
+		String result = textBuffer.toString();
+		if (shouldDecode)
+			result = Translate.decode(result);
+		return result;
+	}
+	
 	public String toString() {
 		return "Text = "+getText()+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 	}

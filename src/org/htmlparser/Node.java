@@ -112,4 +112,5 @@ public interface Node {
 	 * @param tag
 	 */
 	public abstract void setParent(CompositeTag tag);
+		
 }
