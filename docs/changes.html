@@ -17,7 +17,22 @@ Integration build 1.3 - 20030104
 	(iv) HTMLTitleScanner
 	(v) HTMLTextAreaScanner
 	(vi) HTMLScriptScanner
+	(vii) HTMLFrameSetScanner
 
+[12] Made StringNode the last parse attempt, so now Reader trys in this order:
+    remark
+    tag
+    endtag
+    string
+  (this will return more HTMLStringNode objects than it did before).
+[13] Improve speed by performing tag/string triage based on '<' as next character.
+[14] Refactored HTMLTagScanner. The following scanners use refactored code:
+	(i) HTMLBaseHREFScanner
+	(ii) HTMLDoctypeScanner
+	(iii) HTMLFrameScanner
+	(iv) HTMLJspScanner
+	(v) HTMLMetaTagScanner
+	
 Integration build 1.3 - 20021228
 --------------------------------
 [1] Add URLConnection constructors to HTMLParser
