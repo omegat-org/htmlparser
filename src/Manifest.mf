@@ -1,1 +1,1 @@
-Main-Class: org.htmlparser.html.HTMLParser
+Main-Class: org.htmlparser.HTMLParser
