@@ -168,4 +168,12 @@ public class HTMLStringNodeTest extends HTMLParserTestCase {
 		HTMLStringNode stringNode = (HTMLStringNode)node[0];
 		assertEquals("First String node contents","a",stringNode.getText());
 	}
+	
+	public void testStringWithEmptyLine() throws HTMLParserException {
+		createParser("a\n\nb");
+		parseAndAssertNodeCount(1);
+		assertTrue("First node should be HTMLStringNode",node[0] instanceof HTMLStringNode);
+		HTMLStringNode stringNode = (HTMLStringNode)node[0];
+		assertStringEquals("First String node contents","a\r\n\r\nb",stringNode.getText());
+	}	
 }

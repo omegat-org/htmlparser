@@ -126,8 +126,13 @@ public class HTMLStringNode extends HTMLNode
 			   state=PARSE_HAS_BEGUN_STATE;
 			if (state==PARSE_HAS_BEGUN_STATE && i==inputLen-1)
 			{
-				input = reader.getNextLine();
-
+				do {
+					input = reader.getNextLine();
+					if (input!=null && input.length()==0)
+						textBuffer.append(lineSeparator);
+				}
+				while (input!=null && input.length()==0);
+				
 				if (input==null) {
 					textEnd=i;
 					state =PARSE_COMPLETED_STATE;
