@@ -58,51 +58,51 @@ public class HTMLParameterParser {
     
    public Hashtable parseParameters(HTMLTag tag){
         Hashtable h = new Hashtable();
-        String name,value,t,st;
+        String name,value,tokenAccumulator,currentToken;
         final String delim = " \t\r\n\f=\"'>";
-        boolean isAmp=false;
-        boolean isApo=false;
+        boolean isDoubleQuote=false;
+        boolean isSingleQuote=false;
         boolean isValue=false;
         boolean isName=true;
         boolean waitingForValue = false;
         name=null;
         value=null;
-        t=null;
+        tokenAccumulator=null;
         waitingForValue=false;       
         StringTokenizer token = new StringTokenizer(tag.getText() + " ",delim,true);
         while (token.hasMoreTokens()) {
-            st = token.nextToken();
+            currentToken = token.nextToken();
             
             //
             // First let's combine tokens that are inside "" or ''
             //
-            if (isAmp || isApo) {
-                if (isAmp && st.equals("\"")){                
-                    isAmp= false;                                   
-                } else if (isApo && st.equals("'")) {
-                    isApo=false;
+            if (isDoubleQuote || isSingleQuote) {
+                if (isDoubleQuote && currentToken.equals("\"")){                
+                    isDoubleQuote= false;                                   
+                } else if (isSingleQuote && currentToken.equals("'")) {
+                    isSingleQuote=false;
                 }else {               
-                    t += st;   
+                    tokenAccumulator += currentToken;   
                     continue;
                 }
-            } else if (st.equals("\"")){                
-                isAmp= true;
-                t = "";
+            } else if (currentToken.equals("\"")){                
+                isDoubleQuote= true;
+                tokenAccumulator = "";
                 continue;
-            } else if (st.equals("'")){
-                isApo=true;
-                t="";
+            } else if (currentToken.equals("'")){
+                isSingleQuote=true;
+                tokenAccumulator="";
                 continue;                
-            } else t = st;
+            } else tokenAccumulator = currentToken;
             
-            // above leaves t with
+            // above leaves tokenAccumulator with
             // - a delimter
             // - a name of a parameter or the tag itself
             // - a value of a parameter
-            if (delim.indexOf(t)>=0) {
-                // t was a delimiter
+            if (delim.indexOf(tokenAccumulator)>=0) {
+                // tokenAccumulator was a delimiter
                 if (waitingForValue) {
-                  if (t.equals("=")) {
+                  if (tokenAccumulator.equals("=")) {
                         // here set to receive next value of parameter
                         waitingForValue=false;
                         isValue=true;
@@ -113,12 +113,12 @@ public class HTMLParameterParser {
             else {                
      
                 if (isValue) {
-                    value=t;
+                    value=tokenAccumulator;
                     isValue=false;
                 }
                 else {
                     if (name==null) {
-                        name=t;
+                        name=tokenAccumulator;
                         if (isName) {
                             waitingForValue=false;
                         }
@@ -131,7 +131,7 @@ public class HTMLParameterParser {
                         h.put(name.toUpperCase(),"");  
                         isName=false;
                         value=null;
-                        name=t;
+                        name=tokenAccumulator;
                         waitingForValue=true;
 
                     }
@@ -139,16 +139,7 @@ public class HTMLParameterParser {
                 
                 if (!waitingForValue) {
                     if (name != null && isValue==false){
-                        if (isName && value == null) value=HTMLTag.TAGNAME;
-                        else if (value==null) value = ""; // Hashtable does not accept nulls
-                        if (isName) {
-                            // store tagname as tag.TAGNAME,tag                        
-                            h.put(value,name.toUpperCase());  
-                        } 
-                        else {                   
-                            // store tag parameters as NAME, value
-                            h.put(name.toUpperCase(),value);  
-                        }
+                      	putDataIntoTable(h, name, value, isName);
                         isName=false;
                         name=null;
                         name = null;
@@ -160,47 +151,16 @@ public class HTMLParameterParser {
         }
         return h;
     }
- /*               
-                if (waitingForValue) {
-					
-                    if (t.equals("=")) {
-                        // here set to receive next value of parameter
-                        waitingForValue=false;
-                        isValue=true;
-                        value="";
-                    }
-                } 
-                if (name != null && isValue==false){
-                    if (isName && value == null) value=HTMLTag.TAGNAME;
-                    else if (value==null) value = ""; // Hastable does not accept nulls
-                    if (isName) {
-                        // store tagname as tag.TAGNAME,tag                        
-                        h.put(value,name.toUpperCase());  
-                    } 
-                    else {                   
-                        // store tag parameters as NAME, value
-                        h.put(name.toUpperCase(),value);  
-                    }
-                    isName=false;
-                    name=null;
-                    name = null;
-                    value=null;
-                }                
-            }
-            else {                
-                if (isValue) {
-                    value=t;
-                    isValue=false;
-                }
-                else {
-                    if (name==null) {
-                        name=t;
-                        waitingForValue=true;
-                    }
-                }
-            }
-        }
-        return h;
-    }
-  */
+	public void putDataIntoTable(Hashtable h,String name,String value,boolean isName) {
+		  if (isName && value == null) value=HTMLTag.TAGNAME;
+		    else if (value==null) value = ""; // Hashtable does not accept nulls
+		    if (isName) {
+		        // store tagname as tag.TAGNAME,tag                        
+		        h.put(value,name.toUpperCase());  
+		    } 
+		    else {                   
+		        // store tag parameters as NAME, value
+		        h.put(name.toUpperCase(),value);  
+		    }
+	}
 }
