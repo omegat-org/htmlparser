@@ -150,6 +150,14 @@ public void testRemoveChars() {
 	String result = scanner.removeChars(test,'\n');
 	assertEquals("Removing Chars","helloworld\tqsdsds",result);
 }
-
-
+/**
+ * Bug report by Cedric Rosa
+ * in absorbLeadingBlanks - crashes if the tag 
+ * is empty
+ */
+public void testAbsorbLeadingBlanksBlankTag() {
+	String testData = new String("");
+	String result=HTMLTagScanner.absorbLeadingBlanks(testData);
+	assertEquals("",result);
+}
 }

@@ -94,7 +94,7 @@ public String absorb(String s,char c) {
 public static String absorbLeadingBlanks(String s) 
 {
   String temp = new String(s);
-  while (temp.charAt(0)==' ')
+  while (temp.length()!=0 && temp.charAt(0)==' ')
   {
     temp = temp.substring(1,temp.length());
   }

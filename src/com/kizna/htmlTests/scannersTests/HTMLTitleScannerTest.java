@@ -89,4 +89,22 @@ public class HTMLTitleScannerTest extends TestCase {
 		assertEquals("Title","Yahoo!",titleTag.getTitle());
 		assertEquals("Title Scanner",titleScanner,titleTag.getThisScanner());
 	}
+	public void testIncompleteTitle() {
+		String testHTML = new String(
+		"<TITLE>SISTEMA TERRA, VOL. VI , No. 1-3, December 1997</TITLE\n"+
+		"</HEAD>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[20];
+		int i = 0;
+		HTMLTitleScanner titleScanner = new HTMLTitleScanner("-t");
+		parser.addScanner(titleScanner);
+	 	for (Enumeration e = parser.elements();e.hasMoreElements();) {
+			node[i++] = (HTMLNode)e.nextElement();
+		}
+	 	assertEquals("Number of nodes expected",2,i);		
+	 	assertTrue("First Node is a title tag",node[0] instanceof HTMLTitleTag);
+	
+	}
 }
