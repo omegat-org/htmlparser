@@ -397,7 +397,47 @@ public class ParserTest extends ParserTestCase {
 		}
     }
 
-	public void testNullUrl() {
+    /**
+     * Test the case of a double quoted charset directive.
+     * See bug #694477.
+     * Technically, this format does not meet the HTTP/1.1
+     * specification in RFC 2068. In this case that I believe
+     * that the quotes are being inproperly generated in the
+     * header by a server-side web application.
+     * Nonetheless, it would be nice to handle this case.
+     */
+	public void testDoubleQuotedCharset () throws ParserException
+    {
+		Parser parser;
+		String url = "http://htmlparser.sourceforge.net/test/DoublequotedCharset.html";
+		
+		parser = new Parser(url);
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+			e.nextNode();
+        assertTrue ("Wrong encoding", parser.getEncoding ().equals ("UTF-8"));
+    }
+
+    /**
+     * Test the case of a single quoted charset directive.
+     * See bug #694477.
+     * Technically, this format does not meet the HTTP/1.1
+     * specification in RFC 2068. In this case that I believe
+     * that the quotes are being inproperly generated in the
+     * header by a server-side web application.
+     * Nonetheless, it would be nice to handle this case.
+     */
+	public void testSingleQuotedCharset () throws ParserException
+    {
+		Parser parser;
+		String url = "http://htmlparser.sourceforge.net/test/SinglequotedCharset.html";
+		
+		parser = new Parser(url);
+		for (NodeIterator e = parser.elements();e.hasMoreNodes();)
+			e.nextNode();
+        assertTrue ("Wrong encoding", parser.getEncoding ().equals ("UTF-8"));
+    }
+
+    public void testNullUrl() {
 		Parser parser;
 		try {
 			parser = new Parser("http://someoneexisting.com", Parser.noFeedback);
