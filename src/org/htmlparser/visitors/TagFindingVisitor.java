@@ -68,20 +68,21 @@ public class TagFindingVisitor extends NodeVisitor {
 
     public void visitTag(Tag tag)
     {
-        if (tag.isEndTag ())
-        {
-            if (!endTagCheck) return;
-            for (int i=0;i<tagsToBeFound.length;i++)
-                if (tag.getTagName().substring (1).equalsIgnoreCase(tagsToBeFound[i]))
-                {
-                    endTagCount[i]++;
-                    endTags[i].add(tag);
-                }
-        }
         for (int i=0;i<tagsToBeFound.length;i++)
             if (tag.getTagName().equalsIgnoreCase(tagsToBeFound[i])) {
                 count[i]++;
                 tags[i].add(tag);
+            }
+    }
+
+    public void visitEndTag(Tag tag)
+    {
+        if (!endTagCheck) return;
+        for (int i=0;i<tagsToBeFound.length;i++)
+            if (tag.getTagName().equalsIgnoreCase(tagsToBeFound[i]))
+            {
+                endTagCount[i]++;
+                endTags[i].add(tag);
             }
     }
 

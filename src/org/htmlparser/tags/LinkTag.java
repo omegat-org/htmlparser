@@ -250,8 +250,16 @@ public class LinkTag extends CompositeTag
         return children();
     }
 
-    public void accept(NodeVisitor visitor) {
-        visitor.visitLinkTag(this);
-        super.accept(visitor);
+    /**
+     * Link visiting code.
+     * Invokes <code>visitLinkTag()</code> on the visitor and then
+     * invokes the normal tag processing.
+     * @param visitor The <code>NodeVisitor</code> object to invoke 
+     * <code>visitLinkTag()</code> on.
+     */
+    public void accept (NodeVisitor visitor)
+    {
+        visitor.visitLinkTag (this);
+        super.accept (visitor);
     }
 }

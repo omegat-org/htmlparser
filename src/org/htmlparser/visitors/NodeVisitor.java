@@ -35,56 +35,120 @@ import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.TitleTag;
 
-public abstract class NodeVisitor {
-    private boolean recurseChildren;
-    private boolean recurseSelf;
-
-    public NodeVisitor() {
-        this(true);
+/**
+ * The base class for the 'Visitor' pattern.
+ * Classes that wish to use <code>visitAllNodesWith()</code> will subclass
+ * this class and provide implementations for methods they are interested in
+ * processing.<p>
+ * The operation of <code>visitAllNodesWith()</code> is to call
+ * <code>beginParsing()</code>, then <code>visitXXX()</code> according to the
+ * types of nodes encountered in depth-first order and finally
+ * <code>finishedParsing()</code>.<p>
+ * There are currently three specialized <code>visitXXX()</code> calls for
+ * titles, images and links. Thes call their specialized visit, and then
+ * perform the generic processing.
+ * Typical code to print all the link tags:
+ * <pre>
+ * import org.htmlparser.Parser;
+ * import org.htmlparser.tags.LinkTag;
+ * import org.htmlparser.util.ParserException;
+ * import org.htmlparser.visitors.NodeVisitor;
+ * 
+ * public class Visitor extends NodeVisitor
+ * {
+ *     public Visitor ()
+ *     {
+ *     }
+ *     public void visitLinkTag (LinkTag linkTag)
+ *     {
+ *         System.out.println (linkTag);
+ *     }
+ *     public static void main (String[] args) throws ParserException
+ *     {
+ *         Parser parser = new Parser ("http://cbc.ca");
+ *         parser.registerScanners ();
+ *         Visitor visitor = new Visitor ();
+ *         parser.visitAllNodesWith (visitor);
+ *     }
+ * }
+ * </pre>
+ */
+public abstract class NodeVisitor
+{
+    private boolean mRecurseChildren;
+    private boolean mRecurseSelf;
+    
+    public NodeVisitor ()
+    {
+        this (true);
     }
-
-    public NodeVisitor(boolean recurseChildren) {
-        this.recurseChildren = recurseChildren;
-        this.recurseSelf = true;
+    
+    public NodeVisitor (boolean recurseChildren)
+    {
+        this (recurseChildren, true);
     }
-
-    public NodeVisitor(boolean recurseChildren,boolean recurseSelf) {
-        this.recurseChildren = recurseChildren;
-        this.recurseSelf = recurseSelf;
-    }
-
-    public void visitTag(Tag tag) {
-
-    }
-
-    public void visitStringNode(StringNode stringNode) {
-    }
-
-    public void visitLinkTag(LinkTag linkTag) {
-    }
-
-    public void visitImageTag(ImageTag imageTag) {
-    }
-
-    public void visitTitleTag(TitleTag titleTag) {
-
-    }
-    public void visitRemarkNode(RemarkNode remarkNode) {
-
-    }
-
-    public boolean shouldRecurseChildren() {
-        return recurseChildren;
-    }
-
-    public boolean shouldRecurseSelf() {
-        return recurseSelf;
+    
+    public NodeVisitor (boolean recurseChildren, boolean recurseSelf)
+    {
+        mRecurseChildren = recurseChildren;
+        mRecurseSelf = recurseSelf;
     }
 
     /**
      * Override this method if you wish to do special
-     * processing upon completion of parsing
+     * processing prior to the start of parsing.
      */
-    public void finishedParsing() {
+    public void beginParsing ()
+    {
+    }
+
+    public void visitTag (Tag tag)
+    {
+        
+    }
+    
+    public void visitEndTag (Tag tag)
+    {
+        
+    }
+    
+    public void visitStringNode (StringNode stringNode)
+    {
+    }
+    
+    public void visitRemarkNode (RemarkNode remarkNode)
+    {
+        
+    }
+    
+    /**
+     * Override this method if you wish to do special
+     * processing upon completion of parsing.
+     */
+    public void finishedParsing ()
+    {
+    }
+
+    public void visitLinkTag (LinkTag linkTag)
+    {
+    }
+    
+    public void visitImageTag (ImageTag imageTag)
+    {
+    }
+    
+    public void visitTitleTag (TitleTag titleTag)
+    {
+        
+    }
+
+    public boolean shouldRecurseChildren ()
+    {
+        return (mRecurseChildren);
+    }
+    
+    public boolean shouldRecurseSelf ()
+    {
+        return (mRecurseSelf);
     }
 }

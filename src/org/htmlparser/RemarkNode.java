@@ -83,7 +83,12 @@ public class RemarkNode
         if (filter==REMARK_NODE_FILTER) collectionList.add(this);
     }
 
-    public void accept(Object visitor)
+    /**
+     * Remark visiting code.
+     * @param visitor The <code>NodeVisitor</code> object to invoke 
+     * <code>visitRemarkNode()</code> on.
+     */
+    public void accept (Object visitor)
     {
         ((NodeVisitor)visitor).visitRemarkNode (this);
     }

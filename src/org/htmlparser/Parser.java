@@ -861,6 +861,7 @@ public class Parser
 
     public void visitAllNodesWith(NodeVisitor visitor) throws ParserException {
         Node node;
+        visitor.beginParsing();
         for (NodeIterator e = elements();e.hasMoreNodes();) {
             node = e.nextNode();
             node.accept(visitor);

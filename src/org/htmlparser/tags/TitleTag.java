@@ -49,8 +49,16 @@ public class TitleTag extends CompositeTag {
         return "TITLE: "+getTitle();
     }
 
-    public void accept(NodeVisitor visitor) {
-        visitor.visitTitleTag(this);
+    /**
+     * Title visiting code.
+     * Invokes <code>visitTitleTag()</code> on the visitor and then
+     * invokes the normal tag processing.
+     * @param visitor The <code>NodeVisitor</code> object to invoke 
+     * <code>visitTitleTag()</code> on.
+     */
+    public void accept (NodeVisitor visitor)
+    {
+        visitor.visitTitleTag (this);
+        super.accept (visitor);
     }
-
 }

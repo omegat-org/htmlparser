@@ -77,7 +77,12 @@ public class StringNode
         if (filter==STRING_FILTER) collectionList.add(this);
     }
 
-    public void accept(Object visitor)
+    /**
+     * String visiting code.
+     * @param visitor The <code>NodeVisitor</code> object to invoke 
+     * <code>visitStringNode()</code> on.
+     */
+    public void accept (Object visitor)
     {
         ((NodeVisitor)visitor).visitStringNode (this);
     }

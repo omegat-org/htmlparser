@@ -69,6 +69,8 @@ public class LinkProcessor
         {
             if (null == link)
                 link = "";
+            else
+                link = stripQuotes (link);
             if (null != getBaseUrl ())
                 base = getBaseUrl ();
             if ((null == base) || ("".equals (link)))
@@ -87,6 +89,22 @@ public class LinkProcessor
         return (Translate.decode (ret));
     }
 
+    /**
+     * Remove double or single quotes from the string.
+     */
+    public String stripQuotes (String string)
+    {
+        //remove any double quotes from around charset string
+        if (string.startsWith ("\"") && string.endsWith ("\"") && (1 < string.length ()))
+            string = string.substring (1, string.length () - 1);
+
+        //remove any single quote from around charset string
+        if (string.startsWith ("'") && string.endsWith ("'") && (1 < string.length ()))
+            string = string.substring (1, string.length () - 1);
+
+        return (string);
+    }
+    
     public URL constructUrl(String link, String base)
         throws MalformedURLException {
         String path;

@@ -63,24 +63,22 @@ public class HtmlPage extends NodeVisitor {
 
     public void visitTag(Tag tag)
     {
-        if (tag.isEndTag ())
-        {
-            if (isBodyTag(tag))
-                bodyTagBegin = false;
-            addTagToBodyIfApplicable(tag);
-        }
-        else
-        {
-            addTagToBodyIfApplicable(tag);
+        addTagToBodyIfApplicable(tag);
 
-            if (isTable(tag)) {
-                tables.add(tag);
-            }
-            else {
-                if (isBodyTag(tag))
-                    bodyTagBegin = true;
-            }
+        if (isTable(tag)) {
+            tables.add(tag);
         }
+        else {
+            if (isBodyTag(tag))
+                bodyTagBegin = true;
+        }
+    }
+
+    public void visitEndTag(Tag tag)
+    {
+        if (isBodyTag(tag))
+            bodyTagBegin = false;
+        addTagToBodyIfApplicable(tag);
     }
 
     private boolean isTable(Tag tag) {

@@ -318,27 +318,33 @@ public abstract class CompositeTag extends Tag {
     }
 
     /**
-     * Handle a visitor.
-     * <em>NOTE: This currently defers to accept(NodeVisitor), but eventually
-     * subclasses of Node should be overriding accept(Object) directly.</em>
-     * @param visitor The <code>NodeVisitor</code> object.
+     * Tag visiting code.
+     * Invokes <code>accept()</code> on the start tag and then
+     * walks the child list invoking <code>accept()</code> on each
+     * of the children, finishing up with an <code>accept()</code>
+     * call on the end tag. If <code>shouldRecurseSelf()</code>
+     * returns true it then asks the visitor to visit itself.
+     * @param visitor The <code>NodeVisitor</code> object to be signalled
+     * for each child and possibly this tag.
      */
-    public void accept(Object visitor) {
-        accept ((NodeVisitor)visitor);
-    }
+    public void accept (NodeVisitor visitor)
+    {
+        SimpleNodeIterator children;
+        Node child;
 
-    public void accept(NodeVisitor visitor) {
-        if (visitor.shouldRecurseChildren()) {
-            startTag.accept(visitor);
-            SimpleNodeIterator children = children();
-            while (children.hasMoreNodes()) {
-                Node child = (Node)children.nextNode();
-                child.accept(visitor);
+        if (visitor.shouldRecurseChildren ())
+        {
+            startTag.accept (visitor);
+            children = children ();
+            while (children.hasMoreNodes ())
+            {
+                child = (Node)children.nextNode ();
+                child.accept (visitor);
             }
-            endTag.accept(visitor);
+            endTag.accept (visitor);
         }
-        if (visitor.shouldRecurseSelf())
-            visitor.visitTag(this);
+        if (visitor.shouldRecurseSelf ())
+            visitor.visitTag (this);
     }
 
     public int getChildCount() {

@@ -71,8 +71,17 @@ public class ImageTag extends Tag
         setAttribute ("SRC", imageURL);
     }
 
-    public void accept(NodeVisitor visitor) {
-        visitor.visitImageTag(this);
+    /**
+     * Image visiting code.
+     * Invokes <code>visitImageTag()</code> on the visitor and then
+     * invokes the normal tag processing.
+     * @param visitor The <code>NodeVisitor</code> object to invoke 
+     * <code>visitImageTag()</code> on.
+     */
+    public void accept (NodeVisitor visitor)
+    {
+        visitor.visitImageTag (this);
+        super.accept (visitor);
     }
 
 }

@@ -600,30 +600,33 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Appends a newline to the output if the tag breaks flow, and
      * possibly sets the state of the PRE and SCRIPT flags.
-     * Possibly resets the state of the PRE and SCRIPT flags if it's
-     * an end tag.
      */
     public void visitTag (Tag tag)
     {
         String name;
 
         name = tag.getTagName ();
-        if (tag.isEndTag ())
-        {
-            if (name.equalsIgnoreCase ("/PRE"))
-                mIsPre = false;
-            else if (name.equalsIgnoreCase ("/SCRIPT"))
-                mIsScript = false;
-        }
-        else
-        {
-            if (name.equalsIgnoreCase ("PRE"))
-                mIsPre = true;
-            else if (name.equalsIgnoreCase ("SCRIPT"))
-                mIsScript = true;
-            if (tag.breaksFlow ())
-                carriage_return ();
-        }
+        if (name.equalsIgnoreCase ("PRE"))
+            mIsPre = true;
+        else if (name.equalsIgnoreCase ("SCRIPT"))
+            mIsScript = true;
+        if (tag.breaksFlow ())
+            carriage_return ();
+    }
+
+    /**
+     * Resets the state of the PRE and SCRIPT flags.
+     * @param tag The end tag to process.
+     */
+    public void visitEndTag (Tag tag)
+    {
+        String name;
+
+        name = tag.getTagName ();
+        if (name.equalsIgnoreCase ("/PRE"))
+            mIsPre = false;
+        else if (name.equalsIgnoreCase ("/SCRIPT"))
+            mIsScript = false;
     }
 
     /**

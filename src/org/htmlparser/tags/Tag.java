@@ -115,8 +115,30 @@ public class Tag extends TagNode
         return (ret);
     }
 
+    /**
+     * Handle a visitor.
+     * <em>NOTE: This currently defers to accept(NodeVisitor). If
+     * subclasses of Node override accept(Object) directly, they must
+     * handle the delegation to <code>visitTag()</code> and
+     * <code>visitEndTag()</code>.</em>
+     * @param visitor The <code>NodeVisitor</code> object
+     * (a cast is performed without checking).
+     */
     public void accept (Object visitor)
     {
-        ((NodeVisitor)visitor).visitTag (this);
+        accept ((NodeVisitor)visitor);
+    }
+
+    /**
+     * Default tag visiting code.
+     * Based on <code>isEndTag()</code>, calls either <code>visitTag()</code> or
+     * <code>visitEndTag()</code>.
+     */
+    public void accept (NodeVisitor visitor)
+    {
+        if (isEndTag ())
+            ((NodeVisitor)visitor).visitEndTag (this);
+        else
+            ((NodeVisitor)visitor).visitTag (this);
     }
 }

@@ -61,7 +61,6 @@ public class UrlModifyingVisitor extends NodeVisitor {
 
     public void visitImageTag(ImageTag imageTag) {
         imageTag.setImageURL(linkPrefix + imageTag.getImageURL());
-        modifiedResult.append(imageTag.toHtml());
     }
 
     public void visitStringNode(StringNode stringNode) {
@@ -70,10 +69,12 @@ public class UrlModifyingVisitor extends NodeVisitor {
 
     public void visitTag(Tag tag)
     {
-        if (tag.isEndTag ())
-            modifiedResult.append(tag.toHtml());
-        else
-            modifiedResult.append(tag.toHtml());
+        modifiedResult.append(tag.toHtml());
+    }
+
+    public void visitEndTag(Tag tag)
+    {
+        modifiedResult.append(tag.toHtml());
     }
 
     public String getModifiedResult() {

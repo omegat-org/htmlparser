@@ -36,14 +36,15 @@ public class UrlModifyingVisitorTest extends ParserTestCase {
     private static final String HTML_WITH_LINK =
     "<HTML><BODY>" +
         "<A HREF=\"mylink.html\"><IMG SRC=\"mypic.jpg\">" +
-        "</A><IMG SRC=\"mysecondimage.gif\">" +
+        "</A><IMG SRC=\"my second image.gif\">" +
     "</BODY></HTML>";
 
+    // Note: links are only quoted if needed
     private static final String MODIFIED_HTML =
     "<HTML><BODY>" +
-        "<A HREF=\"localhost://mylink.html\">" +
-        "<IMG SRC=\"localhost://mypic.jpg\"></A>" +
-        "<IMG SRC=\"localhost://mysecondimage.gif\">" +
+        "<A HREF=localhost://mylink.html>" +
+        "<IMG SRC=localhost://mypic.jpg></A>" +
+        "<IMG SRC=\"localhost://my second image.gif\">" +
     "</BODY></HTML>";
 
     public UrlModifyingVisitorTest(String name) {
@@ -55,8 +56,9 @@ public class UrlModifyingVisitorTest extends ParserTestCase {
         UrlModifyingVisitor visitor =
             new UrlModifyingVisitor(parser, "localhost://");
         parser.visitAllNodesWith(visitor);
+        String result = visitor.getModifiedResult();
         assertStringEquals("Expected HTML",
             MODIFIED_HTML,
-            visitor.getModifiedResult());
+            result);
     }
 }

@@ -66,26 +66,20 @@ public class TextExtractingVisitor extends NodeVisitor {
         textAccumulator.append(text);
     }
 
-    public void visitTitleTag(TitleTag titleTag) {
-        textAccumulator.append(titleTag.getTitle ());
-    }
-
     private String replaceNonBreakingSpaceWithOrdinarySpace(String text) {
         return text.replace('\u00a0',' ');
     }
 
     public void visitTag(Tag tag)
     {
-        if (tag.isEndTag ())
-        {
-            if (isPreTag(tag))
-                preTagBeingProcessed = false;
-        }
-        else
-        {
-            if (isPreTag(tag))
-                preTagBeingProcessed = true;
-        }
+        if (isPreTag(tag))
+            preTagBeingProcessed = true;
+    }
+
+    public void visitEndTag(Tag tag)
+    {
+        if (isPreTag(tag))
+            preTagBeingProcessed = false;
     }
 
     private boolean isPreTag(Tag tag) {
