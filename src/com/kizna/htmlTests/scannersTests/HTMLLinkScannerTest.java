@@ -349,5 +349,34 @@ public void testInsertEndTagBeforeTag() {
 	String newLine = linkScanner.insertEndTagBeforeNode(tag,currentLine);
 	assertEquals("Expected insertion","</A><a href=s/7509><b>Yahoo! Movies</b></a>",newLine);
 }
-
+/**
+ * A bug in the freshmeat page - really bad html 
+ * tag - &lt;A&gt;Revision&lt;\a&gt;
+ * Reported by Mazlan Mat
+ */
+public void testFreshMeatBug() {
+	String testHTML = "<a>Revision</a>";
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.yahoo.com");
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[10];
+	// Register the image scanner
+	parser.addScanner(new HTMLLinkScanner("-l"));
+		
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 3 nodes identified",new Integer(3),new Integer(i));
+	assertTrue("Node 0 should be a tag",node[0] instanceof HTMLTag);
+	HTMLTag tag = (HTMLTag)node[0];
+	assertEquals("Tag Contents","a",tag.getText());
+	assertTrue("Node 1 should be a string node",node[1] instanceof HTMLStringNode);
+	HTMLStringNode stringNode = (HTMLStringNode)node[1];
+	assertEquals("StringNode Contents","Revision",stringNode.getText());
+	assertTrue("Node 2 should be a string node",node[2] instanceof HTMLEndTag);
+	HTMLEndTag endTag = (HTMLEndTag)node[2];
+	assertEquals("End Tag Contents","a",endTag.getContents());
+}
 }

@@ -77,7 +77,7 @@ public class HTMLLinkScanner extends HTMLTagScanner
 			} 
 		}
 		
-
+		if (s.length()<5) retVal = false; else
 		if ((ch=='a' || ch=='A') && (s.charAt(1)==' ' || s.charAt(1)=='\n')) retVal = true; else retVal = false;
 
 		if (retVal)
