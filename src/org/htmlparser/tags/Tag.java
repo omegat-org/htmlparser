@@ -66,7 +66,7 @@ public class Tag extends AbstractNode
 	private final static int TAG_IGNORE_BEGIN_TAG_STATE=6;
 	private final static String EMPTY_STRING="";
 	
-	private static AttributeParser paramParser = new AttributeParser();
+	private AttributeParser attributeParser;
 	private static TagParser tagParser;
 	/**
 	 * Tag contents will have the contents of the comment tag.
@@ -180,7 +180,8 @@ public class Tag extends AbstractNode
 	 * @return Hashtable
 	 */
 	private Hashtable parseAttributes(){
-	 	return paramParser.parseAttributes(this);
+	 	attributeParser = new AttributeParser();
+	 	return attributeParser.parseAttributes(this);
 	}
 
 	/**
