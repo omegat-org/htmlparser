@@ -26,6 +26,8 @@
 
 package org.htmlparser.tags;
 
+import org.htmlparser.scanners.StyleScanner;
+
 /**
  * A StyleTag represents a &lt;style&gt; tag.
  */
@@ -37,10 +39,16 @@ public class StyleTag extends CompositeTag
     private static final String[] mIds = new String[] {"STYLE"};
 
     /**
+     * The set of end tag names that indicate the end of this tag.
+     */
+    private static final String[] mEndTagEnders = new String[] {"BODY", "HTML"};
+
+    /**
      * Create a new style tag.
      */
     public StyleTag ()
     {
+        setThisScanner (new StyleScanner ());
     }
 
     /**
@@ -53,27 +61,40 @@ public class StyleTag extends CompositeTag
     }
 
     /**
+     * Return the set of end tag names that cause this tag to finish.
+     * @return The names of following end tags that stop further scanning.
+     */
+    public String[] getEndTagEnders ()
+    {
+        return (mEndTagEnders);
+    }
+
+    /**
      * Get the style data in this tag.
      * @return The HTML of the children of this tag.
      */
-    public String getStyleCode()
+    public String getStyleCode ()
     {
-        return getChildrenHTML();
+        return (getChildrenHTML ());
     }
 
     /**
      * Print the contents of the style node.
+     * @return A string suitable for debugging or a printout.
      */
     public String toString()
     {
-        String guts = toHtml();
-        guts = guts.substring (1, guts.length () - 2);
-        StringBuffer sb = new StringBuffer();
-        sb.append("Style Node : \n");
-        sb.append("\n");
-        sb.append("Code\n");
-        sb.append("****\n");
-        sb.append(guts+"\n");
-        return sb.toString();
+        String guts;
+        StringBuffer ret;
+        
+        ret = new StringBuffer ();
+
+        guts = toHtml ();
+        guts = guts.substring (1, guts.length () - 1);
+        ret.append ("Style node :\n");
+        ret.append (guts);
+        ret.append ("\n");
+
+        return (ret.toString ());
     }
 }

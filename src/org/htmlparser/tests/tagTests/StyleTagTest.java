@@ -27,6 +27,7 @@
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.Parser;
+import org.htmlparser.StringNode;
 import org.htmlparser.tags.HeadTag;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tags.StyleTag;
@@ -64,7 +65,6 @@ public class StyleTagTest extends ParserTestCase {
         "-->"+
         "</STYLE>";
         createParser(style);
-        Parser.setLineSeparator("\r\n");
         parseAndAssertNodeCount(1);
         assertTrue(node[0] instanceof StyleTag);
         StyleTag styleTag = (StyleTag)node[0];
@@ -128,5 +128,36 @@ public class StyleTagTest extends ParserTestCase {
         assertTrue("Third child should be a STYLE tag", head.childAt (2) instanceof StyleTag);
         StyleTag styleTag = (StyleTag)head.childAt (2);
         assertStringEquals("Expected Style Code",expectedCode,styleTag.getStyleCode());
+    }
+    
+    /**
+     * See bug #900125 Style Tag Children not grouped
+     */
+    public void testStyleChildren () throws ParserException
+    {
+        String style =
+            "\nbody {color:white}\n" +
+            "<!--\n" +
+            ".teliabox {\n" +
+            "color: #A9014E;\n" +
+            "text-align: center;\n" +
+            "background-image:url(hallo.gif);\n" +
+            "}\n" +
+            "-->";
+        String html =
+            "<style type=\"text/css\" media=\"screen\">" +
+            style +
+            "</style>";
+        StyleTag tag;
+        StringNode string;
+
+        createParser (html);
+        parseAndAssertNodeCount (1);
+        assertTrue ("Node should be a STYLE tag", node[0] instanceof StyleTag);
+        tag = (StyleTag)node[0];
+        assertTrue ("STYLE tag should have one child", 1 == tag.getChildCount ());
+        assertTrue ("Child should be a StringNode", tag.getChild (0) instanceof StringNode);
+        string = (StringNode)tag.getChild (0);
+        assertStringEquals ("Style text incorrect", style, string.toHtml ());
     }
 }
