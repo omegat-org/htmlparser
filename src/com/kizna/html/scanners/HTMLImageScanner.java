@@ -145,7 +145,7 @@ public class HTMLImageScanner extends HTMLTagScanner
 		link = extractImageLocn(tag,url);
 		linkBegin = tag.elementBegin();
 		linkEnd = tag.elementEnd();
-		HTMLImageTag imageTag = new HTMLImageTag(link,linkBegin,linkEnd,currentLine);
+		HTMLImageTag imageTag = new HTMLImageTag(link,linkBegin,linkEnd,currentLine,tag.getText());
 		imageTag.setThisScanner(this);
 		imageTag.setParsed(table);
 		return imageTag;

@@ -62,6 +62,13 @@ public void setLanguage(java.lang.String newLanguage) {
 public void setType(java.lang.String newType) {
 	type = newType;
 }
+public String toRawString() {
+	StringBuffer sb = new StringBuffer();
+	sb.append(super.toRawString());
+	sb.append(scriptCode);
+	sb.append("</SCRIPT>");
+	return sb.toString();
+}
 /**
  * Print the contents of the javascript node
  */

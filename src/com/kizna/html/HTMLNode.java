@@ -41,6 +41,12 @@ public abstract class HTMLNode
 	 * </pre>
 	 */
 	public abstract String toPlainTextString();
+	/**
+	 * This method will make it easier when using html parser to reproduce html pages (with or without modifications)
+	 * Applications reproducing html can use this method on nodes which are to be used or transferred as they were 
+	 * recieved, with the original html
+	 */
+	public abstract String toRawString();
 /**
  * Return the string representation of the node.
  * Subclasses must define this method, and this is typically to be used in the manner<br>

@@ -31,6 +31,9 @@ public class HTMLJspTag extends HTMLTag
 	{
 		return tagEnd;
 	}
+	public String toRawString() {
+		return "<%"+tagContents+"%>";
+	}
 		/**
 	 * Print the contents of the remark tag.
 	 */

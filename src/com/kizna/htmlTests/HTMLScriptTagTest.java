@@ -1,36 +1,7 @@
-// HTMLParser Library v1.1 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-// For any questions or suggestions, you can write to me at :
-// Email :somik@kizna.com
-// 
-// Postal Address : 
-// Somik Raha
-// R&D Team
-// Kizna Corporation
-// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
-// Shibuya-ku, Tokyo, 
-// 150-0012, 
-// JAPAN
-// Tel  :  +81-3-54752646
-// Fax : +81-3-5449-4870
-// Website : www.kizna.com
-
 package com.kizna.htmlTests;
+
+import java.util.*;
+import java.io.*;
 import com.kizna.html.*;
 import com.kizna.html.tags.*;
 import com.kizna.html.scanners.*;
@@ -69,6 +40,17 @@ protected void setUp()
 public static TestSuite suite() {
 	TestSuite suite = new TestSuite(HTMLScriptTagTest.class);
 	return suite;
+}
+public void testCreation() {
+	HTMLScriptTag scriptTag = new HTMLScriptTag(0,10,"Tag Contents","Script Code","english","text","tagline");
+	assertNotNull("Script Tag object creation",scriptTag);
+	assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
+	assertEquals("Script Tag End",10,scriptTag.elementEnd());
+	assertEquals("Script Tag Language","english",scriptTag.getLanguage());		
+	assertEquals("Script Tag Contents","Tag Contents",scriptTag.getText());
+	assertEquals("Script Tag Code","Script Code",scriptTag.getScriptCode());
+	assertEquals("Script Tag Type","text",scriptTag.getType());
+	assertEquals("Script Tag Line","tagline",scriptTag.getTagLine());
 }
 /**
  * Insert the method's description here.
@@ -110,15 +92,24 @@ public void testExtractType()
 	scriptScanner.extractType(new HTMLTag(10,10,"SCRIPT TYPE=\"text/javascript\"",""));
 	assertEquals("text/javascript",scriptScanner.getType());	
 }
-public void testCreation() {
-	HTMLScriptTag scriptTag = new HTMLScriptTag(0,10,"Tag Contents","Script Code","english","text","tagline");
-	assertNotNull("Script Tag object creation",scriptTag);
-	assertEquals("Script Tag Begin",0,scriptTag.elementBegin());
-	assertEquals("Script Tag End",10,scriptTag.elementEnd());
-	assertEquals("Script Tag Language","english",scriptTag.getLanguage());		
-	assertEquals("Script Tag Contents","Tag Contents",scriptTag.getText());
-	assertEquals("Script Tag Code","Script Code",scriptTag.getScriptCode());
-	assertEquals("Script Tag Type","text",scriptTag.getType());
-	assertEquals("Script Tag Line","tagline",scriptTag.getTagLine());
-}
+	public void testToRawString() {
+		String testHTML = new String("<SCRIPT>document.write(d+\".com\")</SCRIPT>");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.google.com/test/index.html");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[10];
+		// Register the image scanner
+		parser.addScanner(new HTMLScriptScanner("-s"));
+			
+		int i = 0;
+		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		{
+			node[i++] = (HTMLNode)e.nextElement();
+		}
+		assertEquals("There should be 1 node identified",new Integer(1),new Integer(i));	
+		assertTrue("Node should be a script tag",node[0] instanceof HTMLScriptTag);
+		// Check the data in the applet tag
+		HTMLScriptTag scriptTag = (HTMLScriptTag)node[0];
+		assertEquals("Expected Raw String","<SCRIPT>document.write(d+\".com\")</SCRIPT>",scriptTag.toRawString());
+	}
 }

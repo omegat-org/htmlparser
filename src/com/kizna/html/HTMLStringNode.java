@@ -102,6 +102,9 @@ public class HTMLStringNode extends HTMLNode
 	public String toPlainTextString() {
 		return text;
 	}
+	public String toRawString() {
+		return text;
+	}
 public String toString() {
 	return "Text = "+text+"; begins at : "+elementBegin()+"; ends at : "+elementEnd();
 }

@@ -498,6 +498,9 @@ public java.lang.String getTagLine() {
 	public String toPlainTextString() {
 		return "";
 	}
+	public String toRawString() {
+		return "<"+tagContents+">";
+	}
 	/**
 	 * Print the contents of the tag
 	 */

@@ -16,9 +16,9 @@ public class HTMLImageTag extends HTMLTag
 	 * @imageBegin Beginning position of the image tag
 	 * @imageEnd Ending position of the image tag
 	 */
-	public HTMLImageTag(String imageURL,int imageBegin, int imageEnd,String tagLine)
+	public HTMLImageTag(String imageURL,int imageBegin, int imageEnd,String tagLine,String tagContents)
 	{
-		super(imageBegin,imageEnd,"",tagLine);
+		super(imageBegin,imageEnd,tagContents,tagLine);
 		this.imageURL = imageURL;
 	}
 	/**

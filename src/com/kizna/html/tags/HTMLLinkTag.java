@@ -119,6 +119,19 @@ public void setNodeVector(java.util.Vector newNodeVector) {
 		}
 		return sb.toString();
 	}
+	public String toRawString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<");
+		sb.append(tagContents.toString());
+		sb.append(">");
+		HTMLNode node;
+		for (Enumeration e = linkData();e.hasMoreElements();) {
+			node = (HTMLNode)e.nextElement();
+			sb.append(node.toRawString());
+		}
+		sb.append("</A>");
+		return sb.toString();
+	}
 	/**
 	 * Print the contents of this Link Node
 	 */

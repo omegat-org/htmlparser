@@ -1,36 +1,5 @@
-// HTMLParser Library v1.1 - A java-based parser for HTML
-// Copyright (C) Dec 31, 2000 Somik Raha
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-// For any questions or suggestions, you can write to me at :
-// Email :somik@kizna.com
-// 
-// Postal Address : 
-// Somik Raha
-// R&D Team
-// Kizna Corporation
-// Hiroo ON Bldg. 2F, 5-19-9 Hiroo,
-// Shibuya-ku, Tokyo, 
-// 150-0012, 
-// JAPAN
-// Tel  :  +81-3-54752646
-// Fax : +81-3-5449-4870
-// Website : www.kizna.com
-
 package com.kizna.htmlTests;
+
 import java.io.BufferedReader;
 import java.util.Enumeration;
 import com.kizna.html.*;
@@ -45,7 +14,7 @@ import junit.framework.TestSuite;
  * Creation date: (6/17/2001 3:59:52 PM)
  * @author: Administrator
  */
-public class HTMLLinkTagTest extends TestCase 
+public class HTMLLinkTagTest extends TestCase
 {
 /**
  * HTMLStringNodeTest constructor comment.
@@ -373,7 +342,6 @@ public void testNullTagBug()
 	assertEquals("The link location","",linkTag.getLink());
 	assertEquals("The link text","Something",linkTag.getLinkText());
 }
-
 public void testToPlainTextString() {
 	String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>");
 	StringReader sr = new StringReader(testHTML);
@@ -393,4 +361,31 @@ public void testToPlainTextString() {
 	HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
 	assertEquals("Link Plain Text","hello",linkTag.toPlainTextString());	
 }
+	public void testToRawString() {
+		String testHTML = new String("<A HREF='mailto:somik@yahoo.com'>hello</A>\n"+
+			"<LI><font color=\"FF0000\" size=-1><b>Tech Samachar:</b></font> <a \n"+
+			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
+			"nical.html\"> Journalism 3.0</a> by Rajesh Jain");
+		StringReader sr = new StringReader(testHTML);
+		HTMLReader reader =  new HTMLReader(new BufferedReader(sr),"http://www.cj.com/");
+		HTMLParser parser = new HTMLParser(reader);
+		HTMLNode [] node = new HTMLNode[10];
+		// Register the image scanner
+		parser.addScanner(new HTMLLinkScanner("-l"));
+			
+		int i = 0;
+		for (Enumeration e = parser.elements();e.hasMoreElements();)
+		{
+			node[i++] = (HTMLNode)e.nextElement();
+		}
+		assertEquals("There should be 1 node identified",new Integer(9),new Integer(i));
+		assertTrue("First Node should be a HTMLLinkTag",node[0] instanceof HTMLLinkTag);
+		HTMLLinkTag linkTag = (HTMLLinkTag)node[0];
+		assertEquals("Link Raw Text","<A HREF='mailto:somik@yahoo.com'>hello</A>",linkTag.toRawString());
+		assertTrue("Eighth Node should be a HTMLLinkTag",node[7] instanceof HTMLLinkTag);
+		linkTag = (HTMLLinkTag)node[7];
+		assertEquals("Link Raw Text","<a \n"+
+			"href=\"http://ads.samachar.com/bin/redirect/tech.txt?http://www.samachar.com/tech\n"+
+			"nical.html\"> Journalism 3.0</A>",linkTag.toRawString());
+	}
 }

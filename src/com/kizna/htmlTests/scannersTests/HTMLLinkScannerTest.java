@@ -193,28 +193,6 @@ public void testScan()
 	HTMLStringNode stringNode = (HTMLStringNode)dataNode[1];
 	assertEquals("String Contents","Hello World",stringNode.getText());
 }
-public void testLinkOnALargeLine() {
-	String testHTML = new String("<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>");
-	StringReader sr = new StringReader(testHTML);
-	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
-	HTMLParser parser = new HTMLParser(reader);
-	parser.addScanner(new HTMLLinkScanner("-l"));
-	HTMLNode [] node = new HTMLNode[10];
-	int i = 0;
-	for (Enumeration e = parser.elements();e.hasMoreElements();)
-	{
-		node[i++] = (HTMLNode)e.nextElement();
-	}
-	assertEquals("There should be 5 nodes identified",5,i);
-	// The first node should be a HTMLTag 
-	assertTrue("First node should be a HTMLTag",node[0] instanceof HTMLTag);
-	// The second node should be a HTMLStringNode
-	assertTrue("Second node should be a HTMLStringNode",node[1] instanceof HTMLStringNode);
-	HTMLStringNode stringNode = (HTMLStringNode)node[1];
-	assertEquals("Text of the StringNode","Site Comments?",stringNode.getText());
-	assertTrue("Third node should be a tag",node[2] instanceof HTMLTag);
-
-}
 public void testDirtyHTMLEvaluate() {
 	HTMLLinkScanner scanner = new HTMLLinkScanner();
 	boolean retVal = scanner.evaluate("A",scanner);
@@ -295,5 +273,28 @@ public void testAccessKey() {
 	assertEquals("Link URL of link tag","http://www.kizna.com/servlets/SomeServlet?name=Sam Joseph",linkTag.getLink());
 	assertEquals("Link Text of link tag","Click Here",linkTag.getLinkText());
 	assertEquals("Access key","1",linkTag.getAccessKey());	
+}
+
+public void testErroneousLinkBug() {
+	String testHTML = new String("<p>Site Comments?<br><a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">Mail Us<a></p>");
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	HTMLParser parser = new HTMLParser(reader);
+	parser.addScanner(new HTMLLinkScanner("-l"));
+	HTMLNode [] node = new HTMLNode[10];
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 5 nodes identified",5,i);
+	// The first node should be a HTMLTag 
+	assertTrue("First node should be a HTMLTag",node[0] instanceof HTMLTag);
+	// The second node should be a HTMLStringNode
+	assertTrue("Second node should be a HTMLStringNode",node[1] instanceof HTMLStringNode);
+	HTMLStringNode stringNode = (HTMLStringNode)node[1];
+	assertEquals("Text of the StringNode","Site Comments?",stringNode.getText());
+	assertTrue("Third node should be a tag",node[2] instanceof HTMLTag);
+
 }
 }

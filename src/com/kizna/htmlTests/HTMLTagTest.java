@@ -472,4 +472,38 @@ public void testNestedTags() {
 		HTMLTag.correctTag(tag);
 		assertEquals("Corrected Tag","font face=Arial,helvetica, sans-serif=sans-serif size=2 color=#FFFFFF",tag.getText());
     }
+
+public void testToRawString() {
+	String testHTML = new String(
+		"<MYTAG abcd\n"+
+		"efgh\n"+
+		"ijkl\n"+
+		"mnop>\n"+
+		"<TITLE>Hello</TITLE>\n"+
+		"<A HREF=\"Hello.html\">Hey</A>"
+	);
+	StringReader sr = new StringReader(testHTML);
+	HTMLReader reader =  new HTMLReader(new BufferedReader(sr),5000);
+	HTMLParser parser = new HTMLParser(reader);
+	HTMLNode [] node = new HTMLNode[10];
+
+			
+	int i = 0;
+	for (Enumeration e = parser.elements();e.hasMoreElements();)
+	{
+		node[i++] = (HTMLNode)e.nextElement();
+	}
+	assertEquals("There should be 4 node identified",new Integer(7),new Integer(i));
+	// The node should be an HTMLTag
+	assertTrue("1st Node should be a HTMLTag",node[0] instanceof HTMLTag);
+	HTMLTag tag = (HTMLTag)node[0];
+	assertEquals("Raw String of the tag","<MYTAG abcd\nefgh\nijkl\nmnop>",tag.toRawString());
+	assertTrue("2nd Node should be a HTMLTag",node[1] instanceof HTMLTag);
+	assertTrue("5th Node should be a HTMLTag",node[4] instanceof HTMLTag);
+	tag = (HTMLTag)node[1];
+	assertEquals("Raw String of the tag","<TITLE>",tag.toRawString());
+	tag = (HTMLTag)node[4];
+	assertEquals("Raw String of the tag","<A HREF=\"Hello.html\">",tag.toRawString());
+	
+}
 }
