@@ -49,7 +49,6 @@ public class TagParser {
 	
 	private ParserFeedback feedback;
 	private boolean encounteredQuery;
-	private int i;
 
 	public TagParser(ParserFeedback feedback) {
 		this.feedback = feedback;
@@ -57,7 +56,7 @@ public class TagParser {
 
 	public Tag find(NodeReader reader,String input,int position) {
 		int state = TAG_BEFORE_PARSING_STATE;
-		i=position;
+		int i=position;
 		char ch;
 		Tag tag = new Tag(new TagData(0,0,"",input));
 		encounteredQuery = false;
@@ -67,8 +66,8 @@ public class TagParser {
 			)
 		{
 			ch = tag.getTagLine().charAt(i);
-			state = automataInput(state, ch, tag, i);
-			i = incrementCounter(reader, state, tag);
+			state = automataInput(i, state, ch, tag, i);
+			i = incrementCounter(i, reader, state, tag);
 		}
 		if (state==TAG_FINISHED_PARSING_STATE) {
 			String tagLine = tag.getTagLine();
@@ -82,9 +81,9 @@ public class TagParser {
 		return null;	
 	}
 
-	private int automataInput(int state,char ch, Tag tag, int pos) {
-		state = checkIllegalState(state, ch, tag);
-		state = checkFinishedState(state, ch, tag, pos);
+	private int automataInput(int i, int state,char ch, Tag tag, int pos) {
+		state = checkIllegalState(i, state, ch, tag);
+		state = checkFinishedState(i, state, ch, tag, pos);
 		state = toggleIgnoringState(state, ch);
 		if (state==TAG_BEFORE_PARSING_STATE && ch!='<') {
             state= TAG_ILLEGAL_STATE;
@@ -99,12 +98,12 @@ public class TagParser {
 				state = TAG_IGNORE_DATA_STATE;
 		}
 		checkIfAppendable(state, ch, tag);
-		state = checkBeginParsingState(state, ch, tag);
+		state = checkBeginParsingState(i, state, ch, tag);
 
 		return state;
 	}
 
-	private int checkBeginParsingState(int state, char ch, Tag tag) {
+	private int checkBeginParsingState(int i, int state, char ch, Tag tag) {
 		if (ch=='<' && 
 			(state==TAG_BEFORE_PARSING_STATE || 
 			  state==TAG_ILLEGAL_STATE))
@@ -123,7 +122,7 @@ public class TagParser {
 		return openTagPos > closeTagPos || (openTagPos ==-1 && closeTagPos!=-1);
  	}
  	
-	private int checkFinishedState(int state,  char ch, Tag tag, int pos) {
+	private int checkFinishedState(int i, int state,  char ch, Tag tag, int pos) {
 		if (ch=='>')
 		{
 			if (state==TAG_BEGIN_PARSING_STATE)
@@ -180,7 +179,7 @@ public class TagParser {
 		}
 	}
 
-	private int checkIllegalState(int state, char ch, Tag tag) {
+	private int checkIllegalState(int i, int state, char ch, Tag tag) {
 		if (ch=='/' && i>0 && tag.getTagLine().charAt(i-1)=='<' && 
 			state!=TAG_IGNORE_DATA_STATE && 
 			state!=TAG_IGNORE_BEGIN_TAG_STATE)
@@ -277,7 +276,7 @@ public class TagParser {
 	}	
 
 	
-	public int incrementCounter(NodeReader reader, int state, Tag tag) {
+	public int incrementCounter(int i, NodeReader reader, int state, Tag tag) {
 		String nextLine = null;
 		if (
 			(state==TAG_BEGIN_PARSING_STATE || 
