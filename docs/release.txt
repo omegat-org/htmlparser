@@ -26,14 +26,27 @@ Contents of the distribution
 
 Changes since Version 1.4
 -------------------------
+New APIs
+    Implement rudimentary sax parser. Currently exposes DOM parser via sax project 
 Configuration Management
     Removed the need for the Translate class to be packaged with htmllexer.jar.
-    This results in a lighter weight component. Updated the logo and included
-    the LGPL license.
+    This results in a lighter weight component.
+    Updated the logo and included the LGPL license.
+    Fixed the Windows batch files.
 Refactoring
     Obviated LinkProcessor and moved it's functionality to the Page class.
     Added Tag, Text and Remark interfaces and moved concrete node
     implementations to the nodes package, removing the lexer.nodes package.
+    Most internals now use the Tag interface.
+    Removed the org.htmlparser.tags.Tag class and moved the remaining (minor)
+    functionality to the TagNode class.
+    So now tags inherit directly from TagNode or CompositeTag.
+	** NOTE: If you have subclassed org.htmlparser.tags.Tag, use org.htmlparser.nodes.TagNode now.**
+    Removed deprecated methods getTagBegin/getTagEnd and deleted unused classes:
+        PeekingIterator and it's Implementation.
+    Added ObjectTag (like an applet tag).
+    Added a real StringSource that reads directly from a String rather than
+    creating a byte array. This avoids character encoding losses.
 Filters
     Added CssSelectorNodeFilter and RegExFilter.
     
@@ -45,8 +58,12 @@ Enhancement Requests
 
 Bug Fixes
 ---------
-919738 Text has not been extracted correctly using StringBean
+998195 SiteCatpurer just crashed
+995703 Parser Crash
+988846 Linkbean getLinks() segmentation fault (duplicate of above)
+973137 Double-bytes characters are messed after parsing
 936392 ScriptTag visitor fails for comments with '
+919738 Text has not been extracted correctly using StringBean
 
 Acknowledgements
 ----------------

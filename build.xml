@@ -449,7 +449,7 @@ Update the Web Site
       <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}" includes="*.bat"/>
       <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}" includes="*" excludes="*.bat" filemode="755"/>
       <zipfileset dir="${docs}" prefix="htmlparser${versionQualifier}/${docs}" excludes="docs/**,samples/**"/>
-      <zipfileset dir="${docs}/docs" prefix="htmlparser${versionQualifier}/${docs}/wiki"/>
+      <zipfileset dir="${wiki}" prefix="htmlparser${versionQualifier}/${docs}/wiki"/>
       <zipfileset dir="${lib}" prefix="htmlparser${versionQualifier}/${lib}"/>
       <zipfileset dir="." prefix="htmlparser${versionQualifier}/" includes="src.zip"/>
       <!-- Copy the release notes as readme.txt in the base release directory -->
