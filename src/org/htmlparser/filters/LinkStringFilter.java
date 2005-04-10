@@ -37,7 +37,14 @@ import org.htmlparser.tags.LinkTag;
  */
 public class LinkStringFilter implements NodeFilter
 {
+    /**
+     * The pattern to search for in the link.
+     */
     protected String mPattern;
+
+    /**
+     * Flag indicating case sensitive/insensitive search.
+     */
     protected boolean mCaseSensitive;
     
     /**

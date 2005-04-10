@@ -149,7 +149,7 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
             System.out.println ("ours " + cursor + ": " + ours);
         }
         else
@@ -170,7 +170,7 @@ public class KitTest extends ParserCallback
             {
                 System.out.println ("to match:");
                 node = (Node)mNodes.elementAt (match);
-                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
                 System.out.println ("@" + cursor + ": " + node.toHtml ());
             }
 //            System.out.println (" match: " + theirs);
@@ -213,7 +213,7 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
             System.out.println ("ours " + cursor + ": " + ours);
         }
         else
@@ -234,7 +234,7 @@ public class KitTest extends ParserCallback
             {
                 System.out.println ("to match:");
                 node = (Node)mNodes.elementAt (match);
-                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
                 System.out.println ("@" + cursor + ": " + node.toHtml ());
             }
 //            System.out.println (" match: " + theirs);
@@ -278,7 +278,7 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
             System.out.println ("ours " + cursor + ": " + ours);
         }
         else
@@ -299,7 +299,7 @@ public class KitTest extends ParserCallback
             {
                 System.out.println ("to match:");
                 node = (Node)mNodes.elementAt (match);
-                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
                 System.out.println ("@" + cursor + ": " + node.toHtml ());
             }
 //            System.out.println (" match: " + theirs);
@@ -342,7 +342,7 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
             System.out.println ("ours " + cursor + ": " + ours);
         }
         else
@@ -363,7 +363,7 @@ public class KitTest extends ParserCallback
             {
                 System.out.println ("to match:");
                 node = (Node)mNodes.elementAt (match);
-                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
                 System.out.println ("@" + cursor + ": " + node.toHtml ());
             }
 //            System.out.println (" match: " + theirs);
@@ -412,7 +412,7 @@ public class KitTest extends ParserCallback
             node = (Node)mNodes.elementAt (mIndex);
             ours = node.getText ();
             System.out.println ("theirs: " + theirs);
-            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+            Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
             System.out.println ("ours " + cursor + ": " + ours);
         }
         else
@@ -433,7 +433,7 @@ public class KitTest extends ParserCallback
             {
                 System.out.println ("to match:");
                 node = (Node)mNodes.elementAt (match);
-                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.elementBegin ());
+                Cursor cursor = new Cursor (((AbstractNode)node).getPage (), node.getStartPosition ());
                 System.out.println ("@" + cursor + ": " + node.toHtml ());
             }
 //            System.out.println (" match: " + theirs);
@@ -598,6 +598,13 @@ public class KitTest extends ParserCallback
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.9  2005/04/10 23:20:46  derrickoswald
+ * Documentation revamp part one.
+ * Deprecated node decorators.
+ * Added doSemanticAction for Text and Comment nodes.
+ * Added missing sitecapturer scripts.
+ * Fixed DOS batch files to work when called from any location.
+ *
  * Revision 1.8  2004/07/31 16:42:31  derrickoswald
  * Remove unused variables and other fixes exposed by turning on compiler warnings.
  *

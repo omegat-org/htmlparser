@@ -77,6 +77,8 @@ public class NodeClassFilter implements NodeFilter
     /**
      * Accept nodes that are assignable from the class provided in the constructor.
      * @param node The node to check.
+     * @return <code>true</code> if the node is the right class,
+     * <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

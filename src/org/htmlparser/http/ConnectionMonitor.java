@@ -41,20 +41,20 @@ public interface ConnectionMonitor
      * and cookie information. It is still possible to adjust the
      * connection, to alter the request method for example. 
      * @param connection The connection which is about to be connected.
-     * @exception This exception is thrown if the connection monitor
-     * wants the ConnectionManager to bail out.
+     * @exception ParserException This exception is thrown if the connection
+     * monitor wants the ConnectionManager to bail out.
      */
     void preConnect (HttpURLConnection connection)
     	throws
-    		ParserException;
+            ParserException;
 
     /** Called just after calling connect.
      * The response code and header fields can be examined.
      * @param connection The connection that was just connected.
-     * @exception This exception is thrown if the connection monitor
-     * wants the ConnectionManager to bail out.
+     * @exception ParserException This exception is thrown if the connection
+     * monitor wants the ConnectionManager to bail out.
      */
     void postConnect (HttpURLConnection connection)
     	throws
-    		ParserException;
+            ParserException;
 }

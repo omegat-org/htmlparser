@@ -82,13 +82,19 @@ public class FrameTag
         setAttribute ("SRC", url);
     }
 
+    /**
+     * Get the <code>NAME</code> attribute, if any.
+     * @return The value of the <code>NAME</code> attribute,
+     * or <code>null</code> if the attribute doesn't exist.
+     */
     public String getFrameName()
     {
         return (getAttribute ("NAME"));
     }
 
     /**
-     * Print the contents of the FrameTag.
+     * Return a string representation of the contents of this <code>FRAME</code> tag suitable for debugging.
+     * @return A string with this tag's contents.
      */
     public String toString()
     {

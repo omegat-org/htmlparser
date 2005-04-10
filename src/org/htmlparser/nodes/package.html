@@ -57,11 +57,12 @@ These classes are derived from the
 basic functionality common to all nodes, such as maintaining start and end positions
 and child and parent references. Only the {@link org.htmlparser.nodes.TagNode TagNode} objects
 contain a list of {@link org.htmlparser.Attribute Attribute} objects.
-<p>
-The {@link org.htmlparser.lexer.Lexer Lexer} parses an HTML stream into a contiguous stream of these
-nodes. The {@link org.htmlparser.Parser Parser} returns specific {@link
-org.htmlparser.tags Tag} objects, which are subclasses of the {@link org.htmlparser.nodes.TagNode TagNode}
-class.
+<p>The {@link org.htmlparser.lexer.Lexer Lexer} parses an HTML stream into a
+contiguous stream of these nodes.</p>
+<p>The {@link org.htmlparser.Parser Parser} returns either these nodes or specific
+{@link org.htmlparser.tags Tag} objects (which are subclasses of TagNode)
+for tags with names that have been registered via
+{@link org.htmlparser.PrototypicalNodeFactory#registerTag registerTag()}.
 <p>
 </BODY>
 </HTML>

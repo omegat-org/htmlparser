@@ -279,10 +279,10 @@ public class LexerTests extends ParserTestCase
         while (null != (node = lexer.nextNode ()))
         {
             string = node.toHtml ();
-            if (position != node.elementBegin ())
+            if (position != node.getStartPosition ())
                 fail ("non-contiguous" + string);
             buffer.append (string);
-            position = node.elementEnd ();
+            position = node.getEndPosition ();
             if (buffer.length () != position)
                 fail ("text length differed after encountering node " + string);
         }

@@ -274,6 +274,7 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Extract the text from a page.
      * @return The textual contents of the page.
+     * @exception ParserException If a parse error occurs.
      */
     protected String extractStrings ()
         throws
@@ -629,6 +630,7 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Appends a newline to the output if the tag breaks flow, and
      * possibly sets the state of the PRE and SCRIPT flags.
+     * @param tag The tag to examine.
      */
     public void visitTag (Tag tag)
     {

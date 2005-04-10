@@ -108,12 +108,20 @@ public class RemarkNode
         nodeEnd = mText.length ();
     }
 
-    public String toPlainTextString()
+    /**
+     * Return the remark text.
+     * @return The HTML comment.
+     */
+    public String toPlainTextString ()
     {
         return (getText());
     }
-    
-    public String toHtml()
+
+    /**
+     * Return The full HTML remark.
+     * @return The comment, i.e. {@.html <!-- this is a comment -->}.
+     */
+    public String toHtml ()
     {
         StringBuffer buffer;
         String ret;

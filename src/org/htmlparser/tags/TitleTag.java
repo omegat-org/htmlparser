@@ -82,12 +82,17 @@ public class TitleTag extends CompositeTag
 
     /**
      * Get the title text.
+     * @return The title.
      */
     public String getTitle()
     {
         return toPlainTextString();
     }
 
+    /**
+     * Return a string representation of this tag for debugging.
+     * @return A string with the text of the title.
+     */
     public String toString()
     {
         return "TITLE: " + getTitle();

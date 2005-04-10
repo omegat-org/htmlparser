@@ -77,11 +77,12 @@ public class ScriptTag extends CompositeTag
     }
 
     /**
-     * Get the language attribute value.
+     * Get the <code>LANGUAGE</code> attribute, if any.
+     * @return The scripting language.
      */
     public String getLanguage()
     {
-        return (getAttribute("LANGUAGE"));
+        return (getAttribute ("LANGUAGE"));
     }
 
     /**
@@ -112,11 +113,12 @@ public class ScriptTag extends CompositeTag
     }
 
     /**
-     * Get the type attribute value.
+     * Get the <code>TYPE</code> attribute, if any.
+     * @return The script mime type.
      */
     public String getType()
     {
-        return (getAttribute("TYPE"));
+        return (getAttribute ("TYPE"));
     }
 
     /**
@@ -129,15 +131,19 @@ public class ScriptTag extends CompositeTag
     }
 
     /**
-     * Set the type of the script tag.
-     * @param type The new type value.
+     * Set the mime type of the script tag.
+     * @param type The new mime type.
      */
     public void setType (String type)
     {
         setAttribute ("TYPE", type);
     }
 
-    protected void putChildrenInto(StringBuffer sb)
+    /**
+     * Places the script contents into the provided buffer.
+     * @param sb The buffer to add the script to.
+     */
+    protected void putChildrenInto (StringBuffer sb)
     {
         Node node;
 
@@ -154,7 +160,8 @@ public class ScriptTag extends CompositeTag
     }
 
     /**
-     * Print the contents of the script tag.
+     * Print the contents of the script tag suitable for debugging display.
+     * @return The script language or type and code as a string.
      */
     public String toString()
     {

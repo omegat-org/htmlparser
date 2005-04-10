@@ -71,6 +71,10 @@ public class CssSelectorNodeFilter implements NodeFilter
 
     private NodeFilter therule;
 
+    /**
+     * Create a Cascading Style Sheet node filter.
+     * @param selector The selector expression.
+     */
     public CssSelectorNodeFilter(String selector)
     {
         m = tokens.matcher(selector);
@@ -78,9 +82,15 @@ public class CssSelectorNodeFilter implements NodeFilter
             therule = parse();
     }
 
-    public boolean accept(Node n)
+    /**
+     * Accept nodes that match the selector expression.
+     * @param node The node to check.
+     * @return <code>true</code> if the node matches,
+     * <code>false</code> otherwise.
+     */
+    public boolean accept(Node node)
     {
-        return therule.accept(n);
+        return therule.accept(node);
     }
 
     private Matcher m = null;
@@ -234,9 +244,9 @@ public class CssSelectorNodeFilter implements NodeFilter
                     val = unescape(token);
                 if ("~=".equals(rel) && val != null)
                     n = new AttribMatchFilter(unescape(attrib),
-                                                                        "\\b"
-                                                                        + val.replaceAll("([^a-zA-Z0-9])", "\\\\$1")
-                                                                        + "\\b");
+                        "\\b"
+                        + val.replaceAll("([^a-zA-Z0-9])", "\\\\$1")
+                        + "\\b");
                 else if ("=".equals(rel) && val != null)
                     n = new HasAttributeFilter(attrib, val);
             }
@@ -248,6 +258,12 @@ public class CssSelectorNodeFilter implements NodeFilter
         return n;
     }
 
+    /**
+     * Replace escape sequences in a string.
+     * @param escaped The string to examine.
+     * @return The argument with escape sequences replaced by their
+     * equivalent character.
+     */
     public static String unescape(String escaped)
     {
         StringBuffer result = new StringBuffer(escaped.length());
@@ -257,7 +273,7 @@ public class CssSelectorNodeFilter implements NodeFilter
         {
             if (m.group(1) != null)
                 m.appendReplacement(result,
-                                                        String.valueOf((char)Integer.parseInt(m.group(1), 16)));
+                    String.valueOf((char)Integer.parseInt(m.group(1), 16)));
             else if (m.group(2) != null)
                 m.appendReplacement(result, m.group(2));
         }

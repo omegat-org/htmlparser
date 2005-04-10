@@ -118,6 +118,8 @@ public class HasAttributeFilter implements NodeFilter
     /**
      * Accept tags with a certain attribute.
      * @param node The node to check.
+     * @return <code>true</code> if the node has the attribute
+     * (and value if that is being checked too), <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

@@ -85,6 +85,11 @@ public class LinkBean extends Object implements Serializable
     // internals
     //
 
+    /**
+     * Internal routine to extract all the links from the parser.
+     * @return A list of all links on the page as URLs.
+     * @exception ParserException If the parse fails.
+     */
     protected URL[] extractLinks () throws ParserException
     {
         NodeFilter filter;

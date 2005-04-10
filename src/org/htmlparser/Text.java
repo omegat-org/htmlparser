@@ -63,14 +63,6 @@ public interface Text
 //    {
 //    }
 //    
-//    public int elementBegin ()
-//    {
-//    }
-//    
-//    public int elementEnd ()
-//    {
-//    }
-//    
 //    public org.htmlparser.util.NodeList getChildren ()
 //    {
 //    }

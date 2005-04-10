@@ -36,16 +36,28 @@ import org.htmlparser.util.ParserException;
 
 /**
  * This interface defines the methods needed to create new nodes.
- * The factory is used when lexing to generate the nodes passed
- * back to the caller.
+ * <p>The factory is used when lexing to generate the nodes passed
+ * back to the caller. By implementing this interface, and setting
+ * that concrete object as the node factory for the
+ * {@link org.htmlparser.lexer.Lexer#setNodeFactory lexer} (perhaps via the
+ * {@link Parser#setNodeFactory parser}), the way that nodes are generated
+ * can be customized.</p>
+ * <p>In general, replacing the factory with a custom factory is not required
+ * because of the flexibility of the {@link PrototypicalNodeFactory}.</p>
+ * <p>Creation of Text and Remark nodes is straight forward, because essentially
+ * they are just sequences of characters extracted from the page. Creation of a
+ * Tag node requires that the attributes from the tag be remembered as well.
+ * @see PrototypicalNodeFactory
  */
 public interface NodeFactory
 {
     /**
-     * Create a new string node.
+     * Create a new text node.
      * @param page The page the node is on.
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
+     * @throws ParserException If there is a problem encountered in creating the node.
+     * @return A text node comprising the indicated characters from the page.
      */
     public Text createStringNode (Page page, int start, int end)
         throws
@@ -56,6 +68,8 @@ public interface NodeFactory
      * @param page The page the node is on.
      * @param start The beginning position of the remark.
      * @param end The ending positiong of the remark.
+     * @throws ParserException If there is a problem encountered in creating the node.
+     * @return A remark node comprising the indicated characters from the page.
      */
     public Remark createRemarkNode (Page page, int start, int end)
         throws
@@ -71,6 +85,8 @@ public interface NodeFactory
      * @param start The beginning position of the tag.
      * @param end The ending positiong of the tag.
      * @param attributes The attributes contained in this tag.
+     * @throws ParserException If there is a problem encountered in creating the node.
+     * @return A tag node comprising the indicated characters from the page.
      */
     public Tag createTagNode (Page page, int start, int end, Vector attributes)
         throws

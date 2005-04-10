@@ -132,18 +132,6 @@ public interface Node
     public abstract void collectInto (NodeList list, NodeFilter filter);
 
     /**
-     * Returns the beginning position of the tag.
-     * <br>deprecated Use {@link #getStartPosition}
-     */
-    public abstract int elementBegin ();
-
-    /**
-     * Returns the ending position fo the tag
-     * <br>deprecated Use {@link #getEndPosition}
-     */
-    public abstract int elementEnd ();
-
-    /**
      * Gets the starting position of the node.
      * This is the character (not byte) offset of this node in the page.
      * @return The start position.

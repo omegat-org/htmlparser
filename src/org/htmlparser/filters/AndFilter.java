@@ -94,6 +94,8 @@ public class AndFilter
     /**
      * Accept nodes that are acceptable to all of it's predicate filters.
      * @param node The node to check.
+     * @return <code>true</code> if all the predicate filters find the node
+     * is acceptable, <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

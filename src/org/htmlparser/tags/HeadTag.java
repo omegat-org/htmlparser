@@ -80,6 +80,10 @@ public class HeadTag extends CompositeTag
         return (mEndTagEnders);
     }
 
+    /**
+     * Returns a string representation of this <code>HEAD</code> tag suitable for debugging.
+     * @return A string representing this tag.
+     */
     public String toString()
     {
         return "HEAD: " + super.toString();

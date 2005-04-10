@@ -36,7 +36,10 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
- * AbstractNode, which implements the Node interface, is the base class for all types of nodes, including tags, string elements, etc
+ * The concrete base class for all types of nodes (tags, text remarks).
+ * This class provides basic functionality to hold the {@link Page}, the
+ * starting and ending position in the page, the parent and the list of
+ * {@link NodeList children}.
  */
 public abstract class AbstractNode implements Node, Serializable
 {
@@ -94,38 +97,46 @@ public abstract class AbstractNode implements Node, Serializable
     }
 
     /**
-     * Returns a string representation of the node. This is an important method, it allows a simple string transformation
-     * of a web page, regardless of a node.<br>
-     * Typical application code (for extracting only the text from a web page) would then be simplified to  :<br>
+     * Returns a string representation of the node.
+     * It allows a simple string transformation
+     * of a web page, regardless of node type.<br>
+     * Typical application code (for extracting only the text from a web page)
+     * would then be simplified to:<br>
      * <pre>
      * Node node;
-     * for (Enumeration e = parser.elements();e.hasMoreElements();) {
-     *    node = (Node)e.nextElement();
-     *    System.out.println(node.toPlainTextString()); // Or do whatever processing you wish with the plain text string
+     * for (Enumeration e = parser.elements (); e.hasMoreElements (); )
+     * {
+     *     node = (Node)e.nextElement();
+     *     System.out.println (node.toPlainTextString ());
+     *     // or do whatever processing you wish with the plain text string
      * }
      * </pre>
+     * @return The 'browser' content of this node.
      */
-    public abstract String toPlainTextString();
+    public abstract String toPlainTextString ();
 
     /**
-     * This method will make it easier when using html parser to reproduce html pages (with or without modifications)
-     * Applications reproducing html can use this method on nodes which are to be used or transferred as they were
-     * recieved, with the original html
+     * Return the HTML that generated this node.
+     * This method will make it easier when using html parser to reproduce html
+     * pages (with or without modifications).
+     * Applications reproducing html can use this method on nodes which are to
+     * be used or transferred as they were recieved, with the original html.
+     * @return The HTML code for this node.
      */
-    public abstract String toHtml();
+    public abstract String toHtml ();
 
     /**
-     * Return the string representation of the node.
+     * Return a string representation of the node.
      * Subclasses must define this method, and this is typically to be used in the manner<br>
      * <pre>System.out.println(node)</pre>
-     * @return java.lang.String
+     * @return A textual representation of the node suitable for debugging
      */
-    public abstract String toString();
+    public abstract String toString ();
 
     /**
      * Collect this node and its child nodes (if-applicable) into the collectionList parameter, provided the node
      * satisfies the filtering criteria.<P>
-     *
+     * 
      * This mechanism allows powerful filtering code to be written very easily,
      * without bothering about collection of embedded tags separately.
      * e.g. when we try to get all the links on a page, it is not possible to
@@ -133,7 +144,7 @@ public abstract class AbstractNode implements Node, Serializable
      * links embedded in them. We could get the links out by checking if the
      * current node is a {@link org.htmlparser.tags.CompositeTag}, and going through its children.
      * So this method provides a convenient way to do this.<P>
-     *
+     * 
      * Using collectInto(), programs get a lot shorter. Now, the code to
      * extract all links from a page would look like:
      * <pre>
@@ -144,7 +155,7 @@ public abstract class AbstractNode implements Node, Serializable
      * </pre>
      * Thus, collectionList will hold all the link nodes, irrespective of how
      * deep the links are embedded.<P>
-     *
+     * 
      * Another way to accomplish the same objective is:
      * <pre>
      * NodeList collectionList = new NodeList();
@@ -154,29 +165,13 @@ public abstract class AbstractNode implements Node, Serializable
      * </pre>
      * This is slightly less specific because the LinkTag class may be
      * registered for more than one node name, e.g. &lt;LINK&gt; tags too.
+     * @param list The node list to collect acceptable nodes into.
+     * @param filter The filter to determine which nodes are retained.
      */
     public void collectInto (NodeList list, NodeFilter filter)
     {
         if (filter.accept (this))
             list.add (this);
-    }
-
-    /**
-     * Returns the beginning position of the tag.
-     * @deprecated Use {@link #getStartPosition}.
-     */
-    public int elementBegin()
-    {
-        return (getStartPosition ());
-    }
-
-    /**
-     * Returns the ending position fo the tag
-     * @deprecated Use {@link #getEndPosition}.
-     */
-    public int elementEnd()
-    {
-        return (getEndPosition ());
     }
 
     /**
@@ -233,14 +228,11 @@ public abstract class AbstractNode implements Node, Serializable
         nodeEnd = position;
     }
 
-    public abstract void accept (NodeVisitor visitor);
-
     /**
-     * @deprecated - use toHtml() instead
+     * Visit this node.
+     * @param visitor The visitor that is visiting this node.
      */
-    public final String toHTML() {
-        return toHtml();
-    }
+    public abstract void accept (NodeVisitor visitor);
 
     /**
      * Get the parent of this node.
@@ -282,9 +274,11 @@ public abstract class AbstractNode implements Node, Serializable
     }
 
     /**
-     * Returns the text of the string line
+     * Returns the text of the node.
+     * @return The text of this node. The default is <code>null</code>.
      */
-    public String getText() {
+    public String getText ()
+    {
         return null;
     }
 
@@ -292,15 +286,19 @@ public abstract class AbstractNode implements Node, Serializable
      * Sets the string contents of the node.
      * @param text The new text for the node.
      */
-    public void setText(String text) {
-
+    public void setText(String text)
+    {
     }
 
     /**
      * Perform the meaning of this tag.
      * The default action is to do nothing.
+     * @exception ParserException <em>Not used.</em> Provides for subclasses
+     * that may want to indicate an exceptional condition.
      */
-    public void doSemanticAction () throws ParserException
+    public void doSemanticAction ()
+        throws
+            ParserException
     {
     }
 }

@@ -57,7 +57,8 @@ public class DoctypeTag
     }
 
     /**
-     * Print the contents of the document declaration tag.
+     * Return a string representation of the contents of this <code>!DOCTYPE</code> tag suitable for debugging.
+     * @return The contents of the document declaration tag as a string.
      */
     public String toString()
     {

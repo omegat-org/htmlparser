@@ -33,6 +33,9 @@ import org.htmlparser.util.NodeList;
 
 /**
  * This class accepts all tags that have a child acceptable to the filter.
+ * It can be set to operate recursively, that is perform a scan down
+ * through the node heirarchy in a breadth first traversal looking for any
+ * descendant that matches the predicate filter (which stops the search). 
  */
 public class HasChildFilter
 	implements
@@ -122,6 +125,8 @@ public class HasChildFilter
     /**
      * Accept tags with children acceptable to the filter.
      * @param node The node to check.
+     * @return <code>true</code> if the node has an acceptable child,
+     * <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

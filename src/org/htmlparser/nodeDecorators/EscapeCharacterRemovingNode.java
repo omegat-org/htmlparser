@@ -29,6 +29,13 @@ package org.htmlparser.nodeDecorators;
 import org.htmlparser.Text;
 import org.htmlparser.util.ParserUtils;
 
+/**
+ * @deprecated Use direct subclasses or dynamic proxies instead.
+ * <p>Use either direct subclasses of the appropriate node and set them on the
+ * {@link org.htmlparser.PrototypicalNodeFactory PrototypicalNodeFactory},
+ * or use a dynamic proxy implementing the required node type interface.</p>
+ * @see AbstractNodeDecorator
+ */
 public class EscapeCharacterRemovingNode extends AbstractNodeDecorator {
     public EscapeCharacterRemovingNode(Text newDelegate) {
         super(newDelegate);

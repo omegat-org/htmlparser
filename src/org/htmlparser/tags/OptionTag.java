@@ -81,29 +81,37 @@ public class OptionTag extends CompositeTag
     }
 
     /**
-     * Get the value of the value attribute.
+     * Get the <code>VALUE</code> attribute, if any.
+     * @return The value of the <code>VALUE</code> attribute,
+     * or <code>null</code> if the attribute doesn't exist.
      */
-    public String getValue()
+    public String getValue ()
     {
-        return (getAttribute("VALUE"));
+        return (getAttribute ("VALUE"));
     }
 
     /**
      * Set the value of the value attribute.
+     * @param value The new value of the <code>VALUE</code> attribute.
      */
-    public void setValue(String value)
+    public void setValue (String value)
     {
         this.setAttribute("VALUE",value);
     }
 
     /**
-     * Get the text of this optin.
+     * Get the text of this option.
+     * @return The textual contents of this <code>OPTION</code> tag.
      */
     public String getOptionText()
     {
         return toPlainTextString();
     }
 
+    /**
+     * Return a string representation of this node suitable for debugging.
+     * @return The value and text of this tag in a string.
+     */
     public String toString()
     {
         String output = "OPTION VALUE: " + getValue() + " TEXT: " + getOptionText()+"\n";

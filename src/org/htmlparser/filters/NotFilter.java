@@ -84,6 +84,8 @@ public class NotFilter implements NodeFilter
     /**
      * Accept nodes that are not acceptable to the predicate filter.
      * @param node The node to check.
+     * @return <code>true</code> if the node is not acceptable to the
+     * predicate filter, <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

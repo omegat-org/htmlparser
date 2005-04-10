@@ -75,24 +75,26 @@ manager.setPassword ("holy$cow");
 ConnectionMonitor monitor = new ConnectionMonitor ()
     {
         public void preConnect (HttpURLConnection connection)
- 	    {
+ 	{
             System.out.println (ConnectionManager.getRequestHeader (connection));
-	    }
-	    public void postConnect (HttpURLConnection connection)
-	    {
+	}
+	public void postConnect (HttpURLConnection connection)
+	{
             System.out.println (ConnectionManager.getResponseHeader (connection));
-	    }
-    }
+	}
+    };
 manager.setMonitor (monitor);
 // perform the connection
 Parser parser = new Parser ("http://frehmeat.net");
 </pre>
-The ConnectionManager used by the Parser class is actually held by the Page class.
-It is accessible from either the Parser or the Page class via
-<code>getConnectionManager()</code>. It is a static (singleton) instance
-so that subsequent connections made by the parser will use the contents of the
-cookie jar from previous connections. By default, cookie processing is not
-enabled. It can be enabled by either setting a cookie or using 
-<code>setCookieProcessingEnabled().</code>.
+The ConnectionManager used by the Parser class is actually held by the 
+{@link org.htmlparser.lexer.Page#mConnectionManager Page} class.
+It is accessible from the Parser (or the Page class) via
+{@link org.htmlparser.Parser#getConnectionManager getConnectionManager()}.
+It is a static (singleton) instance so that subsequent connections made by the
+parser will use the contents of the cookie jar from previous connections.
+By default, cookie processing is not enabled. It can be enabled by either
+setting a cookie or using
+{@link org.htmlparser.http.ConnectionManager#setCookieProcessingEnabled setCookieProcessingEnabled()}.
 </body>
 </html>

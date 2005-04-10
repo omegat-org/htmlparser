@@ -29,16 +29,32 @@
 -->
 </head>
 <body bgcolor="white">
-The tags package contains tag types that are created mostly by the scanners.
-Developers should familiarize themselves with this package as well. Custom scanners would need to create custom tags (Factory + Template Method).
-
-<h2>Related Documentation</h2>
-
-For overviews, tutorials, examples, guides, and tool documentation, please see:
-<ul>
-  <li><a href="http://htmlparser.sourceforge.net">HTML Parser Home Page</a>
-</ul>
-
+The tags package contains specific tags.
+<p>This package has implementations of tags that have functionality beyond the
+capability of a generic tag. For example, the {@.html <META>} tag has methods
+to get the {@link org.htmlparser.tags.MetaTag#getMetaContent CONTENT} and
+{@link org.htmlparser.tags.MetaTag#getMetaTagName NAME}
+attributes (although this could be done with generic attribute manipulation)
+and an implementation of
+{@link org.htmlparser.tags.MetaTag#doSemanticAction doSemanticAction}
+that alters the lexer's encoding.</p>
+<p>The classes in this package have been added in an ad-hoc fashion, with the
+most useful ones having existed a long time, while some obvious ones are rather
+new. Please feel free to add your own, and register them with the
+{@link org.htmlparser.PrototypicalNodeFactory PrototypicalNodeFactory},
+and they will be treated like any other in-built tag. In fact tags do not need
+to reside in this package.</p>
+<p>If the tag can contain other nodes, i.e. {@.html <h1>My Heading</h1>}, then
+it should derive from (i.e. be a subclass of) {@link org.htmlparser.tags.CompositeTag}.
+In this way it will inherit the
+{@link org.htmlparser.scanners.CompositeTagScanner CompositeTagScanner}
+and nodes between the start and end tag will be gathered into the list of
+children. Most of the tags in this package derive from CompositeTag, and that
+why the nodes returned from the Parser are nested.</p>
+<p>If it is a simple tag, i.e. {@.html <br>}, then it should derive from
+{@link org.htmlparser.nodes.TagNode TagNode}. See for example
+{@link org.htmlparser.tags.MetaTag}
+or {@link org.htmlparser.tags.ImageTag}.</p>
 <!-- Put @see and @since tags down here. -->
 
 </body>

@@ -117,7 +117,9 @@ public class LinkTag extends CompositeTag
     }
 
     /**
-     * Returns the accesskey attribute value, if any.
+     * Get the <code>ACCESSKEY</code> attribute, if any.
+     * @return The value of the <code>ACCESSKEY</code> attribute,
+     * or <code>null</code> if the attribute doesn't exist.
      */
     public String getAccessKey()
     {
@@ -129,6 +131,7 @@ public class LinkTag extends CompositeTag
      * This string has had the "mailto:" and "javascript:" protocol stripped
      * off the front (if those predicates return <code>true</code>) but not
      * for other protocols. Don't ask me why, it's a legacy thing.
+     * @return The URL for this <code>A</code> tag.
      */
     public String getLink()
     {
@@ -157,7 +160,8 @@ public class LinkTag extends CompositeTag
     }
 
     /**
-     * Returns the text contained inside this link tag
+     * Returns the text contained inside this link tag.
+     * @return The textual contents between the {@.html <A></A>} pair.
      */
     public String getLinkText()
     {
@@ -258,7 +262,8 @@ public class LinkTag extends CompositeTag
     }
 
     /**
-     * Print the contents of this Link Node
+     * Return the contents of this link node as a string suitable for debugging.
+     * @return A string representation of this node.
      */
     public String toString()
     {
@@ -286,6 +291,10 @@ public class LinkTag extends CompositeTag
         return sb.toString();
     }
 
+    /**
+     * Set the <code>HREF</code> attribute.
+     * @param link The new value of the <code>HREF</code> attribute.
+     */
     public void setLink(String link)
     {
         mLink = link;

@@ -2379,6 +2379,7 @@ public class FilterBuilder
     /**
      * The entry point for this application.
      * Creates a new FilterBuilder and makes it visible.
+     * @param args [0] optional URL to operate on.
      */
     public static void main (String args[])
     {
@@ -2395,6 +2396,8 @@ public class FilterBuilder
 
             // create a new instance of our application's frame, and make it visible
             FilterBuilder builder = new FilterBuilder ();
+            if (0 != args.length)
+                builder.mURLField.setText (args[0]);
             builder.setVisible (true);
         } 
         catch (Throwable t)

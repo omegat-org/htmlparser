@@ -60,8 +60,8 @@ public class BaseHrefTag
     }
 
     /**
-     * Get the value of the HREF attribute, if any.
-     * @return The HREF value, with the last slash removed, if any.
+     * Get the value of the <code>HREF</code> attribute, if any.
+     * @return The <code>HREF</code> value, with the leading and trailing whitespace removed, if any.
      */
     public String getBaseUrl()
     {
@@ -75,6 +75,10 @@ public class BaseHrefTag
         return (base);
     }
 
+    /**
+     * Set the value of the <code>HREF</code> attribute.
+     * @param base The new <code>HREF</code> value.
+     */
     public void setBaseUrl (String base)
     {
         setAttribute ("HREF", base);
@@ -83,6 +87,7 @@ public class BaseHrefTag
     /**
      * Perform the meaning of this tag.
      * This sets the base URL to use for the rest of the page.
+     * @exception ParserException If setting the base URL fails.
      */
     public void doSemanticAction () throws ParserException
     {
@@ -90,8 +95,6 @@ public class BaseHrefTag
         
         page = getPage ();
         if (null != page)
-        {
             page.setBaseUrl (getBaseUrl ());
-        }
     }
 }

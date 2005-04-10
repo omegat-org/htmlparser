@@ -116,6 +116,9 @@ public class TableTag extends CompositeTag
 
     /**
      * Get the number of rows in this table.
+     * @return The number of rows in this table.
+     * <em>Note: this is a a simple count of the number of {@.html <TR>} tags and
+     * may be incorrect if the {@.html <TR>} tags span multiple rows.</em>
      */
     public int getRowCount ()
     {
@@ -124,21 +127,27 @@ public class TableTag extends CompositeTag
 
     /**
      * Get the row at the given index.
+     * @param index The row number (zero based) to get. 
+     * @return The row for the given index.
      */
-    public TableRow getRow (int i)
+    public TableRow getRow (int index)
     {
         TableRow[] rows;
         TableRow ret;
 
         rows = getRows ();
-        if (i < rows.length)
-            ret = rows[i];
+        if (index < rows.length)
+            ret = rows[index];
         else
             ret = null;
         
         return (ret);
     }
 
+    /**
+     * Return a string suitable for debugging display.
+     * @return The table as HTML, sorry.
+     */
     public String toString()
     {
         return

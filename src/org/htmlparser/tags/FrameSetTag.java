@@ -73,7 +73,8 @@ public class FrameSetTag extends CompositeTag
     }
 
     /**
-     * Print the contents of the FrameSetTag
+     * Return a string representation of the contents of this <code>FRAMESET</code> tag suitable for debugging.
+     * @return A string with this tag's contents.
      */
     public String toString()
     {

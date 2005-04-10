@@ -318,12 +318,10 @@ public class TagNode
         return (ret);
     }
 
-    /*
-     * Sets the attributes.
-     * @param attribs The attribute collection to set.
-     * Each element is an {@link Attribute Attribute}.
-     * The first attribute in the list must be the tag name (
-     * <code>isStandalone()</code> returns <code>true</code>).
+    /**
+     * Set an attribute.
+     * @param attribute The attribute to set.
+     * @see #setAttribute(Attribute)
      */
     public void setAttributeEx (Attribute attribute)
     {
@@ -370,16 +368,6 @@ public class TagNode
                 attributes.addElement (new Attribute (" "));
             attributes.addElement (attribute);
         }
-    }
-
-    /**
-     * Eqivalent to <code>getAttribute (name)</code>.
-     * @param name Name of attribute.
-     * @deprecated use getAttribute instead
-     */
-    public String getParameter (String name)
-    {
-        return (getAttribute (name));
     }
 
     /**
@@ -532,7 +520,6 @@ public class TagNode
     {
         String ret;
         
-        //ret = mPage.getText (elementBegin () + 1, elementEnd () - 1);
         ret = toHtml ();
         ret = ret.substring (1, ret.length () - 1);
         
@@ -765,6 +752,7 @@ public class TagNode
      * Default tag visiting code.
      * Based on <code>isEndTag()</code>, calls either <code>visitTag()</code> or
      * <code>visitEndTag()</code>.
+     * @param visitor The visitor that is visiting this node.
      */
     public void accept (NodeVisitor visitor)
     {

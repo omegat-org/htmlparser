@@ -46,7 +46,7 @@ import java.util.Date;
  * <P>
  * Cookies are assigned by servers, using fields added to HTTP response headers.
  * Cookies are passed back to those servers using fields added to HTTP request
- * headers.Several cookies with the same name can be returned;
+ * headers. Several cookies with the same name can be returned;
  * they have different path attributes, but those attributes
  * will not be visible when using "old format" cookies.
  * <P>
@@ -115,15 +115,15 @@ public class Cookie
      * with a "$" character are reserved by RFC 2109.
      * The path for the cookie is set to the root ("/") and there is no
      * expiry time set.
-     * @param name
-     *            name of the cookie
-     * @param value
-     *            value of the cookie
-     * @throws IllegalArgumentException
+     * @param name  The name of the cookie.
+     * @param value The value of the cookie.
+     * @exception IllegalArgumentException
      *             if the cookie name is not an HTTP/1.1 "token", or if it is
      *             one of the tokens reserved for use by the cookie protocol
      */
     public Cookie (String name, String value)
+        throws
+            IllegalArgumentException
     {
         if (!isToken (name) || name.equalsIgnoreCase ("Comment") // rfc2019
                 || name.equalsIgnoreCase ("Discard") // 2019++
@@ -148,7 +148,7 @@ public class Cookie
      * If a user agent (web browser) presents this cookie to a user, the
      * cookie's purpose will be described using this comment. This is not
      * supported by version zero cookies.
-     * 
+     * @param purpose The cookie comment.
      * @see #getComment
      */
     public void setComment (String purpose)
@@ -159,8 +159,8 @@ public class Cookie
     /**
      * Returns the comment describing the purpose of this cookie, or null if no
      * such comment has been defined.
-     * 
      * @see #setComment
+     * @return The cookie comment, or <code>null</code> if none.
      */
     public String getComment ()
     {
@@ -174,8 +174,9 @@ public class Cookie
      * that DNS zone ("www.foo.com", but not "a.b.foo.com") should see the
      * cookie. By default, cookies are only returned to the host which saved
      * them.
-     * 
      * @see #getDomain
+     * @param pattern The domain name pattern. The pattern is converted to
+     * lower case to accommodate less capable browsers.
      */
     public void setDomain (String pattern)
     {
@@ -184,7 +185,7 @@ public class Cookie
 
     /**
      * Returns the domain of this cookie.
-     * 
+     * @return The cookie domain (the base URL name it applies to).
      * @see #setDomain
      */
     public String getDomain ()
@@ -197,7 +198,8 @@ public class Cookie
      * date specified. A null value indicates the default behaviour:
      * the cookie is not stored persistently, and will be deleted when the user
      * agent (web browser) exits.
-     * 
+     * @param expiry The expiry date for this cookie, or <code>null</code> if
+     * the cookie is persistent.
      * @see #getExpiryDate
      */
     public void setExpiryDate (Date expiry)
@@ -209,7 +211,7 @@ public class Cookie
      * Returns the expiry date of the cookie. If none was specified,
      * null is returned, indicating the default behaviour described
      * with <em>setExpiryDate</em>.
-     * 
+     * @return The cookie expiry date, or <code>null</code> if it is persistent.
      * @see #setExpiryDate
      */
     public Date getExpiryDate ()
@@ -223,7 +225,7 @@ public class Cookie
      * Basically, URLs in the same "directory" as the one which set the cookie,
      * and in subdirectories, can all see the cookie unless a different path is
      * set.
-     * 
+     * @param uri The exclusion prefix for the cookie.
      * @see #getPath
      */
     public void setPath (String uri)
@@ -233,7 +235,7 @@ public class Cookie
 
     /**
      * Returns the prefix of all URLs for which this cookie is targetted.
-     * 
+     * @return The cookie path (or "/" if no specific path is specified).
      * @see #setPath
      */
     public String getPath ()
@@ -245,8 +247,9 @@ public class Cookie
      * Indicates to the user agent that the cookie should only be sent using a
      * secure protocol (https). This should only be set when the cookie's
      * originating server used a secure protocol to set the cookie's value.
-     * 
      * @see #getSecure
+     * @param flag Use <code>true</code> if the cookie is to be sent using
+     * secure protocols, <code>false</code> otherwise.
      */
     public void setSecure (boolean flag)
     {
@@ -255,7 +258,8 @@ public class Cookie
 
     /**
      * Returns the value of the 'secure' flag.
-     * 
+     * @return The <code>true</code> if this cookie should only be sent using
+     * a secure protocol, <code>false</code> otherwise.
      * @see #setSecure
      */
     public boolean getSecure ()
@@ -266,6 +270,7 @@ public class Cookie
     /**
      * Returns the name of the cookie. This name may not be changed after the
      * cookie is created.
+     * @return The name of the cookie.
      */
     public String getName ()
     {
@@ -275,14 +280,12 @@ public class Cookie
     /**
      * Sets the value of the cookie. BASE64 encoding is suggested for use with
      * binary values.
-     * 
-     * <P>
-     * With version zero cookies, you need to be careful about the kinds of
+     * <p>With version zero cookies, you need to be careful about the kinds of
      * values you use. Values with various special characters (whitespace,
      * brackets and parentheses, the equals sign, comma, double quote, slashes,
      * question marks, the "at" sign, colon, and semicolon) should be avoided.
-     * Empty values may not behave the same way on all browsers.
-     * 
+     * Empty values may not behave the same way on all browsers.</p>
+     * @param newValue The new value for the cookie.
      * @see #getValue
      */
     public void setValue (String newValue)
@@ -292,7 +295,7 @@ public class Cookie
 
     /**
      * Returns the value of the cookie.
-     * 
+     * @return The cookie value.
      * @see #setValue
      */
     public String getValue ()
@@ -306,8 +309,8 @@ public class Cookie
      * constructed cookies use version 0 by default, to maximize
      * interoperability. Cookies provided by a user agent will identify the
      * cookie version used by the browser.
-     * 
      * @see #setVersion
+     * @return The cookie version.
      */
     public int getVersion ()
     {
@@ -318,7 +321,7 @@ public class Cookie
      * Sets the version of the cookie protocol used when this cookie saves
      * itself. Since the IETF standards are still being finalized, consider
      * version 1 as experimental; do not use it (yet) on production sites.
-     * 
+     * @param version The version of the cookie, either 0 or 1.
      * @see #getVersion
      */
     public void setVersion (int version)
@@ -328,6 +331,10 @@ public class Cookie
 
     /*
      * Return true iff the string counts as an HTTP/1.1 "token".
+     * Valid tokens cannot have characters outside the ASCII range 0x20-0x7e,
+     * and cannot contain any of these characters: "()<>@,;:\\\"/[]?={} \t".
+     * @return The <code>true</code> if the provided string is a valid
+     * token, <code>false</code> otherwise.
      */
     private boolean isToken (String value)
     {
@@ -350,6 +357,7 @@ public class Cookie
 
     /**
      * Returns a copy of this object.
+     * @return The clone of this cookie.
      */
     public Object clone ()
     {

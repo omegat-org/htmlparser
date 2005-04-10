@@ -80,6 +80,10 @@ public class TextareaTag extends CompositeTag
         return (mEndTagEnders);
     }
 
+    /**
+     * Return the plain text contents from this text area.
+     * @return The text of the children of this <code>TEXTAREA</code> tag.
+     */
     public String getValue() {
         return toPlainTextString();
     }

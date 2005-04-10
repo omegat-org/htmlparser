@@ -92,6 +92,8 @@ public class OrFilter implements NodeFilter
     /**
      * Accept nodes that are acceptable to any of it's predicate filters.
      * @param node The node to check.
+     * @return <code>true</code> if any of the predicate filters find the node
+     * is acceptable, <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

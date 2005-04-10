@@ -127,6 +127,8 @@ public class HasParentFilter
      * Recursion only proceeds while no parent satisfies the
      * filter.
      * @param node The node to check.
+     * @return <code>true</code> if the node has an acceptable parent,
+     * <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

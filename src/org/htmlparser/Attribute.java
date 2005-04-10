@@ -162,13 +162,14 @@ import java.io.Serializable;
  * of (legal) attribute value pairs, separated by spaces, may appear in an
  * element's start tag. They may appear in any order.<p>
  * In this example, the id attribute is set for an H1 element:
+ * <pre>
  * <code>
- * &lt;H1 id="section1"&gt;
+ * {@.html
+ *  <H1 id="section1">
+ *  This is an identified heading thanks to the id attribute
+ *  </H1>}
  * </code>
- * This is an identified heading thanks to the id attribute
- * <code>
- * &lt;/H1&gt;
- * </code>
+ * </pre>
  * By default, SGML requires that all attribute values be delimited using
  * either double quotation marks (ASCII decimal 34) or single quotation
  * marks (ASCII decimal 39). Single quote marks can be included within the
@@ -185,7 +186,8 @@ import java.io.Serializable;
  * Attribute names are always case-insensitive.<p>
  * Attribute values are generally case-insensitive. The definition of each
  * attribute in the reference manual indicates whether its value is case-insensitive.<p>
- * All the attributes defined by this specification are listed in the attribute index.<p>
+ * All the attributes defined by this specification are listed in the
+ * <a href="http://www.w3.org/TR/html4/index/attributes.html">attribute index</a>.<p>
  * </cite>
  * <p>
  */

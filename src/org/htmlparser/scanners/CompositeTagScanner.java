@@ -232,7 +232,10 @@ public class CompositeTagScanner extends TagScanner
                         }
                     }
                     else
+                    {
                         addChild (ret, node);
+                        node.doSemanticAction ();
+                    }
                 }
 
                 if (!mUseJVMStack)

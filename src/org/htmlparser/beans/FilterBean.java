@@ -39,10 +39,14 @@ import org.htmlparser.util.EncodingChangeException;
 
 /**
  * Extract nodes from a URL using a filter.
+ * <pre>
+ * <code>
  *     FilterBean fb = new FilterBean ("http://cbc.ca");
  *     fb.setFilters (new NodeFilter[] { new TagNameFilter ("META") });
  *     fb.setURL ("http://cbc.ca");
  *     System.out.println (fb.getNodes ().toHtml ());
+ * </code>
+ * </pre>
  */
 public class FilterBean
 	implements

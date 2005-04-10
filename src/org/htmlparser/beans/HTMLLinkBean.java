@@ -72,6 +72,7 @@ public class HTMLLinkBean extends JList implements Serializable, PropertyChangeL
 
     /**
      * Return the minimum dimension for this visible bean.
+     * @return a minimum bounding box for this bean.
      */
     public Dimension getMinimumSize ()
     {

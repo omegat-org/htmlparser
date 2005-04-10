@@ -76,11 +76,20 @@ public class BodyTag extends CompositeTag
         return (mEndTagEnders);
     }
 
+    /**
+     * Returns the textual contents of this <code>BODY</code> tag.
+     * Equivalent to <code>toPlainTextString()</code>.
+     * @return The 'browser' text in this tag.
+     */
     public String getBody()
     {
         return toPlainTextString();
     }
 
+    /**
+     * Return a string representation of this <code>BODY</code> tag suitable for debugging.
+     * @return A string representing this <code>BODY</code> tag.
+     */
     public String toString()
     {
         return "BODY: "+getBody();

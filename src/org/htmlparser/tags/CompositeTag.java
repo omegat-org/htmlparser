@@ -58,6 +58,9 @@ public class CompositeTag extends TagNode
      */
     protected final static CompositeTagScanner mDefaultCompositeScanner = new CompositeTagScanner ();
 
+    /**
+     * Create a composite tag.
+     */
     public CompositeTag ()
     {
         setThisScanner (mDefaultCompositeScanner);
@@ -124,6 +127,10 @@ public class CompositeTag extends TagNode
             getChildren ().elements ());
     }
 
+    /**
+     * Return the textual contents of this tag and it's children.
+     * @return The 'browser' text contents of this tag.
+     */
     public String toPlainTextString() {
         StringBuffer stringRepresentation = new StringBuffer();
         for (SimpleNodeIterator e=children();e.hasMoreNodes();) {
@@ -132,6 +139,10 @@ public class CompositeTag extends TagNode
         return stringRepresentation.toString();
     }
 
+    /**
+     * Add the textual contents of the children of this node to the buffer.
+     * @param sb The buffer to append to.
+     */
     protected void putChildrenInto(StringBuffer sb)
     {
         Node node;
@@ -144,6 +155,10 @@ public class CompositeTag extends TagNode
         }
     }
 
+    /**
+     * Add the textual contents of the end tag of this node to the buffer.
+     * @param sb The buffer to append to.
+     */
     protected void putEndTagInto(StringBuffer sb)
     {
         // eliminate virtual tags
@@ -151,13 +166,18 @@ public class CompositeTag extends TagNode
             sb.append(getEndTag ().toHtml());
     }
 
+    /**
+     * Return this tag as HTML code.
+     * @return This tag and it's contents (children) and the end tag
+     * as HTML code.
+     */
     public String toHtml() {
         StringBuffer sb = new StringBuffer();
         sb.append (super.toHtml ());
         if (!isEmptyXmlTag())
         {
             putChildrenInto(sb);
-            if (null != getEndTag ()) // this test if for link tags that refuse to scan because there's no HREF attribute
+            if (null != getEndTag ())
                 putEndTagInto(sb);
         }
         return sb.toString();
@@ -289,6 +309,7 @@ public class CompositeTag extends TagNode
      * @param text The text to search for.
      * @return int The node index in the children list of the node containing
      * the text or -1 if not found.
+     * @see #findPositionOf (String, Locale)
      */
     public int findPositionOf (String text)
     {
@@ -300,9 +321,10 @@ public class CompositeTag extends TagNode
      * This can be useful to index into the composite tag and get other children.
      * Text is compared without case sensitivity and conversion to uppercase
      * uses the supplied locale.
-     * @param text The text to search for.
      * @return int The node index in the children list of the node containing
      * the text or -1 if not found.
+     * @param locale The locale to use in converting to uppercase.
+     * @param text The text to search for.
      */
     public int findPositionOf (String text, Locale locale)
     {
@@ -357,37 +379,37 @@ public class CompositeTag extends TagNode
     }
 
     /**
-     * Collect this node and its child nodes (if-applicable) into the collectionList parameter, provided the node
-     * satisfies the filtering criteria.<P>
-     *
-     * This mechanism allows powerful filtering code to be written very easily,
+     * Collect this node and its child nodes (if-applicable) into the list parameter,
+     * provided the node satisfies the filtering criteria.
+     * <p>This mechanism allows powerful filtering code to be written very easily,
      * without bothering about collection of embedded tags separately.
      * e.g. when we try to get all the links on a page, it is not possible to
      * get it at the top-level, as many tags (like form tags), can contain
      * links embedded in them. We could get the links out by checking if the
      * current node is a {@link CompositeTag}, and going through its children.
-     * So this method provides a convenient way to do this.<P>
-     *
-     * Using collectInto(), programs get a lot shorter. Now, the code to
+     * So this method provides a convenient way to do this.</p>
+     * <p>Using collectInto(), programs get a lot shorter. Now, the code to
      * extract all links from a page would look like:
      * <pre>
-     * NodeList collectionList = new NodeList();
+     * NodeList list = new NodeList();
      * NodeFilter filter = new TagNameFilter ("A");
      * for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
-     *      e.nextNode().collectInto(collectionList, filter);
+     *      e.nextNode().collectInto(list, filter);
      * </pre>
-     * Thus, collectionList will hold all the link nodes, irrespective of how
-     * deep the links are embedded.<P>
-     *
-     * Another way to accomplish the same objective is:
+     * Thus, <code>list</code> will hold all the link nodes, irrespective of how
+     * deep the links are embedded.</p>
+     * <p>Another way to accomplish the same objective is:
      * <pre>
-     * NodeList collectionList = new NodeList();
+     * NodeList list = new NodeList();
      * NodeFilter filter = new TagClassFilter (LinkTag.class);
      * for (NodeIterator e = parser.elements(); e.hasMoreNodes();)
-     *      e.nextNode().collectInto(collectionList, filter);
+     *      e.nextNode().collectInto(list, filter);
      * </pre>
      * This is slightly less specific because the LinkTag class may be
-     * registered for more than one node name, e.g. &lt;LINK&gt; tags too.
+     * registered for more than one node name, e.g. &lt;LINK&gt; tags too.</p>
+     * @param list The list to add nodes to.
+     * @param filter The filter to apply.
+     * @see org.htmlparser.filters
      */
     public void collectInto (NodeList list, NodeFilter filter)
     {
@@ -398,6 +420,10 @@ public class CompositeTag extends TagNode
             getEndTag ().collectInto (list, filter);
     }
 
+    /**
+     * Return the HTML code for the children of this tag.
+     * @return A string with the HTML code for the contents of this tag.
+     */
     public String getChildrenHTML() {
         StringBuffer buff = new StringBuffer();
         for (SimpleNodeIterator e = children();e.hasMoreNodes();) {
@@ -440,6 +466,10 @@ public class CompositeTag extends TagNode
         }
     }
 
+    /**
+     * Return the number of child nodes in this tag.
+     * @return The child node count.
+     */
     public int getChildCount()
     {
         NodeList children;
@@ -449,21 +479,36 @@ public class CompositeTag extends TagNode
         return ((null == children) ? 0 : children.size ());
     }
 
+    /**
+     * Get the end tag for this tag.
+     * For example, if the node is {@.html <LABEL>The label</LABLE>}, then
+     * this method would return the {@.html </LABLE>} end tag.
+     * @return The end tag for this node.
+     * <em>Note: If the start and end position of the end tag is the same,
+     * then the end tag was injected (it's a virtual end tag).</em>
+     */
     public Tag getEndTag()
     {
         return (mEndTag);
     }
 
-    public void setEndTag (Tag end)
+    /**
+     * Set the end tag for this tag.
+     * @param tag The new end tag for this tag.
+     * Note: no checking is perfromed so you can generate bad HTML by setting
+     * the end tag with a name not equal to the name of the start tag,
+     * i.e. {@.html <LABEL>The label</TITLE>}
+     */
+    public void setEndTag (Tag tag)
     {
-        mEndTag = end;
+        mEndTag = tag;
     }
 
     /**
      * Finds a text node, however embedded it might be, and returns
      * it. The text node will retain links to its parents, so
      * further navigation is possible.
-     * @param searchText
+     * @param searchText The text to search for.
      * @return The list of text nodes (recursively) found.
      */
     public Text[] digupStringNode(String searchText) {
@@ -489,6 +534,10 @@ public class CompositeTag extends TagNode
         return stringNode;
     }
 
+    /**
+     * Return a string representation of the contents of this tag, it's children and it's end tag suitable for debugging.
+     * @return A textual representation of the tag.
+     */
     public String toString ()
     {
         StringBuffer ret;
@@ -527,6 +576,11 @@ public class CompositeTag extends TagNode
         return (ret);
     }
 
+    /**
+     * Return a string representation of the contents of this tag, it's children and it's end tag suitable for debugging.
+     * @param level The indentation level to use.
+     * @param buffer The buffer to append to.
+     */
     public void toString (int level, StringBuffer buffer)
     {
         Node node;

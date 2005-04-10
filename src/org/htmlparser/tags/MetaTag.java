@@ -59,22 +59,41 @@ public class MetaTag
         return (mIds);
     }
 
+    /**
+     * Get the <code>HTTP-EQUIV</code> attribute, if any.
+     * @return The value of the <code>HTTP-EQUIV</code> attribute,
+     * or <code>null</code> if the attribute doesn't exist.
+     */
     public String getHttpEquiv ()
     {
         return (getAttribute ("HTTP-EQUIV"));
     }
 
+    /**
+     * Get the <code>CONTENT</code> attribute, if any.
+     * @return The value of the <code>CONTENT</code> attribute,
+     * or <code>null</code> if the attribute doesn't exist.
+     */
     public String getMetaContent ()
     {
         return (getAttribute ("CONTENT"));
     }
 
+    /**
+     * Get the <code>NAME</code> attribute, if any.
+     * @return The value of the <code>NAME</code> attribute,
+     * or <code>null</code> if the attribute doesn't exist.
+     */
     public String getMetaTagName ()
     {
         return (getAttribute ("NAME"));
     }
 
-    public void setHttpEquiv(String httpEquiv)
+    /**
+     * Set the <code>HTTP-EQUIV</code> attribute.
+     * @param httpEquiv The new value of the <code>HTTP-EQUIV</code> attribute.
+     */
+    public void setHttpEquiv (String httpEquiv)
     {
         Attribute equiv;
         equiv = getAttributeEx ("HTTP-EQUIV");
@@ -84,7 +103,11 @@ public class MetaTag
             getAttributesEx ().add (new Attribute ("HTTP-EQUIV", httpEquiv));
     }
 
-    public void setMetaTagContents(String metaTagContents)
+    /**
+     * Set the <code>CONTENT</code> attribute.
+     * @param metaTagContents The new value of the <code>CONTENT</code> attribute.
+     */
+    public void setMetaTagContents (String metaTagContents)
     {
         Attribute content;
         content = getAttributeEx ("CONTENT");
@@ -94,7 +117,11 @@ public class MetaTag
             getAttributesEx ().add (new Attribute ("CONTENT", metaTagContents));
     }
 
-    public void setMetaTagName(String metaTagName)
+    /**
+     * Set the <code>NAME</code> attribute.
+     * @param metaTagName The new value of the <code>NAME</code> attribute.
+     */
+    public void setMetaTagName (String metaTagName)
     {
         Attribute name;
         name = getAttributeEx ("NAME");
@@ -105,9 +132,13 @@ public class MetaTag
     }
     
     /**
+     * Perform the META tag semantic action.
      * Check for a charset directive, and if found, set the charset for the page.
+     * @exception ParserException If setting the encoding fails.
      */
-    public void doSemanticAction () throws ParserException
+    public void doSemanticAction ()
+        throws
+            ParserException
     {
         String httpEquiv;
         String charset;

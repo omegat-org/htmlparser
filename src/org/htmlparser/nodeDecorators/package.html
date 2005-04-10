@@ -32,7 +32,11 @@
 </HEAD>
 <BODY>
 The nodeDecorators package contains classes that use the Decorator pattern.
-The nodeDecorators package contains example decorators that alter node behaviour.
+<p><b>Deprecated.</b>&nbsp;<i>Use either prototypes or dynamic proxies instead.<br>
+Use either direct subclasses of the appropriate node and set them on the
+{@link org.htmlparser.PrototypicalNodeFactory PrototypicalNodeFactory},
+or use a dynamic proxy implementing the required node type interface.</i></p>
+<p>The nodeDecorators package contains example decorators that alter node behaviour.
 For example, the DecodingNode class overrides the toPlainTextString() method
 of all nodes it wraps and applies the Translate class decode() method to the
 original node output:
@@ -47,8 +51,8 @@ while (iterator.hasMoreNodes ())
     content.append (iterator.nextNode ().toPlainTextString ());
 System.out.println (content.toString ());
 </pre>
-Decorators are a powerful way of performing the same operation on every node.
-<pre>
-</pre>
+Decorators are a powerful way of performing the same operation on every node.</p>
+@see org.htmlparser.StringNodeFactory
+@see org.htmlparser.nodeDecorators.AbstractNodeDecorator
 </BODY>
 </HTML>

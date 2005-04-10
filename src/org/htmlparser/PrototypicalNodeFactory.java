@@ -39,7 +39,6 @@ import org.htmlparser.Remark;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.lexer.Page;
-import org.htmlparser.nodes.AbstractNode;
 import org.htmlparser.nodes.TextNode;
 import org.htmlparser.nodes.RemarkNode;
 import org.htmlparser.nodes.TagNode;
@@ -78,17 +77,60 @@ import org.htmlparser.util.ParserException;
 /**
  * A node factory based on the prototype pattern.
  * This factory uses the prototype pattern to generate new nodes.
- * It generates generic text and remark nodes from prototypes accessed
- * via the textPrototype and remarkPrototype properties respectively.
- * These are cloned as needed to form new {@link Text} and {@link Remark} nodes.
- * Prototype tags, in the form of undifferentiated tags are held in a hash
+ * These are cloned as needed to form new {@link Text}, {@link Remark} and
+ * {@link Tag} nodes.</p>
+ * <p>Text and remark nodes are generated from prototypes accessed
+ * via the {@link #setTextPrototype(Text) textPrototype} and
+ * {@link #setRemarkPrototype(Remark) remarkPrototype} properties respectively.
+ * Tag nodes are generated as follows:
+ * <p>Prototype tags, in the form of undifferentiated tags, are held in a hash
  * table. On a request for a tag, the attributes are examined for the name
- * of the tag and if a prototype of that name is registered, it is cloned
- * and the clone is given the characteristics
- * {@link Attribute Attributes}, start and end position) of the requested tag.
- * If no tag is registered under the needed name, a generic tag is created.
- * Note that in all casses, the {@link Page} property is only set if the node
- * is a subclass of {@link AbstractNode}.
+ * of the tag to be created. If a prototype of that name has been registered
+ * (exists in the hash table), it is cloned and the clone is given the
+ * characteristics ({@link Attribute Attributes}, start and end position)
+ * of the requested tag.</p>
+ * <p>In the case that no tag has been registered under that name,
+ * a generic tag is created from the prototype acessed via the
+ * {@link #setTagPrototype(Tag) tagPrototype} property.</p>
+ * <p>The hash table of registered tags can be automatically populated with
+ * all the know tags from the {@link org.htmlparser.tags} package when
+ * the factory is constructed, or it can start out empty and be populated
+ * explicitly.</p>
+ * <p>Here is an example of how to override all text issued from
+ * {@link org.htmlparser.nodes.TextNode#toPlainTextString() Text.toPlainTextString()},
+ * in this case decoding (converting character references),
+ * which illustrates the use of setting the text prototype:
+ * <pre>
+ * PrototypicalNodeFactory factory = new PrototypicalNodeFactory ();
+ * factory.setTextPrototype (
+ *     // create a inner class that is a subclass of TextNode
+ *     new TextNode () {
+ *         public String toPlainTextString()
+ *         {
+ *             return (org.htmlparser.util.Translate.decode (super.toPlainTextString ()));
+ *         }
+ *     });
+ * Parser parser = new Parser ();
+ * parser.setNodeFactory (factory);
+ * </pre></p>
+ * <p>Here is an example of using a custom link tag, in this case just
+ * printing the URL, which illustrates registering a tag:
+ * <pre>
+ *
+ * class PrintingLinkTag extends LinkTag
+ * {
+ *     public void doSemanticAction ()
+ *         throws
+ *             ParserException
+ *     {
+ *         System.out.println (getLink ());
+ *     }
+ * }
+ * PrototypicalNodeFactory factory = new PrototypicalNodeFactory ();
+ * factory.registerTag (new PrintingLinkTag ());
+ * Parser parser = new Parser ();
+ * parser.setNodeFactory (factory);
+ * </pre></p>
  */
 public class PrototypicalNodeFactory
     implements
@@ -118,6 +160,8 @@ public class PrototypicalNodeFactory
 
     /**
      * Create a new factory with all tags registered.
+     * Equivalent to
+     * {@link #PrototypicalNodeFactory() PrototypicalNodeFactory(false)}.
      */
     public PrototypicalNodeFactory ()
     {
@@ -125,9 +169,9 @@ public class PrototypicalNodeFactory
     }
 
     /**
-     * Create a new factory with no registered tags.
+     * Create a new factory.
      * @param empty If <code>true</code>, creates an empty factory,
-     * otherwise is equivalent to {@link #PrototypicalNodeFactory()}.
+     * otherwise create a new factory with all tags registered.
      */
     public PrototypicalNodeFactory (boolean empty)
     {
@@ -175,7 +219,8 @@ public class PrototypicalNodeFactory
     /**
      * Gets a tag from the registry.
      * @param id The name of the tag to return.
-     * @return The tag registered under the <code>id</code> name or <code>null</code> if none.
+     * @return The tag registered under the <code>id</code> name,
+     * or <code>null</code> if none.
      */
     public Tag get (String id)
     {
@@ -185,7 +230,8 @@ public class PrototypicalNodeFactory
     /**
      * Remove a tag from the registry.
      * @param id The name of the tag to remove.
-     * @return The tag that was registered with that <code>id</code>.
+     * @return The tag that was registered with that <code>id</code>,
+     * or <code>null</code> if none.
      */
     public Tag remove (String id)
     {
@@ -211,9 +257,9 @@ public class PrototypicalNodeFactory
 
     /**
      * Register a tag.
-     * Registers the given tag under every id the tag has.
-     * @param tag The tag to register (subclass of
-     * {@link Tag}).
+     * Registers the given tag under every {@link Tag#getIds() id} that the
+     * tag has.
+     * @param tag The tag to register.
      */
     public void registerTag (Tag tag)
     {
@@ -226,9 +272,8 @@ public class PrototypicalNodeFactory
 
     /**
      * Unregister a tag.
-     * Unregisters the given tag from every id the tag has.
-     * @param tag The tag to unregister (subclass of
-     * {@link Tag}).
+     * Unregisters the given tag from every {@link Tag#getIds() id} the tag has.
+     * @param tag The tag to unregister.
      */
     public void unregisterTag (Tag tag)
     {
@@ -282,7 +327,7 @@ public class PrototypicalNodeFactory
     }
 
     /**
-     * Get the object being used to generate text nodes.
+     * Get the object that is cloned to generate text nodes.
      * @return The prototype for {@link Text} nodes.
      */
     public Text getTextPrototype ()
@@ -293,17 +338,19 @@ public class PrototypicalNodeFactory
     /**
      * Set the object to be used to generate text nodes.
      * @param text The prototype for {@link Text} nodes.
+     * If <code>null</code> the prototype is set to the default
+     * ({@link TextNode}).
      */
     public void setTextPrototype (Text text)
     {
         if (null == text)
-            throw new IllegalArgumentException ("text prototype node cannot be null");
+            mText = new TextNode (null, 0, 0);
         else
             mText = text;
     }
 
     /**
-     * Get the object being used to generate remark nodes.
+     * Get the object that is cloned to generate remark nodes.
      * @return The prototype for {@link Remark} nodes.
      */
     public Remark getRemarkPrototype ()
@@ -314,19 +361,21 @@ public class PrototypicalNodeFactory
     /**
      * Set the object to be used to generate remark nodes.
      * @param remark The prototype for {@link Remark} nodes.
+     * If <code>null</code> the prototype is set to the default
+     * ({@link RemarkNode}).
      */
     public void setRemarkPrototype (Remark remark)
     {
         if (null == remark)
-            throw new IllegalArgumentException ("remark prototype node cannot be null");
+            mRemark = new RemarkNode (null, 0, 0);
         else
             mRemark = remark;
     }
 
     /**
-     * Get the object being used to generate generic tag nodes.
-     * These are returned from {@link #createTagNode} when no specific tag
-     * is found in the registered tag list.
+     * Get the object that is cloned to generate tag nodes.
+     * Clones of this object are returned from {@link #createTagNode} when no
+     * specific tag is found in the list of registered tags.
      * @return The prototype for {@link Tag} nodes.
      */
     public Tag getTagPrototype ()
@@ -336,14 +385,16 @@ public class PrototypicalNodeFactory
 
     /**
      * Set the object to be used to generate tag nodes.
-     * These are returned from {@link #createTagNode} when no specific tag
-     * is found in the registered tag list.
+     * Clones of this object are returned from {@link #createTagNode} when no
+     * specific tag is found in the list of registered tags.
      * @param tag The prototype for {@link Tag} nodes.
+     * If <code>null</code> the prototype is set to the default
+     * ({@link TagNode}).
      */
     public void setTagPrototype (Tag tag)
     {
         if (null == tag)
-            throw new IllegalArgumentException ("tag prototype node cannot be null");
+            mTag = new TagNode (null, 0, 0, null);
         else
             mTag = tag;
     }
@@ -357,6 +408,7 @@ public class PrototypicalNodeFactory
      * @param page The page the node is on.
      * @param start The beginning position of the string.
      * @param end The ending position of the string.
+     * @return A text node comprising the indicated characters from the page.
      */
     public Text createStringNode (Page page, int start, int end)
     {
@@ -382,6 +434,7 @@ public class PrototypicalNodeFactory
      * @param page The page the node is on.
      * @param start The beginning position of the remark.
      * @param end The ending positiong of the remark.
+     * @return A remark node comprising the indicated characters from the page.
      */
     public Remark createRemarkNode (Page page, int start, int end)
     {
@@ -412,10 +465,9 @@ public class PrototypicalNodeFactory
      * @param start The beginning position of the tag.
      * @param end The ending positiong of the tag.
      * @param attributes The attributes contained in this tag.
+     * @return A tag node comprising the indicated characters from the page.
      */
     public Tag createTagNode (Page page, int start, int end, Vector attributes)
-        throws
-            ParserException
     {
         Attribute attribute;
         String id;

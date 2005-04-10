@@ -86,6 +86,8 @@ public class TagNameFilter
      * This discards non-tag nodes and end tags.
      * The end tags are available on the enclosing non-end tag.
      * @param node The node to check.
+     * @return <code>true</code> if the tag name matches,
+     * <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

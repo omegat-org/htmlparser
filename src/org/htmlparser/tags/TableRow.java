@@ -85,7 +85,8 @@ public class TableRow extends CompositeTag
     }
 
     /**
-     * Get the column tags within this row.
+     * Get the column tags within this <code>TR</code> (table row) tag.
+     * @return The {@.html <TD>} tags contained by this tag.
      */
     public TableColumn[] getColumns ()
     {
@@ -124,6 +125,9 @@ public class TableRow extends CompositeTag
 
     /**
      * Get the number of columns in this row.
+     * @return The number of columns in this row.
+     * <em>Note: this is a a simple count of the number of {@.html <TD>} tags and
+     * may be incorrect if the {@.html <TD>} tags span multiple columns.</em>
      */
     public int getColumnCount ()
     {

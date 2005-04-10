@@ -57,7 +57,8 @@ public class JspTag
     }
 
     /**
-     * Print the contents of the jsp tag.
+     * Returns a string representation of this jsp tag suitable for debugging.
+     * @return A string representing this tag.
      */
     public String toString()
     {

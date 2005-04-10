@@ -35,8 +35,17 @@ import org.htmlparser.util.SimpleNodeIterator;
  */
 public class FormTag extends CompositeTag
 {
-    public static final String POST="POST";
-    public static final String GET="GET";
+    /**
+     * The {@value} method.
+     * @see #getFormMethod
+     */
+    public static final String POST = "POST";
+
+    /**
+     * The {@value} method.
+     * @see #getFormMethod
+     */
+    public static final String GET = "GET";
     
     /**
      * This is the derived form location, based on action.
@@ -182,7 +191,8 @@ public class FormTag extends CompositeTag
 
     /**
      * Find the textarea tag matching the given name
-     * @param name Name of the textarea tag to be found within the form
+     * @param name Name of the textarea tag to be found within the form.
+     * @return The <code>TEXTAREA</code> tag with the matching name.
      */
     public TextareaTag getTextAreaTag(String name)
     {
@@ -202,6 +212,7 @@ public class FormTag extends CompositeTag
     }
 
     /**
+     * Return a string representation of the contents of this <code>FORM</code> tag suitable for debugging.
      * @return A textual representation of the form tag.
      */
     public String toString()
@@ -210,8 +221,8 @@ public class FormTag extends CompositeTag
     }
     
     /**
-     * Extract the location of the image, given the tag, and the url
-     * of the html page in which this tag exists.
+     * Extract the <code>ACTION</code> attribute as an absolute URL.
+     * @return The URL the form is to be submitted to.
      */
     public String extractFormLocn ()
     {

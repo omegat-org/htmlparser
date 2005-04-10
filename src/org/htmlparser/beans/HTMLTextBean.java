@@ -58,6 +58,7 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
 
     /**
      * Return the minimum dimension for this visible bean.
+     * @return a minimum bounding box for this bean.
      */
     public Dimension getMinimumSize ()
     {

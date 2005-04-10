@@ -53,7 +53,8 @@ import org.htmlparser.Text;
  * NodeIterator iterator = parser.extractAllNodesThatMatch (filter).elements ();
  * </pre>
  * which matches a date in yyyy-mm-dd format between 1900-01-01 and 2099-12-31,
- * with a choice of five separators, dash, space, either slash or a period.
+ * with a choice of five separators, either a dash, a space, either kind of
+ * slash or a period.
  * The year is matched by (19|20)\d\d which uses alternation to allow the
  * either 19 or 20 as the first two digits. The round brackets are mandatory.
  * The month is matched by 0[1-9]|1[012], again enclosed by round brackets
@@ -173,6 +174,8 @@ public class RegexFilter implements NodeFilter
     /**
      * Accept string nodes that match the regular expression.
      * @param node The node to check.
+     * @return <code>true</code> if the regular expression matches the 
+     * text of the node, <code>false</code> otherwise.
      */
     public boolean accept (Node node)
     {

@@ -39,6 +39,9 @@ import org.htmlparser.tags.LinkTag;
  */
 public class LinkRegexFilter implements NodeFilter
 {
+    /**
+     * The regular expression to use on the link.
+     */ 
     protected Pattern mRegex;
     
     /**
@@ -46,7 +49,7 @@ public class LinkRegexFilter implements NodeFilter
      * a URL that matches the supplied regex pattern. The match is case insensitive.
      * @param regexPattern The pattern to match.
      */
-    public LinkRegexFilter (String regexPattern) throws Exception
+    public LinkRegexFilter (String regexPattern)
     {
         this (regexPattern, true);
     }
@@ -57,7 +60,7 @@ public class LinkRegexFilter implements NodeFilter
      * @param regexPattern The regex pattern to match.
      * @param caseSensitive Specifies case sensitivity for the matching process.
      */
-    public LinkRegexFilter (String regexPattern, boolean caseSensitive) throws Exception
+    public LinkRegexFilter (String regexPattern, boolean caseSensitive)
     {
         if (caseSensitive)
             mRegex = Pattern.compile (regexPattern);

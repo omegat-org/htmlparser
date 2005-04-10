@@ -70,7 +70,9 @@ public class TextNode
     }
 
     /**
-     * Returns the text of the string line.
+     * Returns the text of the node.
+     * This is the same as {@link #toHtml} for this type of node.
+     * @return The contents of this text node.
      */
     public String getText ()
     {
@@ -88,11 +90,20 @@ public class TextNode
         nodeEnd = mText.length ();
     }
 
+    /**
+     * Returns the text of the node.
+     * This is the same as {@link #toHtml} for this type of node.
+     * @return The contents of this text node.
+     */
     public String toPlainTextString ()
     {
         return (toHtml ());
     }
 
+    /**
+     * Returns the text of the node.
+     * @return The contents of this text node.
+     */
     public String toHtml ()
     {
         String ret;

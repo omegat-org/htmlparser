@@ -32,8 +32,8 @@ import java.util.Vector;
 import org.htmlparser.scanners.Scanner;
 
 /**
- * Identifies what a Tag such as &lt;XXX xxx yyy="zzz"&gt; can do.
- * Adds features to a Node that are specific to a tag.
+ * This interface represents a tag such as &lt;xxx yyy="zzz"&gt; in the HTML document.
+ * Adds capabilities to a Node that are specific to a tag.
  */
 public interface Tag extends Node
 {

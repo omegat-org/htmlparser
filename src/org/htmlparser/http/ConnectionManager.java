@@ -165,6 +165,10 @@ public class ConnectionManager
      * Get the current default request header properties.
      * A String-to-String map of header keys and values.
      * These fields are set by the parser when creating a connection.
+     * @return The default set of request header properties that will
+     * currently be used.
+     * @see #mDefaultRequestProperties
+     * @see #setRequestProperties
      */
     public static Hashtable getDefaultRequestProperties ()
     {
@@ -181,7 +185,8 @@ public class ConnectionManager
      * of the developer, these properties are not available before the
      * connection is fetched. Setting these request header fields affects all
      * subsequent connections opened by the parser. For more direct control
-     * create a <code>URLConnection</code> and set it on the parser.<p>
+     * create a <code>URLConnection</code> massage it the way you want and 
+     * then set it on the parser.<p>
      * From <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1</a>: 
      * <pre>
      * 5.3 Request Header Fields
@@ -219,6 +224,10 @@ public class ConnectionManager
      *    be request-header fields. Unrecognized header fields are treated as
      *    entity-header fields.
      * </pre>
+     * @param properties The new set of default request header properties to
+     * use. This affects all subsequently created connections.
+     * @see #mDefaultRequestProperties
+     * @see #setRequestProperties
      */
     public static void setDefaultRequestProperties (Hashtable properties)
     {
@@ -320,6 +329,7 @@ public class ConnectionManager
      * Get the current request header properties.
      * A String-to-String map of header keys and values,
      * excluding proxy items, cookies and URL authorization.
+     * @return The request header properties for this connection manager.
      */
     public Hashtable getRequestProperties ()
     {
@@ -343,6 +353,7 @@ public class ConnectionManager
     }
 
     /**
+     * Get the proxy host name, if any.
      * @return Returns the proxy host.
      */
     public String getProxyHost ()
@@ -351,8 +362,9 @@ public class ConnectionManager
     }
 
     /**
+     * Set the proxy host to use.
      * @param host The host to use for proxy access.
-     * <em>Note: You must also set the proxy port.</em>
+     * <em>Note: You must also set the proxy {@link #setProxyPort port}.</em>
      */
     public void setProxyHost (String host)
     {
@@ -360,6 +372,7 @@ public class ConnectionManager
     }
 
     /**
+     * Get the proxy port number.
      * @return Returns the proxy port.
      */
     public int getProxyPort ()
@@ -368,7 +381,9 @@ public class ConnectionManager
     }
     
     /**
+     * Set the proxy port number.
      * @param port The proxy port.
+     * <em>Note: You must also set the proxy {@link #setProxyHost host}.</em>
      */
     public void setProxyPort (int port)
     {
@@ -376,6 +391,7 @@ public class ConnectionManager
     }
 
     /**
+     * Get the user name for proxy authorization, if any.
      * @return Returns the proxy user,
      * or <code>null</code> if no proxy authorization is required.
      */
@@ -385,6 +401,7 @@ public class ConnectionManager
     }
 
     /**
+     * Set the user name for proxy authorization.
      * @param user The proxy user name.
      * <em>Note: You must also set the proxy {@link #setProxyPassword password}.</em>
      */
@@ -394,6 +411,7 @@ public class ConnectionManager
     }
 
     /**
+     * Set the proxy user's password.
      * @return Returns the proxy password.
      */
     public String getProxyPassword ()
@@ -402,7 +420,9 @@ public class ConnectionManager
     }
 
     /**
+     * Get the proxy user's password.
      * @param password The password for the proxy user.
+     * <em>Note: You must also set the proxy {@link #setProxyUser user}.</em>
      */
     public void setProxyPassword (String password)
     {
@@ -410,6 +430,7 @@ public class ConnectionManager
     }
 
     /**
+     * Get the user name to access the URL.
      * @return Returns the username that will be used to access the URL,
      * or <code>null</code> if no authorization is required.
      */
@@ -419,6 +440,7 @@ public class ConnectionManager
     }
 
     /**
+     * Set the user name to access the URL.
      * @param user The user name for accessing the URL.
      * <em>Note: You must also set the {@link #setPassword password}.</em>
      */
@@ -428,6 +450,7 @@ public class ConnectionManager
     }
 
     /**
+     * Get the URL users's password.
      * @return Returns the URL password.
      */
     public String getPassword ()
@@ -436,6 +459,7 @@ public class ConnectionManager
     }
 
     /**
+     * Set the URL users's password.
      * @param password The password for the URL.
      */
     public void setPassword (String password)
@@ -513,14 +537,16 @@ public class ConnectionManager
     }
 
     /**
+     * Get the monitoring object, if any.
      * @return Returns the monitor, or null if none has been assigned.
      */
     public ConnectionMonitor getMonitor ()
     {
-        return mMonitor;
+        return (mMonitor);
     }
 
     /**
+     * Set the monitoring object.
      * @param monitor The monitor to set.
      */
     public void setMonitor (ConnectionMonitor monitor)
@@ -531,6 +557,7 @@ public class ConnectionManager
     /**
      * Opens a connection using the given url.
      * @param url The url to open.
+     * @return The connection.
      * @exception ParserException if an i/o exception occurs accessing the url.
      */
     public URLConnection openConnection (URL url)
@@ -774,6 +801,7 @@ public class ConnectionManager
      * begins with one of the known protocol strings, i.e. <code>http://</code>.
      * Embedded spaces are silently converted to %20 sequences.
      * @param string The name of a file or a url.
+     * @return The connection.
      * @exception ParserException if the string is not a valid url or file.
      */
     public URLConnection openConnection (String string)
@@ -1017,6 +1045,7 @@ public class ConnectionManager
     
     /**
      * Check for cookie and parse into cookie jar.
+     * @param connection The connection to extract cookie information from.
      */
     public void parseCookies (URLConnection connection)
     {
@@ -1133,6 +1162,11 @@ public class ConnectionManager
         }
     }
 
+    /**
+     * Save the cookies received in the response header.
+     * @param list The list of cookies extracted from the response header.
+     * @param connection The connection (used when a cookie has no domain).
+     */
     protected void saveCookies (Vector list, URLConnection connection)
     {
         Cookie cookie;

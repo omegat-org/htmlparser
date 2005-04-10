@@ -61,13 +61,21 @@ public class LabelTag extends CompositeTag
         return (mIds);
     }
 
+    /**
+     * Returns the text contained inside this label tag.
+     * @return The textual contents between the {@.html <LABEL></LABEL>} pair.
+     */
     public String getLabel()
     {
         return toPlainTextString();
     }
 
+    /**
+     * Returns a string representation of this label tag suitable for debugging.
+     * @return A string representing this label.
+     */
     public String toString()
     {
-        return "LABEL: "+getLabel();
+        return "LABEL: "+ getLabel();
     }
 }

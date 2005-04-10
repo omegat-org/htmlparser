@@ -80,6 +80,7 @@ public class ImageTag
     * &lt;IMG SRC= http://www.redgreen.com&gt; - space between equals sign and attribute value
     * &lt;IMG SRC = http://www.redgreen.com&gt; - space both sides of equals sign
     * </pre>
+    * @return The relative URL for the image.
     */
     public String extractImageLocn ()
     {
@@ -180,7 +181,8 @@ public class ImageTag
     }
 
     /**
-     * Returns the location of the image
+     * Returns the location of the image.
+     * @return The absolute URL for this image.
      */
     public String getImageURL()
     {
@@ -191,6 +193,10 @@ public class ImageTag
         return (imageURL);
     }
 
+    /**
+     * Set the <code>SRC</code> attribute.
+     * @param url The new value of the <code>SRC</code> attribute.
+     */
     public void setImageURL (String url)
     {
         imageURL = url;

@@ -26,6 +26,17 @@
 
 package org.htmlparser.beans;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 
@@ -38,9 +49,9 @@ public class BeanyBaby
     extends
         javax.swing.JFrame
     implements
-        java.beans.PropertyChangeListener,
-        java.awt.event.ActionListener,
-        java.awt.event.MouseListener
+        PropertyChangeListener,
+        ActionListener,
+        MouseListener
 {
     /**
      * Bread crumb trail of visited URLs.
@@ -118,7 +129,14 @@ public class BeanyBaby
     // ActionListener interface
     //
 
-    public void actionPerformed (java.awt.event.ActionEvent event)
+    /**
+     * Handles UI events.
+     * Changing the URL in the text field, altering a checkbox setting or
+     * choosing a menu item winds up here, where the appropriate change
+     * is made to the state of the bean.
+     * @param event Details about the action.
+     */
+    public void actionPerformed (ActionEvent event)
     {
         Object source;
         String url;
@@ -175,8 +193,9 @@ public class BeanyBaby
     //
     /**
      * Invoked when the mouse button has been clicked (pressed and released) on a component.
+     * @param event Details on the mouse event.
      */
-    public void mouseClicked (java.awt.event.MouseEvent event)
+    public void mouseClicked (MouseEvent event)
     {
         int index;
         String url;
@@ -191,35 +210,44 @@ public class BeanyBaby
 
     /**
      * Invoked when the mouse enters a component.
+     * @param event Details on the mouse event.
      */
-    public void mouseEntered (java.awt.event.MouseEvent event)
+    public void mouseEntered (MouseEvent event)
     {
     }
 
     /**
      * Invoked when the mouse exits a component.
+     * @param event Details on the mouse event.
      */
-    public void mouseExited (java.awt.event.MouseEvent event)
+    public void mouseExited (MouseEvent event)
     {
     }
 
     /**
      * Invoked when a mouse button has been pressed on a component.
+     * @param event Details on the mouse event.
      */
-    public void mousePressed (java.awt.event.MouseEvent event)
+    public void mousePressed (MouseEvent event)
     {
     }
 
     /**
      * Invoked when a mouse button has been released on a component.
+     * @param event Details on the mouse event.
      */
-    public void mouseReleased (java.awt.event.MouseEvent event)
+    public void mouseReleased (MouseEvent event)
     {
     }
 
     //
     // API control
     //
+    
+    /**
+     * Set the URL for the bean.
+     * @param url The URL to use in the bean.
+     */
     public void setURL (String url)
     {
         mTextField.setText (url);
@@ -312,15 +340,15 @@ public class BeanyBaby
         menubar.add(options);
 
         setTitle("BeanyBaby");
-        addWindowListener(new java.awt.event.WindowAdapter()
+        addWindowListener(new WindowAdapter()
         {
-            public void windowClosing(java.awt.event.WindowEvent evt)
+            public void windowClosing(WindowEvent evt)
             {
                 exitForm(evt);
             }
         });
 
-        panel.setLayout(new java.awt.BorderLayout());
+        panel.setLayout(new BorderLayout());
 
         pane1.setViewportView(mLinkBean);
 
@@ -330,21 +358,21 @@ public class BeanyBaby
 
         mSplitPane.setRightComponent(pane2);
 
-        panel.add(mSplitPane, java.awt.BorderLayout.CENTER);
+        panel.add(mSplitPane, BorderLayout.CENTER);
 
         mTextField.setToolTipText("Enter the URL to view");
-        panel.add(mTextField, java.awt.BorderLayout.SOUTH);
+        panel.add(mTextField, BorderLayout.SOUTH);
 
-        getContentPane().add(panel, java.awt.BorderLayout.CENTER);
+        getContentPane().add(panel, BorderLayout.CENTER);
 
         pack();
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(new java.awt.Dimension(640, 480));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(new Dimension(640, 480));
         setLocation((screenSize.width-640)/2,(screenSize.height-480)/2);
     }//GEN-END:initComponents
 
     /** Exit the Application */
-    private void exitForm (java.awt.event.WindowEvent evt)
+    private void exitForm (WindowEvent evt)
     {//GEN-FIRST:event_exitForm
         System.exit (0);
     }//GEN-LAST:event_exitForm
@@ -363,6 +391,7 @@ public class BeanyBaby
 
     /**
      * Unit test.
+     * @param args [0] The URL to use in the bean (optional).
      */
     public static void main (String[] args)
     {
