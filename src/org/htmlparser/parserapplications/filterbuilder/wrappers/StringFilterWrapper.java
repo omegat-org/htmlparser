@@ -49,9 +49,9 @@ import org.htmlparser.parserapplications.filterbuilder.Filter;
  * Wrapper for StringFilters.
  */
 public class StringFilterWrapper
-	extends
-		Filter
-	implements
+    extends
+        Filter
+    implements
         ActionListener,
         DocumentListener,
         Runnable
@@ -61,9 +61,9 @@ public class StringFilterWrapper
      */
     protected StringFilter mFilter;
 
-	/**
-	 * Text to check for.
-	 */
+    /**
+     * Text to check for.
+     */
     protected JTextArea mPattern;
 
     /**
@@ -109,10 +109,10 @@ public class StringFilterWrapper
         synchronized (mLocale)
         {
             mLocale.addItem (mFilter.getLocale ().getDisplayName ());
-	        thread = new Thread (this);
-	        thread.setName  ("locale_getter");
-	        thread.setPriority (Thread.MIN_PRIORITY);
-	        thread.run ();
+            thread = new Thread (this);
+            thread.setName  ("locale_getter");
+            thread.setPriority (Thread.MIN_PRIORITY);
+            thread.run ();
         }
         add (mLocale);
         mLocale.addActionListener (this);
@@ -124,16 +124,28 @@ public class StringFilterWrapper
     // Filter overrides and concrete implementations
     //
 
+    /**
+     * Get the name of the filter.
+     * @return A descriptive name for the filter.
+     */
     public String getDescription ()
     {
         return ("Nodes containing string");
     }
 
+    /**
+     * Get the resource name for the icon.
+     * @return The icon resource specification.
+     */
     public String getIconSpec ()
     {
         return ("images/StringFilter.gif");
     }
 
+    /**
+     * Get the underlying node filter object.
+     * @return The node filter object suitable for serialization.
+     */
     public NodeFilter getNodeFilter ()
     {
         StringFilter ret;
@@ -146,6 +158,14 @@ public class StringFilterWrapper
         return (ret);
     }
 
+    /**
+     * Assign the underlying node filter for this wrapper.
+     * @param filter The filter to wrap.
+     * @param context The parser to use for conditioning this filter.
+     * Some filters need contextual information to provide to the user,
+     * i.e. for tag names or attribute names or values,
+     * so the Parser context is provided. 
+     */
     public void setNodeFilter (NodeFilter filter, Parser context)
     {
         mFilter = (StringFilter)filter;
@@ -155,16 +175,34 @@ public class StringFilterWrapper
         mLocale.setSelectedItem (mFilter.getLocale ().getDisplayName ());
     }
 
+    /**
+     * Get the underlying node filter's subordinate filters.
+     * @return The node filter object's contained filters.
+     */
     public NodeFilter[] getSubNodeFilters ()
     {
         return (new NodeFilter[0]);
     }
 
+    /**
+     * Assign the underlying node filter's subordinate filters.
+     * @param filters The filters to insert into the underlying node filter.
+     */
     public void setSubNodeFilters (NodeFilter[] filters)
     {
         // should we complain?
     }
 
+    /**
+     * Convert this filter into Java code.
+     * Output whatever text necessary and return the variable name.
+     * @param out The output buffer.
+     * @param context Three integers as follows:
+     * <li>indent level - the number of spaces to insert at the beginning of each line</li>
+     * <li>filter number - the next available filter number</li>
+     * <li>filter array number - the next available array of filters number</li>
+     * @return The variable name to use when referencing this filter (usually "filter" + context[1]++) 
+     */
     public String toJavaCode (StringBuffer out, int[] context)
     {
         String ret;
@@ -205,6 +243,15 @@ public class StringFilterWrapper
     // NodeFilter interface
     //
 
+    /**
+     * Predicate to determine whether or not to keep the given node.
+     * The behaviour based on this outcome is determined by the context
+     * in which it is called. It may lead to the node being added to a list
+     * or printed out. See the calling routine for details.
+     * @return <code>true</code> if the node is to be kept, <code>false</code>
+     * if it is to be discarded.
+     * @param node The node to test.
+     */
     public boolean accept (Node node)
     {
         return (mFilter.accept (node));
@@ -216,6 +263,7 @@ public class StringFilterWrapper
 
     /**
      * Invoked when an action occurs on the combo box.
+     * @param event Details about the action event.
      */
     public void actionPerformed (ActionEvent event)
     {
@@ -227,23 +275,23 @@ public class StringFilterWrapper
         source = event.getSource ();
         if (source == mCaseSensitivity)
         {
-	        sensitive = mCaseSensitivity.isSelected ();
-	        mFilter.setCaseSensitive (sensitive);
+            sensitive = mCaseSensitivity.isSelected ();
+            mFilter.setCaseSensitive (sensitive);
             mLocale.setVisible (!sensitive);
-	        mLocale.setSelectedItem (mFilter.getLocale ().getDisplayName ());
+            mLocale.setSelectedItem (mFilter.getLocale ().getDisplayName ());
         }
         else if (source == mLocale)
         {
             synchronized (mLocale)
             {
-	            selection = mLocale.getSelectedObjects ();
-	            if ((null != selection) && (0 != selection.length))
-	            {
-	                locale = (String)selection[0];
-		            for (int i = 0; i < mLocales.length; i++)
-		                if (locale.equals (mLocales[i].getDisplayName ()))
-		                    mFilter.setLocale (mLocales[i]);
-	            }
+                selection = mLocale.getSelectedObjects ();
+                if ((null != selection) && (0 != selection.length))
+                {
+                    locale = (String)selection[0];
+                    for (int i = 0; i < mLocales.length; i++)
+                        if (locale.equals (mLocales[i].getDisplayName ()))
+                            mFilter.setLocale (mLocales[i]);
+                }
             }
         }
     }
@@ -251,7 +299,11 @@ public class StringFilterWrapper
     //
     // Runnable interface
     //
-    public void run()
+
+    /**
+     * Background thread task to get the available locales.
+     */
+    public void run ()
     {
         String locale;
 
@@ -259,10 +311,10 @@ public class StringFilterWrapper
         {
             mLocales = Locale.getAvailableLocales ();
             locale = mFilter.getLocale ().getDisplayName ();
-	        for (int i = 0; i < mLocales.length; i++)
-	            if (!locale.equals (mLocales[i].getDisplayName ()))
-	            	mLocale.addItem (mLocales[i].getDisplayName ());
-	        mLocale.invalidate ();
+            for (int i = 0; i < mLocales.length; i++)
+                if (!locale.equals (mLocales[i].getDisplayName ()))
+                    mLocale.addItem (mLocales[i].getDisplayName ());
+            mLocale.invalidate ();
         }
     }
         
@@ -270,6 +322,10 @@ public class StringFilterWrapper
     // DocumentListener interface
     //
 
+    /**
+     * Handle an insert update event.
+     * @param e Details about the insert event.
+     */
     public void insertUpdate (DocumentEvent e)
     {
         Document doc;
@@ -285,6 +341,10 @@ public class StringFilterWrapper
         }
     }
 
+    /**
+     * Handle a remove update event.
+     * @param e Details about the remove event.
+     */
     public void removeUpdate (DocumentEvent e)
     {
         Document doc;
@@ -300,6 +360,10 @@ public class StringFilterWrapper
         }
     }
 
+    /**
+     * Handle a change update event.
+     * @param e Details about the change event.
+     */
     public void changedUpdate (DocumentEvent e)
     {
         // plain text components don't fire these events

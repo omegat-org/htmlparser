@@ -36,13 +36,28 @@ import org.htmlparser.tags.Html;
 import org.htmlparser.util.NodeList;
 
 /**
- * Each leaf is a TreeItem or something that does toString().
+ * Quick and dirty tree model for HTML nodes.
  */
 public class HtmlTreeModel implements TreeModel
 {
+    /**
+     * The list of tree listeners.
+     */
     protected Vector mTreeListeners;
+    
+    /**
+     * The root {@link Node}.
+     */
     protected Node mRoot;
     
+    /**
+     * Create an HTML tree view.
+     * @param root The nodes at the root of the tree
+     * (the nodes are wrapped in an Html node that is never seen
+     * because it's the root, but this makes all downstream processing
+     * super-simple because every tree node is then a {@link Node},
+     * not sometimes a {@link NodeList} at the root).
+     */
     public HtmlTreeModel (NodeList root)
     {
         mTreeListeners = new Vector ();
@@ -55,7 +70,10 @@ public class HtmlTreeModel implements TreeModel
     // TreeModel interface
     //
 
-    // Adds a listener for the TreeModelEvent posted after the tree changes.
+    /**
+     * Adds a listener for the TreeModelEvent posted after the tree changes.
+     * @param l {@inheritDoc}
+     */
     public void addTreeModelListener (TreeModelListener l)
     {
         synchronized (mTreeListeners)
@@ -65,7 +83,10 @@ public class HtmlTreeModel implements TreeModel
         }        
     }        
 
-    // Removes a listener previously added with addTreeModelListener().
+    /**
+     * Removes a listener previously added with addTreeModelListener().
+     * @param l {@inheritDoc}
+     */
     public void removeTreeModelListener(TreeModelListener l)
     {
         synchronized (mTreeListeners)
@@ -74,7 +95,12 @@ public class HtmlTreeModel implements TreeModel
         }    
     }
 
-    // Returns the child of parent at index index in the parent's child array.
+    /**
+     * Returns the child of parent at index index in the parent's child array.
+     * @param parent {@inheritDoc}
+     * @param index {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     public Object getChild (Object parent, int index)
     {
         Node node;
@@ -91,7 +117,11 @@ public class HtmlTreeModel implements TreeModel
         return (ret);
     }
 
-    // Returns the number of children of parent.
+    /**
+     * Returns the number of children of parent.
+     * @param parent {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     public int getChildCount (Object parent)
     {
         Node node;
@@ -109,7 +139,12 @@ public class HtmlTreeModel implements TreeModel
     }
 
 
-    // Returns the index of child in parent.
+    /**
+     * Returns the index of child in parent.
+     * @param parent {@inheritDoc}
+     * @param child {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     public int getIndexOfChild (Object parent, Object child)
     {
         Node node;
@@ -140,13 +175,20 @@ public class HtmlTreeModel implements TreeModel
         return (ret);
     }
 
-    // Returns the root of the tree.
+    /**
+     * Returns the root of the tree.
+     * @return {@inheritDoc}
+     */
     public Object getRoot ()
     {
         return (mRoot);
     }    
 
-    // Returns true if node is a leaf.
+    /**
+     * Returns true if node is a leaf.
+     * @param node {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     public boolean isLeaf (Object node)
     {
         NodeList list;
@@ -161,7 +203,11 @@ public class HtmlTreeModel implements TreeModel
         return (ret);
     }    
 
-    // Messaged when the user has altered the value for the item identified by path to newValue.
+    /**
+     * Messaged when the user has altered the value for the item identified by path to newValue.
+     * @param path {@inheritDoc}
+     * @param newValue {@inheritDoc}
+     */
     public void valueForPathChanged (TreePath path, Object newValue)
     {
         TreeModelEvent event;

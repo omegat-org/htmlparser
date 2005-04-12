@@ -58,9 +58,9 @@ import org.htmlparser.util.ParserException;
  * Wrapper for HasAttributeFilters.
  */
 public class HasAttributeFilterWrapper
-	extends
-		Filter
-	implements
+    extends
+        Filter
+    implements
         ActionListener,
         DocumentListener
 {
@@ -79,9 +79,9 @@ public class HasAttributeFilterWrapper
      */
     protected JCheckBox mValued;
 
-	/**
-	 * Value to check for.
-	 */
+    /**
+     * Value to check for.
+     */
     protected JTextArea mAttributeValue;
 
     /**
@@ -122,6 +122,11 @@ public class HasAttributeFilterWrapper
     // local methods
     //
 
+    /**
+     * Add the attribute names from the node to the set of attribute names.
+     * @param set The set to add to.
+     * @param node The node with attributes to add.
+     */
     protected void addAttributes (Set set, Node node)
     {
         Vector attributes;
@@ -149,6 +154,11 @@ public class HasAttributeFilterWrapper
         }
     }
 
+    /**
+     * Add the attribute values from the node to the set of attribute values.
+     * @param set The set to add to.
+     * @param node The node with attributes to add.
+     */
     protected void addAttributeValues (Set set, Node node)
     {
         Vector attributes;
@@ -183,16 +193,28 @@ public class HasAttributeFilterWrapper
     // Filter overrides and concrete implementations
     //
 
+    /**
+     * Get the name of the filter.
+     * @return A descriptive name for the filter.
+     */
     public String getDescription ()
     {
         return ("Has attribute");
     }
 
+    /**
+     * Get the resource name for the icon.
+     * @return The icon resource specification.
+     */
     public String getIconSpec ()
     {
         return ("images/HasAttributeFilter.gif");
     }
 
+    /**
+     * Get the underlying node filter object.
+     * @return The node filter object suitable for serialization.
+     */
     public NodeFilter getNodeFilter ()
     {
         HasAttributeFilter ret;
@@ -204,6 +226,14 @@ public class HasAttributeFilterWrapper
         return (ret);
     }
 
+    /**
+     * Assign the underlying node filter for this wrapper.
+     * @param filter The filter to wrap.
+     * @param context The parser to use for conditioning this filter.
+     * Some filters need contextual information to provide to the user,
+     * i.e. for tag names or attribute names or values,
+     * so the Parser context is provided. 
+     */
     public void setNodeFilter (NodeFilter filter, Parser context)
     {
         Set set;
@@ -215,8 +245,8 @@ public class HasAttributeFilterWrapper
         context.reset ();
         try
         {
-	        for (NodeIterator iterator = context.elements (); iterator.hasMoreNodes (); )
-	            addAttributes (set, iterator.nextNode ());
+            for (NodeIterator iterator = context.elements (); iterator.hasMoreNodes (); )
+                addAttributes (set, iterator.nextNode ());
         }
         catch (ParserException pe)
         {
@@ -241,16 +271,34 @@ public class HasAttributeFilterWrapper
         }
     }
 
+    /**
+     * Get the underlying node filter's subordinate filters.
+     * @return The node filter object's contained filters.
+     */
     public NodeFilter[] getSubNodeFilters ()
     {
         return (new NodeFilter[0]);
     }
 
+    /**
+     * Assign the underlying node filter's subordinate filters.
+     * @param filters The filters to insert into the underlying node filter.
+     */
     public void setSubNodeFilters (NodeFilter[] filters)
     {
         // should we complain?
     }
 
+    /**
+     * Convert this filter into Java code.
+     * Output whatever text necessary and return the variable name.
+     * @param out The output buffer.
+     * @param context Three integers as follows:
+     * <li>indent level - the number of spaces to insert at the beginning of each line</li>
+     * <li>filter number - the next available filter number</li>
+     * <li>filter array number - the next available array of filters number</li>
+     * @return The variable name to use when referencing this filter (usually "filter" + context[1]++) 
+     */
     public String toJavaCode (StringBuffer out, int[] context)
     {
         String ret;
@@ -269,12 +317,12 @@ public class HasAttributeFilterWrapper
         newline (out);
         if (null != mFilter.getAttributeValue ())
         {
-	        spaces (out, context[0]);
-	        out.append (ret);
-	        out.append (".setAttributeValue (\"");
-	        out.append (mFilter.getAttributeValue ());
-	        out.append ("\");");
-	        newline (out);
+            spaces (out, context[0]);
+            out.append (ret);
+            out.append (".setAttributeValue (\"");
+            out.append (mFilter.getAttributeValue ());
+            out.append ("\");");
+            newline (out);
         }
         
         return (ret);
@@ -284,6 +332,15 @@ public class HasAttributeFilterWrapper
     // NodeFilter interface
     //
 
+    /**
+     * Predicate to determine whether or not to keep the given node.
+     * The behaviour based on this outcome is determined by the context
+     * in which it is called. It may lead to the node being added to a list
+     * or printed out. See the calling routine for details.
+     * @return <code>true</code> if the node is to be kept, <code>false</code>
+     * if it is to be discarded.
+     * @param node The node to test.
+     */
     public boolean accept (Node node)
     {
         return (mFilter.accept (node));
@@ -295,6 +352,7 @@ public class HasAttributeFilterWrapper
 
     /**
      * Invoked when an action occurs on the combo box.
+     * @param event Details about the action event.
      */
     public void actionPerformed (ActionEvent event)
     {
@@ -311,18 +369,18 @@ public class HasAttributeFilterWrapper
         }
         else if (source == mValued)
         {
-	        valued = mValued.isSelected ();
-	        if (valued)
-	        {
-	            mFilter.setAttributeValue (mAttributeValue.getText ());
-	            mAttributeValue.setVisible (true);
-	        }
-	        else
-	        {
-	            mAttributeValue.setVisible (false);
-	            mAttributeValue.setText ("");
-	            mFilter.setAttributeValue (null);
-	        }
+            valued = mValued.isSelected ();
+            if (valued)
+            {
+                mFilter.setAttributeValue (mAttributeValue.getText ());
+                mAttributeValue.setVisible (true);
+            }
+            else
+            {
+                mAttributeValue.setVisible (false);
+                mAttributeValue.setText ("");
+                mFilter.setAttributeValue (null);
+            }
         }
     }
 
@@ -330,6 +388,10 @@ public class HasAttributeFilterWrapper
     // DocumentListener interface
     //
 
+    /**
+     * Handle an insert update event.
+     * @param e Details about the insert event.
+     */
     public void insertUpdate (DocumentEvent e)
     {
         Document doc;
@@ -345,6 +407,10 @@ public class HasAttributeFilterWrapper
         }
     }
 
+    /**
+     * Handle a remove update event.
+     * @param e Details about the remove event.
+     */
     public void removeUpdate (DocumentEvent e)
     {
         Document doc;
@@ -360,6 +426,10 @@ public class HasAttributeFilterWrapper
         }
     }
 
+    /**
+     * Handle a change update event.
+     * @param e Details about the change event.
+     */
     public void changedUpdate (DocumentEvent e)
     {
         // plain text components don't fire these events

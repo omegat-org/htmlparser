@@ -46,9 +46,11 @@ import org.htmlparser.util.ParserException;
 /**
  * This class parses the HTML stream into nodes.
  * There are three major types of nodes (lexemes):
+ * <ul>
  * <li>Remark</li>
  * <li>Text</li>
  * <li>Tag</li>
+ * </ul>
  * Each time <code>nextNode()</code> is called, another node is returned until
  * the stream is exhausted, and <code>null</code> is returned.
  */
@@ -112,8 +114,11 @@ public class Lexer
     /**
      * Creates a new instance of a Lexer.
      * @param connection The url to parse.
+     * @exception ParserException If an error occurs opening the connection.
      */
-    public Lexer (URLConnection connection) throws ParserException
+    public Lexer (URLConnection connection)
+        throws
+            ParserException
     {
         this (new Page (connection));
     }
@@ -191,11 +196,19 @@ public class Lexer
         mFactory = factory;
     }
 
+    /**
+     * Get the current cursor position.
+     * @return The current character offset into the source.
+     */
     public int getPosition ()
     {
         return (getCursor ().getPosition ());
     }
 
+    /**
+     * Set the current cursor position.
+     * @param position The new character offset into the source.
+     */
     public void setPosition (int position)
     {
         // todo: sanity checks
@@ -314,6 +327,7 @@ public class Lexer
     /**
      * Advance the cursor through a JIS escape sequence.
      * @param cursor A cursor positioned within the escape sequence.
+     * @exception ParserException If a problem occurs reading from the source.
      */
     protected void scanJIS (Cursor cursor)
         throws
@@ -362,6 +376,8 @@ public class Lexer
      * case <code>null</code> is returned.
      * @param start The position at which to start scanning.
      * @param quotesmart If <code>true</code>, strings ignore quoted contents.
+     * @return The parsed node.
+     * @exception ParserException If a problem occurs reading from the source.
      */
     protected Node parseString (int start, boolean quotesmart)
         throws
@@ -467,6 +483,10 @@ public class Lexer
 
     /**
      * Create a string node based on the current cursor and the one provided.
+     * @param start The starting point of the node.
+     * @param end The ending point of the node.
+     * @exception ParserException If the nodefactory creation of the string node fails.
+     * @return The new Text node.
      */
     protected Node makeString (int start, int end)
         throws
@@ -577,6 +597,7 @@ public class Lexer
      * The first slot is for attribute name (kind of like a standalone attribute).
      * @param start The position at which to start scanning.
      * @return The parsed tag.
+     * @exception ParserException If a problem occurs reading from the source.
      */
     protected Node parseTag (int start)
         throws
@@ -749,6 +770,11 @@ public class Lexer
 
     /**
      * Create a tag node based on the current cursor and the one provided.
+     * @param start The starting point of the node.
+     * @param end The ending point of the node.
+     * @param attributes The attributes parsed from the tag.
+     * @exception ParserException If the nodefactory creation of the tag node fails.
+     * @return The new Tag node.
      */
     protected Node makeTag (int start, int end, Vector attributes)
         throws
@@ -810,6 +836,8 @@ public class Lexer
      * We allow terminators like --!&gt; even though this isn't part of the spec.
      * @param start The position at which to start scanning.
      * @param quotesmart If <code>true</code>, strings ignore quoted contents.
+     * @return The parsed node.
+     * @exception ParserException If a problem occurs reading from the source.
      */
     protected Node parseRemark (int start, boolean quotesmart)
         throws
@@ -887,6 +915,10 @@ public class Lexer
 
     /**
      * Create a remark node based on the current cursor and the one provided.
+     * @param start The starting point of the node.
+     * @param end The ending point of the node.
+     * @exception ParserException If the nodefactory creation of the remark node fails.
+     * @return The new Remark node.
      */
     protected Node makeRemark (int start, int end)
         throws
@@ -914,6 +946,8 @@ public class Lexer
      * Scan characters until "%&gt;" is encountered, or the input stream is
      * exhausted, in which case <code>null</code> is returned.
      * @param start The position at which to start scanning.
+     * @return The parsed node.
+     * @exception ParserException If a problem occurs reading from the source.
      */
     protected Node parseJsp (int start)
         throws
@@ -1069,6 +1103,7 @@ public class Lexer
      * are specific to each scripting or style sheet language.
      * </quote>
      * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
+     * @exception ParserException If a problem occurs reading from the source.
      */
     public Node parseCDATA ()
         throws
@@ -1086,6 +1121,7 @@ public class Lexer
      * extended to allow for single or double quoted ETAGO ("&lt;/") sequences.
      * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
      * @see #parseCDATA()
+     * @exception ParserException If a problem occurs reading from the source.
      */
     public Node parseCDATA (boolean quotesmart)
         throws
@@ -1228,6 +1264,7 @@ public class Lexer
      * @param page The page the node is on.
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
+     * @return The created Text node.
      */
     public Text createStringNode (Page page,  int start, int end)
     {
@@ -1239,6 +1276,7 @@ public class Lexer
      * @param page The page the node is on.
      * @param start The beginning position of the remark.
      * @param end The ending positiong of the remark.
+     * @return The created Remark node.
      */
     public Remark createRemarkNode (Page page,  int start, int end)
     {
@@ -1255,6 +1293,7 @@ public class Lexer
      * @param start The beginning position of the tag.
      * @param end The ending positiong of the tag.
      * @param attributes The attributes contained in this tag.
+     * @return The created Tag node.
      */
     public Tag createTagNode (Page page, int start, int end, Vector attributes)
     {
@@ -1263,11 +1302,13 @@ public class Lexer
 
     /**
      * Mainline for command line operation
+     * @param args [0] The URL to parse.
+     * @exception MalformedURLException If the provided URL cannot be resolved.
+     * @exception ParserException If the parse fails.
      */
     public static void main (String[] args)
         throws
             MalformedURLException,
-            IOException,
             ParserException
     {
         Lexer lexer;

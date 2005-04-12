@@ -49,9 +49,9 @@ import org.htmlparser.util.ParserException;
  * Wrapper for TagNameFilters.
  */
 public class TagNameFilterWrapper
-	extends
-		Filter
-	implements
+    extends
+        Filter
+    implements
         ActionListener
 {
     /**
@@ -83,16 +83,28 @@ public class TagNameFilterWrapper
     // Filter overrides and concrete implementations
     //
 
+    /**
+     * Get the name of the filter.
+     * @return A descriptive name for the filter.
+     */
     public String getDescription ()
     {
         return ("Tag named");
     }
 
+    /**
+     * Get the resource name for the icon.
+     * @return The icon resource specification.
+     */
     public String getIconSpec ()
     {
         return ("images/TagNameFilter.gif");
     }
 
+    /**
+     * Get the underlying node filter object.
+     * @return The node filter object suitable for serialization.
+     */
     public NodeFilter getNodeFilter ()
     {
         TagNameFilter ret;
@@ -103,6 +115,14 @@ public class TagNameFilterWrapper
         return (ret);
     }
 
+    /**
+     * Assign the underlying node filter for this wrapper.
+     * @param filter The filter to wrap.
+     * @param context The parser to use for conditioning this filter.
+     * Some filters need contextual information to provide to the user,
+     * i.e. for tag names or attribute names or values,
+     * so the Parser context is provided. 
+     */
     public void setNodeFilter (NodeFilter filter, Parser context)
     {
         Set set;
@@ -112,8 +132,8 @@ public class TagNameFilterWrapper
         context.reset ();
         try
         {
-	        for (NodeIterator iterator = context.elements (); iterator.hasMoreNodes (); )
-	            addName (set, iterator.nextNode ());
+            for (NodeIterator iterator = context.elements (); iterator.hasMoreNodes (); )
+                addName (set, iterator.nextNode ());
         }
         catch (ParserException pe)
         {
@@ -124,16 +144,34 @@ public class TagNameFilterWrapper
         mName.setSelectedItem (mFilter.getName ());
     }
 
+    /**
+     * Get the underlying node filter's subordinate filters.
+     * @return The node filter object's contained filters.
+     */
     public NodeFilter[] getSubNodeFilters ()
     {
         return (new NodeFilter[0]);
     }
 
+    /**
+     * Assign the underlying node filter's subordinate filters.
+     * @param filters The filters to insert into the underlying node filter.
+     */
     public void setSubNodeFilters (NodeFilter[] filters)
     {
         // should we complain?
     }
 
+    /**
+     * Convert this filter into Java code.
+     * Output whatever text necessary and return the variable name.
+     * @param out The output buffer.
+     * @param context Three integers as follows:
+     * <li>indent level - the number of spaces to insert at the beginning of each line</li>
+     * <li>filter number - the next available filter number</li>
+     * <li>filter array number - the next available array of filters number</li>
+     * @return The variable name to use when referencing this filter (usually "filter" + context[1]++) 
+     */
     public String toJavaCode (StringBuffer out, int[] context)
     {
         String ret;
@@ -154,6 +192,11 @@ public class TagNameFilterWrapper
         return (ret);
     }
 
+    /**
+     * Add the tag name and it's children's tag names to the set of tag names.
+     * @param set The set to add to.
+     * @param node The node to get the names from.
+     */
     protected void addName (Set set, Node node)
     {
         NodeList children;
@@ -174,6 +217,15 @@ public class TagNameFilterWrapper
     // NodeFilter interface
     //
 
+    /**
+     * Predicate to determine whether or not to keep the given node.
+     * The behaviour based on this outcome is determined by the context
+     * in which it is called. It may lead to the node being added to a list
+     * or printed out. See the calling routine for details.
+     * @return <code>true</code> if the node is to be kept, <code>false</code>
+     * if it is to be discarded.
+     * @param node The node to test.
+     */
     public boolean accept (Node node)
     {
         return (mFilter.accept (node));
@@ -185,6 +237,7 @@ public class TagNameFilterWrapper
 
     /**
      * Invoked when an action occurs on the combo box.
+     * @param event Details about the action event.
      */
     public void actionPerformed (ActionEvent event)
     {

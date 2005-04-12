@@ -29,17 +29,66 @@
 -->
 </head>
 <body bgcolor="white">
-Developers and users alike should try out the applications in this package. The code of these applications will give
-a good idea about the capabilities of the HTML Parser, and its intended usage. The binary releases of html parser would
-typically contain these applications in runnable form.
+Example applications.
+<p>
+<table width="94%" border="0">
+  <tr> 
+    <td valign="top">
+    <strong>Link Extractor</strong><br>
+    </td>
+    <td>
+    <i>Extract links/mail addresses from a web page.</i><br>
 
-<h2>Related Documentation</h2>
+    <a href="javadoc/org/htmlparser/parserapplications/LinkExtractor.html" target="_parent">org.htmlparser.parserapplications.LinkExtractor</a>
+    <pre>
+    <code>bin/linkextractor http://website_url [-maillinks]</code>
+    the optional -maillinks argument causes mailto: links to be printed
+    </pre>
+    </td>
+  </tr>
+  <tr> 
+    <td valign="top">
 
-For overviews, tutorials, examples, guides, and tool documentation, please see:
-<ul>
-  <li><a href="http://htmlparser.sourceforge.net">HTML Parser Home Page</a>
-</ul>
+    <strong>String Extractor</strong><br>
+    </td>
+    <td>
+    <i>Extract text from a web page.</i><br>
+    <a href="javadoc/org/htmlparser/parserapplications/StringExtractor.html" target="_parent">org.htmlparser.parserapplications.StringExtractor</a>
+    <pre>
+    <code>bin/stringextractor http://website_url [-links]</code>
 
+    the optional -links argument causes hyperlinks to be shown within the text
+    </pre>
+    </td>
+  </tr>
+  <tr> 
+    <td valign="top">
+    <strong>Site Capturer</strong><br>
+    </td>
+    <td>
+
+    <i>Save a web site locally.</i><br>
+    <a href="javadoc/org/htmlparser/parserapplications/SiteCapturer.html" target="_parent">org.htmlparser.parserapplications.SiteCapturer</a>
+    <pre>
+    <code>bin/sitecapturer http://source_website /target_directory/ [true|false]</code>
+
+    the optional boolean argument determines whether resources such as images,
+    audio and video are to be captured
+    </pre>
+    </td>
+  </tr>
+  <tr> 
+    <td valign="top">
+    <strong>Wiki Capturer</strong><br>
+    </td>
+    <td>
+
+    <i>Save a wiki locally.</i><br>
+    <a href="javadoc/org/htmlparser/parserapplications/WikiCapturer.html" target="_parent">org.htmlparser.parserapplications.WikiCapturer</a>
+    Subclass of SiteCapturer (see above) that eliminates specific Wiki pages.
+    </td>
+  </tr>
+</table>
 <!-- Put @see and @since tags down here. -->
 
 </body>

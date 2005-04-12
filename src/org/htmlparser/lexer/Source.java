@@ -88,6 +88,7 @@ public abstract class Source
     /**
      * Does nothing.
      * It's supposed to close the source, but use {@link #destroy} instead.
+     * @exception IOException <em>not used</em>
      * @see #destroy
      */
     public abstract void close () throws IOException;
@@ -138,7 +139,6 @@ public abstract class Source
     /**
      * Reset the source.
      * Repositions the read point to begin at zero.
-     * @exception IllegalStateException If the source has been closed.
      */
     public abstract void reset ();
 
@@ -167,7 +167,6 @@ public abstract class Source
      * <em>Note: n is treated as an int</em>
      * @param n The number of characters to skip.
      * @return The number of characters actually skipped
-     * @exception IllegalArgumentException If <code>n</code> is negative.
      * @exception IOException If an I/O error occurs.
      */
     public abstract long skip (long n) throws IOException;

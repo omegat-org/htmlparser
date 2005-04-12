@@ -216,9 +216,15 @@ public abstract class Filter
     // utilities
     //
 
+    /**
+     * Serialize an object to a byte array.
+     * @param object The object to be pickled.
+     * @return The serialized object.
+     * @exception IOException If the output stream complains (unlikely).
+     */
     public static byte[] pickle (Object object)
-    	throws
-    		IOException
+        throws
+            IOException
     {
         ByteArrayOutputStream bos;
         ObjectOutputStream oos;
@@ -233,9 +239,17 @@ public abstract class Filter
         return (ret);
     }
 
+    /**
+     * Reconstitute a serialized object.
+     * @param data The pickled object.
+     * @return The reconstituted object.
+     * @exception IOException If the input stream complains. 
+     * @exception ClassNotFoundException If the serialized object class cannot
+     * be located.
+     */
     public static Object unpickle (byte[] data)
-    	throws
-    		IOException,
+        throws
+            IOException,
             ClassNotFoundException
     {
         ByteArrayInputStream bis;
@@ -250,6 +264,13 @@ public abstract class Filter
         return (ret);
     }
 
+    /**
+     * Serialize a byte array to a String.
+     * Convert each byte from the serialized object into a couple of hexadecimal
+     * characters.
+     * @param data The serialized object as a byte array.
+     * @return The string representing the serialized object.
+     */
     public static String serialize (byte[] data)
     {
         String string;
@@ -268,6 +289,11 @@ public abstract class Filter
         return (ret.toString ());
     }
 
+    /**
+     * Convert a sequence of hexadecimal characters back into a byte array.
+     * @param string The string to convert (must be correct hex characters).
+     * @return The bytes as an array.
+     */
     public static byte[] deserialize (String string)
     {
         byte[] ret;
@@ -282,7 +308,9 @@ public abstract class Filter
 
     /**
      * Returns a string serialization of the filters.
+     * @param filters The list of filters to serialize.
      * @return A string representation of the filters.
+     * @exception IOException If serialization fails.
      */
     public static String deconstitute (Filter[] filters) throws IOException
     {
@@ -302,7 +330,10 @@ public abstract class Filter
     /**
      * Returns the filters represented by the string.
      * @param string The string with serialized node filters.
+     * @param context The context from which to extract meaningful values
+     * for GUI choices (which aren't serialized).
      * @return The filters gleaned from the string.
+     * @see #wrap
      */
     public static Filter[] reconstitute (String string, Parser context)
     {
@@ -316,26 +347,26 @@ public abstract class Filter
         vector = new Vector ();
         try
         {
-	        while (string.startsWith ("["))
-	        {
-	            index = string.indexOf (']');
-	            if (-1 != index)
-	            {
-	                code = string.substring (1, index);
-	                string = string.substring (index + 1);
-	                object = unpickle (deserialize (code));
-	                if (object instanceof NodeFilter)
-	                {
-	                    filter = wrap ((NodeFilter)object, context);
-	                    if (null != filter)
-	                        vector.addElement (filter);
-	                }
-	                else
-	                    break;
-	            }
-	            else
-	                break;
-	        }
+            while (string.startsWith ("["))
+            {
+                index = string.indexOf (']');
+                if (-1 != index)
+                {
+                    code = string.substring (1, index);
+                    string = string.substring (index + 1);
+                    object = unpickle (deserialize (code));
+                    if (object instanceof NodeFilter)
+                    {
+                        filter = wrap ((NodeFilter)object, context);
+                        if (null != filter)
+                            vector.addElement (filter);
+                    }
+                    else
+                        break;
+                }
+                else
+                    break;
+            }
         }
         catch (Exception e)
         {
@@ -360,10 +391,10 @@ public abstract class Filter
 
         if (component instanceof Container)
         {
-	        list = ((Container)component).getComponents  ();
-	        for (int i = 0; i < list.length; i++)
-	            if (list[i] instanceof SubFilterList)
-	            	return ((SubFilterList)list[i]);
+            list = ((Container)component).getComponents  ();
+            for (int i = 0; i < list.length; i++)
+                if (list[i] instanceof SubFilterList)
+                    return ((SubFilterList)list[i]);
         }
 
         return (null);
@@ -392,21 +423,21 @@ public abstract class Filter
             try
             {
                 ret = Filter.instantiate (class_name);
-	            ret.setNodeFilter (filter, context);
-	            // recurse into subfilters
-	            filters = ret.getSubNodeFilters ();
-	            if (0 != filters.length)
-	            {
-		            list = getEnclosed (ret);
-		            if (null != list)
-		            {
-		                ret.setSubNodeFilters (new NodeFilter[0]); // clean out the unwrapped filters
-			            for (int i = 0; i < filters.length; i++)
-		                    list.addFilter (wrap (filters[i], context));
-		            }
-		            else
-		                throw new IllegalStateException ("filter can't have subnodes without a SubFilterList on the wrapper");
-	            }
+                ret.setNodeFilter (filter, context);
+                // recurse into subfilters
+                filters = ret.getSubNodeFilters ();
+                if (0 != filters.length)
+                {
+                    list = getEnclosed (ret);
+                    if (null != list)
+                    {
+                        ret.setSubNodeFilters (new NodeFilter[0]); // clean out the unwrapped filters
+                        for (int i = 0; i < filters.length; i++)
+                            list.addFilter (wrap (filters[i], context));
+                    }
+                    else
+                        throw new IllegalStateException ("filter can't have subnodes without a SubFilterList on the wrapper");
+                }
             }
             catch (Exception e)
             {
@@ -428,15 +459,15 @@ public abstract class Filter
     {
         if (selected)
             setBorder (
-	            new CompoundBorder (
-	                new EtchedBorder (),
-	                new CompoundBorder (
+                new CompoundBorder (
+                    new EtchedBorder (),
+                    new CompoundBorder (
                         new LineBorder(Color.blue, 2),
                         new EmptyBorder (1, 1, 1, 1))));
         else
             setBorder (
-	            new CompoundBorder (
-	                new EtchedBorder (),
+                new CompoundBorder (
+                    new EtchedBorder (),
                     new EmptyBorder (3,3,3,3)));
     }
     
@@ -457,13 +488,22 @@ public abstract class Filter
                 components[i].setVisible (expanded);
     }
     
+    /**
+     * Append count spaces to the buffer.
+     * @param out The buffer to append to.
+     * @param count The number of spaces to append.
+     */
     public static void spaces (StringBuffer out, int count)
     {
         for (int i = 0; i < count; i++)
             out.append (' ');
     }
     
-    public static  void newline (StringBuffer out)
+    /**
+     * Append a newline to the buffer.
+     * @param out The buffer to append to.
+     */
+    public static void newline (StringBuffer out)
     {
         out.append ('\n');
     }

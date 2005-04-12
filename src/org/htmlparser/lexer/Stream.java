@@ -36,8 +36,22 @@ import java.lang.Runnable;
  */
 public class Stream extends InputStream implements Runnable
 {
+    /**
+     * The number of calls to fill.
+     * Note: to be removed.
+     */
     public int fills = 0;
+
+    /**
+     * The number of reallocations.
+     * Note: to be removed.
+     */
     public int reallocations = 0;
+
+    /**
+     * The number of synchronous (blocking) fills.
+     * Note: to be removed.
+     */
     public int synchronous = 0;
 
     /**

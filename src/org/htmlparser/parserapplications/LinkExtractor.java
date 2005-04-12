@@ -43,6 +43,9 @@ import org.htmlparser.util.ParserException;
 public class LinkExtractor
 {
     /**
+     * Run the link extractor.
+     * @param args [0] Optional url to extract links from.
+     * An input dialog is displayed if it is not supplied.
      */
     public static void main (String[] args)
     {

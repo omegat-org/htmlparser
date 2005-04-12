@@ -83,48 +83,45 @@ code. It reads characters from the page, keeping track of where it is with a
 machines.
 <p>
 The following are some design goals and 'invariants' within the package, if you
-are attempting to understand or modify it. Things that differ substantially from
-previous implementations are highlighted in <B>bold</B>.
+are attempting to understand or modify it.
 <DL>
 <DT>Contiguous Nodes
-<DD><B>Adjacent nodes have no characters between them.</B> The list of nodes forms an
+<DD>Adjacent nodes have no characters between them. The list of nodes forms an
 uninterrupted chain that, by start and end definitions, completely covers the
 characters that were read from the HTML source.
 <DT>Text Fidelity
-<DD>Besides complete coverage, the <B>nodes do not initially contain copies of 
-the text</B>, but instead simply contain offsets into a single large buffer
+<DD>Besides complete coverage, the nodes do not initially contain copies of 
+the text, but instead simply contain offsets into a single large buffer
 that contains the text read from the HTML source. Even within tags, the
 attributes list can contain whitespace, thus there is no lost whitespace or
 text formatting either outside or within tags. Upper and lower case text is
 preserved.
 <DT>Line Endings
-<DD><B>End of line characters are just whitespace.</B> There is no distinction
+<DD>End of line characters are just whitespace. There is no distinction
 made between end of line characters (or pairs of characters on Windows) and
 other whitespace. The text is not read in line by line so nodes (tags) can easily span
 multiple lines with no special processing. Line endings are not transformed
 between platforms, i.e. Unix line endings are not converted to Windows line
-endings by this level.  Each node will has a starting and ending location, which
+endings by this level.  Each node has a starting and ending location, which
 the page can use to extract the text. To facilitate formatting error and log messages
 the page can turn these offsets into row and column numbers. In general ignore line
 breaks in the source if at all possible.
-<DT>One Parser, One Scan
-<DD>The Lexer has the following state machines corresponding
-(roughly) to the <B>four parsers it replaces</B> (StringParser, RemarkNodeParser,
-TagParser & AttributeParser):
+<DT>State Machines
+<DD>The Lexer has the following state machines:
+<UL>
 <LI>in text - parseString()</LI>
 <LI>in comment - parseRemark()</LI>
 <LI>in tag - parseTag()</LI>
-By integrating the four state machines into one, a single pass over the text is
-all that's needed for a low level parse of the HTML source. In previous
-implementations, the attributes were parsed on a second scan after the initial
-tag was extracted. (Actually, for error conditions, the lexer can back up  a
-node to handle missing end tags etc.).
+<LI>in JSP tag - parseJsp()</LI>
+</UL>
+There is another state machine -- parseCDATA -- used by higher level code
+(script and style scanners), but this isn't actually used by the lexer.
 <DT>Two Jars
 <DD>For elementary operations at the node level, a minimalist jar file containing
-<B>only the lexer and base tag classes</B> is split out from the larger <CODE>htmlparser.jar</CODE>.
+only the lexer and base tag classes is split out from the larger <CODE>htmlparser.jar</CODE>.
 In this way, simple parsing and output is handled with a jar file that is under
 45 kilobytes, but anything beyond peephole manipulation, i.e. closing tag detection
-and other semantic reasoning will need the full set of scanners, nodes and ancillary
+and other semantic reasoning, will need the full set of scanners, nodes and ancillary
 classes, which now stands at 210 kilobytes.
 </DL>
 </BODY>

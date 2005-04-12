@@ -110,6 +110,7 @@ public class StringSource
     /**
      * Does nothing.
      * It's supposed to close the source, but use destroy() instead.
+     * @exception IOException <em>not used</em>
      * @see #destroy
      */
     public void close () throws IOException
@@ -205,6 +206,8 @@ public class StringSource
      * @exception IllegalStateException If the source has been closed.
      */
     public void reset ()
+        throws
+            IllegalStateException
     {
         if (null == mString)
             throw new IllegalStateException ("source is closed");
@@ -247,14 +250,17 @@ public class StringSource
      * @exception IllegalArgumentException If <code>n</code> is negative.
      * @exception IOException If the source is closed.
      */
-    public long skip (long n) throws IOException
+    public long skip (long n)
+        throws
+            IOException,
+            IllegalArgumentException
     {
         int length;
         long ret;
 
         if (null == mString)
             throw new IOException ("source is closed");
-        if (n < 0)
+        if (0 > n)
             throw new IllegalArgumentException ("cannot skip backwards");
         else
         {

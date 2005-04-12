@@ -122,6 +122,11 @@ public class Cursor
         }
     }
 
+    /**
+     * Return a string representation of this cursor
+     * @return A string of the form "n[r,c]", where n is the character position,
+     * r is the row (zero based) and c is the column (zero based) on the page.
+     */
     public String toString ()
     {
         StringBuffer ret;
@@ -149,6 +154,10 @@ public class Cursor
 
     /**
      * Compare one reference to another.
+     * @param that The object to compare this to.
+     * @return A negative integer, zero, or a positive
+     * integer as this object is less than, equal to,
+     * or greater than that object.
      * @see org.htmlparser.util.sort.Ordered
      */
     public int compare (Object that)

@@ -50,6 +50,7 @@ public class NullLayoutManager
      * Calculates the minimum size dimensions for the specified
      * panel given the components in the specified parent container.
      * @param target The component to be laid out.
+     * @return The minimum size.
      * @see #preferredLayoutSize
      */
     public Dimension minimumLayoutSize (Container target)
@@ -60,8 +61,9 @@ public class NullLayoutManager
     /**
      * Calculates the preferred size dimensions for the specified
      * panel given the components in the specified parent container.
-     * @param target The component to be laid out.
      * @see #minimumLayoutSize
+     * @param target The component to be laid out.
+     * @return A size deemed suitable for laying out the container.
      */
     public Dimension preferredLayoutSize (Container target)
     {
@@ -75,9 +77,9 @@ public class NullLayoutManager
         
         synchronized (target.getTreeLock ())
         {
-	        count = target.getComponentCount ();
-	        if (0 == count)
-	        {
+            count = target.getComponentCount ();
+            if (0 == count)
+            {
                 // be the same size unless we have a parent
                 ret = target.getSize ();
                 parent = target.getParent ();
@@ -90,19 +92,19 @@ public class NullLayoutManager
                         ret.height - insets.top - insets.bottom);
                 }
             }
-	        else
-	        {
-	            ret = new Dimension (0, 0);
-	            for (int i = 0 ; i < count ; i++)
-	            {
-	                component = target.getComponent (i);
-	                if (component.isVisible ())
-	                {
-	                    point = component.getLocation ();
-		                dimension = component.getPreferredSize();
-		                ret.width = Math.max (ret.width, point.x + dimension.width);
-		                ret.height = Math.max (ret.height, point.y + dimension.height);
-		            }
+            else
+            {
+                ret = new Dimension (0, 0);
+                for (int i = 0 ; i < count ; i++)
+                {
+                    component = target.getComponent (i);
+                    if (component.isVisible ())
+                    {
+                        point = component.getLocation ();
+                        dimension = component.getPreferredSize();
+                        ret.width = Math.max (ret.width, point.x + dimension.width);
+                        ret.height = Math.max (ret.height, point.y + dimension.height);
+                    }
                 }
                 insets = target.getInsets ();
                 ret.width += insets.left + insets.right;
@@ -116,9 +118,8 @@ public class NullLayoutManager
     /**
      * Returns the maximum size of this component.
      * @param target The component to be laid out.
-     * @see java.awt.Component#getMinimumSize
-     * @see java.awt.Component#getPreferredSize
-     * @see java.awt.LayoutManager
+     * @return The maximum size for the container.
+     * @see #preferredLayoutSize
      */
     public Dimension maximumLayoutSize (Container target)
     {
@@ -153,23 +154,23 @@ public class NullLayoutManager
      */
     public void layoutContainer (Container target)
     {
-	    int count;
-	    Component component;
-	    Dimension dimension;
-	    
+        int count;
+        Component component;
+        Dimension dimension;
+        
         synchronized (target.getTreeLock ())
         {
-	        count = target.getComponentCount ();
-	        for (int i = 0 ; i < count ; i++)
-	        {
-	            component = target.getComponent (i);
-	            if (component.isVisible ())
-	            {
-		            dimension = component.getPreferredSize();
-		            component.setSize (dimension.width, dimension.height);
-		        }
-		    }
-		}
+            count = target.getComponentCount ();
+            for (int i = 0 ; i < count ; i++)
+            {
+                component = target.getComponent (i);
+                if (component.isVisible ())
+                {
+                    dimension = component.getPreferredSize();
+                    component.setSize (dimension.width, dimension.height);
+                }
+            }
+        }
     }
   
     //
@@ -193,6 +194,7 @@ public class NullLayoutManager
      * where 0 represents alignment along the origin, 1 is aligned
      * the furthest away from the origin, 0.5 is centered, etc.
      * @param target The target container.
+     * @return The X-axis alignment.
      */
     public float getLayoutAlignmentX (Container target)
     {
@@ -206,6 +208,7 @@ public class NullLayoutManager
      * where 0 represents alignment along the origin, 1 is aligned
      * the furthest away from the origin, 0.5 is centered, etc.
      * @param target The target container.
+     * @return The Y-axis alignment.
      */
     public float getLayoutAlignmentY (Container target)
     {

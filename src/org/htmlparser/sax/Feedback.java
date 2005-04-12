@@ -94,6 +94,7 @@ public class Feedback
      * Error message.
      * Calls {@link ErrorHandler#error(SAXParseException) ErrorHandler.error}.
      * @param message {@inheritDoc} 
+     * @param e {@inheritDoc} 
      */
     public void error (String message, ParserException e)
     {

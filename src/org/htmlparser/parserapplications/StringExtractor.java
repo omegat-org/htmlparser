@@ -50,8 +50,9 @@ public class StringExtractor
 
     /**
      * Extract the text from a page.
-     * @param links if <code>true</code> include hyperlinks in output.
      * @return The textual contents of the page.
+     * @param links if <code>true</code> include hyperlinks in output.
+     * @exception ParserException If a parse error occurs.
      */
     public String extractStrings (boolean links)
         throws

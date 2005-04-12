@@ -356,6 +356,7 @@ public class InputStreamSource
     /**
      * Does nothing.
      * It's supposed to close the source, but use destroy() instead.
+     * @exception IOException <em>not used</em>
      * @see #destroy
      */
     public void close () throws IOException
@@ -446,6 +447,8 @@ public class InputStreamSource
      * @exception IllegalStateException If the source has been closed.
      */
     public void reset ()
+        throws
+            IllegalStateException
     {
         if (null == mStream)
             throw new IllegalStateException ("source is closed");
@@ -503,20 +506,28 @@ public class InputStreamSource
      * @exception IllegalArgumentException If <code>n</code> is negative.
      * @exception IOException If an I/O error occurs.
      */
-    public long skip (long n) throws IOException
+    public long skip (long n)
+        throws
+            IOException,
+            IllegalArgumentException
     {
         long ret;
 
         if (null == mStream)
             throw new IOException ("source is closed");
-        if (mLevel - mOffset < n)
-            fill ((int)(n - (mLevel - mOffset))); // minimum to satisfy this request
-        if (mOffset >= mLevel)
-            ret = EOF;
+        if (0 > n)
+            throw new IllegalArgumentException ("cannot skip backwards");
         else
         {
-            ret = Math.min (mLevel - mOffset, n);
-            mOffset += ret;
+            if (mLevel - mOffset < n)
+                fill ((int)(n - (mLevel - mOffset))); // minimum to satisfy this request
+            if (mOffset >= mLevel)
+                ret = EOF;
+            else
+            {
+                ret = Math.min (mLevel - mOffset, n);
+                mOffset += ret;
+            }
         }
 
         return (ret);

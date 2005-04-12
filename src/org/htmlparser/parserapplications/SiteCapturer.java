@@ -266,8 +266,10 @@ public class SiteCapturer
 
     /**
      * Returns <code>true</code> if the link contains text/html content.
+     * @param link The URL to check for content type.
      * @return <code>true</code> if the HTTP header indicates the type is
      * "text/html".
+     * @exception ParserException If the supplied URL can't be read from.
      */
     protected boolean isHtml (String link)
         throws
@@ -468,6 +470,8 @@ public class SiteCapturer
  
     /**
      * Process a single page.
+     * @param filter The filter to apply to the collected nodes.
+     * @exception ParserException If a parse error occurs.
      */
     protected void process (NodeFilter filter)
         throws
@@ -747,6 +751,8 @@ public class SiteCapturer
      * to save it to, and a flag (true or false) to indicate whether resources
      * such as images and video are to be captured as well.
      * These are requested via dialog boxes if not supplied.
+     * @exception MalformedURLException If the supplied URL is invalid.
+     * @exception IOException If an error occurs reading the page or resources.
      */
     public static void main (String[] args)
         throws

@@ -42,17 +42,17 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.Translate;
 
 /**
- * @author derrick
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * Renderer for tree view of a NodeList.
  */
 public class HtmlTreeCellRenderer
-	extends
-		DefaultTreeCellRenderer
-	implements
-		TreeCellRenderer
+    extends
+        DefaultTreeCellRenderer
+    implements
+        TreeCellRenderer
 {
+    /**
+     * Create a new tree cell renderer for Nodes.
+     */
     public HtmlTreeCellRenderer ()
     {
         setLeafIcon (null);
@@ -64,8 +64,10 @@ public class HtmlTreeCellRenderer
      * Render the tag as HTML.
      * This is different from the tag's normal toHtml() method in that it
      * doesn't process children or end tags, just the initial tag, and
-     * it also wraps the tag in something a label would expect.
+     * it also wraps the tag in html a label would expect.
      * @see org.htmlparser.Node#toHtml()
+     * @param tag The tag to convert to HTML.
+     * @return A string suitable for rendering the tag.
      */
     public String toHtml (TagNode tag)
     {
@@ -112,6 +114,7 @@ public class HtmlTreeCellRenderer
      * This is suitable for display in a debugger or output to a printout.
      * Control characters are replaced by their equivalent escape
      * sequence and contents is truncated to 80 characters.
+     * @param node The node to render.
      * @return A string representation of the string node.
      */
     public String toText (TextNode node)
@@ -154,7 +157,16 @@ public class HtmlTreeCellRenderer
     }
 
     /**
-     * @see javax.swing.tree.TreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object, boolean, boolean, boolean, int, boolean)
+     * Render the node for the tree cell.
+     * @see TreeCellRenderer#getTreeCellRendererComponent(JTree, Object, boolean, boolean, boolean, int, boolean)
+     * @param tree {@inheritDoc}
+     * @param value {@inheritDoc}
+     * @param selected {@inheritDoc}
+     * @param expanded {@inheritDoc}
+     * @param leaf {@inheritDoc}
+     * @param row {@inheritDoc}
+     * @param hasFocus {@inheritDoc}
+     * @return {@inheritDoc}
      */
     public Component getTreeCellRendererComponent (JTree tree, Object value,
             boolean selected, boolean expanded, boolean leaf, int row,

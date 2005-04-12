@@ -267,6 +267,8 @@ public class Attribute
      * whitespace. To set a real value use {@link #Attribute(String,String)}.
      */
     public Attribute (String value)
+        throws
+            IllegalArgumentException
     {
         if (0 != value.trim ().length ())
             throw new IllegalArgumentException ("non whitespace value");

@@ -232,6 +232,7 @@ public class PicturePanel
      * Paints this component.
      * Runs through the list of tiles and for every one that intersects
      * the clip region performs a <code>drawImage()</code>.
+     * @param graphics The graphics context used to paint with.
      */
     public void paint (final Graphics graphics)
     {
@@ -597,6 +598,9 @@ public class PicturePanel
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.2  2005/04/12 11:27:41  derrickoswald
+ * Documentation revamp part two.
+ *
  * Revision 1.1  2003/09/21 18:20:56  derrickoswald
  * Thumbelina
  * Created a lexer GUI application to extract images behind thumbnails.

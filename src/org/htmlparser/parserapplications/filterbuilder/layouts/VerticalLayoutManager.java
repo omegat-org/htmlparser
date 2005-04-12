@@ -51,6 +51,7 @@ public class VerticalLayoutManager
      * Calculates the minimum size dimensions for the specified
      * panel given the components in the specified parent container.
      * @param target The component to be laid out.
+     * @return The minimum size.
      * @see #preferredLayoutSize
      */
     public Dimension minimumLayoutSize (Container target)
@@ -62,6 +63,7 @@ public class VerticalLayoutManager
      * Calculates the preferred size dimensions for the specified
      * panel given the components in the specified parent container.
      * @param target The component to be laid out.
+     * @return A size deemed suitable for laying out the container.
      * @see #minimumLayoutSize
      */
     public Dimension preferredLayoutSize (Container target)
@@ -98,9 +100,8 @@ public class VerticalLayoutManager
     /**
      * Returns the maximum size of this component.
      * @param target The component to be laid out.
-     * @see java.awt.Component#getMinimumSize
-     * @see java.awt.Component#getPreferredSize
-     * @see java.awt.LayoutManager
+     * @return The maximum size for the container.
+     * @see #preferredLayoutSize
      */
     public Dimension maximumLayoutSize (Container target)
     {
@@ -138,42 +139,42 @@ public class VerticalLayoutManager
         Insets insets;
         int x;
         int y;
-	    int count;
-	    int width;
-	    Component component;
-	    Dimension dimension;
-	    
+        int count;
+        int width;
+        Component component;
+        Dimension dimension;
+        
         synchronized (target.getTreeLock ())
         {
             insets = target.getInsets ();
             x = insets.left;
             y = insets.top;
-	        count = target.getComponentCount ();
-	        width = 0;
-	        for (int i = 0 ; i < count ; i++)
-	        {
-	            component = target.getComponent (i);
-	            if (component.isVisible ())
-	            {
-		            dimension = component.getPreferredSize ();
-		            width = Math.max (width, dimension.width);
-		            component.setSize (dimension.width, dimension.height);
-		            component.setLocation (x, y);
-		            y += dimension.height;
-		        }
-		    }
-	        // now set them all to the same width
-	        for (int i = 0 ; i < count ; i++)
-	        {
-	            component = target.getComponent (i);
-	            if (component.isVisible ())
-	            {
-	                dimension = component.getSize ();
-	                dimension.width = width;
-		            component.setSize (dimension.width, dimension.height);
-	            }
-	        }
-		}
+            count = target.getComponentCount ();
+            width = 0;
+            for (int i = 0 ; i < count ; i++)
+            {
+                component = target.getComponent (i);
+                if (component.isVisible ())
+                {
+                    dimension = component.getPreferredSize ();
+                    width = Math.max (width, dimension.width);
+                    component.setSize (dimension.width, dimension.height);
+                    component.setLocation (x, y);
+                    y += dimension.height;
+                }
+            }
+            // now set them all to the same width
+            for (int i = 0 ; i < count ; i++)
+            {
+                component = target.getComponent (i);
+                if (component.isVisible ())
+                {
+                    dimension = component.getSize ();
+                    dimension.width = width;
+                    component.setSize (dimension.width, dimension.height);
+                }
+            }
+        }
     }
   
     //
@@ -197,6 +198,7 @@ public class VerticalLayoutManager
      * where 0 represents alignment along the origin, 1 is aligned
      * the furthest away from the origin, 0.5 is centered, etc.
      * @param target The target container.
+     * @return The X-axis alignment.
      */
     public float getLayoutAlignmentX (Container target)
     {
@@ -210,6 +212,7 @@ public class VerticalLayoutManager
      * where 0 represents alignment along the origin, 1 is aligned
      * the furthest away from the origin, 0.5 is centered, etc.
      * @param target The target container.
+     * @return The Y-axis alignment.
      */
     public float getLayoutAlignmentY (Container target)
     {

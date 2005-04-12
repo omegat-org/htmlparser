@@ -47,9 +47,9 @@ import org.htmlparser.parserapplications.filterbuilder.Filter;
  * Wrapper for RegexFilters.
  */
 public class RegexFilterWrapper
-	extends
-		Filter
-	implements
+    extends
+        Filter
+    implements
         ActionListener,
         DocumentListener
 {
@@ -76,9 +76,9 @@ public class RegexFilterWrapper
      */
     protected RegexFilter mFilter;
 
-	/**
-	 * Text to check for
-	 */
+    /**
+     * Text to check for
+     */
     protected JTextArea mPattern;
 
     /**
@@ -114,16 +114,28 @@ public class RegexFilterWrapper
     // Filter overrides and concrete implementations
     //
 
+    /**
+     * Get the name of the filter.
+     * @return A descriptive name for the filter.
+     */
     public String getDescription ()
     {
         return ("Nodes containing regex");
     }
 
+    /**
+     * Get the resource name for the icon.
+     * @return The icon resource specification.
+     */
     public String getIconSpec ()
     {
         return ("images/RegexFilter.gif");
     }
 
+    /**
+     * Get the underlying node filter object.
+     * @return The node filter object suitable for serialization.
+     */
     public NodeFilter getNodeFilter ()
     {
         RegexFilter ret;
@@ -135,6 +147,14 @@ public class RegexFilterWrapper
         return (ret);
     }
 
+    /**
+     * Assign the underlying node filter for this wrapper.
+     * @param filter The filter to wrap.
+     * @param context The parser to use for conditioning this filter.
+     * Some filters need contextual information to provide to the user,
+     * i.e. for tag names or attribute names or values,
+     * so the Parser context is provided. 
+     */
     public void setNodeFilter (NodeFilter filter, Parser context)
     {
         mFilter = (RegexFilter)filter;
@@ -142,16 +162,34 @@ public class RegexFilterWrapper
         mStrategy.setSelectedIndex (strategyToIndex (mFilter.getStrategy ()));
     }
 
+    /**
+     * Get the underlying node filter's subordinate filters.
+     * @return The node filter object's contained filters.
+     */
     public NodeFilter[] getSubNodeFilters ()
     {
         return (new NodeFilter[0]);
     }
 
+    /**
+     * Assign the underlying node filter's subordinate filters.
+     * @param filters The filters to insert into the underlying node filter.
+     */
     public void setSubNodeFilters (NodeFilter[] filters)
     {
         // should we complain?
     }
 
+    /**
+     * Convert this filter into Java code.
+     * Output whatever text necessary and return the variable name.
+     * @param out The output buffer.
+     * @param context Three integers as follows:
+     * <li>indent level - the number of spaces to insert at the beginning of each line</li>
+     * <li>filter number - the next available filter number</li>
+     * <li>filter array number - the next available array of filters number</li>
+     * @return The variable name to use when referencing this filter (usually "filter" + context[1]++) 
+     */
     public String toJavaCode (StringBuffer out, int[] context)
     {
         String ret;
@@ -178,6 +216,11 @@ public class RegexFilterWrapper
         return (ret);
     }
 
+    /**
+     * Convert the regex strategy to a string.
+     * @param strategy The regex strategy.
+     * @return A string for display in the GUI or in the Java program.
+     */
     public String strategyToString (int strategy)
     {
         for (int i =0; i < mMap.length; i++)
@@ -186,6 +229,11 @@ public class RegexFilterWrapper
         throw new IllegalArgumentException ("unknown strategy constant - " + strategy);
     }
 
+    /**
+     * Convert a string to a regex strategy.
+     * @param strategy The string equivalent of a regex strategy.
+     * @return The regex strategy to use in executing the regular expression.
+     */
     public int stringToStrategy (String strategy)
     {
         for (int i =0; i < mMap.length; i++)
@@ -194,6 +242,11 @@ public class RegexFilterWrapper
         throw new IllegalArgumentException ("unknown strategy constant - " + strategy);
     }
 
+    /**
+     * Convert the regex strategy to an index into the map.
+     * @param strategy The regex strategy.
+     * @return The index of the regex strategy in the map.
+     */
     public int strategyToIndex (int strategy)
     {
         for (int i =0; i < mMap.length; i++)
@@ -202,6 +255,11 @@ public class RegexFilterWrapper
         throw new IllegalArgumentException ("unknown strategy constant - " + strategy);
     }
 
+    /**
+     * Convert an index into a regex strategy.
+     * @param index The index of the regex strategy in the map.
+     * @return The regex strategy at that inxdex.
+     */
     public int indexToStrategy (int index)
     {
         return (((Integer)mMap[index][1]).intValue ());
@@ -211,6 +269,15 @@ public class RegexFilterWrapper
     // NodeFilter interface
     //
 
+    /**
+     * Predicate to determine whether or not to keep the given node.
+     * The behaviour based on this outcome is determined by the context
+     * in which it is called. It may lead to the node being added to a list
+     * or printed out. See the calling routine for details.
+     * @return <code>true</code> if the node is to be kept, <code>false</code>
+     * if it is to be discarded.
+     * @param node The node to test.
+     */
     public boolean accept (Node node)
     {
         return (mFilter.accept (node));
@@ -222,6 +289,7 @@ public class RegexFilterWrapper
 
     /**
      * Invoked when an action occurs on the combo box.
+     * @param event Details about the action event.
      */
     public void actionPerformed (ActionEvent event)
     {
@@ -236,6 +304,10 @@ public class RegexFilterWrapper
     // DocumentListener interface
     //
 
+    /**
+     * Handle an insert update event.
+     * @param e Details about the insert event.
+     */
     public void insertUpdate (DocumentEvent e)
     {
         Document doc;
@@ -251,6 +323,10 @@ public class RegexFilterWrapper
         }
     }
 
+    /**
+     * Handle a remove update event.
+     * @param e Details about the remove event.
+     */
     public void removeUpdate (DocumentEvent e)
     {
         Document doc;
@@ -266,6 +342,10 @@ public class RegexFilterWrapper
         }
     }
 
+    /**
+     * Handle a change update event.
+     * @param e Details about the change event.
+     */
     public void changedUpdate (DocumentEvent e)
     {
         // plain text components don't fire these events

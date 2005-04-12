@@ -34,18 +34,36 @@ import javax.swing.border.*;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.parserapplications.filterbuilder.layouts.VerticalLayoutManager;
 
+/**
+ * A helper class for lists of filters within filters.
+ */
 public class SubFilterList
     extends
         JPanel
 {
+    /**
+     * Padding for the drop target.
+     */
     protected int mExtra = 25; // for now
-    
+
+    /**
+     * The drop target spacer at the bottom of the list.
+     */
     protected Component mSpacer;
-    
+
+    /**
+     * The parent filter wrapper.
+     */
     protected Filter mHome;
 
+    /**
+     * The textual title for the list.
+     */
     protected String mTitle;
 
+    /**
+     * The number of filters limit.
+     */
     protected int mMax;
 
     /**
@@ -97,7 +115,10 @@ public class SubFilterList
     	                    TitledBorder.TOP),
     	                new EmptyBorder (3,3,3,3)));
     }
-    
+
+    /**
+     * Stuff a spacer component at the end of the list.
+     */
     protected void addSpacer ()
     {
         Dimension dimension;
@@ -112,11 +133,15 @@ public class SubFilterList
         add (mSpacer);
     }
 
+    /**
+     * Remove the spacer component at the end of the list.
+     */
     protected void removeSpacer ()
     {
         remove (mSpacer);
         mSpacer = null;
     }
+
     /**
      * Get the components in which to drop commands.
      * @return The component to act as a drop target.
@@ -221,6 +246,11 @@ public class SubFilterList
         return (ret);
     }
 
+    /**
+     * Check if our maximum number of filters limit has been reached.
+     * @return <code>true</code> if the sublist can accept one more filter,
+     * <code>false</code> otherwise.
+     */
     public boolean canAccept ()
     {
         int count;

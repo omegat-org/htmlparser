@@ -581,6 +581,8 @@ public class XMLReader
      * Does rudimentary namespace processing according to the state of {@link #mNameSpaces}
      * and {@link #mNameSpacePrefixes}. 
      * @param node The htmlparser node to traverse.
+     * @exception ParserException If a parse error occurs.
+     * @exception SAXException If a SAX error occurs.
      */
     protected void doSAX (Node node)
         throws

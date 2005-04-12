@@ -42,9 +42,9 @@ import org.htmlparser.parserapplications.filterbuilder.SubFilterList;
  * Wrapper for HasParentFilters.
  */
 public class HasParentFilterWrapper
-	extends
-		Filter
-	implements
+    extends
+        Filter
+    implements
         ActionListener
 {
     /**
@@ -84,16 +84,28 @@ public class HasParentFilterWrapper
     // Filter overrides and concrete implementations
     //
     
+    /**
+     * Get the name of the filter.
+     * @return A descriptive name for the filter.
+     */
     public String getDescription ()
     {
         return ("Has Parent");
     }
 
+    /**
+     * Get the resource name for the icon.
+     * @return The icon resource specification.
+     */
     public String getIconSpec ()
     {
         return ("images/HasParentFilter.gif");
     }
 
+    /**
+     * Get the underlying node filter object.
+     * @return The node filter object suitable for serialization.
+     */
     public NodeFilter getNodeFilter ()
     {
         NodeFilter filter;
@@ -109,12 +121,24 @@ public class HasParentFilterWrapper
         return (ret);
     }
 
+    /**
+     * Assign the underlying node filter for this wrapper.
+     * @param filter The filter to wrap.
+     * @param context The parser to use for conditioning this filter.
+     * Some filters need contextual information to provide to the user,
+     * i.e. for tag names or attribute names or values,
+     * so the Parser context is provided. 
+     */
     public void setNodeFilter (NodeFilter filter, Parser context)
     {
         mFilter = (HasParentFilter)filter;
         mRecursive.setSelected (mFilter.getRecursive ());
     }
 
+    /**
+     * Get the underlying node filter's subordinate filters.
+     * @return The node filter object's contained filters.
+     */
     public NodeFilter[] getSubNodeFilters ()
     {
         NodeFilter filter;
@@ -129,6 +153,10 @@ public class HasParentFilterWrapper
         return (ret);
     }
 
+    /**
+     * Assign the underlying node filter's subordinate filters.
+     * @param filters The filters to insert into the underlying node filter.
+     */
     public void setSubNodeFilters (NodeFilter[] filters)
     {
         if (0 != filters.length)
@@ -137,6 +165,16 @@ public class HasParentFilterWrapper
             mFilter.setParentFilter (null);
     }
 
+    /**
+     * Convert this filter into Java code.
+     * Output whatever text necessary and return the variable name.
+     * @param out The output buffer.
+     * @param context Three integers as follows:
+     * <li>indent level - the number of spaces to insert at the beginning of each line</li>
+     * <li>filter number - the next available filter number</li>
+     * <li>filter array number - the next available array of filters number</li>
+     * @return The variable name to use when referencing this filter (usually "filter" + context[1]++) 
+     */
     public String toJavaCode (StringBuffer out, int[] context)
     {
         String name;
@@ -160,12 +198,12 @@ public class HasParentFilterWrapper
         newline (out);
         if (null != name)
         {
-	        spaces (out, context[0]);
-	        out.append (ret);
-	        out.append (".setParentFilter (");
-	        out.append (name);
-	        out.append (");");
-	        newline (out);
+            spaces (out, context[0]);
+            out.append (ret);
+            out.append (".setParentFilter (");
+            out.append (name);
+            out.append (");");
+            newline (out);
         }
         
         return (ret);
@@ -175,6 +213,15 @@ public class HasParentFilterWrapper
     // NodeFilter interface
     //
 
+    /**
+     * Predicate to determine whether or not to keep the given node.
+     * The behaviour based on this outcome is determined by the context
+     * in which it is called. It may lead to the node being added to a list
+     * or printed out. See the calling routine for details.
+     * @return <code>true</code> if the node is to be kept, <code>false</code>
+     * if it is to be discarded.
+     * @param node The node to test.
+     */
     public boolean accept (Node node)
     {
         return (mFilter.accept (node));
@@ -186,6 +233,7 @@ public class HasParentFilterWrapper
 
     /**
      * Invoked when an action occurs on the check box.
+     * @param event Details about the action event.
      */
     public void actionPerformed (ActionEvent event)
     {
@@ -196,7 +244,7 @@ public class HasParentFilterWrapper
         if (source == mRecursive)
         {
             recursive = mRecursive.isSelected ();
-	        mFilter.setRecursive (recursive);
+            mFilter.setRecursive (recursive);
         }
     }
 }

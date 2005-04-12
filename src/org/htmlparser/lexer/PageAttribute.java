@@ -145,9 +145,11 @@ public class PageAttribute
      * Create a whitespace attribute with the value given.
      * @param value The value of this attribute.
      * @exception IllegalArgumentException if the value contains other than
-     * whitespace. To set a real value use {@link Attribute#Attribute(String)}.
+     * whitespace. To set a real value use {@link #PageAttribute(String,String)}.
      */
     public PageAttribute (String value)
+        throws
+            IllegalArgumentException
     {
         super (value);
         init ();

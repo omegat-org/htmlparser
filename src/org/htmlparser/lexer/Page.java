@@ -287,6 +287,7 @@ public class Page
      * in that case the default is always returned.
      * @param name The name to look up. One of the aliases for a character set.
      * @param _default The name to return if the lookup fails.
+     * @return The character set name.
      */
     public static String findCharset (String name, String _default)
     {
@@ -448,6 +449,7 @@ public class Page
 
     /**
      * Close the page by destroying the source of characters.
+     * @exception IOException If destroying the source encounters an error.
      */
     public void close () throws IOException
     {
@@ -596,6 +598,7 @@ public class Page
     
     /**
      * Get the source this page is reading from.
+     * @return The current source.
      */
     public Source getSource ()
     {
@@ -775,10 +778,11 @@ public class Page
 
     /**
      * Build a URL from the link and base provided.
+     * @return An absolute URL.
      * @param link The (relative) URI.
      * @param base The base URL of the page, either from the &lt;BASE&gt; tag
      * or, if none, the URL the page is being fetched from.
-     * @return An absolute URL.
+     * @exception MalformedURLException If creating the URL fails.
      */
     public URL constructUrl (String link, String base)
         throws MalformedURLException
@@ -912,6 +916,8 @@ public class Page
      * characters ahead of the current source offset (character position).
      */
     public String getText (int start, int end)
+        throws
+            IllegalArgumentException
     {
         String ret;
         
@@ -944,6 +950,8 @@ public class Page
      * characters ahead of the current source offset (character position).
      */
     public void getText (StringBuffer buffer, int start, int end)
+        throws
+            IllegalArgumentException
     {
         int length;
 
@@ -1004,6 +1012,8 @@ public class Page
      * characters ahead of the current source offset (character position).
      */
     public void getText (char[] array, int offset, int start, int end)
+        throws
+            IllegalArgumentException
     {
         int length;
 

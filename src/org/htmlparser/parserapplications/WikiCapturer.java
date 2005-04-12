@@ -122,6 +122,8 @@ public class WikiCapturer
      * to save it to, and a flag (true or false) to indicate whether resources
      * such as images and video are to be captured as well.
      * These are requested via dialog boxes if not supplied.
+     * @exception MalformedURLException If the supplied URL is invalid.
+     * @exception IOException If an error occurs reading the pages or resources.
      */
     public static void main (String[] args)
         throws
