@@ -94,15 +94,15 @@
     <li>ad removal, excising URLs referencing advertising</li>
     <li>conversion to XML, moving existing web pages to XML</li>
     </ul>
-    During or after reading in a page, operations on the nodes can
-    accomplish many transformation tasks "in place", which can then be output
-    with the <a href="javadoc/org/htmlparser/Node.html#toHtml()">toHtml()</a> method.
-    Depending on the purpose of your application, you will probably want to look
-    into node decorators, 
-    <a href="javadoc/org/htmlparser/visitors/package-summary.html">visitors</a>, or
+    Transformation can occur 'on the fly' when using
     <a href="javadoc/org/htmlparser/tags/package-summary.html">custom tags</a>
     in conjunction with the
     <a href="javadoc/org/htmlparser/PrototypicalNodeFactory.html">PrototypicalNodeFactory</a>.
+    Or transformation can occur on a list of nodes after extraction using one or
+    more <a href="javadoc/org/htmlparser/visitors/package-summary.html">visitors</a>.
+    In either case you will need to output the NodeList returned by the parse()
+    method with the <a href="javadoc/org/htmlparser/util/NodeList.html#toHtml()">toHtml()</a>
+    method.
   <p>The HTML Parser is an open source library released under
     <a href="http://www.opensource.org/licenses/lgpl-license.html">GNU Lesser General Public
     License</a>, which basically says you are free to use the library "as is" in

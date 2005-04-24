@@ -33,11 +33,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import org.htmlparser.Attribute;
-import org.htmlparser.NodeFactory;
-import org.htmlparser.Remark;
-import org.htmlparser.Tag;
-import org.htmlparser.Text;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.nodes.TextNode;
 import org.htmlparser.nodes.RemarkNode;
@@ -72,7 +67,6 @@ import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tags.TitleTag;
-import org.htmlparser.util.ParserException;
 
 /**
  * A node factory based on the prototype pattern.
@@ -97,7 +91,8 @@ import org.htmlparser.util.ParserException;
  * the factory is constructed, or it can start out empty and be populated
  * explicitly.</p>
  * <p>Here is an example of how to override all text issued from
- * {@link org.htmlparser.nodes.TextNode#toPlainTextString() Text.toPlainTextString()},
+ * {@link org.htmlparser.nodes.TextNode#toPlainTextString()
+ * Text.toPlainTextString()},
  * in this case decoding (converting character references),
  * which illustrates the use of setting the text prototype:
  * <pre>
@@ -107,7 +102,8 @@ import org.htmlparser.util.ParserException;
  *     new TextNode () {
  *         public String toPlainTextString()
  *         {
- *             return (org.htmlparser.util.Translate.decode (super.toPlainTextString ()));
+ *             String original = super.toPlainTextString ();
+ *             return (org.htmlparser.util.Translate.decode (original));
  *         }
  *     });
  * Parser parser = new Parser ();
@@ -207,6 +203,8 @@ public class PrototypicalNodeFactory
     /**
      * Adds a tag to the registry.
      * @param id The name under which to register the tag.
+     * <strong>For proper operation, the id should be uppercase so it
+     * will be matched by a Map lookup.</strong>
      * @param tag The tag to be returned from a {@link #createTagNode} call.
      * @return The tag previously registered with that id if any,
      * or <code>null</code> if none.
@@ -258,30 +256,34 @@ public class PrototypicalNodeFactory
     /**
      * Register a tag.
      * Registers the given tag under every {@link Tag#getIds() id} that the
-     * tag has.
+     * tag has (i.e. all names returned by {@link Tag#getIds() tag.getIds()}.
+     * <p><strong>For proper operation, the ids are converted to uppercase so
+     * they will be matched by a Map lookup.</strong>
      * @param tag The tag to register.
      */
     public void registerTag (Tag tag)
     {
-        String ids[];
-        
+        String[] ids;
+
         ids = tag.getIds ();
         for (int i = 0; i < ids.length; i++)
-            put (ids[i], tag);
+            put (ids[i].toUpperCase (Locale.ENGLISH), tag);
     }
 
     /**
      * Unregister a tag.
      * Unregisters the given tag from every {@link Tag#getIds() id} the tag has.
+     * <p><strong>The ids are converted to uppercase to undo the operation
+     * of registerTag.</strong>
      * @param tag The tag to unregister.
      */
     public void unregisterTag (Tag tag)
     {
-        String ids[];
-        
+        String[] ids;
+
         ids = tag.getIds ();
         for (int i = 0; i < ids.length; i++)
-            remove (ids[i]);
+            remove (ids[i].toUpperCase (Locale.ENGLISH));
     }
 
     /**
@@ -322,7 +324,7 @@ public class PrototypicalNodeFactory
         registerTag (new BodyTag ());
         registerTag (new HeadTag ());
         registerTag (new Html ());
-        
+
         return (this);
     }
 
@@ -439,7 +441,7 @@ public class PrototypicalNodeFactory
     public Remark createRemarkNode (Page page, int start, int end)
     {
         Remark ret;
-        
+
         try
         {
             ret = (Remark)(getRemarkPrototype ().clone ());
@@ -502,7 +504,7 @@ public class PrototypicalNodeFactory
                 }
                 catch (CloneNotSupportedException cnse)
                 {
-                    // default to creating a new one
+                    // default to creating a generic one
                 }
             }
         }

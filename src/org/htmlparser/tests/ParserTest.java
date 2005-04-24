@@ -438,7 +438,7 @@ public class ParserTest extends ParserTestCase
         Parser parser;
         try
         {
-            parser = new Parser("http://www.ibm.com/jp/", Parser.noFeedback);
+            parser = new Parser("http://www.ibm.com/jp/", Parser.DEVNULL);
             assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
         }
         catch (ParserException e)
@@ -460,7 +460,7 @@ public class ParserTest extends ParserTestCase
 
         try
         {
-            parser = new Parser("http://www.sony.co.jp", Parser.noFeedback);
+            parser = new Parser("http://www.sony.co.jp", Parser.DEVNULL);
             assertEquals("Character set by default is ISO-8859-1", "ISO-8859-1", parser.getEncoding ());
             enumeration = parser.elements();
             // search for the <BODY> tag
@@ -573,7 +573,7 @@ public class ParserTest extends ParserTestCase
     public void testNullUrl() {
         try
         {
-            new Parser("http://none.existant.url.org", Parser.noFeedback);
+            new Parser("http://none.existant.url.org", Parser.DEVNULL);
             assertTrue("Should have thrown an exception!",false);
         }
         catch (ParserException e)

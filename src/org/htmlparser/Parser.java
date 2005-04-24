@@ -116,32 +116,32 @@ public class Parser
     /**
      * The floating point version number ({@value}).
      */
-    public final static double
+    public static final double
     VERSION_NUMBER = 1.5
     ;
 
     /**
      * The type of version ({@value}).
      */
-    public final static String
+    public static final String
     VERSION_TYPE = "Integration Build"
     ;
 
     /**
      * The date of the version ({@value}).
      */
-    public final static String
+    public static final String
     VERSION_DATE = "Mar 13, 2005"
     ;
+
+    // End of formatting
 
     /**
      * The display version ({@value}).
      */
-    public final static String
-    VERSION_STRING = "" + VERSION_NUMBER + " (" + VERSION_TYPE + " " + VERSION_DATE + ")"
-    ;
-
-    // End of formatting
+    public static final String VERSION_STRING =
+            "" + VERSION_NUMBER
+            + " (" + VERSION_TYPE + " " + VERSION_DATE + ")";
 
     /**
      * Feedback object.
@@ -157,13 +157,14 @@ public class Parser
      * A quiet message sink.
      * Use this for no feedback.
      */
-    public static ParserFeedback noFeedback = new DefaultParserFeedback (DefaultParserFeedback.QUIET);
+    public static final ParserFeedback DEVNULL =
+        new DefaultParserFeedback (DefaultParserFeedback.QUIET);
 
     /**
      * A verbose message sink.
      * Use this for output on <code>System.out</code>.
      */
-    public static ParserFeedback stdout = new DefaultParserFeedback ();
+    public static final ParserFeedback STDOUT = new DefaultParserFeedback ();
 
     //
     // Static methods
@@ -242,7 +243,7 @@ public class Parser
      */
     public Parser ()
     {
-        this (new Lexer (new Page ("")), noFeedback);
+        this (new Lexer (new Page ("")), DEVNULL);
     }
 
     /**
@@ -271,7 +272,8 @@ public class Parser
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
      * @param fb The object to use for message communication.
-     * @throws ParserException If the creation of the underlying Lexer cannot be performed.
+     * @throws ParserException If the creation of the underlying Lexer
+     * cannot be performed.
      */
     public Parser (URLConnection connection, ParserFeedback fb)
         throws
@@ -282,7 +284,8 @@ public class Parser
 
     /**
      * Creates a Parser object with the location of the resource (URL or file)
-     * You would typically create a DefaultHTMLParserFeedback object and pass it in.
+     * You would typically create a DefaultHTMLParserFeedback object and pass
+     * it in.
      * @see #Parser(URLConnection,ParserFeedback)
      * @param resourceLocn Either the URL or the filename (autodetects).
      * A standard HTTP GET is performed to read the content of the URL.
@@ -291,7 +294,9 @@ public class Parser
      * is provided.
      * @throws ParserException If the URL is invalid.
      */
-    public Parser (String resourceLocn, ParserFeedback feedback) throws ParserException
+    public Parser (String resourceLocn, ParserFeedback feedback)
+        throws
+            ParserException
     {
         this (getConnectionManager ().openConnection (resourceLocn), feedback);
     }
@@ -300,23 +305,24 @@ public class Parser
      * Creates a Parser object with the location of the resource (URL or file).
      * A DefaultHTMLParserFeedback object is used for feedback.
      * @param resourceLocn Either the URL or the filename (autodetects).
-     * @throws ParserException If the resourceLocn argument does not resolve to a valid page or file.
+     * @throws ParserException If the resourceLocn argument does not resolve
+     * to a valid page or file.
      */
     public Parser (String resourceLocn) throws ParserException
     {
-        this (resourceLocn, stdout);
+        this (resourceLocn, STDOUT);
     }
 
     /**
      * Construct a parser using the provided lexer.
-     * A feedback object printing to {@link #stdout System.out} is used.
+     * A feedback object printing to {@link #STDOUT System.out} is used.
      * This would be used to create a parser for special cases where the
      * normal creation of a lexer on a URLConnection needs to be customized.
      * @param lexer The lexer to draw characters from.
      */
     public Parser (Lexer lexer)
     {
-        this (lexer, stdout);
+        this (lexer, STDOUT);
     }
 
     /**
@@ -324,15 +330,16 @@ public class Parser
      * This would be used to create a parser for a URLConnection that needs
      * a special setup or negotiation conditioning beyond what is available
      * from the {@link #getConnectionManager ConnectionManager}.
-     * A feedback object printing to {@link #stdout System.out} is used.
+     * A feedback object printing to {@link #STDOUT System.out} is used.
      * @see #Parser(URLConnection,ParserFeedback)
      * @param connection A fully conditioned connection. The connect()
      * method will be called so it need not be connected yet.
-     * @throws ParserException If the creation of the underlying Lexer cannot be performed.
+     * @throws ParserException If the creation of the underlying Lexer
+     * cannot be performed.
      */
     public Parser (URLConnection connection) throws ParserException
     {
-        this (connection, stdout);
+        this (connection, STDOUT);
     }
 
     //
@@ -411,7 +418,7 @@ public class Parser
     {
         getLexer ().getPage ().setEncoding (encoding);
     }
-        
+
     /**
      * Get the encoding for the page this parser is reading from.
      * This item is set from the HTTP header but may be overridden by meta
@@ -487,11 +494,14 @@ public class Parser
     /**
      * Sets the feedback object used in scanning.
      * @param fb The new feedback object to use. If this is null a
-     * {@link #noFeedback silent feedback object} is used.
+     * {@link #DEVNULL silent feedback object} is used.
      */
     public void setFeedback (ParserFeedback fb)
     {
-        mFeedback = (null == fb) ? noFeedback : fb;
+        if (null == fb)
+            mFeedback = DEVNULL;
+        else
+            mFeedback = fb;
     }
 
     /**
@@ -511,6 +521,15 @@ public class Parser
      * Reset the parser to start from the beginning again.
      * This assumes support for a reset from the underlying
      * {@link org.htmlparser.lexer.Source} object.
+     * <p>This is cheaper (in terms of time) than resetting the URL, i.e.
+     * <pre>
+     * parser.setURL (parser.getURL ());
+     * </pre>
+     * because the page is not refetched from the internet.
+     * <em>Note: the nodes returned on the second parse are new
+     * nodes and not the same nodes returned on the first parse. If you
+     * want the same nodes for re-use, collect them in a NodeList with
+     * {@link #parse(NodeFilter) parse(null)} and operate on the NodeList.</em>
      */
     public void reset ()
     {
@@ -551,13 +570,13 @@ public class Parser
      *         // do whatever processing you want with the tag itself
      *         // ...
      *         // process recursively (nodes within nodes) via getChildren()
-     *         NodeList list = tag.getChildren ();
-     *         if (null != list)
-     *             for (NodeIterator i = list.elements (); i.hasMoreElements (); )
+     *         NodeList nl = tag.getChildren ();
+     *         if (null != nl)
+     *             for (NodeIterator i = nl.elements (); i.hasMoreElements (); )
      *                 processMyNodes (i.nextNode ());
      *     }
      * }
-     * 
+     *
      * Parser parser = new Parser ("http://www.yahoo.com");
      * for (NodeIterator i = parser.elements (); i.hasMoreElements (); )
      *     processMyNodes (i.nextNode ());
@@ -573,6 +592,30 @@ public class Parser
 
     /**
      * Parse the given resource, using the filter provided.
+     * This can be used to extract information from specific nodes.
+     * When used with a <code>null</code> filter it returns an
+     * entire page which can then be modified and converted back to HTML
+     * (Note: the synthesis use-case is not handled very well; the parser
+     * is more often used to extract information from a web page).
+     * <p>For example, to replace the entire contents of the HEAD with a
+     * single TITLE tag you could do this:
+     * <pre>
+     * NodeList nl = parser.parse (null); // here is your two node list
+     * NodeList heads = nl.extractAllNodesThatMatch (new TagNameFilter ("HEAD"))
+     * if (heads.size () > 0) // there may not be a HEAD tag
+     * {
+     *     Head head = heads.elementAt (0); // there should be only one
+     *     head.removeAll (); // clean out the contents
+     *     Tag title = new TitleTag ();
+     *     title.setTagName ("title");
+     *     title.setChildren (new NodeList (new TextNode ("The New Title")));
+     *     Tag title_end = new TitleTag ();
+     *     title_end.setTagName ("/title");
+     *     title.setEndTag (title_end);
+     *     head.add (title);
+     * }
+     * System.out.println (nl.toHtml ()); // output the modified HTML
+     * </pre>
      * @return The list of matching nodes (for a <code>null</code>
      * filter this is all the top level nodes).
      * @param filter The filter to apply to the parsed nodes,
@@ -594,7 +637,7 @@ public class Parser
             else
                 ret.add (node);
         }
-        
+
         return (ret);
     }
 
@@ -605,12 +648,15 @@ public class Parser
      * <code>beginParsing()</code> method is called prior to processing the
      * page and <code>finishedParsing()</code> is called after the processing.
      * @param visitor The visitor to visit all nodes with.
-     * @throws ParserException If a parse error occurs while traversing the page with the visitor.
+     * @throws ParserException If a parse error occurs while traversing
+     * the page with the visitor.
      */
-    public void visitAllNodesWith (NodeVisitor visitor) throws ParserException {
+    public void visitAllNodesWith (NodeVisitor visitor) throws ParserException
+    {
         Node node;
         visitor.beginParsing();
-        for (NodeIterator e = elements();e.hasMoreNodes();) {
+        for (NodeIterator e = elements(); e.hasMoreNodes(); )
+        {
             node = e.nextNode();
             node.accept(visitor);
         }
@@ -620,7 +666,8 @@ public class Parser
     /**
      * Initializes the parser with the given input HTML String.
      * @param inputHTML the input HTML that is to be parsed.
-     * @throws ParserException If a error occurs in setting up the underlying Lexer.
+     * @throws ParserException If a error occurs in setting up the
+     * underlying Lexer.
      */
     public void setInputHTML (String inputHTML)
         throws
@@ -641,11 +688,13 @@ public class Parser
      * i.e. for which the filter's accept method
      * returned <code>true</code>.
      */
-    public NodeList extractAllNodesThatMatch (NodeFilter filter) throws ParserException
+    public NodeList extractAllNodesThatMatch (NodeFilter filter)
+        throws
+            ParserException
     {
         NodeIterator e;
         NodeList ret;
-        
+
         ret = new NodeList ();
         for (e = elements (); e.hasMoreNodes (); )
             e.nextNode ().collectInto (ret, filter);
@@ -655,11 +704,12 @@ public class Parser
 
     /**
      * Convenience method to extract all nodes of a given class type.
-     * Equivalent to <code>extractAllNodesThatMatch (new NodeClassFilter (nodeType))</code>.
+     * Equivalent to
+     * <code>extractAllNodesThatMatch (new NodeClassFilter (nodeType))</code>.
      * @param nodeType The class of the nodes to collect.
      * @throws ParserException If a parse error occurs.
      * @return A list of nodes which have the class specified.
-     * @deprecated Use extractAllNodesThatMatch (new NodeClassFilter (nodeType)).
+     * @deprecated Use extractAllNodesThatMatch (new NodeClassFilter (cls)).
      * @see #extractAllNodesThatAre
      */
     public Node [] extractAllNodesThatAre (Class nodeType)
@@ -668,7 +718,7 @@ public class Parser
     {
         NodeList ret;
 
-        ret = extractAllNodesThatMatch (new NodeClassFilter (nodeType)); 
+        ret = extractAllNodesThatMatch (new NodeClassFilter (nodeType));
 
         return (ret.toNodeArray ());
     }
@@ -689,8 +739,7 @@ public class Parser
         throws
             ParserException
     {
-        if (null != getFeedback ())
-            getFeedback ().info (ConnectionManager.getRequestHeader (connection));
+        getFeedback ().info (ConnectionManager.getRequestHeader (connection));
     }
 
     /**
@@ -705,8 +754,7 @@ public class Parser
         throws
             ParserException
     {
-        if (null != getFeedback ())
-            getFeedback ().info (ConnectionManager.getResponseHeader (connection));
+        getFeedback ().info (ConnectionManager.getResponseHeader (connection));
     }
 
     /**
@@ -723,17 +771,16 @@ public class Parser
         {
             System.out.println ("HTML Parser v" + VERSION_STRING + "\n");
             System.out.println ();
-            System.out.println ("Syntax : java -jar htmlparser.jar <resourceLocn/website> [node_type]");
-            System.out.println ("   <resourceLocn/website> the URL or file to be parsed");
-            System.out.println ("   node_type an optional node name, for example:");
-            System.out.println ("     A - Show only the link tags extracted from the document");
-            System.out.println ("     IMG - Show only the image tags extracted from the document");
-            System.out.println ("     TITLE - Extract the title from the document");
+            System.out.println ("Syntax : java -jar htmlparser.jar"
+                    + " <file/page> [type]");
+            System.out.println ("   <file/page> the URL or file to be parsed");
+            System.out.println ("   type the node type, for example:");
+            System.out.println ("     A - Show only the link tags");
+            System.out.println ("     IMG - Show only the image tags");
+            System.out.println ("     TITLE - Show only the title tag");
             System.out.println ();
-            System.out.println ("Example : java -jar htmlparser.jar http://www.yahoo.com");
-            System.out.println ();
-            System.out.println ("For support, please join the HTMLParser mailing list (user/developer) from the HTML Parser home page...");
-            System.out.println ("HTML Parser home page : http://htmlparser.org");
+            System.out.println ("Example : java -jar htmlparser.jar"
+                    + " http://www.yahoo.com");
             System.out.println ();
         }
         else
@@ -745,7 +792,7 @@ public class Parser
                 else
                 {   // for a simple dump, use more verbose settings
                     filter = null;
-                    parser.setFeedback (Parser.stdout);
+                    parser.setFeedback (Parser.STDOUT);
                     getConnectionManager ().setMonitor (parser);
                 }
                 parser.setURL (args[0]);

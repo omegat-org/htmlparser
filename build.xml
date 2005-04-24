@@ -121,21 +121,56 @@ Update the Web Site
   <property name="distribution" value="distribution"/>
   <property name="junit.jar" value="${lib}/junit.jar"/>
   <property name="sax2.jar" value="${lib}/sax2.jar"/>
+  <property name="check" value="*.java"/>
+  <available property="checkstyle_present" file="${lib}/checkstyle.jar"/>
+  <available property="fit_present" file="${lib}/fit.jar"/>
 
-  <taskdef resource="checkstyletask.properties"
-           classpath="${lib}/checkstyle-all-3.1.jar"/>
+  <target name="fetch_checkstyle" description="gets the checkstyle jar file"
+      unless="checkstyle_present">
+    <get dest="${lib}/checkstyle_distribution.zip" usetimestamp="true"
+      ignoreerrors="true" verbose="true"
+      src="http://heanet.dl.sourceforge.net/sourceforge/checkstyle/checkstyle-3.5.zip"/>  
+    <unzip src="${lib}/checkstyle_distribution.zip" dest="${lib}/">
+       <patternset>
+         <include name="**/checkstyle-all*.jar"/>
+       </patternset>
+    </unzip>
+    <delete file="${lib}/checkstyle_distribution.zip"/>
+    <move tofile="${lib}/checkstyle.jar">
+        <fileset dir="${lib}" includes="**/checkstyle-all*.jar"/>
+    </move>
+    <delete includeEmptyDirs="true">
+        <fileset dir="${lib}" includes="**/checkstyle-*"/>
+    </delete>
+  </target>
 
-  <target name="checkstyle" description="check source code adheres to coding standards">
+  <target name="checkstyle" depends="fetch_checkstyle"
+      description="check source code adheres to coding standards">
+    <taskdef resource="checkstyletask.properties"
+             classpath="${lib}/checkstyle.jar"/>
     <checkstyle config="${resources}/htmlparser_checks.xml">
-      <fileset dir="src" includes="**/*.java"/>
+      <fileset dir="src" includes="**/${check}"/>
     </checkstyle>
+  </target>
+
+  <target name="fetch_fit" description="gets the fit jar file"
+      unless="fit_present">
+    <get dest="${lib}/fit_distribution.zip" usetimestamp="true"
+      ignoreerrors="true" verbose="true"
+      src="http://puzzle.dl.sourceforge.net/sourceforge/fit/fit-java-1.1.zip"/>  
+    <unzip src="${lib}/fit_distribution.zip" dest="${lib}/">
+       <patternset>
+         <include name="**/fit.jar"/>
+       </patternset>
+    </unzip>
+    <delete file="${lib}/fit_distribution.zip"/>
   </target>
 
   <target name="JDK1.4">
       <condition property="JDK1.4">
         <or>
           <equals arg1="1.4" arg2="${ant.java.version}"/>
-          <equals arg1="1.4" arg2="${ant.java.version}"/>
+          <equals arg1="1.5" arg2="${ant.java.version}"/>
         </or>
       </condition>
   </target>
@@ -333,7 +368,7 @@ Update the Web Site
     <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
     <mkdir dir="${classes}"/>
-    <javac compiler="javac1.4" srcdir="${src}" destdir="${classes}" debug="on" classpath="${classes}:${lib}/htmllexer.jar" source="1.3">
+    <javac srcdir="${src}" destdir="${classes}" debug="on" classpath="${classes}:${lib}/htmllexer.jar" source="1.3">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.java"/>
     </javac>
     <jar jarfile="${lib}/thumbelina.jar"
@@ -352,7 +387,7 @@ Update the Web Site
     <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
     <mkdir dir="${classes}"/>
-    <javac compiler="javac1.4" srcdir="${src}" destdir="${classes}" debug="on" classpath="${classes}:${lib}/htmlparser.jar" source="1.3">
+    <javac srcdir="${src}" destdir="${classes}" debug="on" classpath="${classes}:${lib}/htmlparser.jar" source="1.3">
       <include name="org/htmlparser/parserapplications/filterbuilder/**/*.java"/>
     </javac>
     <jar jarfile="${lib}/filterbuilder.jar"
@@ -481,8 +516,8 @@ Update the Web Site
     </zip>
   </target>
 
-  <!-- Perform the htmlparser integration -->
-  <target name="htmlparser" depends="init,release,sources"
+  <!-- Perform the htmlparser integration --><!--,release,sources" -->
+  <target name="htmlparser" depends="init" 
     description="create distribution zip file">
     <mkdir dir="${distribution}"/>
     <fixcrlf srcDir="${docs}" destDir="${distribution}" includes="release.txt" eol="crlf"/>
@@ -490,7 +525,7 @@ Update the Web Site
       <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}" includes="*.bat"/>
       <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}" includes="*" excludes="*.bat" filemode="755"/>
       <zipfileset dir="${docs}" prefix="htmlparser${versionQualifier}/${docs}" excludes="samples/**"/>
-      <zipfileset dir="${lib}" prefix="htmlparser${versionQualifier}/${lib}"/>
+      <zipfileset dir="${lib}" prefix="htmlparser${versionQualifier}/${lib}" includes="*.jar" excludes="checkstyle.jar,fit.jar"/>
       <zipfileset dir="." prefix="htmlparser${versionQualifier}/" includes="src.zip"/>
       <!-- Copy the release notes as readme.txt in the base release directory -->
       <zipfileset dir="${distribution}" fullpath="htmlparser${versionQualifier}/readme.txt" includes="release.txt"/>
