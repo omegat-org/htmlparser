@@ -113,7 +113,7 @@ public class SelectTagTest extends ParserTestCase
     }
 
     /**
-     * Bug reproduction based on report by gumirov@ccfit.nsu.ru
+     * Bug reproduction.
      */
     public void testSelectTagWithComments() throws Exception {
         createParser(
