@@ -27,6 +27,8 @@
 package org.htmlparser.sax;
 
 import java.io.IOException;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.lexer.Page;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.DTDHandler;
@@ -506,9 +508,46 @@ public class XMLReader
     public void parse (InputSource input)
 	throws IOException, SAXException
     {
-        throw new SAXException ("parse (InputSource input) is not yet supported");
-    }
+        Locator locator;
+        ParserFeedback feedback;
 
+        if (null != mContentHandler)
+            try
+            {
+                mParser = new Parser (
+                    new Lexer (
+                        new Page (
+                            input.getByteStream (),
+                            input.getEncoding ())));
+                locator = new Locator (mParser);
+                if (null != mErrorHandler)
+                    feedback = new Feedback (mErrorHandler, locator);
+                else
+                    feedback = new DefaultParserFeedback (0);
+                mParser.setFeedback (feedback);
+                mContentHandler.setDocumentLocator (locator);
+                try
+                {
+                    mContentHandler.startDocument ();
+                    for (NodeIterator iterator = mParser.elements ();
+                                        iterator.hasMoreNodes ();
+                        doSAX (iterator.nextNode ()));
+                    mContentHandler.endDocument ();
+                }
+                catch (SAXException se)
+                {
+                    if (null != mErrorHandler)
+                        mErrorHandler.fatalError (new SAXParseException (
+                            "contentHandler threw me", locator, se));
+                }
+            }
+            catch (ParserException pe)
+            {
+                if (null != mErrorHandler)
+                    mErrorHandler.fatalError (new SAXParseException (
+                        pe.getMessage (), "", "", 0, 0));
+            }
+    }
 
     /**
      * Parse an XML document from a system identifier (URI).
