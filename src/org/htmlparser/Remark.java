@@ -26,8 +26,6 @@
 
 package org.htmlparser;
 
-import org.htmlparser.Node;
-
 /**
  * This interface represents a comment in the HTML document.
  */
@@ -35,68 +33,68 @@ public interface Remark
     extends
         Node
 {
-    
     /**
      * Returns the text contents of the comment tag.
      * @return The contents of the text inside the comment delimiters.
      */
-    public String getText();
+    String getText();
 
     /**
      * Sets the string contents of the node.
-     * If the text has the remark delimiters (&lt;!-- --&gt;), these are stripped off.
+     * If the text has the remark delimiters (&lt;!-- --&gt;),
+     * these are stripped off.
      * @param text The new text for the node.
      */
-    public void setText (String text);
+    void setText (String text);
 
     //
     // Node interface
     //
 
-//    public void accept (org.htmlparser.visitors.NodeVisitor visitor)
+//    public void accept (NodeVisitor visitor)
 //    {
 //    }
-//    
-//    public void collectInto (org.htmlparser.util.NodeList collectionList, NodeFilter filter)
+//
+//    public void collectInto (NodeList collectionList, NodeFilter filter)
 //    {
 //    }
-//    
-//    public org.htmlparser.util.NodeList getChildren ()
+//
+//    public NodeList getChildren ()
 //    {
 //    }
-//    
+//
 //    public int getEndPosition ()
 //    {
 //    }
-//    
+//
 //    public Node getParent ()
 //    {
 //    }
-//    
+//
 //    public int getStartPosition ()
 //    {
 //    }
-//    
-//    public void setChildren (org.htmlparser.util.NodeList children)
+//
+//    public void setChildren (NodeList children)
 //    {
 //    }
-//    
+//
 //    public void setEndPosition (int position)
 //    {
 //    }
-//    
+//
 //    public void setParent (Node node)
 //    {
 //    }
-//    
+//
 //    public void setStartPosition (int position)
 //    {
 //    }
-//    
+//
 //    public String toHtml ()
 //    {
 //    }
-//    
+//
 //    public String toPlainTextString ()
 //    {
 //    }

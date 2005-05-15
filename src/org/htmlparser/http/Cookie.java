@@ -57,17 +57,19 @@ import java.util.Date;
  * <P>
  * Cookies are being standardized by the IETF. This class supports the original
  * Cookie specification (from Netscape Communications Corp.) as well as the
- * updated <a href="http://www.ietf.org/rfc/rfc2109.txt">RFC 2109</a> specification.
+ * updated <a href="http://www.ietf.org/rfc/rfc2109.txt">RFC 2109</a>
+ * specification.
  */
 public class Cookie
-	implements
-		Cloneable,
-		Serializable
+    implements
+        Cloneable,
+        Serializable
 {
-    //
-    // from RFC 2068, token special case characters
-    //
-    private static final String mSpecials = "()<>@,;:\\\"/[]?={} \t";
+    /**
+     * Special characters to watch out for.
+     * From RFC 2068, token special case characters.
+     */
+    private static final String SPECIALS = "()<>@,;:\\\"/[]?={} \t";
 
     /**
      * The name of the cookie.
@@ -329,7 +331,7 @@ public class Cookie
         mVersion = version;
     }
 
-    /*
+    /**
      * Return true iff the string counts as an HTTP/1.1 "token".
      * Valid tokens cannot have characters outside the ASCII range 0x20-0x7e,
      * and cannot contain any of these characters: "()<>@,;:\\\"/[]?={} \t".
@@ -341,14 +343,14 @@ public class Cookie
         int length;
         char c;
         boolean ret;
-        
+
         ret = true;
 
         length = value.length ();
         for (int i = 0; i < length && ret; i++)
         {
             c = value.charAt (i);
-            if (c < 0x20 || c >= 0x7f || mSpecials.indexOf (c) != -1)
+            if (c < ' ' || c > '~' || SPECIALS.indexOf (c) != -1)
                 ret = false;
         }
 
@@ -378,7 +380,7 @@ public class Cookie
     public String toString ()
     {
         StringBuffer ret;
-        
+
         ret = new StringBuffer (50);
         if (getSecure ())
             ret.append ("secure ");
@@ -393,7 +395,7 @@ public class Cookie
         {
             ret.append (" for ");
             ret.append (getDomain ());
-            
+
             if (null != getPath ())
                 ret.append (getPath ());
         }
@@ -421,7 +423,7 @@ public class Cookie
             ret.append (" // ");
             ret.append (getComment ());
         }
-        
+
         return (ret.toString ());
     }
 }

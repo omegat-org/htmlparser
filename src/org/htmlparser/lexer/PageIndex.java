@@ -329,7 +329,7 @@ public class PageIndex
     {
         if ((index >= capacity ()) || (size () == capacity ()))
         {   // allocate more space
-            int new_values[] = new int[Math.max (capacity () + mIncrement, index + 1)];
+            int[] new_values = new int[Math.max (capacity () + mIncrement, index + 1)];
             mIncrement *= 2;
             if (index < capacity ())
             {

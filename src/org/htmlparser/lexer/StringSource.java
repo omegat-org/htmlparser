@@ -272,7 +272,7 @@ public class StringSource
             mOffset += n;
             ret = n;
         }
-        
+
         return (ret);
     }
 
@@ -361,7 +361,7 @@ public class StringSource
             else
                 ret = mString.substring (offset, offset + length);
         }
-        
+
         return (ret);
     }
 

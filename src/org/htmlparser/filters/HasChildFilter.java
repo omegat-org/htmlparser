@@ -35,11 +35,11 @@ import org.htmlparser.util.NodeList;
  * This class accepts all tags that have a child acceptable to the filter.
  * It can be set to operate recursively, that is perform a scan down
  * through the node heirarchy in a breadth first traversal looking for any
- * descendant that matches the predicate filter (which stops the search). 
+ * descendant that matches the predicate filter (which stops the search).
  */
 public class HasChildFilter
-	implements
-		NodeFilter
+    implements
+        NodeFilter
 {
     /**
      * The filter to apply to children.
@@ -49,7 +49,7 @@ public class HasChildFilter
     /**
      * Performs a recursive search down the node heirarchy if <code>true</code>.
      */
-    public boolean mRecursive;
+    protected boolean mRecursive;
 
     /**
      * Creates a new instance of a HasChildFilter.
@@ -62,7 +62,8 @@ public class HasChildFilter
     }
 
     /**
-     * Creates a new instance of HasChildFilter that accepts nodes with a direct child acceptable to the filter.
+     * Creates a new instance of HasChildFilter that accepts nodes
+     * with a direct child acceptable to the filter.
      * @param filter The filter to apply to the children.
      */
     public HasChildFilter (NodeFilter filter)
@@ -71,9 +72,10 @@ public class HasChildFilter
     }
 
     /**
-     * Creates a new instance of HasChildFilter that accepts nodes with a child acceptable to the filter.
+     * Creates a new instance of HasChildFilter that accepts nodes
+     * with a child acceptable to the filter.
      * Of necessity, this applies only to composite tags, i.e. those that can
-     * contain other nodes, for example &lt;HTML&gt;&lt;/HTML&gt;. 
+     * contain other nodes, for example &lt;HTML&gt;&lt;/HTML&gt;.
      * @param filter The filter to apply to children.
      * @param recursive If <code>true</code>, any enclosed node acceptable
      * to the given filter causes the node being tested to be accepted
@@ -93,7 +95,7 @@ public class HasChildFilter
     {
         return (mChildFilter);
     }
-    
+
     /**
      * Set the filter for this HasParentFilter.
      * @param filter The filter to apply to parents in {@link #accept}.
@@ -110,7 +112,7 @@ public class HasChildFilter
      */
     public boolean getRecursive ()
     {
-        return mRecursive;
+        return (mRecursive);
     }
 
     /**
@@ -144,7 +146,8 @@ public class HasChildFilter
                 for (int i = 0; !ret && i < children.size (); i++)
                     if (getChildFilter ().accept (children.elementAt (i)))
                         ret = true;
-                // do recursion after all children checked to get breadth first traversal
+                // do recursion after all children are checked
+                // to get breadth first traversal
                 if (!ret && getRecursive ())
                     for (int i = 0; !ret && i < children.size (); i++)
                         if (accept (children.elementAt (i)))

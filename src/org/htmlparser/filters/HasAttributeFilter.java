@@ -34,7 +34,8 @@ import org.htmlparser.NodeFilter;
 import org.htmlparser.Tag;
 
 /**
- * This class accepts all tags that have a certain attribute, and optionally, with a certain value.
+ * This class accepts all tags that have a certain attribute,
+ * and optionally, with a certain value.
  */
 public class HasAttributeFilter implements NodeFilter
 {
@@ -59,7 +60,8 @@ public class HasAttributeFilter implements NodeFilter
     }
 
     /**
-     * Creates a new instance of HasAttributeFilter that accepts tags with the given attribute.
+     * Creates a new instance of HasAttributeFilter that accepts tags
+     * with the given attribute.
      * @param attribute The attribute to search for.
      */
     public HasAttributeFilter (String attribute)
@@ -68,9 +70,11 @@ public class HasAttributeFilter implements NodeFilter
     }
 
     /**
-     * Creates a new instance of HasAttributeFilter that accepts tags with the given attribute.
+     * Creates a new instance of HasAttributeFilter that accepts tags
+     * with the given attribute and value.
      * @param attribute The attribute to search for.
-     * @param value The value that must be matched, or null if any value will match.
+     * @param value The value that must be matched,
+     * or null if any value will match.
      */
     public HasAttributeFilter (String attribute, String value)
     {
@@ -108,7 +112,8 @@ public class HasAttributeFilter implements NodeFilter
     /**
      * Set the attribute value.
      * @param value The value of the attribute to accept.
-     * If <code>null</code>, any tag with the attribute, no matter it's value is acceptable.
+     * If <code>null</code>, any tag with the attribute,
+     * no matter what it's value is acceptable.
      */
     public void setAttributeValue (String value)
     {

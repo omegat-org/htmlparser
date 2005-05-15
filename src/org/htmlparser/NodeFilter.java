@@ -32,9 +32,9 @@ import java.io.Serializable;
  * Implement this interface to select particular nodes.
  */
 public interface NodeFilter
-	extends
-		Serializable,
-		Cloneable
+    extends
+        Serializable,
+        Cloneable
 {
     /**
      * Predicate to determine whether or not to keep the given node.

@@ -55,7 +55,7 @@ public class TagNameFilter
     }
 
     /**
-     * Creates a new instance of TagNameFilter that accepts tags with the given name.
+     * Creates a TagNameFilter that accepts tags with the given name.
      * @param name The tag name to match.
      */
     public TagNameFilter (String name)
@@ -91,8 +91,8 @@ public class TagNameFilter
      */
     public boolean accept (Node node)
     {
-        return ((node instanceof Tag) &&
-                !((Tag)node).isEndTag () &&
-                ((Tag)node).getTagName ().equals (mName));
+        return ((node instanceof Tag)
+                && !((Tag)node).isEndTag ()
+                && ((Tag)node).getTagName ().equals (mName));
     }
 }

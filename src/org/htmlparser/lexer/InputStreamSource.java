@@ -46,7 +46,7 @@ public class InputStreamSource
 {
     /**
      * An initial buffer size.
-     * Has a default value of 16384.
+     * Has a default value of {@value}.
      */
     public static int BUFFER_SIZE = 16384;
 
@@ -69,17 +69,17 @@ public class InputStreamSource
     /**
      * The characters read so far.
      */
-    public /*volatile*/ char[] mBuffer;
+    protected char[] mBuffer;
 
     /**
      * The number of valid bytes in the buffer.
      */
-    public /*volatile*/ int mLevel;
+    protected int mLevel;
 
     /**
      * The offset of the next byte returned by read().
      */
-    public /*volatile*/ int mOffset;
+    protected int mOffset;
 
     /**
      * The bookmark.
@@ -89,7 +89,8 @@ public class InputStreamSource
     /**
      * Create a source of characters using the default character set.
      * @param stream The stream of bytes to use.
-     * @exception UnsupportedEncodingException If the default character set is unsupported.
+     * @exception UnsupportedEncodingException If the default character set
+     * is unsupported.
      */
     public InputStreamSource (InputStream stream)
         throws
@@ -102,7 +103,8 @@ public class InputStreamSource
      * Create a source of characters.
      * @param stream The stream of bytes to use.
      * @param charset The character set used in encoding the stream.
-     * @exception UnsupportedEncodingException If the character set is unsupported.
+     * @exception UnsupportedEncodingException If the character set
+     * is unsupported.
      */
     public InputStreamSource (InputStream stream, String charset)
         throws
@@ -115,10 +117,11 @@ public class InputStreamSource
      * Create a source of characters.
      * @param stream The stream of bytes to use.
      * @param charset The character set used in encoding the stream.
-     * @param buffer_size The initial character buffer size.
-     * @exception UnsupportedEncodingException If the character set is unsupported.
+     * @param size The initial character buffer size.
+     * @exception UnsupportedEncodingException If the character set
+     * is unsupported.
      */
-    public InputStreamSource (InputStream stream, String charset, int buffer_size)
+    public InputStreamSource (InputStream stream, String charset, int size)
         throws
             UnsupportedEncodingException
     {
@@ -150,7 +153,7 @@ public class InputStreamSource
             mEncoding = charset;
             mReader = new InputStreamReader (stream, charset);
         }
-        mBuffer = new char[buffer_size];
+        mBuffer = new char[size];
         mLevel = 0;
         mOffset = 0;
         mMark = -1;
@@ -160,6 +163,11 @@ public class InputStreamSource
     // Serialization support
     //
 
+    /**
+     * Serialization support.
+     * @param out Where to write this object.
+     * @exception IOException If serialization has a problem.
+     */
     private void writeObject (ObjectOutputStream out)
         throws
             IOException
@@ -176,10 +184,15 @@ public class InputStreamSource
                 ;
             mOffset = offset;
         }
-        
+
         out.defaultWriteObject ();
     }
 
+    /**
+     * Deserialization support.
+     * @param in Where to read this object from.
+     * @exception IOException If deserialization has a problem.
+     */
     private void readObject (ObjectInputStream in)
         throws
             IOException,
@@ -221,7 +234,7 @@ public class InputStreamSource
      * and a comparison made of the characters read so far with the newly
      * read characters up to the current position.
      * If a difference is encountered, or some other problem occurs,
-     * an exception is thrown. 
+     * an exception is thrown.
      * @param character_set The character set to use to convert bytes into
      * characters.
      * @exception ParserException If a character mismatch occurs between

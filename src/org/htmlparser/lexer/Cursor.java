@@ -166,5 +166,3 @@ public class Cursor
         return (getPosition () - r.getPosition ());
     }
 }
-
-       

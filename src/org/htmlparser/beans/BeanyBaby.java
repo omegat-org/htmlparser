@@ -36,6 +36,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Vector;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
@@ -56,23 +57,23 @@ public class BeanyBaby
     /**
      * Bread crumb trail of visited URLs.
      */
-    java.util.Vector mTrail;
+    protected Vector mTrail;
 
     /**
      * Current position on the bread crumb trail.
      */
-    int mCrumb;
+    protected int mCrumb;
 
     /** Creates new form BeanyBaby */
     public BeanyBaby ()
     {
         initComponents ();
-        mTrail = new java.util.Vector (25);
+        mTrail = new Vector ();
         mCrumb = -1;
 
         // shenanigans to get the splitter bar at the midpoint
         setVisible (true);
-        mSplitPane.setDividerLocation(0.5);
+        mSplitPane.setDividerLocation (0.5); // 50% for each pane
         setVisible (false);
 
         // set up twinning
@@ -117,11 +118,14 @@ public class BeanyBaby
             // check for menu status changes
             name = event.getPropertyName ();
             if (name.equals (StringBean.PROP_LINKS_PROPERTY))
-                mLinks.setSelected (((Boolean)event.getNewValue ()).booleanValue ());
+                mLinks.setSelected (
+                    ((Boolean)event.getNewValue ()).booleanValue ());
             else if (name.equals (StringBean.PROP_COLLAPSE_PROPERTY))
-                mCollapse.setSelected (((Boolean)event.getNewValue ()).booleanValue ());
+                mCollapse.setSelected (
+                    ((Boolean)event.getNewValue ()).booleanValue ());
             else if (name.equals (StringBean.PROP_REPLACE_SPACE_PROPERTY))
-                mNobreak.setSelected (((Boolean)event.getNewValue ()).booleanValue ());
+                mNobreak.setSelected (
+                    ((Boolean)event.getNewValue ()).booleanValue ());
         }
     }
 
@@ -191,8 +195,10 @@ public class BeanyBaby
     //
     // MouseListener interface
     //
+
     /**
-     * Invoked when the mouse button has been clicked (pressed and released) on a component.
+     * Invoked when the mouse button has been clicked on a component.
+     * A mouse click is a press and release of a mouse button.
      * @param event Details on the mouse event.
      */
     public void mouseClicked (MouseEvent event)
@@ -243,7 +249,7 @@ public class BeanyBaby
     //
     // API control
     //
-    
+
     /**
      * Set the URL for the bean.
      * @param url The URL to use in the bean.
@@ -371,8 +377,9 @@ public class BeanyBaby
         setLocation((screenSize.width-640)/2,(screenSize.height-480)/2);
     }//GEN-END:initComponents
 
-    /** Exit the Application */
-    private void exitForm (WindowEvent evt)
+    /** Exit the Application
+     * @param event Details about the window event. */
+    private void exitForm (WindowEvent event)
     {//GEN-FIRST:event_exitForm
         System.exit (0);
     }//GEN-LAST:event_exitForm

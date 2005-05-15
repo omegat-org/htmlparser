@@ -28,9 +28,6 @@ package org.htmlparser;
 
 import java.util.Vector;
 
-import org.htmlparser.Remark;
-import org.htmlparser.Tag;
-import org.htmlparser.Text;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.ParserException;
 
@@ -56,10 +53,11 @@ public interface NodeFactory
      * @param page The page the node is on.
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
-     * @throws ParserException If there is a problem encountered in creating the node.
+     * @throws ParserException If there is a problem encountered
+     * when creating the node.
      * @return A text node comprising the indicated characters from the page.
      */
-    public Text createStringNode (Page page, int start, int end)
+    Text createStringNode (Page page, int start, int end)
         throws
             ParserException;
 
@@ -68,10 +66,11 @@ public interface NodeFactory
      * @param page The page the node is on.
      * @param start The beginning position of the remark.
      * @param end The ending positiong of the remark.
-     * @throws ParserException If there is a problem encountered in creating the node.
+     * @throws ParserException If there is a problem encountered
+     * when creating the node.
      * @return A remark node comprising the indicated characters from the page.
      */
-    public Remark createRemarkNode (Page page, int start, int end)
+    Remark createRemarkNode (Page page, int start, int end)
         throws
             ParserException;
 
@@ -85,10 +84,11 @@ public interface NodeFactory
      * @param start The beginning position of the tag.
      * @param end The ending positiong of the tag.
      * @param attributes The attributes contained in this tag.
-     * @throws ParserException If there is a problem encountered in creating the node.
+     * @throws ParserException If there is a problem encountered
+     * when creating the node.
      * @return A tag node comprising the indicated characters from the page.
      */
-    public Tag createTagNode (Page page, int start, int end, Vector attributes)
+    Tag createTagNode (Page page, int start, int end, Vector attributes)
         throws
             ParserException;
 }

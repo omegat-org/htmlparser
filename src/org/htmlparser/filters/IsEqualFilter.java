@@ -37,10 +37,10 @@ public class IsEqualFilter implements NodeFilter
     /**
      * The node to match.
      */
-    public Node mNode;
+    protected Node mNode;
 
     /**
-     * Creates a new instance of an IsEqualFilter that accepts only the node provided.
+     * Creates a new IsEqualFilter that accepts only the node provided.
      * @param node The node to match.
      */
     public IsEqualFilter (Node node)

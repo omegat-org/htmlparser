@@ -26,7 +26,6 @@
 
 package org.htmlparser.lexer;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URLConnection;
@@ -76,12 +75,13 @@ public class Lexer
 
     /**
      * Line number to trigger on.
-     * This is tested on each <code>nextNode()</code> call, as an aid to debugging.
-     * Alter this value and set a breakpoint on the line after the test.
-     * Remember, these line numbers are zero based, while most editors are one based.
+     * This is tested on each <code>nextNode()</code> call, as a debugging aid.
+     * Alter this value and set a breakpoint on the guarded statement.
+     * Remember, these line numbers are zero based, while most editors are
+     * one based.
      * @see #nextNode
-     */ 
-    static protected int mDebugLineTrigger = -1;
+     */
+    protected static int mDebugLineTrigger = -1;
 
     /**
      * Creates a new instance of a Lexer.
@@ -237,7 +237,8 @@ public class Lexer
      * Get the next node from the source.
      * @return A Remark, Text or Tag, or <code>null</code> if no
      * more lexemes are present.
-     * @exception ParserException If there is a problem with the underlying page.
+     * @exception ParserException If there is a problem with the
+     * underlying page.
      */
     public Node nextNode ()
         throws
@@ -251,7 +252,8 @@ public class Lexer
      * @param quotesmart If <code>true</code>, strings ignore quoted contents.
      * @return A Remark, Text or Tag, or <code>null</code> if no
      * more lexemes are present.
-     * @exception ParserException If there is a problem with the underlying page.
+     * @exception ParserException If there is a problem with the
+     * underlying page.
      */
     public Node nextNode (boolean quotesmart)
         throws
@@ -267,7 +269,7 @@ public class Lexer
             Page page = getPage ();
             int lineno = page.row (mCursor);
             if (mDebugLineTrigger < lineno)
-                mDebugLineTrigger = lineno + 1; // trigger on subsequent lines too
+                mDebugLineTrigger = lineno + 1; // trigger on next line too
         }
         start = mCursor.getPosition ();
         ch = mPage.getCharacter (mCursor);
@@ -301,12 +303,12 @@ public class Lexer
                             ret = makeRemark (start, mCursor.getPosition ());
                         else
                         {
-                            mCursor.retreat (); // remark and tag need this character
+                            mCursor.retreat (); // remark/tag need this char
                             if ('-' == ch)
                                 ret = parseRemark (start, quotesmart);
                             else
                             {
-                                mCursor.retreat (); // tag needs the previous one too
+                                mCursor.retreat (); // tag needs prior one too
                                 ret = parseTag (start);
                             }
                         }
@@ -364,7 +366,7 @@ public class Lexer
                             state = 0;
                         break;
                     default:
-                        throw new IllegalStateException ("how the fuck did we get in state " + state);
+                        throw new IllegalStateException ("state " + state);
                 }
         }
     }
@@ -415,23 +417,25 @@ public class Lexer
                 else
                     mCursor.retreat ();
             }
-            else if (quotesmart && (0 == quote) && (('\'' == ch) || ('"' == ch)))
+            else if (quotesmart && (0 == quote)
+                && (('\'' == ch) || ('"' == ch)))
                 quote = ch; // enter quoted state
-            // patch contributed by Gernot Fricke to handle escaped closing quote
+            // patch from Gernot Fricke to handle escaped closing quote
             else if (quotesmart && (0 != quote) && ('\\' == ch))
             {
-                ch = mPage.getCharacter (mCursor); //try to consume escaped character
+                ch = mPage.getCharacter (mCursor); // try to consume escape
                 if ((Page.EOF != ch)
                     && ('\\' != ch) // escaped backslash
-                    && (ch != quote)) // escaped quote character 
+                    && (ch != quote)) // escaped quote character
                        // ( reflects ["] or [']  whichever opened the quotation)
-                    mCursor.retreat(); // unconsume char if character was not an escapable char.
+                    mCursor.retreat(); // unconsume char if char not an escape
             }
             else if (quotesmart && (ch == quote))
                 quote = 0; // exit quoted state
             else if (quotesmart && (0 == quote) && (ch == '/'))
             {
-                // handle multiline and double slash comments (with a quote) in script like:
+                // handle multiline and double slash comments (with a quote)
+                // in script like:
                 // I can't handle single quotations.
                 ch = mPage.getCharacter (mCursor);
                 if (Page.EOF == ch)
@@ -464,7 +468,8 @@ public class Lexer
                 if (Page.EOF == ch)
                     done = true;
                 // the order of these tests might be optimized for speed:
-                else if ('/' == ch || Character.isLetter (ch) || '!' == ch || '%' == ch)
+                else if ('/' == ch || Character.isLetter (ch)
+                    || '!' == ch || '%' == ch)
                 {
                     done = true;
                     mCursor.retreat ();
@@ -485,7 +490,8 @@ public class Lexer
      * Create a string node based on the current cursor and the one provided.
      * @param start The starting point of the node.
      * @param end The ending point of the node.
-     * @exception ParserException If the nodefactory creation of the string node fails.
+     * @exception ParserException If the nodefactory creation of the text
+     * node fails.
      * @return The new Text node.
      */
     protected Node makeString (int start, int end)
@@ -497,44 +503,83 @@ public class Lexer
 
         length = end - start;
         if (0 != length)
-        {   // got some characters
-            ret = getNodeFactory ().createStringNode (this.getPage (), start, end);
-        }
+            // got some characters
+            ret = getNodeFactory ().createStringNode (
+                this.getPage (), start, end);
         else
             ret = null;
-        
+
         return (ret);
     }
 
+    /**
+     * Generate a whitespace 'attribute',
+     * @param attributes The list so far.
+     * @param bookmarks The array of positions.
+     */
     private void whitespace (Vector attributes, int[] bookmarks)
     {
         if (bookmarks[1] > bookmarks[0])
-            attributes.addElement (new PageAttribute (mPage, -1, -1, bookmarks[0], bookmarks[1], (char)0));
+            attributes.addElement (new PageAttribute (
+                mPage, -1, -1, bookmarks[0], bookmarks[1], (char)0));
     }
 
+    /**
+     * Generate a standalone attribute -- font.
+     * @param attributes The list so far.
+     * @param bookmarks The array of positions.
+     */
     private void standalone (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], -1, -1, (char)0));
+        attributes.addElement (new PageAttribute (
+            mPage, bookmarks[1], bookmarks[2], -1, -1, (char)0));
     }
 
+    /**
+     * Generate an empty attribute -- color=.
+     * @param attributes The list so far.
+     * @param bookmarks The array of positions.
+     */
     private void empty (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], bookmarks[2] + 1, -1, (char)0));
+        attributes.addElement (new PageAttribute (
+            mPage, bookmarks[1], bookmarks[2], bookmarks[2] + 1, -1, (char)0));
     }
 
+    /**
+     * Generate an unquoted attribute -- size=1.
+     * @param attributes The list so far.
+     * @param bookmarks The array of positions.
+     */
     private void naked (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], bookmarks[3], bookmarks[4], (char)0));
+        attributes.addElement (new PageAttribute (
+            mPage, bookmarks[1], bookmarks[2], bookmarks[3],
+            bookmarks[4], (char)0));
     }
 
+    /**
+     * Generate an single quoted attribute -- width='100%'.
+     * @param attributes The list so far.
+     * @param bookmarks The array of positions.
+     */
     private void single_quote (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], bookmarks[4] + 1, bookmarks[5], '\''));
+        attributes.addElement (new PageAttribute (
+            mPage, bookmarks[1], bookmarks[2], bookmarks[4] + 1,
+            bookmarks[5], '\''));
     }
 
+    /**
+     * Generate an double quoted attribute -- CONTENT="Test Development".
+     * @param attributes The list so far.
+     * @param bookmarks The array of positions.
+     */
     private void double_quote (Vector attributes, int[] bookmarks)
     {
-        attributes.addElement (new PageAttribute (mPage, bookmarks[1], bookmarks[2], bookmarks[5] + 1, bookmarks[6], '"'));
+        attributes.addElement (new PageAttribute (
+            mPage, bookmarks[1], bookmarks[2], bookmarks[5] + 1,
+            bookmarks[6], '"'));
     }
 
     /**
@@ -564,7 +609,8 @@ public class Lexer
      * attribute value when the value is delimited by double quote marks, and
      * vice versa. Authors may also use numeric character references to
      * represent double quotes (&amp;#34;) and single quotes (&amp;#39;).
-     * For doublequotes authors can also use the character entity reference &amp;quot;.<p>
+     * For doublequotes authors can also use the character entity reference
+     * &amp;quot;.<p>
      * In certain cases, authors may specify the value of an attribute without
      * any quotation marks. The attribute value may only contain letters
      * (a-z and A-Z), digits (0-9), hyphens (ASCII decimal 45),
@@ -573,8 +619,10 @@ public class Lexer
      * when it is possible to eliminate them.<p>
      * Attribute names are always case-insensitive.<p>
      * Attribute values are generally case-insensitive. The definition of each
-     * attribute in the reference manual indicates whether its value is case-insensitive.<p>
-     * All the attributes defined by this specification are listed in the attribute index.<p>
+     * attribute in the reference manual indicates whether its value is
+     * case-insensitive.<p>
+     * All the attributes defined by this specification are listed in the
+     * attribute index.<p>
      * </cite>
      * <p>
      * This method uses a state machine with the following states:

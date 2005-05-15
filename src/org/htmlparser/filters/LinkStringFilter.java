@@ -46,19 +46,20 @@ public class LinkStringFilter implements NodeFilter
      * Flag indicating case sensitive/insensitive search.
      */
     protected boolean mCaseSensitive;
-    
+
     /**
-     * Creates a new instance of LinkStringFilter that accepts LinkTag nodes containing
-     * a URL that matches the supplied pattern. The match is case insensitive.
+     * Creates a LinkStringFilter that accepts LinkTag nodes containing
+     * a URL that matches the supplied pattern.
+     * The match is case insensitive.
      * @param pattern The pattern to match.
      */
     public LinkStringFilter (String pattern)
     {
         this (pattern, false);
     }
-    
+
     /**
-     * Creates a new instance of LinkStringFilter that accepts LinkTag nodes containing
+     * Creates a LinkStringFilter that accepts LinkTag nodes containing
      * a URL that matches the supplied pattern.
      * @param pattern The pattern to match.
      * @param caseSensitive Specifies case sensitivity for the matching process.
@@ -68,17 +69,17 @@ public class LinkStringFilter implements NodeFilter
         mPattern = pattern;
         mCaseSensitive = caseSensitive;
     }
-    
+
     /**
-     * Accept nodes that are assignable from the LinkTag class and have a URL that
-     * matches the pattern supplied in the constructor.
+     * Accept nodes that are a LinkTag and
+     * have a URL that matches the pattern supplied in the constructor.
      * @param node The node to check.
      * @return <code>true</code> if the node is a link with the pattern.
      */
     public boolean accept (Node node)
     {
         boolean ret;
-        
+
         ret = false;
         if (LinkTag.class.isAssignableFrom (node.getClass ()))
         {

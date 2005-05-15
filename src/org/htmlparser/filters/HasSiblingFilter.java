@@ -36,13 +36,13 @@ import org.htmlparser.util.NodeList;
  * End tags are not considered to be siblings of any tag.
  */
 public class HasSiblingFilter
-	implements
-		NodeFilter
+    implements
+        NodeFilter
 {
     /**
      * The filter to apply to the sibling.
      */
-    public NodeFilter mSiblingFilter;
+    protected NodeFilter mSiblingFilter;
 
     /**
      * Creates a new instance of HasSiblingFilter.
@@ -55,7 +55,8 @@ public class HasSiblingFilter
     }
 
     /**
-     * Creates a new instance of HasSiblingFilter that accepts nodes with sibling acceptable to the filter.
+     * Creates a new instance of HasSiblingFilter that accepts nodes
+     * with sibling acceptable to the filter.
      * @param filter The filter to apply to the sibling.
      */
     public HasSiblingFilter (NodeFilter filter)
@@ -71,7 +72,7 @@ public class HasSiblingFilter
     {
         return (mSiblingFilter);
     }
-    
+
     /**
      * Set the filter for this HasSiblingFilter.
      * @param filter The filter to apply to siblings in {@link #accept}.
@@ -97,20 +98,18 @@ public class HasSiblingFilter
         ret = false;
         if (!(node instanceof Tag) || !((Tag)node).isEndTag ())
         {
-	        parent = node.getParent ();
-	        if (null != parent)
-	        {
-	            siblings = parent.getChildren ();
-	            if (null != siblings)
-	            {
-		            count = siblings.size ();
-		            for (int i = 0; !ret && (i < count); i++)
-		                if (getSiblingFilter ().accept (siblings.elementAt (i)))
-		                    ret = true;
-	            }
-	            else
-	                System.out.println("gotcha");
-	        }
+            parent = node.getParent ();
+            if (null != parent)
+            {
+                siblings = parent.getChildren ();
+                if (null != siblings)
+                {
+                    count = siblings.size ();
+                    for (int i = 0; !ret && (i < count); i++)
+                        if (getSiblingFilter ().accept (siblings.elementAt (i)))
+                            ret = true;
+                }
+            }
         }
 
         return (ret);

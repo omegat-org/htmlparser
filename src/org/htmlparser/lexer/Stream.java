@@ -28,7 +28,6 @@ package org.htmlparser.lexer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.Runnable;
 
 /**
  * Provides for asynchronous fetching from a stream.

@@ -89,9 +89,11 @@ public class StringBean extends NodeVisitor implements Serializable
     public static final String PROP_URL_PROPERTY = "URL";
 
     /**
-     * Property name in event where the 'replace non-breaking spaces' state changes.
+     * Property name in event where the 'replace non-breaking spaces'
+     * state changes.
      */
-    public static final String PROP_REPLACE_SPACE_PROPERTY = "replaceNonBreakingSpaces";
+    public static final String PROP_REPLACE_SPACE_PROPERTY =
+        "replaceNonBreakingSpaces";
 
     /**
      * Property name in event where the 'collapse whitespace' state changes.
@@ -106,12 +108,12 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * A newline.
      */
-    private static final String newline = System.getProperty ("line.separator");
+    private static final String NEWLINE = System.getProperty ("line.separator");
 
     /**
-     * The length of the newline.
+     * The length of the NEWLINE.
      */
-    private static final int newline_size = newline.length ();
+    private static final int NEWLINE_SIZE = NEWLINE.length ();
 
     /**
      * Bound property support.
@@ -140,8 +142,8 @@ public class StringBean extends NodeVisitor implements Serializable
     protected boolean mReplaceSpace;
 
     /**
-     * If <code>true</code> sequences of whitespace characters are replaced with a
-     * single space character.
+     * If <code>true</code> sequences of whitespace characters are replaced
+     * with a single space character.
      */
     protected boolean mCollapse;
 
@@ -200,15 +202,16 @@ public class StringBean extends NodeVisitor implements Serializable
      * Appends a newline to the buffer if there isn't one there already.
      * Except if the buffer is empty.
      */
-    protected void carriage_return ()
+    protected void carriageReturn ()
     {
         int length;
 
         length = mBuffer.length ();
-        if (   (0 != length) // why bother appending newlines to the beginning of a buffer
-        && (   (newline_size <= length) // not enough chars to hold a newline
-        && (!mBuffer.substring (length - newline_size, length).equals (newline))))
-            mBuffer.append (newline);
+        if ((0 != length) // don't append newlines to the beginning of a buffer
+            && ((NEWLINE_SIZE <= length) // not enough chars to hold a NEWLINE
+            && (!mBuffer.substring (
+                length - NEWLINE_SIZE, length).equals (NEWLINE))))
+            mBuffer.append (NEWLINE);
     }
 
     /**
@@ -242,9 +245,12 @@ public class StringBean extends NodeVisitor implements Serializable
         if (0 != chars)
         {
             length = buffer.length ();
-            state = (   (0 == length)
-            || (buffer.charAt (length - 1) == ' ')
-            || ((newline_size <= length) && buffer.substring (length - newline_size, length).equals (newline))) ? 0 : 1;
+            state = ((0 == length)
+                || (buffer.charAt (length - 1) == ' ')
+                || ((NEWLINE_SIZE <= length)
+                    && buffer.substring (
+                        length - NEWLINE_SIZE, length).equals (NEWLINE)))
+                ? 0 : 1;
             for (int i = 0; i < chars; i++)
             {
                 character = string.charAt (i);
@@ -301,7 +307,8 @@ public class StringBean extends NodeVisitor implements Serializable
         {
             oldValue = mStrings;
             mStrings = strings;
-            mPropertySupport.firePropertyChange (PROP_STRINGS_PROPERTY, oldValue, strings);
+            mPropertySupport.firePropertyChange (
+                PROP_STRINGS_PROPERTY, oldValue, strings);
         }
     }
 
@@ -393,7 +400,7 @@ public class StringBean extends NodeVisitor implements Serializable
 
     /**
      * Remove a PropertyChangeListener from the listener list.
-     * This removes a PropertyChangeListener that was registered for all properties.
+     * This removes a registered PropertyChangeListener.
      * @param listener The PropertyChangeListener to be removed.
      */
     public void removePropertyChangeListener (PropertyChangeListener listener)
@@ -408,7 +415,7 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Return the textual contents of the URL.
      * This is the primary output of the bean.
-     * @return The user visible (what would be seen in a browser) text from the URL.
+     * @return The user visible (what would be seen in a browser) text.
      */
     public String getStrings ()
     {
@@ -444,7 +451,8 @@ public class StringBean extends NodeVisitor implements Serializable
         if (oldValue != links)
         {
             mLinks = links;
-            mPropertySupport.firePropertyChange (PROP_LINKS_PROPERTY, oldValue, links);
+            mPropertySupport.firePropertyChange (
+                PROP_LINKS_PROPERTY, oldValue, links);
             resetStrings ();
         }
     }
@@ -472,7 +480,8 @@ public class StringBean extends NodeVisitor implements Serializable
 
         old = getURL ();
         conn = getConnection ();
-        if (((null == old) && (null != url)) || ((null != old) && !old.equals (url)))
+        if (((null == old) && (null != url)) || ((null != old)
+            && !old.equals (url)))
         {
             try
             {
@@ -480,8 +489,10 @@ public class StringBean extends NodeVisitor implements Serializable
                     mParser = new Parser (url);
                 else
                     mParser.setURL (url);
-                mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, old, getURL ());
-                mPropertySupport.firePropertyChange (PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
+                mPropertySupport.firePropertyChange (
+                    PROP_URL_PROPERTY, old, getURL ());
+                mPropertySupport.firePropertyChange (
+                    PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
                 setStrings ();
             }
             catch (ParserException pe)
@@ -494,8 +505,9 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Get the current 'replace non breaking spaces' state.
      * @return <code>true</code> if non-breaking spaces (character '&#92;u00a0',
-     * numeric character reference &amp;#160; or character entity reference &amp;nbsp;)
-     * are to be replaced with normal spaces (character '&#92;u0020').
+     * numeric character reference &amp;#160; or character entity
+     * reference &amp;nbsp;) are to be replaced with normal
+     * spaces (character '&#92;u0020').
      */
     public boolean getReplaceNonBreakingSpaces ()
     {
@@ -506,17 +518,19 @@ public class StringBean extends NodeVisitor implements Serializable
      * Set the 'replace non breaking spaces' state.
      * If the setting is changed after the URL has been set, the text from the
      * URL will be reacquired, which is possibly expensive.
-     * @param replace_space <code>true</code> if non-breaking spaces (character '&#92;u00a0',
-     * numeric character reference &amp;#160; or character entity reference &amp;nbsp;)
-     * are to be replaced with normal spaces (character '&#92;u0020').
+     * @param replace <code>true</code> if non-breaking spaces
+     * (character '&#92;u00a0', numeric character reference &amp;#160;
+     * or character entity reference &amp;nbsp;) are to be replaced with normal
+     * spaces (character '&#92;u0020').
      */
-    public void setReplaceNonBreakingSpaces (boolean replace_space)
+    public void setReplaceNonBreakingSpaces (boolean replace)
     {
         boolean oldValue = mReplaceSpace;
-        if (oldValue != replace_space)
+        if (oldValue != replace)
         {
-            mReplaceSpace = replace_space;
-            mPropertySupport.firePropertyChange (PROP_REPLACE_SPACE_PROPERTY, oldValue, replace_space);
+            mReplaceSpace = replace;
+            mPropertySupport.firePropertyChange (PROP_REPLACE_SPACE_PROPERTY,
+                oldValue, replace);
             resetStrings ();
         }
     }
@@ -524,14 +538,14 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Get the current 'collapse whitespace' state.
      * If set to <code>true</code> this emulates the operation of browsers
-     * in interpretting text where <quote>user agents should collapse input white
-     * space sequences when producing output inter-word space</quote>.
+     * in interpretting text where <quote>user agents should collapse input
+     * white space sequences when producing output inter-word space</quote>.
      * See HTML specification section 9.1 White space
      * <a href="http://www.w3.org/TR/html4/struct/text.html#h-9.1">
      * http://www.w3.org/TR/html4/struct/text.html#h-9.1</a>.
      * @return <code>true</code> if sequences of whitespace (space '&#92;u0020',
      * tab '&#92;u0009', form feed '&#92;u000C', zero-width space '&#92;u200B',
-     * carriage-return '\r' and newline '\n') are to be replaced with a single
+     * carriage-return '\r' and NEWLINE '\n') are to be replaced with a single
      * space.
      */
     public boolean getCollapse ()
@@ -543,16 +557,17 @@ public class StringBean extends NodeVisitor implements Serializable
      * Set the current 'collapse whitespace' state.
      * If the setting is changed after the URL has been set, the text from the
      * URL will be reacquired, which is possibly expensive.
-     * @param collapse_whitespace If <code>true</code>, sequences of whitespace
+     * @param collapse If <code>true</code>, sequences of whitespace
      * will be reduced to a single space.
      */
-    public void setCollapse (boolean collapse_whitespace)
+    public void setCollapse (boolean collapse)
     {
         boolean oldValue = mCollapse;
-        if (oldValue != collapse_whitespace)
+        if (oldValue != collapse)
         {
-            mCollapse = collapse_whitespace;
-            mPropertySupport.firePropertyChange (PROP_COLLAPSE_PROPERTY, oldValue, collapse_whitespace);
+            mCollapse = collapse;
+            mPropertySupport.firePropertyChange (
+                    PROP_COLLAPSE_PROPERTY, oldValue, collapse);
             resetStrings ();
         }
     }
@@ -580,7 +595,8 @@ public class StringBean extends NodeVisitor implements Serializable
 
         url = getURL ();
         conn = getConnection ();
-        if (((null == conn) && (null != connection)) || ((null != conn) && !conn.equals (connection)))
+        if (((null == conn) && (null != connection))
+            || ((null != conn) && !conn.equals (connection)))
         {
             try
             {
@@ -588,8 +604,10 @@ public class StringBean extends NodeVisitor implements Serializable
                     mParser = new Parser (connection);
                 else
                     mParser.setConnection (connection);
-                mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, url, getURL ());
-                mPropertySupport.firePropertyChange (PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
+                mPropertySupport.firePropertyChange (
+                    PROP_URL_PROPERTY, url, getURL ());
+                mPropertySupport.firePropertyChange (
+                    PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
                 setStrings ();
             }
             catch (ParserException pe)
@@ -616,7 +634,7 @@ public class StringBean extends NodeVisitor implements Serializable
             {
                 text = Translate.decode (text);
                 if (getReplaceNonBreakingSpaces ())
-                    text = text.replace ('\u00a0',' ');
+                    text = text.replace ('\u00a0', ' ');
                 if (getCollapse ())
                     collapse (mBuffer, text);
                 else
@@ -628,7 +646,7 @@ public class StringBean extends NodeVisitor implements Serializable
     }
 
     /**
-     * Appends a newline to the output if the tag breaks flow, and
+     * Appends a NEWLINE to the output if the tag breaks flow, and
      * possibly sets the state of the PRE and SCRIPT flags.
      * @param tag The tag to examine.
      */
@@ -651,7 +669,7 @@ public class StringBean extends NodeVisitor implements Serializable
         else if (name.equalsIgnoreCase ("STYLE"))
             mIsStyle = true;
         if (tag.breaksFlow ())
-            carriage_return ();
+            carriageReturn ();
     }
 
     /**
@@ -678,7 +696,8 @@ public class StringBean extends NodeVisitor implements Serializable
     public static void main (String[] args)
     {
         if (0 >= args.length)
-            System.out.println ("Usage: java -classpath htmlparser.jar org.htmlparser.beans.StringBean <http://whatever_url>");
+            System.out.println ("Usage: java -classpath htmlparser.jar"
+                + " org.htmlparser.beans.StringBean <http://whatever_url>");
         else
         {
             StringBean sb = new StringBean ();

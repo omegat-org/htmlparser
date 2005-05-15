@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -47,7 +48,8 @@ import java.util.Vector;
 import org.htmlparser.util.ParserException;
 
 /**
- * Handles proxies, password protected URLs and request properties including cookies.
+ * Handles proxies, password protected URLs and request properties
+ * including cookies.
  */
 public class ConnectionManager
 {
@@ -58,38 +60,49 @@ public class ConnectionManager
     protected static Hashtable mDefaultRequestProperties = new Hashtable ();
     static
     {
-        mDefaultRequestProperties.put ("User-Agent", "HTMLParser/" + org.htmlparser.Parser.VERSION_NUMBER);
+        mDefaultRequestProperties.put ("User-Agent", "HTMLParser/"
+            + org.htmlparser.Parser.VERSION_NUMBER);
         mDefaultRequestProperties.put ("Accept-Encoding", "gzip, deflate");
     }
-   
+
     /**
      * Messages for page not there (404).
      */
-    static private final String[] mFourOhFour =
+    private static final String[] FOUR_OH_FOUR =
     {
-        "The web site you seek cannot be located, but countless more exist",
-        "You step in the stream, but the water has moved on. This page is not here.",
-        "Yesterday the page existed. Today it does not. The internet is like that.",
-        "That page was so big. It might have been very useful. But now it is gone.",
-        "Three things are certain: death, taxes and broken links. Guess which has occured.",
-        "Chaos reigns within. Reflect, repent and enter the correct URL. Order shall return.",
-        "Stay the patient course. Of little worth is your ire. The page is not found.",
+        "The web site you seek cannot be located,"
+            + " but countless more exist",
+        "You step in the stream, but the water has moved on."
+            + " This page is not here.",
+        "Yesterday the page existed. Today it does not."
+            + " The internet is like that.",
+        "That page was so big. It might have been very useful."
+            + " But now it is gone.",
+        "Three things are certain: death, taxes and broken links."
+            + " Guess which has occured.",
+        "Chaos reigns within. Reflect, repent and enter the correct URL."
+            + " Order shall return.",
+        "Stay the patient course. Of little worth is your ire."
+            + " The page is not found.",
         "A non-existant URL reduces your expensive computer to a simple stone.",
-        "Many people have visited that page. Today, you are not one of the lucky ones.",
-        "Cutting the wind with a knife. Bookmarking a URL. Both are ephemeral.",
+        "Many people have visited that page."
+            + " Today, you are not one of the lucky ones.",
+        "Cutting the wind with a knife. Bookmarking a URL."
+            + " Both are ephemeral.",
     };
 
     /**
      * Base 64 character translation table.
      */
-    static private final char[] mCharacterTable =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
- 
+    private static final char[] BASE64_CHAR_TABLE =
+         ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        + "abcdefghijklmnopqrstuvwxyz0123456789+/").toCharArray ();
+
     /**
      * Request header fields.
      */
     protected Hashtable mRequestProperties;
-    
+
     /**
      * The proxy server name.
      */
@@ -141,7 +154,7 @@ public class ConnectionManager
 
     /**
      * Create a connection manager with the given connection properties.
-     * @param properties Name value pairs that are to be added to the HTTP request.
+     * @param properties Name/value pairs to be added to the HTTP request.
      */
     public ConnectionManager (Hashtable properties)
     {
@@ -154,7 +167,6 @@ public class ConnectionManager
         mPassword = null;
         mCookieJar = null;
         mMonitor = null;
-
     }
 
     //
@@ -185,18 +197,19 @@ public class ConnectionManager
      * of the developer, these properties are not available before the
      * connection is fetched. Setting these request header fields affects all
      * subsequent connections opened by the parser. For more direct control
-     * create a <code>URLConnection</code> massage it the way you want and 
+     * create a <code>URLConnection</code> massage it the way you want and
      * then set it on the parser.<p>
-     * From <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1</a>: 
+     * From <a href="http://www.ietf.org/rfc/rfc2616.txt">
+     * RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1</a>: 
      * <pre>
      * 5.3 Request Header Fields
-     * 
+     *
      *    The request-header fields allow the client to pass additional
      *    information about the request, and about the client itself, to the
      *    server. These fields act as request modifiers, with semantics
      *    equivalent to the parameters on a programming language method
      *    invocation.
-     * 
+     *
      *        request-header = Accept                   ; Section 14.1
      *                       | Accept-Charset           ; Section 14.2
      *                       | Accept-Encoding          ; Section 14.3
@@ -216,7 +229,7 @@ public class ConnectionManager
      *                       | Referer                  ; Section 14.36
      *                       | TE                       ; Section 14.39
      *                       | User-Agent               ; Section 14.43
-     * 
+     *
      *    Request-header field names can be extended reliably only in
      *    combination with a change in the protocol version. However, new or
      *    experimental header fields MAY be given the semantics of request-
@@ -248,16 +261,16 @@ public class ConnectionManager
         Map map;
         String key;
         List items;
-        
+
         buffer = new StringBuffer (1024);
         buffer.append (connection.getRequestMethod ());
         buffer.append (" ");
         buffer.append (connection.getURL ());
         buffer.append (" HTTP/1.1\n");
         map  = connection.getRequestProperties ();
-        for (java.util.Iterator iterator = map.keySet ().iterator (); iterator.hasNext ();)
+        for (Iterator iter = map.keySet ().iterator (); iter.hasNext (); )
         {
-            key = (String)iterator.next ();
+            key = (String)iter.next ();
             items = (List)map.get (key);
             buffer.append (key);
             buffer.append (": ");
@@ -269,7 +282,7 @@ public class ConnectionManager
             }
             buffer.append ("\n");
         }
-        
+
         return (buffer.toString ());
     }
 
@@ -280,10 +293,10 @@ public class ConnectionManager
      * from a connected but invalid connection.
      * <em>This header is generated from the contents of the connection
      * and may not be exactly the same as the response that was received.</em>
-     * @param connection The connection to convert into an HTTP response header.
+     * @param conn The connection to convert into an HTTP response header.
      * @return The string that was sent as the HTTP response.
      */
-    public static String getResponseHeader (HttpURLConnection connection)
+    public static String getResponseHeader (HttpURLConnection conn)
     {
         // dump it
         StringBuffer buffer;
@@ -295,27 +308,27 @@ public class ConnectionManager
         buffer = new StringBuffer (1024);
         try
         {
-	        code = connection.getResponseCode ();
-	        if (-1 != code)
-	        {
-	            message = connection.getResponseMessage ();
-	            buffer.append ("HTTP/1.1 ");
-	            buffer.append (code);
-	            buffer.append (" ");
-	            buffer.append (message);
-	            buffer.append ("\n");
-	            for (int i = 0; null != (value = connection.getHeaderField (i)); i++)
-	            {
-	                key = connection.getHeaderFieldKey (i);
-	                if (null != key)
-	                {
-	                    buffer.append (key);
-	                    buffer.append (": ");
-	                    buffer.append (value);
-	                    buffer.append ("\n");
-	                }
-	            }
-	        }
+            code = conn.getResponseCode ();
+            if (-1 != code)
+            {
+                message = conn.getResponseMessage ();
+                buffer.append ("HTTP/1.1 ");
+                buffer.append (code);
+                buffer.append (" ");
+                buffer.append (message);
+                buffer.append ("\n");
+                for (int i = 0; null != (value = conn.getHeaderField (i)); i++)
+                {
+                    key = conn.getHeaderFieldKey (i);
+                    if (null != key)
+                    {
+                        buffer.append (key);
+                        buffer.append (": ");
+                        buffer.append (value);
+                        buffer.append ("\n");
+                    }
+                }
+            }
         }
         catch (IOException ioe)
         {
@@ -379,7 +392,7 @@ public class ConnectionManager
     {
         return (mProxyPort);
     }
-    
+
     /**
      * Set the proxy port number.
      * @param port The proxy port.
@@ -519,7 +532,7 @@ public class ConnectionManager
                         cookies.setElementAt (cookie, j); // replace
                         break;
                     }
-                    else if (path.startsWith (probe.getPath ())) 
+                    else if (path.startsWith (probe.getPath ()))
                     {
                         cookies.insertElementAt (cookie, j);
                         break;
@@ -533,7 +546,7 @@ public class ConnectionManager
             cookies.addElement (cookie);
             mCookieJar.put (domain, cookies);
         }
-        
+
     }
 
     /**
@@ -575,6 +588,8 @@ public class ConnectionManager
         String host2 = null; // old http.proxyHost value
         String port2 = null; // old http.proxyPort value
         HttpURLConnection http;
+        String auth;
+        String encoded;
         URLConnection ret;
 
         try
@@ -582,89 +597,95 @@ public class ConnectionManager
             try
             {
                 // set up for proxy
-	            if ((null != getProxyHost ()) && (0 != getProxyPort ()))
-	            {
-	                sysprops = System.getProperties ();
-		            set = (String)sysprops.put ("proxySet", "true");
-		            host = (String)sysprops.put ("proxyHost", getProxyHost ());
-		            port = (String)sysprops.put ("proxyPort", Integer.toString (getProxyPort ()));
-	                // see http://java.sun.com/j2se/1.4.2/docs/guide/net/properties.html
-		            host2 = (String)sysprops.put ("http.proxyHost", getProxyHost ());
-		            port2 = (String)sysprops.put ("http.proxyPort", Integer.toString (getProxyPort ()));
-		            System.setProperties (sysprops);
-		            
-	            }
-	
-	            // open the connection... but don't connect yet
-	            ret = url.openConnection ();
-	            if (ret instanceof HttpURLConnection)
-	            {
-		            http = (HttpURLConnection)ret;
-		            
-		            // set the fixed request properties
-		            properties = getRequestProperties ();
-		            if (null != properties)
-		                for (enumeration = properties.keys (); enumeration.hasMoreElements ();)
-		                {
-		                    key = (String)enumeration.nextElement ();
-		                    value = (String)properties.get (key);
-		                    ret.setRequestProperty (key, value);
-		                }
-	
-		            // set the proxy name and password
-		            if ((null != getProxyUser ()) && (null != getProxyPassword ()))
-		            {
-			            String authorization = getProxyUser () + ":" + getProxyPassword ();
-			            String encodedauthorization = encode (authorization.getBytes("ISO-8859-1"));
-			            ret.setRequestProperty ("Proxy-Authorization", encodedauthorization);
-		            }
-		            
-		            // set the URL name and password
-		            if ((null != getUser ()) && (null != getPassword ()))
-		            {
-			            String authorization = getUser () + ":" + getPassword ();
-			            String encodedauthorization = encode (authorization.getBytes("ISO-8859-1"));
-		                ret.setRequestProperty ("Authorization", "Basic " + encodedauthorization);
-		            }
-	
-		            // set the cookies based on the url
-		            addCookies (ret);
+                if ((null != getProxyHost ()) && (0 != getProxyPort ()))
+                {
+                    sysprops = System.getProperties ();
+                    set = (String)sysprops.put ("proxySet", "true");
+                    host = (String)sysprops.put ("proxyHost", getProxyHost ());
+                    port = (String)sysprops.put ("proxyPort",
+                        Integer.toString (getProxyPort ()));
+                    // see http://java.sun.com/j2se/1.4.2/docs/guide/net/properties.html
+                    host2 = (String)sysprops.put ("http.proxyHost",
+                        getProxyHost ());
+                    port2 = (String)sysprops.put ("http.proxyPort",
+                        Integer.toString (getProxyPort ()));
+                    System.setProperties (sysprops);
+                    
+                }
+    
+                // open the connection... but don't connect yet
+                ret = url.openConnection ();
+                if (ret instanceof HttpURLConnection)
+                {
+                    http = (HttpURLConnection)ret;
+                    
+                    // set the fixed request properties
+                    properties = getRequestProperties ();
+                    if (null != properties)
+                        for (enumeration = properties.keys ();
+                                enumeration.hasMoreElements ();)
+                        {
+                            key = (String)enumeration.nextElement ();
+                            value = (String)properties.get (key);
+                            ret.setRequestProperty (key, value);
+                        }
+    
+                    // set the proxy name and password
+                    if ((null != getProxyUser ())
+                        && (null != getProxyPassword ()))
+                    {
+                        auth = getProxyUser () + ":" + getProxyPassword ();
+                        encoded = encode (auth.getBytes("ISO-8859-1"));
+                        ret.setRequestProperty ("Proxy-Authorization", encoded);
+                    }
+                    
+                    // set the URL name and password
+                    if ((null != getUser ()) && (null != getPassword ()))
+                    {
+                        auth = getUser () + ":" + getPassword ();
+                        encoded = encode (auth.getBytes("ISO-8859-1"));
+                        ret.setRequestProperty ("Authorization",
+                            "Basic " + encoded);
+                    }
+    
+                    // set the cookies based on the url
+                    addCookies (ret);
 
-		            if (null != getMonitor ())
-		                getMonitor ().preConnect (http);
-	            }
-	            else
-	                http = null;
+                    if (null != getMonitor ())
+                        getMonitor ().preConnect (http);
+                }
+                else
+                    http = null;
 
-	            try
-	            {
-	                ret.connect ();
-	                
-	                if (null != http)
-	                {
-			            if (null != getMonitor ())
-			                getMonitor ().postConnect (http);
-	
-		                parseCookies (ret);
-	                }
-	            }
-	            catch (UnknownHostException uhe)
-	            {
-	                int message = (int)(Math.random () * mFourOhFour.length);
-	                throw new ParserException (mFourOhFour[message], uhe);
-	            }
-	            catch (IOException ioe)
-	            {
-	                throw new ParserException (ioe.getMessage (), ioe);
-	            }
+                try
+                {
+                    ret.connect ();
+                    
+                    if (null != http)
+                    {
+                        if (null != getMonitor ())
+                            getMonitor ().postConnect (http);
+    
+                        parseCookies (ret);
+                    }
+                }
+                catch (UnknownHostException uhe)
+                {
+                    int message = (int)(Math.random () * FOUR_OH_FOUR.length);
+                    throw new ParserException (FOUR_OH_FOUR[message], uhe);
+                }
+                catch (IOException ioe)
+                {
+                    throw new ParserException (ioe.getMessage (), ioe);
+                }
             }
             finally
             {
                 if ((null != getProxyHost ()) && (0 != getProxyPort ()))
                 {
                     sysprops = System.getProperties ();
-		            if (null != set)
-		                sysprops.put ("proxySet", set);
+                    if (null != set)
+                        sysprops.put ("proxySet", set);
                     else
                         sysprops.remove ("proxySet");
                     if (null != host)
@@ -683,13 +704,14 @@ public class ConnectionManager
                         sysprops.put ("http.proxyPort", port2);
                     else
                         sysprops.remove ("http.proxyPort");
-		            System.setProperties (sysprops);
+                    System.setProperties (sysprops);
                 }
             }
         }
         catch (IOException ioe)
         {
-            String msg = "HTMLParser.openConnection() : Error in opening a connection to " + url.toExternalForm ();
+            String msg = "Error in opening a connection to "
+                + url.toExternalForm ();
             ParserException ex = new ParserException (msg, ioe);
             throw ex;
         }
@@ -697,12 +719,13 @@ public class ConnectionManager
         return (ret);
     }
 
-	/**
-	 * Encodes a byte array into BASE64 in accordance with <a href="http://www.faqs.org/rfcs/rfc2045.html">RFC 2045</a>.
-	 * @param array The bytes to convert.
-	 * @return A BASE64 encoded string.
-	 */
-	public final static String encode (byte[] array)
+    /**
+     * Encodes a byte array into BASE64 in accordance with
+     * <a href="http://www.faqs.org/rfcs/rfc2045.html">RFC 2045</a>.
+     * @param array The bytes to convert.
+     * @return A BASE64 encoded string.
+     */
+    public final static String encode (byte[] array)
     {
         int last; // last byte
         int count; // character count
@@ -715,45 +738,49 @@ public class ConnectionManager
         int r; // shift count
         int n; // byte to encode
         int index; // index into output array
-	    String ret;
+        String ret;
 
         if ((null != array) && (0 != array.length))
         {
-	        last = array.length - 1;
-	        count = (last / 3 + 1) << 2;
-	        separators = (count - 1) / 76;
-	        length = count + separators;
-	        encoded = new char[length];
-	        index = 0;
-	        separators = 0;
-	        for (int i = 0; i <= last; i += 3)
-	        {
-	            left = last - i;
-	            end = (left > 1 ? 2 : left);
-	
-	            // collect 1 to 3 bytes to encode
-	            block = 0;
-	            r = 16;
-	            for (int j = 0; j <= end; j++)
-	            {
-	                n = array[i + j];
-	                block += (n < 0 ? n + 256 : n) << r;
-	                r -= 8;
-	            }
-	
-	            // encode into 2-4 chars padding with '=' if no data left
-	            encoded[index++] = mCharacterTable[(block >>> 18) & 0x3f];
-	            encoded[index++] = mCharacterTable[(block >>> 12) & 0x3f];
-	            encoded[index++] = left > 0 ? mCharacterTable[(block >>> 6) & 0x3f] : '=';
-	            encoded[index++] = left > 1 ? mCharacterTable[block & 0x3f] : '=';
-	
+            last = array.length - 1;
+            count = (last / 3 + 1) << 2;
+            separators = (count - 1) / 76;
+            length = count + separators;
+            encoded = new char[length];
+            index = 0;
+            separators = 0;
+            for (int i = 0; i <= last; i += 3)
+            {
+                left = last - i;
+                end = (left > 1 ? 2 : left);
+    
+                // collect 1 to 3 bytes to encode
+                block = 0;
+                r = 16;
+                for (int j = 0; j <= end; j++)
+                {
+                    n = array[i + j];
+                    block += (n < 0 ? n + 256 : n) << r;
+                    r -= 8;
+                }
+    
+                // encode into 2-4 chars padding with '=' if no data left
+                encoded[index++] = BASE64_CHAR_TABLE[(block >>> 18) & 0x3f];
+                encoded[index++] = BASE64_CHAR_TABLE[(block >>> 12) & 0x3f];
+                encoded[index++] = left > 0 ?
+                    BASE64_CHAR_TABLE[(block >>> 6) & 0x3f] :
+                    '=';
+                encoded[index++] = left > 1 ?
+                    BASE64_CHAR_TABLE[block & 0x3f] :
+                    '=';
+    
                 if ((0 == (index - separators) % 76) && (index < length))
                 {
                     encoded[index++] = '\n';
                     separators += 1;
                 }
-	        }
-	        ret = new String (encoded);
+            }
+            ret = new String (encoded);
         }
         else
             ret = "";
@@ -763,7 +790,8 @@ public class ConnectionManager
 
     /**
      * Turn spaces into %20.
-     * ToDo: make this more generic (see RFE #1010593 provide URL encoding/decoding utilities).
+     * ToDo: make this more generic
+     * (see RFE #1010593 provide URL encoding/decoding utilities).
      * @param url The url containing spaces.
      * @return The URL with spaces as %20 sequences.
      */
@@ -825,7 +853,8 @@ public class ConnectionManager
             {
                 File file = new File (string);
                 resource = file.getCanonicalPath ();
-                buffer = new StringBuffer (prefix.length () + resource.length ());
+                buffer = new StringBuffer (prefix.length ()
+                    + resource.length ());
                 buffer.append (prefix);
                 if (!resource.startsWith ("/"))
                     buffer.append ("/");
@@ -835,13 +864,13 @@ public class ConnectionManager
             }
             catch (MalformedURLException murle2)
             {
-                String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
+                String msg = "Error in opening a connection to " + string;
                 ParserException ex = new ParserException (msg, murle2);
                 throw ex;
             }
             catch (IOException ioe)
             {
-                String msg = "HTMLParser.openConnection() : Error in opening a connection to " + string;
+                String msg = "Error in opening a connection to " + string;
                 ParserException ex = new ParserException (msg, ioe);
                 throw ex;
             }
@@ -879,25 +908,28 @@ public class ConnectionManager
 
         if (null != mCookieJar)
         {
-	        list = null;
-	        // get the site from the URL
-	        url = connection.getURL ();
-	        host = url.getHost ();
-	        path = url.getPath ();
-	        if (0 == path.length ())
-	            path = "/";
-	        if (null != host)
-	        {   // http://www.objectsdevelopment.com/portal/modules/freecontent/content/javawebserver.html
-	            list = addCookies ((Vector)mCookieJar.get (host), path, list);
-	            domain = getDomain (host);
-	            if (null != domain)
-	                list = addCookies ((Vector)mCookieJar.get (domain), path, list);
-	            else
-	                // maybe it is the domain we're accessing
-	                list = addCookies ((Vector)mCookieJar.get ("." + host), path, list);
-	        }
-	        if (null != list)
-	            connection.setRequestProperty ("Cookie", generateCookieProperty (list));
+            list = null;
+            // get the site from the URL
+            url = connection.getURL ();
+            host = url.getHost ();
+            path = url.getPath ();
+            if (0 == path.length ())
+                path = "/";
+            if (null != host)
+            {   // http://www.objectsdevelopment.com/portal/modules/freecontent/content/javawebserver.html
+                list = addCookies ((Vector)mCookieJar.get (host), path, list);
+                domain = getDomain (host);
+                if (null != domain)
+                    list = addCookies ((Vector)mCookieJar.get (domain),
+                        path, list);
+                else
+                    // maybe it is the domain we're accessing
+                    list = addCookies ((Vector)mCookieJar.get ("." + host),
+                        path, list);
+            }
+            if (null != list)
+                connection.setRequestProperty ("Cookie",
+                    generateCookieProperty (list));
         }
     }
 
@@ -973,9 +1005,9 @@ public class ConnectionManager
             }
             if (ok)
             {
-	            // so take everything after the first token
-	            server = tokenizer.nextToken ();
-	            length = server.length ();
+                // so take everything after the first token
+                server = tokenizer.nextToken ();
+                length = server.length ();
                 ret = host.substring (length);
             }
         }
@@ -984,9 +1016,11 @@ public class ConnectionManager
     }
 
     /**
-     * Creates the cookie request property value from the list of valid cookies for the domain.
+     * Creates the cookie request property value from the list of
+     * valid cookies for the domain.
      * @param cookies The list of valid cookies to be encoded in the request.
-     * @return A string suitable for inclusion as the value of the "Cookie:" request property.
+     * @return A string suitable for inclusion as the value of
+     * the "Cookie:" request property.
      */
     protected String generateCookieProperty (Vector cookies)
     {
@@ -1000,7 +1034,8 @@ public class ConnectionManager
         buffer = new StringBuffer ();
         version = 0;
         for (int i = 0; i < cookies.size (); i++)
-            version = Math.max (version, ((Cookie)cookies.elementAt (i)).getVersion ());
+            version = Math.max (version,
+                ((Cookie)cookies.elementAt (i)).getVersion ());
         if (0 != version)
         {
             buffer.append ("$Version=\"");
@@ -1084,7 +1119,7 @@ public class ConnectionManager
                 else if (token.equals (","))
                 {
                     cookie = null;
-                	continue;
+                    continue;
                 }
                     
                 index = token.indexOf ('=');
@@ -1110,51 +1145,57 @@ public class ConnectionManager
                 }
                 else
                 {
-	                if (key.equals ("expires")) // Wdy, DD-Mon-YY HH:MM:SS GMT
-	                {
-	                    String comma = tokenizer.nextToken ();
-	                    String rest = tokenizer.nextToken ();
-	                    SimpleDateFormat format = new SimpleDateFormat ("EEE, dd-MMM-yy kk:mm:ss z");
-	                    try
-	                    {
-		                    Date date = format.parse (value + comma + rest);
-		                    cookie.setExpiryDate (date);
-	                    }
-	                    catch (ParseException pe)
-	                    {
-	                        // ok now what
-		                    cookie.setExpiryDate (null);
-	                    }
-	                }
-	                else
-	                    if (key.equals ("domain"))
-	                        cookie.setDomain (value);
-	                    else
-	                        if (key.equals ("path"))
-	                            cookie.setPath (value);
-	                        else
-	                            if (key.equals ("secure"))
-	                                cookie.setSecure (true);
-	                            else
-		                            if (key.equals ("comment"))
-		                                cookie.setComment (value);
-		                            else
-			                            if (key.equals ("version"))
-			                                cookie.setVersion (Integer.parseInt (value));
-			                            else
-				                            if (key.equals ("max-age"))
-				                            {
-				    		                    Date date = new Date ();
-				    		                    long then = date.getTime () + Integer.parseInt (value) * 1000;
-				    		                    date.setTime (then);
-				                                cookie.setExpiryDate (date);
-				                            }
-				                            else
-				                            {   // error,? unknown attribute,
-				                                // maybe just another cookie not separated by a comma
-				                                cookie = new Cookie (name, value);
-				                                cookies.addElement (cookie);
-				                            }
+                    if (key.equals ("expires")) // Wdy, DD-Mon-YY HH:MM:SS GMT
+                    {
+                        String comma = tokenizer.nextToken ();
+                        String rest = tokenizer.nextToken ();
+                        SimpleDateFormat format = new SimpleDateFormat (
+                            "EEE, dd-MMM-yy kk:mm:ss z");
+                        try
+                        {
+                            Date date = format.parse (value + comma + rest);
+                            cookie.setExpiryDate (date);
+                        }
+                        catch (ParseException pe)
+                        {
+                            // ok now what
+                            cookie.setExpiryDate (null);
+                        }
+                    }
+                    else
+                        if (key.equals ("domain"))
+                            cookie.setDomain (value);
+                        else
+                            if (key.equals ("path"))
+                                cookie.setPath (value);
+                            else
+                                if (key.equals ("secure"))
+                                    cookie.setSecure (true);
+                                else
+                                    if (key.equals ("comment"))
+                                        cookie.setComment (value);
+                                    else
+                                        if (key.equals ("version"))
+                                            cookie.setVersion (
+                                                Integer.parseInt (value));
+                                        else
+                                            if (key.equals ("max-age"))
+                                            {
+                                                Date date = new Date ();
+                                                long then = date.getTime ()
+                                                + Integer.parseInt (value)
+                                                * 1000;
+                                                date.setTime (then);
+                                                cookie.setExpiryDate (date);
+                                            }
+                                            else
+                                            {   // error,? unknown attribute,
+                                                // maybe just another cookie
+                                                // not separated by a comma
+                                                cookie = new Cookie (name,
+                                                    value);
+                                                cookies.addElement (cookie);
+                                            }
                 }
            }
            if (0 != cookies.size ())

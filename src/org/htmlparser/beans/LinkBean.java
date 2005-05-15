@@ -34,7 +34,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Vector;
 
-import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.NodeClassFilter;
@@ -169,7 +168,7 @@ public class LinkBean extends Object implements Serializable
 
     /**
      * Remove a PropertyChangeListener from the listener list.
-     * This removes a PropertyChangeListener that was registered for all properties.
+     * This removes a registered PropertyChangeListener.
      * @param listener The PropertyChangeListener to be removed.
      */
     public void removePropertyChangeListener (PropertyChangeListener listener)
@@ -199,7 +198,8 @@ public class LinkBean extends Object implements Serializable
                 {
                     oldValue = mLinks;
                     mLinks = urls;
-                    mPropertySupport.firePropertyChange (PROP_LINKS_PROPERTY, oldValue, mLinks);
+                    mPropertySupport.firePropertyChange (
+                        PROP_LINKS_PROPERTY, oldValue, mLinks);
                 }
             }
             catch (ParserException hpe)
@@ -218,7 +218,8 @@ public class LinkBean extends Object implements Serializable
             try
             {
                 mLinks = extractLinks ();
-                mPropertySupport.firePropertyChange (PROP_LINKS_PROPERTY, null, mLinks);
+                mPropertySupport.firePropertyChange (
+                    PROP_LINKS_PROPERTY, null, mLinks);
             }
             catch (ParserException hpe)
             {
@@ -247,12 +248,14 @@ public class LinkBean extends Object implements Serializable
         String old;
 
         old = getURL ();
-        if (((null == old) && (null != url)) || ((null != old) && !old.equals (url)))
+        if (((null == old) && (null != url)) || ((null != old)
+            && !old.equals (url)))
         {
             try
             {
                 mParser.setURL (url);
-                mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, old, getURL ());
+                mPropertySupport.firePropertyChange (
+                    PROP_URL_PROPERTY, old, getURL ());
                 setLinks ();
             }
             catch (ParserException hpe)
@@ -295,7 +298,8 @@ public class LinkBean extends Object implements Serializable
     public static void main (String[] args)
     {
         if (0 >= args.length)
-            System.out.println ("Usage: java -classpath htmlparser.jar org.htmlparser.beans.LinkBean <http://whatever_url>");
+            System.out.println ("Usage: java -classpath htmlparser.jar"
+                + " org.htmlparser.beans.LinkBean <http://whatever_url>");
         else
         {
             LinkBean lb = new LinkBean ();

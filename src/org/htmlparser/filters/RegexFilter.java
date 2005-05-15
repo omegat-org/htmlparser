@@ -59,7 +59,8 @@ import org.htmlparser.Text;
  * either 19 or 20 as the first two digits. The round brackets are mandatory.
  * The month is matched by 0[1-9]|1[012], again enclosed by round brackets
  * to keep the two options together. By using character classes, the first
- * option matches a number between 01 and 09, and the second matches 10, 11 or 12.
+ * option matches a number between 01 and 09, and the second
+ * matches 10, 11 or 12.
  * The last part of the regex consists of three options. The first matches
  * the numbers 01 through 09, the second 10 through 29, and the third matches 30 or 31.
  * The day and month are optional, but must occur together because of the ()?
@@ -123,9 +124,12 @@ public class RegexFilter implements NodeFilter
      * @param pattern The pattern to search for.
      * @param strategy The type of match:
      * <ol>
-     * <li>{@link #MATCH} use matches() method: attempts to match the entire input sequence against the pattern</li>
-     * <li>{@link #LOOKINGAT} use lookingAt() method: attempts to match the input sequence, starting at the beginning, against the pattern</li>
-     * <li>{@link #FIND} use find() method: scans the input sequence looking for the next subsequence that matches the pattern</li>
+     * <li>{@link #MATCH} use matches() method: attempts to match
+     * the entire input sequence against the pattern</li>
+     * <li>{@link #LOOKINGAT} use lookingAt() method: attempts to match
+     * the input sequence, starting at the beginning, against the pattern</li>
+     * <li>{@link #FIND} use find() method: scans the input sequence looking
+     * for the next subsequence that matches the pattern</li>
      * </ol>
      */
     public RegexFilter (String pattern, int strategy)
@@ -168,13 +172,17 @@ public class RegexFilter implements NodeFilter
      */
     public void setStrategy (int strategy)
     {
+        if ((strategy != MATCH) && (strategy != LOOKINGAT)
+            && (strategy != FIND))
+            throw new IllegalArgumentException ("illegal strategy ("
+                + strategy + ")");
         mStrategy = strategy;
     }
 
     /**
      * Accept string nodes that match the regular expression.
      * @param node The node to check.
-     * @return <code>true</code> if the regular expression matches the 
+     * @return <code>true</code> if the regular expression matches the
      * text of the node, <code>false</code> otherwise.
      */
     public boolean accept (Node node)
@@ -182,7 +190,7 @@ public class RegexFilter implements NodeFilter
         String string;
         Matcher matcher;
         boolean ret;
-        
+
         ret = false;
         if (node instanceof Text)
         {
@@ -197,6 +205,7 @@ public class RegexFilter implements NodeFilter
                     ret = matcher.lookingAt ();
                     break;
                 case FIND:
+                default:
                     ret = matcher.find ();
                     break;
             }

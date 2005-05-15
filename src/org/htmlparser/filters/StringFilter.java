@@ -36,11 +36,11 @@ import org.htmlparser.Text;
  * This class accepts all string nodes containing the given string.
  * This is a fairly simplistic filter, so for more sophisticated
  * string matching, for example newline and whitespace handling,
- * use a {@link RegexFilter} instead. 
+ * use a {@link RegexFilter} instead.
  */
 public class StringFilter
-	implements
-		NodeFilter
+    implements
+        NodeFilter
 {
     /**
      * The string to search for.
@@ -72,8 +72,9 @@ public class StringFilter
     }
 
     /**
-     * Creates a new instance of a StringFilter that accepts string nodes containing a certain string.
-     * The comparison is case insensitive, with conversions done using the default <code>Locale</code>.
+     * Creates a StringFilter that accepts text nodes containing a string.
+     * The comparison is case insensitive, with conversions done using
+     * the default <code>Locale</code>.
      * @param pattern The pattern to search for.
      */
     public StringFilter (String pattern)
@@ -82,28 +83,29 @@ public class StringFilter
     }
 
     /**
-     * Creates a new instance of a StringFilter that accepts string nodes containing a certain string.
+     * Creates a StringFilter that accepts text nodes containing a string.
      * @param pattern The pattern to search for.
-     * @param case_sensitive If <code>true</code>, comparisons are performed
-     * respecting case, with conversions done using the default <code>Locale</code>.
+     * @param sensitive If <code>true</code>, comparisons are performed
+     * respecting case, with conversions done using the default
+     * <code>Locale</code>.
      */
-    public StringFilter (String pattern, boolean case_sensitive)
+    public StringFilter (String pattern, boolean sensitive)
     {
-        this (pattern, case_sensitive, null);
+        this (pattern, sensitive, null);
     }
-    
+
     /**
-     * Creates a new instance of a StringFilter that accepts string nodes containing a certain string.
+     * Creates a StringFilter that accepts text nodes containing a string.
      * @param pattern The pattern to search for.
-     * @param case_sensitive If <code>true</code>, comparisons are performed
+     * @param sensitive If <code>true</code>, comparisons are performed
      * respecting case.
      * @param locale The locale to use when converting to uppercase.
      * If <code>null</code>, the default <code>Locale</code> is used.
      */
-    public StringFilter (String pattern, boolean case_sensitive, Locale locale)
+    public StringFilter (String pattern, boolean sensitive, Locale locale)
     {
         mPattern = pattern;
-        mCaseSensitive = case_sensitive;
+        mCaseSensitive = sensitive;
         mLocale = (null == locale) ? Locale.getDefault () : locale;
         setUpperPattern ();
     }
@@ -111,7 +113,7 @@ public class StringFilter
     //
     // protected methods
     //
-    
+
     /**
      * Set the real (upper case) comparison string.
      */
@@ -195,7 +197,7 @@ public class StringFilter
     {
         String string;
         boolean ret;
-        
+
         ret = false;
         if (node instanceof Text)
         {

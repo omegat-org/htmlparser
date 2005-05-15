@@ -51,7 +51,7 @@ public class NotFilter implements NodeFilter
     }
 
     /**
-     * Creates a new instance of NotFilter that accepts nodes not acceptable to the predicate filter.
+     * Creates a NotFilter that accepts nodes not acceptable to the predicate.
      * @param predicate The filter to consult.
      */
     public NotFilter (NodeFilter predicate)
@@ -67,7 +67,7 @@ public class NotFilter implements NodeFilter
     {
         return (mPredicate);
     }
-    
+
     /**
      * Set the predicate for this NotFilter.
      * @param predicate The predidcate to use in {@link #accept}.

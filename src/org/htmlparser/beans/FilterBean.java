@@ -49,8 +49,8 @@ import org.htmlparser.util.EncodingChangeException;
  * </pre>
  */
 public class FilterBean
-	implements
-		Serializable
+    implements
+        Serializable
 {
     /**
      * Property name in event where the URL contents changes.
@@ -127,15 +127,17 @@ public class FilterBean
             if (null == oldText)
                 oldText = "";
             mNodes = nodes;
-            if (null != mNodes) // TODO: fix this null problem if StringBean finds no nodes
+            if (null != mNodes) // TODO: fix this null problem
                 newText = getText ();
-            else
+            else // StringBean finds no nodes
                 newText = "";
             if (null == newText)
                 newText = "";
-            mPropertySupport.firePropertyChange (PROP_NODES_PROPERTY, oldValue, nodes);
+            mPropertySupport.firePropertyChange (
+                PROP_NODES_PROPERTY, oldValue, nodes);
             if (!newText.equals (oldText))
-                mPropertySupport.firePropertyChange (PROP_TEXT_PROPERTY, oldText, newText);
+                mPropertySupport.firePropertyChange (
+                    PROP_TEXT_PROPERTY, oldText, newText);
         }
     }
 
@@ -144,11 +146,12 @@ public class FilterBean
      * The first filter is applied to the parser.
      * Subsequent filters are applied to the output of the prior filter.
      * @return A list of nodes passed through all filters.
-     * @throws ParserException If an encoding change occurs or there is some other problem.
+     * @throws ParserException If an encoding change occurs
+     * or there is some other problem.
      */
     protected NodeList applyFilters ()
-    	throws
-    	ParserException
+        throws
+            ParserException
     {
         NodeList ret;
 
@@ -157,7 +160,7 @@ public class FilterBean
         if (null != getFilters ())
             for (int i = 0; i < getFilters ().length; i++)
                 if (0 == i)
-                	ret = mParser.parse (getFilters ()[0]);
+                    ret = mParser.parse (getFilters ()[0]);
                 else
                     ret = ret.extractAllNodesThatMatch (getFilters ()[i]);
 
@@ -213,7 +216,7 @@ public class FilterBean
 
     /**
      * Remove a PropertyChangeListener from the listener list.
-     * This removes a PropertyChangeListener that was registered for all properties.
+     * This removes a registered PropertyChangeListener.
      * @param listener The PropertyChangeListener to be removed.
      */
     public void removePropertyChangeListener (PropertyChangeListener listener)
@@ -233,7 +236,7 @@ public class FilterBean
     public NodeList getNodes ()
     {
         if (null == mNodes)
-			setNodes ();
+            setNodes ();
 
         return (mNodes);
     }
@@ -261,7 +264,8 @@ public class FilterBean
 
         old = getURL ();
         conn = getConnection ();
-        if (((null == old) && (null != url)) || ((null != old) && !old.equals (url)))
+        if (((null == old) && (null != url)) || ((null != old)
+            && !old.equals (url)))
         {
             try
             {
@@ -269,8 +273,10 @@ public class FilterBean
                     mParser = new Parser (url);
                 else
                     mParser.setURL (url);
-                mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, old, getURL ());
-                mPropertySupport.firePropertyChange (PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
+                mPropertySupport.firePropertyChange (
+                    PROP_URL_PROPERTY, old, getURL ());
+                mPropertySupport.firePropertyChange (
+                    PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
                 setNodes ();
             }
             catch (ParserException pe)
@@ -303,7 +309,8 @@ public class FilterBean
 
         url = getURL ();
         conn = getConnection ();
-        if (((null == conn) && (null != connection)) || ((null != conn) && !conn.equals (connection)))
+        if (((null == conn) && (null != connection)) || ((null != conn)
+            && !conn.equals (connection)))
         {
             try
             {
@@ -311,8 +318,10 @@ public class FilterBean
                     mParser = new Parser (connection);
                 else
                     mParser.setConnection (connection);
-                mPropertySupport.firePropertyChange (PROP_URL_PROPERTY, url, getURL ());
-                mPropertySupport.firePropertyChange (PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
+                mPropertySupport.firePropertyChange (
+                    PROP_URL_PROPERTY, url, getURL ());
+                mPropertySupport.firePropertyChange (
+                    PROP_CONNECTION_PROPERTY, conn, mParser.getConnection ());
                 setNodes ();
             }
             catch (ParserException pe)
@@ -370,10 +379,11 @@ public class FilterBean
     }
 
     /**
-     * Convenience method to apply a {@link StringBean} to the results of filtering.
-     * This may yield duplicate or multiple text elements if the node list contains nodes from
-     * two or more levels in the same nested tag heirarchy, but if the node list
-     * contains only one tag, it provides access to the text within the node.
+     * Convenience method to apply a {@link StringBean} to the filter results.
+     * This may yield duplicate or multiple text elements if the node list
+     * contains nodes from two or more levels in the same nested tag heirarchy,
+     * but if the node list contains only one tag, it provides access to the
+     * text within the node.
      * @return The textual contents of the nodes that pass through the filter set,
      * as collected by the StringBean. 
      */

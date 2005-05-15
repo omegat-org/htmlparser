@@ -598,6 +598,10 @@ public class KitTest extends ParserCallback
  * Revision Control Modification History
  *
  * $Log$
+ * Revision 1.10  2005/05/15 11:49:05  derrickoswald
+ * Documentation revamp part four.
+ * Remove some checkstyle warnings.
+ *
  * Revision 1.9  2005/04/10 23:20:46  derrickoswald
  * Documentation revamp part one.
  * Deprecated node decorators.

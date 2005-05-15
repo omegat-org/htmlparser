@@ -32,13 +32,14 @@ import java.io.Serializable;
  * An attribute within a tag.
  * Holds the name, assignment string, value and quote character.
  * <p>
- * This class was made deliberately simple. Except for {@link #setRawValue RawValue},
- * the properties are completely orthogonal, that is: each property is independant
- * of the others. This means you have enough rope here to hang yourself, and
- * it's very easy to create malformed HTML. Where it's obvious, warnings and
- * notes have been provided in the setters javadocs, but it is up to you -- the
- * programmer -- to ensure that the contents of the four fields will yield
- * valid HTML (if that's what you want).
+ * This class was made deliberately simple. Except for
+ * {@link #setRawValue RawValue}, the properties are completely orthogonal,
+ * that is: each property is independant of the others. This means you have
+ * enough rope here to hang yourself, and it's very easy to create
+ * malformed HTML. Where it's obvious, warnings and notes have been provided
+ * in the setters javadocs, but it is up to you -- the programmer --
+ * to ensure that the contents of the four fields will yield valid HTML
+ * (if that's what you want).
  * <p>
  * Be especially mindful of quotes and assignment strings. These are handled
  * by the constructors where it's obvious, but in general, you need to set
@@ -141,14 +142,27 @@ import java.io.Serializable;
  *   </tr>
  * </table>
  * <br>In words:
- * <br>If Name is null, and Assignment is null, and Quote is zero, it is whitepace and Value has the whitespace text -- value
- * <br>If Name is not null, and both Assignment and Value are null it's a standalone attribute -- name
- * <br>If Name is not null, and Assignment is an equals sign, and Quote is zero it's an empty attribute -- name=
- * <br>If Name is not null, and Assignment is an equals sign, and Value is "" or null, and Quote is ' it's an empty single quoted attribute -- name=''
- * <br>If Name is not null, and Assignment is an equals sign, and Value is "" or null, and Quote is " it's an empty double quoted attribute -- name=""
- * <br>If Name is not null, and Assignment is an equals sign, and Value is something, and Quote is zero it's a naked attribute -- name=value
- * <br>If Name is not null, and Assignment is an equals sign, and Value is something, and Quote is ' it's a single quoted attribute -- name='value'
- * <br>If Name is not null, and Assignment is an equals sign, and Value is something, and Quote is " it's a double quoted attribute -- name="value"
+ * <br>If Name is null, and Assignment is null, and Quote is zero,
+ *   it's whitepace and Value has the whitespace text -- value
+ * <br>If Name is not null, and both Assignment and Value are null
+ *   it's a standalone attribute -- name
+ * <br>If Name is not null, and Assignment is an equals sign, and Quote is zero
+ *   it's an empty attribute -- name=
+ * <br>If Name is not null, and Assignment is an equals sign,
+ *   and Value is "" or null, and Quote is '
+ *   it's an empty single quoted attribute -- name=''
+ * <br>If Name is not null, and Assignment is an equals sign,
+ *   and Value is "" or null, and Quote is "
+ *   it's an empty double quoted attribute -- name=""
+ * <br>If Name is not null, and Assignment is an equals sign,
+ *   and Value is something, and Quote is zero
+ *   it's a naked attribute -- name=value
+ * <br>If Name is not null, and Assignment is an equals sign,
+ *   and Value is something, and Quote is '
+ *   it's a single quoted attribute -- name='value'
+ * <br>If Name is not null, and Assignment is an equals sign,
+ *   and Value is something, and Quote is "
+ *   it's a double quoted attribute -- name="value"
  * <br>All other states are invalid HTML.
  * <p>
  * From the <a href="http://www.w3.org/TR/html4/intro/sgmltut.html#h-3.2.2">
@@ -176,7 +190,8 @@ import java.io.Serializable;
  * attribute value when the value is delimited by double quote marks, and
  * vice versa. Authors may also use numeric character references to
  * represent double quotes (&amp;#34;) and single quotes (&amp;#39;).
- * For doublequotes authors can also use the character entity reference &amp;quot;.<p>
+ * For doublequotes authors can also use the character entity reference
+ * &amp;quot;.<p>
  * In certain cases, authors may specify the value of an attribute without
  * any quotation marks. The attribute value may only contain letters
  * (a-z and A-Z), digits (0-9), hyphens (ASCII decimal 45),
@@ -185,9 +200,11 @@ import java.io.Serializable;
  * when it is possible to eliminate them.<p>
  * Attribute names are always case-insensitive.<p>
  * Attribute values are generally case-insensitive. The definition of each
- * attribute in the reference manual indicates whether its value is case-insensitive.<p>
+ * attribute in the reference manual indicates whether its value is
+ * case-insensitive.<p>
  * All the attributes defined by this specification are listed in the
- * <a href="http://www.w3.org/TR/html4/index/attributes.html">attribute index</a>.<p>
+ * <a href="http://www.w3.org/TR/html4/index/attributes.html">attribute
+ * index</a>.<p>
  * </cite>
  * <p>
  */
@@ -225,7 +242,7 @@ public class Attribute
     protected char mQuote;
 
     /**
-     * Create an attribute with the name, assignment string, value and quote given.
+     * Create an attribute with the name, assignment, value and quote given.
      * If the quote value is zero, assigns the value using {@link #setRawValue}
      * which sets the quote character to a proper value if necessary.
      * @param name The name of this attribute.
@@ -308,7 +325,7 @@ public class Attribute
 
     /**
      * Create an empty attribute.
-     * This will provide "" from the {@link #toString} and 
+     * This will provide "" from the {@link #toString} and
      * {@link #toString(StringBuffer)} methods.
      */
     public Attribute ()
@@ -478,7 +495,7 @@ public class Attribute
             quote = getQuote ();
             if (0 != quote)
             {
-                buffer = new StringBuffer (); // todo: can we get the value length?
+                buffer = new StringBuffer (); // todo: what is the value length?
                 buffer.append (quote);
                 getValue (buffer);
                 buffer.append (quote);
@@ -531,12 +548,14 @@ public class Attribute
         quote = 0;
         if ((null != value) && (0 != value.trim ().length ()))
         {
-            if (value.startsWith ("'") && value.endsWith ("'") && (2 <= value.length ()))
+            if (value.startsWith ("'") && value.endsWith ("'")
+                && (2 <= value.length ()))
             {
                 quote = '\'';
                 value = value.substring (1, value.length () - 1);
             }
-            else if (value.startsWith ("\"") && value.endsWith ("\"") && (2 <= value.length ()))
+            else if (value.startsWith ("\"") && value.endsWith ("\"")
+                && (2 <= value.length ()))
             {
                 quote = '"';
                 value = value.substring (1, value.length () - 1);
@@ -561,7 +580,7 @@ public class Attribute
                         doubleq = false;
                         needed = true;
                     }
-                    else if (!('-' == ch) && !('.' == ch) && !('_' == ch) 
+                    else if (!('-' == ch) && !('.' == ch) && !('_' == ch)
                        && !(':' == ch) && !Character.isLetterOrDigit (ch))
                     {
                         needed = true;
@@ -582,7 +601,8 @@ public class Attribute
                         quote = '"';
                         ref = "&quot;"; // Translate.encode (quote);
                         // JDK 1.4: value = value.replaceAll ("\"", ref);
-                        buffer = new StringBuffer (value.length() * 5);
+                        buffer = new StringBuffer (
+                                value.length() * (ref.length () - 1));
                         for (int i = 0; i < value.length (); i++)
                         {
                             ch = value.charAt (i);
@@ -599,7 +619,7 @@ public class Attribute
         setValue (value);
         setQuote (quote);
     }
-        
+
     /**
      * Predicate to determine if this attribute is whitespace.
      * @return <code>true</code> if this attribute is whitespace,
@@ -665,7 +685,7 @@ public class Attribute
         quote = getQuote ();
         if (0 != quote)
             ret += 2;
-        
+
         return (ret);
     }
 
@@ -697,7 +717,7 @@ public class Attribute
 
         return (ret.toString ());
     }
-    
+
     /**
      * Get a text representation of this attribute.
      * @param buffer The accumulator for placing the text into.

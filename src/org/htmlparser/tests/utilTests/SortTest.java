@@ -144,8 +144,23 @@ public class SortTest extends ParserTestCase
                 ret = Integer.MIN_VALUE;
             if (ret > Integer.MAX_VALUE)
                 ret = Integer.MAX_VALUE;
+            if (0 == ret)
+                ret = getAbsolutePath ().hashCode ()
+                    - f.getAbsolutePath ().hashCode ();
 
             return ((int)ret);
+        }
+        
+        public String toString ()
+        {
+            StringBuffer ret;
+
+            ret = new StringBuffer (128);
+            ret.append (this.getAbsolutePath ());
+            ret.append ('@');
+            ret.append (this.lastModified ());
+
+            return (ret.toString ());
         }
     }
 
@@ -227,7 +242,20 @@ public class SortTest extends ParserTestCase
             (SortableFile)directory.elementAt (index);
         directory.removeElementAt (index);
         int ordinal = Sort.bsearch (directory, test);
-        assertEquals ("ordinal not correct value", index, ordinal);
+        if (index != ordinal)
+        {
+            for (int i = 0; i < directory.size (); i++)
+            {
+                if (index == i)
+                    System.out.print ('-');
+                else if (ordinal == i)
+                    System.out.print ('+');
+                else
+                    System.out.print (' ');
+                System.out.println (directory.elementAt (i));
+            }
+            fail ("ordinal not correct value, expected " + index + ", was " + ordinal);
+        }
 
         // test the ordering of the objects
         directory.insertElementAt (test, ordinal);

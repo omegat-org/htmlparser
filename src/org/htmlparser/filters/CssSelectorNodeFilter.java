@@ -43,6 +43,9 @@ import org.htmlparser.util.NodeList;
  */
 public class CssSelectorNodeFilter implements NodeFilter
 {
+    /**
+     * Regular expression to split the selector into tokens.
+     */
     private static Pattern tokens =
         Pattern.compile("("
             + "/\\*.*?\\*/"             // comments
@@ -63,13 +66,49 @@ public class CssSelectorNodeFilter implements NodeFilter
             + ") | ( . )"                   // everything else (bogus)
             ,
             Pattern.CASE_INSENSITIVE
-            |Pattern.DOTALL
-            |Pattern.COMMENTS);
+            | Pattern.DOTALL
+            | Pattern.COMMENTS);
 
-    private static final int COMMENT = 1, QUOTEDSTRING = 2, RELATION = 3,
-        NAME = 4, COMBINATOR = 5, DELIM = 6, COMMA = 7;
+    /**
+     * Comment token type.
+     */
+    private static final int COMMENT = 1;
+
+    /**
+     * quoted string token type.
+     */
+    private static final int QUOTEDSTRING = 2;
+
+    /**
+     * Relation token type.
+     */
+    private static final int RELATION = 3;
+
+    /**
+     * Name token type.
+     */
+    private static final int NAME = 4;
+
+    /**
+     * Combinator token type.
+     */
+    private static final int COMBINATOR = 5;
+
+    /**
+     * Delimiter token type.
+     */
+    private static final int DELIM = 6;
+
+    /**
+     * Comma token type.
+     */
+    private static final int COMMA = 7;
 
     private NodeFilter therule;
+
+    private Matcher m = null;
+    private int tokentype = 0;
+    private String token = null;
 
     /**
      * Create a Cascading Style Sheet node filter.
@@ -77,9 +116,9 @@ public class CssSelectorNodeFilter implements NodeFilter
      */
     public CssSelectorNodeFilter(String selector)
     {
-        m = tokens.matcher(selector);
-        if (nextToken())
-            therule = parse();
+        m = tokens.matcher (selector);
+        if (nextToken ())
+            therule = parse ();
     }
 
     /**
@@ -88,33 +127,31 @@ public class CssSelectorNodeFilter implements NodeFilter
      * @return <code>true</code> if the node matches,
      * <code>false</code> otherwise.
      */
-    public boolean accept(Node node)
+    public boolean accept (Node node)
     {
-        return therule.accept(node);
+        return (therule.accept (node));
     }
 
-    private Matcher m = null;
-    private int tokentype = 0;
-    private String token = null;
-
-    private boolean nextToken()
+    private boolean nextToken ()
     {
-        if (m != null && m.find())
-            for (int i = 1; i < m.groupCount(); i++)
-                if (m.group(i) != null)
+        if (m != null && m.find ())
+            for (int i = 1; i < m.groupCount (); i++)
+                if (null != m.group (i))
                 {
                     tokentype = i;
-                    token = m.group(i);
+                    token = m.group (i);
                     return true;
                 }
         tokentype = 0;
         token = null;
-        return false;
+        return (false);
     }
 
-    private NodeFilter parse()
+    private NodeFilter parse ()
     {
-        NodeFilter n = null;
+        NodeFilter ret;
+        
+        ret = null;
         do
         {
             switch (tokentype)
@@ -122,39 +159,40 @@ public class CssSelectorNodeFilter implements NodeFilter
                 case COMMENT:
                 case NAME:
                 case DELIM:
-                    if (n == null)
-                        n = parseSimple();
+                    if (ret == null)
+                        ret = parseSimple ();
                     else
-                        n = new AndFilter(n, parseSimple());
+                        ret = new AndFilter (ret, parseSimple ());
                     break;
                 case COMBINATOR:
-                    switch (token.charAt(0))
+                    switch (token.charAt (0))
                     {
                         case '+':
-                            n = new AdjacentFilter(n);
+                            ret = new AdjacentFilter (ret);
                             break;
                         case '>':
-                            n = new HasParentFilter(n);
+                            ret = new HasParentFilter (ret);
                             break;
                         default: // whitespace
-                            n = new HasAncestorFilter(n);
+                            ret = new HasAncestorFilter (ret);
                     }
-                    nextToken();
+                    nextToken ();
                     break;
                 case COMMA:
-                    n = new OrFilter(n, parse());
-                    nextToken();
+                    ret = new OrFilter (ret, parse ());
+                    nextToken ();
                     break;
             }
         }
         while (token != null);
-        return n;
+
+        return (ret);
     }
 
     private NodeFilter parseSimple()
     {
         boolean done = false;
-        NodeFilter n = null;
+        NodeFilter ret = null;
 
         if (token != null)
             do
@@ -166,11 +204,11 @@ public class CssSelectorNodeFilter implements NodeFilter
                         break;
                     case NAME:
                         if ("*".equals(token))
-                            n = new YesFilter();
-                        else if (n == null)
-                            n = new TagNameFilter(unescape(token));
+                            ret = new YesFilter();
+                        else if (ret == null)
+                            ret = new TagNameFilter(unescape(token));
                         else
-                            n = new AndFilter(n, new TagNameFilter(unescape(token)));
+                            ret = new AndFilter(ret, new TagNameFilter(unescape(token)));
                         nextToken();
                         break;
                     case DELIM:
@@ -180,34 +218,34 @@ public class CssSelectorNodeFilter implements NodeFilter
                                 nextToken();
                                 if (tokentype != NAME)
                                     throw new IllegalArgumentException("Syntax error at " + token);
-                                if (n == null)
-                                    n = new HasAttributeFilter("class", unescape(token));
+                                if (ret == null)
+                                    ret = new HasAttributeFilter("class", unescape(token));
                                 else
-                                    n
-                                    = new AndFilter(n, new HasAttributeFilter("class", unescape(token)));
+                                    ret
+                                    = new AndFilter(ret, new HasAttributeFilter("class", unescape(token)));
                                 break;
                             case '#':
                                 nextToken();
                                 if (tokentype != NAME)
                                     throw new IllegalArgumentException("Syntax error at " + token);
-                                if (n == null)
-                                    n = new HasAttributeFilter("id", unescape(token));
+                                if (ret == null)
+                                    ret = new HasAttributeFilter("id", unescape(token));
                                 else
-                                    n = new AndFilter(n, new HasAttributeFilter("id", unescape(token)));
+                                    ret = new AndFilter(ret, new HasAttributeFilter("id", unescape(token)));
                                 break;
                             case ':':
                                 nextToken();
-                                if (n == null)
-                                    n = parsePseudoClass();
+                                if (ret == null)
+                                    ret = parsePseudoClass();
                                 else
-                                    n = new AndFilter(n, parsePseudoClass());
+                                    ret = new AndFilter(ret, parsePseudoClass());
                                 break;
                             case '[':
                                 nextToken();
-                                if (n == null)
-                                    n = parseAttributeExp();
+                                if (ret == null)
+                                    ret = parseAttributeExp();
                                 else
-                                    n = new AndFilter(n, parseAttributeExp());
+                                    ret = new AndFilter(ret, parseAttributeExp());
                                 break;
                         }
                         nextToken();
@@ -217,7 +255,7 @@ public class CssSelectorNodeFilter implements NodeFilter
                 }
             }
             while (!done && token != null);
-        return n;
+        return ret;
     }
 
     private NodeFilter parsePseudoClass()
@@ -227,13 +265,13 @@ public class CssSelectorNodeFilter implements NodeFilter
 
     private NodeFilter parseAttributeExp()
     {
-        NodeFilter n = null;
+        NodeFilter ret = null;
         if (tokentype == NAME)
         {
             String attrib = token;
             nextToken();
             if ("]".equals(token))
-                n = new HasAttributeFilter(unescape(attrib));
+                ret = new HasAttributeFilter(unescape(attrib));
             else if (tokentype == RELATION)
             {
                 String val = null, rel = token;
@@ -243,19 +281,19 @@ public class CssSelectorNodeFilter implements NodeFilter
                 else if (tokentype == NAME)
                     val = unescape(token);
                 if ("~=".equals(rel) && val != null)
-                    n = new AttribMatchFilter(unescape(attrib),
+                    ret = new AttribMatchFilter(unescape(attrib),
                         "\\b"
                         + val.replaceAll("([^a-zA-Z0-9])", "\\\\$1")
                         + "\\b");
                 else if ("=".equals(rel) && val != null)
-                    n = new HasAttributeFilter(attrib, val);
+                    ret = new HasAttributeFilter(attrib, val);
             }
         }
-        if (n == null)
+        if (ret == null)
             throw new IllegalArgumentException("Syntax error at " + token + tokentype);
 
         nextToken();
-        return n;
+        return ret;
     }
 
     /**

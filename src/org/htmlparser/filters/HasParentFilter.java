@@ -37,18 +37,18 @@ import org.htmlparser.Tag;
  * End tags are not considered to be children of any tag.
  */
 public class HasParentFilter
-	implements
-		NodeFilter
+    implements
+        NodeFilter
 {
     /**
      * The filter to apply to the parent.
      */
-    public NodeFilter mParentFilter;
+    protected NodeFilter mParentFilter;
 
     /**
      * Performs a recursive search up the node heirarchy if <code>true</code>.
      */
-    public boolean mRecursive;
+    protected boolean mRecursive;
 
     /**
      * Creates a new instance of HasParentFilter.
@@ -61,7 +61,8 @@ public class HasParentFilter
     }
 
     /**
-     * Creates a new instance of HasParentFilter that accepts nodes with direct parent acceptable to the filter.
+     * Creates a new instance of HasParentFilter that accepts nodes with
+     * the direct parent acceptable to the filter.
      * @param filter The filter to apply to the parent.
      */
     public HasParentFilter (NodeFilter filter)
@@ -70,7 +71,8 @@ public class HasParentFilter
     }
 
     /**
-     * Creates a new instance of HasParentFilter that accepts nodes with a parent acceptable to the filter.
+     * Creates a new instance of HasParentFilter that accepts nodes with
+     * a parent acceptable to the filter.
      * @param filter The filter to apply to the parent.
      * @param recursive If <code>true</code>, any enclosing node acceptable
      * to the given filter causes the node being tested to be accepted
@@ -91,7 +93,7 @@ public class HasParentFilter
     {
         return (mParentFilter);
     }
-    
+
     /**
      * Set the filter for this HasParentFilter.
      * @param filter The filter to apply to parents in {@link #accept}.
@@ -108,7 +110,7 @@ public class HasParentFilter
      */
     public boolean getRecursive ()
     {
-        return mRecursive;
+        return (mRecursive);
     }
 
     /**
@@ -138,13 +140,13 @@ public class HasParentFilter
         ret = false;
         if (!(node instanceof Tag) || !((Tag)node).isEndTag ())
         {
-	        parent = node.getParent ();
-	        if ((null != parent) && (null != getParentFilter ()))
-	        {
-	            ret = getParentFilter ().accept (parent);
-	            if (!ret && getRecursive ())
-	                ret = accept (parent);
-	        }
+            parent = node.getParent ();
+            if ((null != parent) && (null != getParentFilter ()))
+            {
+                ret = getParentFilter ().accept (parent);
+                if (!ret && getRecursive ())
+                    ret = accept (parent);
+            }
         }
 
         return (ret);

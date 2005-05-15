@@ -42,7 +42,8 @@ import org.htmlparser.util.ParserException;
  * <ul>
  * <li>the fetching of bytes may be asynchronous</li>
  * <li>the character set may be changed, which resets the input stream</li>
- * <li>characters may be requested more than once, so in general they will be buffered</li>
+ * <li>characters may be requested more than once, so in general they
+ * will be buffered</li>
  * </ul>
  */
 public abstract class Source

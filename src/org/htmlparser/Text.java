@@ -26,8 +26,6 @@
 
 package org.htmlparser;
 
-import org.htmlparser.Node;
-
 /**
  * This interface represents a piece of the content of the HTML document.
  */
@@ -37,76 +35,76 @@ public interface Text
 {
     /**
      * Accesses the textual contents of the node.
-     * Returns the text of the node.
+     * @return The text of the node.
      */
-    public String getText ();
+    String getText ();
 
     /**
      * Sets the contents of the node.
      * @param text The new text for the node.
      */
-    public void setText (String text);
+    void setText (String text);
 
     //
     // Node interface
     //
 
-//    public void accept (org.htmlparser.visitors.NodeVisitor visitor)
+//    public void accept (NodeVisitor visitor)
 //    {
 //    }
-//    
-//    public void collectInto (org.htmlparser.util.NodeList collectionList, NodeFilter filter)
+//
+//    public void collectInto (.NodeList collectionList, NodeFilter filter)
 //    {
 //    }
-//    
-//    public void doSemanticAction () throws org.htmlparser.util.ParserException
+//
+//    public void doSemanticAction () throws ParserException
 //    {
 //    }
-//    
-//    public org.htmlparser.util.NodeList getChildren ()
+//
+//    public NodeList getChildren ()
 //    {
 //    }
-//    
+//
 //    public int getEndPosition ()
 //    {
 //    }
-//    
+//
 //    public Node getParent ()
 //    {
 //    }
-//    
+//
 //    public int getStartPosition ()
 //    {
 //    }
-//    
+//
 //    public String getText ()
 //    {
 //    }
-//    
-//    public void setChildren (org.htmlparser.util.NodeList children)
+//
+//    public void setChildren (NodeList children)
 //    {
 //    }
-//    
+//
 //    public void setEndPosition (int position)
 //    {
 //    }
-//    
+//
 //    public void setParent (Node node)
 //    {
 //    }
-//    
+//
 //    public void setStartPosition (int position)
 //    {
 //    }
-//    
+//
 //    public void setText (String text)
 //    {
 //    }
-//    
+//
 //    public String toHtml ()
 //    {
 //    }
-//    
+//
 //    public String toPlainTextString ()
 //    {
 //    }

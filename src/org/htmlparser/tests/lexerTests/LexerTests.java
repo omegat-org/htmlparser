@@ -610,6 +610,10 @@ public class LexerTests extends ParserTestCase
         mAcceptable.add ("DIV");
         mAcceptable.add ("SCRIPT");
         mAcceptable.add ("NOSCRIPT");
+        mAcceptable.add ("STYLE");
+        mAcceptable.add ("SPAN");
+        mAcceptable.add ("UL");
+        mAcceptable.add ("LI");
     }
 
     /**

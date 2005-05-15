@@ -40,7 +40,7 @@ public class NodeClassFilter implements NodeFilter
     protected Class mClass;
 
     /**
-     * Creates a new instance of NodeClassFilter that accepts tags of the Html (top level) class.
+     * Creates a NodeClassFilter that accepts Html tags.
      */
     public NodeClassFilter ()
     {
@@ -48,8 +48,8 @@ public class NodeClassFilter implements NodeFilter
     }
 
     /**
-     * Creates a new instance of NodeClassFilter that accepts tags of the given class.
-     * @param cls The cls to match.
+     * Creates a NodeClassFilter that accepts tags of the given class.
+     * @param cls The class to match.
      */
     public NodeClassFilter (Class cls)
     {
@@ -75,7 +75,8 @@ public class NodeClassFilter implements NodeFilter
     }
 
     /**
-     * Accept nodes that are assignable from the class provided in the constructor.
+     * Accept nodes that are assignable from the class provided in
+     * the constructor.
      * @param node The node to check.
      * @return <code>true</code> if the node is the right class,
      * <code>false</code> otherwise.

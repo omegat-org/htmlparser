@@ -27,7 +27,6 @@
 package org.htmlparser.lexer;
 
 import org.htmlparser.Attribute;
-import org.htmlparser.lexer.Page;
 
 /**
  * An attribute within a tag on a page.

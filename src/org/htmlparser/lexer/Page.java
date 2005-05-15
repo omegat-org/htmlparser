@@ -56,8 +56,9 @@ public class Page
     /**
      * The default charset.
      * This should be <code>{@value}</code>,
-     * see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616) section 3.7.1
-     * Another alias is "8859_1".
+     * see RFC 2616 (http://www.ietf.org/rfc/rfc2616.txt?number=2616)
+     * section 3.7.1
+     * <p>Another alias is "8859_1".
      */
     public static final String DEFAULT_CHARSET = "ISO-8859-1";
 
@@ -94,7 +95,7 @@ public class Page
      * Character positions of the first character in each line.
      */
     protected PageIndex mIndex;
-    
+
     /**
      * The connection this page is coming from or <code>null</code>.
      */
@@ -103,7 +104,8 @@ public class Page
     /**
      * Connection control (proxy, cookies, authorization).
      */
-    public static ConnectionManager mConnectionManager = new ConnectionManager ();
+    protected static ConnectionManager mConnectionManager =
+        new ConnectionManager ();
 
     /**
      * Construct an empty page.
@@ -137,7 +139,8 @@ public class Page
      * @param stream The source of bytes.
      * @param charset The encoding used.
      * If null, defaults to the <code>DEFAULT_CHARSET</code>.
-     * @exception UnsupportedEncodingException If the given charset is not supported.
+     * @exception UnsupportedEncodingException If the given charset
+     * is not supported.
      */
     public Page (InputStream stream, String charset)
         throws
@@ -185,6 +188,21 @@ public class Page
         this (text, null);
     }
 
+    /**
+     * Construct a page from a source.
+     * @param source The source of characters.
+     */
+    public Page (Source source)
+    {
+        if (null == source)
+            throw new IllegalArgumentException ("source cannot be null");
+        mSource = source;
+        mIndex = new PageIndex (this);
+        mConnection = null;
+        mUrl = null;
+        mBaseUrl = null;
+    }
+
     //
     // static methods
     //
@@ -215,7 +233,8 @@ public class Page
      * </pre>
      * which is applicable both to the HTTP header field Content-Type and
      * the meta tag http-equiv="Content-Type".
-     * Note this method also handles non-compliant quoted charset directives such as:
+     * Note this method also handles non-compliant quoted charset directives
+     * such as:
      * <pre>
      * text/html; charset="UTF-8"
      * </pre>
@@ -244,7 +263,8 @@ public class Page
 
             if (index != -1)
             {
-                content = content.substring (index + CHARSET_STRING.length ()).trim ();
+                content = content.substring (index +
+                    CHARSET_STRING.length ()).trim ();
                 if (content.startsWith ("="))
                 {
                     content = content.substring (1).trim ();
@@ -253,17 +273,20 @@ public class Page
                         content = content.substring (0, index);
 
                     //remove any double quotes from around charset string
-                    if (content.startsWith ("\"") && content.endsWith ("\"") && (1 < content.length ()))
+                    if (content.startsWith ("\"") && content.endsWith ("\"")
+                        && (1 < content.length ()))
                         content = content.substring (1, content.length () - 1);
 
                     //remove any single quote from around charset string
-                    if (content.startsWith ("'") && content.endsWith ("'") && (1 < content.length ()))
+                    if (content.startsWith ("'") && content.endsWith ("'")
+                        && (1 < content.length ()))
                         content = content.substring (1, content.length () - 1);
 
                     ret = findCharset (content, ret);
 
                     // Charset names are not case-sensitive;
-                    // that is, case is always ignored when comparing charset names.
+                    // that is, case is always ignored when comparing
+                    // charset names.
 //                    if (!ret.equalsIgnoreCase (content))
 //                    {
 //                        System.out.println (
@@ -286,10 +309,10 @@ public class Page
      * This uses reflection so the code will still run under prior JDK's but
      * in that case the default is always returned.
      * @param name The name to look up. One of the aliases for a character set.
-     * @param _default The name to return if the lookup fails.
+     * @param fallback The name to return if the lookup fails.
      * @return The character set name.
      */
-    public static String findCharset (String name, String _default)
+    public static String findCharset (String name, String fallback)
     {
         String ret;
 
@@ -326,12 +349,12 @@ public class Page
             // java.nio.charset.IllegalCharsetNameException
             // and java.nio.charset.UnsupportedCharsetException
             // return the default
-            ret = _default;
+            ret = fallback;
             System.out.println (
                 "unable to determine cannonical charset name for "
                 + name
                 + " - using "
-                + _default);
+                + fallback);
         }
 
         return (ret);
@@ -347,6 +370,7 @@ public class Page
      * If connected, the URL and the current offset is saved, while if
      * disconnected, the underling source is saved.
      * @param out The object stream to store this object in.
+     * @exception IOException If there is a serialization problem.
      */
     private void writeObject (ObjectOutputStream out)
         throws
@@ -387,6 +411,10 @@ public class Page
      * Deserialize the page.
      * For details see <code>writeObject()</code>.
      * @param in The object stream to decode.
+     * @exception IOException If there is a deserialization problem with
+     * the stream.
+     * @exception ClassNotFoundException If the deserialized class can't be
+     * located with the current classpath and class loader.
      */
     private void readObject (ObjectInputStream in)
         throws
@@ -460,13 +488,16 @@ public class Page
     /**
      * Clean up this page, releasing resources.
      * Calls <code>close()</code>.
-     * @exception Throwable if <code>close()</code> throws an <code>IOException</code>.
+     * @exception Throwable if <code>close()</code> throws an
+     * <code>IOException</code>.
      */
-    protected void finalize () throws Throwable
+    protected void finalize ()
+        throws
+            Throwable
     {
         close ();
     }
-    
+
     /**
      * Get the connection, if any.
      * @return The connection object for this page, or null if this page
@@ -503,24 +534,31 @@ public class Page
         }
         catch (UnknownHostException uhe)
         {
-            throw new ParserException ("Connect to " + mConnection.getURL ().toExternalForm () + " failed.", uhe);
+            throw new ParserException ("Connect to "
+                + mConnection.getURL ().toExternalForm () + " failed.", uhe);
         }
         catch (IOException ioe)
         {
-            throw new ParserException ("Exception connecting to " + mConnection.getURL ().toExternalForm () + " (" + ioe.getMessage () + ").", ioe);
+            throw new ParserException ("Exception connecting to "
+                + mConnection.getURL ().toExternalForm ()
+                + " (" + ioe.getMessage () + ").", ioe);
         }
         type = getContentType ();
         charset = getCharset (type);
         try
         {
             contentEncoding = connection.getContentEncoding();
-            if ((null != contentEncoding) && (-1 != contentEncoding.indexOf ("gzip")))
+            if ((null != contentEncoding)
+                && (-1 != contentEncoding.indexOf ("gzip")))
             {
-                stream = new Stream (new GZIPInputStream (getConnection ().getInputStream ()));
+                stream = new Stream (new GZIPInputStream (
+                    getConnection ().getInputStream ()));
             }
-            else if ((null != contentEncoding) && (-1 != contentEncoding.indexOf ("deflate")))
+            else if ((null != contentEncoding)
+                && (-1 != contentEncoding.indexOf ("deflate")))
             {
-                stream = new Stream (new InflaterInputStream (getConnection ().getInputStream ()));
+                stream = new Stream (new InflaterInputStream (
+                    getConnection ().getInputStream ()));
             }
             else
             {
@@ -548,7 +586,9 @@ public class Page
         }
         catch (IOException ioe)
         {
-            throw new ParserException ("Exception getting input stream from " + mConnection.getURL ().toExternalForm () + " (" + ioe.getMessage () + ").", ioe);
+            throw new ParserException ("Exception getting input stream from "
+                + mConnection.getURL ().toExternalForm ()
+                + " (" + ioe.getMessage () + ").", ioe);
         }
         mUrl = connection.getURL ().toExternalForm ();
         mIndex = new PageIndex (this);
@@ -595,7 +635,7 @@ public class Page
     {
         mBaseUrl = url;
     }
-    
+
     /**
      * Get the source this page is reading from.
      * @return The current source.
@@ -628,8 +668,9 @@ public class Page
     }
 
     /**
-     * Read the character at the cursor position.
-     * The cursor position can be behind or equal to the current source position.
+     * Read the character at the given cursor position.
+     * The cursor position can be only behind or equal to the
+     * current source position.
      * Returns end of lines (EOL) as \n, by converting \r and \r\n to \n,
      * and updates the end-of-line index accordingly
      * Advances the cursor position by one (or two in the \r\n case).
@@ -650,7 +691,9 @@ public class Page
         i = cursor.getPosition ();
         if (mSource.offset () < i)
             // hmmm, we could skip ahead, but then what about the EOL index
-            throw new ParserException ("attempt to read future characters from source");
+            throw new ParserException (
+                "attempt to read future characters from source "
+                + i + " > " + mSource.offset ());
         else if (mSource.offset () == i)
             try
             {
@@ -760,7 +803,7 @@ public class Page
      * and a comparison made of the characters read so far with the newly
      * read characters up to the current position.
      * If a difference is encountered, or some other problem occurs,
-     * an exception is thrown. 
+     * an exception is thrown.
      * @param character_set The character set to use to convert bytes into
      * characters.
      * @exception ParserException If a character mismatch occurs between
@@ -920,7 +963,7 @@ public class Page
             IllegalArgumentException
     {
         String ret;
-        
+
         try
         {
             ret = mSource.getString (start, end - start);
@@ -935,7 +978,7 @@ public class Page
                 + " - "
                 + ioe.getMessage ());
         }
-        
+
         return (ret);
     }
 
@@ -956,7 +999,9 @@ public class Page
         int length;
 
         if ((mSource.offset () < start) || (mSource.offset () < end))
-            throw new IllegalArgumentException ("attempt to extract future characters from source");
+            throw new IllegalArgumentException (
+                "attempt to extract future characters from source"
+                + start + "|" + end + " > " + mSource.offset ());
         if (end < start)
         {
             length = end;

@@ -40,7 +40,12 @@ import javax.swing.JTextArea;
  * @author Derrick Oswald
  * Created on December 24, 2002, 3:49 PM
  */
-public class HTMLTextBean extends JTextArea implements Serializable, PropertyChangeListener
+public class HTMLTextBean
+    extends
+        JTextArea
+    implements
+        Serializable,
+        PropertyChangeListener
 {
     /**
      * The underlying bean that provides our htmlparser specific properties.
@@ -62,13 +67,13 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
      */
     public Dimension getMinimumSize ()
     {
-        FontMetrics metrics;
+        FontMetrics met;
         int width;
         int height;
 
-        metrics = getFontMetrics (getFont ());
-        width = metrics.stringWidth ("Hello World");
-        height = metrics.getLeading () + metrics.getHeight () + metrics.getDescent ();
+        met = getFontMetrics (getFont ());
+        width = met.stringWidth ("Hello World");
+        height = met.getLeading () + met.getHeight () + met.getDescent ();
 
         return (new Dimension (width, height));
     }
@@ -87,7 +92,7 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
 
     /**
      * Remove a PropertyChangeListener from the listener list.
-     * This removes a PropertyChangeListener that was registered for all properties.
+     * This removes a registered PropertyChangeListener.
      * <p><em>Delegates to the underlying StringBean</em>
      * @param listener The PropertyChangeListener to be removed.
      */
@@ -177,13 +182,13 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
 
     /**
      * Set the 'replace non breaking spaces' state.
-     * @param replace_space <code>true</code> if non-breaking spaces (character '\u00a0',
+     * @param replace <code>true</code> if non-breaking spaces (character '\u00a0',
      * numeric character reference &160; or character entity reference &nbsp;)
      * are to be replaced with normal spaces (character '\u0020').
      */
-    public void setReplaceNonBreakingSpaces (boolean replace_space)
+    public void setReplaceNonBreakingSpaces (boolean replace)
     {
-        getBean ().setReplaceNonBreakingSpaces (replace_space);
+        getBean ().setReplaceNonBreakingSpaces (replace);
     }
 
     /**
@@ -205,12 +210,12 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
 
     /**
      * Set the current 'collapse whitespace' state.
-     * @param collapse_whitespace If <code>true</code>, sequences of whitespace
+     * @param collapse If <code>true</code>, sequences of whitespace
      * will be reduced to a single space.
      */
-    public void setCollapse (boolean collapse_whitespace)
+    public void setCollapse (boolean collapse)
     {
-        getBean ().setCollapse (collapse_whitespace);
+        getBean ().setCollapse (collapse);
     }
 
     /**
@@ -258,10 +263,14 @@ public class HTMLTextBean extends JTextArea implements Serializable, PropertyCha
 //        // tb.setLinks (true);
 //        javax.swing.JFrame frame = new javax.swing.JFrame ();
 //        frame.getContentPane ().setLayout (new BorderLayout ());
-//        frame.getContentPane ().add (new JScrollPane (tb), BorderLayout.CENTER);
+//        frame.getContentPane ().add (new JScrollPane (tb),
+//            BorderLayout.CENTER);
 //        frame.addWindowListener (new java.awt.event.WindowListener () {
 //            public void windowOpened (java.awt.event.WindowEvent e) {}
-//            public void windowClosing (java.awt.event.WindowEvent e) {System.exit (0);}
+//            public void windowClosing (java.awt.event.WindowEvent e)
+//            {
+//                System.exit (0);
+//            }
 //            public void windowClosed (java.awt.event.WindowEvent e) {}
 //            public void windowDeiconified (java.awt.event.WindowEvent e) {}
 //            public void windowIconified (java.awt.event.WindowEvent e) {}

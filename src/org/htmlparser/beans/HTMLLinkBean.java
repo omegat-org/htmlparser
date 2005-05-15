@@ -41,7 +41,12 @@ import javax.swing.JList;
  * @author Derrick Oswald
  * Created on December 24, 2002, 3:49 PM
  */
-public class HTMLLinkBean extends JList implements Serializable, PropertyChangeListener
+public class HTMLLinkBean
+    extends
+        JList
+    implements
+        Serializable,
+        PropertyChangeListener
 {
     /**
      * The underlying bean that provides our htmlparser specific properties.
@@ -76,13 +81,13 @@ public class HTMLLinkBean extends JList implements Serializable, PropertyChangeL
      */
     public Dimension getMinimumSize ()
     {
-        FontMetrics metrics;
+        FontMetrics met;
         int width;
         int height;
 
-        metrics = getFontMetrics (getFont ());
-        width = metrics.stringWidth ("http://localhost");
-        height = metrics.getLeading () + metrics.getHeight () + metrics.getDescent ();
+        met = getFontMetrics (getFont ());
+        width = met.stringWidth ("http://localhost");
+        height = met.getLeading () + met.getHeight () + met.getDescent ();
 
         return (new Dimension (width, height));
     }
@@ -101,7 +106,7 @@ public class HTMLLinkBean extends JList implements Serializable, PropertyChangeL
 
     /**
      * Remove a PropertyChangeListener from the listener list.
-     * This removes a PropertyChangeListener that was registered for all properties.
+     * This removes a registered PropertyChangeListener.
      * <p><em>Delegates to the underlying StringBean</em>
      * @param listener The PropertyChangeListener to be removed.
      */
@@ -188,10 +193,14 @@ public class HTMLLinkBean extends JList implements Serializable, PropertyChangeL
 //        lb.setURL ("http://cbc.ca");
 //        javax.swing.JFrame frame = new javax.swing.JFrame ();
 //        frame.getContentPane ().setLayout (new BorderLayout ());
-//        frame.getContentPane ().add (new JScrollPane (lb), BorderLayout.CENTER);
+//        frame.getContentPane ().add (new JScrollPane (lb),
+//            BorderLayout.CENTER);
 //        frame.addWindowListener (new java.awt.event.WindowListener () {
 //            public void windowOpened (java.awt.event.WindowEvent e) {}
-//            public void windowClosing (java.awt.event.WindowEvent e) {System.exit (0);}
+//            public void windowClosing (java.awt.event.WindowEvent e)
+//            {
+//                System.exit (0);
+//            }
 //            public void windowClosed (java.awt.event.WindowEvent e) {}
 //            public void windowDeiconified (java.awt.event.WindowEvent e) {}
 //            public void windowIconified (java.awt.event.WindowEvent e) {}
