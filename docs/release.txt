@@ -1,4 +1,4 @@
-HTMLParser Version 1.5 (Integration Build Mar 13, 2005)
+HTMLParser Version 1.5 (Release Build Jun 14, 2005)
 *********************************************
 
 Contents of the distribution
@@ -28,9 +28,9 @@ Changes since Version 1.4
 -------------------------
 New APIs
     Implement rudimentary sax parser. Currently exposes DOM parser via sax project 
-	A new http package is added, the primary class being Connectionmanager which
-	handles proxies, passwords and cookies. Some testing still needed.
-	Also removed some line separator cruft.
+    A new http package is added, the primary class being Connectionmanager which
+    handles proxies, passwords and cookies. Some testing still needed.
+    Also removed some line separator cruft.
     Added parseCDATA to the Lexer, used in script and style scanners.
     Note that this is significantly new behaviour that now adheres to appendix
     B.3.2 Specifying non-HTML data  of the HTML reference:
@@ -40,13 +40,14 @@ Configuration Management
     This results in a lighter weight component.
     Updated the logo and included the LGPL license.
     Fixed the Windows batch files.
-	Added optional "classes" property to build.xml. This directory is where
+    Added optional "classes" property to build.xml. This directory is where
     class files are put. It defaults to src.
 	To use:
 	    ant -Dclasses=classdir <target>
 	where classdir is/will-be a peer directory to src.
+    Fixed various end user experience issues.
 Refactoring
-	Added static STRICT flag to ScriptScanner to revert to legacy handling of
+    Added static STRICT flag to ScriptScanner to revert to legacy handling of
     broken ETAGO (</). If STRICT is true, scan according to HTML specification,
     else if false, scan with quote smart state machine which heuristically
     yields the correct parse.
@@ -65,9 +66,11 @@ Refactoring
     creating a byte array. This avoids character encoding losses.
     Incorporate patch #1004985 Page.java, by making getCharset() and findCharset() static.
     Incorporated some speed optimizations based on profiling.
+    Deprecated node decorators.
 Filters
     Added CssSelectorNodeFilter and RegExFilter.
     Added the filter builder tool.
+    Added link pattern filters LinkRegexFilter and LinkStringFilter.
     
 Enhancement Requests
 --------------------

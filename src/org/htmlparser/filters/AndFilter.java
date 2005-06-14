@@ -33,8 +33,8 @@ import org.htmlparser.NodeFilter;
  * Accepts nodes matching all of it's predicate filters (AND operation).
  */
 public class AndFilter
-	implements
-		NodeFilter
+    implements
+        NodeFilter
 {
     /**
      * The predicates that are to be and'ed together;
@@ -53,14 +53,14 @@ public class AndFilter
     }
 
     /**
-     * Creates a new instance of an AndFilter that accepts nodes acceptable to both filters.
+     * Creates an AndFilter that accepts nodes acceptable to both filters.
      * @param left One filter.
      * @param right The other filter.
      */
     public AndFilter (NodeFilter left, NodeFilter right)
     {
         NodeFilter[] predicates;
-        
+
         predicates = new NodeFilter[2];
         predicates[0] = left;
         predicates[1] = right;
@@ -75,7 +75,7 @@ public class AndFilter
     {
         return (mPredicates);
     }
-    
+
     /**
      * Set the predicates for this AndFilter.
      * @param predicates The list of predidcates to use in {@link #accept}.
@@ -100,13 +100,13 @@ public class AndFilter
     public boolean accept (Node node)
     {
         boolean ret;
-        
+
         ret = true;
-        
+
         for (int i = 0; ret && (i < mPredicates.length); i++)
             if (!mPredicates[i].accept (node))
                 ret = false;
-            
+
         return (ret);
     }
 }
