@@ -34,6 +34,7 @@ import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.http.ConnectionManager;
 import org.htmlparser.http.ConnectionMonitor;
+import org.htmlparser.http.HttpHeader;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.util.DefaultParserFeedback;
@@ -739,7 +740,7 @@ public class Parser
         throws
             ParserException
     {
-        getFeedback ().info (ConnectionManager.getRequestHeader (connection));
+        getFeedback ().info (HttpHeader.getRequestHeader (connection));
     }
 
     /**
@@ -754,7 +755,7 @@ public class Parser
         throws
             ParserException
     {
-        getFeedback ().info (ConnectionManager.getResponseHeader (connection));
+        getFeedback ().info (HttpHeader.getResponseHeader (connection));
     }
 
     /**

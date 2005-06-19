@@ -38,9 +38,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -245,97 +242,6 @@ public class ConnectionManager
     public static void setDefaultRequestProperties (Hashtable properties)
     {
         mDefaultRequestProperties = properties;
-    }
-
-    /**
-     * Gets the request header for the connection.
-     * <em>This header is generated from the contents of the connection
-     * and may not be exactly the same as the request that will be sent.</em>
-     * @param connection The connection to convert into an HTTP request header.
-     * @return The string that would be sent by the HTTP request.
-     */
-    public static String getRequestHeader (HttpURLConnection connection)
-    {
-        // dump it
-        StringBuffer buffer;
-        Map map;
-        String key;
-        List items;
-
-        buffer = new StringBuffer (1024);
-        buffer.append (connection.getRequestMethod ());
-        buffer.append (" ");
-        buffer.append (connection.getURL ());
-        buffer.append (" HTTP/1.1\n");
-        map  = connection.getRequestProperties ();
-        for (Iterator iter = map.keySet ().iterator (); iter.hasNext (); )
-        {
-            key = (String)iter.next ();
-            items = (List)map.get (key);
-            buffer.append (key);
-            buffer.append (": ");
-            for (int i = 0; i < items.size (); i++)
-            {
-                if (0 != i)
-                    buffer.append (", ");
-                buffer.append (items.get (i));
-            }
-            buffer.append ("\n");
-        }
-
-        return (buffer.toString ());
-    }
-
-    /**
-     * Gets the response header for the connection.
-     * Calling this method on an un-connected connection will
-     * generate an error, as will an attempt to get information
-     * from a connected but invalid connection.
-     * <em>This header is generated from the contents of the connection
-     * and may not be exactly the same as the response that was received.</em>
-     * @param conn The connection to convert into an HTTP response header.
-     * @return The string that was sent as the HTTP response.
-     */
-    public static String getResponseHeader (HttpURLConnection conn)
-    {
-        // dump it
-        StringBuffer buffer;
-        int code;
-        String message;
-        String key;
-        String value;
-
-        buffer = new StringBuffer (1024);
-        try
-        {
-            code = conn.getResponseCode ();
-            if (-1 != code)
-            {
-                message = conn.getResponseMessage ();
-                buffer.append ("HTTP/1.1 ");
-                buffer.append (code);
-                buffer.append (" ");
-                buffer.append (message);
-                buffer.append ("\n");
-                for (int i = 0; null != (value = conn.getHeaderField (i)); i++)
-                {
-                    key = conn.getHeaderFieldKey (i);
-                    if (null != key)
-                    {
-                        buffer.append (key);
-                        buffer.append (": ");
-                        buffer.append (value);
-                        buffer.append ("\n");
-                    }
-                }
-            }
-        }
-        catch (IOException ioe)
-        {
-            buffer.append (ioe.toString ());
-        }
-
-        return (buffer.toString ());
     }
 
     /**
@@ -629,7 +535,7 @@ public class ConnectionManager
                             value = (String)properties.get (key);
                             ret.setRequestProperty (key, value);
                         }
-    
+
                     // set the proxy name and password
                     if ((null != getProxyUser ())
                         && (null != getProxyPassword ()))

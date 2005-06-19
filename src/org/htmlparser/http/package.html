@@ -43,6 +43,7 @@ the HTTP connection.
 capabilities when accessing the internet via the 
 <a href="http://www.ietf.org/rfc/rfc2616.txt">HTTP protocol</a>.
 Each of these capabilities requires conditioning the HTTP connection.
+A HTTP header utility class is also included.
 <p>The {@link org.htmlparser.http.ConnectionMonitor} interface is a callback
 mechanism for the ConnectionManager to notify an interested application
 when an HTTP connection is made. Example uses may include conditioning the
@@ -71,16 +72,16 @@ manager.setCookie (cookie, null);
 // set up security to access a password protected URL
 manager.setUser ("FredB");
 manager.setPassword ("holy$cow");
-// set up an inner class for callbacks
+// set up (an inner class) for callbacks
 ConnectionMonitor monitor = new ConnectionMonitor ()
     {
         public void preConnect (HttpURLConnection connection)
  	{
-            System.out.println (ConnectionManager.getRequestHeader (connection));
+            System.out.println (HttpHeader.getRequestHeader (connection));
 	}
 	public void postConnect (HttpURLConnection connection)
 	{
-            System.out.println (ConnectionManager.getResponseHeader (connection));
+            System.out.println (HttpHeader.getResponseHeader (connection));
 	}
     };
 manager.setMonitor (monitor);

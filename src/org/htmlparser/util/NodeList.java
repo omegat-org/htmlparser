@@ -284,25 +284,6 @@ public class NodeList implements Serializable {
     }
 
     /**
-     * Convenience method to search for nodes of the given type non-recursively.
-     * @param classType The class to search for.
-     */
-    public NodeList searchFor (Class classType)
-    {
-        return (searchFor (classType, false));
-    }
-
-    /**
-     * Convenience method to search for nodes of the given type.
-     * @param classType The class to search for.
-     * @param recursive If <code>true<code> digs into the children recursively.
-     */
-    public NodeList searchFor (Class classType, boolean recursive)
-    {
-        return (extractAllNodesThatMatch (new NodeClassFilter (classType), recursive));
-    }
-
-    /**
      * Utility to apply a visitor to a node list.
      * Provides for a visitor to modify the contents of a page and get the
      * modified HTML as a string with code like this:

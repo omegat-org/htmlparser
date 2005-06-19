@@ -269,6 +269,7 @@ Update the Web Site
       <include name="org/htmlparser/Attribute.java"/>
       <include name="org/htmlparser/Node.java"/>
       <include name="org/htmlparser/NodeFactory.java"/>
+      <include name="org/htmlparser/NodeFilter.java"/>
       <include name="org/htmlparser/Remark.java"/>
       <include name="org/htmlparser/Tag.java"/>
       <include name="org/htmlparser/Text.java"/>
@@ -281,6 +282,7 @@ Update the Web Site
       <include name="org/htmlparser/util/NodeIterator.java"/>
       <include name="org/htmlparser/util/SimpleNodeIterator.java"/>
       <include name="org/htmlparser/util/sort/**/*.java"/>
+      <include name="org/htmlparser/visitors/NodeVisitor.java"/>
       <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
     </javac>
   </target>
@@ -307,6 +309,7 @@ Update the Web Site
       <include name="org/htmlparser/Attribute.class"/>
       <include name="org/htmlparser/Node.class"/>
       <include name="org/htmlparser/NodeFactory.class"/>
+      <include name="org/htmlparser/NodeFilter.class"/>
       <include name="org/htmlparser/Remark.class"/>
       <include name="org/htmlparser/Tag.class"/>
       <include name="org/htmlparser/Text.class"/>
@@ -323,6 +326,7 @@ Update the Web Site
       <include name="org/htmlparser/util/SpecialHashtable.class"/>
       <include name="org/htmlparser/util/EncodingChangeException.class"/>
       <include name="org/htmlparser/util/sort/**/*.class"/>
+      <include name="org/htmlparser/visitors/NodeVisitor.class"/>
       <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
       <manifest>
         <attribute name="Main-Class" value="org.htmlparser.lexer.Lexer"/>
