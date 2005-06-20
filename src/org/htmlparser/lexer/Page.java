@@ -686,15 +686,12 @@ public class Page
             ParserException
     {
         int i;
+        int offset;
         char ret;
 
         i = cursor.getPosition ();
-        if (mSource.offset () < i)
-            // hmmm, we could skip ahead, but then what about the EOL index
-            throw new ParserException (
-                "attempt to read future characters from source "
-                + i + " > " + mSource.offset ());
-        else if (mSource.offset () == i)
+        offset = mSource.offset ();
+        if (offset == i)
             try
             {
                 i = mSource.read ();
@@ -712,7 +709,7 @@ public class Page
                     "problem reading a character at position "
                     + cursor.getPosition (), ioe);
             }
-        else
+        else if (offset > i)
         {
             // historic read
             try
@@ -727,6 +724,11 @@ public class Page
             }
             cursor.advance ();
         }
+        else
+            // hmmm, we could skip ahead, but then what about the EOL index
+            throw new ParserException (
+                "attempt to read future characters from source "
+                + i + " > " + mSource.offset ());
 
         // handle \r
         if ('\r' == ret)

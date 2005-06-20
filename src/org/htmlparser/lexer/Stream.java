@@ -263,9 +263,9 @@ public class Stream extends InputStream implements Runnable
         // If mBuffer changes by the operation of the background thread,
         // the array pointed to can only be bigger than the previous buffer,
         // and hence no array bounds exception can be raised.
-        if (0 == available ())
+        if (0 == (mLevel - mOffset)) // (0 == available ())
             fill (false);
-        if (0 != available ())
+        if (0 != (mLevel - mOffset)) // (0 != available ())
             ret = mBuffer[mOffset++] & 0xff;
         else
             ret = EOF;

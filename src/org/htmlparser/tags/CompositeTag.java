@@ -31,9 +31,10 @@ import java.util.Locale;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Text;
+import org.htmlparser.Tag;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.nodes.AbstractNode;
 import org.htmlparser.nodes.TagNode;
-import org.htmlparser.Tag;
 import org.htmlparser.scanners.CompositeTagScanner;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
@@ -296,9 +297,17 @@ public class CompositeTag extends TagNode
      */
     public NodeList searchFor (Class classType, boolean recursive)
     {
-        return (
-            (null == getChildren ()) ? new NodeList () :
-            getChildren ().searchFor (classType, recursive));
+        NodeList children;
+        NodeList ret;
+
+        children = getChildren ();
+        if (null == children)
+            ret = new NodeList ();
+        else
+            ret = children.extractAllNodesThatMatch (
+                new NodeClassFilter (classType), recursive);
+
+        return (ret);
     }
 
     /**

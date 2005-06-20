@@ -1370,7 +1370,7 @@ public class Lexer
             {
                 ConnectionManager manager = Page.getConnectionManager ();
                 lexer = new Lexer (manager.openConnection (args[0]));
-                while (null != (node = lexer.nextNode ()))
+                while (null != (node = lexer.nextNode (false)))
                     System.out.println (node.toString ());
             }
             catch (ParserException pe)

@@ -142,6 +142,12 @@ public class ConnectionManager
     protected ConnectionMonitor mMonitor;
 
     /**
+     * Cookie expiry date format for parsing.
+     */
+    static protected SimpleDateFormat mFormat =
+        new SimpleDateFormat ("EEE, dd-MMM-yy kk:mm:ss z");
+
+    /**
      * Create a connection manager.
      */
     public ConnectionManager ()
@@ -1055,11 +1061,9 @@ public class ConnectionManager
                     {
                         String comma = tokenizer.nextToken ();
                         String rest = tokenizer.nextToken ();
-                        SimpleDateFormat format = new SimpleDateFormat (
-                            "EEE, dd-MMM-yy kk:mm:ss z");
                         try
                         {
-                            Date date = format.parse (value + comma + rest);
+                            Date date = mFormat.parse (value + comma + rest);
                             cookie.setExpiryDate (date);
                         }
                         catch (ParseException pe)
