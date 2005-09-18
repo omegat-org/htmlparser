@@ -51,6 +51,13 @@ public class NodeListTest extends ParserTestCase {
         nodeList = new NodeList();
     }
 
+    public void testOneItemConstructor() {
+        Node node = createHTMLNodeObject();
+        nodeList = new NodeList(node);
+        assertEquals("Vector Size",1,nodeList.size());
+        assertTrue("First Element",node==nodeList.elementAt(0));
+    }
+
     public void testAddOneItem() {
         Node node = createHTMLNodeObject();
         nodeList.add(node);
@@ -81,30 +88,26 @@ public class NodeListTest extends ParserTestCase {
     public void testAddThirtyItems() {
         createTestDataAndPutInVector(30);
         assertTestDataCouldBeExtractedFromVector(30);
-        assertEquals("Number of Adjustments",1,nodeList.getNumberOfAdjustments());
     }
 
     public void testAddThirtyOneItems() {
         createTestDataAndPutInVector(31);
         assertTestDataCouldBeExtractedFromVector(31);
-        assertEquals("Number of Adjustments",2,nodeList.getNumberOfAdjustments());
     }
 
     public void testAddFiftyItems() {
         createTestDataAndPutInVector(50);
         assertTestDataCouldBeExtractedFromVector(50);
-        assertEquals("Number of Adjustments",2,nodeList.getNumberOfAdjustments());
     }
 
     public void testAddFiftyOneItems() {
         createTestDataAndPutInVector(51);
         assertTestDataCouldBeExtractedFromVector(51);
-        assertEquals("Number of Adjustments",2,nodeList.getNumberOfAdjustments());
     }
 
     public void testAddTwoHundredItems() {
         createTestDataAndPutInVector(200);
-        assertEquals("Number of Adjustments",4,nodeList.getNumberOfAdjustments());
+        assertTestDataCouldBeExtractedFromVector(200);
     }
 
     public void testElements() throws Exception {
@@ -186,5 +189,48 @@ public class NodeListTest extends ParserTestCase {
         assertEquals("List Size",0,nodeList.size());
         assertTrue("First Element",null==nodeList.elementAt(0));
         assertTrue("Second Element",null==nodeList.elementAt(1));
+    }
+
+
+    public void testIndexOf() {
+        Node node1 = createHTMLNodeObject();
+        Node node2 = createHTMLNodeObject();
+        Node node3 = createHTMLNodeObject();
+        nodeList.add(node1);
+        nodeList.add(node2);
+        nodeList.add(node3);
+        assertEquals("Vector Size",3,nodeList.size());
+        assertTrue("First Element",node1==nodeList.elementAt(0));
+        assertTrue("Second Element",node2==nodeList.elementAt(1));
+        assertTrue("Third Element",node3==nodeList.elementAt(2));
+        assertTrue("Index wrong",1 == nodeList.indexOf(node2));
+        assertTrue("Index wrong",0 == nodeList.indexOf(node1));
+        assertTrue("Index wrong",2 == nodeList.indexOf(node3));
+    }
+
+    public void testRemoveItem() {
+        Node node1 = createHTMLNodeObject();
+        Node node2 = createHTMLNodeObject();
+        nodeList.add(node1);
+        nodeList.add(node2);
+        assertEquals("Vector Size",2,nodeList.size());
+        assertTrue("First Element",node1==nodeList.elementAt(0));
+        assertTrue("Second Element",node2==nodeList.elementAt(1));
+        nodeList.remove(node1);
+        assertEquals("List Size",1,nodeList.size());
+        assertTrue("First Element",node2==nodeList.elementAt(0));
+    }
+
+    public void testRemoveLastItem() {
+        Node node1 = createHTMLNodeObject();
+        Node node2 = createHTMLNodeObject();
+        nodeList.add(node1);
+        nodeList.add(node2);
+        assertEquals("Vector Size",2,nodeList.size());
+        assertTrue("First Element",node1==nodeList.elementAt(0));
+        assertTrue("Second Element",node2==nodeList.elementAt(1));
+        nodeList.remove(node2);
+        assertEquals("List Size",1,nodeList.size());
+        assertTrue("First Element",node1==nodeList.elementAt(0));
     }
 }

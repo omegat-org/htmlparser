@@ -34,39 +34,37 @@ import org.htmlparser.NodeFilter;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.visitors.NodeVisitor;
 
-public class NodeList implements Serializable {
+public class NodeList implements Serializable
+{
     private static final int INITIAL_CAPACITY=10;
     //private static final int CAPACITY_INCREMENT=20;
     private Node nodeData[];
     private int size;
     private int capacity;
     private int capacityIncrement;
-    private int numberOfAdjustments;
 
-    public NodeList() {
-        size = 0;
-        capacity = INITIAL_CAPACITY;
-        nodeData = newNodeArrayFor(capacity);
-        capacityIncrement = capacity*2;
-        numberOfAdjustments = 0;
+    public NodeList ()
+    {
+        removeAll ();
     }
-
+    
     /**
      * Create a one element node list.
      * @param node The initial node to add.
      */
-    public NodeList(Node node)
+    public NodeList (Node node)
     {
         this ();
         add (node);
     }
-        
-    public void add(Node node) {
-        if (size==capacity)
-            adjustVectorCapacity();
-        nodeData[size++]=node;
+    
+    public void add (Node node)
+    {
+        if (size == capacity)
+            adjustVectorCapacity ();
+        nodeData[size++] = node;
     }
-
+    
     /**
      * Add another node list to this one.
      * @param list The list to add.
@@ -76,118 +74,171 @@ public class NodeList implements Serializable {
         for (int i = 0; i < list.size; i++)
             add (list.nodeData[i]);
     }
-
+    
     /**
      * Insert the given node at the head of the list.
      * @param node The new first element.
      */
-    public void prepend(Node node)
+    public void prepend (Node node)
     {
-        if (size==capacity)
-            adjustVectorCapacity();
+        if (size == capacity)
+            adjustVectorCapacity ();
         System.arraycopy (nodeData, 0, nodeData, 1, size);
         size++;
         nodeData[0]=node;
     }
-
-    private void adjustVectorCapacity() {
+    
+    private void adjustVectorCapacity ()
+    {
         capacity += capacityIncrement;
         capacityIncrement *= 2;
         Node oldData [] = nodeData;
-        nodeData = newNodeArrayFor(capacity);
-        System.arraycopy(oldData, 0, nodeData, 0, size);
-        numberOfAdjustments++;
+        nodeData = newNodeArrayFor (capacity);
+        System.arraycopy (oldData, 0, nodeData, 0, size);
     }
-
-    private Node[] newNodeArrayFor(int capacity) {
+    
+    private Node[] newNodeArrayFor (int capacity)
+    {
         return new Node[capacity];
     }
-
-    public int size() {
+    
+    public int size ()
+    {
         return size;
     }
-
-    public Node elementAt(int i) {
+    
+    public Node elementAt (int i)
+    {
         return nodeData[i];
     }
-
-    public int getNumberOfAdjustments() {
-        return numberOfAdjustments;
-    }
-
-    public SimpleNodeIterator elements() {
-        return new SimpleNodeIterator() {
+    
+    public SimpleNodeIterator elements ()
+    {
+        return new SimpleNodeIterator ()
+        {
             int count = 0;
-
-            public boolean hasMoreNodes() {
+            
+            public boolean hasMoreNodes ()
+            {
                 return count < size;
             }
-
-            public Node nextNode() {
-            synchronized (NodeList.this) {
-                if (count < size) {
-                return nodeData[count++];
+            
+            public Node nextNode ()
+            {
+                synchronized (NodeList.this)
+                {
+                    if (count < size)
+                    {
+                        return nodeData[count++];
+                    }
                 }
-            }
-            throw new NoSuchElementException("Vector Enumeration");
+                throw new NoSuchElementException ("Vector Enumeration");
             }
         };
     }
-
-    public Node [] toNodeArray() {
-        Node [] nodeArray = newNodeArrayFor(size);
-        System.arraycopy(nodeData, 0, nodeArray, 0, size);
+    
+    public Node [] toNodeArray ()
+    {
+        Node [] nodeArray = newNodeArrayFor (size);
+        System.arraycopy (nodeData, 0, nodeArray, 0, size);
         return nodeArray;
     }
-
-    public void copyToNodeArray(Node[] array) {
-        System.arraycopy(nodeData, 0, array, 0, size);
-    }
-
-    public String asString() {
-        StringBuffer buff = new StringBuffer();
-        for (int i=0;i<size;i++)
-            buff.append(nodeData[i].toPlainTextString());
-        return buff.toString();
-    }
-
-    /**
-     * Convert this nodelist into the equivalent HTML.
-     * @deprecated Use {@link #toHtml}.
-     * @return The contents of the list as HTML text.
-     */
-    public String asHtml()
+    
+    public void copyToNodeArray (Node[] array)
     {
-        return (toHtml ());
+        System.arraycopy (nodeData, 0, array, 0, size);
     }
-
+    
+    public String asString ()
+    {
+        StringBuffer buff = new StringBuffer ();
+        for (int i=0;i<size;i++)
+            buff.append (nodeData[i].toPlainTextString ());
+        return buff.toString ();
+    }
+    
     /**
      * Convert this nodelist into the equivalent HTML.
      * @return The contents of the list as HTML text.
      */
-    public String toHtml()
+    public String toHtml ()
     {
-        StringBuffer buff = new StringBuffer();
+        StringBuffer buff = new StringBuffer ();
         for (int i=0;i<size;i++)
-            buff.append(nodeData[i].toHtml());
-        return buff.toString();
+            buff.append (nodeData[i].toHtml ());
+        return buff.toString ();
     }
-
-    public Node remove(int index) {
+    
+    /**
+     * Remove the node at index.
+     * @param index The index of the node to remove.
+     * @return The node that was removed.
+     */
+    public Node remove (int index)
+    {
         Node ret;
+
         ret = nodeData[index];
-        System.arraycopy(nodeData, index+1, nodeData, index, size-index-1);
+        System.arraycopy (nodeData, index+1, nodeData, index, size - index - 1);
         nodeData[size-1] = null;
         size--;
+
         return (ret);
     }
-
-    public void removeAll() {
+    
+    public void removeAll ()
+    {
         size = 0;
         capacity = INITIAL_CAPACITY;
-        nodeData = newNodeArrayFor(capacity);
-        capacityIncrement = capacity*2;
-        numberOfAdjustments = 0;
+        nodeData = newNodeArrayFor (capacity);
+        capacityIncrement = capacity * 2;
+    }
+    
+    /**
+     * Check to see if the NodeList contains the supplied Node.
+     * @param node The node to look for.
+     * @return True is the Node is in this NodeList.
+     */
+    public boolean contains (Node node)
+    {
+        return (-1 != indexOf (node));
+    }
+    
+    /**
+     * Finds the index of the supplied Node.
+     * @param node The node to look for.
+     * @return The index of the node in the list or -1 if it isn't found.
+     */
+    public int indexOf (Node node)
+    {
+        int ret;
+
+        ret = -1;
+        for (int i = 0; (i < size) && (-1 == ret); i++)
+            if (nodeData[i].equals (node))
+                ret = i;
+
+        return (ret);
+    }
+    
+    /**
+     * Remove the supplied Node from the list.
+     * @param node The node to remove.
+     * @return True if the node was found and removed from the list.
+     */
+    public boolean remove (Node node)
+    {
+        int index;
+        boolean ret;
+
+        ret = false;
+        if (-1 != (index = indexOf (node)))
+        {
+            remove (index);
+            ret = true;
+        }
+
+        return (ret);
     }
 
     /**
@@ -197,10 +248,13 @@ public class NodeList implements Serializable {
      */
     public String toString()
     {
-        StringBuffer text = new StringBuffer();
-        for (int i=0;i<size;i++)
-            text.append (nodeData[i]);
-        return (text.toString ());
+        StringBuffer ret;
+        
+        ret = new StringBuffer ();
+        for (int i = 0; i < size; i++)
+            ret.append (nodeData[i]);
+
+        return (ret.toString ());
     }
 
     /**
