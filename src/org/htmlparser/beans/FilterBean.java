@@ -92,6 +92,13 @@ public class FilterBean
      */
     protected NodeList mNodes;
 
+    /**
+     * The recursion behaviour for elements of the filter array.
+     * If <code>true</code> the filters are applied recursively.
+     * @see org.htmlparser.util.NodeList#extractAllNodesThatMatch(NodeFilter, boolean).
+     */
+    protected boolean mRecursive;
+
    /**
      * Create a FilterBean object.
      */
@@ -101,6 +108,7 @@ public class FilterBean
         mParser = new Parser ();
         mFilters = null;
         mNodes = null;
+        mRecursive = true;
     }
 
     //
@@ -143,9 +151,10 @@ public class FilterBean
 
     /**
      * Apply each of the filters.
-     * The first filter is applied to the parser.
+     * The first filter is applied to the output of the parser.
      * Subsequent filters are applied to the output of the prior filter.
      * @return A list of nodes passed through all filters.
+     * If there are no filters, returns the entire page.
      * @throws ParserException If an encoding change occurs
      * or there is some other problem.
      */
@@ -153,16 +162,14 @@ public class FilterBean
         throws
             ParserException
     {
+        NodeFilter[] filters;
         NodeList ret;
 
-        ret = new NodeList ();
-
-        if (null != getFilters ())
-            for (int i = 0; i < getFilters ().length; i++)
-                if (0 == i)
-                    ret = mParser.parse (getFilters ()[0]);
-                else
-                    ret = ret.extractAllNodesThatMatch (getFilters ()[i]);
+        ret = mParser.parse (null);
+        filters = getFilters ();
+        if (null != filters)
+            for (int i = 0; i < filters.length; i++)
+                ret = ret.extractAllNodesThatMatch (filters[i], mRecursive);
 
         return (ret);
     }
@@ -405,6 +412,27 @@ public class FilterBean
             ret = "";
         
         return (ret);
+    }
+
+    /**
+     * Get the current recursion behaviour.
+     * @return The recursion (applies to children, children's children, etc)
+     * behavior currently being used.
+     */
+    public boolean getRecursive ()
+    {
+        return (mRecursive);
+    }
+
+    /**
+     * Set the recursion behaviour.
+     * @param recursive If <code>true</code> the
+     * <code>extractAllNodesThatMatch()</code> call is performed recursively.
+     * @see org.htmlparser.util.NodeList#extractAllNodesThatMatch(NodeFilter, boolean).
+     */
+    public void setRecursive (boolean recursive)
+    {
+        mRecursive = recursive;
     }
 
     /**

@@ -67,7 +67,8 @@ public class LinkRegexFilter implements NodeFilter
         if (caseSensitive)
             mRegex = Pattern.compile (regexPattern);
         else
-            mRegex = Pattern.compile (regexPattern, Pattern.CASE_INSENSITIVE);
+            mRegex = Pattern.compile (regexPattern,
+                Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     }
 
     /**
