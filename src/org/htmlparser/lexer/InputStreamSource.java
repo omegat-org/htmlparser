@@ -46,7 +46,7 @@ public class InputStreamSource
 {
     /**
      * An initial buffer size.
-     * Has a default value of {@value}.
+     * Has a default value of {16384}.
      */
     public static int BUFFER_SIZE = 16384;
 

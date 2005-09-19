@@ -1181,11 +1181,14 @@ public class Lexer
         char quote;
         char ch;
         int end;
+        boolean comment;
 
         start = mCursor.getPosition ();
         state = 0;
         done = false;
         quote = 0;
+        comment = false;
+
         while (!done)
         {
             ch = mPage.getCharacter (mCursor);
@@ -1198,14 +1201,14 @@ public class Lexer
                             done = true;
                             break;
                         case '\'':
-                            if (quotesmart)
+                            if (quotesmart && !comment)
                                 if (0 == quote)
                                     quote = '\''; // enter quoted state
                                 else if ('\'' == quote)
                                     quote = 0; // exit quoted state
                             break;
                         case '"':
-                            if (quotesmart)
+                            if (quotesmart && !comment)
                                 if (0 == quote)
                                     quote = '"'; // enter quoted state
                                 else if ('"' == quote)
@@ -1231,11 +1234,7 @@ public class Lexer
                                     if (Page.EOF == ch)
                                         done = true;
                                     else if ('/' == ch)
-                                    {
-                                        do
-                                            ch = mPage.getCharacter (mCursor);
-                                        while ((Page.EOF != ch) && ('\n' != ch));
-                                    }
+                                        comment = true;
                                     else if ('*' == ch)
                                     {
                                         do
@@ -1252,6 +1251,9 @@ public class Lexer
                                     else
                                         mCursor.retreat ();
                                 }
+                            break;
+                        case '\n':
+                            comment = false;
                             break;
                         case '<':
                             if (quotesmart)
@@ -1275,12 +1277,30 @@ public class Lexer
                         case '/':
                             state = 2;
                             break;
+                        case '!':
+                            ch = mPage.getCharacter (mCursor);
+                            if (Page.EOF == ch)
+                                done = true;
+                            else if ('-' == ch)
+                            {
+                                ch = mPage.getCharacter (mCursor);
+                                if (Page.EOF == ch)
+                                    done = true;
+                                else if ('-' == ch)
+                                    state = 3;
+                                else
+                                    state = 0;
+                            }
+                            else
+                                state = 0;
+                            break;
                         default:
                             state = 0;
                             break;
                     }
                     break;
                 case 2: // </
+                    comment = false;
                     if (Page.EOF == ch)
                         done = true;
                     else if (Character.isLetter (ch))
@@ -1293,6 +1313,25 @@ public class Lexer
                     }
                     else
                         state = 0;
+                    break;
+                case 3: // <!
+                    comment = false;
+                    if (Page.EOF == ch)
+                        done = true;
+                    else if ('-' == ch)
+                    {
+                        ch = mPage.getCharacter (mCursor);
+                        if (Page.EOF == ch)
+                            done = true;
+                        else if ('-' == ch)
+                        {
+                            ch = mPage.getCharacter (mCursor);
+                            if (Page.EOF == ch)
+                                done = true;
+                            else if ('>' == ch)
+                                state = 0;
+                        }
+                    }
                     break;
                 default:
                     throw new IllegalStateException ("how the fuck did we get in state " + state);

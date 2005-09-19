@@ -36,6 +36,8 @@ import org.htmlparser.Remark;
 import org.htmlparser.Tag;
 import org.htmlparser.Text;
 import org.htmlparser.lexer.Lexer;
+import org.htmlparser.tags.ScriptTag;
+import org.htmlparser.tags.StyleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.EncodingChangeException;
 import org.htmlparser.util.NodeIterator;
@@ -272,7 +274,7 @@ public class LexerTests extends ParserTestCase
         char[] ref;
         char[] test;
 
-        URL url = new URL ("http://sourceforge.net/projects/htmlparser");
+        URL url = new URL ("http://sourceforge.net");
         lexer = new Lexer (url.openConnection ());
         position = 0;
         buffer = new StringBuffer (80000);
@@ -835,5 +837,70 @@ public class LexerTests extends ParserTestCase
         assertNull ("too many nodes", lexer.nextNode (true));
     }
 
+    /**
+     * See bug #1227213 Particular SCRIPT tags close too late.
+     */
+    public void testCommentInScript () throws ParserException
+    {
+        String tag;
+        String cdata;
+        String endtag;
+        String html;
+        Parser parser;
+        NodeIterator iterator;
+        Node node;
+
+        tag = "<script>";
+        cdata = "<!--document.write(\"en\");// -->";
+        endtag = "</script>";
+        html = tag + cdata + endtag;
+        parser = new Parser ();
+        parser.setInputHTML (html);
+        iterator = parser.elements ();
+        node = iterator.nextNode ();
+        if (node == null)
+            fail ("too few nodes");
+        else
+            assertStringEquals ("bad parse", html, node.toHtml());
+        assertTrue (node instanceof ScriptTag);
+        assertStringEquals ("bad cdata", cdata, ((ScriptTag)node).getScriptCode ());
+        assertNull ("too many nodes", iterator.nextNode ());
+    }
+
+    /**
+     * See bug #1227213 Particular SCRIPT tags close too late.
+     * This was actually working prior to the patch, since the
+     * ScriptScanner didn't use smartquote processing.
+     * I'm not sure why jwilsonsprings1 said the patch worked
+     * for him. I can only assume he was mistaken in thinking
+     * it was the URL that caused the failure.
+     */
+    public void testUrlInStyle () throws ParserException
+    {
+        String tag;
+        String cdata;
+        String endtag;
+        String html;
+        Parser parser;
+        NodeIterator iterator;
+        Node node;
+        
+        tag = "<style>";
+        cdata = ".eSDot {background-image:" +
+            "url(http://di.image.eshop.msn.com/img/sys/dot.gif)}";
+        endtag = "</style>";
+        html = tag + cdata + endtag;
+        parser = new Parser ();
+        parser.setInputHTML (html);
+        iterator = parser.elements ();
+        node = iterator.nextNode ();
+        if (node == null)
+            fail ("too few nodes");
+        else
+            assertStringEquals ("bad parse", html, node.toHtml());
+        assertTrue (node instanceof StyleTag);
+        assertStringEquals ("bad cdata", cdata, ((StyleTag)node).getStyleCode ());
+        assertNull ("too many nodes", iterator.nextNode ());
+    }
 }
 
