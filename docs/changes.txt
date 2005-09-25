@@ -15,6 +15,58 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.6 - 20050925
+--------------------------------
+
+2005-09-18 22:35  derrickoswald
+
+	* docs/contributors.html,
+	src/org/htmlparser/lexer/InputStreamSource.java,
+	src/org/htmlparser/lexer/Lexer.java,
+	src/org/htmlparser/tests/lexerTests/LexerTests.java:
+
+	Apply patch #1247128 Bug Fix: #1227213 Particular SCRIPT tags close too late
+	from Keiron McCammon.
+	
+2005-09-18 19:40  derrickoswald
+
+	* docs/contributors.html, src/org/htmlparser/beans/FilterBean.java,
+	src/org/htmlparser/filters/LinkRegexFilter.java:
+
+	Add recursive property on FilterBean suggested by Martin Hudson.
+	
+2005-09-18 19:00  derrickoswald
+
+	* docs/contributors.html,
+	src/org/htmlparser/tests/utilTests/NodeListTest.java,
+	src/org/htmlparser/util/NodeList.java:
+
+	Add remove(Node) method and code suggested by Matthew Buckett.
+	
+2005-06-19 21:56  derrickoswald
+
+	* src/org/htmlparser/: http/ConnectionManager.java,
+	lexer/Lexer.java, lexer/Page.java, lexer/Stream.java,
+	tags/CompositeTag.java:
+
+	Optimizations suggested by profiling.
+	Correction to previous drop:
+	-- use extractAllNodesThatmatch to replace searchFor(cls) --
+	
+2005-06-19 08:01  derrickoswald
+
+	* build.xml, src/org/htmlparser/Parser.java,
+	src/org/htmlparser/http/ConnectionManager.java,
+	src/org/htmlparser/http/HttpHeader.java,
+	src/org/htmlparser/http/package.html,
+	src/org/htmlparser/util/NodeList.java:
+
+	Changes to allow compilation of htmllexer.jar by gcj.
+	Move non-JDK1.1 functionality to HttpHeader class.
+	Unhook NodeList from filters by removing searchFor(cls) -
+	use keepAllNodesThatMatch(new NodeClassFilter(cls)) instead.
+	Include classes missing from closure set.
+
 Release Build 1.5 - 20050614
 --------------------------------
 

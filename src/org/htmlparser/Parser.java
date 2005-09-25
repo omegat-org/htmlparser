@@ -118,21 +118,21 @@ public class Parser
      * The floating point version number ({@value}).
      */
     public static final double
-    VERSION_NUMBER = 1.5
+    VERSION_NUMBER = 1.6
     ;
 
     /**
      * The type of version ({@value}).
      */
     public static final String
-    VERSION_TYPE = "Release Build"
+    VERSION_TYPE = "Integration Build"
     ;
 
     /**
      * The date of the version ({@value}).
      */
     public static final String
-    VERSION_DATE = "Jun 14, 2005"
+    VERSION_DATE = "Sep 25, 2005"
     ;
 
     // End of formatting

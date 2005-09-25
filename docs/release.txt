@@ -1,4 +1,4 @@
-HTMLParser Version 1.5 (Release Build Jun 14, 2005)
+HTMLParser Version 1.6 (Integration Build Sep 25, 2005)
 *********************************************
 
 Contents of the distribution
@@ -23,6 +23,20 @@ Contents of the distribution
   (v) license.txt (GNU Lesser General Public License)
 
  (vi) this file, readme.txt
+
+Changes since Version 1.5
+-------------------------
+
+Refactoring
+-----------
+    The FilterBean now has a 'recursive' property to control descent through
+    children when applying filters.
+    The NodeList class is a little more standard now with a remove(node) method.
+    Some refactoring to allow the htmllexer jar file to be compiled by gcj.
+
+Bug Fixes
+---------
+#1227213 Particular SCRIPT tags close too late
 
 Changes since Version 1.4
 -------------------------
@@ -143,6 +157,11 @@ The following people have contributed important bug reports, feature ideas :
 [34] Jon Gillette
 [35] Enrico Triolo
 [36] Dave Anderson
+[37] Keiron McCammon
+[38] Martin Hudson
+[39] Matthew Buckett
+[40] Jamie McCrindle
+[41] John Derrick
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 

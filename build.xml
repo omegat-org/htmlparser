@@ -107,7 +107,7 @@ Update the Web Site
        ant -DversionMinor=5 -DversionType=Release\ Build versionSource
   -->
   <property name="versionMajor" value="1"/>
-  <property name="versionMinor" value="5"/>
+  <property name="versionMinor" value="6"/>
   <property name="versionType" value="Integration Build"/>
   <property name="versionNumber" value="${versionMajor}.${versionMinor}"/>
   <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
