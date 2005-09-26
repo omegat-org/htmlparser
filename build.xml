@@ -520,8 +520,8 @@ Update the Web Site
     </zip>
   </target>
 
-  <!-- Perform the htmlparser integration --><!--,release,sources" -->
-  <target name="htmlparser" depends="init" 
+  <!-- Perform the htmlparser integration -->
+  <target name="htmlparser" depends="init,release,sources" 
     description="create distribution zip file">
     <mkdir dir="${distribution}"/>
     <fixcrlf srcDir="${docs}" destDir="${distribution}" includes="release.txt" eol="crlf"/>
