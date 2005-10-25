@@ -250,13 +250,18 @@ public class Page
      * @see #findCharset
      * @see #DEFAULT_CHARSET
      */
-    public static String getCharset (String content)
+    public String getCharset (String content)
     {
         final String CHARSET_STRING = "charset";
         int index;
         String ret;
 
-        ret = DEFAULT_CHARSET;
+        if (null == mSource)
+            ret = DEFAULT_CHARSET;
+        else
+            // use existing (possibly supplied) character set:
+            // bug #1322686 when illegal charset specified
+            ret = mSource.getEncoding ();
         if (null != content)
         {
             index = content.indexOf (CHARSET_STRING);
