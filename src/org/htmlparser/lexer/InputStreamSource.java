@@ -618,7 +618,7 @@ public class InputStreamSource
 
         if (null == mStream)
             throw new IOException ("source is closed");
-        if (offset + length >= mBuffer.length)
+        if (offset + length > mBuffer.length)
             throw new IOException ("illegal read ahead");
         else
             ret = new String (mBuffer, offset, length);
