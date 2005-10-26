@@ -272,6 +272,97 @@ public abstract class AbstractNode implements Node, Serializable
     {
         this.children = children;
     }
+    
+    /**
+     * Get the first child of this node.
+     * @return The first child in the list of children contained by this node,
+     * <code>null</code> otherwise.
+     */
+    public Node getFirstChild ()
+    {
+        if (children == null)
+            return null;
+        if (children.size() == 0)
+            return null;
+        return children.elementAt(0);
+    }
+    
+    /**
+     * Get the last child of this node.
+     * @return The last child in the list of children contained by this node,
+     * <code>null</code> otherwise.
+     */
+    public Node getLastChild ()
+    {
+        if (children == null)
+            return null;
+        int numChildren = children.size();
+        if (numChildren == 0)
+            return null;
+        return children.elementAt(numChildren - 1);
+    }
+    
+    /**
+     * Get the previous sibling to this node.
+     * @return The previous sibling to this node if one exists,
+     * <code>null</code> otherwise.
+     */
+    public Node getPreviousSibling ()
+    {
+        Node parentNode = this.getParent();
+        if (parentNode == null)//root node
+            return null;
+        NodeList siblings = parentNode.getChildren();
+        if (siblings == null)//this should actually be an error
+            return null;
+        int numSiblings = siblings.size();
+        if (numSiblings < 2)//need at least one other node to have a chance of having any siblings
+            return null;
+        int positionInParent = -1;
+        for (int i = 0; i < numSiblings; i++)
+        {
+            if (siblings.elementAt(i) == this)
+            {
+                positionInParent = i;
+                break;
+            }
+        }
+        if (positionInParent < 1)//no previous siblings
+            return null;
+        return siblings.elementAt(positionInParent - 1);
+    }
+    
+    /**
+     * Get the next sibling to this node.
+     * @return The next sibling to this node if one exists,
+     * <code>null</code> otherwise.
+     */
+    public Node getNextSibling ()
+    {
+        Node parentNode = this.getParent();
+        if (parentNode == null)//root node
+            return null;
+        NodeList siblings = parentNode.getChildren();
+        if (siblings == null)//this should actually be an error
+            return null;
+        int numSiblings = siblings.size();
+        if (numSiblings < 2)//need at least one other node to have a chance of having any siblings
+            return null;
+        int positionInParent = -1;
+        for (int i = 0; i < numSiblings; i++)
+        {
+            if (siblings.elementAt(i) == this)
+            {
+                positionInParent = i;
+                break;
+            }
+        }
+        if (positionInParent == -1)//this should actually be an error
+            return null;
+        if (positionInParent == (numSiblings - 1))//no next sibling
+            return null;
+        return siblings.elementAt(positionInParent + 1);
+    }
 
     /**
      * Returns the text of the node.

@@ -204,7 +204,35 @@ public interface Node
      * @param children The new list of children this node contains.
      */
     void setChildren (NodeList children);
-
+    
+    /**
+     * Get the first child of this node.
+     * @return The first child in the list of children contained by this node,
+     * <code>null</code> otherwise.
+     */
+    Node getFirstChild ();
+    
+    /**
+     * Get the last child of this node.
+     * @return The last child in the list of children contained by this node,
+     * <code>null</code> otherwise.
+     */
+    Node getLastChild ();
+    
+    /**
+     * Get the previous sibling to this node.
+     * @return The previous sibling to this node if one exists,
+     * <code>null</code> otherwise.
+     */
+    Node getPreviousSibling ();
+    
+    /**
+     * Get the next sibling to this node.
+     * @return The next sibling to this node if one exists,
+     * <code>null</code> otherwise.
+     */
+    Node getNextSibling ();
+    
     /**
      * Returns the text of the node.
      * @return The contents of the string or remark node, and in the case of
