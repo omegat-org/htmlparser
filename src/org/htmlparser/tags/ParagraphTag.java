@@ -27,29 +27,29 @@
 package org.htmlparser.tags;
 
 /**
- * A table column tag.
+ * A paragraph (p) tag.
  */
-public class TableColumn extends CompositeTag
+public class ParagraphTag extends CompositeTag
 {
     /**
      * The set of names handled by this tag.
      */
-    private static final String[] mIds = new String[] {"TD"};
+    private static final String[] mIds = new String[] {"P"};
 
     /**
      * The set of tag names that indicate the end of this tag.
      */
-    private static final String[] mEnders = new String[] {"TD", "TR", "TBODY", "TFOOT", "THEAD"};
-
+    private static final String[] mEnders = new String[] {"ADDRESS", "BLOCKQUOTE", "CENTER", "DD", "DIR", "DIV", "DL", "DT", "FIELDSET", "FORM", "H1", "H2", "H3", "H4", "H5", "H6", "HR", "ISINDEX", "LI", "MENU", "NOFRAMES", "OL", "P", "PARAM", "PRE", "UL"};
+    
     /**
      * The set of end tag names that indicate the end of this tag.
      */
-    private static final String[] mEndTagEnders = new String[] {"TR", "TBODY", "TFOOT", "THEAD", "TABLE"};
+    private static final String[] mEndTagEnders = new String[] {"BODY", "HTML"};
 
     /**
-     * Create a new table column tag.
+     * Create a new p tag.
      */
-    public TableColumn ()
+    public ParagraphTag ()
     {
     }
 
@@ -61,7 +61,7 @@ public class TableColumn extends CompositeTag
     {
         return (mIds);
     }
-
+    
     /**
      * Return the set of tag names that cause this tag to finish.
      * @return The names of following tags that stop further scanning.

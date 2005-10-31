@@ -44,11 +44,16 @@ public class TableRow extends CompositeTag
      * The set of names handled by this tag.
      */
     private static final String[] mIds = new String[] {"TR"};
-
+    
+    /**
+     * The set of tag names that indicate the end of this tag.
+     */
+    private static final String[] mEnders = new String[] {"TBODY", "TFOOT", "THEAD"};
+    
     /**
      * The set of end tag names that indicate the end of this tag.
      */
-    private static final String[] mEndTagEnders = new String[] {"TABLE"};
+    private static final String[] mEndTagEnders = new String[] {"TBODY", "TFOOT", "THEAD", "TABLE"};
 
     /**
      * Create a new table row tag.
@@ -72,7 +77,7 @@ public class TableRow extends CompositeTag
      */
     public String[] getEnders ()
     {
-        return (mIds);
+        return (mEnders);
     }
 
     /**

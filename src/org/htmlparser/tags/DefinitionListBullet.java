@@ -27,29 +27,24 @@
 package org.htmlparser.tags;
 
 /**
- * A table column tag.
+ * A definition list bullet tag (either DD or DT).
  */
-public class TableColumn extends CompositeTag
+public class DefinitionListBullet extends CompositeTag
 {
     /**
      * The set of names handled by this tag.
      */
-    private static final String[] mIds = new String[] {"TD"};
-
-    /**
-     * The set of tag names that indicate the end of this tag.
-     */
-    private static final String[] mEnders = new String[] {"TD", "TR", "TBODY", "TFOOT", "THEAD"};
+    private static final String[] mIds = new String[] {"DD", "DT"};
 
     /**
      * The set of end tag names that indicate the end of this tag.
      */
-    private static final String[] mEndTagEnders = new String[] {"TR", "TBODY", "TFOOT", "THEAD", "TABLE"};
+    private static final String[] mEndTagEnders = new String[] {"DL", "BODY", "HTML"};
 
     /**
-     * Create a new table column tag.
+     * Create a new bullet tag.
      */
-    public TableColumn ()
+    public DefinitionListBullet ()
     {
     }
 
@@ -68,7 +63,7 @@ public class TableColumn extends CompositeTag
      */
     public String[] getEnders ()
     {
-        return (mEnders);
+        return (mIds);
     }
 
     /**

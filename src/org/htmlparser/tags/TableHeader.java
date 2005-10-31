@@ -27,7 +27,9 @@
 package org.htmlparser.tags;
 
 /**
+
  * A table header tag.
+
  */
 public class TableHeader extends CompositeTag
 {
@@ -39,12 +41,12 @@ public class TableHeader extends CompositeTag
     /**
      * The set of tag names that indicate the end of this tag.
      */
-    private static final String[] mEnders = new String[] {"TH", "TR"};
+    private static final String[] mEnders = new String[] {"TH", "TR", "TBODY", "TFOOT", "THEAD"};
 
     /**
      * The set of end tag names that indicate the end of this tag.
      */
-    private static final String[] mEndTagEnders = new String[] {"TR", "TABLE"};
+    private static final String[] mEndTagEnders = new String[] {"TR", "TBODY", "TFOOT", "THEAD", "TABLE"};
 
     /**
      * Create a new table header tag.

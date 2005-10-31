@@ -42,11 +42,14 @@ import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.Bullet;
 import org.htmlparser.tags.BulletList;
+import org.htmlparser.tags.DefinitionList;
+import org.htmlparser.tags.DefinitionListBullet;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.DoctypeTag;
 import org.htmlparser.tags.FormTag;
 import org.htmlparser.tags.FrameSetTag;
 import org.htmlparser.tags.FrameTag;
+import org.htmlparser.tags.HeadingTag;
 import org.htmlparser.tags.HeadTag;
 import org.htmlparser.tags.Html;
 import org.htmlparser.tags.ImageTag;
@@ -57,6 +60,7 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.ObjectTag;
 import org.htmlparser.tags.OptionTag;
+import org.htmlparser.tags.ParagraphTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.SelectTag;
 import org.htmlparser.tags.Span;
@@ -298,10 +302,13 @@ public class PrototypicalNodeFactory
         registerTag (new BaseHrefTag ());
         registerTag (new Bullet ());
         registerTag (new BulletList ());
+        registerTag (new DefinitionList ());
+        registerTag (new DefinitionListBullet ());
         registerTag (new DoctypeTag ());
         registerTag (new FormTag ());
         registerTag (new FrameSetTag ());
         registerTag (new FrameTag ());
+        registerTag (new HeadingTag ());
         registerTag (new ImageTag ());
         registerTag (new InputTag ());
         registerTag (new JspTag ());
@@ -310,6 +317,7 @@ public class PrototypicalNodeFactory
         registerTag (new MetaTag ());
         registerTag (new ObjectTag ());
         registerTag (new OptionTag ());
+        registerTag (new ParagraphTag ());
         registerTag (new ScriptTag ());
         registerTag (new SelectTag ());
         registerTag (new StyleTag ());
@@ -324,6 +332,7 @@ public class PrototypicalNodeFactory
         registerTag (new BodyTag ());
         registerTag (new HeadTag ());
         registerTag (new Html ());
+        
 
         return (this);
     }
