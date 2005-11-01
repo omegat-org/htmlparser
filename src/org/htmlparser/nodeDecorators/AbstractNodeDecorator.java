@@ -243,6 +243,22 @@ public abstract class AbstractNodeDecorator implements Text
     {
         delegate.setChildren (children);
     }
+    
+    public Node getFirstChild (){
+        return delegate.getFirstChild();
+    }
+    
+    public Node getLastChild (){
+        return delegate.getLastChild();
+    }
+    
+    public Node getPreviousSibling (){
+        return delegate.getPreviousSibling();
+    }
+    
+    public Node getNextSibling (){
+        return delegate.getNextSibling();
+    }
 
     public void setText(String text) {
         delegate.setText(text);
