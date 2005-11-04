@@ -210,6 +210,17 @@ public class TextNode
     }
 
     /**
+     * Returns if the node consists of only white space.
+     * White space can be spaces, new lines, etc.
+     */
+    public boolean isWhiteSpace()
+    {
+        if (mText == null || mText.trim().equals(""))
+            return true;
+        return false;
+    }
+    
+    /**
      * String visiting code.
      * @param visitor The <code>NodeVisitor</code> object to invoke 
      * <code>visitStringNode()</code> on.
