@@ -616,6 +616,7 @@ public class LexerTests extends ParserTestCase
         mAcceptable.add ("SPAN");
         mAcceptable.add ("UL");
         mAcceptable.add ("LI");
+        mAcceptable.add ("IFRAME");
     }
 
     /**

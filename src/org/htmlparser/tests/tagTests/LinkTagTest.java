@@ -377,24 +377,20 @@ public class LinkTagTest extends ParserTestCase {
 
     public void testErroneousLinkBug() throws ParserException {
         createParser(
-            "<p>Site Comments?<br>" +
+            "Site Comments?<br>" +
                 "<a href=\"mailto:sam@neurogrid.com?subject=Site Comments\">" +
                     "Mail Us" +
-                "<a>" +
-            "</p>"
+                "<a>"
         );
-        parseAndAssertNodeCount(6);
-        // The first node should be a Tag
-        assertTrue("First node should be a Tag",node[0] instanceof Tag);
-        // The second node should be a Text
-        assertTrue("Second node should be a Text",node[1] instanceof Text);
-        Text stringNode = (Text)node[1];
+        parseAndAssertNodeCount(4);
+        // The first node should be a Text
+        assertTrue("First node should be a Text",node[0] instanceof Text);
+        Text stringNode = (Text)node[0];
         assertEquals("Text of the Text","Site Comments?",stringNode.getText());
-        assertTrue("Third node should be a tag",node[2] instanceof Tag);
-        assertTrue("Fourth node should be a link",node[3] instanceof LinkTag);
+        assertTrue("Second node should be a tag",node[1] instanceof Tag);
+        assertTrue("Third node should be a link",node[2] instanceof LinkTag);
         // LinkScanner.evaluate() says no HREF means it isn't a link:
-        assertTrue("Fifth node should be a tag",node[4] instanceof Tag); 
-        assertTrue("Sixth node should be a tag",node[5] instanceof Tag);
+        assertTrue("Fourth node should be a tag",node[3] instanceof Tag); 
     }
 
     /**

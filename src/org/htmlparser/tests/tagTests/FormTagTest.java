@@ -40,6 +40,7 @@ import org.htmlparser.tags.Html;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.OptionTag;
+import org.htmlparser.tags.ParagraphTag;
 import org.htmlparser.tags.SelectTag;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.tags.TextareaTag;
@@ -271,12 +272,14 @@ public class FormTagTest extends ParserTestCase {
                 "<INPUT TYPE=\"SUBMIT\">\n"+
             "</FORM>"
         );
-        parseAndAssertNodeCount(8);
-        assertTrue("Seventh Node is a link",node[6] instanceof LinkTag);
-        LinkTag linkTag = (LinkTag)node[6];
+        parseAndAssertNodeCount(5);
+        assertTrue("Fourth Node is a paragraph",node[3] instanceof ParagraphTag);
+        ParagraphTag paragraph = (ParagraphTag)node[3];
+        assertTrue("Second Node of paragraph is a link", paragraph.getChildren ().elementAt (1) instanceof LinkTag);
+        LinkTag linkTag = (LinkTag)paragraph.getChildren ().elementAt (1);
         assertEquals("Link Text","Yahoo!\n",linkTag.getLinkText());
         assertEquals("Link URL","http://www.yahoo.com",linkTag.getLink());
-        assertType("Eigth Node",FormTag.class,node[7]);
+        assertType("Fifth Node",FormTag.class,node[4]);
     }
 
     /**
@@ -320,6 +323,7 @@ public class FormTagTest extends ParserTestCase {
         factory.unregisterTag (new Html ());
         factory.unregisterTag (new HeadTag ());
         factory.unregisterTag (new BodyTag ());
+        factory.unregisterTag (new ParagraphTag ());
         parser.setNodeFactory (factory);
         i = 0;
         nodes = new Node[50];
