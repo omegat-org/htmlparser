@@ -424,6 +424,7 @@ public class ConnectionManager
         String path;
         Vector cookies;
         Cookie probe;
+        boolean found; // flag if a cookie with current name is already there
 
         if (null != cookie.getDomain ())
             domain = cookie.getDomain ();
@@ -433,6 +434,7 @@ public class ConnectionManager
         cookies = (Vector)mCookieJar.get (domain);
         if (null != cookies)
         {
+            found = false;
             for (int j = 0; j < cookies.size (); j++)
             {
                 probe = (Cookie)cookies.elementAt (j);
@@ -442,15 +444,21 @@ public class ConnectionManager
                     if (probe.getPath ().equals (path))
                     {
                         cookies.setElementAt (cookie, j); // replace
+                        found = true; // cookie found, set flag
                         break;
                     }
                     else if (path.startsWith (probe.getPath ()))
                     {
                         cookies.insertElementAt (cookie, j);
+                        found = true; // cookie found, set flag
                         break;
                     }
                 }
             }
+            if (!found)
+                // there's no cookie with the current name, therefore it's added
+                // at the end of the list (faster then inserting at the front)
+                cookies.addElement (cookie);
         }
         else
         {   // new cookie list needed
@@ -458,7 +466,6 @@ public class ConnectionManager
             cookies.addElement (cookie);
             mCookieJar.put (domain, cookies);
         }
-
     }
 
     /**

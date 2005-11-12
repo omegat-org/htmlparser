@@ -91,7 +91,7 @@ import org.htmlparser.tags.TitleTag;
  * a generic tag is created from the prototype acessed via the
  * {@link #setTagPrototype(Tag) tagPrototype} property.</p>
  * <p>The hash table of registered tags can be automatically populated with
- * all the know tags from the {@link org.htmlparser.tags} package when
+ * all the known tags from the {@link org.htmlparser.tags} package when
  * the factory is constructed, or it can start out empty and be populated
  * explicitly.</p>
  * <p>Here is an example of how to override all text issued from
