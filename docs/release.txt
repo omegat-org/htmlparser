@@ -1,4 +1,4 @@
-HTMLParser Version 1.6 (Integration Build Sep 25, 2005)
+HTMLParser Version 1.6 (Integration Build Nov 12, 2005)
 *********************************************
 
 Contents of the distribution
@@ -27,6 +27,16 @@ Contents of the distribution
 Changes since Version 1.5
 -------------------------
 
+New Functionality
+-----------------
+    Support has been added for commonly requested composite tags, P and H1-H6.
+    Definition list tags (dl, dt, dd), are also now included in the standard
+    set of tags recognized by the parser.
+    The node interface has been augmented with get first/last child and
+    get previous/next sibling methods to ease traversing the HTML document.
+    The TextNode class has an added isWhiteSpace method that returns true
+    when it contains no printable characters.
+
 Refactoring
 -----------
     The FilterBean now has a 'recursive' property to control descent through
@@ -36,7 +46,14 @@ Refactoring
 
 Bug Fixes
 ---------
+#1344687 A bug when set cookies
+#1334408 Exception occurs based on string length
+#1322686 when illegal charset specified
 #1227213 Particular SCRIPT tags close too late
+
+Patches
+-------
+#1338534 Support get first/last child, previous/next sibling
 
 Changes since Version 1.4
 -------------------------

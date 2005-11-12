@@ -15,6 +15,69 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.6 - 20051112
+--------------------------------
+2005-11-12 09:19  derrickoswald
+
+	* src/org/htmlparser/http/ConnectionManager.java,
+	docs/contributors.html,
+	src/org/htmlparser/PrototypicalNodeFactory.java:
+
+	Add cookie processing changes suggested by Marcus Mattern.
+	
+2005-11-04 10:49  ian_macfarlane
+
+	* src/org/htmlparser/nodes/TextNode.java:
+
+	Add method isWhiteSpace to TextNode that returns if the node is nothing
+        but white space (or null) or if it contains some characters.
+	
+2005-11-01 03:55  ian_macfarlane
+
+	* src/org/htmlparser/nodeDecorators/AbstractNodeDecorator.java:
+
+	Add methods first/last child previous/next sibling added to AbstractNode.
+	This is required to enable the project to compile.
+	
+2005-10-31 11:26  ian_macfarlane
+
+	* src/org/htmlparser/: PrototypicalNodeFactory.java,
+	tags/DefinitionList.java, tags/DefinitionListBullet.java,
+	tags/HeadingTag.java, tags/ParagraphTag.java,
+	tags/TableColumn.java, tags/TableHeader.java, tags/TableRow.java:
+
+	Added support for P and h1-h6 tags.
+	Added support for definition list tags (dl, dt, dd).
+	Let table row/column tags know when to close if encounter TBODY/TFOOT/THEAD.
+	
+2005-10-26 18:01  derrickoswald
+
+	* docs/contributors.html, src/org/htmlparser/Node.java,
+	src/org/htmlparser/nodes/AbstractNode.java:
+
+	Incorporate patch #1338534 Support get first/last child, previous/next sibling
+	from  Ian Macfarlane. No unit tests.
+	
+2005-10-24 22:06  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java, tags/MetaTag.java:
+
+	Fix bug 1322686 when illegal charset specified
+	Use current source charset as the default if there is already a source.
+	
+2005-10-24 21:26  derrickoswald
+
+	* src/org/htmlparser/lexer/InputStreamSource.java:
+
+	Fixed bug #1334408 Exception occurs based on string length
+	Changed >= test to > to avoid off-by-one error.
+	
+2005-09-25 21:01  derrickoswald
+
+	* build.xml:
+
+	Fix htmlparser target.
+
 Integration Build 1.6 - 20050925
 --------------------------------
 
