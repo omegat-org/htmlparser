@@ -76,7 +76,7 @@ import org.htmlparser.tags.TitleTag;
  * A node factory based on the prototype pattern.
  * This factory uses the prototype pattern to generate new nodes.
  * These are cloned as needed to form new {@link Text}, {@link Remark} and
- * {@link Tag} nodes.</p>
+ * {@link Tag} nodes.
  * <p>Text and remark nodes are generated from prototypes accessed
  * via the {@link #setTextPrototype(Text) textPrototype} and
  * {@link #setRemarkPrototype(Remark) remarkPrototype} properties respectively.
@@ -340,6 +340,7 @@ public class PrototypicalNodeFactory
     /**
      * Get the object that is cloned to generate text nodes.
      * @return The prototype for {@link Text} nodes.
+     * @see #setTextPrototype
      */
     public Text getTextPrototype ()
     {
@@ -351,6 +352,7 @@ public class PrototypicalNodeFactory
      * @param text The prototype for {@link Text} nodes.
      * If <code>null</code> the prototype is set to the default
      * ({@link TextNode}).
+     * @see #getTextPrototype
      */
     public void setTextPrototype (Text text)
     {
@@ -363,6 +365,7 @@ public class PrototypicalNodeFactory
     /**
      * Get the object that is cloned to generate remark nodes.
      * @return The prototype for {@link Remark} nodes.
+     * @see #setRemarkPrototype
      */
     public Remark getRemarkPrototype ()
     {
@@ -374,6 +377,7 @@ public class PrototypicalNodeFactory
      * @param remark The prototype for {@link Remark} nodes.
      * If <code>null</code> the prototype is set to the default
      * ({@link RemarkNode}).
+     * @see #getRemarkPrototype
      */
     public void setRemarkPrototype (Remark remark)
     {
@@ -388,6 +392,7 @@ public class PrototypicalNodeFactory
      * Clones of this object are returned from {@link #createTagNode} when no
      * specific tag is found in the list of registered tags.
      * @return The prototype for {@link Tag} nodes.
+     * @see #setTagPrototype
      */
     public Tag getTagPrototype ()
     {
@@ -401,6 +406,7 @@ public class PrototypicalNodeFactory
      * @param tag The prototype for {@link Tag} nodes.
      * If <code>null</code> the prototype is set to the default
      * ({@link TagNode}).
+     * @see #getTagPrototype
      */
     public void setTagPrototype (Tag tag)
     {

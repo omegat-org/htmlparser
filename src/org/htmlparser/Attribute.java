@@ -67,7 +67,7 @@ import java.io.Serializable;
  * building the attribute from scratch using the properties.
  * <p>
  * <table width="100.0%" align="Center" border="1">
- *   <caption>Valid States for Attributes.
+ *   <caption>Valid States for Attributes.</caption>
  *   <tr>
  *     <th align="Center">Description</th>
  *     <th align="Center">toString()</th>
@@ -339,6 +339,7 @@ public class Attribute
      * stand-alone attribute.
      * @return The name, or <code>null</code> if it's just a whitepace
      * 'attribute'.
+     * @see #setName
      */
     public String getName ()
     {
@@ -349,6 +350,7 @@ public class Attribute
      * Get the name of this attribute.
      * @param buffer The buffer to place the name in.
      * @see #getName()
+     * @see #setName
      */
     public void getName (StringBuffer buffer)
     {
@@ -363,6 +365,8 @@ public class Attribute
      * <em>WARNING:</em> Setting this to <code>null</code> can result in
      * malformed HTML if the assignment string is not <code>null</code>.
      * @param name The new name.
+     * @see #getName
+     * @see #getName(StringBuffer)
      */
     public void setName (String name)
     {
@@ -374,6 +378,7 @@ public class Attribute
      * This is usually just an equals sign, but in poorly formed attributes it
      * can include whitespace on either or both sides of an equals sign.
      * @return The assignment string.
+     * @see #setAssignment
      */
     public String getAssignment ()
     {
@@ -384,6 +389,7 @@ public class Attribute
      * Get the assignment string of this attribute.
      * @param buffer The buffer to place the assignment string in.
      * @see #getAssignment()
+     * @see #setAssignment
      */
     public void getAssignment (StringBuffer buffer)
     {
@@ -398,6 +404,8 @@ public class Attribute
      * <code>null</code>, the {@link  #setValue value} should also be set to
      * <code>null</code>.
      * @param assignment The new assignment string.
+     * @see #getAssignment
+     * @see #getAssignment(StringBuffer)
      */
     public void setAssignment (String assignment)
     {
@@ -413,6 +421,7 @@ public class Attribute
      * {@link  #getRawValue}.
      * @return The value, or <code>null</code> if it's a stand-alone or
      * empty attribute, or the text if it's just a whitepace 'attribute'.
+     * @see #setValue
      */
     public String getValue ()
     {
@@ -423,6 +432,7 @@ public class Attribute
      * Get the value of the attribute.
      * @param buffer The buffer to place the value in.
      * @see #getValue()
+     * @see #setValue
      */
     public void getValue (StringBuffer buffer)
     {
@@ -438,6 +448,8 @@ public class Attribute
      * quoted without also setting the quote character will result in malformed
      * HTML.
      * @param value The new value.
+     * @see #getValue
+     * @see #getValue(StringBuffer)
      */
     public void setValue (String value)
     {
@@ -448,6 +460,7 @@ public class Attribute
      * Get the quote, if any, surrounding the value of the attribute, if any.
      * @return Either ' or " if the attribute value was quoted, or zero
      * if there are no quotes around it.
+     * @see #setQuote
      */
     public char getQuote ()
     {
@@ -458,6 +471,7 @@ public class Attribute
      * Get the quote, if any, surrounding the value of the attribute, if any.
      * @param buffer The buffer to place the quote in.
      * @see #getQuote()
+     * @see #setQuote
      */
     public void getQuote (StringBuffer buffer)
     {
@@ -471,6 +485,8 @@ public class Attribute
      * HTML if the {@link  #getValue value} needs to be quoted (i.e. contains
      * whitespace).
      * @param quote The new quote value.
+     * @see #getQuote
+     * @see #getQuote(StringBuffer)
      */
     public void setQuote (char quote)
     {
@@ -483,6 +499,7 @@ public class Attribute
      * 'attribute'. This includes the quotes around the value if any.
      * @return The value, or <code>null</code> if it's a stand-alone attribute,
      * or the text if it's just a whitepace 'attribute'.
+     * @see #setRawValue
      */
     public String getRawValue ()
     {
@@ -516,6 +533,7 @@ public class Attribute
      * 'attribute'. This includes the quotes around the value if any.
      * @param buffer The string buffer to append the attribute value to.
      * @see #getRawValue()
+     * @see #setRawValue
      */
     public void getRawValue (StringBuffer buffer)
     {
@@ -534,6 +552,8 @@ public class Attribute
      * and an appropriate quote character if so. This may involve changing
      * double quotes within the string to character references.
      * @param value The new value.
+     * @see #getRawValue
+     * @see #getRawValue(StringBuffer)
      */
     public void setRawValue (String value)
     {

@@ -133,12 +133,14 @@ public interface Node
      * Gets the starting position of the node.
      * This is the character (not byte) offset of this node in the page.
      * @return The start position.
+     * @see #setStartPosition
      */
     int getStartPosition ();
 
     /**
      * Sets the starting position of the node.
      * @param position The new start position.
+     * @see #getStartPosition
      */
     void setStartPosition (int position);
 
@@ -147,24 +149,28 @@ public interface Node
      * This is the character (not byte) offset of the character following this
      * node in the page.
      * @return The end position.
+     * @see #setEndPosition
      */
     int getEndPosition ();
 
     /**
      * Sets the ending position of the node.
      * @param position The new end position.
+     * @see #getEndPosition
      */
     void setEndPosition (int position);
 
     /**
      * Get the page this node came from.
      * @return The page that supplied this node.
+     * @see #setPage
      */
     Page getPage ();
 
     /**
      * Set the page this node came from.
      * @param page The page that supplied this node.
+     * @see #getPage
      */
     void setPage (Page page);
 
@@ -183,12 +189,14 @@ public interface Node
      * be expected in the future.
      * @return The parent of this node, if it's been set, <code>null</code>
      * otherwise.
+     * @see #setParent
      */
     Node getParent ();
 
     /**
      * Sets the parent of this node.
      * @param node The node that contains this node.
+     * @see #getParent
      */
     void setParent (Node node);
 
@@ -196,12 +204,14 @@ public interface Node
      * Get the children of this node.
      * @return The list of children contained by this node, if it's been set,
      * <code>null</code> otherwise.
+     * @see #setChildren
      */
     NodeList getChildren ();
 
     /**
      * Set the children of this node.
      * @param children The new list of children this node contains.
+     * @see #getChildren
      */
     void setChildren (NodeList children);
     
@@ -237,12 +247,14 @@ public interface Node
      * Returns the text of the node.
      * @return The contents of the string or remark node, and in the case of
      * a tag, the contents of the tag less the enclosing angle brackets.
+     * @see #setText
      */
     String getText ();
 
     /**
      * Sets the string contents of the node.
      * @param text The new text for the node.
+     * @see #getText
      */
     void setText (String text);
 

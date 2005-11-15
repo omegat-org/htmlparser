@@ -69,24 +69,28 @@ public class StringNodeFactory
         Serializable
 {
     /**
-     * Flag to tell the parser to decode strings returned by StringNode's toPlainTextString.
+     * Flag to toggle decoding of strings.
      * Decoding occurs via the method, org.htmlparser.util.Translate.decode()
      */
     protected boolean mDecode;
 
 
     /**
-     * Flag to tell the parser to remove escape characters, like \n and \t, returned by StringNode's toPlainTextString.
-     * Escape character removal occurs via the method, org.htmlparser.util.ParserUtils.removeEscapeCharacters()
+     * Flag to toggle removal of escape characters, like \n and \t.
+     * Escape character removal occurs via the method,
+     * org.htmlparser.util.ParserUtils.removeEscapeCharacters()
      */
     protected boolean mRemoveEscapes;
 
     /**
-     * Flag to tell the parser to convert non breaking space (from \u00a0 to a space " ").
+     * Flag to toggle converting non breaking spaces (from \u00a0 to space " ").
      * If true, this will happen inside StringNode's toPlainTextString.
      */
     protected boolean mConvertNonBreakingSpaces;
-    
+
+    /**
+     * Create the default string node factory.
+     */
     public StringNodeFactory ()
     {
         mDecode = false;
@@ -103,6 +107,7 @@ public class StringNodeFactory
      * @param page The page the node is on.
      * @param start The beginning position of the string.
      * @param end The ending positiong of the string.
+     * @return The text node for the page and range given.
      */
     public Text createStringNode (Page page, int start, int end)
     {
@@ -121,7 +126,9 @@ public class StringNodeFactory
 
     /**
      * Set the decoding state.
-     * @param decode If <code>true</code>, string nodes decode text using {@link org.htmlparser.util.Translate#decode}.
+     * @param decode If <code>true</code>, string nodes decode text using
+     * {@link org.htmlparser.util.Translate#decode}.
+     * @see #getDecode
      */
     public void setDecode (boolean decode)
     {
@@ -131,6 +138,7 @@ public class StringNodeFactory
     /**
      * Get the decoding state.
      * @return <code>true</code> if string nodes decode text.
+     * @see #setDecode
      */
     public boolean getDecode ()
     {
@@ -139,7 +147,9 @@ public class StringNodeFactory
 
     /**
      * Set the escape removing state.
-     * @param remove If <code>true</code>, string nodes remove escape characters.
+     * @param remove If <code>true</code>, string nodes remove escape
+     * characters.
+     * @see #getRemoveEscapes
      */
     public void setRemoveEscapes (boolean remove)
     {
@@ -149,6 +159,7 @@ public class StringNodeFactory
     /**
      * Get the escape removing state.
      * @return The removing state.
+     * @see #setRemoveEscapes
      */
     public boolean getRemoveEscapes ()
     {
@@ -157,7 +168,9 @@ public class StringNodeFactory
 
     /**
      * Set the non-breaking space replacing state.
-     * @param convert If <code>true</code>, string nodes replace &semi;nbsp; characters with spaces.
+     * @param convert If <code>true</code>, string nodes replace &semi;nbsp;
+     * characters with spaces.
+     * @see #getConvertNonBreakingSpaces
      */
     public void setConvertNonBreakingSpaces (boolean convert)
     {
@@ -167,6 +180,7 @@ public class StringNodeFactory
     /**
      * Get the non-breaking space replacing state.
      * @return The replacing state.
+     * @see #setConvertNonBreakingSpaces
      */
     public boolean getConvertNonBreakingSpaces ()
     {

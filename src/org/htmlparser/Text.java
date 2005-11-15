@@ -36,12 +36,14 @@ public interface Text
     /**
      * Accesses the textual contents of the node.
      * @return The text of the node.
+     * @see #setText
      */
     String getText ();
 
     /**
      * Sets the contents of the node.
      * @param text The new text for the node.
+     * @see #getText
      */
     void setText (String text);
 

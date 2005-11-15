@@ -196,6 +196,7 @@ public class Parser
     /**
      * Get the connection manager all Parsers use.
      * @return The connection manager.
+     * @see #setConnectionManager
      */
     public static ConnectionManager getConnectionManager ()
     {
@@ -205,6 +206,7 @@ public class Parser
     /**
      * Set the connection manager all Parsers use.
      * @param manager The new connection manager.
+     * @see #getConnectionManager
      */
     public static void setConnectionManager (ConnectionManager manager)
     {
@@ -356,6 +358,7 @@ public class Parser
      * HTTP header is not supported, or an i/o exception occurs creating the
      * lexer.
      * @see #setLexer
+     * @see #getConnection
      */
     public void setConnection (URLConnection connection)
         throws
@@ -384,6 +387,7 @@ public class Parser
      * @param url The new URL for the parser.
      * @throws ParserException If the url is invalid or creation of the
      * underlying Lexer cannot be performed.
+     * @see #getURL
      */
     public void setURL (String url)
         throws
@@ -399,6 +403,7 @@ public class Parser
      * A string passed into the constructor or set via setURL may be altered,
      * for example, a file name may be modified to be a URL.
      * @see Page#getUrl
+     * @see #setURL
      */
     public String getURL ()
     {
@@ -412,6 +417,7 @@ public class Parser
      * have already been consumed to differ from the characters that would
      * have been seen had the new encoding been in force.
      * @see org.htmlparser.util.EncodingChangeException
+     * @see #getEncoding
      */
     public void setEncoding (String encoding)
         throws
@@ -425,6 +431,7 @@ public class Parser
      * This item is set from the HTTP header but may be overridden by meta
      * tags in the head, so this may change after the head has been parsed.
      * @return The encoding currently in force.
+     * @see #setEncoding
      */
     public String getEncoding ()
     {
@@ -439,6 +446,7 @@ public class Parser
      * Trying to set the lexer to <code>null</code> is a no-op.
      * @param lexer The lexer object to use.
      * @see #setNodeFactory
+     * @see #getLexer
      */
     public void setLexer (Lexer lexer)
     {
@@ -464,8 +472,9 @@ public class Parser
     }
 
     /**
-     * Returns the lexer associated with the parser
+     * Returns the lexer associated with the parser.
      * @return The current lexer.
+     * @see #setLexer
      */
     public Lexer getLexer ()
     {
@@ -475,6 +484,7 @@ public class Parser
     /**
      * Get the current node factory.
      * @return The current lexer's node factory.
+     * @see #setNodeFactory
      */
     public NodeFactory getNodeFactory ()
     {
@@ -484,6 +494,7 @@ public class Parser
     /**
      * Set the current node factory.
      * @param factory The new node factory for the current lexer.
+     * @see #getNodeFactory
      */
     public void setNodeFactory (NodeFactory factory)
     {
@@ -496,6 +507,7 @@ public class Parser
      * Sets the feedback object used in scanning.
      * @param fb The new feedback object to use. If this is null a
      * {@link #DEVNULL silent feedback object} is used.
+     * @see #getFeedback
      */
     public void setFeedback (ParserFeedback fb)
     {
@@ -508,6 +520,7 @@ public class Parser
     /**
      * Returns the current feedback object.
      * @return The feedback object currently being used.
+     * @see #setFeedback
      */
     public ParserFeedback getFeedback()
     {
@@ -759,7 +772,7 @@ public class Parser
     }
 
     /**
-     * The main program, which can be executed from the command line
+     * The main program, which can be executed from the command line.
      * @param args A URL or file name to parse, and an optional tag name to be
      * used as a filter.
      */

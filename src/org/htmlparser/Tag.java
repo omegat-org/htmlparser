@@ -41,7 +41,8 @@ public interface Tag extends Node
      * Returns the value of an attribute.
      * @param name Name of attribute, case insensitive.
      * @return The value associated with the attribute or null if it does
-     * not exist, or is a stand-alone or
+     * not exist, or is a stand-alone.
+     * @see #setAttribute
      */
     String getAttribute (String name);
 
@@ -50,6 +51,8 @@ public interface Tag extends Node
      * Figures out a quote character to use if necessary.
      * @param key The name of the attribute.
      * @param value The value of the attribute.
+     * @see #getAttribute
+     * @see #setAttribute(String,String,char)
      */
     void setAttribute (String key, String value);
 
@@ -59,6 +62,7 @@ public interface Tag extends Node
      * @param value The value of the attribute.
      * @param quote The quote character to be used around value.
      * If zero, it is an unquoted value.
+     * @see #getAttribute
      */
     void setAttribute (String key, String value, char quote);
 
@@ -73,6 +77,7 @@ public interface Tag extends Node
      * @param name Name of attribute, case insensitive.
      * @return The attribute or null if it does
      * not exist.
+     * @see #setAttributeEx
      */
     Attribute getAttributeEx (String name);
 
@@ -81,12 +86,14 @@ public interface Tag extends Node
      * This replaces an attribute of the same name.
      * To set the zeroth attribute (the tag name), use setTagName().
      * @param attribute The attribute to set.
+     * @see #getAttributeEx
      */
     void setAttributeEx (Attribute attribute);
 
     /**
      * Gets the attributes in the tag.
      * @return Returns the list of {@link Attribute Attributes} in the tag.
+     * @see #setAttributesEx
      */
     Vector getAttributesEx ();
 
@@ -96,6 +103,7 @@ public interface Tag extends Node
      * with the first element being the original name (not uppercased),
      * and the second element being the value.
      * @param attribs The attribute collection to set.
+     * @see #getAttributesEx
      */
     void setAttributesEx (Vector attribs);
 
@@ -111,18 +119,20 @@ public interface Tag extends Node
      * The table <em>will</em> return <code>null</code> if there was no value
      * for an attribute (either no equals sign or nothing to the right of the
      * equals sign). A special entry with a key of
-     * SpecialHashtable.TAGNAME ("$<TAGNAME>$") holds the tag name.
+     * SpecialHashtable.TAGNAME ("$&lt;TAGNAME&gt;$") holds the tag name.
      * The conversion to uppercase is performed with an ENGLISH locale.
      * @deprecated Use getAttributesEx() instead.
+     * @see #setAttributes
      */
     Hashtable getAttributes ();
 
     /**
      * Sets the attributes.
-     * A special entry with a key of SpecialHashtable.TAGNAME ("$<TAGNAME>$")
+     * A special entry with a key of SpecialHashtable.TAGNAME ("$&lt;TAGNAME&gt;$")
      * sets the tag name.
      * @param attributes The attribute collection to set.
      * @deprecated Use setAttributesEx() instead.
+     * @see #getAttributes
      */
     void setAttributes (Hashtable attributes);
 
@@ -136,6 +146,7 @@ public interface Tag extends Node
      * The conversion to uppercase is performed with an ENGLISH locale.
      * </em>
      * @return The tag name.
+     * @see #setTagName
      */
     String getTagName ();
 
@@ -144,6 +155,7 @@ public interface Tag extends Node
      * This creates or replaces the first attribute of the tag (the
      * zeroth element of the attribute vector).
      * @param name The tag name.
+     * @see #getTagName
      */
     void setTagName (String name);
 
@@ -212,6 +224,7 @@ public interface Tag extends Node
      * Get the end tag for this (composite) tag.
      * For a non-composite tag this always returns <code>null</code>.
      * @return The tag that terminates this composite tag, i.e. &lt;/HTML&gt;.
+     * @see #setEndTag
      */
     Tag getEndTag ();
 
@@ -219,18 +232,21 @@ public interface Tag extends Node
      * Set the end tag for this (composite) tag.
      * For a non-composite tag this is a no-op.
      * @param tag The tag that closes this composite tag, i.e. &lt;/HTML&gt;.
+     * @see #getEndTag
      */
     void setEndTag (Tag tag);
 
     /**
      * Return the scanner associated with this tag.
      * @return The scanner associated with this tag.
+     * @see #setThisScanner
      */
     Scanner getThisScanner ();
 
     /**
      * Set the scanner associated with this tag.
      * @param scanner The scanner for this tag.
+     * @see #getThisScanner
      */
     void setThisScanner (Scanner scanner);
 

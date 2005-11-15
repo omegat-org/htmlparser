@@ -36,6 +36,7 @@ public interface Remark
     /**
      * Returns the text contents of the comment tag.
      * @return The contents of the text inside the comment delimiters.
+     * @see #setText
      */
     String getText();
 
@@ -44,6 +45,7 @@ public interface Remark
      * If the text has the remark delimiters (&lt;!-- --&gt;),
      * these are stripped off.
      * @param text The new text for the node.
+     * @see #getText
      */
     void setText (String text);
 
