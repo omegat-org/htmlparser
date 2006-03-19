@@ -85,13 +85,4 @@ public class BodyTag extends CompositeTag
     {
         return toPlainTextString();
     }
-
-    /**
-     * Return a string representation of this <code>BODY</code> tag suitable for debugging.
-     * @return A string representing this <code>BODY</code> tag.
-     */
-    public String toString()
-    {
-        return "BODY: "+getBody();
-    }
 }

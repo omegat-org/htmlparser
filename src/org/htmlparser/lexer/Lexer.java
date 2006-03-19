@@ -1496,7 +1496,14 @@ public class Lexer
                                 done = true;
                             else if ('>' == ch)
                                 state = 0;
+                            else
+                            {
+                                mCursor.retreat ();
+                                mCursor.retreat ();
+                            }
                         }
+                        else
+                            mCursor.retreat ();
                     }
                     break;
                 default:
