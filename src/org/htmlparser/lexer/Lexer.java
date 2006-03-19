@@ -1074,6 +1074,42 @@ public class Lexer
                         case '%': // <%???%
                             state = 3;
                             break;
+                        case '/': // // or /*
+                            ch = mPage.getCharacter (mCursor);
+                            if (ch == '/') 
+                            {   // find the \n or \r
+                                while(true)
+                                {
+                                    ch = mPage.getCharacter (mCursor);
+                                    if (ch == Page.EOF)
+                                    {
+                                        done = true;
+                                        break;
+                                    }
+                                    else if (ch == '\n' || ch == '\r')
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (ch == '*')
+                            {
+                                do
+                                {
+                                    do
+                                        ch = mPage.getCharacter (mCursor);
+                                    while ((Page.EOF != ch) && ('*' != ch));
+                                    ch = mPage.getCharacter (mCursor);
+                                    if (ch == '*')
+                                        mCursor.retreat ();
+                                }
+                                while ((Page.EOF != ch) && ('/' != ch));
+                            }
+                            else
+                            {
+                                mCursor.retreat ();
+                            }
+                            break;
                         default:  // <%???x
                             break;
                     }
