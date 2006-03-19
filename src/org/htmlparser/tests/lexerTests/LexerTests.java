@@ -150,6 +150,7 @@ public class LexerTests extends ParserTestCase
             "<head>",
             "</head>",
             "<%=head%>",
+            "<?php ?>",
             "<!--head-->",
         };
         Lexer lexer;
@@ -815,7 +816,26 @@ public class LexerTests extends ParserTestCase
             assertStringEquals ("bad html", html, node.toHtml());
         assertNull ("too many nodes", lexer.nextNode ());
     }
-    
+
+    /**
+     * Unit test for new PI parsing code.
+     */
+    public void testPI() throws ParserException
+    {
+        String html;
+        Lexer lexer;
+        Node node;
+
+        html = "<?php print(\"<p>Hello World!</p>\"); ?>";
+        lexer = new Lexer(html);
+        node = lexer.nextNode();
+        if (node == null)
+            fail ("too few nodes");
+        else
+            assertStringEquals("bad html", html, node.toHtml());
+        assertNull("too many nodes", lexer.nextNode());
+    }
+
     /**
      * See bug #899413 bug in javascript end detection.
      */

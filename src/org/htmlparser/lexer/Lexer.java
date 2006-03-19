@@ -287,6 +287,11 @@ public class Lexer
                     mCursor.retreat ();
                     ret = parseJsp (start);
                 }
+                else if ('?' == ch)
+                {
+                    mCursor.retreat ();
+                    ret = parsePI (start);
+                }
                 else if ('/' == ch || '%' == ch || Character.isLetter (ch))
                 {
                     mCursor.retreat ();
@@ -469,7 +474,7 @@ public class Lexer
                     done = true;
                 // the order of these tests might be optimized for speed:
                 else if ('/' == ch || Character.isLetter (ch)
-                    || '!' == ch || '%' == ch)
+                    || '!' == ch || '%' == ch || '?' == ch)
                 {
                     done = true;
                     mCursor.retreat ();
@@ -1129,6 +1134,131 @@ public class Lexer
             }
             else
                 throw new IllegalStateException ("jsp with no code!");
+        }
+        else
+            return (parseString (start, true)); // hmmm, true?
+
+        return (makeTag (start, mCursor.getPosition (), attributes));
+    }
+
+    /**
+     * Parse an XML processing instruction.
+     * Scan characters until "?&gt;" is encountered, or the input stream is
+     * exhausted, in which case <code>null</code> is returned.
+     * @param start The position at which to start scanning.
+     * @return The parsed node.
+     * @exception ParserException If a problem occurs reading from the source.
+     */
+    protected Node parsePI (int start)
+        throws
+            ParserException
+    {
+        boolean done;
+        char ch;
+        int state;
+        Vector attributes;
+        int code;
+
+        done = false;
+        state = 0;
+        code = 0;
+        attributes = new Vector ();
+        // <?xyz?>
+        // 011112d
+        while (!done)
+        {
+            ch = mPage.getCharacter (mCursor);
+            switch (state)
+            {
+                case 0: // prior to the question mark
+                    switch (ch)
+                    {
+                        case '?': // <?
+                            code = mCursor.getPosition ();
+                            attributes.addElement (new PageAttribute (mPage, start + 1, code, -1, -1, (char)0));
+                            state = 1;
+                            break;
+                        // case Page.EOF: // <\0
+                        // case '>': // <>
+                        default:
+                            done = true;
+                            break;
+                    }
+                    break;
+                case 1: // prior to the closing question mark
+                    switch (ch)
+                    {
+                        case Page.EOF: // <?x\0
+                        case '>': // <?x>
+                            done = true;
+                            break;
+                        case '\'':
+                        case '"':// <?..."
+                            state = ch;
+                            break;
+                        case '?': // <?...?
+                            state = 2;
+                            break;
+                        default:  // <?...x
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (ch)
+                    {
+                        case Page.EOF: // <?x..?\0
+                            done = true;
+                            break;
+                        case '>':
+                            state = 3;
+                            done = true;
+                            break;
+                        default:  // <?...?x
+                            state = 1;
+                            break;
+                    }
+                    break;
+                case '"':
+                    switch (ch)
+                    {
+                        case Page.EOF: // <?x.."\0
+                            done = true;
+                            break;
+                        case '"':
+                            state = 1;
+                            break;
+                        default:  // <?...'.x
+                            break;
+                    }
+                    break;
+                case '\'':
+                    switch (ch)
+                    {
+                        case Page.EOF: // <?x..'\0
+                            done = true;
+                            break;
+                        case '\'':
+                            state = 1;
+                            break;
+                        default:  // <?..."..x
+                            break;
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException ("how the fuck did we get in state " + state);
+            }
+        }
+
+        if (3 == state) // normal exit
+        {
+            if (0 != code)
+            {
+                state = mCursor.getPosition () - 2; // reuse state
+                attributes.addElement (new PageAttribute (mPage, code, state, -1, -1, (char)0));
+                attributes.addElement (new PageAttribute (mPage, state, state + 1, -1, -1, (char)0));
+            }
+            else
+                throw new IllegalStateException ("processing instruction with no content");
         }
         else
             return (parseString (start, true)); // hmmm, true?

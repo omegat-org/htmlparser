@@ -61,6 +61,7 @@ import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.ObjectTag;
 import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tags.ParagraphTag;
+import org.htmlparser.tags.ProcessingInstructionTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.SelectTag;
 import org.htmlparser.tags.Span;
@@ -318,6 +319,7 @@ public class PrototypicalNodeFactory
         registerTag (new ObjectTag ());
         registerTag (new OptionTag ());
         registerTag (new ParagraphTag ());
+        registerTag (new ProcessingInstructionTag ());
         registerTag (new ScriptTag ());
         registerTag (new SelectTag ());
         registerTag (new StyleTag ());
