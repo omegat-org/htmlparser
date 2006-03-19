@@ -967,7 +967,7 @@ public class ConnectionManager
             if (0 != buffer.length ())
                 buffer.append ("; ");
             buffer.append (cookie.getName ());
-            buffer.append ("=");
+            buffer.append (cookie.getName ().equals ("") ? "" : "=");
             if (0 != version)
                 buffer.append ("\"");
             buffer.append (cookie.getValue ());
@@ -1044,11 +1044,18 @@ public class ConnectionManager
                 index = token.indexOf ('=');
                 if (-1 == index)
                 {
-                    name = token;
-                    value = null;
                     if (null == cookie)
-                        throw new IllegalStateException ("no cookie value");
-                    key = name.toLowerCase ();
+                    {   // an unnamed cookie
+                        name = "";
+                        value = token;
+                        key = name;
+                    }
+                    else
+                    {
+                        name = token;
+                        value = null;
+                        key = name.toLowerCase ();
+                    }
                 }
                 else
                 {

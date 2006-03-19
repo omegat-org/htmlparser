@@ -410,7 +410,7 @@ public class Cookie
         }
         ret.append (": ");
         ret.append (getName ());
-        ret.append ("=");
+        ret.append (getName ().equals ("") ? "" : "=");
         if (getValue ().length () > 40)
         {
             ret.append (getValue ().substring (1, 40));
