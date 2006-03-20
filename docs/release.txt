@@ -1,4 +1,4 @@
-HTMLParser Version 1.6 (Integration Build Nov 12, 2005)
+HTMLParser Version 1.6 (Integration Build Mar 19, 2006)
 *********************************************
 
 Contents of the distribution
@@ -36,6 +36,8 @@ New Functionality
     get previous/next sibling methods to ease traversing the HTML document.
     The TextNode class has an added isWhiteSpace method that returns true
     when it contains no printable characters.
+    NodeTreeWalker, a utility class to traverse a tree of Node objects using
+    either depth-first or breadth-first tree order has been added.
 
 Refactoring
 -----------
@@ -46,6 +48,10 @@ Refactoring
 
 Bug Fixes
 ---------
+#1445795 return as TextNode when processing jsp
+#1445309 XML processing instructions are returned as text
+#1376851 Null-valued cookies cause exception
+#1375230 some javascript breaks stringbean
 #1344687 A bug when set cookies
 #1334408 Exception occurs based on string length
 #1322686 when illegal charset specified

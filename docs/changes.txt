@@ -15,6 +15,96 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.6 - 20060319
+--------------------------------
+2006-03-19 19:02  derrickoswald
+
+	* src/org/htmlparser/tests/tagTests/BodyTagTest.java:
+
+	Fix unit test for body tag.
+	
+2006-03-19 17:13  derrickoswald
+
+	* docs/panel.html:
+
+	Fix name of current build.
+	
+2006-03-19 17:03  derrickoswald
+
+	* build.xml, docs/bug.html, docs/panel.html:
+
+	Fix bug #1363500 http://htmlparser.sourceforge.net/bug.html is wrong
+	Take down the wiki.
+	
+2006-03-19 16:26  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java, tags/BodyTag.java:
+
+	Fix bug #1375230 some javascript breaks stringbean
+	Retrace non-conforming end of remark.
+	
+2006-03-19 15:14  derrickoswald
+
+	* src/org/htmlparser/http/: ConnectionManager.java, Cookie.java:
+
+	Fix bug #1376851 Null-valued cookies cause exception
+	Add handling for namewless cookies.
+	
+2006-03-19 13:40  derrickoswald
+
+	* src/org/htmlparser/http/ConnectionManager.java:
+
+	Remove deflate option from default request properties.
+	See RFE #1394144 handle deflate encoding.
+	
+2006-03-19 12:09  derrickoswald
+
+	* src/org/htmlparser/lexer/Page.java:
+
+	Typo.
+	
+2006-03-19 11:11  derrickoswald
+
+	* src/org/htmlparser/lexer/Lexer.java:
+
+	Fix bug #1445795 return as TextNode when processing jsp
+	Handle single and double line comments within jsp nodes.
+	Suggested alteration to handle jsp tags within tag attributes wasn't implemented.
+	
+2006-03-19 10:01  derrickoswald
+
+	* docs/contributors.html,
+	src/org/htmlparser/PrototypicalNodeFactory.java,
+	src/org/htmlparser/lexer/Lexer.java,
+	src/org/htmlparser/tags/ProcessingInstructionTag.java,
+	src/org/htmlparser/tests/lexerTests/LexerTests.java:
+
+	Incorporated patch #1450095 Fix for Bug 1445309 from Trejkaz Xaoza.
+	Addition of code to parse XML processing instructions.
+	
+2006-02-13 09:50  ian_macfarlane
+
+	* src/org/htmlparser/util/NodeTreeWalker.java:
+
+	A utility class to traverse a tree of Node objects using either depth-first or breadth-first tree traversal. Kind of like a NodeIterator for DOM-type trees of Nodes instead of linear sequences of Nodes.
+	
+	Post to the dev mailing list about this on the way.
+	
+2005-11-14 21:09  derrickoswald
+
+	* src/org/htmlparser/: Attribute.java, Node.java, Parser.java,
+	PrototypicalNodeFactory.java, Remark.java, StringNodeFactory.java,
+	Tag.java, Text.java:
+
+	Fix warnings flagged by doccheck.
+	
+2005-11-12 11:44  derrickoswald
+
+	* src/org/htmlparser/tests/: lexerTests/LexerTests.java,
+	tagTests/FormTagTest.java, tagTests/LinkTagTest.java:
+
+	Update tests for addition of Paragraph tag.
+
 Integration Build 1.6 - 20051112
 --------------------------------
 2005-11-12 09:19  derrickoswald
