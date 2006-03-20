@@ -73,10 +73,6 @@ public class BodyTagTest extends ParserTestCase {
         assertStringEquals("Raw String", html, bodyTag.toHtml());
     }
 
-    public void testToString() throws ParserException  {
-        assertEquals("Body","BODY: Yahoo!",bodyTag.toString());
-    }
-
     public void testAttributes ()
     {
         NodeIterator iterator;
