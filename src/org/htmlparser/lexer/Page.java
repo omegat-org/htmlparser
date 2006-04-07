@@ -827,14 +827,33 @@ public class Page
     }
 
     /**
-     * Build a URL from the link and base provided.
-     * @return An absolute URL.
+     * Build a URL from the link and base provided using non-strict rules.
      * @param link The (relative) URI.
      * @param base The base URL of the page, either from the &lt;BASE&gt; tag
      * or, if none, the URL the page is being fetched from.
+     * @return An absolute URL.
      * @exception MalformedURLException If creating the URL fails.
+     * @see #constructUrl(String, String, boolean)
      */
     public URL constructUrl (String link, String base)
+        throws MalformedURLException
+    {
+        return (constructUrl (link, base, false));
+    }
+
+    /**
+     * Build a URL from the link and base provided.
+     * @param link The (relative) URI.
+     * @param base The base URL of the page, either from the &lt;BASE&gt; tag
+     * or, if none, the URL the page is being fetched from.
+     * @param strict If <code>true</code> a link starting with '?' is handled
+     * according to <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>,
+     * otherwise the common interpretation of a query appended to the base
+     * is used instead.
+     * @return An absolute URL.
+     * @exception MalformedURLException If creating the URL fails.
+     */
+    public URL constructUrl (String link, String base, boolean strict)
         throws MalformedURLException
     {
         String path;
@@ -843,7 +862,15 @@ public class Page
         int index;
         URL url; // constructed URL combining relative link and base
 
-        url = new URL (new URL (base), link);
+        // Bug #1461473 Relative links starting with ?
+        if (!strict && ('?' == link.charAt (0)))
+        {   // remove query part of base if any
+            if (-1 != (index = base.lastIndexOf ('?')))
+                base = base.substring (0, index);
+            url = new URL (base + link);
+        }
+        else
+            url = new URL (new URL (base), link);
         path = url.getFile ();
         modified = false;
         absolute = link.startsWith ("/");
@@ -886,6 +913,21 @@ public class Page
      */
     public String getAbsoluteURL (String link)
     {
+        return (getAbsoluteURL (link, false));
+    }
+
+    /**
+     * Create an absolute URL from a relative link.
+     * @param link The reslative portion of a URL.
+     * @param strict If <code>true</code> a link starting with '?' is handled
+     * according to <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>,
+     * otherwise the common interpretation of a query appended to the base
+     * is used instead.
+     * @return The fully qualified URL or the original link if it was absolute
+     * already or a failure occured.
+     */
+    public String getAbsoluteURL (String link, boolean strict)
+    {
         String base;
         URL url;
         String ret;
@@ -902,7 +944,7 @@ public class Page
                     ret = link;
                 else
                 {
-                    url = constructUrl (link, base);
+                    url = constructUrl (link, base, strict);
                     ret = url.toExternalForm ();
                 }
             }

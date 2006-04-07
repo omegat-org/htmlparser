@@ -191,7 +191,8 @@ public class PageTests extends ParserTestCase
     }
     public void test7 () throws ParserException
     {
-        assertEquals ("test7 failed", "http://a/b/c/?y", mPage.getAbsoluteURL ("?y"));
+        assertEquals ("test7 strict failed", "http://a/b/c/?y", mPage.getAbsoluteURL ("?y", true));
+        assertEquals ("test7 non-strict failed", "http://a/b/c/d;p?y", mPage.getAbsoluteURL ("?y"));
     }
     public void test8 () throws ParserException
     {
