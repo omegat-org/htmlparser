@@ -1,6 +1,6 @@
 // HTMLParser Library $Name$ - A java-based parser for HTML
 // http://sourceforge.org/projects/htmlparser
-// Copyright (C) 2004 Derick Oswald
+// Copyright (C) 2004 Derrick Oswald
 //
 // Revision Control Information
 //
