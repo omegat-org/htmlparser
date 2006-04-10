@@ -664,7 +664,9 @@ public class Page
         connection = getConnection ();
         if (null != connection)
         {
-            content = connection.getContentType ();
+            // can't use connection#getContentType
+            // see Bug #1467712 Page#getCharset never works
+            content = connection.getHeaderField ("Content-Type");
             if (null != content)
                 ret = content;
         }
