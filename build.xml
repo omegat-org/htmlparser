@@ -12,7 +12,7 @@ Release Procedure
   Parser.java file, that's why this step can't be automated
 - incorporate changes from ChangeLog into htmlparser/docs/changes under
   a heading like "Integration Build 1.5 - 20040522"
-- 'ant versionSource' updates the version in Parser.java and release.txt
+- 'ant versionSource' updates the version in Parser.java, Lexer.java and release.txt
 - edit docs/release.txt to update changes since the last version, bugs fixed
   and enhancements completed
 - perform a CVS update on htmlparser/ to identify new and changed files
@@ -208,12 +208,18 @@ Update the Web Site
     <chmod file="${src}/org/htmlparser/Parser.java" perm="u+w"/>
     <echo message="Replacing version VERSION_NUMBER = ${VERSION_NUMBER} with VERSION_NUMBER = ${versionNumber} in ${src}/org/htmlparser/Parser.java"/>
     <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_NUMBER = ${VERSION_NUMBER}" value="VERSION_NUMBER = ${versionNumber}"/>
-
     <echo message="Replacing version VERSION_TYPE = &quot;${VERSION_TYPE}&quot; with VERSION_TYPE = &quot;${versionType}&quot; in ${src}/org/htmlparser/Parser.java"/>
     <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_TYPE = &quot;${VERSION_TYPE}&quot;" value="VERSION_TYPE = &quot;${versionType}&quot;"/>
-
     <echo message="Replacing version VERSION_DATE = &quot;${VERSION_DATE}&quot; with VERSION_DATE = &quot;${TODAY_STRING}&quot; in ${src}/org/htmlparser/Parser.java"/>
     <replace file="${src}/org/htmlparser/Parser.java" token="VERSION_DATE = &quot;${VERSION_DATE}&quot;" value="VERSION_DATE = &quot;${TODAY_STRING}&quot;"/>
+
+    <chmod file="${src}/org/htmlparser/lexer/Lexer.java" perm="u+w"/>
+    <echo message="Replacing version VERSION_NUMBER = ${VERSION_NUMBER} with VERSION_NUMBER = ${versionNumber} in ${src}/org/htmlparser/lexer/Lexer.java"/>
+    <replace file="${src}/org/htmlparser/lexer/Lexer.java" token="VERSION_NUMBER = ${VERSION_NUMBER}" value="VERSION_NUMBER = ${versionNumber}"/>
+    <echo message="Replacing version VERSION_TYPE = &quot;${VERSION_TYPE}&quot; with VERSION_TYPE = &quot;${versionType}&quot; in ${src}/org/htmlparser/lexer/Lexer.java"/>
+    <replace file="${src}/org/htmlparser/lexer/Lexer.java" token="VERSION_TYPE = &quot;${VERSION_TYPE}&quot;" value="VERSION_TYPE = &quot;${versionType}&quot;"/>
+    <echo message="Replacing version VERSION_DATE = &quot;${VERSION_DATE}&quot; with VERSION_DATE = &quot;${TODAY_STRING}&quot; in ${src}/org/htmlparser/lexer/Lexer.java"/>
+    <replace file="${src}/org/htmlparser/lexer/Lexer.java" token="VERSION_DATE = &quot;${VERSION_DATE}&quot;" value="VERSION_DATE = &quot;${TODAY_STRING}&quot;"/>
 
     <chmod file="${docs}/release.txt" perm="u+w"/>
     <echo message="Replacing version &quot;${VERSION_NUMBER} (${VERSION_TYPE} ${VERSION_DATE})&quot; with &quot;${versionNumber} (${versionType} ${TODAY_STRING})&quot; in ${docs}/release.txt"/>
@@ -323,7 +329,6 @@ Update the Web Site
       <include name="org/htmlparser/util/EncodingChangeException.class"/>
       <include name="org/htmlparser/util/sort/**/*.class"/>
       <include name="org/htmlparser/visitors/NodeVisitor.class"/>
-      <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
       <manifest>
         <attribute name="Main-Class" value="org.htmlparser.lexer.Lexer"/>
       </manifest>

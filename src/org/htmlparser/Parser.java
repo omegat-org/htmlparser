@@ -167,6 +167,13 @@ public class Parser
      */
     public static final ParserFeedback STDOUT = new DefaultParserFeedback ();
 
+    static
+    {
+        getConnectionManager ().getDefaultRequestProperties ().put (
+            "User-Agent", "HTMLParser/" + getVersionNumber ());
+    
+    }
+
     //
     // Static methods
     //
@@ -783,7 +790,7 @@ public class Parser
 
         if (args.length < 1 || args[0].equals ("-help"))
         {
-            System.out.println ("HTML Parser v" + VERSION_STRING + "\n");
+            System.out.println ("HTML Parser v" + getVersion () + "\n");
             System.out.println ();
             System.out.println ("Syntax : java -jar htmlparser.jar"
                     + " <file/page> [type]");

@@ -58,7 +58,7 @@ public class ConnectionManager
     static
     {
         mDefaultRequestProperties.put ("User-Agent", "HTMLParser/"
-            + org.htmlparser.Parser.VERSION_NUMBER);
+            + org.htmlparser.lexer.Lexer.VERSION_NUMBER);
         mDefaultRequestProperties.put ("Accept-Encoding", "gzip");
     }
 

@@ -31,7 +31,6 @@ import java.util.NoSuchElementException;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.visitors.NodeVisitor;
 
 public class NodeList implements Serializable

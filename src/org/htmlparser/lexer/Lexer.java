@@ -58,6 +58,39 @@ public class Lexer
         Serializable,
         NodeFactory
 {
+    // Please don't change the formatting of the version variables below.
+    // This is done so as to facilitate ant script processing.
+
+    /**
+     * The floating point version number ({@value}).
+     */
+    public static final double
+    VERSION_NUMBER = 1.6
+    ;
+
+    /**
+     * The type of version ({@value}).
+     */
+    public static final String
+    VERSION_TYPE = "Integration Build"
+    ;
+
+    /**
+     * The date of the version ({@value}).
+     */
+    public static final String
+    VERSION_DATE = "Mar 19, 2006"
+    ;
+
+    // End of formatting
+
+    /**
+     * The display version ({@value}).
+     */
+    public static final String VERSION_STRING =
+            "" + VERSION_NUMBER
+            + " (" + VERSION_TYPE + " " + VERSION_DATE + ")";
+
     /**
      * The page lexemes are retrieved from.
      */
@@ -82,6 +115,26 @@ public class Lexer
      * @see #nextNode
      */
     protected static int mDebugLineTrigger = -1;
+
+    //
+    // Static methods
+    //
+
+    /**
+     * Return the version string of this parser.
+     * @return A string of the form:
+     * <pre>
+     * "[floating point number] ([build-type] [build-date])"
+     * </pre>
+     */
+    public static String getVersion ()
+    {
+        return (VERSION_STRING);
+    }
+
+    //
+    // Constructors
+    //
 
     /**
      * Creates a new instance of a Lexer.
@@ -123,16 +176,9 @@ public class Lexer
         this (new Page (connection));
     }
 
-    /**
-     * Reset the lexer to start parsing from the beginning again.
-     * The underlying components are reset such that the next call to
-     * <code>nextNode()</code> will return the first lexeme on the page.
-     */
-    public void reset ()
-    {
-        getPage ().reset ();
-        setCursor (new Cursor (getPage (), 0));
-    }
+    //
+    // Bean patterns
+    //
 
     /**
      * Get the page this lexer is working on.
@@ -233,6 +279,21 @@ public class Lexer
         return (getPage ().getLine (getCursor ()));
     }
 
+    //
+    // Public methods
+    //
+
+    /**
+     * Reset the lexer to start parsing from the beginning again.
+     * The underlying components are reset such that the next call to
+     * <code>nextNode()</code> will return the first lexeme on the page.
+     */
+    public void reset ()
+    {
+        getPage ().reset ();
+        setCursor (new Cursor (getPage (), 0));
+    }
+
     /**
      * Get the next node from the source.
      * @return A Remark, Text or Tag, or <code>null</code> if no
@@ -330,6 +391,268 @@ public class Lexer
 
         return (ret);
     }
+
+    /**
+     * Return CDATA as a text node.
+     * According to appendix <a href="http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data">
+     * B.3.2 Specifying non-HTML data</a> of the
+     * <a href="http://www.w3.org/TR/html4/">HTML 4.01 Specification</a>:<br>
+     * <quote>
+     * <b>Element content</b><br>
+     * When script or style data is the content of an element (SCRIPT and STYLE),
+     * the data begins immediately after the element start tag and ends at the
+     * first ETAGO ("&lt;/") delimiter followed by a name start character ([a-zA-Z]);
+     * note that this may not be the element's end tag.
+     * Authors should therefore escape "&lt;/" within the content. Escape mechanisms
+     * are specific to each scripting or style sheet language.
+     * </quote>
+     * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
+     * @exception ParserException If a problem occurs reading from the source.
+     */
+    public Node parseCDATA ()
+        throws
+            ParserException
+    {
+        return (parseCDATA (false));
+    }
+
+    /**
+     * Return CDATA as a text node.
+     * Slightly less rigid than {@link #parseCDATA()} this method provides for
+     * parsing CDATA that may contain quoted strings that have embedded
+     * ETAGO ("&lt;/") delimiters and skips single and multiline comments.
+     * @param quotesmart If <code>true</code> the strict definition of CDATA is
+     * extended to allow for single or double quoted ETAGO ("&lt;/") sequences.
+     * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
+     * @see #parseCDATA()
+     * @exception ParserException If a problem occurs reading from the source.
+     */
+    public Node parseCDATA (boolean quotesmart)
+        throws
+            ParserException
+    {
+        int start;
+        int state;
+        boolean done;
+        char quote;
+        char ch;
+        int end;
+        boolean comment;
+
+        start = mCursor.getPosition ();
+        state = 0;
+        done = false;
+        quote = 0;
+        comment = false;
+
+        while (!done)
+        {
+            ch = mPage.getCharacter (mCursor);
+            switch (state)
+            {
+                case 0: // prior to ETAGO
+                    switch (ch)
+                    {
+                        case Page.EOF:
+                            done = true;
+                            break;
+                        case '\'':
+                            if (quotesmart && !comment)
+                                if (0 == quote)
+                                    quote = '\''; // enter quoted state
+                                else if ('\'' == quote)
+                                    quote = 0; // exit quoted state
+                            break;
+                        case '"':
+                            if (quotesmart && !comment)
+                                if (0 == quote)
+                                    quote = '"'; // enter quoted state
+                                else if ('"' == quote)
+                                    quote = 0; // exit quoted state
+                            break;
+                        case '\\':
+                            if (quotesmart)
+                                if (0 != quote)
+                                {
+                                    ch = mPage.getCharacter (mCursor); // try to consume escaped character
+                                    if (Page.EOF == ch)
+                                        done = true;
+                                    else if (  (ch != '\\') && (ch != quote))
+                                        mCursor.retreat (); // unconsume char if character was not an escapable char.
+                                }
+                            break;
+                        case '/':
+                            if (quotesmart)
+                                if (0 == quote)
+                                {
+                                    // handle multiline and double slash comments (with a quote)
+                                    ch = mPage.getCharacter (mCursor);
+                                    if (Page.EOF == ch)
+                                        done = true;
+                                    else if ('/' == ch)
+                                        comment = true;
+                                    else if ('*' == ch)
+                                    {
+                                        do
+                                        {
+                                            do
+                                                ch = mPage.getCharacter (mCursor);
+                                            while ((Page.EOF != ch) && ('*' != ch));
+                                            ch = mPage.getCharacter (mCursor);
+                                            if (ch == '*')
+                                                mCursor.retreat ();
+                                        }
+                                        while ((Page.EOF != ch) && ('/' != ch));
+                                    }
+                                    else
+                                        mCursor.retreat ();
+                                }
+                            break;
+                        case '\n':
+                            comment = false;
+                            break;
+                        case '<':
+                            if (quotesmart)
+                            {
+                                if (0 == quote)
+                                    state = 1;
+                            }
+                            else
+                                state = 1;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 1: // <
+                    switch (ch)
+                    {
+                        case Page.EOF:
+                            done = true;
+                            break;
+                        case '/':
+                            state = 2;
+                            break;
+                        case '!':
+                            ch = mPage.getCharacter (mCursor);
+                            if (Page.EOF == ch)
+                                done = true;
+                            else if ('-' == ch)
+                            {
+                                ch = mPage.getCharacter (mCursor);
+                                if (Page.EOF == ch)
+                                    done = true;
+                                else if ('-' == ch)
+                                    state = 3;
+                                else
+                                    state = 0;
+                            }
+                            else
+                                state = 0;
+                            break;
+                        default:
+                            state = 0;
+                            break;
+                    }
+                    break;
+                case 2: // </
+                    comment = false;
+                    if (Page.EOF == ch)
+                        done = true;
+                    else if (Character.isLetter (ch))
+                    {
+                        done = true;
+                        // back up to the start of ETAGO
+                        mCursor.retreat ();
+                        mCursor.retreat ();
+                        mCursor.retreat ();
+                    }
+                    else
+                        state = 0;
+                    break;
+                case 3: // <!
+                    comment = false;
+                    if (Page.EOF == ch)
+                        done = true;
+                    else if ('-' == ch)
+                    {
+                        ch = mPage.getCharacter (mCursor);
+                        if (Page.EOF == ch)
+                            done = true;
+                        else if ('-' == ch)
+                        {
+                            ch = mPage.getCharacter (mCursor);
+                            if (Page.EOF == ch)
+                                done = true;
+                            else if ('>' == ch)
+                                state = 0;
+                            else
+                            {
+                                mCursor.retreat ();
+                                mCursor.retreat ();
+                            }
+                        }
+                        else
+                            mCursor.retreat ();
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException ("how the fuck did we get in state " + state);
+            }
+        }
+        end = mCursor.getPosition ();
+
+        return (makeString (start, end));
+    }
+
+    //
+    // NodeFactory interface
+    //
+
+    /**
+     * Create a new string node.
+     * @param page The page the node is on.
+     * @param start The beginning position of the string.
+     * @param end The ending positiong of the string.
+     * @return The created Text node.
+     */
+    public Text createStringNode (Page page,  int start, int end)
+    {
+        return (new TextNode (page, start, end));
+    }
+
+    /**
+     * Create a new remark node.
+     * @param page The page the node is on.
+     * @param start The beginning position of the remark.
+     * @param end The ending positiong of the remark.
+     * @return The created Remark node.
+     */
+    public Remark createRemarkNode (Page page,  int start, int end)
+    {
+        return (new RemarkNode (page, start, end));
+    }
+
+    /**
+     * Create a new tag node.
+     * Note that the attributes vector contains at least one element,
+     * which is the tag name (standalone attribute) at position zero.
+     * This can be used to decide which type of node to create, or
+     * gate other processing that may be appropriate.
+     * @param page The page the node is on.
+     * @param start The beginning position of the tag.
+     * @param end The ending positiong of the tag.
+     * @param attributes The attributes contained in this tag.
+     * @return The created Tag node.
+     */
+    public Tag createTagNode (Page page, int start, int end, Vector attributes)
+    {
+        return (new TagNode (page, start, end, attributes));
+    }
+
+    //
+    // Internal methods
+    //
 
     /**
      * Advance the cursor through a JIS escape sequence.
@@ -1302,263 +1625,9 @@ public class Lexer
         return (makeTag (start, mCursor.getPosition (), attributes));
     }
 
-    /**
-     * Return CDATA as a text node.
-     * According to appendix <a href="http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data">
-     * B.3.2 Specifying non-HTML data</a> of the
-     * <a href="http://www.w3.org/TR/html4/">HTML 4.01 Specification</a>:<br>
-     * <quote>
-     * <b>Element content</b><br>
-     * When script or style data is the content of an element (SCRIPT and STYLE),
-     * the data begins immediately after the element start tag and ends at the
-     * first ETAGO ("&lt;/") delimiter followed by a name start character ([a-zA-Z]);
-     * note that this may not be the element's end tag.
-     * Authors should therefore escape "&lt;/" within the content. Escape mechanisms
-     * are specific to each scripting or style sheet language.
-     * </quote>
-     * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
-     * @exception ParserException If a problem occurs reading from the source.
-     */
-    public Node parseCDATA ()
-        throws
-            ParserException
-    {
-        return (parseCDATA (false));
-    }
-
-    /**
-     * Return CDATA as a text node.
-     * Slightly less rigid than {@link #parseCDATA()} this method provides for
-     * parsing CDATA that may contain quoted strings that have embedded
-     * ETAGO ("&lt;/") delimiters and skips single and multiline comments.
-     * @param quotesmart If <code>true</code> the strict definition of CDATA is
-     * extended to allow for single or double quoted ETAGO ("&lt;/") sequences.
-     * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
-     * @see #parseCDATA()
-     * @exception ParserException If a problem occurs reading from the source.
-     */
-    public Node parseCDATA (boolean quotesmart)
-        throws
-            ParserException
-    {
-        int start;
-        int state;
-        boolean done;
-        char quote;
-        char ch;
-        int end;
-        boolean comment;
-
-        start = mCursor.getPosition ();
-        state = 0;
-        done = false;
-        quote = 0;
-        comment = false;
-
-        while (!done)
-        {
-            ch = mPage.getCharacter (mCursor);
-            switch (state)
-            {
-                case 0: // prior to ETAGO
-                    switch (ch)
-                    {
-                        case Page.EOF:
-                            done = true;
-                            break;
-                        case '\'':
-                            if (quotesmart && !comment)
-                                if (0 == quote)
-                                    quote = '\''; // enter quoted state
-                                else if ('\'' == quote)
-                                    quote = 0; // exit quoted state
-                            break;
-                        case '"':
-                            if (quotesmart && !comment)
-                                if (0 == quote)
-                                    quote = '"'; // enter quoted state
-                                else if ('"' == quote)
-                                    quote = 0; // exit quoted state
-                            break;
-                        case '\\':
-                            if (quotesmart)
-                                if (0 != quote)
-                                {
-                                    ch = mPage.getCharacter (mCursor); // try to consume escaped character
-                                    if (Page.EOF == ch)
-                                        done = true;
-                                    else if (  (ch != '\\') && (ch != quote))
-                                        mCursor.retreat (); // unconsume char if character was not an escapable char.
-                                }
-                            break;
-                        case '/':
-                            if (quotesmart)
-                                if (0 == quote)
-                                {
-                                    // handle multiline and double slash comments (with a quote)
-                                    ch = mPage.getCharacter (mCursor);
-                                    if (Page.EOF == ch)
-                                        done = true;
-                                    else if ('/' == ch)
-                                        comment = true;
-                                    else if ('*' == ch)
-                                    {
-                                        do
-                                        {
-                                            do
-                                                ch = mPage.getCharacter (mCursor);
-                                            while ((Page.EOF != ch) && ('*' != ch));
-                                            ch = mPage.getCharacter (mCursor);
-                                            if (ch == '*')
-                                                mCursor.retreat ();
-                                        }
-                                        while ((Page.EOF != ch) && ('/' != ch));
-                                    }
-                                    else
-                                        mCursor.retreat ();
-                                }
-                            break;
-                        case '\n':
-                            comment = false;
-                            break;
-                        case '<':
-                            if (quotesmart)
-                            {
-                                if (0 == quote)
-                                    state = 1;
-                            }
-                            else
-                                state = 1;
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 1: // <
-                    switch (ch)
-                    {
-                        case Page.EOF:
-                            done = true;
-                            break;
-                        case '/':
-                            state = 2;
-                            break;
-                        case '!':
-                            ch = mPage.getCharacter (mCursor);
-                            if (Page.EOF == ch)
-                                done = true;
-                            else if ('-' == ch)
-                            {
-                                ch = mPage.getCharacter (mCursor);
-                                if (Page.EOF == ch)
-                                    done = true;
-                                else if ('-' == ch)
-                                    state = 3;
-                                else
-                                    state = 0;
-                            }
-                            else
-                                state = 0;
-                            break;
-                        default:
-                            state = 0;
-                            break;
-                    }
-                    break;
-                case 2: // </
-                    comment = false;
-                    if (Page.EOF == ch)
-                        done = true;
-                    else if (Character.isLetter (ch))
-                    {
-                        done = true;
-                        // back up to the start of ETAGO
-                        mCursor.retreat ();
-                        mCursor.retreat ();
-                        mCursor.retreat ();
-                    }
-                    else
-                        state = 0;
-                    break;
-                case 3: // <!
-                    comment = false;
-                    if (Page.EOF == ch)
-                        done = true;
-                    else if ('-' == ch)
-                    {
-                        ch = mPage.getCharacter (mCursor);
-                        if (Page.EOF == ch)
-                            done = true;
-                        else if ('-' == ch)
-                        {
-                            ch = mPage.getCharacter (mCursor);
-                            if (Page.EOF == ch)
-                                done = true;
-                            else if ('>' == ch)
-                                state = 0;
-                            else
-                            {
-                                mCursor.retreat ();
-                                mCursor.retreat ();
-                            }
-                        }
-                        else
-                            mCursor.retreat ();
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException ("how the fuck did we get in state " + state);
-            }
-        }
-        end = mCursor.getPosition ();
-
-        return (makeString (start, end));
-    }
-
     //
-    // NodeFactory interface
+    // Main program
     //
-
-    /**
-     * Create a new string node.
-     * @param page The page the node is on.
-     * @param start The beginning position of the string.
-     * @param end The ending positiong of the string.
-     * @return The created Text node.
-     */
-    public Text createStringNode (Page page,  int start, int end)
-    {
-        return (new TextNode (page, start, end));
-    }
-
-    /**
-     * Create a new remark node.
-     * @param page The page the node is on.
-     * @param start The beginning position of the remark.
-     * @param end The ending positiong of the remark.
-     * @return The created Remark node.
-     */
-    public Remark createRemarkNode (Page page,  int start, int end)
-    {
-        return (new RemarkNode (page, start, end));
-    }
-
-    /**
-     * Create a new tag node.
-     * Note that the attributes vector contains at least one element,
-     * which is the tag name (standalone attribute) at position zero.
-     * This can be used to decide which type of node to create, or
-     * gate other processing that may be appropriate.
-     * @param page The page the node is on.
-     * @param start The beginning position of the tag.
-     * @param end The ending positiong of the tag.
-     * @param attributes The attributes contained in this tag.
-     * @return The created Tag node.
-     */
-    public Tag createTagNode (Page page, int start, int end, Vector attributes)
-    {
-        return (new TagNode (page, start, end, attributes));
-    }
 
     /**
      * Mainline for command line operation
@@ -1571,16 +1640,21 @@ public class Lexer
             MalformedURLException,
             ParserException
     {
+        ConnectionManager manager;
         Lexer lexer;
         Node node;
 
         if (0 >= args.length)
+        {
+            System.out.println ("HTML Lexer v" + getVersion () + "\n");
+            System.out.println ();
             System.out.println ("usage: java -jar htmllexer.jar <url>");
+        }
         else
         {
             try
             {
-                ConnectionManager manager = Page.getConnectionManager ();
+                manager = Page.getConnectionManager ();
                 lexer = new Lexer (manager.openConnection (args[0]));
                 while (null != (node = lexer.nextNode (false)))
                     System.out.println (node.toString ());
