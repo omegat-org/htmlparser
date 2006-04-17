@@ -59,6 +59,10 @@ public class ParserTestCase extends TestCase {
         super(name);
     }
 
+    public void testFake ()
+    {
+    }
+
     protected void parse(String response) throws ParserException {
         createParser(response,10000);
         parseNodes();

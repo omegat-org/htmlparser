@@ -27,6 +27,7 @@
 package org.htmlparser.tests;
 
 import org.htmlparser.Parser;
+import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -56,6 +57,7 @@ public class PerformanceTest {
         for (int i=0;i<=numTimes;i++) {
             // Create the parser object
             parser = new Parser(file,new DefaultParserFeedback());
+            parser.setNodeFactory (new PrototypicalNodeFactory (true));
             long start=System.currentTimeMillis();
             for (NodeIterator e = parser.elements();e.hasMoreNodes();)
                 e.nextNode();
