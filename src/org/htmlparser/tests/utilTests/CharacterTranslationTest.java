@@ -333,6 +333,8 @@ public class CharacterTranslationTest
 
             if (string.startsWith ("-- "))
                 string = string.substring (3);
+            // remove newlines
+            string = string.replace ('\n', ' ');
             // remove doublespaces
             index = 0;
             while ((index < string.length ()) && (-1 != (spaces = indexOfWhitespace (string, index))))

@@ -430,7 +430,7 @@ public class ParserTest extends ParserTestCase
 
     /**
      * Test with a HTTP header with a valid charset parameter.
-     * Here, ibm.co.jp is an example of a HTTP server that correctly sets the
+     * Here, Oracle Japan is an example of a HTTP server that correctly sets the
      * charset in the header to match the content encoding.
      */
     public void testHTTPCharset ()
@@ -438,7 +438,7 @@ public class ParserTest extends ParserTestCase
         Parser parser;
         try
         {
-            parser = new Parser("http://www.ibm.com/jp/", Parser.DEVNULL);
+            parser = new Parser("http://www.oracle.co.jp/", Parser.DEVNULL);
             assertTrue("Character set should be Shift_JIS", parser.getEncoding ().equalsIgnoreCase ("Shift_JIS"));
         }
         catch (ParserException e)

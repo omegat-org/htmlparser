@@ -139,34 +139,12 @@ public class TableTagTest extends ParserTestCase
     /**
      * See bug #742254 Nested <TR> &<TD> tags should not be allowed
      */
-    public void testUnClosed1 () throws ParserException
-    {
-        createParser ("<TABLE><TR><TR></TR></TABLE>");
-        parseAndAssertNodeCount (1);
-        String s = node[0].toHtml ();
-        assertEquals ("Unclosed","<TABLE><TR></TR><TR></TR></TABLE>",s);
-    }
-
-    /**
-     * See bug #742254 Nested <TR> &<TD> tags should not be allowed
-     */
     public void testUnClosed2 () throws ParserException
     {
         createParser ("<TABLE><TR><TD><TD></TD></TR></TABLE>");
         parseAndAssertNodeCount (1);
         String s = node[0].toHtml ();
         assertEquals ("Unclosed","<TABLE><TR><TD></TD><TD></TD></TR></TABLE>",s);
-    }
-
-    /**
-     * See bug #742254 Nested <TR> &<TD> tags should not be allowed
-     */
-    public void testUnClosed3 () throws ParserException
-    {
-        createParser ("<TABLE><TR><TD>blah blah</TD><TR><TD>blah blah</TD></TR></TABLE>");
-        parseAndAssertNodeCount (1);
-        String s = node[0].toHtml ();
-        assertEquals ("Unclosed","<TABLE><TR><TD>blah blah</TD></TR><TR><TD>blah blah</TD></TR></TABLE>",s);
     }
 
     /**
