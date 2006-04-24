@@ -63,7 +63,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * <code>
  * <pre>
  * Parser parser = new Parser ("http://whatever");
- * NodeList list = parser.parse ();
+ * NodeList list = parser.parse (null);
  * // do something with your list of nodes.
  * </pre>
  * </code></p>
