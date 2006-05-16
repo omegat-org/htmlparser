@@ -64,6 +64,15 @@ public class OrFilter implements NodeFilter
         predicates[1] = right;
         setPredicates (predicates);
     }
+    
+    /**
+     * Creates an OrFilter that accepts nodes acceptable to any of the given filters.
+     * @param predicates The list of filters. 
+     */
+    public OrFilter (NodeFilter[] predicates)
+    {
+        setPredicates (predicates);
+    }
 
     /**
      * Get the predicates used by this OrFilter.

@@ -66,6 +66,15 @@ public class AndFilter
         predicates[1] = right;
         setPredicates (predicates);
     }
+    
+    /**
+     * Creates an AndFilter that accepts nodes acceptable to all given filters.
+     * @param predicates The list of filters. 
+     */
+    public AndFilter (NodeFilter[] predicates)
+    {
+        setPredicates (predicates);
+    }
 
     /**
      * Get the predicates used by this AndFilter.
