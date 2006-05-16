@@ -30,7 +30,7 @@ import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 
 /**
- * Accepts nodes matching any of it's predicates filters (OR operation).
+ * Accepts nodes matching any of its predicates filters (OR operation).
  */
 public class OrFilter implements NodeFilter
 {
@@ -99,7 +99,7 @@ public class OrFilter implements NodeFilter
     //
 
     /**
-     * Accept nodes that are acceptable to any of it's predicate filters.
+     * Accept nodes that are acceptable to any of its predicate filters.
      * @param node The node to check.
      * @return <code>true</code> if any of the predicate filters find the node
      * is acceptable, <code>false</code> otherwise.

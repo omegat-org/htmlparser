@@ -30,7 +30,7 @@ import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 
 /**
- * Accepts nodes matching all of it's predicate filters (AND operation).
+ * Accepts nodes matching all of its predicate filters (AND operation).
  */
 public class AndFilter
     implements
@@ -101,7 +101,7 @@ public class AndFilter
     //
 
     /**
-     * Accept nodes that are acceptable to all of it's predicate filters.
+     * Accept nodes that are acceptable to all of its predicate filters.
      * @param node The node to check.
      * @return <code>true</code> if all the predicate filters find the node
      * is acceptable, <code>false</code> otherwise.
