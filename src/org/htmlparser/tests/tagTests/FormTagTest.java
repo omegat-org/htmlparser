@@ -226,7 +226,7 @@ public class FormTagTest extends ParserTestCase {
         for (NodeIterator e = ((FormTag)node[0]).children (); e.hasMoreNodes ();)
             e.nextNode ().collectInto (remarkNodes, filter);
         assertEquals("Remark Node Count",1,remarkNodes.size ());
-        assertEquals("First Remark Node"," Hello World ",remarkNodes.elementAt (0).toPlainTextString());
+        assertEquals("First Remark Node"," Hello World ",remarkNodes.elementAt (0).getText ());
     }
     /**
      * Bug 652674 - forms with comments are not being parsed

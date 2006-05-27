@@ -73,7 +73,7 @@ public class RemarkNode
      * Returns the text contents of the comment tag.
      * @return The contents of the text inside the comment delimiters.
      */
-    public String getText()
+    public String getText ()
     {
         int start;
         int end;
@@ -114,7 +114,7 @@ public class RemarkNode
      */
     public String toPlainTextString ()
     {
-        return (getText());
+        return ("");
     }
 
     /**
