@@ -355,17 +355,17 @@ public class Lexer
                     ret = makeString (start, mCursor.getPosition ());
                 else if ('%' == ch)
                 {
-                    mCursor.retreat ();
+                    mPage.ungetCharacter (mCursor);
                     ret = parseJsp (start);
                 }
                 else if ('?' == ch)
                 {
-                    mCursor.retreat ();
+                    mPage.ungetCharacter (mCursor);
                     ret = parsePI (start);
                 }
                 else if ('/' == ch || '%' == ch || Character.isLetter (ch))
                 {
-                    mCursor.retreat ();
+                    mPage.ungetCharacter (mCursor);
                     ret = parseTag (start);
                 }
                 else if ('!' == ch)
@@ -379,12 +379,12 @@ public class Lexer
                             ret = makeRemark (start, mCursor.getPosition ());
                         else
                         {
-                            mCursor.retreat (); // remark/tag need this char
+                            mPage.ungetCharacter (mCursor); // remark/tag need this char
                             if ('-' == ch)
                                 ret = parseRemark (start, quotesmart);
                             else
                             {
-                                mCursor.retreat (); // tag needs prior one too
+                                mPage.ungetCharacter (mCursor); // tag needs prior one too
                                 ret = parseTag (start);
                             }
                         }
@@ -394,7 +394,7 @@ public class Lexer
                     ret = parseString (start, quotesmart);
                 break;
             default:
-                mCursor.retreat (); // string needs to see leading foreslash
+                mPage.ungetCharacter (mCursor); // string needs to see leading foreslash
                 ret = parseString (start, quotesmart);
                 break;
         }
@@ -488,7 +488,8 @@ public class Lexer
                                     if (Page.EOF == ch)
                                         done = true;
                                     else if (  (ch != '\\') && (ch != quote))
-                                        mCursor.retreat (); // unconsume char if character was not an escapable char.
+                                        // unconsume char if character was not an escapable char.
+                                        mPage.ungetCharacter (mCursor);
                                 }
                             break;
                         case '/':
@@ -510,12 +511,12 @@ public class Lexer
                                             while ((Page.EOF != ch) && ('*' != ch));
                                             ch = mPage.getCharacter (mCursor);
                                             if (ch == '*')
-                                                mCursor.retreat ();
+                                                mPage.ungetCharacter (mCursor);
                                         }
                                         while ((Page.EOF != ch) && ('/' != ch));
                                     }
                                     else
-                                        mCursor.retreat ();
+                                        mPage.ungetCharacter (mCursor);
                                 }
                             break;
                         case '\n':
@@ -573,9 +574,9 @@ public class Lexer
                     {
                         done = true;
                         // back up to the start of ETAGO
-                        mCursor.retreat ();
-                        mCursor.retreat ();
-                        mCursor.retreat ();
+                        mPage.ungetCharacter (mCursor);
+                        mPage.ungetCharacter (mCursor);
+                        mPage.ungetCharacter (mCursor);
                     }
                     else
                         state = 0;
@@ -598,12 +599,12 @@ public class Lexer
                                 state = 0;
                             else
                             {
-                                mCursor.retreat ();
-                                mCursor.retreat ();
+                                mPage.ungetCharacter (mCursor);
+                                mPage.ungetCharacter (mCursor);
                             }
                         }
                         else
-                            mCursor.retreat ();
+                            mPage.ungetCharacter (mCursor);
                     }
                     break;
                 default:
@@ -748,12 +749,12 @@ public class Lexer
                         scanJIS (mCursor);
                     else
                     {
-                        mCursor.retreat ();
-                        mCursor.retreat ();
+                        mPage.ungetCharacter (mCursor);
+                        mPage.ungetCharacter (mCursor);
                     }
                 }
                 else
-                    mCursor.retreat ();
+                    mPage.ungetCharacter (mCursor);
             }
             else if (quotesmart && (0 == quote)
                 && (('\'' == ch) || ('"' == ch)))
@@ -766,7 +767,7 @@ public class Lexer
                     && ('\\' != ch) // escaped backslash
                     && (ch != quote)) // escaped quote character
                        // ( reflects ["] or [']  whichever opened the quotation)
-                    mCursor.retreat(); // unconsume char if char not an escape
+                    mPage.ungetCharacter (mCursor); // unconsume char if char not an escape
             }
             else if (quotesmart && (ch == quote))
                 quote = 0; // exit quoted state
@@ -793,12 +794,12 @@ public class Lexer
                         while ((Page.EOF != ch) && ('*' != ch));
                         ch = mPage.getCharacter (mCursor);
                         if (ch == '*')
-                            mCursor.retreat ();
+                            mPage.ungetCharacter (mCursor);
                     }
                     while ((Page.EOF != ch) && ('/' != ch));
                 }
                 else
-                    mCursor.retreat ();
+                    mPage.ungetCharacter (mCursor);
             }
             else if ((0 == quote) && ('<' == ch))
             {
@@ -810,13 +811,13 @@ public class Lexer
                     || '!' == ch || '%' == ch || '?' == ch)
                 {
                     done = true;
-                    mCursor.retreat ();
-                    mCursor.retreat ();
+                    mPage.ungetCharacter (mCursor);
+                    mPage.ungetCharacter (mCursor);
                 }
                 else
                 {
                     // it's not a tag, so keep going, but check for quotes
-                    mCursor.retreat ();
+                    mPage.ungetCharacter (mCursor);
                 }
             }
         }
@@ -1012,7 +1013,7 @@ public class Lexer
                         if ('<' == ch)
                         {
                             // don't consume the opening angle
-                            mCursor.retreat ();
+                            mPage.ungetCharacter (mCursor);
                             bookmarks[state + 1] = mCursor.getPosition ();
                         }
                         whitespace (attributes, bookmarks);
@@ -1030,7 +1031,7 @@ public class Lexer
                         if ('<' == ch)
                         {
                             // don't consume the opening angle
-                            mCursor.retreat ();
+                            mPage.ungetCharacter (mCursor);
                             bookmarks[state + 1] = mCursor.getPosition ();
                         }
                         standalone (attributes, bookmarks);
@@ -1120,7 +1121,7 @@ public class Lexer
                         // same as last else clause
                         standalone (attributes, bookmarks);
                   	    bookmarks[0]=bookmarks[6];
-                  	    mCursor.retreat();
+                  	    mPage.ungetCharacter (mCursor);
                   	    state=0;
                     }
                     else if (Character.isWhitespace (ch))
@@ -1142,7 +1143,7 @@ public class Lexer
                         // and restart scanning as whitespace attribute.
                   	    standalone (attributes, bookmarks);
                   	    bookmarks[0]=bookmarks[6];
-                  	    mCursor.retreat();
+                  	    mPage.ungetCharacter (mCursor);
                   	    state=0;
                    	}
                     break;
@@ -1262,7 +1263,7 @@ public class Lexer
                                 done = true;
                             else
                             {
-                                mCursor.retreat ();
+                                mPage.ungetCharacter (mCursor);
                                 state = 2;
                             }                        
                         }
@@ -1441,14 +1442,12 @@ public class Lexer
                                     while ((Page.EOF != ch) && ('*' != ch));
                                     ch = mPage.getCharacter (mCursor);
                                     if (ch == '*')
-                                        mCursor.retreat ();
+                                        mPage.ungetCharacter (mCursor);
                                 }
                                 while ((Page.EOF != ch) && ('/' != ch));
                             }
                             else
-                            {
-                                mCursor.retreat ();
-                            }
+                                mPage.ungetCharacter (mCursor);
                             break;
                         default:  // <%???x
                             break;

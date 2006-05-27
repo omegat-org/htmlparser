@@ -101,8 +101,7 @@ public class StreamTests extends ParserTestCase
         Stream stream;
         int index;
 
-        // pick a big file
-        link = "http://htmlparser.sourceforge.net/HTMLParser_Coverage.html";
+        link = "http://htmlparser.sourceforge.net";
         try
         {
             url = new URL (link);
