@@ -621,6 +621,9 @@ public class LexerTests extends ParserTestCase
         mAcceptable.add ("LINK");
         mAcceptable.add ("H1");
         mAcceptable.add ("H3");
+        mAcceptable.add ("OBJECT");
+        mAcceptable.add ("PARAM");
+        mAcceptable.add ("EMBED");
     }
 
     /**

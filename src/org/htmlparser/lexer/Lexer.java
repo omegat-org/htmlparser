@@ -92,6 +92,16 @@ public class Lexer
             + " (" + VERSION_TYPE + " " + VERSION_DATE + ")";
 
     /**
+     * Process remarks strictly flag.
+     * If <code>true</code>, remarks are not terminated by ---$gt;
+     * or --!$gt;, i.e. more than two dashes. If <code>false</code>,
+     * a more lax (and closer to typical browser handling) remark parsing
+     * is used.
+     * Default <code>{@value}</code>.
+     */
+    public static boolean STRICT_REMARKS = true;
+
+    /**
      * The page lexemes are retrieved from.
      */
     protected Page mPage;
@@ -1200,10 +1210,10 @@ public class Lexer
      * <p>
      * This method uses a state machine with the following states:
      * <ol>
-     * <li>state 0 - prior to the first open delimiter</li>
-     * <li>state 1 - prior to the second open delimiter</li>
-     * <li>state 2 - prior to the first closing delimiter</li>
-     * <li>state 3 - prior to the second closing delimiter</li>
+     * <li>state 0 - prior to the first open delimiter (first dash)</li>
+     * <li>state 1 - prior to the second open delimiter (second dash)</li>
+     * <li>state 2 - prior to the first closing delimiter (first dash)</li>
+     * <li>state 3 - prior to the second closing delimiter (second dash)</li>
      * <li>state 4 - prior to the terminating &gt;</li>
      * </ol>
      * <p>
@@ -1274,12 +1284,19 @@ public class Lexer
                     case 4: // prior to the terminating >
                         if ('>' == ch)
                             done = true;
-                        else if (('!' == ch) || ('-' == ch) || Character.isWhitespace (ch))
+                        else if (Character.isWhitespace (ch))
                         {
                             // stay in state 4
                         }
                         else
-                            state = 2;
+                            if (!STRICT_REMARKS && (('-' == ch) || ('!' == ch)))
+                            {
+                                // stay in state 4
+                            }
+                            else
+                                // bug #1345049 HTMLParser should not terminate a comment with --->
+                                // should maybe issue a warning mentioning STRICT_REMARKS
+                                state = 2;
                         break;
                     default:
                         throw new IllegalStateException ("how the fuck did we get in state " + state);
