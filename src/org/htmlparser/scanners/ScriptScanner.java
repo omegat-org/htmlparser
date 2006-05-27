@@ -73,7 +73,7 @@ public class ScriptScanner
      * users prefer non-strict handling since there is so much broken script
      * out in the wild.
      */
-    public static boolean STRICT = false;
+    public static boolean STRICT = true;
 
     /**
      * Create a script scanner.

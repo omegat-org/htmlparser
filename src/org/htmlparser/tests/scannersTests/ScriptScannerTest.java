@@ -184,295 +184,333 @@ public class ScriptScannerTest extends ParserTestCase
      * quotes (only single quotes were previously accepted).
      * @throws Exception
      */
-    public void testScriptTagsGeneratedByScriptCode() throws Exception {
-        createParser(
-            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 " +
-            "Transitional//EN\">" +
-            "<html>" +
-            "<head>" +
-            "<title>Untitled Document</title>" +
-            "<meta http-equiv=\"Content-Type\" content=\"text/html; " +
-            "charset=iso-8859-1\">" +
-            "</head>" +
-            "<script language=\"JavaScript\">" +
-            "document.write(\"<script " +
-            "language=\\\"JavaScript\\\">\");" +
-            "document.write(\"function onmousedown" +
-            "(event)\");" +
-            "document.write(\"{ // do something\"); " +
-            "document.write(\"}\"); " +
-            "// parser thinks this is the end tag.\n" +
-            "document.write(\"</script>\");" +
-            "</script>" +
-            "<body>" +
-            "</body>" +
-            "</html>"
-        );
-        Node scriptNodes [] =
-            parser.extractAllNodesThatAre(ScriptTag.class);
-        assertType(
-            "scriptnode",
-            ScriptTag.class,
-            scriptNodes[0]
-        );
-        ScriptTag scriptTag = (ScriptTag)scriptNodes[0];
-        assertStringEquals(
-            "script code",
-            "document.write(\"<script " +
-            "language=\\\"JavaScript\\\">\");" +
-            "document.write(\"function onmousedown" +
-            "(event)\");" +
-            "document.write(\"{ // do something\"); " +
-            "document.write(\"}\"); " +
-            "// parser thinks this is the end tag.\n" +
-            "document.write(\"</script>\");",
-            scriptTag.getScriptCode()
-        );
-
+    public void testScriptTagsGeneratedByScriptCode() throws Exception 
+    {
+        boolean old_strict = org.htmlparser.scanners.ScriptScanner.STRICT;
+        try
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = false;
+            createParser(
+                "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 " +
+                "Transitional//EN\">" +
+                "<html>" +
+                "<head>" +
+                "<title>Untitled Document</title>" +
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; " +
+                "charset=iso-8859-1\">" +
+                "</head>" +
+                "<script language=\"JavaScript\">" +
+                "document.write(\"<script " +
+                "language=\\\"JavaScript\\\">\");" +
+                "document.write(\"function onmousedown" +
+                "(event)\");" +
+                "document.write(\"{ // do something\"); " +
+                "document.write(\"}\"); " +
+                "// parser thinks this is the end tag.\n" +
+                "document.write(\"</script>\");" +
+                "</script>" +
+                "<body>" +
+                "</body>" +
+                "</html>"
+            );
+            Node scriptNodes [] =
+                parser.extractAllNodesThatAre(ScriptTag.class);
+            assertType(
+                "scriptnode",
+                ScriptTag.class,
+                scriptNodes[0]
+            );
+            ScriptTag scriptTag = (ScriptTag)scriptNodes[0];
+            assertStringEquals(
+                "script code",
+                "document.write(\"<script " +
+                "language=\\\"JavaScript\\\">\");" +
+                "document.write(\"function onmousedown" +
+                "(event)\");" +
+                "document.write(\"{ // do something\"); " +
+                "document.write(\"}\"); " +
+                "// parser thinks this is the end tag.\n" +
+                "document.write(\"</script>\");",
+                scriptTag.getScriptCode()
+            );
+        }
+        finally
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = old_strict;
+        }
     }
 
-    public void testScriptCodeExtraction() throws ParserException {
-        createParser(
-            "<SCRIPT language=JavaScript>" +
-            "document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
-            "width=\"80\" height=\"20\" border=\"0\"></a>\");" +
-            "</SCRIPT>"
-        );
-        parseAndAssertNodeCount(1);
-        assertType("script",ScriptTag.class,node[0]);
-        ScriptTag scriptTag = (ScriptTag)node[0];
-        assertStringEquals(
-            "script code",
-            "document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
-            "width=\"80\" height=\"20\" border=\"0\"></a>\");",
-            scriptTag.getScriptCode()
-        );
+    public void testScriptCodeExtraction() throws ParserException 
+    {
+        boolean old_strict = org.htmlparser.scanners.ScriptScanner.STRICT;
+        try
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = false;
+            createParser(
+                "<SCRIPT language=JavaScript>" +
+                "document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
+                "width=\"80\" height=\"20\" border=\"0\"></a>\");" +
+                "</SCRIPT>"
+            );
+            parseAndAssertNodeCount(1);
+            assertType("script",ScriptTag.class,node[0]);
+            ScriptTag scriptTag = (ScriptTag)node[0];
+            assertStringEquals(
+                "script code",
+                "document.write(\"<a href=\"1.htm\"><img src=\"1.jpg\" " +
+                "width=\"80\" height=\"20\" border=\"0\"></a>\");",
+                scriptTag.getScriptCode()
+            );
+        }
+        finally
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = old_strict;
+        }
     }
 
-    public void testScriptCodeExtractionWithMultipleQuotes() throws ParserException {
-        createParser(
-            "<SCRIPT language=JavaScript>" +
-            "document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
-            "width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");" +
-            "</SCRIPT>"
-        );
-        parseAndAssertNodeCount(1);
-        assertType("script",ScriptTag.class,node[0]);
-        ScriptTag scriptTag = (ScriptTag)node[0];
-        assertStringEquals(
-            "script code",
-            "document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
-            "width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");",
-            scriptTag.getScriptCode()
-        );
+    public void testScriptCodeExtractionWithMultipleQuotes() throws ParserException 
+    {
+        boolean old_strict = org.htmlparser.scanners.ScriptScanner.STRICT;
+        try
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = false;
+            createParser(
+                "<SCRIPT language=JavaScript>" +
+                "document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
+                "width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");" +
+                "</SCRIPT>"
+            );
+            parseAndAssertNodeCount(1);
+            assertType("script",ScriptTag.class,node[0]);
+            ScriptTag scriptTag = (ScriptTag)node[0];
+            assertStringEquals(
+                "script code",
+                "document.write(\"<a href=\\\"1.htm\\\"><img src=\\\"1.jpg\\\" " +
+                "width=\\\"80\\\" height=\\\"20\\\" border=\\\"0\\\"></a>\");",
+                scriptTag.getScriptCode()
+            );
+        }
+        finally
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = old_strict;
+        }
     }
 
-    public void testScriptWithinComments() throws Exception {
-        createParser(
-            "<script language=\"JavaScript1.2\">" +
-            "\n" +
-            "var linkset=new Array()" +
-            "\n" +
-            "var ie4=document.all&&navigator.userAgent.indexOf(\"Opera\")==-1" +
-            "\n" +
-            "var ns6=document.getElementById&&!document.all" +
-            "\n" +
-            "var ns4=document.layers" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "function showmenu(e,which){" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "if (!document.all&&!document.getElementById&&!document.layers)" +
-            "\n" +
-            "return" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "clearhidemenu()" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "menuobj=ie4? document.all.popmenu : ns6? document.getElementById(\"popmenu\") : ns4? document.popmenu : \"\"\n" +
-            "\n" +
-            "menuobj.thestyle=(ie4||ns6)? menuobj.style : menuobj" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "if (ie4||ns6)" +
-            "\n" +
-            "menuobj.innerHTML=which" +
-            "\n" +
-            "else{" +
-            "\n" +
-            "menuobj.document.write('<layer name=gui bgColor=#E6E6E6 width=165 onmouseover=\"clearhidemenu()\" onmouseout=\"hidemenu()\">'+which+'</layer>')" +
-            "\n" +
-            "menuobj.document.close()" +
-            "\n" +
-            "}" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "menuobj.contentwidth=(ie4||ns6)? menuobj.offsetWidth : menuobj.document.gui.document.width" +
-            "\n" +
-            "menuobj.contentheight=(ie4||ns6)? menuobj.offsetHeight : menuobj.document.gui.document.height" +
-            "\n" +
-            "eventX=ie4? event.clientX : ns6? e.clientX : e.x" +
-            "\n" +
-            "eventY=ie4? event.clientY : ns6? e.clientY : e.y" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "//Find out how close the mouse is to the corner of the window" +
-            "\n" +
-            "var rightedge=ie4? document.body.clientWidth-eventX : window.innerWidth-eventX" +
-            "\n" +
-            "var bottomedge=ie4? document.body.clientHeight-eventY : window.innerHeight-eventY" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "//if the horizontal distance isn't enough to accomodate the width of the context menu" +
-            "\n" +
-            "if (rightedge < menuobj.contentwidth)" +
-            "\n" +
-            "//move the horizontal position of the menu to the left by it's width" +
-            "\n" +
-            "menuobj.thestyle.left=ie4? document.body.scrollLeft+eventX-menuobj.contentwidth : ns6? window.pageXOffset+eventX-menuobj.contentwidth : eventX-menuobj.contentwidth" +
-            "\n" +
-            "else" +
-            "\n" +
-            "//position the horizontal position of the menu where the mouse was clicked" +
-            "\n" +
-            "menuobj.thestyle.left=ie4? document.body.scrollLeft+eventX : ns6? window.pageXOffset+eventX : eventX" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "//same concept with the vertical position" +
-            "\n" +
-            "if (bottomedge<menuobj.contentheight)" +
-            "\n" +
-            "menuobj.thestyle.top=ie4? document.body.scrollTop+eventY-menuobj.contentheight : ns6? window.pageYOffset+eventY-menuobj.contentheight : eventY-menuobj.contentheight" +
-            "\n" +
-            "else" +
-            "\n" +
-            "menuobj.thestyle.top=ie4? document.body.scrollTop+event.clientY : ns6? window.pageYOffset+eventY : eventY" +
-            "\n" +
-            "menuobj.thestyle.visibility=\"visible\"\n" +
-            "\n" +
-            "return false" +
-            "\n" +
-            "}" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "function contains_ns6(a, b) {" +
-            "\n" +
-            "//Determines if 1 element in contained in another- by Brainjar.com" +
-            "\n" +
-            "while (b.parentNode)" +
-            "\n" +
-            "if ((b = b.parentNode) == a)" +
-            "\n" +
-            "return true;" +
-            "\n" +
-            "return false;" +
-            "\n" +
-            "}" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "function hidemenu(){" +
-            "\n" +
-            "if (window.menuobj)" +
-            "\n" +
-            "menuobj.thestyle.visibility=(ie4||ns6)? \"hidden\" : \"hide\"\n" +
-            "\n" +
-            "}" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "function dynamichide(e){" +
-            "\n" +
-            "if (ie4&&!menuobj.contains(e.toElement))" +
-            "\n" +
-            "hidemenu()" +
-            "\n" +
-            "else if (ns6&&e.currentTarget!= e.relatedTarget&& !contains_ns6(e.currentTarget, e.relatedTarget))" +
-            "\n" +
-            "hidemenu()" +
-            "\n" +
-            "}" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "function delayhidemenu(){" +
-            "\n" +
-            "if (ie4||ns6||ns4)" +
-            "\n" +
-            "delayhide=setTimeout(\"hidemenu()\",500)" +
-            "\n" +
-            "}" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "function clearhidemenu(){" +
-            "\n" +
-            "if (window.delayhide)" +
-            "\n" +
-            "clearTimeout(delayhide)" +
-            "\n" +
-            "}" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "function highlightmenu(e,state){" +
-            "\n" +
-            "if (document.all)" +
-            "\n" +
-            "source_el=event.srcElement" +
-            "\n" +
-            "else if (document.getElementById)" +
-            "\n" +
-            "source_el=e.target" +
-            "\n" +
-            "if (source_el.className==\"menuitems\"){" +
-            "\n" +
-            "source_el.id=(state==\"on\")? \"mouseoverstyle\" : \"\"\n" +
-            "\n" +
-            "}" +
-            "\n" +
-            "else{" +
-            "\n" +
-            "while(source_el.id!=\"popmenu\"){" +
-            "\n" +
-            "source_el=document.getElementById? source_el.parentNode : source_el.parentElement" +
-            "\n" +
-            "if (source_el.className==\"menuitems\"){" +
-            "\n" +
-            "source_el.id=(state==\"on\")? \"mouseoverstyle\" : \"\"\n" +
-            "\n" +
-            "}" +
-            "\n" +
-            "}" +
-            "\n" +
-            "}" +
-            "\n" +
-            "}" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "if (ie4||ns6)" +
-            "\n" +
-            "document.onclick=hidemenu" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "</script>"
-        );
-        parseAndAssertNodeCount(1);
-
+    public void testScriptWithinComments() throws Exception 
+    {
+        boolean old_strict = org.htmlparser.scanners.ScriptScanner.STRICT;
+        try
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = false;
+            createParser(
+                "<script language=\"JavaScript1.2\">" +
+                "\n" +
+                "var linkset=new Array()" +
+                "\n" +
+                "var ie4=document.all&&navigator.userAgent.indexOf(\"Opera\")==-1" +
+                "\n" +
+                "var ns6=document.getElementById&&!document.all" +
+                "\n" +
+                "var ns4=document.layers" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "function showmenu(e,which){" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "if (!document.all&&!document.getElementById&&!document.layers)" +
+                "\n" +
+                "return" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "clearhidemenu()" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "menuobj=ie4? document.all.popmenu : ns6? document.getElementById(\"popmenu\") : ns4? document.popmenu : \"\"\n" +
+                "\n" +
+                "menuobj.thestyle=(ie4||ns6)? menuobj.style : menuobj" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "if (ie4||ns6)" +
+                "\n" +
+                "menuobj.innerHTML=which" +
+                "\n" +
+                "else{" +
+                "\n" +
+                "menuobj.document.write('<layer name=gui bgColor=#E6E6E6 width=165 onmouseover=\"clearhidemenu()\" onmouseout=\"hidemenu()\">'+which+'</layer>')" +
+                "\n" +
+                "menuobj.document.close()" +
+                "\n" +
+                "}" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "menuobj.contentwidth=(ie4||ns6)? menuobj.offsetWidth : menuobj.document.gui.document.width" +
+                "\n" +
+                "menuobj.contentheight=(ie4||ns6)? menuobj.offsetHeight : menuobj.document.gui.document.height" +
+                "\n" +
+                "eventX=ie4? event.clientX : ns6? e.clientX : e.x" +
+                "\n" +
+                "eventY=ie4? event.clientY : ns6? e.clientY : e.y" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "//Find out how close the mouse is to the corner of the window" +
+                "\n" +
+                "var rightedge=ie4? document.body.clientWidth-eventX : window.innerWidth-eventX" +
+                "\n" +
+                "var bottomedge=ie4? document.body.clientHeight-eventY : window.innerHeight-eventY" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "//if the horizontal distance isn't enough to accomodate the width of the context menu" +
+                "\n" +
+                "if (rightedge < menuobj.contentwidth)" +
+                "\n" +
+                "//move the horizontal position of the menu to the left by it's width" +
+                "\n" +
+                "menuobj.thestyle.left=ie4? document.body.scrollLeft+eventX-menuobj.contentwidth : ns6? window.pageXOffset+eventX-menuobj.contentwidth : eventX-menuobj.contentwidth" +
+                "\n" +
+                "else" +
+                "\n" +
+                "//position the horizontal position of the menu where the mouse was clicked" +
+                "\n" +
+                "menuobj.thestyle.left=ie4? document.body.scrollLeft+eventX : ns6? window.pageXOffset+eventX : eventX" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "//same concept with the vertical position" +
+                "\n" +
+                "if (bottomedge<menuobj.contentheight)" +
+                "\n" +
+                "menuobj.thestyle.top=ie4? document.body.scrollTop+eventY-menuobj.contentheight : ns6? window.pageYOffset+eventY-menuobj.contentheight : eventY-menuobj.contentheight" +
+                "\n" +
+                "else" +
+                "\n" +
+                "menuobj.thestyle.top=ie4? document.body.scrollTop+event.clientY : ns6? window.pageYOffset+eventY : eventY" +
+                "\n" +
+                "menuobj.thestyle.visibility=\"visible\"\n" +
+                "\n" +
+                "return false" +
+                "\n" +
+                "}" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "function contains_ns6(a, b) {" +
+                "\n" +
+                "//Determines if 1 element in contained in another- by Brainjar.com" +
+                "\n" +
+                "while (b.parentNode)" +
+                "\n" +
+                "if ((b = b.parentNode) == a)" +
+                "\n" +
+                "return true;" +
+                "\n" +
+                "return false;" +
+                "\n" +
+                "}" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "function hidemenu(){" +
+                "\n" +
+                "if (window.menuobj)" +
+                "\n" +
+                "menuobj.thestyle.visibility=(ie4||ns6)? \"hidden\" : \"hide\"\n" +
+                "\n" +
+                "}" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "function dynamichide(e){" +
+                "\n" +
+                "if (ie4&&!menuobj.contains(e.toElement))" +
+                "\n" +
+                "hidemenu()" +
+                "\n" +
+                "else if (ns6&&e.currentTarget!= e.relatedTarget&& !contains_ns6(e.currentTarget, e.relatedTarget))" +
+                "\n" +
+                "hidemenu()" +
+                "\n" +
+                "}" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "function delayhidemenu(){" +
+                "\n" +
+                "if (ie4||ns6||ns4)" +
+                "\n" +
+                "delayhide=setTimeout(\"hidemenu()\",500)" +
+                "\n" +
+                "}" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "function clearhidemenu(){" +
+                "\n" +
+                "if (window.delayhide)" +
+                "\n" +
+                "clearTimeout(delayhide)" +
+                "\n" +
+                "}" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "function highlightmenu(e,state){" +
+                "\n" +
+                "if (document.all)" +
+                "\n" +
+                "source_el=event.srcElement" +
+                "\n" +
+                "else if (document.getElementById)" +
+                "\n" +
+                "source_el=e.target" +
+                "\n" +
+                "if (source_el.className==\"menuitems\"){" +
+                "\n" +
+                "source_el.id=(state==\"on\")? \"mouseoverstyle\" : \"\"\n" +
+                "\n" +
+                "}" +
+                "\n" +
+                "else{" +
+                "\n" +
+                "while(source_el.id!=\"popmenu\"){" +
+                "\n" +
+                "source_el=document.getElementById? source_el.parentNode : source_el.parentElement" +
+                "\n" +
+                "if (source_el.className==\"menuitems\"){" +
+                "\n" +
+                "source_el.id=(state==\"on\")? \"mouseoverstyle\" : \"\"\n" +
+                "\n" +
+                "}" +
+                "\n" +
+                "}" +
+                "\n" +
+                "}" +
+                "\n" +
+                "}" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "if (ie4||ns6)" +
+                "\n" +
+                "document.onclick=hidemenu" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "</script>"
+            );
+            parseAndAssertNodeCount(1);
+        }
+        finally
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = old_strict;
+        }
     }
 
     /**
@@ -518,13 +556,20 @@ public class ScriptScannerTest extends ParserTestCase
      */
     public void testScanQuotedEndTag() throws ParserException
     {
-        String html = "<SCRIPT language=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>";
-        createParser(html);
-        parseAndAssertNodeCount(1);
-        assertStringEquals ("Parse error", html, node[0].toHtml ());
+        boolean old_strict = org.htmlparser.scanners.ScriptScanner.STRICT;
+        try
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = false;
+            String html = "<SCRIPT language=\"JavaScript\">document.write('</SCRIPT>');</SCRIPT>";
+            createParser(html);
+            parseAndAssertNodeCount(1);
+            assertStringEquals ("Parse error", html, node[0].toHtml ());
+        }
+        finally
+        {
+            org.htmlparser.scanners.ScriptScanner.STRICT = old_strict;
+        }
     }
-
-
 
     public void testScanScriptWithTagsInComment() throws ParserException {
         String javascript = "\n// This is javascript with <li> tag in the comment\n";
