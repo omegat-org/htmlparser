@@ -1,12 +1,12 @@
-HTMLParser Version 1.6 (Integration Build Mar 19, 2006)
+HTMLParser Version 1.6 (Integration Build May 27, 2006)
 *********************************************
 
 Contents of the distribution
 ----------------------------
   (i) jar files - lib directory
-      HTML Parser jars: htmlparser.jar, lexer.jar, thumbelina.jar and
+      HTML Parser jars: htmlparser.jar, htmllexer.jar, thumbelina.jar and
       filterbuilder.jar.
-      Also thirdparty jar files checkstyle-all-3.1.jar, fit.jar and junit.jar.
+      Also thirdparty jar files sax2.jar and junit.jar.
 
  (ii) source code - src.zip
       Also contains necessary resources, and build file. Unzip this
@@ -38,6 +38,9 @@ New Functionality
     when it contains no printable characters.
     NodeTreeWalker, a utility class to traverse a tree of Node objects using
     either depth-first or breadth-first tree order has been added.
+    An XorFilter has been added to round out our NOT, AND and OR filters,
+    along with new constructors to OrFilter/AndFilter that take an array of
+    NodeFilter's.
 
 Refactoring
 -----------
@@ -45,13 +48,20 @@ Refactoring
     children when applying filters.
     The NodeList class is a little more standard now with a remove(node) method.
     Some refactoring to allow the htmllexer jar file to be compiled by gcj.
+    Moved non-JUnit test code to Request For Enhancement (RFE) as attachments,
+    so all the code in the tests package should now compile.
 
 Bug Fixes
 ---------
+#1488951 RemarkNode.toPlainTextString() incorrect behaviour
+#1467712 Page#getCharset never works
+#1461473 Relative links starting with ?
+#1457371 Script tag consumes too much from document being parsed
 #1445795 return as TextNode when processing jsp
 #1445309 XML processing instructions are returned as text
 #1376851 Null-valued cookies cause exception
 #1375230 some javascript breaks stringbean
+#1345049 HTMLParser should not terminate a comment with --->
 #1344687 A bug when set cookies
 #1334408 Exception occurs based on string length
 #1322686 when illegal charset specified
@@ -185,6 +195,7 @@ The following people have contributed important bug reports, feature ideas :
 [39] Matthew Buckett
 [40] Jamie McCrindle
 [41] John Derrick
+[42] Ian MacFarlane
 
 If you find any bugs, please go to 
 http://htmlparser.sourceforge.net and click on the Bugs link. You can open a bug case here. 

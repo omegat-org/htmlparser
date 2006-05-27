@@ -132,7 +132,7 @@ public class Parser
      * The date of the version ({@value}).
      */
     public static final String
-    VERSION_DATE = "Mar 19, 2006"
+    VERSION_DATE = "May 27, 2006"
     ;
 
     // End of formatting

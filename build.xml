@@ -10,14 +10,14 @@ Release Procedure
 - edit the ChangeLog to exclude changes already incorporated - the CVS date spec
   is only accurate to the day since it comes from the version coded in the
   Parser.java file, that's why this step can't be automated
-- incorporate changes from ChangeLog into htmlparser/docs/changes under
+- incorporate changes from ChangeLog into htmlparser/docs/changes.txt under
   a heading like "Integration Build 1.5 - 20040522"
 - 'ant versionSource' updates the version in Parser.java, Lexer.java and release.txt
 - edit docs/release.txt to update changes since the last version, bugs fixed
   and enhancements completed
 - perform a CVS update on htmlparser/ to identify new and changed files
 - commit changed files (i.e. Parser.java, docs/release.txt, docs/changes.txt,
-  and docs/release.txt) to the head revision using a reason of the form:
+  and lexer/Lexer.java) to the head revision using a reason of the form:
     Update version to 1.5-20040522.
 - use CVS to tag the current head revisions with a name like v1_5_20040522.
 - use CVS to checkout everything with the tag created above

@@ -15,6 +15,133 @@
 *                                                                             *
 *******************************************************************************
 
+Integration Build 1.6 - 20060527
+--------------------------------
+2006-05-27 10:36  derrickoswald
+
+	* src/org/htmlparser/: scanners/ScriptScanner.java,
+	tests/scannersTests/ScriptScannerTest.java:
+
+	fix bug #1457371 Script tag consumes too much from document being parsed
+	The default for ScriptScanner.STRICT was set to true.
+	If you want the older, more lax, script parsing, set it to false.
+	
+2006-05-27 10:03  derrickoswald
+
+	* src/org/htmlparser/: nodes/RemarkNode.java,
+	tests/tagTests/FormTagTest.java:
+
+	fix bug #1488951 RemarkNode.toPlainTextString() incorrect behaviour
+	RemarkNode.toPlainTextString() now always returns an empty string
+	if you want the remark text use getText()
+	
+2006-05-27 10:02  derrickoswald
+
+	* src/org/htmlparser/: lexer/Lexer.java,
+	tests/FunctionalTests.java, tests/lexerTests/LexerTests.java,
+	tests/parserHelperTests/RemarkNodeParserTest.java:
+
+	fix bug #1345049 HTMLParser should not terminate a comment with --->
+	add static STRICT_REMARKS to Lexer class, which when true follows the specification for remarks
+	
+2006-05-16 05:14  ian_macfarlane
+
+	* src/org/htmlparser/filters/: AndFilter.java, OrFilter.java:
+
+	Incorrect grammar in javadoc. Changed [it's]  to [its].
+	
+2006-05-16 05:11  ian_macfarlane
+
+	* src/org/htmlparser/filters/XorFilter.java:
+
+	New class that does XOR logic (to round out our NOT, AND and OR filters).
+	
+2006-05-16 03:58  ian_macfarlane
+
+	* src/org/htmlparser/filters/: AndFilter.java, OrFilter.java:
+
+	Added constructors to OrFilter/AndFilter that take an array of NodeFilter's.
+	
+2006-04-24 18:12  derrickoswald
+
+	* src/org/htmlparser/Parser.java:
+
+	Fix incorrect example.
+	
+2006-04-23 07:59  derrickoswald
+
+	* src/org/htmlparser/tags/TableHeader.java:
+
+	Change copyright as per request by P.I.M. Schrama
+	
+2006-04-17 20:08  derrickoswald
+
+	* src/org/htmlparser/tests/: lexerTests/KitTest.java,
+	PerformanceTest.java:
+
+	Move non-junit test code to Request For Enhancement (RFE) as attachments.
+	
+2006-04-17 19:45  derrickoswald
+
+	* src/org/htmlparser/tests/: ParserTestCase.java,
+	PerformanceTest.java:
+
+	Fix unit tests.
+	
+2006-04-17 09:53  derrickoswald
+
+	* src/org/htmlparser/tests/: ParserTest.java,
+	lexerTests/LexerTests.java, tagTests/InputTagTest.java,
+	tagTests/TableTagTest.java,
+	utilTests/CharacterTranslationTest.java:
+
+	Fix unit tests. Move failing test cases to downloads on corresponding RFE artifacts.
+	
+2006-04-17 09:51  derrickoswald
+
+	* bin/: translate.cmd, beanybaby.cmd, filterbuilder.cmd, lexer.cmd,
+	linkextractor.cmd, parser.cmd, sitecapturer.cmd,
+	stringextractor.cmd, thumbelina.cmd:
+
+	Allow execution from directory name containing spaces on Windows.
+	
+2006-04-14 18:18  derrickoswald
+
+	* build.xml, src/org/htmlparser/Parser.java,
+	src/org/htmlparser/http/ConnectionManager.java,
+	src/org/htmlparser/lexer/Lexer.java,
+	src/org/htmlparser/util/NodeList.java:
+
+	Cleanup to isolate htmllexer jar build.
+	
+2006-04-11 08:03  derrickoswald
+
+	* src/org/htmlparser/tests/: AllTests.java, MemoryTest.java:
+
+	Move failing unit test to RFE as a download.
+	
+2006-04-10 17:38  derrickoswald
+
+	* src/org/htmlparser/lexer/Page.java:
+
+	Fix Bug #1467712 Page#getCharset never works
+	Use Content-Type header field instead of connection's getContentType method.
+	
+2006-04-08 09:33  derrickoswald
+
+	* src/org/htmlparser/tests/utilTests/CharacterTranslationTest.java:
+
+	Typo.
+	
+2006-04-06 20:58  derrickoswald
+
+	* src/org/htmlparser/: lexer/Page.java,
+	tests/lexerTests/PageTests.java:
+
+	Fix Bug #1461473 Relative links starting with ?
+	Added overloaded methods taking boolean 'strict' flag on URL manipulators.
+	Default is loose interpretation like most browsers.
+
 Integration Build 1.6 - 20060319
 --------------------------------
 2006-03-19 19:02  derrickoswald
