@@ -1066,8 +1066,17 @@ public class ConnectionManager
 
                 if (null == cookie)
                 {
-                    cookie = new Cookie (name, value);
-                    cookies.addElement (cookie);
+                    try
+                    {
+                        cookie = new Cookie (name, value);
+                        cookies.addElement (cookie);
+                    }
+                    catch (IllegalArgumentException iae)
+                    {
+                        // should print a warning
+                        // for now just bail
+                        break;
+                    }
                 }
                 else
                 {
@@ -1113,13 +1122,21 @@ public class ConnectionManager
                                                 cookie.setExpiryDate (date);
                                             }
                                             else
-                                            {   // error,? unknown attribute,
+                                                // error,? unknown attribute,
                                                 // maybe just another cookie
                                                 // not separated by a comma
-                                                cookie = new Cookie (name,
-                                                    value);
-                                                cookies.addElement (cookie);
-                                            }
+                                                try
+                                                {
+                                                    cookie = new Cookie (name,
+                                                        value);
+                                                    cookies.addElement (cookie);
+                                                }
+                                                catch (IllegalArgumentException iae)
+                                                {
+                                                    // should print a warning
+                                                    // for now just bail
+                                                    break;
+                                                }
                 }
            }
            if (0 != cookies.size ())
