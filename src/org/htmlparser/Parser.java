@@ -50,11 +50,13 @@ import org.htmlparser.visitors.NodeVisitor;
  * This is the primary class of the HTML Parser library. It provides
  * constructors that take a {@link #Parser(String) String},
  * a {@link #Parser(URLConnection) URLConnection}, or a
- * {@link #Parser(Lexer) Lexer}.  In the case of a String, an
+ * {@link #Parser(Lexer) Lexer}.  In the case of a String, 
+ * a check is made to see if the first non-whitespace character is a &lt;, in
+ * which case it is assumed to be HTML. Otherwise an
  * attempt is made to open it as a URL, and if that fails it assumes it is a
- * local disk file. If you want to actually parse a String, use
- * {@link #setInputHTML setInputHTML()} after using the
- * {@link #Parser() no-args} constructor, or use {@link #createParser}.
+ * local disk file. If you want to parse a String after using the
+ * {@link #Parser() no-args} constructor, use 
+ * {@link #setInputHTML setInputHTML()}, or you can use {@link #createParser}.
  * <p>The Parser provides access to the contents of the
  * page, via a {@link #elements() NodeIterator}, a
  * {@link #parse(NodeFilter) NodeList} or a
