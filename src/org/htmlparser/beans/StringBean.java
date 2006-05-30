@@ -148,6 +148,11 @@ public class StringBean extends NodeVisitor implements Serializable
     protected boolean mCollapse;
 
     /**
+     * The state of the collapse processiung state machine.
+     */
+    protected int mCollapseState;
+
+    /**
      * The buffer text is stored in while traversing the HTML.
      */
     protected StringBuffer mBuffer;
@@ -188,6 +193,7 @@ public class StringBean extends NodeVisitor implements Serializable
         mLinks = false;
         mReplaceSpace = true;
         mCollapse = true;
+        mCollapseState = 0;
         mBuffer = new StringBuffer (4096);
         mIsScript = false;
         mIsPre = false;
@@ -212,6 +218,7 @@ public class StringBean extends NodeVisitor implements Serializable
             && (!mBuffer.substring (
                 length - NEWLINE_SIZE, length).equals (NEWLINE))))
             mBuffer.append (NEWLINE);
+        mCollapseState = 0;
     }
 
     /**
@@ -237,20 +244,11 @@ public class StringBean extends NodeVisitor implements Serializable
     protected void collapse (StringBuffer buffer, String string)
     {
         int chars;
-        int length;
-        int state;
         char character;
 
         chars = string.length ();
         if (0 != chars)
         {
-            length = buffer.length ();
-            state = ((0 == length)
-                || (buffer.charAt (length - 1) == ' ')
-                || ((NEWLINE_SIZE <= length)
-                    && buffer.substring (
-                        length - NEWLINE_SIZE, length).equals (NEWLINE)))
-                ? 0 : 1;
             for (int i = 0; i < chars; i++)
             {
                 character = string.charAt (i);
@@ -264,13 +262,13 @@ public class StringBean extends NodeVisitor implements Serializable
                     case '\u200B':
                     case '\r':
                     case '\n':
-                        if (0 != state)
-                            state = 1;
+                        if (0 != mCollapseState)
+                            mCollapseState = 1;
                         break;
                     default:
-                        if (1 == state)
+                        if (1 == mCollapseState)
                             buffer.append (' ');
-                        state = 2;
+                        mCollapseState = 2;
                         buffer.append (character);
                 }
             }
@@ -288,6 +286,7 @@ public class StringBean extends NodeVisitor implements Serializable
     {
         String ret;
 
+        mCollapseState = 0;
         mParser.visitAllNodesWith (this);
         ret = mBuffer.toString ();
         mBuffer = new StringBuffer(4096);
@@ -318,6 +317,7 @@ public class StringBean extends NodeVisitor implements Serializable
      */
     protected void setStrings ()
     {
+        mCollapseState = 0;
         if (null != getURL ())
             try
             {
@@ -340,6 +340,7 @@ public class StringBean extends NodeVisitor implements Serializable
                 {   // try again with the encoding now in force
                     mParser.reset ();
                     mBuffer = new StringBuffer (4096);
+                    mCollapseState = 0;
                     mParser.visitAllNodesWith (this);
                     updateStrings (mBuffer.toString ());
                 }
@@ -557,11 +558,15 @@ public class StringBean extends NodeVisitor implements Serializable
      * Set the current 'collapse whitespace' state.
      * If the setting is changed after the URL has been set, the text from the
      * URL will be reacquired, which is possibly expensive.
+     * The internal state of the collapse state machine can be reset with
+     * code like this:
+     * <code>setCollapse (getCollapse ());</code>
      * @param collapse If <code>true</code>, sequences of whitespace
      * will be reduced to a single space.
      */
     public void setCollapse (boolean collapse)
     {
+        mCollapseState = 0;
         boolean oldValue = mCollapse;
         if (oldValue != collapse)
         {
