@@ -297,30 +297,58 @@ public class Parser
      * You would typically create a DefaultHTMLParserFeedback object and pass
      * it in.
      * @see #Parser(URLConnection,ParserFeedback)
-     * @param resourceLocn Either the URL or the filename (autodetects).
+     * @param resource Either a URL, a filename or a string of HTML.
+     * The string is considered HTML if the first non-whitespace character
+     * is a &lt;. The use of a url or file is autodetected by first attempting
+     * to open the resource as a URL, if that fails it is assumed to be a file
+     * name.
      * A standard HTTP GET is performed to read the content of the URL.
      * @param feedback The HTMLParserFeedback object to use when information,
      * warning and error messages are produced. If <em>null</em> no feedback
      * is provided.
      * @throws ParserException If the URL is invalid.
      */
-    public Parser (String resourceLocn, ParserFeedback feedback)
+    public Parser (String resource, ParserFeedback feedback)
         throws
             ParserException
     {
-        this (getConnectionManager ().openConnection (resourceLocn), feedback);
+        int length;
+        boolean html;
+        char ch;
+
+        if (null == resource)
+            throw new IllegalArgumentException ("resource cannot be null");
+        setFeedback (feedback);
+        length = resource.length ();
+        html = false;
+        for (int i = 0; i < length; i++)
+        {
+            ch = resource.charAt (i);
+            if (!Character.isWhitespace (ch))
+            {
+                if ('<' == ch)
+                    html = true;
+                break;
+            }
+        }
+        if (html)
+            setLexer (new Lexer (new Page (resource)));
+        else
+            setLexer (new Lexer (getConnectionManager ().openConnection (resource)));
+        setNodeFactory (new PrototypicalNodeFactory ());
     }
 
     /**
      * Creates a Parser object with the location of the resource (URL or file).
      * A DefaultHTMLParserFeedback object is used for feedback.
-     * @param resourceLocn Either the URL or the filename (autodetects).
+     * @param resource Either HTML, a URL or a filename (autodetects).
      * @throws ParserException If the resourceLocn argument does not resolve
      * to a valid page or file.
+     * @see #Parser(string,ParserFeedback)
      */
-    public Parser (String resourceLocn) throws ParserException
+    public Parser (String resource) throws ParserException
     {
-        this (resourceLocn, STDOUT);
+        this (resource, STDOUT);
     }
 
     /**
@@ -807,16 +835,17 @@ public class Parser
         else
             try
             {
-                parser = new Parser ();
                 if (1 < args.length)
                     filter = new TagNameFilter (args[1]);
                 else
-                {   // for a simple dump, use more verbose settings
                     filter = null;
+                parser = new Parser (args[0]);
+                if (1 < args.length)
+                {
+                    // for a simple dump, use more verbose settings
                     parser.setFeedback (Parser.STDOUT);
                     getConnectionManager ().setMonitor (parser);
                 }
-                parser.setURL (args[0]);
                 System.out.println (parser.parse (filter));
             }
             catch (ParserException e)
