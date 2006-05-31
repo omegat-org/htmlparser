@@ -102,15 +102,17 @@ public class TextNode
 
     /**
      * Returns the text of the node.
+     * @param verbatim If <code>true</code> return as close to the original
+     * page text as possible.
      * @return The contents of this text node.
      */
-    public String toHtml ()
+    public String toHtml (boolean verbatim)
     {
         String ret;
         
         ret = mText;
         if (null == ret)
-            ret = mPage.getText (getStartPosition (), getEndPosition ());
+            ret = mPage.getText (getStartPosition (),  getEndPosition ());
 
         return (ret);
     }

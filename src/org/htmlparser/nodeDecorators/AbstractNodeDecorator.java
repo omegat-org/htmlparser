@@ -268,6 +268,10 @@ public abstract class AbstractNodeDecorator implements Text
         return delegate.toHtml();
     }
 
+    public String toHtml(boolean verbatim) {
+        return delegate.toHtml(verbatim);
+    }
+
     public String toPlainTextString() {
         return delegate.toPlainTextString();
     }

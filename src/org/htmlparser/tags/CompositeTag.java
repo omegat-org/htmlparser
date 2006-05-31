@@ -142,46 +142,55 @@ public class CompositeTag extends TagNode
 
     /**
      * Add the textual contents of the children of this node to the buffer.
+     * @param verbatim If <code>true</code> return as close to the original
+     * page text as possible.
      * @param sb The buffer to append to.
      */
-    protected void putChildrenInto(StringBuffer sb)
+    protected void putChildrenInto (StringBuffer sb, boolean verbatim)
     {
         Node node;
         for (SimpleNodeIterator e = children (); e.hasMoreNodes ();)
         {
             node = e.nextNode ();
             // eliminate virtual tags
-//            if (!(node.getStartPosition () == node.getEndPosition ()))
+            if (!verbatim || !(node.getStartPosition () == node.getEndPosition ()))
                 sb.append (node.toHtml ());
         }
     }
 
     /**
      * Add the textual contents of the end tag of this node to the buffer.
+     * @param verbatim If <code>true</code> return as close to the original
+     * page text as possible.
      * @param sb The buffer to append to.
      */
-    protected void putEndTagInto(StringBuffer sb)
+    protected void putEndTagInto (StringBuffer sb, boolean verbatim)
     {
         // eliminate virtual tags
-//        if (!(endTag.getStartPosition () == endTag.getEndPosition ()))
-            sb.append(getEndTag ().toHtml());
+        if (!verbatim || !(mEndTag.getStartPosition () == mEndTag.getEndPosition ()))
+            sb.append (getEndTag ().toHtml());
     }
 
     /**
      * Return this tag as HTML code.
+     * @param verbatim If <code>true</code> return as close to the original
+     * page text as possible.
      * @return This tag and it's contents (children) and the end tag
      * as HTML code.
      */
-    public String toHtml() {
-        StringBuffer sb = new StringBuffer();
-        sb.append (super.toHtml ());
-        if (!isEmptyXmlTag())
+    public String toHtml (boolean verbatim)
+    {
+        StringBuffer ret;
+        
+        ret = new StringBuffer ();
+        ret.append (super.toHtml (verbatim));
+        if (!isEmptyXmlTag ())
         {
-            putChildrenInto(sb);
+            putChildrenInto (ret, verbatim);
             if (null != getEndTag ())
-                putEndTagInto(sb);
+                putEndTagInto (ret, verbatim);
         }
-        return sb.toString();
+        return (ret.toString ());
     }
 
     /**
@@ -565,7 +574,7 @@ public class CompositeTag extends TagNode
     {
         String ret;
         
-        ret = super.toHtml ();
+        ret = super.toHtml (true); // need TagNode.toHtml(boolean)
         ret = ret.substring (1, ret.length () - 1);
         
         return (ret);

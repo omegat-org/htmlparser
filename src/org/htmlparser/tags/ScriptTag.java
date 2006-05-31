@@ -141,9 +141,11 @@ public class ScriptTag extends CompositeTag
 
     /**
      * Places the script contents into the provided buffer.
+     * @param verbatim If <code>true</code> return as close to the original
+     * page text as possible.
      * @param sb The buffer to add the script to.
      */
-    protected void putChildrenInto (StringBuffer sb)
+    protected void putChildrenInto (StringBuffer sb, boolean verbatim)
     {
         Node node;
 
@@ -154,8 +156,8 @@ public class ScriptTag extends CompositeTag
             {
                 node = e.nextNode ();
                 // eliminate virtual tags
-    //            if (!(node.getStartPosition () == node.getEndPosition ()))
-                    sb.append (node.toHtml ());
+                if (!verbatim || !(node.getStartPosition () == node.getEndPosition ()))
+                    sb.append (node.toHtml (verbatim));
             }
     }
 

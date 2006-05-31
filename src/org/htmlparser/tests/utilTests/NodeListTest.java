@@ -122,12 +122,17 @@ public class NodeListTest extends ParserTestCase {
 
     }
 
-    private Node createHTMLNodeObject() {
+    private Node createHTMLNodeObject ()
+    {
         Node node = new AbstractNode(null,10,20) {
             public void accept(NodeVisitor visitor) {
             }
 
             public String toHtml() {
+                return null;
+            }
+
+            public String toHtml(boolean verbatim) {
                 return null;
             }
 

@@ -158,16 +158,30 @@ public class NodeList implements Serializable
     
     /**
      * Convert this nodelist into the equivalent HTML.
+     * @param verbatim If <code>true</code> return as close to the original
+     * page text as possible.
+     * @return The contents of the list as HTML text.
+     */
+    public String toHtml (boolean verbatim)
+    {
+        StringBuffer ret;
+        
+        ret = new StringBuffer ();
+        for (int i = 0; i < size; i++)
+            ret.append (nodeData[i].toHtml (verbatim));
+
+        return (ret.toString ());
+    }
+
+    /**
+     * Convert this nodelist into the equivalent HTML.
      * @return The contents of the list as HTML text.
      */
     public String toHtml ()
     {
-        StringBuffer buff = new StringBuffer ();
-        for (int i=0;i<size;i++)
-            buff.append (nodeData[i].toHtml ());
-        return buff.toString ();
+        return (toHtml (false));
     }
-    
+
     /**
      * Remove the node at index.
      * @param index The index of the node to remove.

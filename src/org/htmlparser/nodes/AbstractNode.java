@@ -116,14 +116,33 @@ public abstract class AbstractNode implements Node, Serializable
     public abstract String toPlainTextString ();
 
     /**
-     * Return the HTML that generated this node.
-     * This method will make it easier when using html parser to reproduce html
-     * pages (with or without modifications).
+     * Return the HTML for this node.
+     * This should be the sequence of characters that were encountered by
+     * the parser that caused this node to be created. Where this breaks down is
+     * where broken nodes (tags and remarks) have been encountered and fixed.
      * Applications reproducing html can use this method on nodes which are to
-     * be used or transferred as they were recieved, with the original html.
-     * @return The HTML code for this node.
+     * be used or transferred as they were received or created.
+     * @return The sequence of characters that would cause this node
+     * to be returned by the parser or lexer.
      */
-    public abstract String toHtml ();
+    public String toHtml ()
+    {
+        return (toHtml (false));
+    }
+
+    /**
+     * Return the HTML for this node.
+     * This should be the exact sequence of characters that were encountered by
+     * the parser that caused this node to be created. Where this breaks down is
+     * where broken nodes (tags and remarks) have been encountered and fixed.
+     * Applications reproducing html can use this method on nodes which are to
+     * be used or transferred as they were received or created.
+     * @param verbatim If <code>true</code> return as close to the original
+     * page text as possible.
+     * @return The (exact) sequence of characters that would cause this node
+     * to be returned by the parser or lexer.
+     */
+    public abstract String toHtml (boolean verbatim);
 
     /**
      * Return a string representation of the node.

@@ -659,10 +659,12 @@ public class TagNode
     /**
      * Render the tag as HTML.
      * A call to a tag's <code>toHtml()</code> method will render it in HTML.
+     * @param verbatim If <code>true</code> return as close to the original
+     * page text as possible.
      * @return The tag as an HTML fragment.
      * @see org.htmlparser.Node#toHtml()
      */
-    public String toHtml ()
+    public String toHtml (boolean verbatim)
     {
         int length;
         int size;
