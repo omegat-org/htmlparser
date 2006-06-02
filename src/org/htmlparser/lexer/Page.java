@@ -39,6 +39,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 import org.htmlparser.http.ConnectionManager;
@@ -563,7 +564,7 @@ public class Page
                 && (-1 != contentEncoding.indexOf ("deflate")))
             {
                 stream = new Stream (new InflaterInputStream (
-                    getConnection ().getInputStream ()));
+                    getConnection ().getInputStream (), new Inflater (true)));
             }
             else
             {
