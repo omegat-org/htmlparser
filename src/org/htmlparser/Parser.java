@@ -324,7 +324,7 @@ public class Parser
      * @param resource Either HTML, a URL or a filename (autodetects).
      * @throws ParserException If the resourceLocn argument does not resolve
      * to a valid page or file.
-     * @see #Parser(string,ParserFeedback)
+     * @see #Parser(String,ParserFeedback)
      */
     public Parser (String resource) throws ParserException
     {

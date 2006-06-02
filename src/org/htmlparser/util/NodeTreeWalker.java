@@ -77,7 +77,7 @@ public class NodeTreeWalker implements NodeIterator
     
     /**
      * Creates a new instance of NodeTreeWalker using depth-first tree traversal, without limits on how deep it may traverse.
-     * @param root Node The Node to set as the root of the tree.
+     * @param rootNode Node The Node to set as the root of the tree.
      * @throws NullPointerException if root Node is null.
      */
     public NodeTreeWalker(Node rootNode)

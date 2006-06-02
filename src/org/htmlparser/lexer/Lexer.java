@@ -97,7 +97,7 @@ public class Lexer
      * or --!$gt;, i.e. more than two dashes. If <code>false</code>,
      * a more lax (and closer to typical browser handling) remark parsing
      * is used.
-     * Default <code>{@value}</code>.
+     * Default <code>true</code>.
      */
     public static boolean STRICT_REMARKS = true;
 
