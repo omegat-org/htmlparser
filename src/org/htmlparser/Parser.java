@@ -229,6 +229,7 @@ public class Parser
      * be reported by {@link #getEncoding}. If charset is <code>null</code>
      * the default character set is used.
      * @return A parser with the <code>html</code> string as input.
+     * @exception IllegalArgumentException if <code>html</code> is <code>null</code>.
      */
     public static Parser createParser (String html, String charset)
     {
@@ -270,8 +271,6 @@ public class Parser
     public Parser (Lexer lexer, ParserFeedback fb)
     {
         setFeedback (fb);
-        if (null == lexer)
-            throw new IllegalArgumentException ("lexer cannot be null");
         setLexer (lexer);
         setNodeFactory (new PrototypicalNodeFactory ());
     }
@@ -314,29 +313,8 @@ public class Parser
         throws
             ParserException
     {
-        int length;
-        boolean html;
-        char ch;
-
-        if (null == resource)
-            throw new IllegalArgumentException ("resource cannot be null");
         setFeedback (feedback);
-        length = resource.length ();
-        html = false;
-        for (int i = 0; i < length; i++)
-        {
-            ch = resource.charAt (i);
-            if (!Character.isWhitespace (ch))
-            {
-                if ('<' == ch)
-                    html = true;
-                break;
-            }
-        }
-        if (html)
-            setLexer (new Lexer (new Page (resource)));
-        else
-            setLexer (new Lexer (getConnectionManager ().openConnection (resource)));
+        setResource (resource);
         setNodeFactory (new PrototypicalNodeFactory ());
     }
 
@@ -387,6 +365,40 @@ public class Parser
     //
 
     /**
+     * Set the html, a url, or a file.
+     * @param resource The resource to use.
+     * @exception IllegalArgumentException if <code>resource</code> is <code>null</code>.
+     * @exception ParserException if a problem occurs in connecting.
+     */
+    public void setResource (String resource)
+        throws
+            ParserException
+    {
+        int length;
+        boolean html;
+        char ch;
+
+        if (null == resource)
+            throw new IllegalArgumentException ("resource cannot be null");
+        length = resource.length ();
+        html = false;
+        for (int i = 0; i < length; i++)
+        {
+            ch = resource.charAt (i);
+            if (!Character.isWhitespace (ch))
+            {
+                if ('<' == ch)
+                    html = true;
+                break;
+            }
+        }
+        if (html)
+            setLexer (new Lexer (new Page (resource)));
+        else
+            setLexer (new Lexer (getConnectionManager ().openConnection (resource)));
+    }
+
+    /**
      * Set the connection for this parser.
      * This method creates a new <code>Lexer</code> reading from the connection.
      * @param connection A fully conditioned connection. The connect()
@@ -396,6 +408,8 @@ public class Parser
      * lexer.
      * @see #setLexer
      * @see #getConnection
+     * @exception IllegalArgumentException if <code>connection</code> is <code>null</code>.
+     * @exception ParserException if a problem occurs in connecting.
      */
     public void setConnection (URLConnection connection)
         throws
@@ -424,6 +438,7 @@ public class Parser
      * @param url The new URL for the parser.
      * @throws ParserException If the url is invalid or creation of the
      * underlying Lexer cannot be performed.
+     * @exception ParserException if a problem occurs in connecting.
      * @see #getURL
      */
     public void setURL (String url)
@@ -480,32 +495,32 @@ public class Parser
      * The current NodeFactory is transferred to (set on) the given lexer,
      * since the lexer owns the node factory object.
      * It does not adjust the <code>feedback</code> object.
-     * Trying to set the lexer to <code>null</code> is a no-op.
      * @param lexer The lexer object to use.
      * @see #setNodeFactory
      * @see #getLexer
+     * @exception IllegalArgumentException if <code>lexer</code> is <code>null</code>.
      */
     public void setLexer (Lexer lexer)
     {
         NodeFactory factory;
         String type;
 
-        if (null != lexer)
-        {   // move a node factory that's been set to the new lexer
-            factory = null;
-            if (null != getLexer ())
-                factory = getLexer ().getNodeFactory ();
-            if (null != factory)
-                lexer.setNodeFactory (factory);
-            mLexer = lexer;
-            // warn about content that's not likely text
-            type = mLexer.getPage ().getContentType ();
-            if (type != null && !type.startsWith ("text"))
-                getFeedback ().warning (
-                    "URL "
-                    + mLexer.getPage ().getUrl ()
-                    + " does not contain text");
-        }
+        if (null == lexer)
+            throw new IllegalArgumentException ("lexer cannot be null");
+        // move a node factory that's been set to the new lexer
+        factory = null;
+        if (null != getLexer ())
+            factory = getLexer ().getNodeFactory ();
+        if (null != factory)
+            lexer.setNodeFactory (factory);
+        mLexer = lexer;
+        // warn about content that's not likely text
+        type = mLexer.getPage ().getContentType ();
+        if (type != null && !type.startsWith ("text"))
+            getFeedback ().warning (
+                "URL "
+                + mLexer.getPage ().getUrl ()
+                + " does not contain text");
     }
 
     /**
@@ -532,6 +547,7 @@ public class Parser
      * Set the current node factory.
      * @param factory The new node factory for the current lexer.
      * @see #getNodeFactory
+     * @exception IllegalArgumentException if <code>factory</code> is <code>null</code>.
      */
     public void setNodeFactory (NodeFactory factory)
     {
@@ -719,6 +735,7 @@ public class Parser
      * @param inputHTML the input HTML that is to be parsed.
      * @throws ParserException If a error occurs in setting up the
      * underlying Lexer.
+     * @exception IllegalArgumentException if <code>inputHTML</code> is <code>null</code>.
      */
     public void setInputHTML (String inputHTML)
         throws
@@ -837,17 +854,19 @@ public class Parser
         else
             try
             {
+                parser = new Parser ();
                 if (1 < args.length)
                     filter = new TagNameFilter (args[1]);
                 else
-                    filter = null;
-                parser = new Parser (args[0]);
-                if (1 < args.length)
                 {
+                    filter = null;
                     // for a simple dump, use more verbose settings
                     parser.setFeedback (Parser.STDOUT);
                     getConnectionManager ().setMonitor (parser);
                 }
+                getConnectionManager ().setRedirectionProcessingEnabled (true);
+                getConnectionManager ().setCookieProcessingEnabled (true);
+                parser.setResource (args[0]);
                 System.out.println (parser.parse (filter));
             }
             catch (ParserException e)

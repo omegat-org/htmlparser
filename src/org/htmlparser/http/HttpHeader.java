@@ -111,18 +111,24 @@ public class HttpHeader
             if (-1 != code)
             {
                 message = conn.getResponseMessage ();
-                buffer.append ("HTTP/1.1 ");
-                buffer.append (code);
-                buffer.append (" ");
-                buffer.append (message);
-                buffer.append ("\n");
                 for (int i = 0; null != (value = conn.getHeaderField (i)); i++)
                 {
                     key = conn.getHeaderFieldKey (i);
-                    if (null != key)
+                    if ((null == key) && (0 == i))
                     {
-                        buffer.append (key);
-                        buffer.append (": ");
+                        buffer.append ("HTTP/1.1 ");
+                        buffer.append (code);
+                        buffer.append (" ");
+                        buffer.append (message);
+                        buffer.append ("\n");
+                    }
+                    else
+                    {
+                        if (null != key)
+                        {
+                            buffer.append (key);
+                            buffer.append (": ");
+                        }
                         buffer.append (value);
                         buffer.append ("\n");
                     }

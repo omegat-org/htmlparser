@@ -142,6 +142,11 @@ public class ConnectionManager
     protected ConnectionMonitor mMonitor;
 
     /**
+     * Flag determining if redirection processing is being handled manually.
+     */
+    protected boolean mRedirectionProcessingEnabled;
+
+    /**
      * Cookie expiry date format for parsing.
      */
     static protected SimpleDateFormat mFormat =
@@ -170,6 +175,7 @@ public class ConnectionManager
         mPassword = null;
         mCookieJar = null;
         mMonitor = null;
+        mRedirectionProcessingEnabled = false;
     }
 
     //
@@ -487,6 +493,50 @@ public class ConnectionManager
     }
 
     /**
+     * Predicate to determine if url redirection processing is currently enabled.
+     * @return <code>true</code> if redirection is being processed manually.
+     * @see #setRedirectionProcessingEnabled
+     */
+    public boolean getRedirectionProcessingEnabled ()
+    {
+        return (mRedirectionProcessingEnabled);
+    }
+
+    /**
+     * Enables or disables manual redirection handling.
+     * Normally the <code>HttpURLConnection</code> follows redirections
+     * (HTTP response code 3xx) automatically if the
+     * <code>followRedirects</code> property is <code>true</code>.
+     * With this flag set the <code>ConnectionMonitor</code> performs the
+     * redirection processing; The advantage being that cookies (if enabled)
+     * are passed in subsequent requests.
+     * @param enabled The new state of the redirectionProcessingEnabled property.
+     */
+    public void setRedirectionProcessingEnabled (boolean enabled)
+    {
+        mRedirectionProcessingEnabled = enabled;
+    }
+
+    /**
+     * Get the Location field if any.
+     * @param http The connection to get the location from.
+     */
+    protected String getLocation (HttpURLConnection http)
+    {
+        String key;
+        String value;
+        String ret;
+
+        ret = null;
+
+        for (int i = 0; ((null == ret) && (null != (value = http.getHeaderField (i)))); i++)
+            if ((null != (key = http.getHeaderFieldKey (i))) && (key.equalsIgnoreCase ("Location")))
+                ret = value;
+
+        return (ret);
+    }
+
+    /**
      * Opens a connection using the given url.
      * @param url The url to open.
      * @return The connection.
@@ -496,6 +546,8 @@ public class ConnectionManager
         throws
             ParserException
     {
+        boolean repeat;
+        int repeated;
         Properties sysprops;
         Hashtable properties;
         Enumeration enumeration;
@@ -509,131 +561,153 @@ public class ConnectionManager
         HttpURLConnection http;
         String auth;
         String encoded;
+        int code;
+        String uri;
         URLConnection ret;
 
-        try
+        repeated = 0;
+        do
         {
+            repeat = false;
             try
             {
-                // set up for proxy
-                if ((null != getProxyHost ()) && (0 != getProxyPort ()))
-                {
-                    sysprops = System.getProperties ();
-                    set = (String)sysprops.put ("proxySet", "true");
-                    host = (String)sysprops.put ("proxyHost", getProxyHost ());
-                    port = (String)sysprops.put ("proxyPort",
-                        Integer.toString (getProxyPort ()));
-                    // see http://java.sun.com/j2se/1.4.2/docs/guide/net/properties.html
-                    host2 = (String)sysprops.put ("http.proxyHost",
-                        getProxyHost ());
-                    port2 = (String)sysprops.put ("http.proxyPort",
-                        Integer.toString (getProxyPort ()));
-                    System.setProperties (sysprops);
-                    
-                }
-    
-                // open the connection... but don't connect yet
-                ret = url.openConnection ();
-                if (ret instanceof HttpURLConnection)
-                {
-                    http = (HttpURLConnection)ret;
-                    
-                    // set the fixed request properties
-                    properties = getRequestProperties ();
-                    if (null != properties)
-                        for (enumeration = properties.keys ();
-                                enumeration.hasMoreElements ();)
-                        {
-                            key = (String)enumeration.nextElement ();
-                            value = (String)properties.get (key);
-                            ret.setRequestProperty (key, value);
-                        }
-
-                    // set the proxy name and password
-                    if ((null != getProxyUser ())
-                        && (null != getProxyPassword ()))
-                    {
-                        auth = getProxyUser () + ":" + getProxyPassword ();
-                        encoded = encode (auth.getBytes("ISO-8859-1"));
-                        ret.setRequestProperty ("Proxy-Authorization", encoded);
-                    }
-                    
-                    // set the URL name and password
-                    if ((null != getUser ()) && (null != getPassword ()))
-                    {
-                        auth = getUser () + ":" + getPassword ();
-                        encoded = encode (auth.getBytes("ISO-8859-1"));
-                        ret.setRequestProperty ("Authorization",
-                            "Basic " + encoded);
-                    }
-    
-                    // set the cookies based on the url
-                    addCookies (ret);
-
-                    if (null != getMonitor ())
-                        getMonitor ().preConnect (http);
-                }
-                else
-                    http = null;
-
                 try
                 {
-                    ret.connect ();
-                    
-                    if (null != http)
+                    // set up for proxy
+                    if ((null != getProxyHost ()) && (0 != getProxyPort ()))
                     {
+                        sysprops = System.getProperties ();
+                        set = (String)sysprops.put ("proxySet", "true");
+                        host = (String)sysprops.put ("proxyHost", getProxyHost ());
+                        port = (String)sysprops.put ("proxyPort",
+                            Integer.toString (getProxyPort ()));
+                        // see http://java.sun.com/j2se/1.4.2/docs/guide/net/properties.html
+                        host2 = (String)sysprops.put ("http.proxyHost",
+                            getProxyHost ());
+                        port2 = (String)sysprops.put ("http.proxyPort",
+                            Integer.toString (getProxyPort ()));
+                        System.setProperties (sysprops);
+
+                    }
+
+                    // open the connection... but don't connect yet
+                    ret = url.openConnection ();
+                    if (ret instanceof HttpURLConnection)
+                    {
+                        http = (HttpURLConnection)ret;
+
+                        if (getRedirectionProcessingEnabled ())
+                            http.setInstanceFollowRedirects (false);
+
+                        // set the fixed request properties
+                        properties = getRequestProperties ();
+                        if (null != properties)
+                            for (enumeration = properties.keys ();
+                                    enumeration.hasMoreElements ();)
+                            {
+                                key = (String)enumeration.nextElement ();
+                                value = (String)properties.get (key);
+                                ret.setRequestProperty (key, value);
+                            }
+
+                        // set the proxy name and password
+                        if ((null != getProxyUser ())
+                            && (null != getProxyPassword ()))
+                        {
+                            auth = getProxyUser () + ":" + getProxyPassword ();
+                            encoded = encode (auth.getBytes("ISO-8859-1"));
+                            ret.setRequestProperty ("Proxy-Authorization", encoded);
+                        }
+
+                        // set the URL name and password
+                        if ((null != getUser ()) && (null != getPassword ()))
+                        {
+                            auth = getUser () + ":" + getPassword ();
+                            encoded = encode (auth.getBytes("ISO-8859-1"));
+                            ret.setRequestProperty ("Authorization",
+                                "Basic " + encoded);
+                        }
+
+                        if (getCookieProcessingEnabled ())
+                            // set the cookies based on the url
+                            addCookies (ret);
+
                         if (null != getMonitor ())
-                            getMonitor ().postConnect (http);
-    
-                        parseCookies (ret);
+                            getMonitor ().preConnect (http);
+                    }
+                    else
+                        http = null;
+
+                    try
+                    {
+                        ret.connect ();
+
+                        if (null != http)
+                        {
+                            if (null != getMonitor ())
+                                getMonitor ().postConnect (http);
+
+                            if (getCookieProcessingEnabled ())
+                                parseCookies (ret);
+
+                            code = http.getResponseCode ();
+                            if ((3 == (code / 100)) && (repeated < 20))
+                                if (null != (uri = getLocation (http)))
+                                {
+                                    url = new URL (uri);
+                                    repeat = true;
+                                    repeated++;
+                                }
+                        }
+                    }
+                    catch (UnknownHostException uhe)
+                    {
+                        int message = (int)(Math.random () * FOUR_OH_FOUR.length);
+                        throw new ParserException (FOUR_OH_FOUR[message], uhe);
+                    }
+                    catch (IOException ioe)
+                    {
+                        throw new ParserException (ioe.getMessage (), ioe);
                     }
                 }
-                catch (UnknownHostException uhe)
+                finally
                 {
-                    int message = (int)(Math.random () * FOUR_OH_FOUR.length);
-                    throw new ParserException (FOUR_OH_FOUR[message], uhe);
-                }
-                catch (IOException ioe)
-                {
-                    throw new ParserException (ioe.getMessage (), ioe);
+                    if ((null != getProxyHost ()) && (0 != getProxyPort ()))
+                    {
+                        sysprops = System.getProperties ();
+                        if (null != set)
+                            sysprops.put ("proxySet", set);
+                        else
+                            sysprops.remove ("proxySet");
+                        if (null != host)
+                            sysprops.put ("proxyHost", host);
+                        else
+                            sysprops.remove ("proxyHost");
+                        if (null != port)
+                            sysprops.put ("proxyPort", port);
+                        else
+                            sysprops.remove ("proxyPort");
+                        if (null != host2)
+                            sysprops.put ("http.proxyHost", host2);
+                        else
+                            sysprops.remove ("http.proxyHost");
+                        if (null != port2)
+                            sysprops.put ("http.proxyPort", port2);
+                        else
+                            sysprops.remove ("http.proxyPort");
+                        System.setProperties (sysprops);
+                    }
                 }
             }
-            finally
+            catch (IOException ioe)
             {
-                if ((null != getProxyHost ()) && (0 != getProxyPort ()))
-                {
-                    sysprops = System.getProperties ();
-                    if (null != set)
-                        sysprops.put ("proxySet", set);
-                    else
-                        sysprops.remove ("proxySet");
-                    if (null != host)
-                        sysprops.put ("proxyHost", host);
-                    else
-                        sysprops.remove ("proxyHost");
-                    if (null != port)
-                        sysprops.put ("proxyPort", port);
-                    else
-                        sysprops.remove ("proxyPort");
-                    if (null != host2)
-                        sysprops.put ("http.proxyHost", host2);
-                    else
-                        sysprops.remove ("http.proxyHost");
-                    if (null != port2)
-                        sysprops.put ("http.proxyPort", port2);
-                    else
-                        sysprops.remove ("http.proxyPort");
-                    System.setProperties (sysprops);
-                }
+                String msg = "Error in opening a connection to "
+                    + url.toExternalForm ();
+                ParserException ex = new ParserException (msg, ioe);
+                throw ex;
             }
         }
-        catch (IOException ioe)
-        {
-            String msg = "Error in opening a connection to "
-                + url.toExternalForm ();
-            ParserException ex = new ParserException (msg, ioe);
-            throw ex;
-        }
+        while (repeat);
 
         return (ret);
     }
