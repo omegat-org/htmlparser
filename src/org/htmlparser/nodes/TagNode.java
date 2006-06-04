@@ -39,7 +39,6 @@ import org.htmlparser.lexer.Page;
 import org.htmlparser.scanners.Scanner;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.util.ParserException;
-import org.htmlparser.util.SpecialHashtable;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
@@ -173,14 +172,9 @@ public class TagNode
 
         ret = null;
 
-        if (name.equalsIgnoreCase (SpecialHashtable.TAGNAME))
-            ret = ((Attribute)getAttributesEx ().elementAt (0)).getName ();
-        else
-        {
-            attribute = getAttributeEx (name);
-            if (null != attribute)
-                ret = attribute.getValue ();
-        }
+        attribute = getAttributeEx (name);
+        if (null != attribute)
+            ret = attribute.getValue ();
 
         return (ret);
     }
@@ -382,55 +376,6 @@ public class TagNode
     }
 
     /**
-     * Gets the attributes in the tag.
-     * This is not the preferred  method to get attributes, see {@link
-     * #getAttributesEx getAttributesEx} which returns a list of {@link
-     * Attribute} objects, which offer more information than the simple
-     * <code>String</code> objects available from this <code>Hashtable</code>.
-     * @return Returns a list of name/value pairs representing the attributes.
-     * These are not in order, the keys (names) are converted to uppercase and the values
-     * are not quoted, even if they need to be. The table <em>will</em> return
-     * <code>null</code> if there was no value for an attribute (no equals
-     * sign or nothing to the right of the equals sign). A special entry with
-     * a key of SpecialHashtable.TAGNAME ("$<TAGNAME>$") holds the tag name.
-     * The conversion to uppercase is performed with an ENGLISH locale.
-     */
-    public Hashtable getAttributes ()
-    {
-        Vector attributes;
-        Attribute attribute;
-        String value;
-        Hashtable ret;
-
-        ret = new SpecialHashtable ();
-        attributes = getAttributesEx ();
-        if (0 < attributes.size ())
-        {
-            // special handling for the node name
-            attribute = (Attribute)attributes.elementAt (0);
-            ret.put (SpecialHashtable.TAGNAME, attribute.getName ().toUpperCase (Locale.ENGLISH));
-            // the rest
-            for (int i = 1; i < attributes.size (); i++)
-            {
-                attribute = (Attribute)attributes.elementAt (i);
-                if (!attribute.isWhitespace ())
-                {
-                    value = attribute.getValue ();
-                    if (attribute.isEmpty ())
-                        value = SpecialHashtable.NOTHING;
-                    if (null == value)
-                        value = SpecialHashtable.NULLVALUE;
-                    ret.put (attribute.getName ().toUpperCase (Locale.ENGLISH), value);
-                }
-            }
-        }
-        else
-            ret.put (SpecialHashtable.TAGNAME, "");
-
-        return (ret);
-    }
-
-    /**
      * Return the name of this tag.
      * <p>
      * <em>
@@ -524,54 +469,6 @@ public class TagNode
         ret = ret.substring (1, ret.length () - 1);
         
         return (ret);
-    }
-
-    /**
-     * Sets the attributes.
-     * A special entry with a key of SpecialHashtable.TAGNAME ("$<TAGNAME>$")
-     * sets the tag name.
-     * @param attributes The attribute collection to set.
-     */
-    public void setAttributes (Hashtable attributes)
-    {
-        Vector att;
-        String key;
-        String value;
-        char quote;
-        Attribute attribute;
-
-        att = new Vector ();
-        for (Enumeration e = attributes.keys (); e.hasMoreElements (); )
-        {
-            key = (String)e.nextElement ();
-            value = (String)attributes.get (key);
-            if (value.startsWith ("'") && value.endsWith ("'") && (2 <= value.length ()))
-            {
-                quote = '\'';
-                value = value.substring (1, value.length () - 1);
-            }
-            else if (value.startsWith ("\"") && value.endsWith ("\"") && (2 <= value.length ()))
-            {
-                quote = '"';
-                value = value.substring (1, value.length () - 1);
-            }
-            else
-                quote = (char)0;
-            if (key.equals (SpecialHashtable.TAGNAME))
-            {
-                attribute = new Attribute (value, null, quote);
-                att.insertElementAt (attribute, 0);
-            }
-            else
-            {
-                // add whitespace between attributes
-                attribute = new Attribute (" ");
-                att.addElement (attribute);
-                attribute = new Attribute (key, value, quote);
-                att.addElement (attribute);
-            }
-        }
-        this.mAttributes = att;
     }
 
     /**
@@ -738,16 +635,6 @@ public class TagNode
     public boolean breaksFlow ()
     {
         return (breakTags.containsKey (getTagName ()));
-    }
-
-    /**
-     * Returns table of attributes in the tag
-     * @return Hashtable
-     * @deprecated This method is deprecated. Use getAttributes() instead.
-     */
-    public Hashtable getParsed ()
-    {
-        return getAttributes ();
     }
 
     /**

@@ -770,27 +770,6 @@ public class Parser
         return (ret);
     }
 
-    /**
-     * Convenience method to extract all nodes of a given class type.
-     * Equivalent to
-     * <code>extractAllNodesThatMatch (new NodeClassFilter (nodeType))</code>.
-     * @param nodeType The class of the nodes to collect.
-     * @throws ParserException If a parse error occurs.
-     * @return A list of nodes which have the class specified.
-     * @deprecated Use extractAllNodesThatMatch (new NodeClassFilter (cls)).
-     * @see #extractAllNodesThatAre
-     */
-    public Node [] extractAllNodesThatAre (Class nodeType)
-        throws
-            ParserException
-    {
-        NodeList ret;
-
-        ret = extractAllNodesThatMatch (new NodeClassFilter (nodeType));
-
-        return (ret.toNodeArray ());
-    }
-
     //
     // ConnectionMonitor interface
     //

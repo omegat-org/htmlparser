@@ -108,35 +108,6 @@ public interface Tag extends Node
     void setAttributesEx (Vector attribs);
 
     /**
-     * Gets the attributes in the tag.
-     * This is not the preferred  method to get attributes, see {@link
-     * #getAttributesEx getAttributesEx} which returns a list of {@link
-     * Attribute} objects, which offer more information than the simple
-     * <code>String</code> objects available from this <code>Hashtable</code>.
-     * @return Returns a list of name/value pairs representing the attributes.
-     * These are not in order, the keys (names) are converted to uppercase
-     * and the values are not quoted, even if they need to be.
-     * The table <em>will</em> return <code>null</code> if there was no value
-     * for an attribute (either no equals sign or nothing to the right of the
-     * equals sign). A special entry with a key of
-     * SpecialHashtable.TAGNAME ("$&lt;TAGNAME&gt;$") holds the tag name.
-     * The conversion to uppercase is performed with an ENGLISH locale.
-     * @deprecated Use getAttributesEx() instead.
-     * @see #setAttributes
-     */
-    Hashtable getAttributes ();
-
-    /**
-     * Sets the attributes.
-     * A special entry with a key of SpecialHashtable.TAGNAME ("$&lt;TAGNAME&gt;$")
-     * sets the tag name.
-     * @param attributes The attribute collection to set.
-     * @deprecated Use setAttributesEx() instead.
-     * @see #getAttributes
-     */
-    void setAttributes (Hashtable attributes);
-
-    /**
      * Return the name of this tag.
      * <p>
      * <em>

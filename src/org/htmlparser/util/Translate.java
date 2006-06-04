@@ -726,38 +726,6 @@ public class Translate
     }
 
     /**
-     * Convert a reference to a unicode character.
-     * Convert a single numeric character reference or character entity reference
-     * to a unicode character.
-     * @param string The string to convert. Of the form &xxxx; or &amp;#xxxx; with
-     * or without the leading ampersand or trailing semi-colon.
-     * @param start The starting pooint in the string to look for a character reference.
-     * @param end The ending point in the string to stop looking for a character reference.
-     * @return The converted character or ' ' (zero) if the string is an
-     * invalid reference.
-     * @deprecated Use {@link #decode(String) decode}.
-     */
-    public static char convertToChar (String string, int start, int end)
-    {
-        return (decode (string.substring (start, end)).charAt (0));
-    }
-
-    /**
-     * Convert a reference to a unicode character.
-     * Convert a single numeric character reference or character entity reference
-     * to a unicode character.
-     * @param string The string to convert. Of the form &xxxx; or &amp;#xxxx; with
-     * or without the leading ampersand or trailing semi-colon.
-     * @return The converted character or ' ' (zero) if the string is an
-     * invalid reference.
-     * @deprecated Use {@link #decode(String) decode}.
-     */
-    public static char convertToChar (String string)
-    {
-        return (decode (string).charAt (0));
-    }
-
-    /**
      * Decode a string containing references.
      * Change all numeric character reference and character entity references
      * to unicode characters.
@@ -1025,19 +993,6 @@ public class Translate
         {
             out.flush ();
         }
-    }
-
-    /**
-     * Convert a character to a numeric character reference.
-     * Convert a unicode character to a numeric character reference of
-     * the form &amp;#xxxx;.
-     * @param character The character to convert.
-     * @return The converted character.
-     * @deprecated Use {@link #encode(int) encode}.
-     */
-    public static String convertToString (int character)
-    {
-        return (encode (character));
     }
 
     /**

@@ -285,7 +285,6 @@ Update the Web Site
       <include name="org/htmlparser/util/SimpleNodeIterator.java"/>
       <include name="org/htmlparser/util/sort/**/*.java"/>
       <include name="org/htmlparser/visitors/NodeVisitor.java"/>
-      <include name="org/htmlparser/parserHelper/SpecialHashtable.class"/>
     </javac>
   </target>
 
@@ -325,7 +324,6 @@ Update the Web Site
       <include name="org/htmlparser/util/NodeList*.class"/>
       <include name="org/htmlparser/util/NodeIterator.class"/>
       <include name="org/htmlparser/util/SimpleNodeIterator.class"/>
-      <include name="org/htmlparser/util/SpecialHashtable.class"/>
       <include name="org/htmlparser/util/EncodingChangeException.class"/>
       <include name="org/htmlparser/util/sort/**/*.class"/>
       <include name="org/htmlparser/visitors/NodeVisitor.class"/>

@@ -77,7 +77,6 @@ public class BodyTagTest extends ParserTestCase {
     {
         NodeIterator iterator;
         Node node;
-        Hashtable attributes;
 
         try
         {
@@ -90,9 +89,8 @@ public class BodyTagTest extends ParserTestCase {
                 node = iterator.nextNode ();
                 if (node instanceof BodyTag)
                 {
-                    attributes = ((BodyTag)node).getAttributes ();
-                    assertTrue ("no style attribute", attributes.containsKey ("STYLE"));
-                    assertTrue ("no title attribute", attributes.containsKey ("TITLE"));
+                    assertNotNull ("no style attribute", ((BodyTag)node).getAttribute ("STYLE"));
+                    assertNotNull ("no title attribute", ((BodyTag)node).getAttribute ("TITLE"));
                 }
                 else
                     fail ("not a body tag");

@@ -30,6 +30,7 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Tag;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tests.ParserTestCase;
@@ -363,7 +364,7 @@ public class TagTests extends ParserTestCase {
         public void run() {
             try {
                 mResult = false;
-                Node linkTag [] = mParser.extractAllNodesThatAre(LinkTag.class);
+                Node linkTag [] = mParser.extractAllNodesThatMatch (new NodeClassFilter (LinkTag.class)).toNodeArray ();
                 mLink1 = (LinkTag)linkTag[0];
                 mLink2 = (LinkTag)linkTag[1];
                 if (mId < mMax / 2) {

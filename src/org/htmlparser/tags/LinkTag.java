@@ -69,14 +69,14 @@ public class LinkTag extends CompositeTag
      * Constructor creates an LinkTag object, which basically stores the location
      * where the link points to, and the text it contains.
      * <p>
-     * In order to get the contents of the link tag, use the method linkData(),
+     * In order to get the contents of the link tag, use the method children(),
      * which returns an enumeration of nodes encapsulated within the link.
      * <p>
      * The following code will get all the images inside a link tag.
      * <pre>
      * Node node ;
      * ImageTag imageTag;
-     * for (Enumeration e=linkTag.linkData();e.hasMoreElements();) {
+     * for (Enumeration e=linkTag.children();e.hasMoreElements();) {
      *      node = (Node)e.nextElement();
      *      if (node instanceof ImageTag) {
      *          imageTag = (ImageTag)node;
@@ -275,9 +275,6 @@ public class LinkTag extends CompositeTag
             sb.append(getAccessKey ()+"\n");
         if (null != getChildren ())
         {
-            sb.append("  "+"LinkData\n");
-            sb.append("  "+"--------\n");
-
             Node node;
             int i = 0;
             for (SimpleNodeIterator e=children();e.hasMoreNodes();)
@@ -287,7 +284,6 @@ public class LinkTag extends CompositeTag
                 sb.append(node.toString()+"\n");
             }
         }
-        sb.append("  "+"*** END of LinkData ***\n");
         return sb.toString();
     }
 
@@ -299,15 +295,6 @@ public class LinkTag extends CompositeTag
     {
         mLink = link;
         setAttribute ("HREF", link);
-    }
-
-    /**
-     * This method returns an enumeration of data that it contains
-     * @return Enumeration
-     * @deprecated Use children() instead.
-     */
-    public SimpleNodeIterator linkData() {
-        return children();
     }
 
     /**

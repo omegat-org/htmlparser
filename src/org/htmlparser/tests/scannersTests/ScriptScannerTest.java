@@ -30,6 +30,7 @@ import java.util.Hashtable;
 
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.scanners.ScriptDecoder;
@@ -79,8 +80,7 @@ public class ScriptScannerTest extends ParserTestCase
         assertTrue("Node should be a script tag",node[0] instanceof ScriptTag);
         // Check the data in the applet tag
         ScriptTag scriptTag = (ScriptTag)node[0];
-        Hashtable table = scriptTag.getAttributes();
-        String srcExpected = (String)table.get("SRC");
+        String srcExpected = scriptTag.getAttribute ("SRC");;
         assertEquals("Expected SRC value",src,srcExpected);
     }
 
@@ -214,7 +214,7 @@ public class ScriptScannerTest extends ParserTestCase
                 "</html>"
             );
             Node scriptNodes [] =
-                parser.extractAllNodesThatAre(ScriptTag.class);
+                parser.extractAllNodesThatMatch (new NodeClassFilter (ScriptTag.class)).toNodeArray ();
             assertType(
                 "scriptnode",
                 ScriptTag.class,

@@ -29,6 +29,7 @@ package org.htmlparser.tests.tagTests;
 import org.htmlparser.Node;
 import org.htmlparser.PrototypicalNodeFactory;
 import org.htmlparser.Tag;
+import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TableTag;
@@ -69,7 +70,7 @@ public class ObjectCollectionTest extends ParserTestCase {
             "<SPAN>&#013;id: 6</SPAN>"
         );
         parser.setNodeFactory (new PrototypicalNodeFactory (new Span ()));
-        assertSpanContent(parser.extractAllNodesThatAre(Span.class));
+        assertSpanContent(parser.extractAllNodesThatMatch (new NodeClassFilter (Span.class)).toNodeArray ());
     }
 
     public void testOneLevelNesting() throws ParserException {

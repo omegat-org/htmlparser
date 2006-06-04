@@ -59,7 +59,6 @@ public class AllTests extends ParserTestCase
         suite.addTest (org.htmlparser.tests.tagTests.AllTests.suite ());
         suite.addTest (org.htmlparser.tests.visitorsTests.AllTests.suite ());
         suite.addTest (org.htmlparser.tests.parserHelperTests.AllTests.suite ());
-        suite.addTest (org.htmlparser.tests.nodeDecoratorTests.AllTests.suite ());
         suite.addTestSuite (org.htmlparser.tests.filterTests.FilterTest.class);
 
         return (suite);
