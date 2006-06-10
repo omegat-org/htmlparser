@@ -11,9 +11,110 @@
 *    http://www.red-bean.com/cvs2cl/changelogs.html                           *
 *                                                                             *
 * This file has been trimmed of changes prior to version 1.4. For access to   *
-* earlier change histories, please consult cvs.htmlparser.sorceforge.net.     *
+* earlier change histories, please consult htmlparser.cvs.sorceforge.net.     *
 *                                                                             *
 *******************************************************************************
+
+Release Build 1.6 - 20060610
+--------------------------------
+
+2006-06-10 10:39  derrickoswald
+
+	* docs/faq.html:
+
+	add faq to docs
+	
+2006-06-05 19:53  derrickoswald
+
+	* src/org/htmlparser/tests/InstanceofPerformanceTest.java:
+
+	Remove InstanceofPerformanceTest, no longer needed.
+	
+2006-06-04 15:17  derrickoswald
+
+	* src/org/htmlparser/tests/AllTests.java,
+	src/org/htmlparser/tests/ParserTest.java,
+	src/org/htmlparser/tests/tagTests/BodyTagTest.java,
+	src/org/htmlparser/tests/tagTests/FormTagTest.java,
+	src/org/htmlparser/tests/tagTests/LabelTagTest.java,
+	src/org/htmlparser/tests/tagTests/LinkTagTest.java,
+	src/org/htmlparser/tests/tagTests/ObjectCollectionTest.java,
+	build.xml, src/org/htmlparser/Parser.java,
+	src/org/htmlparser/StringNodeFactory.java,
+	src/org/htmlparser/Tag.java,
+	src/org/htmlparser/tests/lexerTests/TagTests.java,
+	src/org/htmlparser/tests/scannersTests/ScriptScannerTest.java,
+	src/org/htmlparser/util/LinkProcessor.java,
+	src/org/htmlparser/util/SpecialHashtable.java,
+	src/org/htmlparser/util/Translate.java,
+	src/org/htmlparser/nodes/TagNode.java,
+	src/org/htmlparser/tags/LinkTag.java:
+
+	Eliminate deprecated classes and methods.
+	Removed nodeDecorator package, StringNodeFactory, LinkProcesor, SpecialHashTable,
+	and methods for linkData, non-Ex Attributes and FindAllNodesThatAre.
+	
+2006-06-01 23:14  derrickoswald
+
+	* src/org/htmlparser/: Parser.java, lexer/Lexer.java,
+	util/NodeTreeWalker.java:
+
+	Fix Javadoc warnings.
+	
+2006-06-01 22:43  derrickoswald
+
+	* src/org/htmlparser/: http/ConnectionManager.java,
+	lexer/Page.java:
+
+	implement RFE #1394144 handle deflate encoding
+	InflaterInputStream needed an additional Inflater argument.
+	
+2006-06-01 21:48  derrickoswald
+
+	* src/org/htmlparser/: http/ConnectionManager.java,
+	http/HttpHeader.java, Parser.java:
+
+	implement RFE #1436082 Follow redirections with cookie processing
+	Use ConnectionManager.setRedirectionProcessingEnabled(true).
+	Probably only useful if combined with ConnectionManager.setCookieProcessingEnabled(true).
+	
+2006-05-30 22:10  derrickoswald
+
+	* src/org/htmlparser/: tests/utilTests/NodeListTest.java,
+	Node.java, nodes/AbstractNode.java, nodes/RemarkNode.java,
+	nodes/TagNode.java, nodes/TextNode.java, tags/CompositeTag.java,
+	tags/ScriptTag.java, util/NodeList.java:
+
+	implement task #93148 toHtml(boolean verbatim)
+	To avoid printing generated end tags use toHtml(true).
+	
+2006-05-29 23:11  derrickoswald
+
+	* src/org/htmlparser/Parser.java:
+
+	Update javadoc for new Parser constructor behaviour.
+	
+2006-05-29 22:53  derrickoswald
+
+	* src/org/htmlparser/Parser.java:
+
+	Allow passing HTML in the Parser constructor.
+	So now it allows HTML, a URL or a file name.
+	
+2006-05-29 21:30  derrickoswald
+
+	* src/org/htmlparser/http/ConnectionManager.java:
+
+	Handle bad cookie names.
+	Traps cookie name problems, but ignores any following cookies.
+	
+2006-05-29 21:07  derrickoswald
+
+	* src/org/htmlparser/: beans/StringBean.java,
+	tests/utilTests/BeanTest.java:
+
+	fix bug#1496863 StringBean collapse() adds extra whitespace
+	Keep collapsing state machine state as member variable.
 
 Integration Build 1.6 - 20060527
 --------------------------------

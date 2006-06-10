@@ -127,14 +127,14 @@ public class Parser
      * The type of version ({@value}).
      */
     public static final String
-    VERSION_TYPE = "Integration Build"
+    VERSION_TYPE = "Release Build"
     ;
 
     /**
      * The date of the version ({@value}).
      */
     public static final String
-    VERSION_DATE = "May 27, 2006"
+    VERSION_DATE = "Jun 10, 2006"
     ;
 
     // End of formatting

@@ -1,4 +1,4 @@
-HTMLParser Version 1.6 (Integration Build May 27, 2006)
+HTMLParser Version 1.6 (Release Build Jun 10, 2006)
 *********************************************
 
 Contents of the distribution
@@ -32,7 +32,10 @@ New Functionality
     Support has been added for commonly requested composite tags, P and H1-H6.
     Definition list tags (dl, dt, dd), are also now included in the standard
     set of tags recognized by the parser.
-    The node interface has been augmented with get first/last child and
+    The FilterBean now has a 'recursive' property to control descent through
+    children when applying filters.
+    The NodeList class is a little more standard now with a remove(node) method.
+    The Node interface has been augmented with get first/last child and
     get previous/next sibling methods to ease traversing the HTML document.
     The TextNode class has an added isWhiteSpace method that returns true
     when it contains no printable characters.
@@ -41,18 +44,21 @@ New Functionality
     An XorFilter has been added to round out our NOT, AND and OR filters,
     along with new constructors to OrFilter/AndFilter that take an array of
     NodeFilter's.
+    Deflate encoding is now handled correctly and there is now an option to
+    have the ConnectionManager follow redirections manually so that cookie
+    processing can occur between redirections.
+    There is a new override for toHtml() that avoids issuing generated end tags.
 
 Refactoring
 -----------
-    The FilterBean now has a 'recursive' property to control descent through
-    children when applying filters.
-    The NodeList class is a little more standard now with a remove(node) method.
     Some refactoring to allow the htmllexer jar file to be compiled by gcj.
     Moved non-JUnit test code to Request For Enhancement (RFE) as attachments,
     so all the code in the tests package should now compile.
+    Removed all deprecated classes and methods.
 
 Bug Fixes
 ---------
+#1496863 StringBean collapse() adds extra whitespace
 #1488951 RemarkNode.toPlainTextString() incorrect behaviour
 #1467712 Page#getCharset never works
 #1461473 Relative links starting with ?
@@ -69,7 +75,12 @@ Bug Fixes
 
 Patches
 -------
+#1436082 Follow redirections with cookie processing
 #1338534 Support get first/last child, previous/next sibling
+
+Requests For Enhancements
+------------
+#1394144 handle deflate encoding
 
 Changes since Version 1.4
 -------------------------
