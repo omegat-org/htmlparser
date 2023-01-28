@@ -157,26 +157,6 @@ Update the Web Site
     <delete file="${lib}/fit_distribution.zip"/>
   </target>
 
-  <target name="JDK_OK">
-      <condition property="JDK1.4">
-        <or>
-          <equals arg1="1.4" arg2="${ant.java.version}"/>
-          <equals arg1="1.5" arg2="${ant.java.version}"/>
-        </or>
-      </condition>
-      <condition property="JDK1.5">
-        <or>
-          <equals arg1="1.5" arg2="${ant.java.version}"/>
-        </or>
-      </condition>
-  </target>
-
-  <target name="JDK_Warning" unless="JDK_OK">
-    <echo message="***************************************************"/>
-    <echo message="*  WARNING: The detected JDK version is not 1.4!  *"/>
-    <echo message="***************************************************"/>
-  </target>
-  
   <target name="init" description="initialize version properties">
     <tstamp>
       <format property="TODAY" pattern="yyyyMMdd" locale="en"/>
@@ -371,7 +351,7 @@ Update the Web Site
   </target>
 
   <!-- Create the Thumbelina jar -->
-  <target name="thumbelina" depends="JDK_OK,jarlexer" description="create thumbelina.jar">
+  <target name="thumbelina" depends="jarlexer" description="create thumbelina.jar">
     <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
     <mkdir dir="${classes}"/>
@@ -391,7 +371,7 @@ Update the Web Site
   </target>
   
   <!-- Create the FilterBuilder jar -->
-  <target name="filterbuilder" depends="JDK_OK,jarparser" description="create filterbuilder.jar">
+  <target name="filterbuilder" depends="jarparser" description="create filterbuilder.jar">
     <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
     <mkdir dir="${classes}"/>
@@ -444,7 +424,7 @@ Update the Web Site
   </target>
 
   <!-- Create the javadoc for the project -->
-  <target name="javadoc" depends="JDK_OK,JDK_Warning,init" description="create JavaDoc (API) documentation">
+  <target name="javadoc" depends="init" description="create JavaDoc (API) documentation">
     <mkdir dir="${classes}"/>
     <javac srcdir="${resources}"
            classpath="${classes}" encoding="iso-8859-1"/>
@@ -488,7 +468,7 @@ Update the Web Site
   </target>
 
     <!-- Create the javadoc for the project -->
-  <target name="checkjavadoc" depends="JDK_OK,JDK_Warning,init" description="create JavaDoc (API) documentation">
+  <target name="checkjavadoc" depends="init" description="create JavaDoc (API) documentation">
     <mkdir dir="${classes}"/>
     <javac srcdir="${resources}"
            classpath="${classes}" encoding="iso-8859-1"/>
