@@ -367,11 +367,11 @@ Update the Web Site
   </target>
 
   <!-- Create the Thumbelina jar -->
-  <target name="thumbelina" depends="JDK_OK,jarlexer" description="create thumbelina.jar" if="JDK1.5">
+  <target name="thumbelina" depends="JDK_OK,jarlexer" description="create thumbelina.jar">
     <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
     <mkdir dir="${classes}"/>
-    <javac srcdir="${src}" destdir="${classes}" debug="on" classpath="${classes}:${lib}/htmllexer.jar" source="1.5">
+    <javac srcdir="${src}" destdir="${classes}" debug="on" classpath="${classes}:${lib}/htmlparser.jar" source="1.5">
       <include name="org/htmlparser/lexerapplications/thumbelina/**/*.java"/>
     </javac>
     <jar jarfile="${lib}/thumbelina.jar"
@@ -386,7 +386,7 @@ Update the Web Site
   </target>
   
   <!-- Create the FilterBuilder jar -->
-  <target name="filterbuilder" depends="JDK_OK,jarparser" description="create filterbuilder.jar" if="JDK1.4">
+  <target name="filterbuilder" depends="JDK_OK,jarparser" description="create filterbuilder.jar">
     <!-- Create the lib directory -->
     <mkdir dir="${lib}"/>
     <mkdir dir="${classes}"/>
