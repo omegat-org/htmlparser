@@ -37,10 +37,8 @@ import org.htmlparser.Node;
  *   <th>Breadth-first traversal</th>
  *  </tr>
  *  <tr>
- *   <img src="http://htmlparser.sourceforge.net/tree-traversal-depth-first.gif" alt="Diagram showing depth-first tree traversal" width="300" height="300" />
  *  </tr>
  *  <tr>
- *   <img src="http://htmlparser.sourceforge.net/tree-traversal-breadth-first.gif" alt="Diagram showing breadth-first tree traversal" width="300" height="300" />
  *  </tr>
  * </table>
  * @author  ian_macfarlane
