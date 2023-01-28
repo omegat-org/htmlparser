@@ -446,7 +446,7 @@ Update the Web Site
   <!-- Create the javadoc for the project -->
   <target name="javadoc" depends="JDK_OK,JDK_Warning,init" description="create JavaDoc (API) documentation">
     <mkdir dir="${classes}"/>
-    <javac srcdir="${resources}" includes="HtmlTaglet.java"
+    <javac srcdir="${resources}"
            classpath="${classes}" encoding="iso-8859-1"/>
     <mkdir dir="${docs}/javadoc"/>
     <property name="javadoc.doctitle" value="HTML Parser ${versionNumber}"/>
@@ -471,7 +471,6 @@ Update the Web Site
       <header>${javadoc.header}</header>
       <bottom>${javadoc.bottom}</bottom>
       <footer>${javadoc.footer}</footer>
-      <taglet name="HtmlTaglet" path="${resources}:${classes}"/>
       <group title="Main Package" packages="org.htmlparser"/>
       <group title="Example Applications" packages="org.htmlparser.parserapplications,org.htmlparser.lexerapplications.tabby,org.htmlparser.lexerapplications.thumbelina,org.htmlparser.parserapplications.filterbuilder*"/>
       <group title="Nodes" packages="org.htmlparser.nodes,org.htmlparser.tags"/>
@@ -486,21 +485,19 @@ Update the Web Site
       <link href="http://www.saxproject.org/apidoc/"/>
     </javadoc>
     <copy file="${resources}/inherit.gif" tofile="${docs}/javadoc/resources/inherit.gif" overwrite="true"/>
-    <delete file="${resources}/HtmlTaglet.class"/>
   </target>
 
     <!-- Create the javadoc for the project -->
   <target name="checkjavadoc" depends="JDK_OK,JDK_Warning,init" description="create JavaDoc (API) documentation">
     <mkdir dir="${classes}"/>
-    <javac srcdir="${resources}" includes="HtmlTaglet.java"
+    <javac srcdir="${resources}"
            classpath="${classes}" encoding="iso-8859-1"/>
     <mkdir dir="${docs}/checkjavadoc"/>
     <property name="javadoc.doctitle" value="HTML Parser ${versionNumber}"/>
     <property name="javadoc.header" value="&lt;A HREF=&quot;http://htmlparser.sourceforge.net&quot; target=&quot;_top&quot;>HTML Parser Home Page&lt;/A>"/>
     <property name="javadoc.footer" value="&amp;copy; 2005 Derrick Oswald&lt;div align=&quot;right&quot;&gt;${TODAY_STRING}&lt;/div&gt;"/>
     <property name="javadoc.bottom" value=""/>
-    <javadoc doclet="com.sun.tools.doclets.doccheck.DocCheck"
-           docletpath="/home/derrick/htmlparser_cvs/htmlparser/doccheck1.2b2/doccheck.jar"
+    <javadoc
            packagenames="org.htmlparser.*"
            sourcepath="${src}"
            classpath="${classes}"
@@ -512,7 +509,6 @@ Update the Web Site
            overview="${src}/doc-files/overview.html">
     </javadoc>
     <copy file="${resources}/inherit.gif" tofile="${docs}/javadoc/resources/inherit.gif" overwrite="true"/>
-    <delete file="${resources}/HtmlTaglet.class"/>
   </target>
   
   <target name="release" depends="jar,thumbelina,filterbuilder,javadoc" description="prepare the release files">
