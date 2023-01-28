@@ -494,7 +494,7 @@ Update the Web Site
            classpath="${classes}" encoding="iso-8859-1"/>
     <mkdir dir="${docs}/checkjavadoc"/>
     <property name="javadoc.doctitle" value="HTML Parser ${versionNumber}"/>
-    <property name="javadoc.header" value="&lt;A HREF=&quot;http://htmlparser.sourceforge.net&quot; target=&quot;_top&quot;>HTML Parser Home Page&lt;/A>"/>
+    <property name="javadoc.header" value=""/>
     <property name="javadoc.footer" value="&amp;copy; 2005 Derrick Oswald&lt;div align=&quot;right&quot;&gt;${TODAY_STRING}&lt;/div&gt;"/>
     <property name="javadoc.bottom" value=""/>
     <javadoc
