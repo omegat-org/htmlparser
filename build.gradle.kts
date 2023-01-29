@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.omegat"
-version = "1.6"
+version = "1.6-20230129-SNAPSHOT"
 
 java {
     toolchain {
