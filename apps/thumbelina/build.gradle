@@ -1,0 +1,23 @@
+plugins {
+    id 'application'
+}
+
+applicationName = 'thumbelina'
+
+application {
+    mainClass = 'org.htmlparser.lexerapplications.thumbelina.Thumbelina'
+}
+
+// We bundle our startup scripts separately, so disable startScripts.
+startScripts.enabled = false
+
+tasks.register("installThumbelinaScripts", Copy) {
+    from layout.projectDirectory.dir("scripts").asFileTree
+    into layout.buildDirectory.dir("scripts")
+    dependsOn(jar)
+}
+tasks.distZip.dependsOn(installThumbelinaScripts)
+
+dependencies {
+    implementation rootProject
+}

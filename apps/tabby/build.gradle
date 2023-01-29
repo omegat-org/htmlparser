@@ -1,0 +1,13 @@
+plugins {
+    id 'application'
+}
+
+applicationName = 'tabby'
+
+application {
+    mainClass = 'org.htmlparser.lexerapplications.tabby.Tabby'
+}
+
+dependencies {
+    implementation rootProject
+}
