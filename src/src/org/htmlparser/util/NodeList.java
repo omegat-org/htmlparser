@@ -285,7 +285,7 @@ public class NodeList implements Serializable
     /**
      * Filter the list with the given filter.
      * @param filter The filter to use.
-     * @param recursive If <code>true<code> digs into the children recursively.
+     * @param recursive If <code>true</code> digs into the children recursively.
      * @return A new node array containing the nodes accepted by the filter.
      * This is a linear list and preserves the nested structure of the returned
      * nodes only.
@@ -325,7 +325,7 @@ public class NodeList implements Serializable
     /**
      * Remove nodes not matching the given filter.
      * @param filter The filter to use.
-     * @param recursive If <code>true<code> digs into the children recursively.
+     * @param recursive If <code>true</code> digs into the children recursively.
      */
     public void keepAllNodesThatMatch (NodeFilter filter, boolean recursive)
     {
@@ -360,6 +360,8 @@ public class NodeList implements Serializable
      * list.visitAllNodesWith (visitor);
      * System.out.println (list.toHtml ());
      * </pre>
+     * @param visitor visitor
+     * @throws ParserException when error
      */
     public void visitAllNodesWith (NodeVisitor visitor)
         throws

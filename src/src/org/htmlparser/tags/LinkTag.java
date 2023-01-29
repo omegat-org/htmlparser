@@ -1,5 +1,5 @@
 // HTMLParser Library $Name$ - A java-based parser for HTML
-// http://sourceforge.org/projects/htmlparser
+// http://sourceforge.org/projects/.htmlparser
 // Copyright (C) 2004 Somik Raha
 //
 // Revision Control Information
@@ -161,7 +161,7 @@ public class LinkTag extends CompositeTag
 
     /**
      * Returns the text contained inside this link tag.
-     * @return The textual contents between the {@.html <A></A>} pair.
+     * @return The textual contents between the &lt;A&gt;&lt;/A&gt; pair.
      */
     public String getLinkText()
     {

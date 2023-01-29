@@ -172,7 +172,7 @@ public class HTMLTextBean
     /**
      * Get the current 'replace non breaking spaces' state.
      * @return The <code>true</code> if non-breaking spaces (character '\u00a0',
-     * numeric character reference &160; or character entity reference &nbsp;)
+     * numeric character reference &#160; or character entity reference &nbsp;)
      * are to be replaced with normal spaces (character '\u0020').
      */
     public boolean getReplaceNonBreakingSpaces ()
@@ -183,7 +183,7 @@ public class HTMLTextBean
     /**
      * Set the 'replace non breaking spaces' state.
      * @param replace <code>true</code> if non-breaking spaces (character '\u00a0',
-     * numeric character reference &160; or character entity reference &nbsp;)
+     * numeric character reference &#160; or character entity reference &nbsp;)
      * are to be replaced with normal spaces (character '\u0020').
      */
     public void setReplaceNonBreakingSpaces (boolean replace)

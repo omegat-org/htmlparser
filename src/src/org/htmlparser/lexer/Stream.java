@@ -312,7 +312,7 @@ public class Stream extends InputStream implements Runnable
      *
      * <p> The general contract of <code>reset</code> is:
      *
-     * <p><ul>
+     * <ul>
      *
      * <li> If the method <code>markSupported</code> returns
      * <code>true</code>, then:

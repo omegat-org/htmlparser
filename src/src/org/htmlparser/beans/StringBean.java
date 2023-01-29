@@ -56,7 +56,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * </pre>
  * You can also use the StringBean as a NodeVisitor on your own parser,
  * in which case you have to refetch your page if you change one of the
- * properties because it resets the Strings property:</p>
+ * properties because it resets the Strings property:
  * <pre>
  *     StringBean sb = new StringBean ();
  *     Parser parser = new Parser ("http://cbc.ca");
@@ -539,8 +539,8 @@ public class StringBean extends NodeVisitor implements Serializable
     /**
      * Get the current 'collapse whitespace' state.
      * If set to <code>true</code> this emulates the operation of browsers
-     * in interpretting text where <quote>user agents should collapse input
-     * white space sequences when producing output inter-word space</quote>.
+     * in interpretting text where "user agents should collapse input
+     * white space sequences when producing output inter-word space".
      * See HTML specification section 9.1 White space
      * <a href="http://www.w3.org/TR/html4/struct/text.html#h-9.1">
      * http://www.w3.org/TR/html4/struct/text.html#h-9.1</a>.

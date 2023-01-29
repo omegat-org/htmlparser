@@ -70,7 +70,7 @@ public abstract class AbstractNode implements Node, Serializable
 
     /**
      * Create an abstract node with the page positions given.
-     * Remember the page and start & end cursor positions.
+     * Remember the page and start &amp; end cursor positions.
      * @param page The page this tag was read from.
      * @param start The starting offset of this node within the page.
      * @param end The ending offset of this node within the page.

@@ -640,6 +640,7 @@ public class Translate
      * a failure.
      * @param key A character reference with the kernel set to the string
      * to be found. It need not be truncated at the exact end of the reference.
+     * @return CharacterReference of result.
      */
     protected static CharacterReference lookup (CharacterReference key)
     {
@@ -730,6 +731,7 @@ public class Translate
      * Change all numeric character reference and character entity references
      * to unicode characters.
      * @param string The string to translate.
+     * @return String result
      */
     public static String decode (String string)
     {

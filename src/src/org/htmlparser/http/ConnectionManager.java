@@ -520,6 +520,7 @@ public class ConnectionManager
     /**
      * Get the Location field if any.
      * @param http The connection to get the location from.
+     * @return result
      */
     protected String getLocation (HttpURLConnection http)
     {

@@ -63,11 +63,9 @@ import org.htmlparser.visitors.NodeVisitor;
  * {@link #visitAllNodesWith NodeVisitor}.
  * <p>Typical usage of the parser is:
  * <code>
- * <pre>
  * Parser parser = new Parser ("http://whatever");
  * NodeList list = parser.parse (null);
  * // do something with your list of nodes.
- * </pre>
  * </code></p>
  * <p>What types of nodes and what can be done with them is dependant on the
  * setup, but in general a node can be converted back to HTML and it's
@@ -75,18 +73,17 @@ import org.htmlparser.visitors.NodeVisitor;
  * nested. See the {@link Node} interface.</p>
  * <p>For example, if the URL contains:<br>
  * <code>
- * {@.html
- * <html>
- * <head>
- * <title>Mondays -- What a bad idea.</title>
- * </head>
- * <body BGCOLOR="#FFFFFF">
+ * &lt;html&gt;
+ * &lt;head&gt;
+ * &lt;title&gt;Mondays -- What a bad idea.&lt;title&gt;
+ * &lt;head&gt;
+ *&lt;body BGCOLOR="#FFFFFF"&gt;
  * Most people have a pathological hatred of Mondays...
- * </body>
- * </html>}
+ * &lt;body&gt;
+ * &lt;/html&gt;
  * </code><br>
  * and the example code above is used, the list contain only one element, the
- * {@.html <html>} node.  This node is a {@link org.htmlparser.tags tag},
+ * &lt;html&gt; node.  This node is a {@link org.htmlparser.tags tag},
  * which is an object of class
  * {@link org.htmlparser.tags.Html Html} if the default {@link NodeFactory}
  * (a {@link PrototypicalNodeFactory}) is used.</p>
@@ -95,15 +92,13 @@ import org.htmlparser.visitors.NodeVisitor;
  * conscious of the possibility of whitespace between nodes, e.g. in the example
  * above:
  * <code>
- * <pre>
  * Node node = list.elementAt (0);
  * NodeList sublist = node.getChildren ();
  * System.out.println (sublist.size ());
- * </pre>
  * </code>
- * would print out 5, not 2, because there are newlines after {@.html <html>},
- * {@.html </head>} and {@.html </body>} that are children of the HTML node
- * besides the {@.html <head>} and {@.html <body>} nodes.</p>
+ * would print out 5, not 2, because there are newlines after &lt;html&gt;,
+ * &lt;/head&gt; and &lt;/body&gt; that are children of the HTML node
+ * besides the &lt;head&gt; and &lt;body&gt; nodes.</p>
  * <p>Because processing nodes is so common, two interfaces are provided to
  * ease this task, {@link org.htmlparser.filters filters}
  * and {@link org.htmlparser.visitors visitors}.
@@ -614,7 +609,6 @@ public class Parser
      * In general, when parsing with an iterator or processing a NodeList,
      * you will need to use recursion. For example:
      * <code>
-     * <pre>
      * void processMyNodes (Node node)
      * {
      *     if (node instanceof TextNode)
@@ -647,10 +641,9 @@ public class Parser
      * Parser parser = new Parser ("http://www.yahoo.com");
      * for (NodeIterator i = parser.elements (); i.hasMoreElements (); )
      *     processMyNodes (i.nextNode ());
-     * </pre>
      * </code>
      * @throws ParserException If a parsing error occurs.
-     * @return An iterator over the top level nodes (usually {@.html <html>}).
+     * @return An iterator over the top level nodes (usually &lt;htmlGgt;.
      */
     public NodeIterator elements () throws ParserException
     {
@@ -666,10 +659,10 @@ public class Parser
      * is more often used to extract information from a web page).
      * <p>For example, to replace the entire contents of the HEAD with a
      * single TITLE tag you could do this:
-     * <pre>
+     * <code>
      * NodeList nl = parser.parse (null); // here is your two node list
      * NodeList heads = nl.extractAllNodesThatMatch (new TagNameFilter ("HEAD"))
-     * if (heads.size () > 0) // there may not be a HEAD tag
+     * if (heads.size () &gt; 0) // there may not be a HEAD tag
      * {
      *     Head head = heads.elementAt (0); // there should be only one
      *     head.removeAll (); // clean out the contents
@@ -682,7 +675,7 @@ public class Parser
      *     head.add (title);
      * }
      * System.out.println (nl.toHtml ()); // output the modified HTML
-     * </pre>
+     * </code>
      * @return The list of matching nodes (for a <code>null</code>
      * filter this is all the top level nodes).
      * @param filter The filter to apply to the parsed nodes,

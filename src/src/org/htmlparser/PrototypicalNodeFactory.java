@@ -113,7 +113,7 @@ import org.htmlparser.tags.TitleTag;
  *     });
  * Parser parser = new Parser ();
  * parser.setNodeFactory (factory);
- * </pre></p>
+ * </pre>
  * <p>Here is an example of using a custom link tag, in this case just
  * printing the URL, which illustrates registering a tag:
  * <pre>
@@ -131,7 +131,7 @@ import org.htmlparser.tags.TitleTag;
  * factory.registerTag (new PrintingLinkTag ());
  * Parser parser = new Parser ();
  * parser.setNodeFactory (factory);
- * </pre></p>
+ * </pre>
  */
 public class PrototypicalNodeFactory
     implements

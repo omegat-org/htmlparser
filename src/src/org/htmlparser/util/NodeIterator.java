@@ -32,12 +32,14 @@ public interface NodeIterator {
     /**
      * Check if more nodes are available.
      * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
+     * @throws ParserException when error
      */
     public boolean hasMoreNodes() throws ParserException;
 
     /**
      * Get the next node.
      * @return The next node in the HTML stream, or null if there are no more nodes.
+     * @throws ParserException when error
      */
     public Node nextNode() throws ParserException;
 

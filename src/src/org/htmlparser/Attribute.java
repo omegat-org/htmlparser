@@ -65,8 +65,7 @@ import java.io.Serializable;
  * </pre>
  * Note that the assignment value and quoting need to be set separately when
  * building the attribute from scratch using the properties.
- * <p>
- * <table width="100.0%" align="Center" border="1">
+ * <table>
  *   <caption>Valid States for Attributes.</caption>
  *   <tr>
  *     <th align="Center">Description</th>
@@ -169,21 +168,19 @@ import java.io.Serializable;
  * HTML 4.01 Specification, W3C Recommendation 24 December 1999</a>
  * http://www.w3.org/TR/html4/intro/sgmltut.html#h-3.2.2:<p>
  * <cite>
- * 3.2.2 Attributes<p>
+ * 3.2.2 Attributes
  * Elements may have associated properties, called attributes, which may
  * have values (by default, or set by authors or scripts). Attribute/value
- * pairs appear before the final ">" of an element's start tag. Any number
+ * pairs appear before the final "&gt;" of an element's start tag. Any number
  * of (legal) attribute value pairs, separated by spaces, may appear in an
- * element's start tag. They may appear in any order.<p>
+ * element's start tag. They may appear in any order.
  * In this example, the id attribute is set for an H1 element:
- * <pre>
  * <code>
- * {@.html
- *  <H1 id="section1">
+ *
+ *  &lt;H1 id="section1"&gt;
  *  This is an identified heading thanks to the id attribute
- *  </H1>}
+ *  &lt;/H1&gt;
  * </code>
- * </pre>
  * By default, SGML requires that all attribute values be delimited using
  * either double quotation marks (ASCII decimal 34) or single quotation
  * marks (ASCII decimal 39). Single quote marks can be included within the
@@ -191,22 +188,21 @@ import java.io.Serializable;
  * vice versa. Authors may also use numeric character references to
  * represent double quotes (&amp;#34;) and single quotes (&amp;#39;).
  * For doublequotes authors can also use the character entity reference
- * &amp;quot;.<p>
+ * &amp;quot;.
  * In certain cases, authors may specify the value of an attribute without
  * any quotation marks. The attribute value may only contain letters
  * (a-z and A-Z), digits (0-9), hyphens (ASCII decimal 45),
  * periods (ASCII decimal 46), underscores (ASCII decimal 95),
  * and colons (ASCII decimal 58). We recommend using quotation marks even
- * when it is possible to eliminate them.<p>
- * Attribute names are always case-insensitive.<p>
+ * when it is possible to eliminate them.
+ * Attribute names are always case-insensitive.
  * Attribute values are generally case-insensitive. The definition of each
  * attribute in the reference manual indicates whether its value is
- * case-insensitive.<p>
+ * case-insensitive.
  * All the attributes defined by this specification are listed in the
  * <a href="http://www.w3.org/TR/html4/index/attributes.html">attribute
- * index</a>.<p>
+ * index</a>.
  * </cite>
- * <p>
  */
 public class Attribute
     implements
@@ -714,14 +710,12 @@ public class Attribute
      * Suitable for insertion into a tag, the output is one of
      * the forms:
      * <code>
-     * <pre>
      * value
      * name
      * name=
      * name=value
      * name='value'
      * name="value"
-     * </pre>
      * </code>
      * @return A string that can be used within a tag.
      */

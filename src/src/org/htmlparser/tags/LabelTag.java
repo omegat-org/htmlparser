@@ -63,7 +63,7 @@ public class LabelTag extends CompositeTag
 
     /**
      * Returns the text contained inside this label tag.
-     * @return The textual contents between the {@.html <LABEL></LABEL>} pair.
+     * @return The textual contents between the &lt;LABEL&gt;&lt;LABEL&gt; pair.
      */
     public String getLabel()
     {

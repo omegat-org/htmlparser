@@ -191,7 +191,8 @@ public class InputStreamSource
     /**
      * Deserialization support.
      * @param in Where to read this object from.
-     * @exception IOException If deserialization has a problem.
+     * @throws IOException If deserialization has a problem.
+     * @throws ClassNotFoundException when error
      */
     private void readObject (ObjectInputStream in)
         throws

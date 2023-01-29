@@ -55,7 +55,7 @@ public class ScriptScanner
      * If this flag is set true, the parsing of script is performed without
      * regard to quotes. This means that erroneous script such as:
      * <pre>
-     * document.write("&lt;/script&gt");
+     * document.write("&lt;/script&gt;");
      * </pre>
      * will be parsed in strict accordance with appendix
      * <a href="http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data">
@@ -64,7 +64,7 @@ public class ScriptScanner
      * hence will be split into two or more nodes. Correct javascript would
      * escape the ETAGO:
      * <pre>
-     * document.write("&lt;\/script&gt");
+     * document.write("&lt;\/script&gt;");
      * </pre>
      * If true, CDATA parsing will stop at the first ETAGO ("&lt;/") no matter
      * whether it is quoted or not. If false, balanced quotes (either single or

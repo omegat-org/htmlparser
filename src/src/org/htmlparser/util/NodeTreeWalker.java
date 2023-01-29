@@ -31,16 +31,8 @@ import org.htmlparser.Node;
 /**
  * A class for walking a tree of {@link Node} objects, in either a depth-first or breadth-first manner.
  * The following two diagrams show the represent tree traversal with the two different methods.
- * <table>
- *  <tr>
- *   <th>Depth-first traversal</th>
- *   <th>Breadth-first traversal</th>
- *  </tr>
- *  <tr>
- *  </tr>
- *  <tr>
- *  </tr>
- * </table>
+ * Depth-first traversal
+ * Breadth-first traversal
  * @author  ian_macfarlane
  */
 public class NodeTreeWalker implements NodeIterator
@@ -98,9 +90,9 @@ public class NodeTreeWalker implements NodeIterator
      * Creates a new instance of NodeTreeWalker using the specified type of tree traversal and maximum depth from the root Node to traverse.
      * @param rootNode The Node to set as the root of the tree.
      * @param depthFirst Whether to use depth-first (true) or breadth-first (false) tree traversal.
-     * @param maxDepth The maximum depth from the root Node that this NodeTreeWalker may traverse. This must be > 0 or equal to -1.
+     * @param maxDepth The maximum depth from the root Node that this NodeTreeWalker may traverse. This must be &gt; 0 or equal to -1.
      * @throws NullPointerException if rootNode is null.
-     * @throws IllegalArgumentException maxDepth is not > 0 or equal to -1.
+     * @throws IllegalArgumentException maxDepth is not &gt; 0 or equal to -1.
      */
     public NodeTreeWalker(Node rootNode, boolean depthFirst, int maxDepth)
     {

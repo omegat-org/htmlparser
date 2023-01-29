@@ -64,8 +64,8 @@ public interface Ordered
      * throws an exception.)
      * <p>
      * The implementor must also ensure that the relation is transitive:
-     * <code>((x.compare(y)>0) && (y.compare(z)>0))</code>
-     * implies <code>x.compare(z)>0</code>.
+     * <code>((x.compare(y)&gt;0) &amp;&amp; (y.compare(z)&gt;0))</code>
+     * implies <code>x.compare(z)&gt;0</code>.
      * <p>
      * Finally, the implementer must ensure that
      * <code>x.compare(y)==0</code> implies that

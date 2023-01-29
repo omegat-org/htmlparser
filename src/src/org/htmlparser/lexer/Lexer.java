@@ -407,7 +407,7 @@ public class Lexer
      * According to appendix <a href="http://www.w3.org/TR/html4/appendix/notes.html#notes-specifying-data">
      * B.3.2 Specifying non-HTML data</a> of the
      * <a href="http://www.w3.org/TR/html4/">HTML 4.01 Specification</a>:<br>
-     * <quote>
+     *
      * <b>Element content</b><br>
      * When script or style data is the content of an element (SCRIPT and STYLE),
      * the data begins immediately after the element start tag and ends at the
@@ -415,7 +415,7 @@ public class Lexer
      * note that this may not be the element's end tag.
      * Authors should therefore escape "&lt;/" within the content. Escape mechanisms
      * are specific to each scripting or style sheet language.
-     * </quote>
+     *
      * @return The <code>TextNode</code> of the CDATA or <code>null</code> if none.
      * @exception ParserException If a problem occurs reading from the source.
      */
@@ -928,12 +928,12 @@ public class Lexer
      * HTML 4.01 Specification, W3C Recommendation 24 December 1999</a>
      * http://www.w3.org/TR/html4/intro/sgmltut.html#h-3.2.2<p>
      * <cite>
-     * 3.2.2 Attributes<p>
+     * 3.2.2 Attributes
      * Elements may have associated properties, called attributes, which may
      * have values (by default, or set by authors or scripts). Attribute/value
-     * pairs appear before the final ">" of an element's start tag. Any number
+     * pairs appear before the final "&gt;" of an element's start tag. Any number
      * of (legal) attribute value pairs, separated by spaces, may appear in an
-     * element's start tag. They may appear in any order.<p>
+     * element's start tag. They may appear in any order.
      * In this example, the id attribute is set for an H1 element:
      * <code>
      * &lt;H1 id="section1"&gt;
@@ -949,19 +949,19 @@ public class Lexer
      * vice versa. Authors may also use numeric character references to
      * represent double quotes (&amp;#34;) and single quotes (&amp;#39;).
      * For doublequotes authors can also use the character entity reference
-     * &amp;quot;.<p>
+     * &amp;quot;.
      * In certain cases, authors may specify the value of an attribute without
      * any quotation marks. The attribute value may only contain letters
      * (a-z and A-Z), digits (0-9), hyphens (ASCII decimal 45),
      * periods (ASCII decimal 46), underscores (ASCII decimal 95),
      * and colons (ASCII decimal 58). We recommend using quotation marks even
-     * when it is possible to eliminate them.<p>
-     * Attribute names are always case-insensitive.<p>
+     * when it is possible to eliminate them.
+     * Attribute names are always case-insensitive.
      * Attribute values are generally case-insensitive. The definition of each
      * attribute in the reference manual indicates whether its value is
-     * case-insensitive.<p>
+     * case-insensitive.
      * All the attributes defined by this specification are listed in the
-     * attribute index.<p>
+     * attribute index.
      * </cite>
      * <p>
      * This method uses a state machine with the following states:
@@ -1191,12 +1191,12 @@ public class Lexer
      * HTML 4.01 Specification, W3C Recommendation 24 December 1999</a>
      * http://www.w3.org/TR/html4/intro/sgmltut.html#h-3.2.4<p>
      * <cite>
-     * 3.2.4 Comments<p>
-     * HTML comments have the following syntax:<p>
+     * 3.2.4 Comments
+     * HTML comments have the following syntax:
      * <code>
-     * &lt;!-- this is a comment --&gt;<p>
-     * &lt;!-- and so is this one,<p>
-     *     which occupies more than one line --&gt;<p>
+     * &lt;!-- this is a comment --&gt;
+     * &lt;!-- and so is this one,
+     *     which occupies more than one line --&gt;
      * </code>
      * White space is not permitted between the markup declaration
      * open delimiter("&lt;!") and the comment open delimiter ("--"),
@@ -1206,7 +1206,7 @@ public class Lexer
      * Authors should avoid putting two or more adjacent hyphens inside comments.
      * Information that appears between comments has no special meaning
      * (e.g., character references are not interpreted as such).
-     * Note that comments are markup.<p>
+     * Note that comments are markup.
      * </cite>
      * <p>
      * This method uses a state machine with the following states:

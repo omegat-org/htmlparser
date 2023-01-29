@@ -121,7 +121,7 @@ public class RemarkNode
      * Return The full HTML remark.
      * @param verbatim If <code>true</code> return as close to the original
      * page text as possible.
-     * @return The comment, i.e. {@.html <!-- this is a comment -->}.
+     * @return The comment, i.e. &lt;!-- this is a comment --&gt;.
      */
     public String toHtml (boolean verbatim)
     {

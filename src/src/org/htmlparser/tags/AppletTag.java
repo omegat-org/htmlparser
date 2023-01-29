@@ -156,7 +156,7 @@ public class AppletTag
     }
 
     /**
-     * Get the <code>PARAM<code> tag with the given name.
+     * Get the <code>PARAM</code> tag with the given name.
      * <em>NOTE: This was called (erroneously) getAttribute() in previous versions.</em>
      * @param key The applet parameter name to get.
      * @return The value of the parameter or <code>null</code> if there is no parameter of that name.
@@ -168,7 +168,7 @@ public class AppletTag
 
     /**
      * Get an enumeration over the (String) parameter names.
-     * @return An enumeration of the <code>PARAM<code> tag <code>NAME<code> attributes.
+     * @return An enumeration of the <code>PARAM</code> tag <code>NAME</code> attributes.
      */
     public Enumeration getParameterNames ()
     {
@@ -176,7 +176,7 @@ public class AppletTag
     }
 
     /**
-     * Set the <code>CODE<code> attribute.
+     * Set the <code>CODE</code> attribute.
      * @param newAppletClass The new applet class.
      */
     public void setAppletClass (String newAppletClass)
@@ -185,7 +185,7 @@ public class AppletTag
     }
 
     /**
-     * Set the enclosed <code>PARM<code> children.
+     * Set the enclosed <code>PARM</code> children.
      * @param newAppletParams The new parameters.
      */
     public void setAppletParams (Hashtable newAppletParams)
@@ -248,7 +248,7 @@ public class AppletTag
     }
 
     /**
-     * Set the <code>ARCHIVE<code> attribute.
+     * Set the <code>ARCHIVE</code> attribute.
      * @param newArchive The new archive file.
      */
     public void setArchive (String newArchive)
@@ -257,7 +257,7 @@ public class AppletTag
     }
 
     /**
-     * Set the <code>CODEBASE<code> attribute.
+     * Set the <code>CODEBASE</code> attribute.
      * @param newCodeBase The new applet code base.
      */
     public void setCodeBase (String newCodeBase)

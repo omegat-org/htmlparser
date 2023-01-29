@@ -239,8 +239,9 @@ public class ParserUtils
      * Split the input string considering as string separator
      * all the spaces and tabs like chars and
      * the chars specified in the input variable charsToBeRemoved.
-     * <BR>For example if you call splitSpaces(&quot;&lt;DIV&gt;  +12.5, +3.4 &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/,&quot;),
-     * &lt;BR>you obtain an array of strings {&quot;+12.5&quot;, &quot;+3.4&quot;} as output (space chars and &lt;,&gt;,D,I,V,/ and the comma are chars that must be removed).
+     * For example if you call splitSpaces(&quot;&lt;DIV&gt;  +12.5, +3.4 &lt;/DIV&gt;&quot;, &quot;&lt;&gt;DIV/,&quot;),
+     * &lt;
+     * you obtain an array of strings {&quot;+12.5&quot;, &quot;+3.4&quot;} as output (space chars and &lt;,&gt;,D,I,V,/ and the comma are chars that must be removed).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
      * @return The array of strings as output.
@@ -300,9 +301,9 @@ public class ParserUtils
     /**
      * Remove from the input string all the spaces and tabs like chars.
      * Remove also the chars specified in the input variable charsToBeRemoved.
-     * <BR>For example if you call trimSpaces(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/&quot;),
+     * <BR>For example if you call trimSpaces(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;&lt;DIV/&quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (space chars and &lt;,&gt;,D,I,V,/ are chars that must be removed).
-     * <BR>For example if you call trimSpaces(&quot;&lt;DIV&gt;  Trim All Spaces Also The Ones Inside The String &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/&quot;),
+     * <BR>For example if you call trimSpaces(&quot;&lt;DIV&gt;  Trim All Spaces Also The Ones Inside The String &lt;/DIV&gt;&quot;, &quot;&lt;DIV/&quot;),
      * <BR>you obtain a string &quot;TrimAllSpacesAlsoTheOnesInsideTheString&quot; as output (all the spaces inside the string are removed).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
@@ -332,9 +333,9 @@ public class ParserUtils
      * Remove from the beginning and the end of the input string all the spaces and tabs like chars.
      * Remove also the chars specified in the input variable charsToBeRemoved.
      * <BR>The removal process removes only chars at the beginning and at the end of the string.
-     * <BR>For example if you call trimSpacesBeginEnd(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/&quot;),
+     * <BR>For example if you call trimSpacesBeginEnd(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;&lt;DIV/&quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (space chars and &lt;,&gt;,D,I,V,/ are chars that must be removed).
-     * <BR>For example if you call trimSpacesBeginEnd(&quot;&lt;DIV&gt;  Trim all spaces but not the ones inside the string &lt;/DIV&gt;&quot;, &quot;&lt;>DIV/&quot;),
+     * <BR>For example if you call trimSpacesBeginEnd(&quot;&lt;DIV&gt;  Trim all spaces but not the ones inside the string &lt;/DIV&gt;&quot;, &quot;&lt;DIV/&quot;),
      * <BR>you obtain a string &quot;Trim all spaces but not the ones inside the string&quot; as output (all the spaces inside the string are preserved).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
@@ -528,7 +529,7 @@ public class ParserUtils
     /**
      * Split the input string considering as string separator
      * the chars specified in the input variable charsToBeRemoved.
-     * <BR>For example if you call splitChars(&quot;&lt;DIV&gt;  +12.5, +3.4 &lt;/DIV&gt;&quot;, &quot; <>DIV/,&quot;),
+     * <BR>For example if you call splitChars(&quot;&lt;DIV&gt;  +12.5, +3.4 &lt;/DIV&gt;&quot;, &quot; &lt;/DIV&gt;,&quot;),
      * <BR>you obtain an array of strings {&quot;+12.5&quot;, &quot;+3.4&quot;} as output (space chars and &lt;,&gt;,D,I,V,/ and the comma are chars that must be removed).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
@@ -588,9 +589,9 @@ public class ParserUtils
 
     /**
      * Remove from the input string all the chars specified in the input variable charsToBeRemoved.
-     * <BR>For example if you call trimChars(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;<>DIV/ &quot;),
+     * <BR>For example if you call trimChars(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;DIV/ &quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (&lt;,&gt;,D,I,V,/ and space char are chars that must be removed).
-     * <BR>For example if you call trimChars(&quot;&lt;DIV&gt;  Trim All Chars Also The Ones Inside The String &lt;/DIV&gt;&quot;, &quot;<>DIV/ &quot;),
+     * <BR>For example if you call trimChars(&quot;&lt;DIV&gt;  Trim All Chars Also The Ones Inside The String &lt;/DIV&gt;&quot;, &quot;DIV/ &quot;),
      * <BR>you obtain a string &quot;TrimAllCharsAlsoTheOnesInsideTheString&quot; as output (all the spaces inside the string are removed).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
@@ -619,9 +620,9 @@ public class ParserUtils
     /**
      * Remove from the beginning and the end of the input string all the chars specified in the input variable charsToBeRemoved.
      * <BR>The removal process removes only chars at the beginning and at the end of the string.
-     * <BR>For example if you call trimCharsBeginEnd(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;<>DIV/ &quot;),
+     * <BR>For example if you call trimCharsBeginEnd(&quot;&lt;DIV&gt;  +12.5 &lt;/DIV&gt;&quot;, &quot;DIV/ &quot;),
      * <BR>you obtain a string &quot;+12.5&quot; as output (' ' is a space char and &lt;,&gt;,D,I,V,/ are chars that must be removed).
-     * <BR>For example if you call trimCharsBeginEnd(&quot;&lt;DIV&gt;  Trim all spaces but not the ones inside the string &lt;/DIV&gt;&quot;, &quot;<>DIV/ &quot;),
+     * <BR>For example if you call trimCharsBeginEnd(&quot;&lt;DIV&gt;  Trim all spaces but not the ones inside the string &lt;/DIV&gt;&quot;, &quot;DIV/ &quot;),
      * <BR>you obtain a string &quot;Trim all spaces but not the ones inside the string&quot; as output (all the spaces inside the string are preserved).
      * @param input The string in input.
      * @param charsToBeRemoved The chars to be removed.
@@ -670,6 +671,11 @@ public class ParserUtils
     /**
      * Split the input string in a string array,
      * considering the tags as delimiter for splitting.
+     * @param input input
+     * @param tags tag
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      * @see ParserUtils#splitTags (String input, String[] tags, boolean recursive, boolean insideTag).
      */
     public static String[] splitTags (String input, String[] tags)
@@ -694,6 +700,8 @@ public class ParserUtils
      * @param recursive Optional parameter (true if not present), if true delete all the tags recursively.
      * @param insideTag Optional parameter (true if not present), if true delete also the content of the tags.
      * @return The string array containing the strings delimited by tags.
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      */
     public static String[] splitTags (String input, String[] tags, boolean recursive, boolean insideTag)
         throws ParserException, UnsupportedEncodingException
@@ -785,6 +793,11 @@ public class ParserUtils
      * considering the tags as delimiter for splitting.
      * <BR>Use Class class as input parameter
      * instead of tags[] string array.
+     * @param input input
+     * @param nodeType node type
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      * @see ParserUtils#splitTags (String input, String[] tags, boolean recursive, boolean insideTag).
      */
     public static String[] splitTags (String input, Class nodeType)
@@ -798,6 +811,13 @@ public class ParserUtils
      * considering the tags as delimiter for splitting.
      * <BR>Use Class class as input parameter
      * instead of tags[] string array.
+     * @param input input
+     * @param nodeType node type
+     * @param recursive bool
+     * @param insideTag bool
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      * @see ParserUtils#splitTags (String input, String[] tags, boolean recursive, boolean insideTag).
      */
     public static String[] splitTags (String input, Class nodeType, boolean recursive, boolean insideTag)
@@ -811,6 +831,11 @@ public class ParserUtils
      * considering the tags as delimiter for splitting.
      * <BR>Use NodeFilter class as input parameter
      * instead of tags[] string array.
+     * @param filter filter
+     * @param input input
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      * @see ParserUtils#splitTags (String input, String[] tags, boolean recursive, boolean insideTag).
      */
     public static String[] splitTags (String input, NodeFilter filter)
@@ -824,6 +849,13 @@ public class ParserUtils
      * considering the tags as delimiter for splitting.
      * <BR>Use NodeFilter class as input parameter
      * instead of tags[] string array.
+     * @param filter filtr
+     * @param input input
+     * @param insideTag bool
+     * @param recursive bool
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      * @see ParserUtils#splitTags (String input, String[] tags, boolean recursive, boolean insideTag).
      */
     public static String[] splitTags (String input, NodeFilter filter, boolean recursive, boolean insideTag)
@@ -941,6 +973,11 @@ public class ParserUtils
      * Trim all tags in the input string and
      * return a string like the input one
      * without the tags and their content.
+     * @param input input
+     * @param tags tags
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
      */
     public static String trimTags (String input, String[] tags)
@@ -966,6 +1003,8 @@ public class ParserUtils
      * @param recursive Optional parameter (true if not present), if true delete all the tags recursively.
      * @param insideTag Optional parameter (true if not present), if true delete also the content of the tags.
      * @return The string without tags.
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      */
     public static String trimTags (String input, String[] tags, boolean recursive, boolean insideTag)
         throws ParserException, UnsupportedEncodingException
@@ -1033,6 +1072,12 @@ public class ParserUtils
      * <BR>Use Class class as input parameter
      * instead of tags[] string array.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
+     * @param input  input
+     * @param nodeType  node type
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
+     *
      */
     public static String trimTags (String input, Class nodeType)
         throws ParserException, UnsupportedEncodingException
@@ -1047,6 +1092,13 @@ public class ParserUtils
      * <BR>Use Class class as input parameter
      * instead of tags[] string array.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
+     * @param input input
+     * @param nodeType  node type
+     * @param recursive bool
+     * @param insideTag bool
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      */
     public static String trimTags (String input, Class nodeType, boolean recursive, boolean insideTag)
         throws ParserException, UnsupportedEncodingException
@@ -1061,6 +1113,11 @@ public class ParserUtils
      * <BR>Use NodeFilter class as input parameter
      * instead of tags[] string array.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
+     * @param input  input
+     * @param filter filter
+     * @return result
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      */
     public static String trimTags (String input, NodeFilter filter)
         throws ParserException, UnsupportedEncodingException
@@ -1075,6 +1132,14 @@ public class ParserUtils
      * <BR>Use NodeFilter class as input parameter
      * instead of tags[] string array.
      * @see ParserUtils#trimTags (String input, String[] tags, boolean recursive, boolean insideTag).
+     * @param filter filter
+     * @param input input
+     * @param recursive bool
+     * @param insideTag bool
+     * @return result
+     * @throws ParserException when eeror
+     * @throws UnsupportedEncodingException when error
+     *
      */
     public static String trimTags (String input, NodeFilter filter, boolean recursive, boolean insideTag)
         throws ParserException, UnsupportedEncodingException
@@ -1132,6 +1197,8 @@ public class ParserUtils
      * <BR>The string will be parsed as it would be a file.
      * @param input The string in input.
      * @return The Parser Object with the string as input stream.
+     * @throws ParserException when error
+     * @throws UnsupportedEncodingException when error
      */
     public static Parser createParserParsingAnInputString (String input)
         throws ParserException, UnsupportedEncodingException

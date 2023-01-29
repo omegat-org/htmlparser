@@ -294,6 +294,7 @@ public class CompositeTagScanner extends TagScanner
      * Perform the semantic acton.
      * @param tag The tag to finish off.
      * @param lexer A lexer positioned at the end of the tag.
+     * @throws ParserException when exception
      */
     protected void finishTag (Tag tag, Lexer lexer)
         throws
@@ -315,6 +316,7 @@ public class CompositeTagScanner extends TagScanner
      * @return An end tag with the name '"/" + tag.getTagName()' and a start
      * and end position at the given position. The fact these positions are
      * equal may be used to distinguish it as a virtual tag later on.
+     * @throws ParserException when exception
      */
     protected Tag createVirtualEndTag (Tag tag, Lexer lexer, Page page, int position)
         throws

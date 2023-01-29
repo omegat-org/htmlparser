@@ -415,7 +415,7 @@ public class CompositeTag extends TagNode
      *      e.nextNode().collectInto(list, filter);
      * </pre>
      * Thus, <code>list</code> will hold all the link nodes, irrespective of how
-     * deep the links are embedded.</p>
+     * deep the links are embedded.
      * <p>Another way to accomplish the same objective is:
      * <pre>
      * NodeList list = new NodeList();
@@ -424,7 +424,7 @@ public class CompositeTag extends TagNode
      *      e.nextNode().collectInto(list, filter);
      * </pre>
      * This is slightly less specific because the LinkTag class may be
-     * registered for more than one node name, e.g. &lt;LINK&gt; tags too.</p>
+     * registered for more than one node name, e.g. &lt;LINK&gt; tags too.
      * @param list The list to add nodes to.
      * @param filter The filter to apply.
      * @see org.htmlparser.filters
@@ -499,8 +499,8 @@ public class CompositeTag extends TagNode
 
     /**
      * Get the end tag for this tag.
-     * For example, if the node is {@.html <LABEL>The label</LABLE>}, then
-     * this method would return the {@.html </LABLE>} end tag.
+     * For example, if the node is &le;LABEL&gt;The label&lt;/LABLE&gt; then
+     * this method would return the &lt;LABLE&gt; end tag.
      * @return The end tag for this node.
      * <em>Note: If the start and end position of the end tag is the same,
      * then the end tag was injected (it's a virtual end tag).</em>
@@ -515,7 +515,7 @@ public class CompositeTag extends TagNode
      * @param tag The new end tag for this tag.
      * Note: no checking is perfromed so you can generate bad HTML by setting
      * the end tag with a name not equal to the name of the start tag,
-     * i.e. {@.html <LABEL>The label</TITLE>}
+     * i.e. &lt;LABEL&gt;The label&lt;TITLE&gt;
      */
     public void setEndTag (Tag tag)
     {

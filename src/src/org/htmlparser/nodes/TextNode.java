@@ -214,6 +214,7 @@ public class TextNode
     /**
      * Returns if the node consists of only white space.
      * White space can be spaces, new lines, etc.
+     * @return true when empty
      */
     public boolean isWhiteSpace()
     {

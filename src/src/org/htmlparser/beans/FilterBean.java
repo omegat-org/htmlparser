@@ -95,7 +95,7 @@ public class FilterBean
     /**
      * The recursion behaviour for elements of the filter array.
      * If <code>true</code> the filters are applied recursively.
-     * @see org.htmlparser.util.NodeList#extractAllNodesThatMatch(NodeFilter, boolean).
+     * @see org.htmlparser.util.NodeList#extractAllNodesThatMatch(NodeFilter, boolean) extractAllNodesThatMatch
      */
     protected boolean mRecursive;
 
@@ -428,7 +428,7 @@ public class FilterBean
      * Set the recursion behaviour.
      * @param recursive If <code>true</code> the
      * <code>extractAllNodesThatMatch()</code> call is performed recursively.
-     * @see org.htmlparser.util.NodeList#extractAllNodesThatMatch(NodeFilter, boolean).
+     * @see org.htmlparser.util.NodeList#extractAllNodesThatMatch(NodeFilter, boolean) extractAllNodesThatMatch
      */
     public void setRecursive (boolean recursive)
     {

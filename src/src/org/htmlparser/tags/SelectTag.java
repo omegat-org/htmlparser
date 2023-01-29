@@ -84,7 +84,7 @@ public class SelectTag extends CompositeTag
 
     /**
      * Get the list of options in this <code>SELECT</code> tag.
-     * @return The {@.html <OPTION>} tags contained by this tag.
+     * @return The &lt;OPTION&gt; tags contained by this tag.
      */
     public OptionTag [] getOptionTags ()
     {

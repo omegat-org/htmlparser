@@ -199,7 +199,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Get the <code>PARAM<code> tag with the given name.
+     * Get the <code>PARAM</code> tag with the given name.
      * @param key The object parameter name to get.
      * @return The value of the parameter or <code>null</code> if there is no parameter of that name.
      */
@@ -210,7 +210,7 @@ public class ObjectTag extends CompositeTag
     
     /**
      * Get an enumeration over the (String) parameter names.
-     * @return An enumeration of the <code>PARAM<code> tag <code>NAME<code> attributes.
+     * @return An enumeration of the <code>PARAM</code> tag <code>NAME</code> attributes.
      */
     public Enumeration getParameterNames ()
     {
@@ -218,7 +218,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the <code>CLASSID<code> attribute.
+     * Set the <code>CLASSID</code> attribute.
      * @param newClassId The new classid.
      */
     public void setObjectClassId (String newClassId)
@@ -227,7 +227,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the <code>CODEBASE<code> attribute.
+     * Set the <code>CODEBASE</code> attribute.
      * @param newCodeBase The new codebase.
      */
     public void setObjectCodeBase (String newCodeBase)
@@ -236,7 +236,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the <code>CODETYPE<code> attribute.
+     * Set the <code>CODETYPE</code> attribute.
      * @param newCodeType The new codetype.
      */
     public void setObjectCodeType (String newCodeType)
@@ -245,7 +245,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the <code>DATA<code> attribute.
+     * Set the <code>DATA</code> attribute.
      * @param newData The new data.
      */
     public void setObjectData (String newData)
@@ -254,7 +254,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the <code>HEIGHT<code> attribute.
+     * Set the <code>HEIGHT</code> attribute.
      * @param newHeight The new height.
      */
     public void setObjectHeight (String newHeight)
@@ -263,7 +263,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the <code>STANDBY<code> attribute.
+     * Set the <code>STANDBY</code> attribute.
      * @param newStandby The new standby.
      */
     public void setObjectStandby (String newStandby)
@@ -272,7 +272,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the <code>TYPE<code> attribute.
+     * Set the <code>TYPE</code> attribute.
      * @param newType The new type.
      */
     public void setObjectType (String newType)
@@ -281,7 +281,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the <code>WIDTH<code> attribute.
+     * Set the <code>WIDTH</code> attribute.
      * @param newWidth The new width.
      */
     public void setObjectWidth (String newWidth)
@@ -290,7 +290,7 @@ public class ObjectTag extends CompositeTag
     }
     
     /**
-     * Set the enclosed <code>PARAM<code> children.
+     * Set the enclosed <code>PARAM</code> children.
      * @param newObjectParams The new parameters.
      */
     public void setObjectParams (Hashtable newObjectParams)

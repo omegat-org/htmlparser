@@ -14,9 +14,11 @@ import org.htmlparser.util.sort.Ordered;
  * Structure to hold a character and it's equivalent entity reference kernel.
  * For the character reference &amp;copy; the character would be '&copy;' and
  * the kernel would be "copy", for example.<p>
- * Character references are described at <a href="Character references">http://www.w3.org/TR/REC-html40/charset.html#entities</a>
- * Supports the Ordered interface so it's easy to create a list sorted by
- * kernel, to perform binary searches on.<p>
+ * Character references are described at
+ * Supports the Ordered interface, so it's easy to create a list sorted by
+ * kernel, to perform binary searches on.
+ *
+ * @see <a href="http://www.w3.org/TR/REC-html40/charset.html#entities">Character references</a>
  */
 public class CharacterReference
     implements

@@ -127,7 +127,7 @@ public interface Node
      *      e.nextNode ().collectInto (list, filter);
      * </pre>
      * Thus, <code>list</code> will hold all the link nodes, irrespective of how
-     * deep the links are embedded.</p>
+     * deep the links are embedded.
      * <p>Another way to accomplish the same objective is:
      * <pre>
      * NodeList list = new NodeList ();
@@ -139,7 +139,7 @@ public interface Node
      * registered for more than one node name, e.g. &lt;LINK&gt; tags too.
      * @param list The list to collect nodes into.
      * @param filter The criteria to use when deciding if a node should
-     * be added to the list.</p>
+     * be added to the list.
      */
     void collectInto (NodeList list, NodeFilter filter);
 

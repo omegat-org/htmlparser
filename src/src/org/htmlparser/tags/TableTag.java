@@ -117,8 +117,8 @@ public class TableTag extends CompositeTag
     /**
      * Get the number of rows in this table.
      * @return The number of rows in this table.
-     * <em>Note: this is a a simple count of the number of {@.html <TR>} tags and
-     * may be incorrect if the {@.html <TR>} tags span multiple rows.</em>
+     * <em>Note: this is a a simple count of the number of &lt;TR&gt; tags and
+     * may be incorrect if the &lt;TR&gt; tags span multiple rows.</em>
      */
     public int getRowCount ()
     {
