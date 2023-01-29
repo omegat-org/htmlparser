@@ -36,7 +36,6 @@ repositories {
 }
 
 val javaHome = System.getProperty("java.home")
-
 dependencies {
     // Test dependencies
     testImplementation(files("${javaHome}/../lib/tools.jar"))
@@ -53,6 +52,67 @@ tasks.jar {
     }
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            pom {
+                name.set("htmlparser")
+                description.set("html parser library")
+                url.set("https://github.com/omegat-org/htmlparser")
+                licenses {
+                    license {
+                        name.set("The GNU Lesser General Public License, Version 2.1")
+                        url.set("https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("miurahr")
+                        name.set("Hiroshi Miura")
+                        email.set("miurahr@linux.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/omegat-org/htmlparser.git")
+                    developerConnection.set("scm:git:git://github.com/omegat-org/htmlparser.git")
+                    url.set("https://github.com/omegat-org/htmlparser")
+                }
+            }
+        }
+    }
+}
+
+val signKey = listOf("signingKey", "signing.keyId", "signing.gnupg.keyName").find {project.hasProperty(it)}
+signing {
+    when (signKey) {
+        "signingKey" -> {
+            val signingKey: String? by project
+            val signingPassword: String? by project
+            useInMemoryPgpKeys(signingKey, signingPassword)
+        }
+        "signing.keyId" -> {
+            val keyId: String? by project
+            val password: String? by project
+            val secretKeyRingFile: String? by project // e.g. gpg --export-secret-keys > secring.gpg
+            useInMemoryPgpKeys(keyId, password, secretKeyRingFile)
+        }
+        "signing.gnupg.keyName" -> {
+            useGpgCmd()
+        }
+    }
+    sign(publishing.publications["mavenJava"])
+}
+
+nexusPublishing {
+    repositories{
+        sonatype()
+    }
+}
+
+// --------------------------------------------------------
+// Apps build
 application {
     mainClass.set("org.htmlparser.Parser")
 }
@@ -117,38 +177,6 @@ project(":apps:htmllexer") {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            pom {
-                name.set("htmlparser")
-                description.set("html parser library")
-                url.set("https://github.com/omegat-org/htmlparser")
-                licenses {
-                    license {
-                        name.set("The GNU Lesser General Public License, Version 2.1")
-                        url.set("https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html")
-                        distribution.set("repo")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("miurahr")
-                        name.set("Hiroshi Miura")
-                        email.set("miurahr@linux.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com/omegat-org/htmlparser.git")
-                    developerConnection.set("scm:git:git://github.com/omegat-org/htmlparser.git")
-                    url.set("https://github.com/omegat-org/htmlparser")
-                }
-            }
-        }
-    }
-}
-
 tasks.register<Zip>("distAllZip") {
     archiveFileName.set("HtmlParser-Dist-1.6.zip")
     from(tasks.distZip.get().archiveFile)
@@ -160,30 +188,3 @@ tasks.register<Zip>("distAllZip") {
     dependsOn(tasks.get("distZip"))
 }
 tasks.assemble.get().dependsOn(tasks.get("distAllZip"))
-
-val signKey = listOf("signingKey", "signing.keyId", "signing.gnupg.keyName").find {project.hasProperty(it)}
-signing {
-    when (signKey) {
-        "signingKey" -> {
-            val signingKey: String? by project
-            val signingPassword: String? by project
-            useInMemoryPgpKeys(signingKey, signingPassword)
-        }
-        "signing.keyId" -> {
-            val keyId: String? by project
-            val password: String? by project
-            val secretKeyRingFile: String? by project // e.g. gpg --export-secret-keys > secring.gpg
-            useInMemoryPgpKeys(keyId, password, secretKeyRingFile)
-        }
-        "signing.gnupg.keyName" -> {
-            useGpgCmd()
-        }
-    }
-    sign(publishing.publications["mavenJava"])
-}
-
-nexusPublishing {
-    repositories{
-        sonatype()
-    }
-}
