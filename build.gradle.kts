@@ -23,6 +23,7 @@ sourceSets {
             srcDir("src/src")
         }
     }
+
     test {
         java {
             srcDir("src/tests")
@@ -40,6 +41,54 @@ dependencies {
     // Test dependencies
     testImplementation(files("${javaHome}/../lib/tools.jar"))
     testImplementation("junit:junit:3.8.2")
+}
+
+tasks.jar {
+    manifest {
+        attributes("Main-Class" to "org.htmlparser.Parser")
+        attributes("org/htmlparser/Parser.class", "Java-Bean" to "True")
+        attributes("org/htmlparser/beans/StringBean.class", "Java-Bean" to "True")
+        attributes("org/htmlparser/beans/HTMLTextBean.class", "Java-Bean" to "True")
+        attributes("org/htmlparser/beans/LinkBean.class", "Java-Bean" to "True")
+        attributes("org/htmlparser/beans/HTMLLinkBean.class", "Java-Bean" to "True")
+    }
+}
+
+project(":htmllexer") {
+    apply(plugin="application")
+    application.applicationName = "htmllexer"
+    application.mainClass.set("org.htmlparser.lexer.Lexer")
+    sourceSets {
+        main {
+            java {
+                srcDir("src/src")
+                include(listOf(
+                        "org/htmlparser/lexer/*",
+                        "org/htmlparser/nodes/*.class",
+                        "org/htmlparser/Attribute.class",
+                        "org/htmlparser/Node.class",
+                        "org/htmlparser/NodeFactory.class",
+                        "org/htmlparser/NodeFilter.class",
+                        "org/htmlparser/Remark.class",
+                        "org/htmlparser/Tag.class",
+                        "org/htmlparser/Text.class",
+                        "org/htmlparser/scanners/Scanner.class",
+                        "org/htmlparser/scanners/TagScanner.class",
+                        "org/htmlparser/http/ConnectionManager.class",
+                        "org/htmlparser/http/ConnectionMonitor.class",
+                        "org/htmlparser/http/Cookie.class",
+                        "org/htmlparser/util/ParserException.class",
+                        "org/htmlparser/util/ChainedException.class",
+                        "org/htmlparser/util/NodeList*.class",
+                        "org/htmlparser/util/NodeIterator.class",
+                        "org/htmlparser/util/SimpleNodeIterator.class",
+                        "org/htmlparser/util/EncodingChangeException.class",
+                        "org/htmlparser/util/sort/**/*.class",
+                        "org/htmlparser/visitors/NodeVisitor.class"
+                ))
+            }
+        }
+    }
 }
 
 publishing {
