@@ -1,0 +1,23 @@
+plugins {
+    id 'application'
+}
+
+applicationName = 'filterbuilder'
+
+application {
+    mainClass = 'org.htmlparser.parserapplications.filterbuilder.FilterBuilder'
+}
+
+// We bundle our startup scripts separately, so disable startScripts.
+startScripts.enabled = false
+
+tasks.register("installFilterBuilderScripts", Copy) {
+    from layout.projectDirectory.dir("scripts").asFileTree
+    into layout.buildDirectory.dir("scripts")
+    dependsOn(jar)
+}
+tasks.distZip.dependsOn(installFilterBuilderScripts)
+
+dependencies {
+    implementation rootProject
+}

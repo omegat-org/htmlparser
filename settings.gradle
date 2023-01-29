@@ -1,2 +1,2 @@
 rootProject.name="htmlparser"
-include 'apps:lexerapplications:thumbelina','apps:lexerapplications:tabby', 'apps:parserapplications', 'htmllexer'
+include 'apps:htmllexer', 'apps:thumbelina','apps:tabby', 'apps:filterbuilder'

@@ -45,7 +45,6 @@ dependencies {
 
 tasks.jar {
     manifest {
-        attributes("Main-Class" to "org.htmlparser.Parser")
         attributes("org/htmlparser/Parser.class", "Java-Bean" to "True")
         attributes("org/htmlparser/beans/StringBean.class", "Java-Bean" to "True")
         attributes("org/htmlparser/beans/HTMLTextBean.class", "Java-Bean" to "True")
@@ -54,10 +53,37 @@ tasks.jar {
     }
 }
 
-project(":htmllexer") {
+application {
+    mainClass.set("org.htmlparser.Parser")
+}
+
+// We bundle our startup scripts separately, so disable startScripts.
+tasks.startScripts {
+    enabled = false
+}
+
+tasks.register<Copy>("installParserScripts") {
+    from(layout.projectDirectory.dir("scripts").asFileTree)
+    exclude("lexer*")
+    into(layout.buildDirectory.dir("scripts"))
+    dependsOn(tasks.jar.get())
+}
+tasks.distZip.get().dependsOn(tasks.get("installParserScripts"))
+
+project(":apps:htmllexer") {
     apply(plugin="application")
     application.applicationName = "htmllexer"
     application.mainClass.set("org.htmlparser.lexer.Lexer")
+    tasks.startScripts {
+        enabled = false
+    }
+    tasks.register<Copy>("installLexerScripts") {
+        from(layout.projectDirectory.dir("scripts").asFileTree)
+        include("lexer*")
+        into(layout.buildDirectory.dir("scripts"))
+        dependsOn(tasks.jar.get())
+    }
+    tasks.distZip.get().dependsOn(tasks.get("installLexerScripts"))
     sourceSets {
         main {
             java {
@@ -122,6 +148,18 @@ publishing {
         }
     }
 }
+
+tasks.register<Zip>("distAllZip") {
+    archiveFileName.set("HtmlParser-Dist-1.6.zip")
+    from(tasks.distZip.get().archiveFile)
+    from(file(project(":apps:htmllexer").layout.buildDirectory.dir("distributions")))
+    from(file(project(":apps:tabby").layout.buildDirectory.dir("distributions")))
+    from(file(project(":apps:thumbelina").layout.buildDirectory.dir("distributions")))
+    from(file(project(":apps:filterbuilder").layout.buildDirectory.dir("distributions")))
+    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+    dependsOn(tasks.get("distZip"))
+}
+tasks.assemble.get().dependsOn(tasks.get("distAllZip"))
 
 val signKey = listOf("signingKey", "signing.keyId", "signing.gnupg.keyName").find {project.hasProperty(it)}
 signing {
