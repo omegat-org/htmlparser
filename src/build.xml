@@ -91,7 +91,7 @@ Update the Web Site
 
 -->
 
-<project name="HTMLParser" default="htmlparser" basedir=".">
+<project name="HTMLParser" default="jarparser" basedir=".">
 
   <!-- set global properties for this build -->
   <!--
@@ -104,9 +104,9 @@ Update the Web Site
   <property name="versionNumber" value="${versionMajor}.${versionMinor}"/>
   <property name="versionQualifier" value="${versionMajor}_${versionMinor}"/>
   <property name="src" value="src"/>
+  <property name="tests" value="tests"/>
   <property name="classes" value="${src}"/>
   <property name="docs" value="docs"/>
-  <property name="bin" value="bin"/>
   <property name="lib" value="lib"/>
   <property name="resources" value="resources"/>
   <property name="distribution" value="distribution"/>
@@ -210,39 +210,10 @@ Update the Web Site
 
   </target>
  
-  <target name="changelog" depends="init" description="create the change log from CVS logs">
-    <!-- ant has a changelog task already, but it outputs XML and doesn't unify dates or spit them out in chronological order -->
-    <!-- cvschangelog daysinpast="7" destfile="changelog.xml" / -->
-    <!-- so we use cvs2cl instead -->
-    <!--
-      Note: This relies on being able to perform cvs operations to
-      cvs.htmlparser.sorceforge.net by default, so you need to have
-      environment variables CVSROOT and CVS_RSH set up and the ssh-agent
-      loaded and primed.
-      $ ssh-agent
-      $ ssh-add
-      $ CVSROOT=:ext:derrickoswald@cvs.htmlparser.sorceforge.net:/cvsroot/htmlparser
-      $ export CVSROOT
-      $ CVS_RSH=ssh
-      $ export CVS_RSH
-      At this point you should be able to ssh to sourceforge without answering
-      password prompts:
-      $ ssh -l derrickoswald shell.sourceforge.net
-    -->
-    <echo message="${resources}/cvs2cl.pl --no-wrap --separate-header -l &quot;-d'&gt;${VERSION_DATE}'&quot;"/>
-    <exec executable="${resources}/cvs2cl.pl">
-      <arg value="--no-wrap"/>
-      <arg value="--separate-header"/>
-      <arg value="-l"/>
-      <arg value="-d'&gt;${VERSION_DATE}'"/>
-    </exec>
-  </target>
-
   <target name="compile" description="compile all java files">
     <mkdir dir="${classes}"/>
     <javac srcdir="${src}" destdir="${classes}" includes="org/htmlparser/**"
-           excludes="org/htmlparser/tests/**" debug="on" classpath="${classes}"
-           source="1.7" encoding="iso-8859-1"/>
+           debug="on" classpath="${classes}" source="1.7" encoding="iso-8859-1"/>
   </target>
 
   <target name="compilelexer" description="compile lexer java files">
@@ -273,11 +244,8 @@ Update the Web Site
 
   <target name="compileparser" depends="compilelexer" description="compile parser java files">
     <mkdir dir="${classes}"/>
-    <javac srcdir="${src}" destdir="${classes}" debug="on"
-           classpath="{classes}:${sax2.jar}" source="1.7" encoding="iso-8859-1">
+    <javac srcdir="${src}" destdir="${classes}" debug="on" source="1.7" encoding="iso-8859-1">
       <include name="org/htmlparser/**/*.java"/>
-      <exclude name="org/htmlparser/tests/**"/>
-      <exclude name="org/htmlparser/lexerapplications/**/*.java"/>
     </javac>
   </target>
 
@@ -324,8 +292,7 @@ Update the Web Site
     <jar jarfile="${lib}/htmlparser.jar">
       <fileset
         dir="${classes}"
-        includes="**/*.class"
-        excludes="org/htmlparser/tests/**/*.class"/>
+        includes="**/*.class"/>
       <fileset
         dir="${src}"
         includes="**/*.gif"/>
@@ -401,8 +368,7 @@ Update the Web Site
   <!-- Run the unit tests -->
   <target name="test" depends="jar" description="run the JUnit tests">
     <mkdir dir="${classes}"/>
-    <javac srcdir="${src}" destdir="${classes}"
-           includes="org/htmlparser/tests/**" debug="on" source="1.7"
+    <javac srcdir="${tests}" destdir="${classes}" debug="on" source="1.7"
            encoding="iso-8859-1">
       <classpath>
         <pathelement location="${classes}"/>
@@ -504,25 +470,6 @@ Update the Web Site
     </zip>
   </target>
 
-  <!-- Perform the htmlparser integration -->
-  <target name="htmlparser" depends="init,release,sources" 
-    description="create distribution zip file">
-    <mkdir dir="${distribution}"/>
-    <fixcrlf srcDir="${docs}" destDir="${distribution}" includes="release.txt" eol="crlf"/>
-    <zip zipfile="${distribution}/htmlparser${versionTag}.zip">
-      <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}" includes="*.bat"/>
-      <zipfileset dir="${bin}" prefix="htmlparser${versionQualifier}/${bin}" includes="*" excludes="*.bat" filemode="755"/>
-      <zipfileset dir="${docs}" prefix="htmlparser${versionQualifier}/${docs}" excludes="samples/**"/>
-      <zipfileset dir="${lib}" prefix="htmlparser${versionQualifier}/${lib}" includes="*.jar" excludes="checkstyle.jar,fit.jar"/>
-      <zipfileset dir="." prefix="htmlparser${versionQualifier}/" includes="src.zip"/>
-      <!-- Copy the release notes as readme.txt in the base release directory -->
-      <zipfileset dir="${distribution}" fullpath="htmlparser${versionQualifier}/readme.txt" includes="release.txt"/>
-      <!-- Copy the LGPL license.txt to the base release directory -->
-      <zipfileset dir="${resources}" includes="license.txt" fullpath="htmlparser${versionQualifier}/license.txt"/>
-    </zip>
-    <delete file="${distribution}/release.txt"/>
-  </target>
-  
   <target name="clean" description="cleanup">
     <!-- delete the src.zip, classes and javadocs leave the jars -->
     <delete>

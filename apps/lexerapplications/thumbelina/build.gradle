@@ -1,0 +1,13 @@
+plugins {
+    id 'application'
+}
+
+applicationName = 'Thumbelina'
+
+application {
+    mainClass = 'org.htmlparser.lexerapplications.thumbelina.Thumbelina'
+}
+
+dependencies {
+    implementation rootProject
+}
