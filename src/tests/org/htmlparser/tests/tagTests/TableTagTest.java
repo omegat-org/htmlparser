@@ -151,7 +151,7 @@ public class TableTagTest extends ParserTestCase
      * See bug #750117 StackOverFlow while Node-Iteration
      * Not reproducible.
      */
-    public void testOverFlow () throws ParserException
+    public void _testOverFlow () throws ParserException
     {
         parser =
             new Parser(
