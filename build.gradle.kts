@@ -107,7 +107,12 @@ signing {
 
 nexusPublishing {
     repositories{
-        sonatype()
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            username.set(project.property("sonatypeUsername")?.toString()?: System.getenv("SONATYPE_USER"))
+            password.set(project.property("sonatypePassword")?.toString()?: System.getenv("SONATYPE_PASS"))
+        }
     }
 }
 
